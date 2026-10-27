@@ -1,64 +1,68 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import {
-  loadFormatter,
-  fixture,
-  authTypes,
-} from "./helpers/diffFormatFixture.mjs";
+import load, { nativeDependency } from "./helpers/loadTypeScript.mjs";
+const { formatEnv, compareEnvironments } = await load(
+  "apps/webviews/src/features/sync/utils/environment-comparison.ts",
+  nativeDependency,
+);
 const plain = (value) => JSON.parse(JSON.stringify(value));
-const api = await loadFormatter();
-for (const name of [
-  "formatApis",
-  "formatWebSocket",
-  "formatSocketIo",
-  "formatGraphql",
-]) {
-  test(`${name} retains common parameter fields, labels and required flags`, () => {
-    const input = fixture();
-    const snapshot = structuredClone(input);
-    const result = plain(api[name](input));
-    assert.deepEqual(result.header, [
-      {
-        "[supplement.key]key": "key",
-        "[supplement.value]value": "value",
-        "[supplement.file_type]field_type": "String",
-        "[supplement.desc]description": "Description",
-        "[supplement.required]not_null": "supplement.yes",
-      },
-    ]);
-    assert.deepEqual(result.base_info["[supplement.status]mark"], "Done");
-    assert.deepEqual(input, snapshot);
-    const empty = plain(api[name]({}));
-    assert.deepEqual(empty.header, []);
-  });
-}
-for (const type of authTypes) {
-  test(`${type} auth formatting is consistent across HTTP and GraphQL without leaking previous auth fields`, () => {
-    const input = fixture(type);
-    assert.deepEqual(
-      plain(api.formatApis(input).auth),
-      plain(api.formatGraphql(input).auth),
-    );
-    const noauth = plain(api.formatApis(fixture("noauth")).auth);
-    assert.deepEqual(Object.keys(noauth), ["[supplement.type]type"]);
-  });
-}
-test("parameter formatting keeps optional flags and protocol-specific sections intact", () => {
-  const input = fixture("basic", "form-data");
-  input.request.header.parameter[0] = {
-    ...input.request.header.parameter[0],
-    not_null: -1,
-  };
-  assert.equal(
-    api.formatApis(input).header[0]["[supplement.required]not_null"],
-    "supplement.no",
-  );
+const environment = () => ({
+  env_id: "1",
+  name: "Development",
+  is_private: -1,
+  server_list: [
+    { server_id: "1", name: "API", uri: "https://example.test", sort: 1 },
+  ],
+  env_var_list: {
+    token: { value: "saved", current_value: "local", description: "Token" },
+  },
+});
+
+test("environment comparison includes cloud values, descriptions, names and servers without mutating inputs", () => {
+  const before = environment();
+  const after = environment();
+  after.name = "Production";
+  after.server_list[0].uri = "https://production.test";
+  after.env_var_list.token.value = "updated";
+  after.env_var_list.token.description = "Updated token";
+  const snapshot = structuredClone([before, after]);
+  const differences = plain(compareEnvironments(before, after));
   assert.deepEqual(
-    plain(api.formatApis(input).cookie),
-    plain(api.formatGraphql(input).cookie),
+    differences.map((row) => row.key),
+    ["base_info", "server_list", "env_var_list"],
   );
-  const graphql = plain(api.formatGraphql(input));
-  assert.deepEqual(graphql.query[0]["[Variables]variables"], { id: 1 });
-  const socket = plain(api.formatSocketIo(input));
-  assert.equal(socket.event[0]["[supplement.listen]listen"], true);
+  assert.equal(differences[2].previous[0]["[Cloud Value]value"], "saved");
+  assert.equal(
+    differences[2].next[0]["[Description]description"],
+    "Updated token",
+  );
+  assert.deepEqual([before, after], snapshot);
+});
+
+test("runtime values and environment metadata do not produce cloud conflicts", () => {
+  const before = environment();
+  const after = environment();
+  after.env_var_list.token.current_value = "another runtime value";
+  after.env_id = "another-id";
+  after.is_private = 1;
+  assert.deepEqual(plain(compareEnvironments(before, after)), []);
+  after.env_var_list.extra = {
+    value: "added",
+    description: "",
+    current_value: "",
+  };
+  assert.deepEqual(
+    plain(compareEnvironments(before, after)).map((row) => row.key),
+    ["env_var_list"],
+  );
+});
+
+test("missing comparison sides wait for data; empty environments retain empty display sections", () => {
+  assert.deepEqual(plain(compareEnvironments(undefined, environment())), []);
+  assert.deepEqual(plain(compareEnvironments(environment(), undefined)), []);
+  assert.deepEqual(plain(formatEnv()), {
+    base_info: { "[Environment Name]name": "" },
+    server_list: [],
+    env_var_list: [],
+  });
 });

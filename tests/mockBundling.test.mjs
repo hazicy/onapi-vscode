@@ -10,7 +10,8 @@ import { fakerLocalesEsbuild } from "../tooling/build/faker-locales.mjs";
 await fs.mkdir("test-results", { recursive: true });
 const result = await build({
   stdin: {
-    contents: `export * from './packages/domain/src/mock/expressions.js';
+    contents: `export {default as fakerDefinitions} from './packages/domain/src/mock/faker-definitions.json';
+export * from './packages/domain/src/mock/expressions.js';
 export {generateIdCard,generateBankCard} from './packages/domain/src/mock/cards.ts';
 export {default as MockSchema} from './packages/domain/src/mock/schema.ts';
 export {generateMockBody} from './apps/webviews/src/features/requests/utils/generateMockBody';
@@ -341,4 +342,17 @@ test("WebSocket replacement uses Faker expressions", async () => {
   assert.equal(await replace("{{$function.fn_test(hello)}}"), "hello!");
   assert.equal(await replace("{{$randomCity}}"), "{{$randomCity}}");
   assert.equal(await replace("{{missing}}"), "{{missing}}");
+});
+
+test("Faker discovery and execution use the same definitions without a UI fallback catalog", async () => {
+  assert.deepEqual(api.getFakerObject(), api.fakerDefinitions);
+  const keys = api.fakerDefinitions.map(
+    (item) => `${item.module}.${item.function}`,
+  );
+  assert.equal(new Set(keys).size, keys.length);
+  for (const definition of api.fakerDefinitions) {
+    assert.equal(typeof definition.module, "string");
+    assert.equal(typeof definition.function, "string");
+    assert.equal(typeof definition.params, "object");
+  }
 });

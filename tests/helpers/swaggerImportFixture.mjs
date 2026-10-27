@@ -14,37 +14,16 @@ export default async (
   return await load(filename, (id) => {
     if (id === "lodash") return nativeDependency(id);
     if (id === "i18next") return { t: (key) => key };
-    if (
-      ["@/shared/utils/dataTools", "@onapi/domain/utils/data-tools"].includes(
-        id,
-      )
-    )
+    if (id === "@onapi/domain/utils/data-tools")
       return { snowflakeId: () => `id-${++nextId}` };
-    if (
-      [
-        "@/features/requests/constants/auth",
-        "@onapi/domain/requests/constants/auth",
-      ].includes(id)
-    )
+    if (id === "@onapi/domain/requests/constants/auth")
       return { DEFAULT_AUTH: { type: "noauth" } };
-    if (
-      [
-        "@/features/requests/constants/response",
-        "@onapi/domain/requests/constants/response",
-      ].includes(id)
-    )
+    if (id === "@onapi/domain/requests/constants/response")
       return {
         DEFAULT_API_RESPONSE: defaults,
         ERROR_RESPONSE: { example_id: "2", name: "Error" },
         SUCCESS_RESPONSE: { example_id: "1", name: "Success" },
       };
-    if (id === "@/shared/utils/common")
-      return {
-        getSubstring: (text, length) =>
-          typeof text === "string" ? text.slice(0, length) : "",
-      };
-    if (id === "@/features/requests/utils/apis")
-      return { genUrlByQuery: (url) => url };
     throw new Error(`Unexpected dependency ${id}`);
   });
 };

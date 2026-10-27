@@ -43,12 +43,7 @@ test("XML detection recognizes documents and rejects plain values", () => {
 const parse = await load(
   "packages/domain/src/utils/parse.ts",
   async (id) =>
-    [
-      "@/shared/utils/responseTools",
-      "@onapi/domain/utils/response-tools",
-    ].includes(id)
-      ? tools
-      : nativeDependency(id),
+    id === "@onapi/domain/utils/response-tools" ? tools : nativeDependency(id),
   { TextDecoder },
 );
 

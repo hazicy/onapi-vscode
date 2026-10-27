@@ -85,6 +85,7 @@ async function fixture() {
         )
       )
         return {
+          getApiList: () => [],
           getApiListName: (ctx) => project(ctx),
           getCurrentProjectConfig: (ctx) => configs[project(ctx)],
           getProjectWorkspace: (ctx) => ({

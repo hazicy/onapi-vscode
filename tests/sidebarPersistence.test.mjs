@@ -1,3 +1,5 @@
+import { requestPanelStubs } from "./helpers/requestPanelStubs.mjs";
+import { unexpectedCall as unused } from "./helpers/unexpectedCall.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import loadTypeScript from "./helpers/loadTypeScript.mjs";
@@ -43,6 +45,14 @@ async function fixture(writeSucceeds = true) {
         )
       )
         return {
+          deleteProjectReport: unused,
+          deleteTestingFoldersData: unused,
+          getTestingFolderName: unused,
+          downloadFile: unused,
+          openInFileExplorer: unused,
+          getAllChildIds: unused,
+          setProjectApisVersion: unused,
+          setProjectConfig: unused,
           getApiList: () => structuredClone(persisted),
           getApiListName: () => "project",
           updateApiList: async (_, change) => {
@@ -65,11 +75,7 @@ async function fixture(writeSucceeds = true) {
         return {
           updateOpenData: (_, data) => calls.push(["open", plain(data)]),
         };
-      if (
-        ["@/shared/utils/dataTools", "@onapi/domain/utils/data-tools"].includes(
-          id,
-        )
-      )
+      if (id === "@onapi/domain/utils/data-tools")
         return { snowflakeId: () => "copy" };
       if (id === "vscode")
         return {
@@ -79,7 +85,9 @@ async function fixture(writeSucceeds = true) {
               calls.push(["success", message]),
           },
         };
-      return {};
+      return (
+        requestPanelStubs[id] ?? (id === "vscode" ? {} : nativeDependency(id))
+      );
     },
   );
   return { handleMessage, calls, rows: () => persisted };
@@ -165,6 +173,7 @@ test("setApiList propagates the actual storage result and selects the project ke
           return { globalConfig: { openedPanels: {} } };
         if (id === "./index" || /\/storage(?:\/index)?$/.test(id))
           return {
+            updateDataInGlobalStorage: unused,
             hasStoredData: () => true,
             getDataFromGlobalStorage: (_, key, fallback) => fallback || {},
             setDataToGlobalStorage: (...args) => {
@@ -172,7 +181,9 @@ test("setApiList propagates the actual storage result and selects the project ke
               return expected;
             },
           };
-        return {};
+        return (
+          requestPanelStubs[id] ?? (id === "vscode" ? {} : nativeDependency(id))
+        );
       },
     );
     const context = {
@@ -210,15 +221,34 @@ test("opening a request deleted since the UI rendered safely skips both message 
             id,
           )
         )
-          return { getApiList: () => [] };
+          return {
+            deleteProjectReport: unused,
+            deleteTestingFoldersData: unused,
+            getTestingFolderName: unused,
+            downloadFile: unused,
+            openInFileExplorer: unused,
+            getAllChildIds: unused,
+            setProjectApisVersion: unused,
+            getApiList: () => [],
+            getApiListName: unused,
+            updateApiList: unused,
+            setApiList: unused,
+            showTabName: unused,
+            getCurrentProjectConfig: unused,
+            setProjectConfig: unused,
+            getMaxSort: unused,
+          };
         if (id.endsWith("/panel-actions"))
           return { handlePanelAction: () => false };
-        if (id === "../../app/config") return { globalConfig: {} };
+        if (id === "../../app/config")
+          return { globalConfig: {}, DEFAULT_TARGET_NAME: {} };
         if (id === "vscode")
           return {
             commands: { executeCommand: (...args) => commands.push(args) },
           };
-        return {};
+        return (
+          requestPanelStubs[id] ?? (id === "vscode" ? {} : nativeDependency(id))
+        );
       },
     );
     await handlers[handler](
@@ -251,12 +281,16 @@ test("request storage returns unified records without reading a second collectio
       if (id === "lodash") return nativeDependency(id);
       if (/\/storage(?:\/index)?$/.test(id))
         return {
+          setDataToGlobalStorage: unused,
+          updateDataInGlobalStorage: unused,
           getDataFromGlobalStorage: (_, key) => {
             reads.push(key);
             return structuredClone(rows);
           },
         };
-      return {};
+      return (
+        requestPanelStubs[id] ?? (id === "vscode" ? {} : nativeDependency(id))
+      );
     },
   );
   const actual = getApiList({

@@ -1,6 +1,7 @@
+import { unexpectedCall as unused } from "./helpers/unexpectedCall.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import load from "./helpers/loadTypeScript.mjs";
+import load, { nativeDependency } from "./helpers/loadTypeScript.mjs";
 
 for (const failAt of ["storage", "initialization"]) {
   test(`sidebar and recovery commands register when ${failAt} fails`, async () => {
@@ -48,8 +49,36 @@ for (const failAt of ["storage", "initialization"]) {
           },
         };
       if (id.endsWith("/documentation"))
-        return { startDocsServer: () => calls.push(["docs"]) };
-      return {};
+        return {
+          startDocsServer: () => calls.push(["docs"]),
+          restartServer: unused,
+        };
+      if (id === "./platform/webviews/panel-manager")
+        return {
+          createOpenPanel: unused,
+          createCurlPanel: unused,
+          createImportDataPanel: unused,
+          createEnvironmentPanel: unused,
+          createPushPanel: unused,
+          createFolderTestPanel: unused,
+          createfolderTestReportDataPanel: unused,
+          createExportDataPanel: unused,
+        };
+      if (id === "./platform/theme")
+        return { onThemeChange: unused, onFontSizeChange: unused };
+      if (id === "./features/sharing/share-list-panel")
+        return { createShareListPanel: unused };
+      if (id === "./features/sidebar/sidebar-handler")
+        return { handleMessage: unused };
+      if (id === "./platform/storage/events")
+        return { storageChanged: { fire: unused } };
+      if (id === "./app/config") return { globalConfig: {} };
+      if (id === "./platform/storage/project-config")
+        return { getCurrentProjectConfig: unused };
+      if (id === "./features/requests/request-storage")
+        return { getApiList: unused };
+      if (id === "./platform/locale/index") return {};
+      return nativeDependency(id);
     });
     await activate({ subscriptions: [] });
     assert.ok(calls.some(([name]) => name === "views"));

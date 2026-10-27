@@ -113,3 +113,18 @@ test("switching value modes clears the previous function draft", async ({
     JSON.stringify({ text: "{{token}}", operation: "var", action: 0 }),
   );
 });
+
+test("Mock picker selections build executable expressions from the shared catalog", async ({
+  page,
+  variableInsertPage,
+}) => {
+  await variableInsertPage.open();
+  await variableInsertPage.insertDynamicValueButton.click();
+  await page.getByRole("button", { name: "Mock data", exact: true }).click();
+  await page.getByRole("textbox", { name: "Search tree" }).fill("alpha");
+  await page.getByRole("treeitem", { name: "alpha", exact: true }).click();
+  await expect(page.getByLabel("Variable expression")).toHaveText(
+    "{{$fakerjs.String.alpha}}",
+  );
+  await expect(page.getByLabel("Variable preview")).toHaveText(/^[a-zA-Z]+$/);
+});

@@ -1,20 +1,15 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import vm from "node:vm";
-import loadTypeScript from "./helpers/loadTypeScript.mjs";
+import loadTypeScript, { nativeDependency } from "./helpers/loadTypeScript.mjs";
 
 test("embedded request data preserves script-like bodies without breaking the HTML", async () => {
   const { getHtmlForWebview } = await loadTypeScript(
     "apps/extension/src/platform/webviews/html.ts",
     async (id) => {
       if (id === "os") return { platform: () => "darwin" };
-      if (
-        ["@/shared/locale/language", "@onapi/domain/locale/language"].includes(
-          id,
-        )
-      )
-        return { language: "en" };
-      return {};
+      if (id === "../locale/index") return { language: "en" };
+      return id === "vscode" ? {} : nativeDependency(id);
     },
   );
   const data = {

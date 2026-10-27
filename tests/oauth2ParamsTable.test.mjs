@@ -22,11 +22,7 @@ const { default: Table } = await load(
         jsx: (type, props) => ({ type, props }),
         jsxs: (type, props) => ({ type, props }),
       };
-    if (
-      ["@/shared/utils/dataTools", "@onapi/domain/utils/data-tools"].includes(
-        id,
-      )
-    )
+    if (id === "@onapi/domain/utils/data-tools")
       return { snowflakeId: () => `id-${++nextId}` };
     if (id === "@dnd-kit/sortable") return nativeDependency(id);
     if (id === "@/shared/ui/base")
@@ -34,12 +30,7 @@ const { default: Table } = await load(
     if (id === "@/shared/components") return { BasicTable: "BasicTable" };
     if (id === "@/features/variables/components/VarInput/VarInput")
       return "VarInput";
-    if (
-      [
-        "@/features/requests/constants/auth",
-        "@onapi/domain/requests/constants/auth",
-      ].includes(id)
-    )
+    if (id === "@onapi/domain/requests/constants/auth")
       return { AUTH_OAUTH2_SEND_IN: [] };
     throw new Error(`Unexpected dependency ${id}`);
   },

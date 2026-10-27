@@ -1,3 +1,5 @@
+import { requestPanelStubs } from "./helpers/requestPanelStubs.mjs";
+import { unexpectedCall as unused } from "./helpers/unexpectedCall.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import load from "./helpers/loadTypeScript.mjs";
@@ -64,6 +66,11 @@ async function fixture(
         )
       )
         return {
+          curlImport: unused,
+          downloadFile: unused,
+          openInFileExplorer: unused,
+          deleteProjectReport: unused,
+          getCurrentProjectId: unused,
           getApiList: () => structuredClone(rows),
           getApiListName: () => project,
           updateApiList: async (_, change) => {
@@ -106,9 +113,16 @@ async function fixture(
         };
       if (id === "../sharing/share-data")
         return {
+          createShare: unused,
+          deleteShare: unused,
+          getOpenApi: unused,
+          setProjectShareData: unused,
           getProjectShareData: () => {
             calls.push(["shareRead"]);
-            return {};
+            return (
+              requestPanelStubs[id] ??
+              (id === "vscode" ? {} : nativeDependency(id))
+            );
           },
         };
       if (id === "@/features/requests/utils/apis")
@@ -124,7 +138,9 @@ async function fixture(
             },
           },
         };
-      return {};
+      return (
+        requestPanelStubs[id] ?? (id === "vscode" ? {} : nativeDependency(id))
+      );
     },
   );
   const handler =
@@ -369,6 +385,7 @@ test("batch test cleanup writes once and propagates the storage result", async (
       (id) => {
         if (id === "./index" || /\/storage(?:\/index)?$/.test(id))
           return {
+            setDataToGlobalStorage: unused,
             getDataFromGlobalStorage: () => ({
               folder: {},
               request: {},
@@ -384,7 +401,9 @@ test("batch test cleanup writes once and propagates the storage result", async (
               return result;
             },
           };
-        return {};
+        return (
+          requestPanelStubs[id] ?? (id === "vscode" ? {} : nativeDependency(id))
+        );
       },
     );
     const context = {

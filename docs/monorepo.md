@@ -190,3 +190,17 @@ that redirect library imports into another package's private source tree.
 
 The workspace split does not suppress existing frontend TypeScript errors.
 `pnpm typecheck` reports them; shared packages are checked independently.
+
+### Shared Mock metadata and regression boundaries
+
+`packages/domain/src/mock/faker-definitions.json` is the single source for Faker
+function names, arguments and descriptions. Both the expression engine and the
+variable picker consume it directly; do not add a separate UI fallback catalog.
+The picker uses `Module.function` names so its expressions can execute unchanged.
+
+Module regressions may provide explicit host/UI mocks through
+`tests/helpers/loadTypeScript.mjs`. Mocks must use the source import path and
+provide every imported name; the loader does not retry historical aliases or
+invent missing named exports. `tests/workspaceEntrypoints.test.mjs` additionally
+bundles public workspace entrypoints and variable utilities without mocks to
+verify real module wiring.

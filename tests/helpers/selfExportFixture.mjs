@@ -29,34 +29,13 @@ const loadConverter = async (
           return lodash1.cloneDeep(value);
         },
       };
-    if (
-      ["@/shared/utils/dataTools", "@onapi/domain/utils/data-tools"].includes(
-        id,
-      )
-    )
+    if (id === "@onapi/domain/utils/data-tools")
       return { snowflakeId: () => `id-${++nextId}` };
     if (id === "i18next") return { t: (key) => key };
-    if (
-      [
-        "@/features/requests/constants",
-        "@onapi/domain/requests/constants/index",
-      ].includes(id)
-    )
+    if (id === "@onapi/domain/requests/constants/index")
       return { APIS_TARGET_TYPE_ENUM: types };
-    if (
-      [
-        "@/features/requests/constants/request",
-        "@onapi/domain/requests/constants/request",
-      ].includes(id)
-    )
+    if (id === "@onapi/domain/requests/constants/request")
       return { DEFAULT_WEBSOCKET_MESSAGE: { type: "text", message: "" } };
-    if (id === "@/shared/utils/common")
-      return {
-        getSubstring: (text, length) =>
-          typeof text === "string" ? text.slice(0, length) : "",
-      };
-    if (id === "@/features/requests/utils/apis")
-      return { genUrlByQuery: (url) => url };
     throw new Error(`Unexpected dependency: ${id}`);
   });
   return { ...api, cloneCount: () => clones };

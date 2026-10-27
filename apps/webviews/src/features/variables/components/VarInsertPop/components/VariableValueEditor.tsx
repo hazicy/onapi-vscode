@@ -19,13 +19,12 @@ import {
   type TreeSelectProps,
 } from "@/shared/ui/base";
 import { AppIcon, Input, Popover, Tooltip } from "@/shared/ui";
-import { getFakerObject } from "@onapi/domain/mock/expressions";
+import fakerDefinitions from "@onapi/domain/mock/faker-definitions.json";
 import { MOCK_LANGUAGE_MAP } from "@onapi/domain/settings/constants/settings";
 import { has, isEqual, map } from "lodash-es";
 import {
   ASSIGNMENT_VALUE_KEY,
   DATE_FORMAT_OPTIONS,
-  FAKERJS_VAR_LIST,
   FAKER_SPLIT_CONST,
   MOCK_TABS_KEY,
   TIME_ZONE_OPTIONS,
@@ -115,8 +114,7 @@ export default function VariableValueEditor({
     const descriptions: Record<string, string> = {};
     const expanded: string[] = [];
     if (optionKey === VAR_OPTIONS_KEY.mock) {
-      const definitions: FakerDefinition[] =
-        getFakerObject() || FAKERJS_VAR_LIST;
+      const definitions: FakerDefinition[] = fakerDefinitions;
       for (const item of definitions) {
         const key = `${item.module}${FAKER_SPLIT_CONST}${item.function}`;
         if (!modules[item.module]) {

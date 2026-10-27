@@ -1,3 +1,4 @@
+import { unexpectedCall as unused } from "./helpers/unexpectedCall.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import load from "./helpers/loadTypeScript.mjs";
@@ -73,6 +74,8 @@ async function fixture({
         return { useShallow: (selector) => selector };
       if (id === "@/shared/ui/base")
         return {
+          Flex: "Flex",
+          Typography: { Text: "Text" },
           Spin: "Spin",
           message: { error: (message) => calls.push(["error", message]) },
         };
@@ -97,6 +100,7 @@ async function fixture({
         };
       if (id === "@/features/sync/utils/push")
         return {
+          completeServiceList: unused,
           getEnvConflictList: async () => ({
             addEnvs: [],
             diffEnvs: [],
@@ -104,13 +108,7 @@ async function fixture({
             cloudServiceList: [],
           }),
         };
-      if (
-        [
-          "@/features/sync/utils/apiVersions",
-          "@onapi/domain/sync/utils/api-versions",
-        ].includes(id)
-      )
-        return versions;
+      if (id === "@onapi/domain/sync/utils/api-versions") return versions;
       if (id === "@/features/sync/utils/environmentDiff")
         return environmentDiff;
       if (id === "@/features/sync/services/apis")
@@ -122,7 +120,13 @@ async function fixture({
             return { list: uploaded };
           },
         };
-      if (id === "@/features/sync/services/project") return {};
+      if (id === "@/features/sync/services/project")
+        return {
+          addProjectEnvService: unused,
+          addProjectEnvSeverService: unused,
+          updateProjectEnvService: unused,
+          updateProjectEnvSeverService: unused,
+        };
       if (id === "./Left/Left" || id === "./Right/Right") return id;
       return nativeDependency(id);
     },

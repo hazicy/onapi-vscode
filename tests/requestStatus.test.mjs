@@ -1,17 +1,20 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import load from "./helpers/loadTypeScript.mjs";
+import load, { nativeDependency } from "./helpers/loadTypeScript.mjs";
 const {
   requestDecoration: decorate,
   setRequestDraft,
   setRequestResult,
 } = await load(
   "apps/extension/src/features/requests/request-status.ts",
-  () => ({
-    EventEmitter: class {
-      fire() {}
-    },
-  }),
+  (id) =>
+    id === "vscode"
+      ? {
+          EventEmitter: class {
+            fire() {}
+          },
+        }
+      : nativeDependency(id),
 );
 const request = {
   id: "r",

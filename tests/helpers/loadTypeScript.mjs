@@ -8,7 +8,6 @@ const modelRequire = createRequire(
 );
 import vm from "node:vm";
 import { transform } from "esbuild";
-import { parseSync } from "oxc-parser";
 import { pathToFileURL, fileURLToPath } from "node:url";
 
 export async function nativeDependency(id) {
@@ -57,19 +56,6 @@ export default async function loadTypeScript(
       return dependency;
     },
   });
-  const { program } = parseSync(filename + ".js", compiled);
-  const requested = new Map();
-  for (const statement of program.body) {
-    if (statement.type !== "ImportDeclaration") continue;
-    const id = statement.source.value;
-    const names = requested.get(id) ?? new Set(["default"]);
-    for (const specifier of statement.specifiers) {
-      if (specifier.type === "ImportSpecifier") {
-        names.add(specifier.imported.name ?? specifier.imported.value);
-      }
-    }
-    requested.set(id, names);
-  }
   async function linkDependency(id) {
     let value;
     let dependencyError;
@@ -80,30 +66,7 @@ export default async function loadTypeScript(
     }
     const nonempty = (candidate) =>
       candidate && Object.keys(candidate).length > 0;
-    let alias;
-    if (id.startsWith("@onapi/domain/"))
-      alias = "@/" + id.slice("@onapi/domain/".length).replace(/\/index$/, "");
-    else if (id.startsWith(".")) {
-      const resolved = fileURLToPath(new URL(id, module.identifier));
-      const marker = "/apps/webviews/src/";
-      if (resolved.includes(marker))
-        alias = "@/" + resolved.split(marker)[1].replace(/\/index$/, "");
-    }
-    if (!nonempty(value) && alias) {
-      try {
-        value = await dependencies(alias);
-        dependencyError = undefined;
-      } catch (error) {
-        dependencyError = error;
-      }
-    }
-    if (
-      id.startsWith("@onapi/domain") &&
-      (!nonempty(value) ||
-        [...(requested.get(id) || [])]
-          .filter((name) => name !== "default")
-          .some((name) => !(name in Object(value))))
-    ) {
+    if (id.startsWith("@onapi/domain") && !nonempty(value)) {
       const subpath =
         id === "@onapi/domain" ? "index" : id.slice("@onapi/domain/".length);
       value = await loadTypeScript(
@@ -124,11 +87,7 @@ export default async function loadTypeScript(
     } else if (!nonempty(value) && id === "postman-url-encoder/parser/index.js")
       value = await nativeDependency(id);
     if (!nonempty(value) && dependencyError) throw dependencyError;
-    const names = new Set([
-      ...Object.keys(value ?? {}),
-      ...(requested.get(id) ?? []),
-      "default",
-    ]);
+    const names = new Set([...Object.keys(value ?? {}), "default"]);
     return new vm.SyntheticModule(
       [...names],
       function () {

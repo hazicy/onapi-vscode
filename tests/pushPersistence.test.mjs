@@ -1,3 +1,4 @@
+import { unexpectedCall as unused } from "./helpers/unexpectedCall.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import load from "./helpers/loadTypeScript.mjs";
@@ -38,19 +39,14 @@ async function fixture({
     "apps/extension/src/features/sync/push-handler.ts",
     (id) => {
       if (id === "../../app/config") return { globalConfig: config };
-      if (
-        [
-          "@/features/sync/utils/apiVersions",
-          "@onapi/domain/sync/utils/api-versions",
-        ].includes(id)
-      )
-        return versions;
+      if (id === "@onapi/domain/sync/utils/api-versions") return versions;
       if (
         /\/(?:project-config|request-storage|report-storage|collection-order|import-curl|prepare-options|html|host-utils|user-config)$/.test(
           id,
         )
       )
         return {
+          getCurrentProjectConfig: unused,
           getApiListName: () => key,
           getApiList: () => {
             calls.push(["read"]);
@@ -193,7 +189,16 @@ test("version metadata persistence awaits storage and preserves existing state o
   const original = { target: { existing: 1 } };
   const { setProjectApisVersion } = await load(
     "apps/extension/src/features/requests/request-storage.ts",
-    (id) => (id === "lodash" ? nativeDependency(id) : {}),
+    (id) =>
+      id === "../../platform/storage/index"
+        ? {
+            getDataFromGlobalStorage: unused,
+            setDataToGlobalStorage: unused,
+            updateDataInGlobalStorage: unused,
+          }
+        : id === "vscode"
+          ? {}
+          : nativeDependency(id),
   );
   const context = {
     globalState: {

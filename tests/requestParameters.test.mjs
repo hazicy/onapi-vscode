@@ -1,3 +1,4 @@
+import { unexpectedCall as unused } from "./helpers/unexpectedCall.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import load from "./helpers/loadTypeScript.mjs";
@@ -7,17 +8,14 @@ let nextId = 0;
 const exportsObject = await load(
   "apps/webviews/src/features/requests/utils/apis.ts",
   (id) => {
-    if (id === "lodash-es" || id === "url-parse") return nativeDependency(id);
-    if (
-      ["@/shared/utils/dataTools", "@onapi/domain/utils/data-tools"].includes(
-        id,
-      )
-    )
+    if (id === "lodash-es" || id === "url-parse" || id === "immer")
+      return nativeDependency(id);
+    if (id === "@onapi/domain/utils/data-tools")
       return { snowflakeId: () => `new-${++nextId}` };
-    if (id.endsWith("/constants/common"))
-      return { STATUS_CODE: { ENABLE: 1, DISABLE: -1 } };
+    if (id === "@onapi/domain/constants/common") return nativeDependency(id);
     if (id.endsWith("/utils/common"))
       return {
+        isJSON: unused,
         isURL: (url) => url.startsWith("http"),
         createUrl: (url) => new URL(url),
         getUrlQueryToArray: (query) =>
