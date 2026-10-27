@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import styles from "./index.module.css";
+import styles from "./NodeList.module.css";
 import {
   DndContext,
   KeyboardSensor,
@@ -18,7 +18,7 @@ import { CSS } from "@dnd-kit/utilities";
 
 import AppIcon from "@/shared/ui/AppIcon";
 
-import ItemNode from "../ItemNode";
+import ItemNode from "../ItemNode/ItemNode";
 
 export const SortableItem = ({ index, nodeProps }: any) => {
   const {

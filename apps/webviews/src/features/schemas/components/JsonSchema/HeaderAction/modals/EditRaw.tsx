@@ -1,4 +1,4 @@
-import styles from "../index.module.css";
+import styles from "../HeaderAction.module.css";
 import React, { memo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -7,7 +7,7 @@ import { message } from "@/shared/ui/base";
 import { useMemoizedFn } from "ahooks";
 import { isObject, isString } from "lodash";
 
-import CodeEditor from "@/shared/components/CodeEditor";
+import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 import Modal from "@/shared/ui/Modal";
 import { isJSON } from "@/shared/utils/common";
 

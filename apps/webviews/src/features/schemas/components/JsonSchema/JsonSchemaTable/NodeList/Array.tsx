@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 
 import isObject from "lodash/isObject";
 
-import ItemNode from "../ItemNode";
+import ItemNode from "../ItemNode/ItemNode";
 
 interface ArrayItemProps {
   deepIndex: number;

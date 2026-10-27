@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import ResizablePanels from "@/shared/components/ResizablePanels";
+import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
 
 export default function ResizeFixture() {
   const [direction, setDirection] = useState<"horizontal" | "vertical">(

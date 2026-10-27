@@ -6,7 +6,7 @@ let nextId = 0;
 let activeRefs;
 let refIndex;
 const { default: Table } = await load(
-  "apps/webviews/src/features/requests/components/Request/Auth/components/Oauth2ParamsTable.tsx",
+  "apps/webviews/src/features/requests/editor/Request/Auth/components/Oauth2ParamsTable.tsx",
   (id) => {
     if (id === "react")
       return {
@@ -33,7 +33,8 @@ const { default: Table } = await load(
     if (id === "@/shared/ui/base")
       return { Checkbox: "Checkbox", Flex: "Flex", Select: "Select" };
     if (id === "@/shared/components") return { BasicTable: "BasicTable" };
-    if (id === "@/features/variables/components/VarInput") return "VarInput";
+    if (id === "@/features/variables/components/VarInput/VarInput")
+      return "VarInput";
     if (
       [
         "@/features/requests/constants/auth",

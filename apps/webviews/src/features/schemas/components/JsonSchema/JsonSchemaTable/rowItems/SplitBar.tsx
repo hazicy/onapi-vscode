@@ -1,4 +1,4 @@
-import styles from "../index.module.css";
+import styles from "../JsonSchemaTable.module.css";
 import React, {
   MouseEventHandler,
   memo,

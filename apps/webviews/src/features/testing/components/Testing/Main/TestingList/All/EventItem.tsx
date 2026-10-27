@@ -1,4 +1,4 @@
-import styles from "./index.module.css";
+import styles from "./All.module.css";
 import PrefixIcon from "@/shared/ui/PrefixIcon";
 import { STATUS_CODE } from "@onapi/http-model/constants/common";
 import { Checkbox, Flex, Tooltip, Typography } from "@/shared/ui/base";

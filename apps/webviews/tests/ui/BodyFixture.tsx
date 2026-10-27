@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Request from "@/features/requests/components/Request";
+import Request from "@/features/requests/editor/Request/Request";
 
 export default function BodyFixture() {
   const [item, setItem] = useState<any>({

@@ -8,7 +8,7 @@ import type { RcFile } from "@/shared/ui/base";
 import { useSafeState } from "ahooks";
 import classnames from "classnames";
 
-import ImportContent from "@/features/import/components/ImportContent";
+import ImportContent from "@/features/import/components/ImportContent/ImportContent";
 import { createImportOptions } from "@/features/import/components/ImportContent/options";
 
 import AppIcon from "@/shared/ui/AppIcon";

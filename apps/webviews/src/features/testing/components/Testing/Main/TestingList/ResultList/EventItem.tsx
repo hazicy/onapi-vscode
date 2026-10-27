@@ -1,7 +1,7 @@
-import styles from "./index.module.css";
-import ResponseSize from "@/features/requests/components/ResponseSize";
+import styles from "./ResultList.module.css";
+import ResponseSize from "@/features/requests/response/ResponseSize";
 
-import HttpExecDetail from "@/features/requests/components/HttpExecDetail";
+import HttpExecDetail from "@/features/requests/response/HttpExecDetail/HttpExecDetail";
 import { AppIcon } from "@/shared/ui";
 import PrefixIcon from "@/shared/ui/PrefixIcon";
 import useTheme from "@/shared/hooks/useTheme";

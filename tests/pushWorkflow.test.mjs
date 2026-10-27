@@ -44,7 +44,7 @@ async function fixture({
     ...apiData,
   };
   const { default: Push } = await load(
-    "apps/webviews/src/features/sync/components/Push/index.tsx",
+    "apps/webviews/src/features/sync/components/Push/Push.tsx",
     (id) => {
       if (id.endsWith(".css")) return {};
       if (id === "react/jsx-runtime")
@@ -123,7 +123,7 @@ async function fixture({
           },
         };
       if (id === "@/shared/services/project") return {};
-      if (id === "./Left" || id === "./Right") return id;
+      if (id === "./Left/Left" || id === "./Right/Right") return id;
       return nativeDependency(id);
     },
     {

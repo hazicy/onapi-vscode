@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import load from "./helpers/loadTypeScript.mjs";
 const { readAuthValues, updateAuthValues, validateOAuth2 } = await load(
-  "apps/webviews/src/features/requests/components/Request/Auth/authState.ts",
+  "apps/webviews/src/features/requests/editor/Request/Auth/authState.ts",
 );
 const plain = (value) => JSON.parse(JSON.stringify(value));
 

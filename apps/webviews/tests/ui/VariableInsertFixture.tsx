@@ -1,5 +1,5 @@
 import { useState } from "react";
-import VarInsertPop from "@/features/variables/components/VarInsertPop";
+import VarInsertPop from "@/features/variables/components/VarInsertPop/VarInsertPop";
 
 export default function VariableInsertFixture() {
   const [open, setOpen] = useState(false);

@@ -7,7 +7,7 @@ import ErrorBoundary from "@/shared/components/ErrorBoundary";
 import "@/shared/assets/css/reset.css";
 
 import "@/shared/locale";
-import ShareList from "@/features/sharing/components/ShareList";
+import ShareList from "@/features/sharing/components/ShareList/ShareList";
 import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
 import GlobalStyle from "../../shared/theme/globalStyle";

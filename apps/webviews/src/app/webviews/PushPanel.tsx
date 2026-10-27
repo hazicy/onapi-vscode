@@ -6,7 +6,7 @@ import useGlobalTheme from "@/shared/theme";
 import "@/shared/assets/css/reset.css";
 
 import "@/shared/locale";
-import Push from "@/features/sync/components/Push";
+import Push from "@/features/sync/components/Push/Push";
 import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
 import GlobalStyle from "../../shared/theme/globalStyle";

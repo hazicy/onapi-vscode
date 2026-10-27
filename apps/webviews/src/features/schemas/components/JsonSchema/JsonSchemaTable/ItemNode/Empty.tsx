@@ -10,7 +10,7 @@ import cn from "classnames";
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
 
-import LinkModal from "../modals/Link";
+import LinkModal from "../modals/Link/Link";
 
 type Props = {
   deepIndex: number;

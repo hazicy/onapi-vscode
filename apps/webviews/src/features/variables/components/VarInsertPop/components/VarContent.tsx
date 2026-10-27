@@ -79,7 +79,7 @@ import {
   InsertAction,
 } from "@onapi/http-model/requests/types/variable";
 import { copyStringToClipboard } from "@/shared/utils/common";
-import { getGlobals } from "@/features/requests/utils/send/utils";
+import { getGlobals } from "@/features/requests/utils/send-utils";
 import { transFuncName } from "@/features/variables/utils/variable";
 import { transKey } from "@/features/variables/utils/variable";
 

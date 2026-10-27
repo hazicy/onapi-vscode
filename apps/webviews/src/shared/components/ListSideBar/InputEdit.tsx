@@ -1,4 +1,4 @@
-import styles from "./index.module.css";
+import styles from "./ListSideBar.module.css";
 import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 

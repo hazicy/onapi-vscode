@@ -1,4 +1,4 @@
-import styles from "../index.module.css";
+import styles from "../RequestTable.module.css";
 import { memo, useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -7,14 +7,14 @@ import { REQUEST_CONTENT_TYPE } from "@onapi/http-model/requests/constants/index
 
 import { includes, isEqual } from "lodash";
 import classNames from "classnames";
-import VarInput from "@/features/variables/components/VarInput";
+import VarInput from "@/features/variables/components/VarInput/VarInput";
 import { Button, AppIcon, Upload } from "@/shared/ui";
 import { fileTodataUrl } from "@/shared/utils/file";
 
 import Context from "../context";
 import { ItemProps } from "../types";
 
-import VarInsertPop from "@/features/variables/components/VarInsertPop";
+import VarInsertPop from "@/features/variables/components/VarInsertPop/VarInsertPop";
 import { VAR_OPTIONS_KEY } from "@/features/variables/constants/variable";
 import { InsertAction } from "@onapi/http-model/requests/types/variable";
 

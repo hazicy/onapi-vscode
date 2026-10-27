@@ -1,4 +1,4 @@
-import styles from "../index.module.css";
+import styles from "../RequestTable.module.css";
 import { FC, memo } from "react";
 
 import { Flex, Switch } from "@/shared/ui/base";

@@ -3,7 +3,7 @@ import styles from "./ParamsManage.module.css";
 
 import { Flex, message } from "@/shared/ui/base";
 
-import RequestGlobal from "@/features/requests/components/RequestGlobal";
+import RequestGlobal from "@/features/requests/editor/RequestGlobal";
 import Button from "@/shared/ui/Button";
 
 import useProjectConfig from "@/features/project/store/useProjectConfig";

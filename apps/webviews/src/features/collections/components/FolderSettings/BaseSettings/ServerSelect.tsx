@@ -1,4 +1,4 @@
-import styles from "./index.module.css";
+import styles from "./BaseSettings.module.css";
 import React, { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 

@@ -1,4 +1,4 @@
-import styles from "../index.module.css";
+import styles from "../Tree.module.css";
 import { FC, ReactNode, memo, useMemo } from "react";
 
 import { Dropdown, MenuProps } from "@/shared/ui/base";

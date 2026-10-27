@@ -3,7 +3,7 @@ import {
   scopeValues,
 } from "@/features/project/store/useProjectConfig/selectors";
 import { getI18n } from "react-i18next";
-import { getGlobals } from "../../features/requests/utils/send/utils";
+import { getGlobals } from "../../features/requests/utils/send-utils";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import { has, merge } from "lodash";
 import { convertVarFormat } from "./common";

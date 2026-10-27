@@ -1,4 +1,4 @@
-import styles from "./index.module.css";
+import styles from "./ItemSettings.module.css";
 import { useTranslation } from "react-i18next";
 
 import { Flex, Select, Switch } from "@/shared/ui/base";

@@ -8,7 +8,7 @@ import { useSafeState } from "ahooks";
 
 import { isObject } from "lodash";
 
-import ApisDiffJsonContent from "@/features/sync/components/ApisDiffJsonContent";
+import ApisDiffJsonContent from "@/features/sync/components/ApisDiffJsonContent/ApisDiffJsonContent";
 import { Modal } from "@/shared/ui/Modal";
 
 import { EnvListItem } from "@onapi/http-model/environment/types/index";

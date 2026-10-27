@@ -1,4 +1,4 @@
-import styles from "./index.module.css";
+import styles from "./ItemSettings.module.css";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 

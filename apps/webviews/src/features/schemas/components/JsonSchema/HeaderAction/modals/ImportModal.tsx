@@ -1,4 +1,4 @@
-import styles from "../index.module.css";
+import styles from "../HeaderAction.module.css";
 import { memo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -8,7 +8,7 @@ import $RefParser from "@apidevtools/json-schema-ref-parser";
 import { XMLParser } from "fast-xml-parser";
 import { isObject, isPlainObject, isString } from "lodash";
 
-import CodeEditor from "@/shared/components/CodeEditor";
+import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 import Modal from "@/shared/ui/Modal";
 import { recursionSetSchemaOrder } from "@/shared/events/export";
 import { ThemeToken } from "@/shared/hooks/useTheme";

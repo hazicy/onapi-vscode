@@ -1,4 +1,4 @@
-import styles from "../index.module.css";
+import styles from "../ShareList.module.css";
 import { useTranslation } from "react-i18next";
 
 import { Flex, message } from "@/shared/ui/base";

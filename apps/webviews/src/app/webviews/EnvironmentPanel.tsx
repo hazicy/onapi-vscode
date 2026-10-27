@@ -7,7 +7,7 @@ import ErrorBoundary from "@/shared/components/ErrorBoundary";
 import "@/shared/assets/css/reset.css";
 
 import "@/shared/locale";
-import Environment from "@/features/environment/components";
+import Environment from "@/features/environment/components/Environment";
 import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
 import GlobalStyle from "../../shared/theme/globalStyle";

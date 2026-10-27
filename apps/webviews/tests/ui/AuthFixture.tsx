@@ -1,9 +1,9 @@
-import Oauth2 from "@/features/requests/components/Request/Auth/components/Oauth2";
+import Oauth2 from "@/features/requests/editor/Request/Auth/components/Oauth2";
 import { useState } from "react";
 import {
   AuthField,
   AuthContext,
-} from "@/features/requests/components/Request/Auth/AuthField";
+} from "@/features/requests/editor/Request/Auth/AuthField";
 import { Input, Checkbox } from "@/shared/ui/base";
 
 export default function AuthFixture() {

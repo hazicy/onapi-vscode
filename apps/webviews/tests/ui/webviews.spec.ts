@@ -30,20 +30,20 @@ const componentClasses: Record<string, [string, string]> = {
   spinContent: ["shared/ui/base/Spin.module.css", "content"],
   skeleton: ["shared/ui/base/Skeleton.module.css", "skeleton"],
   requestUrlGroup: [
-    "features/requests/components/Content/api/Debug/Header.module.css",
+    "features/requests/protocols/http/Header.module.css",
     "urlGroupWrap",
   ],
   select: ["shared/ui/base/Select.module.css", "select"],
   tabsCountBadge: [
-    "shared/components/LineTabs/index.module.css",
+    "shared/components/LineTabs/LineTabs.module.css",
     "tabsCountBadge",
   ],
   responseResultTabs: [
-    "features/requests/components/ResponseResult/index.module.css",
+    "features/requests/response/ResponseResult/ResponseResult.module.css",
     "responseResultTabsWrap",
   ],
   responseTools: [
-    "features/requests/components/ResponseResult/index.module.css",
+    "features/requests/response/ResponseResult/ResponseResult.module.css",
     "tabBarExtraContentWrap",
   ],
 };

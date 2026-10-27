@@ -1,5 +1,5 @@
 import { Flex } from "@/shared/ui/base";
-import TreeCheckbox from "@/features/collections/components/TreeCheckbox";
+import TreeCheckbox from "@/features/collections/components/TreeCheckbox/TreeCheckbox";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";

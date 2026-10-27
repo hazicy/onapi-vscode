@@ -1,7 +1,7 @@
 import styles from "./ReportDetails.module.css";
 
 import { TestingReportList } from "@onapi/http-model/testing/types/res/index";
-import TestingMain from "@/features/testing/components/Testing/Main";
+import TestingMain from "@/features/testing/components/Testing/Main/Main";
 
 type ReportDetailsProps = {
   reportDetails: TestingReportList;

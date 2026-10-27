@@ -44,7 +44,7 @@ import { ApisBaseRequestBody } from "@onapi/http-model/requests/types/request";
 import { DEFAULT_API_RESPONSE } from "@onapi/http-model/requests/constants/response";
 import { WebSocketDetailsData } from "@onapi/http-model/requests/types/websocket";
 import { SocketIoDetailsData } from "@onapi/http-model/requests/types/socketio";
-import { UrlGroupProps } from "@/features/requests/components/UrlGroup";
+import { UrlGroupProps } from "@/features/requests/editor/UrlGroup";
 import { produce } from "immer";
 import { CurlDataType } from "@/features/requests/types/other";
 

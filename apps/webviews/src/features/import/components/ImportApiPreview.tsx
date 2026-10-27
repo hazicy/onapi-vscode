@@ -18,7 +18,7 @@ import {
 import { filter, isArray } from "lodash";
 
 import { BasicTable } from "@/shared/components";
-import Tree from "@/features/collections/components/Tree";
+import Tree from "@/features/collections/components/Tree/Tree";
 
 import { Button, Empty, Tooltip } from "@/shared/ui";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";

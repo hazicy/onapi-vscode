@@ -4,7 +4,7 @@ import { EditorView } from "@codemirror/view";
 import CodeEditor, {
   type CodeEditorRef,
   type Props,
-} from "../../src/shared/components/CodeEditor";
+} from "../../src/shared/components/CodeEditor/CodeEditor";
 import DiffEditor from "../../src/features/sync/components/ApisDiffJsonContent/Edit";
 import { formatDocument } from "../../src/shared/components/CodeEditor/format";
 import { jsonDiagnostics } from "../../src/shared/components/CodeEditor/jsonDiagnostics";

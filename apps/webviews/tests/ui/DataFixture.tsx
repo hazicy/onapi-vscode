@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Table, Tree, TreeSelect, Upload, Button } from "@/shared/ui/base";
 import type { DataNode } from "@/shared/ui/base";
-import BasicTable from "@/shared/components/BasicTable";
+import BasicTable from "@/shared/components/BasicTable/BasicTable";
 
 const rows = [
   { id: "one", name: "First", count: 30 },

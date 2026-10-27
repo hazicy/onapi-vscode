@@ -1,5 +1,5 @@
 import { saveEnvironments } from "@/features/requests/events/env";
-import styles from "./index.module.css";
+import styles from "./Environment.module.css";
 import classNames from "classnames";
 import { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -17,7 +17,7 @@ import AppIcon from "@/shared/ui/AppIcon";
 import { copyEnv, saveProjectConfig } from "@/features/requests/events/env";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 
-import DraggableMenu from "./DraggableMenu";
+import DraggableMenu from "./DraggableMenu/DraggableMenu";
 import { DraggableMenuProps } from "./DraggableMenu/types";
 import {
   ENV_MANAGE_ENUM,

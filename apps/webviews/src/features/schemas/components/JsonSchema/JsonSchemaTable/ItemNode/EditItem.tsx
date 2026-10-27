@@ -5,7 +5,7 @@ import { produce } from "immer";
 import { assign } from "lodash";
 
 import ItemDescription from "../rowItems/ItemDescription";
-import ItemKey, { ItemKeyProps } from "../rowItems/ItemKey";
+import ItemKey, { ItemKeyProps } from "../rowItems/ItemKey/ItemKey";
 import ModelSettings from "../rowItems/ModelSettings";
 
 type Props = {

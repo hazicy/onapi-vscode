@@ -21,7 +21,7 @@ import AppIcon from "@/shared/ui/AppIcon";
 import Tooltip from "@/shared/ui/Tooltip";
 import useProjectSetting from "@/features/project/store/useProjectSetting";
 
-import ItemSettings from "./ItemSettings";
+import ItemSettings from "./ItemSettings/ItemSettings";
 
 const lineHeight = 32;
 

@@ -1,4 +1,4 @@
-import styles from "./index.module.css";
+import styles from "./VarInsertPop.module.css";
 import classNames from "classnames";
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 

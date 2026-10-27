@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import Context from "../context";
-import styles from "../index.module.css";
+import styles from "../RequestTable.module.css";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 

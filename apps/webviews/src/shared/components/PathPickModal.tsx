@@ -1,4 +1,4 @@
-import type { CodeEditorRef } from "@/shared/components/CodeEditor";
+import type { CodeEditorRef } from "@/shared/components/CodeEditor/CodeEditor";
 import styles from "./PathPickModal.module.css";
 import Modal from "@/shared/ui/Modal";
 import classNames from "classnames";
@@ -24,7 +24,7 @@ import {
 import X2JS from "x2js";
 import xpath from "xpath";
 
-import CodeEditor from "@/shared/components/CodeEditor";
+import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 
 type Props = ModalProps & {
   defaultValue?: string;

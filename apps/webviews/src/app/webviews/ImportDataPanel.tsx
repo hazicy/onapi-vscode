@@ -6,7 +6,7 @@ import useGlobalTheme from "@/shared/theme";
 import "@/shared/assets/css/reset.css";
 
 import "@/shared/locale";
-import ImportData from "@/features/import/components/ImportData";
+import ImportData from "@/features/import/components/ImportData/ImportData";
 import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
 import GlobalStyle from "../../shared/theme/globalStyle";

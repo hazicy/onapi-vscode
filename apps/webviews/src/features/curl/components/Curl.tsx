@@ -1,7 +1,7 @@
 import styles from "./Curl.module.css";
 import { Flex } from "@/shared/ui/base";
 
-import CodeEditor from "@/shared/components/CodeEditor";
+import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 import { useSafeState } from "ahooks";
 import { Button } from "@/shared/ui/base";
 import { useTranslation } from "react-i18next";

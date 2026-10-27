@@ -15,9 +15,9 @@ import {
   values,
 } from "lodash";
 
-import ItemNode from "./index";
+import ItemNode from "./ItemNode";
 import { useSchemaContext } from "../context";
-import LinkModal from "../modals/Link";
+import LinkModal from "../modals/Link/Link";
 import ObjectList from "../NodeList/Object";
 
 import { AnyObject } from "@onapi/http-model/types/common";

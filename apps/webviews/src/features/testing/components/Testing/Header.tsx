@@ -1,4 +1,4 @@
-import styles from "./index.module.css";
+import styles from "./Testing.module.css";
 import useTesting from "@/features/testing/store/useTesting";
 import cn from "classnames";
 import { Button, Flex } from "@/shared/ui/base";

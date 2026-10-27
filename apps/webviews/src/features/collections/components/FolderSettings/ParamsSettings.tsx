@@ -3,7 +3,7 @@ import { FC } from "react";
 
 import { useMemoizedFn } from "ahooks";
 
-import RequestGlobal from "@/features/requests/components/RequestGlobal";
+import RequestGlobal from "@/features/requests/editor/RequestGlobal";
 import { FolderDetailsData } from "@onapi/http-model/requests/types/folder";
 
 interface Props {

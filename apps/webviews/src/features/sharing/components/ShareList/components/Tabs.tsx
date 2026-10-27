@@ -1,4 +1,4 @@
-import styles from "../index.module.css";
+import styles from "../ShareList.module.css";
 import { Checkbox, Flex, Tabs, Tooltip, Typography } from "@/shared/ui/base";
 
 import { SHARE_TAB_LIST } from "../constants";

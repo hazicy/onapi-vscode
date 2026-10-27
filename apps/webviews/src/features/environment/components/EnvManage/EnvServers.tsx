@@ -8,7 +8,7 @@ import { DragEndEvent } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { cloneDeep, findIndex, isEqual, size, sortBy } from "lodash";
 
-import Table from "@/shared/components/BasicTable";
+import Table from "@/shared/components/BasicTable/BasicTable";
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
 import { Modal } from "@/shared/ui/Modal";

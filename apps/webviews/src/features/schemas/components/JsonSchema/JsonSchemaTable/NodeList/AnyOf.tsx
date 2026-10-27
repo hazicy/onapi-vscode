@@ -4,7 +4,7 @@ import { useMemoizedFn } from "ahooks";
 import { produce } from "immer";
 import { isArray, isNumber } from "lodash";
 
-import ItemNode from "../ItemNode";
+import ItemNode from "../ItemNode/ItemNode";
 
 interface AnyOfItemProps {
   deepIndex: number;

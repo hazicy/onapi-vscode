@@ -48,7 +48,9 @@ const ObjectItem: React.FC<ObjectItemProps> = (props) => {
   const requiredKeys = isArray(nodeValue?.required) ? nodeValue.required : [];
 
   // Ensure order is correct when modifying key
-  const itemKeys = isArray(nodeValue?.ONAPI_ORDERS) ? nodeValue.ONAPI_ORDERS : [];
+  const itemKeys = isArray(nodeValue?.ONAPI_ORDERS)
+    ? nodeValue.ONAPI_ORDERS
+    : [];
 
   // Properties content under object
   const propertiesData = isPlainObject(nodeValue?.properties)

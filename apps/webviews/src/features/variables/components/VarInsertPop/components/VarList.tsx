@@ -1,4 +1,4 @@
-import styles from "../index.module.css";
+import styles from "../VarInsertPop.module.css";
 import { useMemo } from "react";
 
 import { Flex } from "@/shared/ui/base";

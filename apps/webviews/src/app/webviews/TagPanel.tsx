@@ -9,9 +9,9 @@ import useGlobalTheme from "@/shared/theme";
 import ErrorBoundary from "@/shared/components/ErrorBoundary";
 import "@/shared/assets/css/reset.css";
 import "@/shared/locale";
-import Content, {
+import RequestWorkspace, {
   preloadRequestProtocol,
-} from "@/features/requests/components/Content";
+} from "@/features/requests/RequestWorkspace";
 import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
 import GlobalStyle from "../../shared/theme/globalStyle";
@@ -20,12 +20,12 @@ import useProjectConfig from "@/features/project/store/useProjectConfig";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import { useGlobal } from "@/app/store";
 import { HotkeysProvider } from "react-hotkeys-hook";
-import useApisHotkeys from "@/features/requests/hooks/useHotKeys/useApisHotkeys";
+import useApisHotkeys from "@/features/requests/hooks/useApisHotkeys";
 import useShare from "@/features/sharing/store/useShare";
 import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
-import useWebSocket from "@/features/requests/components/Content/websocket/useWebSocket";
-import useSocketIo from "@/features/requests/components/Content/socketio/useWebSocket";
-import useGraphQLQuery from "@/features/requests/components/GraphQLQuery/hooks";
+import useWebSocket from "@/features/requests/protocols/websocket/useWebSocket";
+import useSocketIo from "@/features/requests/protocols/socketio/useWebSocket";
+import useGraphQLQuery from "@/features/requests/graphql/GraphQLQuery/useGraphQLQuery";
 
 function initializeRequest(data: any) {
   const { apiData, projectConfig, systemConfig, vscodeTheme, docBaseUrl } =
@@ -165,7 +165,7 @@ function TagPanel() {
         <GlobalStyle />
         <ErrorBoundary>
           <Suspense fallback={null}>
-            <Content />
+            <RequestWorkspace />
           </Suspense>
         </ErrorBoundary>
       </ThemeProvider>

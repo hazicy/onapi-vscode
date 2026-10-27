@@ -1,7 +1,7 @@
 import styles from "./ExportData.module.css";
 import { Flex } from "@/shared/ui/base";
 
-import Export from "@/features/export/components/Export";
+import Export from "@/features/export/components/Export/Export";
 
 const exportData = () => {
   return (

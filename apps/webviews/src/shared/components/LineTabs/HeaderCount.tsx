@@ -1,4 +1,4 @@
-import styles from "./index.module.css";
+import styles from "./LineTabs.module.css";
 import { FC, useMemo } from "react";
 
 import { isArray, isPlainObject, keys, size } from "lodash";

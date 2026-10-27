@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Filters from "@/features/requests/components/GraphQLQuery/components/Filters";
-import GraphQLSchemaProvider from "@/features/requests/components/GraphQLQuery/context/GraphQLSchemaProvider";
+import Filters from "@/features/requests/graphql/GraphQLQuery/components/Filters";
+import GraphQLSchemaProvider from "@/features/requests/graphql/GraphQLQuery/context/GraphQLSchemaProvider";
 
 export default function FiltersFixture() {
   const [filterData, setFilterData] = useState<any>({});

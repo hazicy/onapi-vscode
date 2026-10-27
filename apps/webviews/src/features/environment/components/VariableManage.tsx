@@ -7,7 +7,7 @@ import { Flex, Input, message } from "@/shared/ui/base";
 
 import { cloneDeep, isPlainObject, keyBy, keys, mapValues } from "lodash";
 
-import Table from "@/shared/components/BasicTable";
+import Table from "@/shared/components/BasicTable/BasicTable";
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
 import { IEnvDataItem } from "@onapi/http-model/project/types/variable";

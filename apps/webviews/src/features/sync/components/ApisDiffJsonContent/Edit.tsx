@@ -1,4 +1,4 @@
-import styles from "./index.module.css";
+import styles from "./ApisDiffJsonContent.module.css";
 import { useEffect, useRef } from "react";
 import { EditorState } from "@codemirror/state";
 import { EditorView, lineNumbers } from "@codemirror/view";

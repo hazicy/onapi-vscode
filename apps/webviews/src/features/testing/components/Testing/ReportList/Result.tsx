@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import Drawer from "@/shared/ui/Drawer";
 import { Modal } from "@/shared/ui/Modal";
-import TestingMain from "../Main";
+import TestingMain from "../Main/Main";
 
 type ResultProps = {
   /** Report data to open */

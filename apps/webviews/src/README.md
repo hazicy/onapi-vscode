@@ -10,7 +10,17 @@ src/
     webviews/                 # React entry points and VS Code bridge setup
     store/                    # Application state only (global and storage)
   features/
-    requests/                 # HTTP, GraphQL, SSE, WebSocket and Socket.IO
+    requests/                 # Request workspace and execution
+      editor/                 # Request fields, auth, body and URL editing
+      response/               # Response content, metadata and execution details
+      assertions/             # Assertion configuration and results
+      scripts/                # Request scripts
+      graphql/                # GraphQL query editing and contexts
+      protocols/              # HTTP, GraphQL, SSE, WebSocket and Socket.IO views
+      code-generation/        # Code generation drawer
+      variables/              # Request variable extraction
+      execution/              # Execution events and state transitions
+      store/                  # Request state
     collections/              # Collection tree and folder settings
     environment/              # Environments, cookies and parameters
     testing/                  # Collection runs and reports
@@ -43,11 +53,25 @@ src/
 ## Naming and imports
 
 - Use PascalCase for React component names, component files and component folders:
-  `EditItem.tsx`, `components/ImportData/index.tsx`.
+  `EditItem.tsx`, `components/ImportData/ImportData.tsx`.
 - Keep a standalone component and its stylesheet side by side as `Component.tsx`
   and `Component.module.css`; do not add a folder containing only that pair.
-- Keep component folders when they contain supporting files or subcomponents.
-  An `index.tsx` entry uses `index.module.css`.
+- Keep component folders when they contain supporting logic or subcomponents.
+  Name the implementation after the component (`ImportData.tsx`), with a matching
+  stylesheet (`ImportData.module.css`). Reserve `index.ts` for deliberate public
+  exports; do not add one to every component directory.
+- Keep a single hook or store in a named file such as `hooks/useApisHotkeys.ts`
+  or `store/useSchemas.ts`, without a same-named wrapper directory. Create
+  category directories only when needed; do not create empty placeholders.
+- Keep private components, hooks, types and constants beside their owner. A
+  private child does not need another `components/` or `hooks/` wrapper.
+- Group large features by responsibility before adding technical categories.
+  Request protocol screens belong in `requests/protocols/<protocol>/`; folder
+  editing belongs in `collections/components/FolderEditor/`.
+- Keep business components in their owning feature, including components used
+  by other features. Promote code to `shared/` only when it has no feature-specific
+  behavior or application-state dependency. Basic controls belong in `shared/ui/`;
+  reusable composed components and editors belong in `shared/components/`.
 - Hooks keep the `useSomething` convention. New ordinary utility, context and
   service modules use kebab-case filenames that describe their role. Existing
   modules can adopt this convention when reorganized.
@@ -93,7 +117,7 @@ src/
 - Use pseudo-classes or `data-*` attributes for states, and CSS custom
   properties for dynamic values and component customization.
 - Match stylesheet names to their component files: `Modal.tsx` uses
-  `Modal.module.css`, and `index.tsx` uses `index.module.css`.
+  `Modal.module.css`, including components kept in their own directories.
 - Keep each primitive implementation next to its matching stylesheet; do not
   collect unrelated components into grouped implementation files.
 - Keep default and state styles inside the owning component. Accept `className`

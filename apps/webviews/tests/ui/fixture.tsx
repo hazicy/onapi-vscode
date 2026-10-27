@@ -8,7 +8,7 @@ import AuthFixture from "./AuthFixture";
 import { useState } from "react";
 import { createRoot } from "react-dom/client";
 import "@/shared/locale";
-import AiDescription from "@/features/requests/components/AiDescription";
+import AiDescription from "@/features/requests/editor/AiDescription/AiDescription";
 import useProjectSetting from "@/features/project/store/useProjectSetting";
 import useUserConfig from "@/features/auth/store/useUserConfig";
 import DrawerFixture from "./DrawerFixture";
