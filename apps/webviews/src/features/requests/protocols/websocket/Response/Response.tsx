@@ -83,9 +83,6 @@ const Response: React.FC = (props: any) => {
           />
         </div>
       ),
-      countParams: {
-        showDot: !isEmpty(websocketConnectionPool[value?.id]?.responseData),
-      },
     },
   ];
   const tabsItems = useMemoizedFn(() => {

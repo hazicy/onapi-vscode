@@ -39,9 +39,12 @@ const Header: FC<ApiComponentType> = ({ apisData, onApisDataChange, type }) => {
   const isSending = isEqual(currentSendingData?.sendStatus, "sending");
 
   const handleSend = (option?: { server_id: string }) => {
-    // Reset before sending
+    // Keep the last response visible while opening a new stream.
 
     updateCurrentSendingData({
+      ...useApis.getState().currentSendingData,
+      error: null,
+      message: undefined,
       id: apisData?.id,
       sendStatus: "sending",
       streamResponse: [

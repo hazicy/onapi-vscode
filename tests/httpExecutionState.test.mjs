@@ -7,11 +7,11 @@ const { reduceHttpExecutionEvent: reduce } = await load(
 );
 const plain = (value) => JSON.parse(JSON.stringify(value));
 
-test("a new HTTP execution clears previous results without mutating the old state", () => {
+test("a new HTTP execution preserves the previous response while resetting execution bookkeeping", () => {
   const previous = {
     response: { code: 500 },
     error: { message: "old" },
-    events: [],
+    events: [{ type: "done" }],
     consoleList: ["old"],
     assertions: ["old"],
     visualizerHtml: "old",
@@ -20,6 +20,9 @@ test("a new HTTP execution clears previous results without mutating the old stat
   const start = { type: "start" };
   const next = reduce(previous, start);
   assert.deepEqual(plain(next), {
+    response: { code: 500 },
+    visualizerHtml: "old",
+    error: null,
     events: [start],
     sendStatus: "sending",
     consoleList: [],
@@ -76,4 +79,30 @@ test("HTTP completion retains a script failure when the terminal event has no er
   });
   assert.equal(terminal.message, "network failed");
   assert.equal(failed.error, error);
+});
+
+test("a replacement response replaces previous data and clears its visualizer", () => {
+  const previous = {
+    response: { code: 200, body: "old" },
+    request: { method: "GET" },
+    cookies: [{ name: "old" }],
+    visualizerHtml: "old visualization",
+  };
+  const pending = reduce(previous, { type: "start" });
+  const logging = reduce(pending, {
+    type: "console",
+    messages: ["new execution"],
+  });
+  assert.deepEqual(plain(logging.response), previous.response);
+  const next = reduce(logging, {
+    type: "request",
+    response: { code: 201, body: "new" },
+    request: { method: "POST" },
+    cookies: [],
+  });
+  assert.deepEqual(plain(next.response), { code: 201, body: "new" });
+  assert.deepEqual(plain(next.request), { method: "POST" });
+  assert.deepEqual(plain(next.cookies), []);
+  assert.equal(next.visualizerHtml, null);
+  assert.equal(previous.visualizerHtml, "old visualization");
 });

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 
 import AppIcon from "@/shared/ui/AppIcon";
+import Empty from "@/shared/ui/Empty";
 
 type ResponseEmpty = {
   description?: string;
@@ -29,36 +30,29 @@ const ResponseEmpty = ({
         wrapClassName,
       )}
     >
-      <div
-        className={styles.responseEmptyWrap}
+      <Empty
         role={errorMessage ? "alert" : "status"}
-      >
-        <AppIcon
-          icon={errorMessage ? "circle-alert" : "send"}
-          className={clsx(
-            styles.iconEmptyWrap,
-            errorMessage && styles.errorIcon,
-          )}
-        />
-        <p className={clsx(styles.emptyDescription, descriptionClassName)}>
-          {errorMessage
+        variant="request"
+        image={
+          errorMessage ? (
+            <AppIcon
+              icon="circle-alert"
+              className={clsx(styles.iconEmptyWrap, styles.errorIcon)}
+            />
+          ) : undefined
+        }
+        descriptionClassName={descriptionClassName}
+        description={
+          errorMessage
             ? t("request_panel.failed")
-            : description || t("request_panel.send_hint")}
-        </p>
-        {errorMessage ? (
-          <p className={styles.errorMessage}>{errorMessage}</p>
-        ) : (
-          !description && (
-            <p className={styles.shortcut}>
-              <kbd>Ctrl / Cmd</kbd> + <kbd>Enter</kbd>
-              <span>{t("request_panel.shortcut_hint")}</span>
-            </p>
-          )
-        )}
+            : description || t("request_panel.send_hint")
+        }
+      >
+        {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
         {errorMessage && (
           <p className={styles.hint}>{t("request_panel.details")}</p>
         )}
-      </div>
+      </Empty>
     </div>
   );
 };

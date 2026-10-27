@@ -15,17 +15,6 @@
   color: var(--vscode-textLink-foreground, var(--color-primary));
   background: var(--vscode-toolbar-hoverBackground);
 }
-.container [role="tablist"] {
-  border-bottom: 1px solid var(--vscode-widget-border, var(--color-border));
-}
-.container [role="tab"] {
-  padding: 8px 10px;
-  font-size: inherit;
-}
-.container [role="tab"][data-active] {
-  color: var(--vscode-foreground, var(--font-title-color));
-  font-weight: 600;
-}
 .actions {
   flex-shrink: 0;
 }

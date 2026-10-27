@@ -1,3 +1,7 @@
+import {
+  beginRequest,
+  cancelRequest,
+} from "@/features/requests/utils/requestExecution";
 import { requestUrl, requestMethod, editedUrl } from "@onapi/domain";
 import { ApiComponentType } from "@onapi/domain/requests/types/api";
 import { AnyObject } from "@onapi/domain/types/common";
@@ -14,7 +18,7 @@ import UrlGroup from "@/features/requests/editor/UrlGroup";
 import useApis from "@/features/requests/store/useApis";
 import { Icon } from "@iconify/react";
 import sendHorizontal from "@iconify-icons/lucide/send-horizontal";
-import loaderCircle from "@iconify-icons/lucide/loader-circle";
+import square from "@iconify-icons/lucide/square";
 import styles from "./Header.module.css";
 
 import { CurlDataType } from "@/features/requests/types/other";
@@ -22,9 +26,6 @@ import { CurlDataType } from "@/features/requests/types/other";
 const Header: FC<ApiComponentType> = ({ apisData, onApisDataChange, type }) => {
   const { t } = useTranslation();
   const currentSendingData = useApis((store) => store.currentSendingData);
-  const updateCurrentSendingData = useApis(
-    (store) => store.updateCurrentSendingData,
-  );
 
   const [curServerId, SetCurServerId] = useState("");
 
@@ -44,7 +45,9 @@ const Header: FC<ApiComponentType> = ({ apisData, onApisDataChange, type }) => {
   const isSending = isEqual(currentSendingData?.sendStatus, "sending");
 
   const handleSend = (option?: { server_id: string }) => {
-    updateCurrentSendingData({ sendStatus: "sending" });
+    if (!beginRequest()) {
+      return;
+    }
     window?.vscode.postMessage({
       action: "sendApi",
       data: apisData,
@@ -101,18 +104,19 @@ const Header: FC<ApiComponentType> = ({ apisData, onApisDataChange, type }) => {
           <button
             type="button"
             className={styles.sendButton}
-            aria-label={t(isSending ? "api.run.sending" : "api.run.send")}
-            title={`${t(isSending ? "api.run.sending" : "api.run.send")} (Ctrl/Cmd+Enter)`}
-            onClick={() => handleSend()}
-            disabled={isSending}
+            aria-label={t(
+              isSending ? "supplement.cancel_send" : "api.run.send",
+            )}
+            title={
+              isSending
+                ? t("supplement.cancel_send")
+                : `${t("api.run.send")} (Ctrl/Cmd+Enter)`
+            }
+            onClick={() => (isSending ? cancelRequest() : handleSend())}
           >
-            <Icon
-              icon={isSending ? loaderCircle : sendHorizontal}
-              width={18}
-              className={isSending ? styles.spinning : undefined}
-            />
+            <Icon icon={isSending ? square : sendHorizontal} width={18} />
             <span className={styles.sendLabel}>
-              {t(isSending ? "api.run.sending" : "api.run.send")}
+              {t(isSending ? "supplement.cancel_send" : "api.run.send")}
             </span>
           </button>
         }

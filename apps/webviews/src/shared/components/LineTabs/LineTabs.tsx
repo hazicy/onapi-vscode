@@ -14,7 +14,6 @@ type LineTabsItems = Omit<TabPaneProps, "tab"> & {
   label: ReactNode;
   countParams?: {
     dataSource?: any;
-    showDot?: boolean;
     customCalcFun?: (dataSource: any) => number;
   };
 };

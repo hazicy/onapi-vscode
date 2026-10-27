@@ -1,0 +1,10 @@
+.scene {
+  --empty-ink: var(--vscode-descriptionForeground, #526fa3);
+  --empty-accent: var(--vscode-textLink-foreground, #759bd5);
+  --empty-paper: var(--vscode-editor-background, #f1f5fc);
+  display: block;
+  width: 120px;
+  height: 96px;
+  max-width: 100%;
+  margin: 0 auto;
+}

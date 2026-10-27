@@ -1,3 +1,4 @@
+import tabSelection from "@/shared/components/LineTabs/LineTabs.module.css";
 import BodyModeSelect, { getBodyModeLabel } from "./Body/BodyModeSelect";
 import clsx from "clsx";
 import { HttpParameterTable } from "@/shared/components/RequestTable/RequestTable";
@@ -204,6 +205,7 @@ const Request: FC<RequestProps> = ({
           setVisitedTabs((previous) => new Set([...previous, key]));
           tabOptions.onChange?.(key);
         }}
+        tabListClassName={tabSelection.selectionList}
         navClassName={styles.tabsNav}
         panelClassName={styles.tabsTabpane}
         panelsClassName={styles.tabsContent}

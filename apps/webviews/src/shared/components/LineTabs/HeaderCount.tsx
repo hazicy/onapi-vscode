@@ -1,57 +1,28 @@
 import styles from "./LineTabs.module.css";
-import { FC, useMemo } from "react";
-
-import { isArray, isPlainObject, keys, size } from "lodash-es";
+import type { ReactNode } from "react";
+import { isArray, isPlainObject, size } from "lodash-es";
 
 interface Props {
   dataSource?: any;
-  showDot?: boolean;
   customCalcFun?: (dataSource: any) => number;
-  label: any;
+  label: ReactNode;
 }
 
-const HeaderCount: FC<Props> = ({
+export default function HeaderCount({
   label,
   dataSource,
-  showDot = false,
   customCalcFun,
-}) => {
-  const calcCount = useMemo(() => {
-    if (showDot) {
-      return 0;
-    }
-
-    if (customCalcFun) {
-      return customCalcFun(dataSource);
-    }
-
-    if (isPlainObject(dataSource)) {
-      const number = size(keys(dataSource));
-      return number;
-    }
-
-    if (isArray(dataSource)) {
-      return size(dataSource);
-    }
-  }, [dataSource, customCalcFun, showDot]);
-
-  if (showDot) {
-    return (
-      <span className={styles.tabsHeaderCount}>
-        {label}
-        <em className={styles.tabsHeaderDot} />
-      </span>
-    );
-  }
+}: Props) {
+  const count = customCalcFun
+    ? customCalcFun(dataSource)
+    : isArray(dataSource) || isPlainObject(dataSource)
+      ? size(dataSource)
+      : 0;
 
   return (
     <span className={styles.tabsHeaderCount}>
       {label}
-      {!!calcCount && calcCount > 0 && (
-        <span className={styles.tabsCountBadge}>{calcCount}</span>
-      )}
+      {count > 0 && <span className={styles.tabsCountBadge}>{count}</span>}
     </span>
   );
-};
-
-export default HeaderCount;
+}

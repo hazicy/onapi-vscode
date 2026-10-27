@@ -1,3 +1,4 @@
+import tabSelection from "@/shared/components/LineTabs/LineTabs.module.css";
 import type { HttpExecutionState } from "@/features/requests/execution/http-state";
 import { sdkResponseView } from "@/features/requests/utils/executionView";
 import clsx from "clsx";
@@ -28,7 +29,6 @@ import Sending from "@/features/requests/editor/Sending";
 
 import { STATUS_CODE } from "@onapi/domain/constants/common";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
-import { useGlobal } from "@/app/store";
 import { BaseResponse } from "@onapi/domain/requests/types/response";
 import {
   ApiSendingData,
@@ -87,12 +87,15 @@ const Response: FC<Props> = memo((props) => {
   } = props;
   const { t } = useTranslation();
   const nativeResponse = sdkResponseView(sendingData?.response);
-  const cancelToken = useGlobal((state) => state.cancelToken);
 
-  const [showError, setShowError] = useSafeState(false);
-  const [activeKey, setActiveKey] = useSafeState(
+  const showError =
+    sendingData?.sendStatus === "sendError" && !isEmpty(sendingData.message);
+  const [selectedKey, setActiveKey] = useSafeState(
     tabsDefaultActiveKey || "realtime",
   );
+  const hasExecution = !isEmpty(sendingData);
+  const initialTabKey = tabsDefaultActiveKey || "realtime";
+  const activeKey = hasExecution ? selectedKey : initialTabKey;
   const [visitedTabs, setVisitedTabs] = useState(
     () => new Set([tabsDefaultActiveKey || "realtime"]),
   );
@@ -112,17 +115,6 @@ const Response: FC<Props> = memo((props) => {
       !_includes(["realtime"], activeKey),
     [isSendDone, sendingData?.sendStatus, activeKey],
   );
-
-  useUpdateEffect(() => {
-    if (
-      sendingData?.sendStatus === "sendError" &&
-      !isEmpty(sendingData?.message)
-    ) {
-      setShowError(true);
-    } else {
-      setShowError(false);
-    }
-  }, [sendingData]);
 
   useUpdateEffect(() => {
     const { systemConfig } = useSystemConfig.getState();
@@ -197,9 +189,6 @@ const Response: FC<Props> = memo((props) => {
       key: "realRequest",
       label: t("api.run.real_request"),
       children: <RealRequest sendingData={sendingData} />,
-      countParams: {
-        showDot: !isEmpty(sendingData?.request),
-      },
     },
     {
       key: "console",
@@ -241,6 +230,14 @@ const Response: FC<Props> = memo((props) => {
     onResponseDataChange(data),
   );
 
+  if (!hasExecution) {
+    return (
+      <div className={styles.container}>
+        <Empty />
+      </div>
+    );
+  }
+
   return (
     <ErrorContext.Provider
       value={{ showError, errorMsg: sendingData?.message || "" }}
@@ -248,7 +245,7 @@ const Response: FC<Props> = memo((props) => {
       <div className={styles.container}>
         {sendingData?.sendStatus === "sending" && showSending && (
           <Sending
-            onCancel={cancelToken}
+            hasCancel={false}
             onlySendingLoadingBar={onlySendingLoadingBar}
           />
         )}
@@ -285,7 +282,7 @@ const Response: FC<Props> = memo((props) => {
               </Suspense>
             )
           }
-          tabListClassName={styles.tabsNavList}
+          tabListClassName={tabSelection.selectionList}
           navWrapClassName={styles.tabsNavWrap}
           navClassName={styles.tabsNav}
           panelsClassName={styles.tabsContent}

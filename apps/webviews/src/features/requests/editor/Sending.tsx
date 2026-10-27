@@ -1,5 +1,6 @@
 import styles from "./Sending.module.css";
 import React from "react";
+import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 
 import Button from "@/shared/ui/Button";
@@ -34,20 +35,19 @@ const Sending: React.FC<SendingProps> = ({
 
   return (
     <div
-      style={{ ...(onlySendingLoadingBar ? { height: 2 } : {}) }}
-      className={styles.container}
+      className={clsx(styles.container, {
+        [styles.barOnly]: onlySendingLoadingBar,
+      })}
+      aria-busy="true"
+      role="status"
+      aria-label={t("supplement.sending")}
     >
       <div className={styles.sendingLoadingBar} />
-      {!onlySendingLoadingBar && (
+      {!onlySendingLoadingBar && hasCancel && (
         <div className={styles.sendingLoadingContent}>
-          <div className={styles.sendingLoadingContentText} aria-live="polite">
-            {t("supplement.sending")}
-          </div>
-          {hasCancel && (
-            <Button type="primary" mode="light" onClick={handleCancel}>
-              {t("supplement.cancel_send")}
-            </Button>
-          )}
+          <Button type="primary" mode="light" onClick={handleCancel}>
+            {t("supplement.cancel_send")}
+          </Button>
         </div>
       )}
     </div>

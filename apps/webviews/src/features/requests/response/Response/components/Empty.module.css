@@ -14,46 +14,15 @@
   height: calc(100% - 44px);
   background: var(--vscode-editor-background, var(--color-bg-right));
 }
-.responseEmptyWrap {
-  width: 100%;
-  max-width: 420px;
-  padding: 24px;
-  box-sizing: border-box;
-  text-align: center;
-}
 .iconEmptyWrap {
   font-size: 32px;
   color: var(--vscode-descriptionForeground, var(--font-light-color));
   opacity: 0.65;
 }
-.emptyDescription {
-  margin: 12px 0;
-  color: var(--vscode-foreground, var(--font-content-color));
-  font-size: inherit;
-}
-.shortcut,
 .hint {
   color: var(--vscode-descriptionForeground, var(--font-light-color));
   font-size: inherit;
   line-height: 1.6;
-}
-.shortcut {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-.shortcut span {
-  margin-left: 4px;
-}
-.shortcut kbd {
-  padding: 1px 5px;
-  border: 1px solid var(--vscode-keybindingLabel-border, var(--color-border));
-  border-radius: 3px;
-  background: var(--vscode-keybindingLabel-background, transparent);
-  color: var(--vscode-keybindingLabel-foreground, inherit);
-  font: inherit;
 }
 .errorIcon {
   color: var(--vscode-errorForeground, var(--color-error));

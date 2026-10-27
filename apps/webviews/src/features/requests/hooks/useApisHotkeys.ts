@@ -1,3 +1,4 @@
+import { beginRequest } from "@/features/requests/utils/requestExecution";
 import { useHotkeys } from "react-hotkeys-hook";
 import {
   APIS_HOT_KEYS_ENUM,
@@ -24,9 +25,9 @@ export default function useApisHotkeys() {
       ) {
         return;
       }
-      const { apisActiveData, updateCurrentSendingData } = useApis.getState();
-      if (action === APIS_HOT_KEYS_ENUM.SEND) {
-        updateCurrentSendingData({ sendStatus: "sending" });
+      const { apisActiveData } = useApis.getState();
+      if (action === APIS_HOT_KEYS_ENUM.SEND && !beginRequest()) {
+        return;
       }
       window.vscode.postMessage({
         action: action === APIS_HOT_KEYS_ENUM.SEND ? "sendApi" : "saveApiData",

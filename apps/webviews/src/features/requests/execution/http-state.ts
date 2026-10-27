@@ -32,7 +32,7 @@ export function reduceHttpExecutionEvent(
   previous: HttpExecutionState | undefined,
   event: ExecutionEvent,
 ): HttpExecutionState {
-  const current = event.type === "start" ? {} : previous || {};
+  const current = previous || {};
   const next = {
     ...current,
     events: [...(current.events || []), event],
@@ -43,12 +43,16 @@ export function reduceHttpExecutionEvent(
       return {
         ...next,
         sendStatus: "sending",
+        events: [event],
+        error: null,
+        message: undefined,
         consoleList: [],
         assertions: [],
       };
     case "request":
       return {
         ...next,
+        visualizerHtml: null,
         response: event.response,
         request: event.request,
         cookies: event.cookies,

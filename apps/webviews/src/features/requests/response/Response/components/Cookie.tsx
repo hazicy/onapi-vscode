@@ -4,6 +4,7 @@ import { FC, memo } from "react";
 import dayjs from "dayjs";
 import { isArray, isEqual, isPlainObject } from "lodash-es";
 
+import Empty from "@/shared/ui/Empty";
 import { BasicTable } from "@/shared/components";
 
 import { Tooltip } from "@/shared/ui";
@@ -89,13 +90,18 @@ const Cookie: FC<Props> = memo(
       },
     ];
 
+    const rows = dataList();
+    if (!rows.length) {
+      return <Empty />;
+    }
+
     return (
       <div className={styles.container}>
         <BasicTable
           bordered
           rowKey={(record) => record?.cookie_id || record?.key}
           columns={columns}
-          dataSource={dataList()}
+          dataSource={rows}
         />
       </div>
     );

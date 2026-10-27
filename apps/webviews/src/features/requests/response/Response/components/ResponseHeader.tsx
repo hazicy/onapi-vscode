@@ -3,6 +3,7 @@ import { FC, memo } from "react";
 
 import { isArray, isEqual, isPlainObject } from "lodash-es";
 
+import Empty from "@/shared/ui/Empty";
 import BasicTable from "@/shared/components/BasicTable/BasicTable";
 
 interface Props {
@@ -46,13 +47,18 @@ const ResponseHeader: FC<Props> = memo(
         ),
       },
     ];
+    const rows = dataList();
+    if (!rows.length) {
+      return <Empty />;
+    }
+
     return (
       <div className={styles.container}>
         <BasicTable
           bordered
           showHeader={false}
           columns={columns}
-          dataSource={dataList()}
+          dataSource={rows}
         />
       </div>
     );

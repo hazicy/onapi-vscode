@@ -1,3 +1,7 @@
+import {
+  beginRequest,
+  cancelRequest,
+} from "@/features/requests/utils/requestExecution";
 import { selectRequestIndex } from "@/features/requests/store/useApis";
 import clsx from "clsx";
 import { requestUrl, editedUrl } from "@onapi/domain";
@@ -40,9 +44,6 @@ const menuProps = {
 const Index = memo((props: ApiComponentType) => {
   const { t } = useTranslation();
   const { apisData, onApisDataChange } = props;
-  const updateCurrentSendingData = useApis(
-    (store) => store.updateCurrentSendingData,
-  );
   const curApiSendingData = useApis((state) => state.currentSendingData);
   const apisActiveData = useApis((store) => store.apisActiveData);
   const apiDetailsData = useApis(selectRequestIndex);
@@ -94,7 +95,9 @@ const Index = memo((props: ApiComponentType) => {
   };
 
   const handleSend = () => {
-    updateCurrentSendingData({ sendStatus: "sending" });
+    if (!beginRequest()) {
+      return;
+    }
     window?.vscode.postMessage({
       action: "sendApi",
       data: currentData(),
@@ -183,12 +186,15 @@ const Index = memo((props: ApiComponentType) => {
               marginLeft: "4px",
             }}
             onClick={() => {
-              handleSend();
+              if (isSending) {
+                cancelRequest();
+              } else {
+                handleSend();
+              }
             }}
-            disabled={isSending}
             className={clsx(styles.button, styles2.button)}
           >
-            {isSending ? `${t("api.run.sending")}...` : t("api.run.send")}
+            {isSending ? t("supplement.cancel_send") : t("api.run.send")}
           </Button>
         }
       />

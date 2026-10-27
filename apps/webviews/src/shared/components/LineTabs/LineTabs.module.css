@@ -16,24 +16,6 @@
   height: 100%;
   overflow: auto;
 }
-.tabsHeaderCount .tabsCountBadge {
-  font-size: 10px;
-  box-shadow: none;
-  background: none;
-  color: var(--color-primary);
-}
-.tabsHeaderDot {
-  display: inline-block;
-  margin-left: 4px;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background-color: var(--color-primary);
-  position: absolute;
-  top: 16px;
-  right: 2px;
-}
-
 .tabsHeaderCount {
   display: inline-flex;
   align-items: center;
@@ -41,25 +23,59 @@
   line-height: 18px;
 }
 .tabsHeaderCount .tabsCountBadge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
-  border-radius: 3px;
-  background: var(
-    --vscode-badge-background,
-    var(--vscode-toolbar-hoverBackground)
-  );
-  color: var(--vscode-badge-foreground, var(--font-light-color));
-  font-size: 10px;
-  font-weight: 500;
-  line-height: 16px;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+  font-size: 11px;
+  font-weight: 400;
+  line-height: inherit;
   font-variant-numeric: tabular-nums;
 }
-.tabsHeaderDot {
-  position: static;
-  margin: 0;
-  flex-shrink: 0;
+
+.selectionList {
+  gap: 4px;
+  border: 0;
+}
+.selectionList [role="tab"] {
+  min-height: 28px;
+  padding: 4px 10px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+  font-size: var(--vscode-font-size, 13px);
+  font-weight: 500;
+  line-height: 20px;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+.selectionList [role="tab"]:hover {
+  background: var(--vscode-toolbar-hoverBackground, rgb(128 128 128 / 10%));
+  color: var(--vscode-foreground, var(--font-title-color));
+}
+.selectionList [role="tab"][data-active] {
+  background: color-mix(
+    in srgb,
+    var(--vscode-foreground, #888) 9%,
+    transparent
+  );
+  color: var(--vscode-foreground, var(--font-title-color));
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--vscode-foreground, #888) 6%, transparent);
+}
+.selectionList [role="tab"]:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder, var(--color-primary));
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .selectionList [role="tab"] {
+    transition: none;
+  }
+}
+
+.selectionList > span,
+.selectionList > span:has(> [role="tab"][data-active]) {
+  border-bottom: 0;
 }
