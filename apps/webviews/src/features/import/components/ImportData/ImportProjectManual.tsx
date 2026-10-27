@@ -6,7 +6,7 @@ import { Spin, Typography } from "@/shared/ui/base";
 import type { RcFile } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import classnames from "classnames";
+import clsx from "clsx";
 
 import ImportContent from "@/features/import/components/ImportContent/ImportContent";
 import { createImportOptions } from "@/features/import/components/ImportContent/options";
@@ -81,7 +81,7 @@ const ImportProjectManual = () => {
                 >
                   <div
                     key={item.key}
-                    className={classnames({
+                    className={clsx({
                       [styles.radioCard]: true,
                       [styles.active]: item.key === fileType,
                     })}

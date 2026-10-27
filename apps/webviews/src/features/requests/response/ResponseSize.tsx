@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { Col, Divider, Flex, Row } from "@/shared/ui/base";
 
 import { bufferToRaw } from "@onapi/domain/utils/response-tools";
-import classNames from "classnames";
+import clsx from "clsx";
 import {
   add,
   divide,
@@ -134,7 +134,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
         <Col span={24}>
           <Flex
             justify="space-between"
-            className={classNames(styles.responseSizeTitle, styles.flex)}
+            className={clsx(styles.responseSizeTitle, styles.flex)}
           >
             <span>{t("common.response_indicators.network")}</span>
           </Flex>
@@ -193,17 +193,17 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
     <Flex
       vertical
       style={{ width: 300 }}
-      className={classNames(styles.customSizePopover, styles.flex)}
+      className={clsx(styles.customSizePopover, styles.flex)}
     >
       <Flex gap={4} vertical className={styles.flex}>
         <Flex style={{ width: "100%" }} gap={8} className={styles.flex}>
-          <Flex className={classNames(styles.iconWrapper, styles.flex)}>
+          <Flex className={clsx(styles.iconWrapper, styles.flex)}>
             <AppIcon icon="download" className={styles.icon} />
           </Flex>
           <Flex flex={1} gap={4} vertical className={styles.flex}>
             <Flex
               justify="space-between"
-              className={classNames(styles.name, styles.flex)}
+              className={clsx(styles.name, styles.flex)}
               gap={4}
             >
               <span>Response Size</span>
@@ -211,7 +211,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
             </Flex>
             <Flex
               justify="space-between"
-              className={classNames(styles.desc, styles.flex)}
+              className={clsx(styles.desc, styles.flex)}
               gap={4}
             >
               <span>Headers</span>
@@ -219,7 +219,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
             </Flex>
             <Flex
               justify="space-between"
-              className={classNames(styles.desc, styles.flex)}
+              className={clsx(styles.desc, styles.flex)}
               gap={4}
             >
               <span>Body</span>
@@ -228,7 +228,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
             {has(formatSize, "uncompressedResponseBody") && (
               <Flex
                 justify="space-between"
-                className={classNames(styles.desc, styles.flex)}
+                className={clsx(styles.desc, styles.flex)}
                 gap={4}
               >
                 <span>Uncompressed</span>
@@ -240,7 +240,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
         <Divider style={{ margin: "8px 0" }} />
         <Flex style={{ width: "100%" }} gap={8} className={styles.flex}>
           <Flex
-            className={classNames(
+            className={clsx(
               [styles.iconWrapper, styles.request].join(" "),
               styles.flex,
             )}
@@ -250,7 +250,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
           <Flex flex={1} gap={4} vertical className={styles.flex}>
             <Flex
               justify="space-between"
-              className={classNames(styles.name, styles.flex)}
+              className={clsx(styles.name, styles.flex)}
               gap={4}
             >
               <span>Request Size</span>
@@ -258,7 +258,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
             </Flex>
             <Flex
               justify="space-between"
-              className={classNames(styles.desc, styles.flex)}
+              className={clsx(styles.desc, styles.flex)}
               gap={4}
             >
               <span>Headers</span>
@@ -266,7 +266,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
             </Flex>
             <Flex
               justify="space-between"
-              className={classNames(styles.desc, styles.flex)}
+              className={clsx(styles.desc, styles.flex)}
               gap={4}
             >
               <span>Body</span>
@@ -282,10 +282,10 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
     <Flex
       gap={8}
       style={{ width: 240 }}
-      className={classNames(styles.customCodePopover, styles.flex)}
+      className={clsx(styles.customCodePopover, styles.flex)}
     >
       <Flex
-        className={classNames(
+        className={clsx(
           styles.iconCode,
           {
             [styles.success]: String(responseCode).charAt(0) === "2",
@@ -301,11 +301,11 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
         />
       </Flex>
       <Flex gap={4} vertical className={styles.flex}>
-        <Flex className={classNames(styles.name, styles.flex)} gap={4}>
+        <Flex className={clsx(styles.name, styles.flex)} gap={4}>
           <span>{responseCode}</span>
           <span>{responseCodeDesc?.name}</span>
         </Flex>
-        <Flex className={classNames(styles.desc, styles.flex)} wrap="wrap">
+        <Flex className={clsx(styles.desc, styles.flex)} wrap="wrap">
           {responseCodeDesc?.desc}
         </Flex>
       </Flex>
@@ -329,7 +329,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
             <Col span={24}>
               <Flex
                 justify="space-between"
-                className={classNames(styles.newResponseSizeTitle, styles.flex)}
+                className={clsx(styles.newResponseSizeTitle, styles.flex)}
               >
                 Response Time
                 <span>{`${toFixed(formatTimings?.total?.duration || 0)}ms`}</span>
@@ -341,7 +341,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
             timeContentList,
             ({ key, name, lineLeftSize, lineRightSize, width, marginLeft }) => (
               <Row
-                className={classNames(styles[key] ?? key, {
+                className={clsx(styles[key] ?? key, {
                   [styles.empty]: isEqual(width, 0),
                 })}
                 gutter={[8, 8]}
@@ -360,7 +360,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
                         width: `${width}%`,
                         marginLeft: `${marginLeft}%`,
                       }}
-                      className={classNames(
+                      className={clsx(
                         styles.progressContent,
                         styles[key] ?? key,
                       )}
@@ -393,7 +393,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
         <Col span={24}>
           <Flex
             justify="space-between"
-            className={classNames(styles.responseSizeTitle, styles.flex)}
+            className={clsx(styles.responseSizeTitle, styles.flex)}
           >
             <span>{t("common.response_indicators.event")}</span>
             <span>{t("common.response_indicators.use_time")}</span>
@@ -482,7 +482,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
     <Flex
       gap={8}
       align="center"
-      className={classNames(styles.responseSize, styles.flex)}
+      className={clsx(styles.responseSize, styles.flex)}
     >
       {responseCode !== 0 && (
         <>
@@ -607,7 +607,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
           >
             <AppIcon
               icon="network"
-              className={classNames(styles.curPointer, styles.icon)}
+              className={clsx(styles.curPointer, styles.icon)}
               style={{
                 color:
                   systemProxy === 2
@@ -640,7 +640,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
         <Tooltip title={t("response.download_tip")}>
           <AppIcon
             style={{ fontSize: 14 }}
-            className={classNames(styles.curPointer, styles.icon)}
+            className={clsx(styles.curPointer, styles.icon)}
             onClick={handleDownload}
             icon="download"
           />

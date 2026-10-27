@@ -1,5 +1,5 @@
 import { forwardRef } from "./forwardRef";
-import cx from "classnames";
+import clsx from "clsx";
 import type { UIProps } from "./types";
 import tagStyles from "./Tag.module.css";
 
@@ -21,7 +21,7 @@ export const Tag = forwardRef<HTMLSpanElement, UIProps>(
     <span
       {...props}
       ref={ref}
-      className={cx(tagStyles.tag, className)}
+      className={clsx(tagStyles.tag, className)}
       style={{ color, ...style }}
     >
       {icon}

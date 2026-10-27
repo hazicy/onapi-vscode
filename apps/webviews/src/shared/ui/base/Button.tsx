@@ -1,7 +1,7 @@
 import buttonStyles from "./Button.module.css";
 import { forwardRef } from "./forwardRef";
 import { Button as BaseButton } from "@base-ui/react/button";
-import cx from "classnames";
+import clsx from "clsx";
 import type { ButtonProps } from "./types";
 
 export const Button = forwardRef<HTMLElement, ButtonProps>(
@@ -30,7 +30,7 @@ export const Button = forwardRef<HTMLElement, ButtonProps>(
       ref={ref}
       type={htmlType}
       disabled={props.disabled || !!loading}
-      className={cx(
+      className={clsx(
         buttonStyles.button,
         type !== "default" && buttonStyles[`button-${type}`],
         size === "small"
@@ -51,7 +51,7 @@ export const Button = forwardRef<HTMLElement, ButtonProps>(
         <span className={buttonStyles.spinner} aria-label="Loading" />
       ) : (
         icon && (
-          <span className={cx(buttonStyles.icon, iconClassName)}>{icon}</span>
+          <span className={clsx(buttonStyles.icon, iconClassName)}>{icon}</span>
         )
       )}
       {children}

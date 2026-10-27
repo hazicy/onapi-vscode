@@ -32,7 +32,7 @@ import TestingResult from "./TestingResult";
 import TestingList from "./TestingList/TestingList";
 import All from "./TestingList/All/All";
 import { forEach, isArray } from "lodash-es";
-import classNames from "classnames";
+import clsx from "clsx";
 
 type MainProps = {
   testingSendingData: Partial<TestingSendingData>;
@@ -193,7 +193,7 @@ const Main = ({
               <>
                 {testingConfig?.file_name ? (
                   <div
-                    className={classNames(styles.fileNameWrap, {
+                    className={clsx(styles.fileNameWrap, {
                       [styles.disabled]: sendingOrOver,
                     })}
                   >
@@ -214,7 +214,7 @@ const Main = ({
                   <Upload
                     disabled={sendingOrOver}
                     customRequest={customRequest}
-                    className={classNames(styles.uploadWrapper, {
+                    className={clsx(styles.uploadWrapper, {
                       [styles.disabled]: sendingOrOver,
                     })}
                     accept="text/plain,text/csv,application/json"
@@ -382,7 +382,7 @@ const Main = ({
               {t("base.refresh")}
             </Button>
             <Button
-              className={classNames(styles.selectAll, styles.button)}
+              className={clsx(styles.selectAll, styles.button)}
               type="text"
               onClick={onSelectAll}
             >

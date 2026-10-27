@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Dialog } from "@base-ui/react/dialog";
-import classNames from "classnames";
+import clsx from "clsx";
 
 import css from "./Drawer.module.css";
 
@@ -39,7 +39,7 @@ export interface DrawerProps extends Omit<
   rootClassName?: string;
   rootStyle?: CSSProperties;
   styles?: Partial<Record<DrawerSection, CSSProperties>>;
-  classNames?: Partial<Record<DrawerSection, string>>;
+  clsx?: Partial<Record<DrawerSection, string>>;
   onClose?: (event: Event) => void;
   afterOpenChange?: (open: boolean) => void;
 }
@@ -70,7 +70,7 @@ export const Drawer = ({
   className,
   style,
   styles,
-  classNames: sectionClasses,
+  clsx: sectionClasses,
   onClose,
   afterOpenChange,
   "aria-label": ariaLabel,
@@ -118,12 +118,12 @@ export const Drawer = ({
         keepMounted={
           forceRender || (hasOpened && !(destroyOnClose || destroyOnHidden))
         }
-        className={classNames(css.root, rootClassName)}
+        className={clsx(css.root, rootClassName)}
         style={{ zIndex, ...rootStyle }}
       >
         {mask && (
           <Dialog.Backdrop
-            className={classNames(css.mask, sectionClasses?.mask)}
+            className={clsx(css.mask, sectionClasses?.mask)}
             style={styles?.mask}
           />
         )}
@@ -133,7 +133,7 @@ export const Drawer = ({
           aria-label={ariaLabel}
           aria-describedby={undefined}
           initialFocus={autoFocus}
-          className={classNames(
+          className={clsx(
             css.popup,
             className,
             sectionClasses?.wrapper,
@@ -144,7 +144,7 @@ export const Drawer = ({
           style={popupStyle}
         >
           <header
-            className={classNames(css.header, sectionClasses?.header)}
+            className={clsx(css.header, sectionClasses?.header)}
             style={styles?.header}
           >
             {closable && closeIcon !== null && closeIcon !== false && (
@@ -167,7 +167,7 @@ export const Drawer = ({
               </Dialog.Close>
             )}
             <Dialog.Title
-              className={classNames(
+              className={clsx(
                 css.title,
                 (title === null || title === undefined) && css.visuallyHidden,
               )}
@@ -179,14 +179,14 @@ export const Drawer = ({
             )}
           </header>
           <div
-            className={classNames(css.body, sectionClasses?.body)}
+            className={clsx(css.body, sectionClasses?.body)}
             style={styles?.body}
           >
             {children}
           </div>
           {footer !== null && footer !== undefined && (
             <footer
-              className={classNames(css.footer, sectionClasses?.footer)}
+              className={clsx(css.footer, sectionClasses?.footer)}
               style={styles?.footer}
             >
               {footer}

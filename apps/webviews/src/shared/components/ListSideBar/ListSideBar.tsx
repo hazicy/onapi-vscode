@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Button, Flex } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import classNames from "classnames";
+import clsx from "clsx";
 import { isEqual, map, size } from "lodash-es";
 
 import { AppIcon } from "@/shared/ui";
@@ -41,7 +41,7 @@ const ListSideBar = (props: Props) => {
     <Flex className={styles.container}>
       <Flex
         vertical
-        className={classNames(styles.sideTreeWrap, {
+        className={clsx(styles.sideTreeWrap, {
           [styles.expand]: expand,
         })}
       >

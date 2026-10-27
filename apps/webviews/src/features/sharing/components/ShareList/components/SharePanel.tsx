@@ -5,7 +5,7 @@ import { Flex, message } from "@/shared/ui/base";
 
 import { useDebounce, useSafeState } from "ahooks";
 
-import cn from "classnames";
+import clsx from "clsx";
 
 import { Button, AppIcon, Tooltip } from "@/shared/ui";
 import { Modal } from "@/shared/ui/Modal";
@@ -28,7 +28,7 @@ const SharePanel = (props: PanelProps) => {
 
   const tabExtraContent = (
     <Flex
-      className={cn(
+      className={clsx(
         styles.shareListDeleteBtn,
         {
           [styles.show]: checkedList.length > 0,

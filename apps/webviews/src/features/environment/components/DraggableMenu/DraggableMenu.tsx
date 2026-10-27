@@ -8,7 +8,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import cn from "classnames";
+import clsx from "clsx";
 import { includes, map } from "lodash-es";
 
 import { AppIcon } from "@/shared/ui";
@@ -45,7 +45,7 @@ const Item: FC<ItemProps> = ({
       className={styles.draggableMenuItem}
     >
       <div
-        className={cn(styles.draggableMenuItem, {
+        className={clsx(styles.draggableMenuItem, {
           [styles.draggableMenuItemSelected]: includes(selectedKeys, id),
         })}
         onClick={() => onItemClick?.(`${id}`)}
@@ -88,7 +88,7 @@ const DraggableMenu: FC<DraggableMenuProps> = ({
   });
 
   return (
-    <ul style={style} className={cn(styles.container, className)}>
+    <ul style={style} className={clsx(styles.container, className)}>
       <DndContext sensors={[sensor]} onDragEnd={onDragEnd}>
         {map(items, (menuItem) =>
           menuItem?.type === "group" ? (

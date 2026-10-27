@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import clsx from "clsx";
 import React, {
   KeyboardEvent,
   useEffect,
@@ -188,7 +188,7 @@ const UrlGroup = (props: UrlGroupProps) => {
     <div
       ref={requestBarRef}
       style={style}
-      className={classNames(styles.container, className)}
+      className={clsx(styles.container, className)}
     >
       {["api", "sse"].includes(type) && (
         <>
@@ -198,7 +198,7 @@ const UrlGroup = (props: UrlGroupProps) => {
             onDropdownVisibleChange={(open) => {
               setMethodSelectOpen(open);
             }}
-            className={classNames(
+            className={clsx(
               styles[data?.method?.toLowerCase() || "DEFAULT"],
               styles.select,
             )}
@@ -292,7 +292,7 @@ const UrlGroup = (props: UrlGroupProps) => {
                         />
                       }
                       popupMatchSelectWidth={450}
-                      className={classNames(
+                      className={clsx(
                         [
                           styles.rightSelect,
                           styles.rightSelectHttp,
@@ -376,7 +376,7 @@ const UrlGroup = (props: UrlGroupProps) => {
             />
           }
           popupMatchSelectWidth={false}
-          className={classNames(
+          className={clsx(
             [styles.rightSelect, styles.rightSelectHttp].join(" "),
             styles.select,
           )}

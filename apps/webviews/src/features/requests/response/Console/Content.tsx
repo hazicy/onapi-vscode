@@ -1,5 +1,5 @@
 import styles from "./Content.module.css";
-import classNames from "classnames";
+import clsx from "clsx";
 import ReactJson from "@microlink/react-json-view";
 
 import { Flex } from "@/shared/ui/base";
@@ -77,7 +77,7 @@ const ConsoleContent = (props: ConsoleContentProps) => {
         <Flex
           align={"center"}
           key={`${consoleItem.level}-${consoleIndex}`}
-          className={classNames(
+          className={clsx(
             styles.consoleItem,
             styles[consoleItem.level] ?? consoleItem.level,
           )}

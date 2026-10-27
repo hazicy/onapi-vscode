@@ -13,7 +13,7 @@ import {
 } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import classNames from "classnames";
+import clsx from "clsx";
 import { get, map } from "lodash-es";
 
 import Button from "@/shared/ui/Button";
@@ -151,7 +151,7 @@ const EnvDropdown: React.FC<EnvDropdownProps> = ({
     <Flex
       style={style}
       align="center"
-      className={classNames(
+      className={clsx(
         styles.container,
         envDisabled && styles.envDropdownDisabled,
       )}
@@ -184,7 +184,7 @@ const EnvDropdown: React.FC<EnvDropdownProps> = ({
         >
           <Flex align="center" gap={4}>
             <AppIcon
-              className={classNames(styles.envSelectSetting, styles.icon)}
+              className={clsx(styles.envSelectSetting, styles.icon)}
               onClick={(e) => {
                 if (envDisabled) {
                   return;

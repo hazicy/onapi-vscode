@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import clsx from "clsx";
 import styles from "../../SocketIoDebug.module.css";
 import { useTranslation } from "react-i18next";
 
@@ -30,7 +30,7 @@ const Header = (props: Props) => {
     <>
       <Flex
         justify="space-between"
-        className={classNames(styles.wsHeader, styles.flex)}
+        className={clsx(styles.wsHeader, styles.flex)}
       >
         <Flex
           align="center"

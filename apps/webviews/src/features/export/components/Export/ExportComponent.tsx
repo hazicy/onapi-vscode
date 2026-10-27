@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Flex, message } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import classnames from "classnames";
+import clsx from "clsx";
 
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
@@ -47,7 +47,7 @@ const Export = (props: Props) => {
               <React.Fragment key={item.key}>
                 <div
                   key={item.key}
-                  className={classnames({
+                  className={clsx({
                     [styles.radioCard]: true,
                     [styles.active]: item.key === exportType,
                   })}
@@ -82,7 +82,7 @@ const Export = (props: Props) => {
             <Radio.Group
               value={version}
               onChange={(e) => setVersion(e?.target?.value)}
-              className={classnames(styles.marginBottom20, styles.radioGroup)}
+              className={clsx(styles.marginBottom20, styles.radioGroup)}
             >
               <Radio
                 value="3.0"

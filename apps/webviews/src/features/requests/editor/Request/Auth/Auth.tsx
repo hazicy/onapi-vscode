@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import clsx from "clsx";
 import { AuthContext } from "./AuthField";
 import "./style.css";
 import styles from "./Auth.module.css";

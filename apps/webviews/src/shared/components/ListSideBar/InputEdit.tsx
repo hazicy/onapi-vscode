@@ -11,7 +11,7 @@ import {
 } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import classnames from "classnames";
+import clsx from "clsx";
 
 import AppIcon from "@/shared/ui/AppIcon";
 
@@ -85,7 +85,7 @@ const InputEdit = (props: Props) => {
 
   return (
     <li
-      className={classnames({
+      className={clsx({
         [styles.basicTabBar]: true,
         [styles.basicTabBarActive]: active,
       })}
@@ -95,7 +95,7 @@ const InputEdit = (props: Props) => {
       {!edit ? (
         <Input
           size="small"
-          className={classnames({
+          className={clsx({
             [styles.editInput]: !edit,
           })}
           style={{ width: 120 }}

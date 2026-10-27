@@ -2,7 +2,7 @@ import checkboxStyles from "./Checkbox.module.css";
 import { forwardRef } from "./forwardRef";
 import { useState } from "react";
 import { Checkbox as BaseCheckbox } from "@base-ui/react/checkbox";
-import cx from "classnames";
+import clsx from "clsx";
 import type { CheckboxProps, UIProps } from "./types";
 import { eventFor } from "./controlEvents";
 
@@ -21,12 +21,12 @@ const CheckboxControl = forwardRef<HTMLElement, CheckboxProps>(
     },
     ref,
   ) => (
-    <label className={cx(checkboxStyles.checkLabel, className, rootClassName)}>
+    <label className={clsx(checkboxStyles.checkLabel, className, rootClassName)}>
       <BaseCheckbox.Root
         {...props}
         ref={ref}
         indeterminate={indeterminate}
-        className={cx(checkboxStyles.checkbox, controlClassName)}
+        className={clsx(checkboxStyles.checkbox, controlClassName)}
         onCheckedChange={(checked, details) =>
           onChange?.(eventFor(value, checked, details.event))
         }
@@ -51,7 +51,7 @@ function CheckboxGroup({
   const [internal, set] = useState(defaultValue);
   const selected = value ?? internal;
   return (
-    <div {...props} className={cx(checkboxStyles.flex, props.className)}>
+    <div {...props} className={clsx(checkboxStyles.flex, props.className)}>
       {children ??
         options.map((raw: any) => {
           const option =

@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import clsx from "clsx";
 import styles from "../../WebSocketDebug.module.css";
 import React, { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -133,7 +133,7 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
           onChange(newValue);
         },
       }}
-      itemClassName={classNames(
+      itemClassName={clsx(
         styles.dropdownMenuItem,
         styles.dropdownMenuSubmenu,
       )}
@@ -241,7 +241,7 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
                 />
                 <div
                   ref={flowRef}
-                  className={classNames("websocket", styles.messageList)}
+                  className={clsx("websocket", styles.messageList)}
                 >
                   {!wsTemplateStateList.length ? (
                     <Empty

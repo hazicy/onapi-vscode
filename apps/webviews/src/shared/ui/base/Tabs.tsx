@@ -1,7 +1,7 @@
 import tabsStyles from "./Tabs.module.css";
 import React, { useState } from "react";
 import { Tabs as BaseTabs } from "@base-ui/react/tabs";
-import cx from "classnames";
+import clsx from "clsx";
 import type { TabsProps } from "./types";
 
 export function Tabs({
@@ -40,25 +40,25 @@ export function Tabs({
         setSelected(String(key));
         onChange?.(String(key));
       }}
-      className={cx(
+      className={clsx(
         tabsStyles.tabs,
         (tabPosition === undefined || tabPosition === "top") && undefined,
         className,
         rootClassName,
       )}
     >
-      <div className={cx(tabsStyles.nav, navClassName)}>
+      <div className={clsx(tabsStyles.nav, navClassName)}>
         {tabBarExtraContent &&
         !React.isValidElement(tabBarExtraContent) &&
         typeof tabBarExtraContent === "object"
           ? tabBarExtraContent.left
           : null}
-        <div className={cx(tabsStyles.navWrap, navWrapClassName)}>
-          <BaseTabs.List className={cx(tabsStyles.tabList, tabListClassName)}>
+        <div className={clsx(tabsStyles.navWrap, navWrapClassName)}>
+          <BaseTabs.List className={clsx(tabsStyles.tabList, tabListClassName)}>
             {items.map((item) => (
               <span
                 key={item.key}
-                className={cx(
+                className={clsx(
                   tabsStyles.tabItem,
                   item.tabExtra && tabsStyles.tabWithExtra,
                   current === item.key && tabsStyles.tabItemActive,
@@ -69,7 +69,7 @@ export function Tabs({
                 <BaseTabs.Tab
                   value={item.key}
                   disabled={item.disabled}
-                  className={cx(tabsStyles.tab, tabButtonClassName)}
+                  className={clsx(tabsStyles.tab, tabButtonClassName)}
                 >
                   {item.label}
                 </BaseTabs.Tab>
@@ -96,14 +96,14 @@ export function Tabs({
           ? tabBarExtraContent.right
           : tabBarExtraContent}
       </div>
-      <div className={cx(tabsStyles.contentHolder, contentClassName)}>
-        <div className={cx(tabsStyles.content, panelsClassName)}>
+      <div className={clsx(tabsStyles.contentHolder, contentClassName)}>
+        <div className={clsx(tabsStyles.content, panelsClassName)}>
           {items.map((item) => (
             <BaseTabs.Panel
               key={item.key}
               value={item.key}
               keepMounted={!destroyInactiveTabPane && !item.destroyOnHidden}
-              className={cx(tabsStyles.tabPanel, panelClassName)}
+              className={clsx(tabsStyles.tabPanel, panelClassName)}
             >
               {item.children}
             </BaseTabs.Panel>

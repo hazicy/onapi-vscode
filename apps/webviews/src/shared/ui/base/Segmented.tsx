@@ -1,6 +1,6 @@
 import segmentedStyles from "./Segmented.module.css";
 import { Tabs as BaseTabs } from "@base-ui/react/tabs";
-import cx from "classnames";
+import clsx from "clsx";
 import type { SegmentedProps } from "./types";
 
 export function Segmented<V extends string | number = string | number>({
@@ -27,9 +27,9 @@ export function Segmented<V extends string | number = string | number>({
           : options[0])
       }
       onValueChange={(v) => onChange?.(v as V)}
-      className={cx(segmentedStyles.segmented, className)}
+      className={clsx(segmentedStyles.segmented, className)}
     >
-      <BaseTabs.List className={cx(segmentedStyles.tabList, listClassName)}>
+      <BaseTabs.List className={clsx(segmentedStyles.tabList, listClassName)}>
         {options.map((raw: any) => {
           const o = typeof raw === "object" ? raw : { value: raw, label: raw };
           return (
@@ -38,7 +38,7 @@ export function Segmented<V extends string | number = string | number>({
               value={o.value}
               disabled={o.disabled}
               className={(state) =>
-                cx(
+                clsx(
                   segmentedStyles.tab,
                   itemClassName,
                   state.active && activeItemClassName,

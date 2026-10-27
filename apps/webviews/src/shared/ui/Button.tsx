@@ -3,7 +3,7 @@ import { Button as BaseButton } from "@/shared/ui/base";
 
 import type { ButtonProps as BaseButtonProps } from "@/shared/ui/base";
 
-import classNames from "classnames";
+import clsx from "clsx";
 
 export type ButtonProps = Omit<BaseButtonProps, "size"> & {
   /** Extension property for button type, add new className directly for new variant types */
@@ -18,12 +18,12 @@ const Button = ({ btnRef, mode, size, ...restProps }: ButtonProps) => {
     <BaseButton
       ref={btnRef}
       {...restProps}
-      rootClassName={classNames(
+      rootClassName={clsx(
         mode && styles[`mode-${mode}`],
         size && styles[`size-${size}`],
         styles[`type-${type}`],
       )}
-      className={classNames(styles.container, restProps.className)}
+      className={clsx(styles.container, restProps.className)}
     />
   );
 };

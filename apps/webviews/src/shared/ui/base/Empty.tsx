@@ -1,4 +1,4 @@
-import cx from "classnames";
+import clsx from "clsx";
 import type { UIProps } from "./types";
 import emptyStyles from "./Empty.module.css";
 
@@ -14,10 +14,10 @@ export function Empty({
   style,
 }: UIProps) {
   return (
-    <div className={cx(emptyStyles.empty, className)} style={style}>
+    <div className={clsx(emptyStyles.empty, className)} style={style}>
       {image && <div className={imageClassName}>{image}</div>}
       {description !== false && (
-        <div className={cx(emptyStyles.description, descriptionClassName)}>
+        <div className={clsx(emptyStyles.description, descriptionClassName)}>
           {description}
         </div>
       )}

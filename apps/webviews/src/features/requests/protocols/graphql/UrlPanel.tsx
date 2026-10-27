@@ -1,5 +1,5 @@
 import { selectRequestIndex } from "@/features/requests/store/useApis";
-import classNames from "classnames";
+import clsx from "clsx";
 import { requestUrl, editedUrl } from "@onapi/domain";
 import styles from "../../RequestWorkspace.module.css";
 import styles2 from "./UrlPanel.module.css";
@@ -187,7 +187,7 @@ const Index = memo((props: ApiComponentType) => {
               handleSend();
             }}
             disabled={isSending}
-            className={classNames(styles.button, styles2.button)}
+            className={clsx(styles.button, styles2.button)}
           >
             {isSending ? `${t("api.run.sending")}...` : t("api.run.send")}
           </Button>

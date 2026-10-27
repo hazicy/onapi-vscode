@@ -1,6 +1,6 @@
 import { forwardRef } from "./forwardRef";
 import React from "react";
-import cx from "classnames";
+import clsx from "clsx";
 import type { UIProps } from "./types";
 import flexStyles from "./Flex.module.css";
 
@@ -27,7 +27,7 @@ export const Flex = forwardRef<HTMLDivElement, UIProps>(
       {
         ...props,
         ref,
-        className: cx(flexStyles.flex, className, rootClassName),
+        className: clsx(flexStyles.flex, className, rootClassName),
         style: {
           flexDirection: vertical ? "column" : "row",
           alignItems: align,

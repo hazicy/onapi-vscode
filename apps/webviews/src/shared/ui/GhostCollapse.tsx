@@ -3,7 +3,7 @@ import styles from "./GhostCollapse.module.css";
 import type { CollapseProps as BaseCollapseProps } from "@/shared/ui/base";
 import { Collapse as BaseCollapse } from "@/shared/ui/base";
 
-import classNames from "classnames";
+import clsx from "clsx";
 
 import AppIcon from "@/shared/ui/AppIcon";
 import useTheme from "@/shared/hooks/useTheme";
@@ -22,7 +22,7 @@ const GhostCollapse = ({
   return (
     <div className={styles.container}>
       <BaseCollapse
-        rootClassName={classNames({ [styles.fitContent]: fitContent })}
+        rootClassName={clsx({ [styles.fitContent]: fitContent })}
         expandIcon={({ isActive }) => (
           <AppIcon
             icon="chevron-down"

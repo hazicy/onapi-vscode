@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import cx from "classnames";
+import clsx from "clsx";
 import modalStyles from "./Modal.module.css";
 import { useSyncExternalStore } from "react";
 import { Dialog } from "@base-ui/react/dialog";
@@ -109,7 +109,7 @@ function ModalControl({
         keepMounted={
           forceRender || (visited && !(destroyOnClose || destroyOnHidden))
         }
-        className={cx(modalStyles.container, rootClassName, wrapClassName)}
+        className={clsx(modalStyles.container, rootClassName, wrapClassName)}
         style={{ zIndex }}
       >
         {mask && (
@@ -118,7 +118,7 @@ function ModalControl({
         <Dialog.Popup
           aria-describedby={undefined}
           finalFocus={focusTriggerAfterClose}
-          className={cx(modalStyles.modal, className)}
+          className={clsx(modalStyles.modal, className)}
           style={{
             width,
             maxWidth: "calc(100vw - 32px)",
@@ -142,7 +142,7 @@ function ModalControl({
           </div>
           {footer !== null && (
             <div
-              className={cx(modalStyles.actions, footerClassName)}
+              className={clsx(modalStyles.actions, footerClassName)}
               style={styles?.footer}
             >
               {typeof footer === "function"

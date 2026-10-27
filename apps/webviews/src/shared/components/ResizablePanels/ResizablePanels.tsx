@@ -22,7 +22,7 @@ import {
 import { Flex } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import cn from "classnames";
+import clsx from "clsx";
 
 import AppIcon from "@/shared/ui/AppIcon";
 import { usePanelPreferences } from "@/shared/contexts/panel-preferences";
@@ -178,7 +178,7 @@ const ResizablePanels = forwardRef((props: Props, ref) => {
           );
           onResize?.(size, id, previous);
         }}
-        className={cn(
+        className={clsx(
           isLeft
             ? styles.resizablePanelLeftWrap
             : styles.resizablePanelRightWrap,
@@ -204,7 +204,7 @@ const ResizablePanels = forwardRef((props: Props, ref) => {
                 className={styles.icon}
               />
               <span
-                className={cn(
+                className={clsx(
                   styles.collapseTitle,
                   styles[direction],
                   language === "en" && styles.noSpacing,
@@ -238,7 +238,7 @@ const ResizablePanels = forwardRef((props: Props, ref) => {
         {/* bar */}
         <Separator
           {...panelResizeHandleProps}
-          className={cn(
+          className={clsx(
             styles.resizablePanelHandle,
             styles[direction],
             panelResizeHandleProps?.className,

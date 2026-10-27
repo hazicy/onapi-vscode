@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 
-import cn from "classnames";
+import clsx from "clsx";
 
 interface Props {
   width?: number;
@@ -123,7 +123,7 @@ const SplitBar: React.FC<Props> = (props) => {
           left: layoutWidth,
           height: barHeight,
         }}
-        className={cn({
+        className={clsx({
           [styles.tdScale]: false,
           [styles.scaling]: scaling,
         })}

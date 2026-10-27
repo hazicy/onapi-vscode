@@ -2,7 +2,7 @@ import inputStyles from "./Input.module.css";
 import { forwardRef } from "./forwardRef";
 import { useImperativeHandle, useRef } from "react";
 import { Input as BaseInput } from "@base-ui/react/input";
-import cx from "classnames";
+import clsx from "clsx";
 import type { InputProps, InputRef, TextAreaProps } from "./types";
 
 const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
@@ -21,7 +21,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       {...props}
       ref={ref}
       rows={props.rows ?? autoSize?.minRows ?? 2}
-      className={cx(
+      className={clsx(
         inputStyles.input,
         inputClassName,
         className,
@@ -78,12 +78,12 @@ const InputControl = forwardRef<InputRef, InputProps>(
             ? style
             : undefined
         }
-        className={cx(
+        className={clsx(
           inputStyles.input,
           inputClassName,
           bordered &&
             variant !== "borderless" &&
-            cx(inputStyles.outlined, outlinedClassName),
+            clsx(inputStyles.outlined, outlinedClassName),
           !prefix && !suffix && !allowClear && className,
           { [inputStyles.borderless]: !bordered || variant === "borderless" },
         )}
@@ -97,7 +97,7 @@ const InputControl = forwardRef<InputRef, InputProps>(
     );
     return addonBefore || addonAfter || prefix || suffix || allowClear ? (
       <span
-        className={cx(
+        className={clsx(
           inputStyles.group,
           inputStyles.affix,
           affixClassName,

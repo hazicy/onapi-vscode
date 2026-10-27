@@ -1,7 +1,7 @@
 import type { CodeEditorRef } from "@/shared/components/CodeEditor/CodeEditor";
 import styles from "./PathPickModal.module.css";
 import Modal from "@/shared/ui/Modal";
-import classNames from "classnames";
+import clsx from "clsx";
 import { FC, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -171,7 +171,7 @@ const PathPickModal: FC<Props> = ({
       destroyOnClose
       title={computedInfo.modalTitle}
       {...resetProps}
-      className={classNames(styles.container, resetProps.className)}
+      className={clsx(styles.container, resetProps.className)}
     >
       <Input
         placeholder={computedInfo.placeholder}

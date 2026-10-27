@@ -2,7 +2,7 @@ import { memo, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import cn from "classnames";
+import clsx from "clsx";
 
 import AppIcon from "@/shared/ui/AppIcon";
 import { Checkbox } from "@/shared/ui/base";
@@ -46,7 +46,7 @@ const KeyValueRow = memo(function KeyValueRow({
   return (
     <div
       ref={sortable.setNodeRef}
-      className={cn(styles.row, {
+      className={clsx(styles.row, {
         [styles.dragging]: sortable.isDragging,
         [styles.placeholder]: placeholderRow,
       })}

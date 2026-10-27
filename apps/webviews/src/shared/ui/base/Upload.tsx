@@ -1,6 +1,6 @@
 import uploadStyles from "./Upload.module.css";
 import { useEffect, useRef, useState } from "react";
-import cx from "classnames";
+import clsx from "clsx";
 import type { RcFile, UploadFile, UploadProps } from "./types";
 
 const IGNORE = Symbol("ignore-file");
@@ -134,7 +134,7 @@ function FilePicker({
     }
   };
   return (
-    <div className={cx(uploadStyles.upload, className)} style={style}>
+    <div className={clsx(uploadStyles.upload, className)} style={style}>
       <div
         role="button"
         tabIndex={disabled ? -1 : 0}

@@ -1,6 +1,6 @@
 import fieldStyles from "./Field.module.css";
 import { useId, type CSSProperties, type ReactNode } from "react";
-import cx from "classnames";
+import clsx from "clsx";
 
 export function Field({
   labelClassName,
@@ -31,7 +31,7 @@ export function Field({
   return (
     <div
       hidden={hidden}
-      className={cx(fieldStyles.formItem, className)}
+      className={clsx(fieldStyles.formItem, className)}
       style={style}
     >
       {label !== undefined && (

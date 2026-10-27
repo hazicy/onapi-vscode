@@ -1,5 +1,5 @@
 import styles from "./SegmentedTabs.module.css";
-import classNames from "classnames";
+import clsx from "clsx";
 import {
   FC,
   forwardRef,
@@ -94,9 +94,9 @@ const SegmentedTabs: FC<Props> = forwardRef(
     const mergeValue = value || tabValue;
 
     return (
-      <Flex vertical className={classNames(styles.container, wrapClassName)}>
+      <Flex vertical className={clsx(styles.container, wrapClassName)}>
         <header
-          className={classNames(styles.segmentedTabsHeader, headerClassName)}
+          className={clsx(styles.segmentedTabsHeader, headerClassName)}
         >
           <Flex align="center" style={{ width: "100%" }}>
             <Segmented
@@ -107,7 +107,7 @@ const SegmentedTabs: FC<Props> = forwardRef(
             />
             {tabBarExtraContent && (
               <div
-                className={classNames(
+                className={clsx(
                   styles.tabBarExtraContentWrap,
                   extraClassName,
                 )}
@@ -123,7 +123,7 @@ const SegmentedTabs: FC<Props> = forwardRef(
           </Flex>
         </header>
         <main
-          className={classNames(styles.segmentedTabsContent, contentClassName)}
+          className={clsx(styles.segmentedTabsContent, contentClassName)}
         >
           {map(
             options,
@@ -131,7 +131,7 @@ const SegmentedTabs: FC<Props> = forwardRef(
               renderChildrenMap[item.value] && (
                 <div
                   hidden={mergeValue !== item.value}
-                  className={classNames(
+                  className={clsx(
                     styles.segmentedTabsContentItem,
                     contentItemClassName,
                   )}

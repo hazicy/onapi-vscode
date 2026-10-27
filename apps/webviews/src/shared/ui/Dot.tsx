@@ -1,5 +1,5 @@
 import styles from "./Dot.module.css";
-import classNames from "classnames";
+import clsx from "clsx";
 import { ValueOf } from "type-fest";
 
 const TYPE_MAP = {
@@ -25,9 +25,9 @@ const Dot = ({
   color = "",
 }: DotProps) => {
   return (
-    <div className={classNames(styles.container, className)}>
+    <div className={clsx(styles.container, className)}>
       <div
-        className={classNames(styles.dot, [{ [TYPE_MAP[type]]: true }])}
+        className={clsx(styles.dot, [{ [TYPE_MAP[type]]: true }])}
         style={{ width: size, height: size, backgroundColor: color }}
       ></div>
     </div>

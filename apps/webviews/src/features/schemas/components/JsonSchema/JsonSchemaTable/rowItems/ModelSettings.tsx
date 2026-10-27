@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { Input } from "@/shared/ui/base";
 
-import cn from "classnames";
+import clsx from "clsx";
 import { isPlainObject } from "lodash-es";
 
 import Button from "@/shared/ui/Button";

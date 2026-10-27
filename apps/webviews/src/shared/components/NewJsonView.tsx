@@ -1,5 +1,5 @@
 import styles from "./NewJsonView.module.css";
-import classNames from "classnames";
+import clsx from "clsx";
 import { CSSProperties, FC, useMemo } from "react";
 import ReactJson from "@microlink/react-json-view";
 
@@ -78,7 +78,7 @@ const NewJsonView: FC<Props> = ({ value, wrapStyle, wrapClassName }) => {
   return (
     <div
       style={wrapStyle}
-      className={classNames(styles.container, wrapClassName)}
+      className={clsx(styles.container, wrapClassName)}
     >
       {jsonView.isJson ? (
         <ReactJson

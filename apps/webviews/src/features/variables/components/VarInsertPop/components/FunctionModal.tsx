@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { Flex, Select } from "@/shared/ui/base";
 
-import classNames from "classnames";
+import clsx from "clsx";
 import { has, size } from "lodash-es";
 
 import { Button, Input, InputNumber, Modal, Tooltip } from "@/shared/ui";
@@ -157,7 +157,7 @@ const FunctionModal = ({ onCancel, editFn }: Props) => {
                         func_desc: item.func_desc,
                       })
                     }
-                    className={classNames(styles.item, {
+                    className={clsx(styles.item, {
                       [styles.active]: selectFunc.func_name === item.func_name,
                     })}
                   >
@@ -188,13 +188,13 @@ const FunctionModal = ({ onCancel, editFn }: Props) => {
                       func_desc: item.description,
                     })
                   }
-                  className={classNames(styles.item, {
+                  className={clsx(styles.item, {
                     [styles.active]: selectFunc.func_name === item.function,
                   })}
                 >
                   <div className={styles.name}>{item.function}</div>
                   <div
-                    className={classNames(
+                    className={clsx(
                       styles.render,
                       !has(item, "params") && styles.customDesc,
                     )}

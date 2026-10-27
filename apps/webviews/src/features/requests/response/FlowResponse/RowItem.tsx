@@ -3,7 +3,7 @@ import React from "react";
 
 import { Flex } from "@/shared/ui/base";
 
-import classNames from "classnames";
+import clsx from "clsx";
 import { includes, isEqual } from "lodash-es";
 
 import AppIcon from "@/shared/ui/AppIcon";
@@ -50,7 +50,7 @@ const RowItem = (props: Props) => {
         style={{ maxWidth: "80%", overflow: "hidden" }}
       >
         <span
-          className={classNames({
+          className={clsx({
             [styles.iconSpan]: true,
             [styles.message]: isEqual("message", data.action),
             [styles.send]: isEqual("send", data.action),
@@ -66,7 +66,7 @@ const RowItem = (props: Props) => {
           <>
             <Tooltip title={calcTipsContent(data)}>
               <AppIcon
-                className={classNames(styles.flowIcon, styles.icon)}
+                className={clsx(styles.flowIcon, styles.icon)}
                 icon="info"
               />
             </Tooltip>

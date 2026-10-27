@@ -1,5 +1,5 @@
 import styles from "./CookieTab.module.css";
-import classNames from "classnames";
+import clsx from "clsx";
 import { Dispatch } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -215,7 +215,7 @@ const Index = (props: Props) => {
         return (
           <div
             key={cookie_id}
-            className={classNames(
+            className={clsx(
               styles.tabItem,
               value?.activeId === cookie_id && styles.active,
             )}
@@ -243,7 +243,7 @@ const Index = (props: Props) => {
       })}
       <div
         onClick={() => addCookieItem(domain)}
-        className={classNames(
+        className={clsx(
           styles.tabItem,
           ["cookie-list-item", styles.active, styles.cookieItemAdd].join(" "),
         )}

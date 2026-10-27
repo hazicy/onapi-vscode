@@ -1,5 +1,5 @@
 import { useState } from "react";
-import cx from "classnames";
+import clsx from "clsx";
 import menuStyles from "./Menu.module.css";
 import type { MenuProps, MenuItemProps } from "./types";
 
@@ -17,7 +17,7 @@ export function Menu({
     props.defaultOpenKeys ?? [],
   );
   const render = (rows: MenuItemProps[]) => (
-    <ul role="menu" className={cx(menuStyles.menu, className)}>
+    <ul role="menu" className={clsx(menuStyles.menu, className)}>
       {rows.map((item, index) => (
         <li key={String(item.key ?? index)} role="none">
           {item.type === "divider" ? (
@@ -27,7 +27,7 @@ export function Menu({
               type="button"
               role="menuitem"
               disabled={item.disabled}
-              className={cx(
+              className={clsx(
                 menuStyles.item,
                 itemClassName,
                 selectedKeys.includes(String(item.key)) &&

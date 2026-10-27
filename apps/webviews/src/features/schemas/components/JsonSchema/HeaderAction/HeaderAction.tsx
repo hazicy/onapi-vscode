@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import clsx from "clsx";
 import styles from "./HeaderAction.module.css";
 import React, { lazy, memo, Suspense, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -75,7 +75,7 @@ const HeaderAction: React.FC<Props> = (props) => {
             icon={<AppIcon icon="file-input" />}
             mode="light"
             size="small"
-            className={classNames(styles.previewBtn, styles.button)}
+            className={clsx(styles.previewBtn, styles.button)}
             type="primary"
             onClick={() => setModalType("import")}
           >

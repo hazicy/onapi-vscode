@@ -1,4 +1,4 @@
-import cx from "classnames";
+import clsx from "clsx";
 import type { UIProps } from "./types";
 import spinStyles from "./Spin.module.css";
 
@@ -13,7 +13,7 @@ export function Spin({
   size,
 }: UIProps) {
   return (
-    <div className={cx(spinStyles.host, className)} style={style}>
+    <div className={clsx(spinStyles.host, className)} style={style}>
       {spinning && (
         <div role="status" className={spinStyles.overlay}>
           <span className={spinStyles.spinner} />
@@ -21,7 +21,7 @@ export function Spin({
         </div>
       )}
       <div
-        className={cx(spinStyles.content, contentClassName)}
+        className={clsx(spinStyles.content, contentClassName)}
         aria-busy={spinning}
       >
         {children}

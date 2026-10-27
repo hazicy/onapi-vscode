@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import classNames from "classnames";
+import clsx from "clsx";
 import { forwardRef } from "react";
 import type { HTMLAttributes } from "react";
 import { appIcons, type AppIconName } from "./app-icons";
@@ -16,7 +16,7 @@ const AppIcon = forwardRef<HTMLSpanElement, AppIconProps>(
     <span
       {...props}
       ref={ref}
-      className={classNames(css.icon, spin && css.spin, className)}
+      className={clsx(css.icon, spin && css.spin, className)}
       style={{
         transform: rotate ? `rotate(${rotate}deg)` : undefined,
         ...style,

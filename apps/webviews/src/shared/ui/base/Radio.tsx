@@ -3,7 +3,7 @@ import { forwardRef } from "./forwardRef";
 import { createContext, useContext } from "react";
 import { Radio as BaseRadio } from "@base-ui/react/radio";
 import { RadioGroup } from "@base-ui/react/radio-group";
-import cx from "classnames";
+import clsx from "clsx";
 import type { RadioGroupProps, RadioProps } from "./types";
 import { eventFor } from "./controlEvents";
 
@@ -32,7 +32,7 @@ const RadioControl = forwardRef<HTMLElement, RadioProps>(
         {...props}
         value={value}
         ref={ref}
-        className={cx(radioStyles.radio, controlClassName)}
+        className={clsx(radioStyles.radio, controlClassName)}
         onClick={(e) => {
           props.onClick?.(e);
           onChange?.(eventFor(value, true, e.nativeEvent));
@@ -42,7 +42,7 @@ const RadioControl = forwardRef<HTMLElement, RadioProps>(
       </BaseRadio.Root>
     );
     return (
-      <label className={cx(radioStyles.checkLabel, className, rootClassName)}>
+      <label className={clsx(radioStyles.checkLabel, className, rootClassName)}>
         {grouped ? (
           radio
         ) : (
@@ -72,7 +72,7 @@ const Group = ({
   <RadioContext.Provider value={true}>
     <RadioGroup
       {...props}
-      className={cx(radioStyles.flex, className, rootClassName)}
+      className={clsx(radioStyles.flex, className, rootClassName)}
       onValueChange={(value, details) =>
         onChange?.(eventFor(value, true, details.event))
       }

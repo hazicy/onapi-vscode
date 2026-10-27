@@ -1,4 +1,4 @@
-import cx from "classnames";
+import clsx from "clsx";
 import type { UIProps } from "./types";
 import badgeStyles from "./Badge.module.css";
 
@@ -15,7 +15,7 @@ export const Badge = ({
   className,
   style,
 }: UIProps) => (
-  <span className={cx(badgeStyles.badge, className)} style={style}>
+  <span className={clsx(badgeStyles.badge, className)} style={style}>
     {children}
     {status ? (
       <span style={{ color }}>{text}</span>

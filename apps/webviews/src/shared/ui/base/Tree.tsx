@@ -18,7 +18,7 @@ import {
   type DragTarget,
   type ItemInstance,
 } from "@headless-tree/core";
-import cx from "classnames";
+import clsx from "clsx";
 import { Checkbox } from "./Checkbox";
 import type { DataNode, TreeProps, TreeHandle, TreeEventNode } from "./types";
 import {
@@ -355,7 +355,7 @@ const TreeControl = forwardRef<TreeHandle, TreeProps>(function TreeControl(
         container.current = element;
         tree.registerElement(element);
       }}
-      className={cx(treeStyles.tree, className, rootClassName)}
+      className={clsx(treeStyles.tree, className, rootClassName)}
       style={{ position: "relative", overflow: "auto", height, ...style }}
       onScroll={onScroll}
       onKeyDownCapture={(e) => {
@@ -425,7 +425,7 @@ const TreeControl = forwardRef<TreeHandle, TreeProps>(function TreeControl(
                     : checked.has(node.id)
                   : undefined
               }
-              className={cx(
+              className={clsx(
                 inactive && treeStyles.disabled,
                 item.isDragTarget() && treeStyles.dropTarget,
               )}

@@ -1,6 +1,6 @@
 import collapseStyles from "./Collapse.module.css";
 import { Accordion } from "@base-ui/react/accordion";
-import cx from "classnames";
+import clsx from "clsx";
 import type { CollapseProps } from "./types";
 
 const array = (v: any) =>
@@ -30,7 +30,7 @@ export function Collapse({
   return (
     <Accordion.Root
       {...props}
-      className={cx(collapseStyles.collapse, className, rootClassName)}
+      className={clsx(collapseStyles.collapse, className, rootClassName)}
       value={array(activeKey)}
       defaultValue={array(defaultActiveKey)}
       multiple={!accordion}
@@ -41,12 +41,12 @@ export function Collapse({
           key={String(item.key)}
           value={item.key}
           disabled={item.collapsible === "disabled"}
-          className={cx(collapseStyles.item, itemClassName, item.className)}
+          className={clsx(collapseStyles.item, itemClassName, item.className)}
           style={item.style}
         >
           <Accordion.Header className={headerClassName}>
             <Accordion.Trigger
-              className={cx(collapseStyles.trigger, triggerClassName)}
+              className={clsx(collapseStyles.trigger, triggerClassName)}
             >
               {item.label}
             </Accordion.Trigger>
@@ -54,7 +54,7 @@ export function Collapse({
           </Accordion.Header>
           <Accordion.Panel
             keepMounted={!destroyInactivePanel && !item.destroyOnHidden}
-            className={cx(collapseStyles.panel, panelClassName)}
+            className={clsx(collapseStyles.panel, panelClassName)}
           >
             <div className={contentClassName}>{item.children}</div>
           </Accordion.Panel>

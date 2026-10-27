@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { DatePicker, Flex, Input, InputNumber, Select } from "@/shared/ui/base";
 
-import cn from "classnames";
+import clsx from "clsx";
 import dayjs from "dayjs";
 import {
   cloneDeep,
@@ -228,7 +228,7 @@ const Index = ({
       <Flex vertical className={styles.container}>
         {fakerJsParamList?.length ? (
           <div
-            className={cn(styles.param, {
+            className={clsx(styles.param, {
               [styles.footer]:
                 fakerJsParamList?.length ===
                 keys(fakerJsParamsMap[value]).length,

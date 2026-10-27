@@ -1,4 +1,4 @@
-import cx from "classnames";
+import clsx from "clsx";
 import type { UIProps } from "./types";
 import alertStyles from "./Alert.module.css";
 import { message } from "./Toast";
@@ -18,7 +18,7 @@ export const Alert = ({
 }: UIProps) => (
   <div
     role={type === "error" ? "alert" : "status"}
-    className={cx(alertStyles.alert, className)}
+    className={clsx(alertStyles.alert, className)}
     style={style}
   >
     {showIcon && icon}

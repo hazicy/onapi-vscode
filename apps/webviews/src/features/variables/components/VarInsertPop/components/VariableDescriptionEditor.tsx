@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import classNames from "classnames";
+import clsx from "clsx";
 import { Flex, Input } from "@/shared/ui/base";
 import { AppIcon, Empty } from "@/shared/ui";
 import { VAR_OPTIONS_KEY } from "@/features/variables/constants/variable";
@@ -35,7 +35,7 @@ export default function VariableDescriptionEditor({
                   setSelectedId(item.id);
                   onChange(item.description);
                 }}
-                className={classNames(styles.descItem, {
+                className={clsx(styles.descItem, {
                   [styles.active]: item.id === selectedId,
                 })}
               >

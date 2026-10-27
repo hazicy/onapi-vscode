@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { Checkbox, Collapse, Input } from "@/shared/ui/base";
 
-import cn from "classnames";
+import clsx from "clsx";
 import { concat, filter, isEqual, map, size, trim } from "lodash-es";
 
 import AppIcon from "@/shared/ui/AppIcon";
@@ -118,7 +118,7 @@ const PublicParamsTable: FC<Props> = memo(
                 </>
               );
             }}
-            className={cn(
+            className={clsx(
               [styles.tableCollapse, styles.tableCollapsePublic].join(" "),
               styles.collapse,
             )}

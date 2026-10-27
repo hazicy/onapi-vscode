@@ -1,5 +1,5 @@
 import styles from "./VarInsertPop.module.css";
-import classNames from "classnames";
+import clsx from "clsx";
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 
 import { PopoverProps } from "@/shared/ui/base";
@@ -151,7 +151,7 @@ const Index = ({
           id={VARIABLE_LIST_CONTENT_KEY}
           aria-hidden={step !== 1}
           inert={step !== 1}
-          className={classNames(styles.container, step === 1 && styles.active)}
+          className={clsx(styles.container, step === 1 && styles.active)}
         >
           <VarList onChange={stepChange} type={tabsValue} />
         </div>

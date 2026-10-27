@@ -1,6 +1,6 @@
 import styles from "./ApisTypeTag.module.css";
 import { Tag as Tag2 } from "@/shared/ui/base";
-import classNames from "classnames";
+import clsx from "clsx";
 
 import React from "react";
 
@@ -26,7 +26,7 @@ const ApisTypeTag: React.FC<Props> = ({
       style={{ fontWeight: 700 }}
       bordered={false}
       {...resetProps}
-      className={classNames(styles.container, resetProps.className)}
+      className={clsx(styles.container, resetProps.className)}
     >
       {method}
     </Tag2>

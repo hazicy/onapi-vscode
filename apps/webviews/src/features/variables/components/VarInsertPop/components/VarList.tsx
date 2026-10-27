@@ -5,7 +5,7 @@ import { variableLabels } from "./variable-labels";
 
 import { Flex } from "@/shared/ui/base";
 
-import classNames from "classnames";
+import clsx from "clsx";
 
 import AiDescIcon from "@/shared/assets/icon/aidesc.png";
 import { AppIcon } from "@/shared/ui";
@@ -55,7 +55,7 @@ const Index = ({ type, onChange }: Props) => {
             }}
             className={styles.listItem}
           >
-            <div className={classNames(styles.iconContent, styles[key] ?? key)}>
+            <div className={clsx(styles.iconContent, styles[key] ?? key)}>
               {iconRender(key, icon)}
             </div>
             <Flex flex={1} gap={4} vertical>

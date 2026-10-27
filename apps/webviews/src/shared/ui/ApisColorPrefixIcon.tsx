@@ -1,7 +1,7 @@
 import styles from "./ApisColorPrefixIcon.module.css";
 import { FC } from "react";
 
-import cn from "classnames";
+import clsx from "clsx";
 
 import AppIcon from "@/shared/ui/AppIcon";
 
@@ -19,7 +19,7 @@ const ApisColorPrefixIcon: FC<Props> = ({ gradientColor, icon, className }) => {
       style={{
         background: `linear-gradient(${(gradientColor || defaultGradientColor).join(",")})`,
       }}
-      className={cn(styles.container, className)}
+      className={clsx(styles.container, className)}
     >
       <AppIcon icon={icon} className={styles.icon} />
     </div>

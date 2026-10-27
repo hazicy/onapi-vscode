@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Flex, Spin, message } from "@/shared/ui/base";
 
 import { useDebounceFn, useSafeState } from "ahooks";
-import classNames from "classnames";
+import clsx from "clsx";
 import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 import Button from "@/shared/ui/Button";
 import Drawer from "@/shared/ui/Drawer";
@@ -52,7 +52,7 @@ const GenerateCodeDrawer: React.FC<Props> = (props) => {
   const generateMenuDom = languages.flatMap((language) =>
     language.variants.map(({ key: variant }) => (
       <div
-        className={classNames(styles2.menuItem, {
+        className={clsx(styles2.menuItem, {
           [styles2.active]: `${language.key}.${variant}` === menuKey,
         })}
         key={`${language.key}.${variant}`}

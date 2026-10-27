@@ -1,7 +1,7 @@
 import inputNumberStyles from "./InputNumber.module.css";
 import { forwardRef } from "./forwardRef";
 import { NumberField } from "@base-ui/react/number-field";
-import cx from "classnames";
+import clsx from "clsx";
 import type { InputNumberProps } from "./types";
 
 export const InputNumber = forwardRef<HTMLDivElement, InputNumberProps>(
@@ -24,7 +24,7 @@ export const InputNumber = forwardRef<HTMLDivElement, InputNumberProps>(
     <NumberField.Root
       {...props}
       ref={ref}
-      className={cx(inputNumberStyles.number, className, rootClassName)}
+      className={clsx(inputNumberStyles.number, className, rootClassName)}
       onValueChange={(value) =>
         onChange?.(
           stringMode && value !== null ? (String(value) as never) : value,
@@ -33,7 +33,7 @@ export const InputNumber = forwardRef<HTMLDivElement, InputNumberProps>(
     >
       <NumberField.Group className={inputNumberStyles.inputGroup}>
         <NumberField.Input
-          className={cx(inputNumberStyles.input, inputClassName)}
+          className={clsx(inputNumberStyles.input, inputClassName)}
           aria-label={props["aria-label"]}
           placeholder={props.placeholder}
         />

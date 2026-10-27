@@ -4,7 +4,7 @@ import React from "react";
 import { List } from "@/shared/ui/base";
 
 import { useMount, useSafeState } from "ahooks";
-import classnames from "classnames";
+import clsx from "clsx";
 
 import RowItem from "./RowItem";
 import { RowItemTipsConfig } from "./types";
@@ -29,7 +29,7 @@ const FlowResponse = (props: Props) => {
         renderItem={(item: any) => (
           <List.Item
             key={item.id}
-            className={classnames({
+            className={clsx({
               [styles.active]: active === item.id,
             })}
             onClick={() => {

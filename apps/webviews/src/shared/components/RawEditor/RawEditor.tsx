@@ -1,5 +1,5 @@
 import styles from "./RawEditor.module.css";
-import classNames from "classnames";
+import clsx from "clsx";
 import { useContext, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -56,7 +56,7 @@ const RawEditor = ({
       ? { height: 380 }
       : {};
   return (
-    <div className={classNames(styles.container, "raw-editor-container")}>
+    <div className={clsx(styles.container, "raw-editor-container")}>
       <Flex style={{ width: "100%" }} vertical className={styles.flex}>
         <header>
           <Flex align="center" justify="space-between" className={styles.flex}>

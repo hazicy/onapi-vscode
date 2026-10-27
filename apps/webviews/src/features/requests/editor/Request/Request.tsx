@@ -1,5 +1,5 @@
 import BodyModeSelect, { getBodyModeLabel } from "./Body/BodyModeSelect";
-import classNames from "classnames";
+import clsx from "clsx";
 import { HttpParameterTable } from "@/shared/components/RequestTable/RequestTable";
 import {
   urlWithQuery,
@@ -207,7 +207,7 @@ const Request: FC<RequestProps> = ({
         navClassName={styles.tabsNav}
         panelClassName={styles.tabsTabpane}
         panelsClassName={styles.tabsContent}
-        className={classNames(styles.tabs, styles.tabsTop)}
+        className={clsx(styles.tabs, styles.tabsTop)}
       />
     </div>
   );

@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useMemoizedFn, useSafeState } from "ahooks";
-import cn from "classnames";
+import clsx from "clsx";
 import { produce } from "immer";
 import {
   assign,
@@ -183,7 +183,7 @@ const DataModel: React.FC<Props> = (props) => {
       )}
       <div
         ref={refTable}
-        className={cn(
+        className={clsx(
           styles.container,
           "ref-table",
           "model-tbody",

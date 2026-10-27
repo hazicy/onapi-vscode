@@ -1,5 +1,5 @@
 import styles from "./Body.module.css";
-import classNames from "classnames";
+import clsx from "clsx";
 import { FC, lazy, useMemo } from "react";
 
 import { Flex, message, Tooltip } from "@/shared/ui/base";
@@ -64,12 +64,12 @@ const RequestBody: FC<RequestBodyProps> = (props) => {
   };
 
   return (
-    <div className={classNames(styles.container, "request-body-container")}>
+    <div className={clsx(styles.container, "request-body-container")}>
       <Flex vertical className={styles.flex}>
         {(!props.hideModeSelect ||
           (apiData?.kind === "api" && isRowMode && language === "json")) && (
           <Flex
-            className={classNames(styles.requestBodyHeader, styles.flex)}
+            className={clsx(styles.requestBodyHeader, styles.flex)}
             align="center"
             justify="space-between"
           >
@@ -78,7 +78,7 @@ const RequestBody: FC<RequestBodyProps> = (props) => {
             </Flex>
             {apiData?.kind === "api" && (
               <Flex
-                className={classNames(styles.otherBtn, styles.flex)}
+                className={clsx(styles.otherBtn, styles.flex)}
                 align="center"
               >
                 {language === "json" && (

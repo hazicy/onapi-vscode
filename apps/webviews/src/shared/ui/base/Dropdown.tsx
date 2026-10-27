@@ -1,4 +1,4 @@
-import cx from "classnames";
+import clsx from "clsx";
 
 import dropdownStyles from "./Dropdown.module.css";
 import { ContextMenu as BaseContextMenu } from "@base-ui/react/context-menu";
@@ -43,7 +43,7 @@ function MenuItems({
         ) : item?.children ? (
           <BaseMenu.SubmenuRoot key={String(item.key ?? index)}>
             <BaseMenu.SubmenuTrigger
-              className={cx(
+              className={clsx(
                 dropdownStyles.menuItem,
                 itemClassName,
                 item.className,
@@ -60,7 +60,7 @@ function MenuItems({
                 sideOffset={2}
               >
                 <BaseMenu.Popup
-                  className={cx(dropdownStyles.popup, overlayClassName)}
+                  className={clsx(dropdownStyles.popup, overlayClassName)}
                 >
                   <MenuItems
                     items={item.children ?? []}
@@ -78,11 +78,11 @@ function MenuItems({
           <BaseMenu.Item
             key={String(item?.key ?? index)}
             disabled={item?.disabled}
-            className={cx(
+            className={clsx(
               dropdownStyles.menuItem,
               itemClassName,
               selectedKeys.includes(String(item?.key)) &&
-                cx(dropdownStyles.menuItemSelected, selectedItemClassName),
+                clsx(dropdownStyles.menuItemSelected, selectedItemClassName),
               item?.className,
             )}
             style={item?.style}
@@ -131,7 +131,7 @@ export function Dropdown({
   const Root = context ? BaseContextMenu.Root : BaseMenu.Root;
   const body = (
     <BaseMenu.Popup
-      className={cx(dropdownStyles.popup, overlayClassName)}
+      className={clsx(dropdownStyles.popup, overlayClassName)}
       style={overlayStyle}
     >
       {overlay ?? (
@@ -193,7 +193,7 @@ Dropdown.Button = ({
   icon,
   ...props
 }: DropdownProps) => (
-  <div className={cx(dropdownStyles.splitButton, className)} style={style}>
+  <div className={clsx(dropdownStyles.splitButton, className)} style={style}>
     <Button
       type={type}
       size={size}

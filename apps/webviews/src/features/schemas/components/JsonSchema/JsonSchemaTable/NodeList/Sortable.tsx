@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import clsx from "clsx";
 import styles from "./NodeList.module.css";
 import {
   DndContext,

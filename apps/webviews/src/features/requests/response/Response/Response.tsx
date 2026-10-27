@@ -1,6 +1,6 @@
 import type { HttpExecutionState } from "@/features/requests/execution/http-state";
 import { sdkResponseView } from "@/features/requests/utils/executionView";
-import classNames from "classnames";
+import clsx from "clsx";
 import { responseText } from "@onapi/domain";
 import styles from "./Response.module.css";
 import { FC, lazy, memo, Suspense, useMemo, useState } from "react";
@@ -286,7 +286,7 @@ const Response: FC<Props> = memo((props) => {
           navClassName={styles.tabsNav}
           panelsClassName={styles.tabsContent}
           contentClassName={styles.tabsContentHolder}
-          className={classNames(styles.tabs, styles.tabsTop)}
+          className={clsx(styles.tabs, styles.tabsTop)}
         />
       </div>
     </ErrorContext.Provider>

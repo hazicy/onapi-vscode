@@ -6,7 +6,7 @@ import { Badge, Flex } from "@/shared/ui/base";
 import { DataNode } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import classNames from "classnames";
+import clsx from "clsx";
 import {
   entries,
   find,
@@ -82,12 +82,12 @@ const TitleRender = memo((props: DataNode | any) => {
     <Flex align="center" justify="space-between" className={styles.titleRender}>
       <Flex align="center" className={styles.title} gap={12}>
         <div
-          className={classNames(styles.input, {
+          className={clsx(styles.input, {
             [styles.noDesc]: !description,
           })}
         >{`${name}`}</div>
         <div
-          className={classNames(styles.type, {
+          className={clsx(styles.type, {
             [styles.null]: non_null !== undefined,
             [styles.array]: includes(["array"], kind),
             [styles.noDesc]: !description,

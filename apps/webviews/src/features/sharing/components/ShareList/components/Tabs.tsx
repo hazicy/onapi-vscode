@@ -4,7 +4,7 @@ import { Checkbox, Flex, Tabs, Tooltip, Typography } from "@/shared/ui/base";
 import { SHARE_TAB_LIST } from "../constants";
 import { TabsProps } from "../types";
 
-import cn from "classnames";
+import clsx from "clsx";
 
 import { isArray } from "lodash-es";
 import { Empty } from "@/shared/ui";
@@ -28,7 +28,7 @@ const TabsPanel = (props: TabsProps) => {
       <div
         key={item.id}
         onClick={() => {}}
-        className={cn(styles.itemTitle, {
+        className={clsx(styles.itemTitle, {
           [styles.selectItem]: false,
         })}
       >

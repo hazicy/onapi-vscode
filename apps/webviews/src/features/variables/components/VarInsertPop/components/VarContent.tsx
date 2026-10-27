@@ -9,7 +9,7 @@ import {
   useRef,
 } from "react";
 import { useTranslation } from "react-i18next";
-import classNames from "classnames";
+import clsx from "clsx";
 import { Flex } from "@/shared/ui/base";
 import { AppIcon, Empty } from "@/shared/ui";
 import VariableInsertContext from "@/features/variables/contexts/variable-insert";
@@ -165,7 +165,7 @@ const VarContent = forwardRef<VarContentRef, { className?: string }>(
 
     return (
       <div
-        className={classNames(
+        className={clsx(
           styles.container,
           step === 2 && styles.active,
           className,
@@ -194,7 +194,7 @@ const VarContent = forwardRef<VarContentRef, { className?: string }>(
           </Flex>
           <AppIcon
             onClick={() => setOpen?.(false)}
-            className={classNames(styles.cursor, styles.icon)}
+            className={clsx(styles.cursor, styles.icon)}
             icon="circle-x"
           />
         </Flex>

@@ -1,6 +1,6 @@
 import { saveEnvironments } from "@/features/requests/events/env";
 import styles from "./Environment.module.css";
-import classNames from "classnames";
+import clsx from "clsx";
 import { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
@@ -94,7 +94,7 @@ const Menus: FC<Props> = ({ selectedKeys, setSelectedKeys }) => {
         ) : (
           <span className={styles.menuIcon}>
             <div className={icon}>
-              <AppIcon className={classNames(icon, styles.icon)} icon={icon} />
+              <AppIcon className={clsx(icon, styles.icon)} icon={icon} />
             </div>
           </span>
         )
@@ -164,7 +164,7 @@ const Menus: FC<Props> = ({ selectedKeys, setSelectedKeys }) => {
         label: <span className={styles.menuTitle}>{label}</span>,
         key,
         icon: icon ? (
-          <AppIcon className={classNames(icon, styles.icon)} icon={icon} />
+          <AppIcon className={clsx(icon, styles.icon)} icon={icon} />
         ) : null,
         children:
           key === MENU_ITEMS_KEY.all

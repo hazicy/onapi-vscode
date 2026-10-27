@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { cloneDeep } from "lodash-es";
-import classNames from "classnames";
+import clsx from "clsx";
 import { Flex } from "@/shared/ui/base";
 import { AppIcon, Button } from "@/shared/ui";
 import { INNER_FUNC_LIST } from "@/features/variables/constants/variable";
@@ -85,7 +85,7 @@ const VariableFunctions = forwardRef<VariableFunctionsRef, Props>(
                         setEdit({ mode: "edit", index, draft: cloneDeep(fn) });
                       }
                     }}
-                    className={classNames(styles.name, {
+                    className={clsx(styles.name, {
                       [styles.del]: !(fn.func_name in catalog),
                     })}
                   >

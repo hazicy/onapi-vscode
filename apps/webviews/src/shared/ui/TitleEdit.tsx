@@ -1,6 +1,6 @@
 import styles from "./TitleEdit.module.css";
 import { Input } from "@/shared/ui/base";
-import classNames from "classnames";
+import clsx from "clsx";
 import { FC } from "react";
 
 import { InputProps } from "@/shared/ui/base";
@@ -11,7 +11,7 @@ export const TitleEdit: FC<Props> = ({ ...resetProps }) => {
   return (
     <Input
       {...resetProps}
-      className={classNames(styles.container, resetProps.className)}
+      className={clsx(styles.container, resetProps.className)}
     />
   );
 };

@@ -6,7 +6,7 @@ import { Flex, Input } from "@/shared/ui/base";
 
 import { CaretDownOutlined, CaretRightOutlined } from "@/shared/ui/base/Icons";
 import { useMemoizedFn, useSafeState } from "ahooks";
-import cn from "classnames";
+import clsx from "clsx";
 import { produce } from "immer";
 import { isObject, isString, isUndefined } from "lodash-es";
 
@@ -164,9 +164,9 @@ const ItemKey: React.FC<ItemKeyProps> = (props) => {
   return (
     <div ref={refContainerWarper}>
       <div
-        className={cn(
+        className={clsx(
           styles.keyWarper,
-          cn(styles.schemaTdWarper, styles.schemaWidthAuto),
+          clsx(styles.schemaTdWarper, styles.schemaWidthAuto),
         )}
       >
         {IndentPanel(deepIndex)}
@@ -193,7 +193,7 @@ const ItemKey: React.FC<ItemKeyProps> = (props) => {
         {readOnly && (
           <Button
             size="small"
-            className={cn(
+            className={clsx(
               styles.itemKeyInput,
               styles.readonly,
               deepIndex === 0 && styles.itemKeyInputFront,
@@ -214,7 +214,7 @@ const ItemKey: React.FC<ItemKeyProps> = (props) => {
             <Input
               size="small"
               ref={txtKeyRef}
-              className={cn(
+              className={clsx(
                 styles.itemKeyInput,
                 styles.itemKeyInputHover,
                 deepIndex === 0 && styles.itemKeyInputFront,

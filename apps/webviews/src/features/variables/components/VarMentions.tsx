@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import { useTranslation } from "react-i18next";
 
 import { useMemoizedFn, useSafeState } from "ahooks";
-import cn from "classnames";
+import clsx from "clsx";
 import { isFunction, isObject, isUndefined, map } from "lodash-es";
 
 import { SYSTEM_VARS } from "@/shared/constants/system";
@@ -160,7 +160,7 @@ const EnvVar = (props: EnvVarsProps) => {
                 {map(markVarsList, (item: any, index) => (
                   <div
                     key={`${item.key} + ${index}`}
-                    className={cn(styles.envVarsDefault, {
+                    className={clsx(styles.envVarsDefault, {
                       [styles.active]: itemIndex === index,
                     })}
                     onFocus={setItemIndex.bind(null, index)}
@@ -168,7 +168,7 @@ const EnvVar = (props: EnvVarsProps) => {
                     onMouseDown={handleSelectMarkItem.bind(null, item.key)}
                   >
                     <div
-                      className={cn(styles.defaultType, {
+                      className={clsx(styles.defaultType, {
                         [styles.e]: item?.envType === "env",
                       })}
                     >

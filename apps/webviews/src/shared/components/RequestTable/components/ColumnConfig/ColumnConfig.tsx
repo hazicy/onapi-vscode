@@ -1,5 +1,5 @@
 import styles from "./ColumnConfig.module.css";
-import classNames from "classnames";
+import clsx from "clsx";
 import { FC, memo } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -83,7 +83,7 @@ const ColumnConfig: FC<Props> = memo(
                 <Flex
                   align={"center"}
                   justify={"space-between"}
-                  className={classNames(styles.container, styles.tipsItemWrap)}
+                  className={clsx(styles.container, styles.tipsItemWrap)}
                 >
                   <span>{t("common.request_table.display_column")}</span>
                   <Tooltip

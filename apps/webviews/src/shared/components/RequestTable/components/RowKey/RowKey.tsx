@@ -10,7 +10,7 @@ import {
   Select,
 } from "@/shared/ui/base";
 
-import classnames from "classnames";
+import clsx from "clsx";
 import { concat, isEqual, map } from "lodash-es";
 
 import AppIcon from "@/shared/ui/AppIcon";
@@ -94,7 +94,7 @@ const RowKey: FC<Props> = memo((props) => {
       />
       <div
         style={{ pointerEvents: "visible" }}
-        className={classnames({
+        className={clsx({
           [styles.required]: true,
           [styles.checked]: rowData?.not_null == 1,
         })}
@@ -183,7 +183,7 @@ const RowKey: FC<Props> = memo((props) => {
                 className={styles.select}
               >
                 <span
-                  className={classnames(
+                  className={clsx(
                     styles.selectFieldTypeOptionItem,
                     styles[
                       `item${item.charAt(0).toUpperCase()}${item.slice(1).toLowerCase()}`

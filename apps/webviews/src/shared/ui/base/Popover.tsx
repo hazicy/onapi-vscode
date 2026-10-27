@@ -1,4 +1,4 @@
-import cx from "classnames";
+import clsx from "clsx";
 import popoverStyles from "./Popover.module.css";
 import { Popover as BasePopover } from "@base-ui/react/popover";
 import type { PopoverProps } from "./types";
@@ -49,7 +49,7 @@ export function Popover({
           style={overlayStyle}
         >
           <BasePopover.Popup
-            className={cx(popoverStyles.popup, overlayClassName)}
+            className={clsx(popoverStyles.popup, overlayClassName)}
             style={overlayInnerStyle}
           >
             {title && <BasePopover.Title>{content(title)}</BasePopover.Title>}

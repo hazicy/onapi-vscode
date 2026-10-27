@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { Flex, Popconfirm, Segmented, Select, message } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import classNames from "classnames";
+import clsx from "clsx";
 import { isNumber, isObject, isUndefined, toLower } from "lodash-es";
 
 import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";

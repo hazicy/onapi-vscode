@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import cn from "classnames";
+import clsx from "clsx";
 
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
@@ -65,7 +65,7 @@ const EmptyItem: React.FC<Props> = (props) => {
       <LinkModal open={showModal} onLinkSchema={handleLinkSchema} />
       <div>
         <div className={styles.container}>
-          <div className={cn(styles.schemaTdWarper, styles.schemaWidthAuto)}>
+          <div className={clsx(styles.schemaTdWarper, styles.schemaWidthAuto)}>
             {IndentPanel(deepIndex)}
             <Input
               size="small"

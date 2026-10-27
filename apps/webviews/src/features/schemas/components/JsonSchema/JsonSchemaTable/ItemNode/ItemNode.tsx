@@ -3,7 +3,7 @@ import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useMemoizedFn } from "ahooks";
-import cn from "classnames";
+import clsx from "clsx";
 import { produce } from "immer";
 import {
   isArray,
@@ -301,7 +301,7 @@ const ItemNode: React.FC<ItemNodeProps> = (props) => {
   return (
     <>
       <div
-        className={cn({
+        className={clsx({
           [styles.tableTr]: true,
 
           [styles.isHidden]: overrideData === null,

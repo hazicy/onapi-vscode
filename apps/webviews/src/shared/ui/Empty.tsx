@@ -1,5 +1,5 @@
 import styles from "./Empty.module.css";
-import classNames from "classnames";
+import clsx from "clsx";
 import { CSSProperties, FC } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -30,7 +30,7 @@ const Empty: FC<Props> = ({
   return (
     <div
       style={wrapStyle}
-      className={classNames(styles.container, wrapClassName)}
+      className={clsx(styles.container, wrapClassName)}
     >
       <AntEmpty
         {...resetProps}

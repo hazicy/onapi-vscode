@@ -1,7 +1,7 @@
 import styles from "./PrefixIcon.module.css";
 import { FC, memo, useMemo } from "react";
 
-import cn from "classnames";
+import clsx from "clsx";
 
 import AppIcon from "@/shared/ui/AppIcon";
 import { REQUEST_METHOD_MAP } from "@onapi/domain/requests/constants/index";
@@ -76,7 +76,7 @@ const PrefixIcon: FC<Props> = memo(
         {(computed?.icon && (
           <div
             style={style}
-            className={cn(styles.container, computed?.className, wrapClassName)}
+            className={clsx(styles.container, computed?.className, wrapClassName)}
           >
             {renderIcon(computed?.icon)}
           </div>

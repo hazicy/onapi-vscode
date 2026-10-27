@@ -44,7 +44,7 @@
     "ajv": "^8.20.0",
     "ajv-i18n": "^4.2.0",
     "axios": "^1.20.0",
-    "classnames": "^2.5.1",
+    "clsx": "^2.1.1",
     "cm6-graphql": "^0.2.2",
     "csvtojson": "^2.0.14",
     "curl-to-postmanv2": "^1.8.7",

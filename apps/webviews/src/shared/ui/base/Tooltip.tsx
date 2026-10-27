@@ -1,4 +1,4 @@
-import cx from "classnames";
+import clsx from "clsx";
 import tooltipStyles from "./Tooltip.module.css";
 import { Tooltip as BaseTooltip } from "@base-ui/react/tooltip";
 import type { TooltipProps } from "./types";
@@ -47,7 +47,7 @@ export function Tooltip({
             style={overlayStyle}
           >
             <BaseTooltip.Popup
-              className={cx(tooltipStyles.tooltip, overlayClassName)}
+              className={clsx(tooltipStyles.tooltip, overlayClassName)}
               style={{ background: color, ...overlayInnerStyle }}
             >
               {content(title)}

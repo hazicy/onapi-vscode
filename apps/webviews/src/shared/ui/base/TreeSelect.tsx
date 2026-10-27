@@ -2,7 +2,7 @@ import treeSelectStyles from "./TreeSelect.module.css";
 import { useId, useMemo, useState } from "react";
 import { forwardRef } from "./forwardRef";
 import { Popover } from "@base-ui/react/popover";
-import cx from "classnames";
+import clsx from "clsx";
 import { Tree } from "./Tree";
 import { Input } from "./Input";
 import { nodeText } from "./treeData";
@@ -137,7 +137,7 @@ export const TreeSelect = forwardRef<HTMLButtonElement, TreeSelectProps>(
     return (
       <Popover.Root open={visible} onOpenChange={changeOpen}>
         <div
-          className={cx(
+          className={clsx(
             treeSelectStyles.control,
             className,
             rootClassName,
@@ -157,7 +157,7 @@ export const TreeSelect = forwardRef<HTMLButtonElement, TreeSelectProps>(
             className={treeSelectStyles.trigger}
           >
             <span
-              className={cx(
+              className={clsx(
                 !selected && !current && treeSelectStyles.placeholder,
               )}
             >
@@ -191,7 +191,7 @@ export const TreeSelect = forwardRef<HTMLButtonElement, TreeSelectProps>(
           >
             <Popover.Popup
               id={popupId}
-              className={cx(
+              className={clsx(
                 treeSelectStyles.popup,
                 treeSelectStyles.panel,
                 popupClassName,

@@ -2,7 +2,7 @@ import { useMemo } from "react";
 
 import { ConfigProvider } from "@/shared/ui/base";
 
-import classNames from "classnames";
+import clsx from "clsx";
 
 import Empty from "@/shared/ui/Empty";
 import useTheme from "@/shared/hooks/useTheme";
@@ -26,7 +26,7 @@ const BasicTable = <DataSource extends AnyObject>(
 
   const tableProps = {
     ...props,
-    rowClassName: classNames(props.rootClassName, {}),
+    rowClassName: clsx(props.rootClassName, {}),
     pagination: props.pagination ?? false,
     locale: { emptyText: <Empty style={{ height: 160 }} /> },
   };

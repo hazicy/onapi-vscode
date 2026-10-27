@@ -1,6 +1,6 @@
 import { forwardRef } from "./forwardRef";
 import React, { useState } from "react";
-import cx from "classnames";
+import clsx from "clsx";
 import type { UIProps } from "./types";
 import selectStyles from "./Select.module.css";
 import { useMemo } from "react";
@@ -197,13 +197,13 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
         key={String(o.value)}
         value={o}
         disabled={o.disabled}
-        className={cx(selectStyles.option, optionClassName)}
+        className={clsx(selectStyles.option, optionClassName)}
       >
         <span className={optionContentClassName}>
           {optionRender ? optionRender({ ...o, data: o }, { index }) : o.label}
         </span>
         <Combobox.ItemIndicator
-          className={cx(selectStyles.itemIndicator, indicatorClassName)}
+          className={clsx(selectStyles.itemIndicator, indicatorClassName)}
         >
           <Icon icon={check} width={14} />
         </Combobox.ItemIndicator>
@@ -229,7 +229,7 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
           group.label !== null && group.label !== undefined ? (
             <Combobox.Group key={`${group.key}-${index}`}>
               <Combobox.GroupLabel
-                className={cx(selectStyles.groupLabel, groupLabelClassName)}
+                className={clsx(selectStyles.groupLabel, groupLabelClassName)}
               >
                 {group.label}
               </Combobox.GroupLabel>
@@ -246,7 +246,7 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
           ),
         )}
         {!filtered.length && (
-          <div className={cx(selectStyles.option, optionClassName)}>
+          <div className={clsx(selectStyles.option, optionClassName)}>
             {notFoundContent ?? "No options"}
           </div>
         )}
@@ -300,7 +300,7 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
       >
         <div
           style={style}
-          className={cx(
+          className={clsx(
             selectStyles.select,
             (bordered === false || variant === "borderless") &&
               selectStyles.borderless,
@@ -335,7 +335,7 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
                   ? text(selectedOptions.label)
                   : placeholder
               }
-              className={cx(
+              className={clsx(
                 selectStyles.input,
                 inputClassName,
                 searchClassName,
@@ -344,7 +344,7 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
           ) : (
             <Combobox.Trigger
               {...props}
-              className={cx(selectStyles.trigger, triggerClassName)}
+              className={clsx(selectStyles.trigger, triggerClassName)}
             >
               <span className={valueClassName}>
                 {selectedOptions
@@ -355,7 +355,7 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
                   : placeholder}
               </span>
               <span
-                className={cx(selectStyles.arrow, arrowClassName)}
+                className={clsx(selectStyles.arrow, arrowClassName)}
                 aria-hidden="true"
               >
                 {loading ? "…" : (suffixIcon ?? "⌄")}
@@ -372,7 +372,7 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
           )}
           {(showSearch || multiple) && (
             <Combobox.Trigger
-              className={cx(selectStyles.arrow, arrowClassName)}
+              className={clsx(selectStyles.arrow, arrowClassName)}
               aria-label="Open options"
             >
               {loading ? "…" : (suffixIcon ?? "⌄")}
@@ -394,7 +394,7 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
             className={selectStyles.positioner}
           >
             <Combobox.Popup
-              className={cx(selectStyles.popup, popupClassName)}
+              className={clsx(selectStyles.popup, popupClassName)}
               style={dropdownStyle}
             >
               {popupArrow && (

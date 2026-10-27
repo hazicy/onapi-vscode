@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { Flex, Input, Popconfirm } from "@/shared/ui/base";
 
 import { snowflakeId } from "@onapi/domain/utils/data-tools";
-import cn from "classnames";
+import clsx from "clsx";
 import {
   differenceWith,
   isArray,
@@ -161,7 +161,7 @@ const ItemMock: React.FC<Props> = (props) => {
           <Tooltip title={t("common.schema.required")}>
             <div
               onClick={handleUpdateRequired}
-              className={cn(styles.itemRequired, {
+              className={clsx(styles.itemRequired, {
                 [styles.required]: isRequired,
               })}
             >

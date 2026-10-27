@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { AutoComplete } from "@/shared/ui/base";
 
 import { useMemoizedFn } from "ahooks";
-import cn from "classnames";
+import clsx from "clsx";
 import { produce } from "immer";
 import { entries, isNumber, isPlainObject, isString } from "lodash-es";
 
@@ -86,7 +86,7 @@ const ItemMock: React.FC<Props> = (props) => {
 
   return (
     <div style={{ ...currentLayout, width: "100%" }}>
-      <div className={cn(styles.container, {})}>
+      <div className={clsx(styles.container, {})}>
         <AutoComplete
           size="small"
           filterOption

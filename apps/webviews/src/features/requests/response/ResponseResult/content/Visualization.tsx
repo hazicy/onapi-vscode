@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import clsx from "clsx";
 import styles from "../ResponseResult.module.css";
 import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -98,7 +98,7 @@ const Visualization: React.FC<Props> = (props) => {
           justify="center"
           gap={12}
           align="center"
-          className={classNames(styles.visualizationEmpty, styles.flex)}
+          className={clsx(styles.visualizationEmpty, styles.flex)}
         >
           {t("common.response_component.visualize_tip")}
           <Button

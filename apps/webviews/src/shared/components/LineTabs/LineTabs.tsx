@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import clsx from "clsx";
 import styles from "./LineTabs.module.css";
 import { FC, ReactNode, useMemo } from "react";
 
@@ -45,21 +45,21 @@ const LineTabs: FC<Props> = ({ items, wrapStyle, ...resetProps }) => {
         items={finalItems}
         {...resetProps}
         animated={false}
-        panelClassName={classNames(
+        panelClassName={clsx(
           styles.tabsTabpane,
           resetProps.panelClassName,
         )}
-        panelsClassName={classNames(
+        panelsClassName={clsx(
           styles.tabsContent,
           resetProps.panelsClassName,
         )}
-        contentClassName={classNames(
+        contentClassName={clsx(
           styles.tabsContentHolder,
           resetProps.contentClassName,
         )}
-        className={classNames(styles.tabs, resetProps.className)}
-        tabClassName={classNames(styles.tabsTab, resetProps.tabClassName)}
-        navWrapClassName={classNames(
+        className={clsx(styles.tabs, resetProps.className)}
+        tabClassName={clsx(styles.tabsTab, resetProps.tabClassName)}
+        navWrapClassName={clsx(
           styles.tabsNavWrap,
           resetProps.navWrapClassName,
         )}

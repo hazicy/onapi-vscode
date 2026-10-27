@@ -1,5 +1,5 @@
 import { sdkResponseView } from "@/features/requests/utils/executionView";
-import classNames from "classnames";
+import clsx from "clsx";
 import { responseText, responseLanguage } from "@onapi/domain";
 import {
   forwardRef,
@@ -185,7 +185,7 @@ const ResponseResult = forwardRef((props: Props, ref) => {
         wrapClassName={styles.responseResultTabsWrap}
         tabBarExtraContent={
           <Flex
-            className={classNames(styles.tabBarExtraContentWrap, styles.flex)}
+            className={clsx(styles.tabBarExtraContentWrap, styles.flex)}
             gap={8}
           >
             <Select

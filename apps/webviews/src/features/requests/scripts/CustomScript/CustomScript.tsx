@@ -1,7 +1,7 @@
 import styles from "./CustomScript.module.css";
 import { useEffect, useRef, useState } from "react";
 
-import classNames from "classnames";
+import clsx from "clsx";
 import { map } from "lodash-es";
 
 import Tooltip from "@/shared/ui/Tooltip";
@@ -44,7 +44,7 @@ const VarItem = ({ item, value, onClick }: VarItem) => {
   return (
     <div
       ref={itemRef}
-      className={classNames(styles.varItem, {
+      className={clsx(styles.varItem, {
         [styles.active]: item.value === value,
       })}
       onClick={onClick}

@@ -1,5 +1,5 @@
 import styles from "./Request.module.css";
-import classNames from "classnames";
+import clsx from "clsx";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -142,7 +142,7 @@ const Message = (props: Props) => {
         }}
       >
         <Flex vertical gap={8} style={{ height: "100%", flex: 1, width: 0 }}>
-          <div className={classNames(styles.rawEditor, "raw-editor-wrap")}>
+          <div className={clsx(styles.rawEditor, "raw-editor-wrap")}>
             <RawEditor
               regularValueHeight={0}
               mode={curItem.request.mode}

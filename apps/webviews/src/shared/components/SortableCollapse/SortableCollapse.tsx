@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 import { Flex, Popconfirm, Switch } from "@/shared/ui/base";
 
 import { useDeepCompareEffect, useMemoizedFn } from "ahooks";
-import classNames from "classnames";
+import clsx from "clsx";
 import { isEmpty, map } from "lodash-es";
 
 import OrderNumber from "@/shared/components/SortableCollapse/OrderNumber";
@@ -301,7 +301,7 @@ const SortableCollapse = <SortItem extends AnyObject>({
       collisionDetection={pointerWithin}
       onDragEnd={onDragEnd}
     >
-      <div className={classNames(styles.container, wrapClassName)}>
+      <div className={clsx(styles.container, wrapClassName)}>
         {map(sortItemList, (sortItem, index) => (
           <PureSortableItem
             isTree={isTree}

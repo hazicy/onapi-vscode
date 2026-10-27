@@ -1,6 +1,6 @@
 import styles from "./Testing.module.css";
 import useTesting from "@/features/testing/store/useTesting";
-import cn from "classnames";
+import clsx from "clsx";
 import { Button, Flex } from "@/shared/ui/base";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -46,7 +46,7 @@ const TestingHeader = ({
         </div>
       </Flex>
       <Button
-        className={cn({
+        className={clsx({
           [styles.folderSendingBtn]:
             testingSendingData.sendStatus === "sending",
         })}

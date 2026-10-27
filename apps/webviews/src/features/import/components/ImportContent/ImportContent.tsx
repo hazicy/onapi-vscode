@@ -1,5 +1,5 @@
 import styles from "./ImportContent.module.css";
-import classNames from "classnames";
+import clsx from "clsx";
 import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
@@ -315,7 +315,7 @@ const Index = ({
                   ) && (
                     <Dragger
                       key={uploadKey}
-                      className={classNames(
+                      className={clsx(
                         styles.importProjectUploadContent,
                         styles.uploadWrapper,
                       )}

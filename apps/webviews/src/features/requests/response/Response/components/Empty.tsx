@@ -1,7 +1,7 @@
 import styles from "./Empty.module.css";
 import { useTranslation } from "react-i18next";
 
-import cn from "classnames";
+import clsx from "clsx";
 
 import Empty from "@/shared/ui/Empty";
 import AppIcon from "@/shared/ui/AppIcon";
@@ -22,7 +22,7 @@ const ResponseEmpty = ({
   const { t } = useTranslation();
   return (
     <div
-      className={cn(
+      className={clsx(
         styles.container,
         { [styles.maskMode]: maskMode },
         wrapClassName,
@@ -32,7 +32,7 @@ const ResponseEmpty = ({
         className={styles.responseEmptyWrap}
         description={description || t("api.run.response_tip")}
         image={<AppIcon icon="onapi" className={styles.iconEmptyWrap} />}
-        descriptionClassName={cn(descriptionClassName, styles.emptyDescription)}
+        descriptionClassName={clsx(descriptionClassName, styles.emptyDescription)}
         imageClassName={styles.emptyImage}
       />
     </div>

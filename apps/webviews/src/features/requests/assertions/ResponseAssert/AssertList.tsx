@@ -1,5 +1,5 @@
 import styles from "./ResponseAssert.module.css";
-import classNames from "classnames";
+import clsx from "clsx";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -27,7 +27,7 @@ const List: React.FC<ListProps> = ({ asserts }) => {
               <span
                 key={index}
                 data-passed={!item.error && !item.skipped}
-                className={classNames(
+                className={clsx(
                   styles.responseAssertItem,
                   styles.contentItem,
                 )}

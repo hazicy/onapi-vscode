@@ -1,6 +1,6 @@
 import { forwardRef } from "./forwardRef";
 import React from "react";
-import cx from "classnames";
+import clsx from "clsx";
 import type { UIProps } from "./types";
 import typographyStyles from "./Typography.module.css";
 import { Tag } from "./Tag";
@@ -34,7 +34,7 @@ const Text = forwardRef<HTMLElement, UIProps>(
             ? String(children)
             : props.title
         }
-        className={cx(
+        className={clsx(
           ellipsis && typographyStyles.ellipsis,
           type && typographyStyles[type as keyof typeof typographyStyles],
           className,

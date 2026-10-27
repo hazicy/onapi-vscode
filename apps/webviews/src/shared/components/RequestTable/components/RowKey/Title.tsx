@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { Checkbox, CheckboxProps, Flex } from "@/shared/ui/base";
 
-import cn from "classnames";
+import clsx from "clsx";
 import { isEqual, isNumber } from "lodash-es";
 
 import AppIcon from "@/shared/ui/AppIcon";
@@ -58,7 +58,7 @@ const RowKeyTitle: FC<Props> = memo(
               }
             >
               <span
-                className={cn(
+                className={clsx(
                   styles.queryEqIconWrap,
                   isEqual(queryAddEqual, 1) ? styles.active : "",
                 )}

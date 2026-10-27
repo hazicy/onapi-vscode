@@ -6,7 +6,7 @@ import type { InputRef } from "@/shared/ui/base";
 import VarMentions from "@/features/variables/components/VarMentions";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import { useMemoizedFn, useSafeState } from "ahooks";
-import cn from "classnames";
+import clsx from "clsx";
 import { head } from "lodash-es";
 
 import { parseSafeBash } from "@/features/curl/utils/curl";
@@ -224,14 +224,14 @@ export default function VarInput(props: Partial<VarInputProps>) {
     <div
       onKeyDown={handleKeyDown}
       onBlur={handleBlur}
-      className={cn(
+      className={clsx(
         styles.container,
         { [styles.hasBorder]: hasBorder },
         wrapClassName,
       )}
     >
       <div
-        className={cn(styles.miniEditor, styles.editorShell, {})}
+        className={clsx(styles.miniEditor, styles.editorShell, {})}
         onFocus={() => setActive(true)}
       >
         {multiline ? (

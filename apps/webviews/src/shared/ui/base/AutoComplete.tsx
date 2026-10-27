@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import cx from "classnames";
+import clsx from "clsx";
 import type { UIProps } from "./types";
 import autoCompleteStyles from "./AutoComplete.module.css";
 import { Autocomplete as Combobox } from "@base-ui/react/autocomplete";
@@ -77,7 +77,7 @@ export function AutoComplete({
       <div
         ref={fieldRef}
         style={style}
-        className={cx(autoCompleteStyles.select, className)}
+        className={clsx(autoCompleteStyles.select, className)}
       >
         <Combobox.Input
           {...props}
@@ -94,7 +94,7 @@ export function AutoComplete({
           <Combobox.Trigger
             ref={arrowRef}
             aria-label="Show options"
-            className={cx(autoCompleteStyles.arrow, arrowClassName)}
+            className={clsx(autoCompleteStyles.arrow, arrowClassName)}
           >
             <Icon icon={chevronDown} width={14} />
           </Combobox.Trigger>
@@ -109,7 +109,7 @@ export function AutoComplete({
           sideOffset={showArrow ? 8 : 0}
         >
           <Combobox.Popup
-            className={cx(
+            className={clsx(
               autoCompleteStyles.popup,
               showArrow && autoCompleteStyles.arrowPopup,
             )}

@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { Flex } from "@/shared/ui/base";
 
-import classNames from "classnames";
+import clsx from "clsx";
 import { concat, entries, filter, find, isString, map, size } from "lodash-es";
 
 import { Empty, Tooltip } from "@/shared/ui";
@@ -72,7 +72,7 @@ const Index = ({ value, onChange }: Props) => {
                 }}
               >
                 <div
-                  className={classNames(styles.listItemIcon, {
+                  className={clsx(styles.listItemIcon, {
                     [styles.e]: item?.type === ListType.env,
                     [styles.g]: item?.type === ListType.global,
                   })}

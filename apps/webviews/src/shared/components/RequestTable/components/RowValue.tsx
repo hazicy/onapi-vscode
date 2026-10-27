@@ -6,7 +6,7 @@ import { AutoComplete, UploadProps, message } from "@/shared/ui/base";
 import { REQUEST_CONTENT_TYPE } from "@onapi/domain/requests/constants/index";
 
 import { includes, isEqual } from "lodash-es";
-import classNames from "classnames";
+import clsx from "clsx";
 import { useVariableControls } from "@/shared/contexts/variable-controls";
 import { Button, AppIcon, Upload } from "@/shared/ui";
 import { fileTodataUrl } from "@/shared/utils/file";
@@ -90,7 +90,7 @@ const RowValue = memo((props: ItemProps) => {
     valueSuffix && Insert ? (
       <Insert onChange={valueChange} setOpen={setOpen} open={open}>
         <AppIcon
-          className={classNames(
+          className={clsx(
             styles.insertIcon,
             { [styles.active]: open },
             styles.icon,

@@ -15,7 +15,7 @@ import {
   type PaginationState,
 } from "@tanstack/react-table";
 import { get } from "lodash-es";
-import cx from "classnames";
+import clsx from "clsx";
 import { Checkbox } from "./Checkbox";
 import { Button } from "./Button";
 import type { TableProps, TableColumnType } from "./types";
@@ -232,9 +232,9 @@ export function Table<T extends object = Record<string, unknown>>({
   const Header = components.header?.wrapper ?? "thead";
   return (
     <div
-      className={cx(
+      className={clsx(
         tableStyles.table,
-        bordered && cx(tableStyles.bordered, borderedClassName),
+        bordered && clsx(tableStyles.bordered, borderedClassName),
         className,
         rootClassName,
       )}
@@ -292,7 +292,7 @@ export function Table<T extends object = Record<string, unknown>>({
                         {...cellProps}
                         key={header.id}
                         colSpan={header.colSpan}
-                        className={cx(
+                        className={clsx(
                           col.className,
                           cellClassName,
                           cellProps.className,
@@ -385,7 +385,7 @@ export function Table<T extends object = Record<string, unknown>>({
                   {...rowProps}
                   key={row.id}
                   data-row-key={getKey(record, row.index)}
-                  className={cx(
+                  className={clsx(
                     rowClassName,
                     typeof rowClassName === "function"
                       ? rowClassName(record, index)
@@ -443,7 +443,7 @@ export function Table<T extends object = Record<string, unknown>>({
                       <BodyCell
                         {...cellProps}
                         key={col.key ?? cell.column.id}
-                        className={cx(
+                        className={clsx(
                           cellClassName,
                           col.className,
                           cellProps.className,
