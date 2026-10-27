@@ -8,7 +8,7 @@ import { CaretDownOutlined, CaretRightOutlined } from "@/shared/ui/base/Icons";
 import { useMemoizedFn, useSafeState } from "ahooks";
 import cn from "classnames";
 import { produce } from "immer";
-import { isObject, isString, isUndefined } from "lodash";
+import { isObject, isString, isUndefined } from "lodash-es";
 
 import { AppIcon, Tooltip } from "@/shared/ui";
 import Button from "@/shared/ui/Button";

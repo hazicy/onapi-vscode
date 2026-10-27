@@ -5,7 +5,7 @@ import { arrayMove } from "@dnd-kit/sortable";
 import { useMemoizedFn } from "ahooks";
 import { snowflakeId } from "@onapi/http-model/utils/data-tools";
 import { produce } from "immer";
-import { cloneDeep, isArray } from "lodash";
+import { cloneDeep, isArray } from "lodash-es";
 
 interface Props {
   // Data source

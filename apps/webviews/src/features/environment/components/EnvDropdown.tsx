@@ -14,7 +14,7 @@ import {
 
 import { useSafeState } from "ahooks";
 import classNames from "classnames";
-import { get, map } from "lodash";
+import { get, map } from "lodash-es";
 
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";

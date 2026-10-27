@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import { Dropdown, Flex, Tree } from "@/shared/ui/base";
 
 import { useMemoizedFn, useSafeState } from "ahooks";
-import { cloneDeep, find, head, isArray } from "lodash";
+import { cloneDeep, find, head, isArray } from "lodash-es";
 
 import { SuspenseContent } from "@/shared/components";
 

@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { AutoComplete } from "@/shared/ui/base";
 
-import { map } from "lodash";
+import { map } from "lodash-es";
 
 import { REQUEST_CONTENT_TYPE } from "@onapi/http-model/requests/constants/index";
 

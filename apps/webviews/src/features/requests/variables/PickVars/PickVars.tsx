@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Flex, Select, SelectProps, Typography } from "@/shared/ui/base";
 
 import { DownOutlined } from "@/shared/ui/base/Icons";
-import { find, map } from "lodash";
+import { find, map } from "lodash-es";
 
 import useTheme from "@/shared/hooks/useTheme";
 

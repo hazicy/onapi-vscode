@@ -1,7 +1,7 @@
 import styles from "./LineTabs.module.css";
 import { FC, useMemo } from "react";
 
-import { isArray, isPlainObject, keys, size } from "lodash";
+import { isArray, isPlainObject, keys, size } from "lodash-es";
 
 interface Props {
   dataSource?: any;

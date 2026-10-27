@@ -14,7 +14,7 @@ import {
   isString,
   isUndefined,
   trim,
-} from "lodash";
+} from "lodash-es";
 
 import { getItemType } from "../common";
 import { ItemNodeProps } from "../interface";

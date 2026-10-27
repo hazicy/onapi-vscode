@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { Checkbox, Input } from "@/shared/ui/base";
 
-import { map } from "lodash";
+import { map } from "lodash-es";
 
 import GhostCollapse from "@/shared/ui/GhostCollapse";
 import { AUTH_ENUM } from "@onapi/http-model/requests/constants/auth";

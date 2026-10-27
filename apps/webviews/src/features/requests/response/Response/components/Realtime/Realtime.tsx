@@ -5,7 +5,7 @@ import { FC, memo, useContext, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useSafeState } from "ahooks";
-import { isEmpty, isEqual } from "lodash";
+import { isEmpty, isEqual } from "lodash-es";
 
 import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
 import ResponseResult from "@/features/requests/response/ResponseResult/ResponseResult";

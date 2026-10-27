@@ -13,7 +13,10 @@ import { connect as connectTcp, type Socket } from "node:net";
 import { setTimeout as delay } from "node:timers/promises";
 import test, { type TestContext } from "node:test";
 import { WebSocketServer } from "ws";
-import { WSClient, type WebSocketResult } from "@onapi/runtime/websocket/client";
+import {
+  WSClient,
+  type WebSocketResult,
+} from "@onapi/runtime/websocket/client";
 import {
   createVariableReplacer,
   prepareWebSocket,

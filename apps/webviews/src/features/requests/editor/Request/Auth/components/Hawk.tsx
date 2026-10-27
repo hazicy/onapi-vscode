@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { Checkbox, Input, Select } from "@/shared/ui/base";
 
-import { isEqual, map } from "lodash";
+import { isEqual, map } from "lodash-es";
 
 import GhostCollapse from "@/shared/ui/GhostCollapse";
 import {

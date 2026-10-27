@@ -5,7 +5,7 @@ import TreeCheckbox from "@/features/collections/components/TreeCheckbox/TreeChe
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
 import Conflict from "../Conflict";
 import { PushApiData } from "../type";
-import { isArray } from "lodash";
+import { isArray } from "lodash-es";
 
 type ApiCheckBoxProps = {
   halfCheckedKeys: Array<React.Key>;

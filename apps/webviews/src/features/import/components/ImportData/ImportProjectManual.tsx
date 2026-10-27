@@ -21,7 +21,7 @@ import {
   ImportLocationEnum,
 } from "@onapi/http-model/settings/constants/settings";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
-import { isString } from "lodash";
+import { isString } from "lodash-es";
 
 const { Title } = Typography;
 

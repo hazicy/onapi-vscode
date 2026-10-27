@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Checkbox, Collapse, Input } from "@/shared/ui/base";
 
 import cn from "classnames";
-import { concat, filter, isEqual, map, size, trim } from "lodash";
+import { concat, filter, isEqual, map, size, trim } from "lodash-es";
 
 import AppIcon from "@/shared/ui/AppIcon";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";

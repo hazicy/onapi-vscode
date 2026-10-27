@@ -5,7 +5,7 @@ import { Input } from "@/shared/ui/base";
 import { TextAreaProps } from "@/shared/ui/base";
 
 import { useUpdateEffect } from "ahooks";
-import { isString, trim } from "lodash";
+import { isString, trim } from "lodash-es";
 
 import { ItemProps } from "../../types";
 

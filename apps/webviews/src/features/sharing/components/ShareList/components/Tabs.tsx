@@ -6,7 +6,7 @@ import { TabsProps } from "../types";
 
 import cn from "classnames";
 
-import { isArray } from "lodash";
+import { isArray } from "lodash-es";
 import { Empty } from "@/shared/ui";
 import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
 import ApisColorPrefixIcon from "@/shared/ui/ApisColorPrefixIcon";

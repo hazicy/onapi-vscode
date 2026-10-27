@@ -7,7 +7,7 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { cloneDeep, head, last, map } from "lodash";
+import { cloneDeep, head, last, map } from "lodash-es";
 
 import ResizableTable from "../ResizableTable";
 import { SORT_KEY } from "../constants";

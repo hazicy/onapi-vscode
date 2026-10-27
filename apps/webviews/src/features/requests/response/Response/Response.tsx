@@ -19,7 +19,7 @@ import {
   isEqual,
   map,
   size,
-} from "lodash";
+} from "lodash-es";
 import ErrorContext from "./ErrorContext";
 
 import LineTabs from "@/shared/components/LineTabs/LineTabs";

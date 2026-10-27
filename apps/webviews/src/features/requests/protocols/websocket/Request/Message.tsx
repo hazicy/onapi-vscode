@@ -17,7 +17,7 @@ import {
   isEqual,
   map,
   set,
-} from "lodash";
+} from "lodash-es";
 
 import { RawEditor } from "@/shared/components";
 

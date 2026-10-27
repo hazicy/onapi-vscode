@@ -14,7 +14,7 @@ import {
   type RowSelectionState,
   type PaginationState,
 } from "@tanstack/react-table";
-import { get } from "lodash";
+import { get } from "lodash-es";
 import cx from "classnames";
 import { Checkbox } from "./Checkbox";
 import { Button } from "./Button";

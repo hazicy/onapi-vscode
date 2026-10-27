@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Checkbox, Input, Tree } from "@/shared/ui/base";
 
 import { useMemoizedFn, useSafeState } from "ahooks";
-import { isPlainObject, isUndefined } from "lodash";
+import { isPlainObject, isUndefined } from "lodash-es";
 
 import Button from "@/shared/ui/Button";
 import Empty from "@/shared/ui/Empty";

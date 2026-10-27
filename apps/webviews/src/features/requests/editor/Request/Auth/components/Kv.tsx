@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { Input, Select } from "@/shared/ui/base";
 
-import { map } from "lodash";
+import { map } from "lodash-es";
 
 import VarInput from "@/features/variables/components/VarInput/VarInput";
 import {

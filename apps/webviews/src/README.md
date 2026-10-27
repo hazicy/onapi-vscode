@@ -92,6 +92,8 @@ src/
   exceptions as well as new dependencies.
 - Use `@/features/...`, `@/shared/...` and `@/app/...` for cross-directory imports.
   Relative imports are suitable within a component or feature.
+- Import Lodash utilities as named exports from `lodash-es` in browser code;
+  no build-time import rewriting is needed.
 - Public panel IDs and generated bundle names remain camelCase. Their source
   files under `app/webviews/` use PascalCase in both Vite and development URLs.
 

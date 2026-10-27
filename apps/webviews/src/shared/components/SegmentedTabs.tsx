@@ -13,7 +13,7 @@ import {
 import { Flex, Segmented, SegmentedProps } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import { isEqual, map } from "lodash";
+import { isEqual, map } from "lodash-es";
 
 type Props = SegmentedProps & {
   ref?: Ref<HTMLDivElement> | undefined;

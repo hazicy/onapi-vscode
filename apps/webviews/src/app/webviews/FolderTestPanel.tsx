@@ -16,7 +16,7 @@ import { useGlobal } from "@/app/store";
 import useTesting from "@/features/testing/store/useTesting";
 import { produce } from "immer";
 import { saveReport } from "@/features/testing/components/Testing/utils";
-import { isString } from "lodash";
+import { isString } from "lodash-es";
 
 function FolderTestPanel() {
   const customTheme = useGlobalTheme();

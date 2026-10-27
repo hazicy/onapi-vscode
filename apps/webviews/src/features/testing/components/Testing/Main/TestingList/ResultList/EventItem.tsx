@@ -9,7 +9,7 @@ import { RuntimeResponse } from "@onapi/http-model/testing/types/index";
 import CustomPopover from "@/shared/ui/Popover";
 import { Checkbox, Flex, Tooltip, Typography } from "@/shared/ui/base";
 import { Drawer } from "@/shared/ui/Drawer";
-import { isArray, isEmpty, toUpper } from "lodash";
+import { isArray, isEmpty, toUpper } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 

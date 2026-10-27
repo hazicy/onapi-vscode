@@ -1,4 +1,4 @@
-import { isArray, isUndefined } from "lodash";
+import { isArray, isUndefined } from "lodash-es";
 
 // Get object type
 export const getItemType = (

@@ -9,7 +9,7 @@ import CookieManage from "./CookieManage/CookieManage";
 import EnvManage from "./EnvManage/EnvManage";
 import ParamsManage from "./ParamsManage";
 import VariableManage from "./VariableManage";
-import { head } from "lodash";
+import { head } from "lodash-es";
 import Menus from "./Menus";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import { snowflakeId } from "@onapi/http-model/utils/data-tools";

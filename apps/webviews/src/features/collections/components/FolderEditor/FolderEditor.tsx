@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { SegmentedProps } from "@/shared/ui/base";
 
 import { useMemoizedFn, useSafeState } from "ahooks";
-import { find, head, includes, isArray, last, map } from "lodash";
+import { find, head, includes, isArray, last, map } from "lodash-es";
 
 import { SegmentedTabs } from "@/shared/components";
 

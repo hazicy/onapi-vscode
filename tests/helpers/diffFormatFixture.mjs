@@ -20,7 +20,7 @@ const loadFormatter = async (
   filename = "apps/webviews/src/features/sync/components/ApisDiffJsonContent/utils.ts",
 ) =>
   await load(filename, (id) => {
-    if (id === "lodash" || id === "dayjs") return nativeDependency(id);
+    if (id === "lodash-es" || id === "dayjs") return nativeDependency(id);
     if (id === "i18next") return { t: (key) => key };
     if (id === "@/features/project/store/useProjectSetting")
       return {

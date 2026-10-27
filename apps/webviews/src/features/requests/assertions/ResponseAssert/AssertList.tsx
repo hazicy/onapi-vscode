@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { Space } from "@/shared/ui/base";
 
-import { isArray } from "lodash";
+import { isArray } from "lodash-es";
 
 import { CheckCircleFilled, CloseCircleFilled } from "@/shared/ui/base/Icons";
 

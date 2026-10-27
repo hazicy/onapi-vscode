@@ -5,7 +5,7 @@ import { Flex, InputNumber, Switch } from "@/shared/ui/base";
 
 import { useMemoizedFn } from "ahooks";
 import { produce } from "immer";
-import { isEqual, map } from "lodash";
+import { isEqual, map } from "lodash-es";
 
 interface Props {
   value: any;

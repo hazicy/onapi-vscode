@@ -1,4 +1,4 @@
-import { isEqual } from "lodash";
+import { isEqual } from "lodash-es";
 import { requestDefinition } from "@onapi/http-model";
 import type { HttpExecutionState } from "@/features/requests/execution/http-state";
 import type {

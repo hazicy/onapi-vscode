@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import { Flex, SegmentedProps, Select, message } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import { find, forEach, isArray, isPlainObject, map } from "lodash";
+import { find, forEach, isArray, isPlainObject, map } from "lodash-es";
 
 import SegmentedTabs from "@/shared/components/SegmentedTabs";
 import AppIcon from "@/shared/ui/AppIcon";

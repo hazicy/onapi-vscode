@@ -7,7 +7,7 @@ import {
   isString,
   setWith,
   trim,
-} from "lodash";
+} from "lodash-es";
 
 import useWebSocketStore from "@/features/requests/store/useApis/websocket";
 

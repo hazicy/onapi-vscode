@@ -17,7 +17,7 @@ import { Flex, Popconfirm, Switch } from "@/shared/ui/base";
 
 import { useDeepCompareEffect, useMemoizedFn } from "ahooks";
 import classNames from "classnames";
-import { isEmpty, map } from "lodash";
+import { isEmpty, map } from "lodash-es";
 
 import OrderNumber from "@/shared/components/SortableCollapse/OrderNumber";
 import Collapse from "@/shared/ui/Collapse/Collapse";

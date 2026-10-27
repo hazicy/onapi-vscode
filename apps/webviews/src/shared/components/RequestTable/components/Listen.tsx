@@ -3,7 +3,7 @@ import { FC, memo } from "react";
 
 import { Flex, Switch } from "@/shared/ui/base";
 
-import { isEqual } from "lodash";
+import { isEqual } from "lodash-es";
 
 import { ItemProps } from "../types";
 

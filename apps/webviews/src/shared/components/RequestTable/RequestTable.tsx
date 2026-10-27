@@ -30,7 +30,7 @@ import { useMemoizedFn } from "ahooks";
 
 import { snowflakeId } from "@onapi/http-model/utils/data-tools";
 import { produce } from "immer";
-import { cloneDeep } from "lodash";
+import { cloneDeep } from "lodash-es";
 
 import KeyValueRow from "./components/KeyValueRow";
 import { PARAMETER_ITEM } from "@onapi/http-model/requests/constants/request";

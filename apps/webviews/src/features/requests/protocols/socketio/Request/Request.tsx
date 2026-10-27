@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useDebounceFn, useSafeState } from "ahooks";
-import { concat, forEach, isEqual, keys, reverse } from "lodash";
+import { concat, forEach, isEqual, keys, reverse } from "lodash-es";
 
 import LineTabs from "@/shared/components/LineTabs/LineTabs";
 import context from "@/shared/components/RawEditor/visualizationContext";

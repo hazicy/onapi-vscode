@@ -28,7 +28,7 @@ import {
   size,
   toUpper,
   trim,
-} from "lodash";
+} from "lodash-es";
 import { ComponentType } from "react";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
 import {

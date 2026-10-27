@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-import { isObject, size } from "lodash";
+import { isObject, size } from "lodash-es";
 
 import BasicTable from "@/shared/components/BasicTable/BasicTable";
 import LineTabs from "@/shared/components/LineTabs/LineTabs";

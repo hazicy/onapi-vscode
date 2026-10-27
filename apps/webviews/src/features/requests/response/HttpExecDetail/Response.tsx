@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { bufferToRaw } from "@onapi/http-model/utils/response-tools";
 import dayjs from "dayjs";
-import { isEmpty, size } from "lodash";
+import { isEmpty, size } from "lodash-es";
 
 import Console from "@/features/requests/response/Console/Console";
 import LineTabs from "@/shared/components/LineTabs/LineTabs";

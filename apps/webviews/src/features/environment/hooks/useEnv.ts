@@ -6,7 +6,7 @@ import {
   updateAuthValues,
 } from "@/features/requests/editor/Request/Auth/authState";
 import { message } from "@/shared/ui/base";
-import { cloneDeep, isPlainObject, isString, setWith } from "lodash";
+import { cloneDeep, isPlainObject, isString, setWith } from "lodash-es";
 import { useTranslation } from "react-i18next";
 
 const useEnv = () => {

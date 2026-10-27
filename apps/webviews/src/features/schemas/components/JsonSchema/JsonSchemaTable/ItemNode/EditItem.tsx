@@ -2,7 +2,7 @@ import React from "react";
 
 import { useMemoizedFn } from "ahooks";
 import { produce } from "immer";
-import { assign } from "lodash";
+import { assign } from "lodash-es";
 
 import ItemDescription from "../rowItems/ItemDescription";
 import ItemKey, { ItemKeyProps } from "../rowItems/ItemKey/ItemKey";

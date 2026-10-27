@@ -5,7 +5,7 @@ import type {
   ServerItem,
 } from "@onapi/http-model/environment/types/index";
 import type { Key } from "react";
-import { cloneDeep } from "lodash";
+import { cloneDeep } from "lodash-es";
 import { compareEnvironments, mergeServiceLists } from "./environmentDiff";
 
 type EnvironmentConflictList = ReturnType<typeof compareEnvironments> & {

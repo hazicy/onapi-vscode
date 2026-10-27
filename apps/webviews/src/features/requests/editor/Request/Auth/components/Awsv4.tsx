@@ -4,7 +4,7 @@ import styles from "../Auth.module.css";
 import { Input, Select } from "@/shared/ui/base";
 
 import i18next from "i18next";
-import { isEqual, map } from "lodash";
+import { isEqual, map } from "lodash-es";
 
 import GhostCollapse from "@/shared/ui/GhostCollapse";
 import {

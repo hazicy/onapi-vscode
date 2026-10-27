@@ -3,7 +3,7 @@ import { FC, ReactNode, memo, useMemo } from "react";
 
 import { Dropdown, MenuProps } from "@/shared/ui/base";
 
-import { isNumber } from "lodash";
+import { isNumber } from "lodash-es";
 
 import { TreeDataItem } from "@onapi/http-model/requests/types/api";
 

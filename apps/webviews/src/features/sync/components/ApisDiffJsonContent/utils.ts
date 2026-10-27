@@ -10,7 +10,7 @@ import {
   map,
   size,
   sortBy,
-} from "lodash";
+} from "lodash-es";
 
 import useProjectSetting from "@/features/project/store/useProjectSetting";
 import { CustomAttributeItem } from "@onapi/http-model/project/types/index";

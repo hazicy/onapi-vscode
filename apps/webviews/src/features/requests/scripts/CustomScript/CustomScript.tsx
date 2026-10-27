@@ -2,7 +2,7 @@ import styles from "./CustomScript.module.css";
 import { useEffect, useRef, useState } from "react";
 
 import classNames from "classnames";
-import { map } from "lodash";
+import { map } from "lodash-es";
 
 import Tooltip from "@/shared/ui/Tooltip";
 

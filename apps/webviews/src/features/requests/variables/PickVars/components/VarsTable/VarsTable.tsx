@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Flex, Space } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import { find, isEmpty, isEqual, isUndefined } from "lodash";
+import { find, isEmpty, isEqual, isUndefined } from "lodash-es";
 
 import BasicTable from "@/shared/components/BasicTable/BasicTable";
 import { ColumnsType } from "@/shared/components/BasicTable/types";

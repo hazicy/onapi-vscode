@@ -2,7 +2,7 @@ import styles from "./Cookie.module.css";
 import { FC, memo } from "react";
 
 import dayjs from "dayjs";
-import { isArray, isEqual, isPlainObject } from "lodash";
+import { isArray, isEqual, isPlainObject } from "lodash-es";
 
 import { BasicTable } from "@/shared/components";
 

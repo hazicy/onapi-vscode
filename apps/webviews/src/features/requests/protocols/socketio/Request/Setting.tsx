@@ -10,7 +10,7 @@ import {
 
 import { useMemoizedFn } from "ahooks";
 import { produce } from "immer";
-import { isEqual, map } from "lodash";
+import { isEqual, map } from "lodash-es";
 
 import { Input } from "@/shared/ui";
 

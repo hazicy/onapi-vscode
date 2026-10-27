@@ -1,7 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import { rewriteLodashImports } from "../tooling/build/lodash-imports.mjs";
 import load from "./helpers/loadTypeScript.mjs";
 
 const fixtures = JSON.parse(
@@ -144,18 +143,4 @@ test("lightweight IDs retain the existing seed, timestamp, radix and sequence la
     const id = actual.snowflakeId("request-project", base);
     if (fixtures.ids[i]) assert.equal(id, fixtures.ids[i]);
   }
-});
-
-test("Lodash optimization handles multiline imports, aliases and trailing commas", async () => {
-  const source =
-    'import {\n cloneDeep, isEqual as same,\n} from "lodash";\nexport { cloneDeep, same };';
-  const optimized = rewriteLodashImports(source);
-  assert.ok(!optimized.includes('from "lodash"'));
-  assert.ok(optimized.includes('import cloneDeep from "lodash/cloneDeep.js"'));
-  const result = await import(
-    `data:text/javascript,${encodeURIComponent(optimized.replaceAll('"lodash/cloneDeep.js"', JSON.stringify(new URL("../node_modules/lodash/cloneDeep.js", import.meta.url).href)).replaceAll('"lodash/isEqual.js"', JSON.stringify(new URL("../node_modules/lodash/isEqual.js", import.meta.url).href)))}`
-  );
-  const value = { nested: [1, 2] };
-  assert.notEqual(result.cloneDeep(value).nested, value.nested);
-  assert.equal(result.same(value, result.cloneDeep(value)), true);
 });

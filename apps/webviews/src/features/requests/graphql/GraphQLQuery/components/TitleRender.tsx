@@ -19,7 +19,7 @@ import {
   isPlainObject,
   keys,
   size,
-} from "lodash";
+} from "lodash-es";
 
 import GraphQLSchemaProvider from "@/features/requests/graphql/GraphQLQuery/context/GraphQLSchemaProvider";
 import { Tooltip } from "@/shared/ui";

@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { AutoComplete, UploadProps, message } from "@/shared/ui/base";
 import { REQUEST_CONTENT_TYPE } from "@onapi/http-model/requests/constants/index";
 
-import { includes, isEqual } from "lodash";
+import { includes, isEqual } from "lodash-es";
 import classNames from "classnames";
 import VarInput from "@/features/variables/components/VarInput/VarInput";
 import { Button, AppIcon, Upload } from "@/shared/ui";

@@ -1,5 +1,4 @@
 import { fakerLocalesVite } from "../../tooling/build/faker-locales.mjs";
-import { lodashMethodImports } from "../../tooling/build/lodash-imports.mjs";
 import { generateScopedName } from "../../tooling/build/css-modules.mjs";
 import { fileURLToPath, URL } from "node:url";
 import { defineConfig, loadEnv } from "vite";
@@ -61,7 +60,6 @@ export default defineConfig(({ mode, command }) => {
         },
       },
       fakerLocalesVite(),
-      lodashMethodImports(),
       react(),
       svgr({ include: /\.svg(?:\?react)?$/ }),
       nodePolyfills(),

@@ -31,7 +31,7 @@ import { str2testData } from "@/shared/utils/common";
 import TestingResult from "./TestingResult";
 import TestingList from "./TestingList/TestingList";
 import All from "./TestingList/All/All";
-import { forEach, isArray } from "lodash";
+import { forEach, isArray } from "lodash-es";
 import classNames from "classnames";
 
 type MainProps = {

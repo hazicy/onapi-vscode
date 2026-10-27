@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Flex, Select } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import { includes, size, trim } from "lodash";
+import { includes, size, trim } from "lodash-es";
 
 import Button from "@/shared/ui/Button";
 import useApis from "@/features/requests/store/useApis";

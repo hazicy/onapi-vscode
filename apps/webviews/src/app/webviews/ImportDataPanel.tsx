@@ -15,7 +15,7 @@ import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import useUserConfig from "@/features/auth/store/useUserConfig";
 import { useGlobal } from "@/app/store";
 
-import { isArray } from "lodash";
+import { isArray } from "lodash-es";
 import useImportData from "@/features/import/store/useImportData";
 
 function ImportDataPanel() {

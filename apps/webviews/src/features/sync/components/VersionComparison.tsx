@@ -6,7 +6,7 @@ import { Flex } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
 
-import { isObject } from "lodash";
+import { isObject } from "lodash-es";
 
 import ApisDiffJsonContent from "@/features/sync/components/ApisDiffJsonContent/ApisDiffJsonContent";
 import { Modal } from "@/shared/ui/Modal";

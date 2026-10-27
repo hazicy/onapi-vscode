@@ -14,7 +14,7 @@ const {
       return { create: zustand.create, devtools: (initializer) => initializer };
     if (id.endsWith("requests/constants/request"))
       return { DEFAULT_REQUEST_SYSTEM_HEADERS: [] };
-    if (id === "lodash") return nativeDependency(id);
+    if (id === "lodash-es") return nativeDependency(id);
     return {};
   },
 );

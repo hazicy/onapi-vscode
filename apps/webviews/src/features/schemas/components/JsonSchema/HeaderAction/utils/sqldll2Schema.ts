@@ -1,5 +1,11 @@
 import $RefParser from "@apidevtools/json-schema-ref-parser";
-import { cloneDeep, isArray, isEmpty, isPlainObject, mapValues } from "lodash";
+import {
+  cloneDeep,
+  isArray,
+  isEmpty,
+  isPlainObject,
+  mapValues,
+} from "lodash-es";
 import { Parser } from "sql-ddl-to-json-schema";
 
 export const cutLength = (schema: any) => {

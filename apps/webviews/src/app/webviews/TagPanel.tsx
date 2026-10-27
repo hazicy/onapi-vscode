@@ -2,7 +2,7 @@ import { PROTOCOL_EXECUTION_EVENT } from "@onapi/contracts";
 import { createExecutionConsumer } from "@/features/requests/execution/consume-event";
 import { reduceHttpExecutionEvent } from "@/features/requests/execution/http-state";
 import { Suspense, useEffect } from "react";
-import { isEqual } from "lodash";
+import { isEqual } from "lodash-es";
 import ReactDOM from "react-dom/client";
 import { App as BaseApp } from "@/shared/ui/base";
 import useGlobalTheme from "@/shared/theme";

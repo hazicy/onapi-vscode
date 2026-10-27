@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
 import i18next from "i18next";
-import { size } from "lodash";
+import { size } from "lodash-es";
 
 import {
   compare,

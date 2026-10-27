@@ -6,7 +6,7 @@ import type {
   TreeArgument,
   InputField,
 } from "./types";
-import _, { has, isEqual, map, union } from "lodash";
+import { cloneDeep, has, isEqual, map, union } from "lodash-es";
 
 function getQueryTypeInfo(typeObj: SchemaTypeRef): {
   kind: string;
@@ -77,7 +77,7 @@ export const getChildTree = (
     return field?.children;
   }
   if (objects.objects[field.itemKind || ""]) {
-    const obj = _.cloneDeep(objects.objects[field.itemKind || ""]);
+    const obj = cloneDeep(objects.objects[field.itemKind || ""]);
     const modifyPaths = objects.objectPaths.filter((path) =>
       path.startsWith(`${field.itemKind}.`),
     );
@@ -112,7 +112,7 @@ export const raw2tree = (raw: Partial<OrganizedSchema>) => {
     for (let i = 0; i < queryInfo.Query.children.length; i++) {
       const field = queryInfo.Query.children[i];
       if (objects.objects[field.itemKind || ""]) {
-        const obj = _.cloneDeep(objects.objects[field.itemKind || ""]);
+        const obj = cloneDeep(objects.objects[field.itemKind || ""]);
         const modifyPaths = objects.objectPaths.filter((path) =>
           path.startsWith(`${field.itemKind}.`),
         );

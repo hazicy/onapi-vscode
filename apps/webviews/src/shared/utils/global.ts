@@ -5,7 +5,7 @@ import {
 import { getI18n } from "react-i18next";
 import { getGlobals } from "../../features/requests/utils/send-utils";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
-import { has, merge } from "lodash";
+import { has, merge } from "lodash-es";
 import { convertVarFormat } from "./common";
 
 export const getEditorVariable = async (originKey: string) => {

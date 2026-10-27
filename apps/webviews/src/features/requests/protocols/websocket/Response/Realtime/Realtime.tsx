@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Dropdown } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import { cloneDeep, isEqual, isFunction, isString, map, size } from "lodash";
+import { cloneDeep, isEqual, isFunction, isString, map, size } from "lodash-es";
 
 import Sending from "@/features/requests/editor/Sending";
 

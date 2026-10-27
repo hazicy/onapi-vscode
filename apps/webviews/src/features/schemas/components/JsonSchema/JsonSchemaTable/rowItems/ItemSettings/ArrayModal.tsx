@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { Flex, InputNumber, Switch } from "@/shared/ui/base";
 
-import { isNumber } from "lodash";
+import { isNumber } from "lodash-es";
 
 const ArrayModal = (props: any) => {
   const {

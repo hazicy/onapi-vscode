@@ -6,7 +6,7 @@ import { Table as BaseTable, TableColumnsType } from "@/shared/ui/base";
 
 import { useMemoizedFn, useSafeState } from "ahooks";
 import { produce } from "immer";
-import { map } from "lodash";
+import { map } from "lodash-es";
 
 import { AnyObject, BasicTableProps } from "./types";
 import { SORT_KEY } from "./constants";

@@ -8,7 +8,7 @@ import {
   isArray,
   isEqual,
   isString,
-} from "lodash";
+} from "lodash-es";
 
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
 import useApis from "@/features/requests/store/useApis";

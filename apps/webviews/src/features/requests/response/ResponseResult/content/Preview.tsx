@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-import { isPlainObject, isUndefined } from "lodash";
+import { isPlainObject, isUndefined } from "lodash-es";
 
 import Empty from "@/shared/ui/Empty";
 import { ApiSendingData } from "@onapi/http-model/requests/types/send";

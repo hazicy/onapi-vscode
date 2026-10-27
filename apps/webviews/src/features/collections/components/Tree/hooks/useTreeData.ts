@@ -9,7 +9,7 @@ import {
   some,
   uniq,
   values,
-} from "lodash";
+} from "lodash-es";
 
 import { TreeDataItem } from "@onapi/http-model/requests/types/api";
 

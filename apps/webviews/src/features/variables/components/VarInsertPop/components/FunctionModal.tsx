@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Flex, Select } from "@/shared/ui/base";
 
 import classNames from "classnames";
-import { has, size } from "lodash";
+import { has, size } from "lodash-es";
 
 import { Button, Input, InputNumber, Modal, Tooltip } from "@/shared/ui";
 import {

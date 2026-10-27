@@ -3,7 +3,7 @@ import { EditFormat } from "@/shared/utils/editFormat";
 import { parseModelToJsonSchema } from "@/features/schemas/utils/data-model";
 import { useMemoizedFn } from "ahooks";
 import { message } from "@/shared/ui/base";
-import { cloneDeep, isObject } from "lodash";
+import { cloneDeep, isObject } from "lodash-es";
 import { useTranslation } from "react-i18next";
 
 const Index = () => {

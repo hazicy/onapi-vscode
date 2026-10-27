@@ -13,7 +13,7 @@ import {
   omit,
   reduce,
   size,
-} from "lodash";
+} from "lodash-es";
 
 import JSON5 from "json5";
 import useProjectConfig from "@/features/project/store/useProjectConfig";

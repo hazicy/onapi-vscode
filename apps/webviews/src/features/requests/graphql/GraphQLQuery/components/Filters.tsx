@@ -26,7 +26,7 @@ import {
   keys,
   setWith,
   some,
-} from "lodash";
+} from "lodash-es";
 
 import GraphQLSchemaProvider from "@/features/requests/graphql/GraphQLQuery/context/GraphQLSchemaProvider";
 import { AppIcon } from "@/shared/ui";

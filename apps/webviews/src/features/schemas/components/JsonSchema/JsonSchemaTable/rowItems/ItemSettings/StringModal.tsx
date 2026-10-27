@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Flex, Input, InputNumber, Select, Switch } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import { isEmpty, isNumber, isString } from "lodash";
+import { isEmpty, isNumber, isString } from "lodash-es";
 
 const TextArea = Input.TextArea;
 const Option = Select.Option;

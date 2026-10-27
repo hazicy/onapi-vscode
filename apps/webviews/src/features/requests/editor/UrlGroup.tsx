@@ -17,7 +17,7 @@ import {
   Space,
 } from "@/shared/ui/base";
 
-import { find, includes, isArray, isString } from "lodash";
+import { find, includes, isArray, isString } from "lodash-es";
 
 import AppIcon from "@/shared/ui/AppIcon";
 import Tooltip from "@/shared/ui/Tooltip";

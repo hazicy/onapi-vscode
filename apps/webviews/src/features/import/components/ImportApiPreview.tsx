@@ -15,7 +15,7 @@ import {
   Typography,
 } from "@/shared/ui/base";
 
-import { filter, isArray } from "lodash";
+import { filter, isArray } from "lodash-es";
 
 import { BasicTable } from "@/shared/components";
 import Tree from "@/features/collections/components/Tree/Tree";

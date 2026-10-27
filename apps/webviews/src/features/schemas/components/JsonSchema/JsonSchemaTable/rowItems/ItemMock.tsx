@@ -7,7 +7,7 @@ import { AutoComplete } from "@/shared/ui/base";
 import { useMemoizedFn } from "ahooks";
 import cn from "classnames";
 import { produce } from "immer";
-import { entries, isNumber, isPlainObject, isString } from "lodash";
+import { entries, isNumber, isPlainObject, isString } from "lodash-es";
 
 import { SYSTEM_VARS } from "@/shared/constants/system";
 

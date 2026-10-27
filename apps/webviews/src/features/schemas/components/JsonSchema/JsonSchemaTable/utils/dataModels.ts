@@ -6,7 +6,7 @@ import {
   isPlainObject,
   isString,
   merge,
-} from "lodash";
+} from "lodash-es";
 
 function dataModels(models: any) {
   const getModelItem: (id: string) => any = (ref_id) => {

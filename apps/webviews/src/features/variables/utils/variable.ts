@@ -1,4 +1,4 @@
-import { includes } from "lodash";
+import { includes } from "lodash-es";
 
 export const transFuncName = (originName: string, value: any) => {
   try {

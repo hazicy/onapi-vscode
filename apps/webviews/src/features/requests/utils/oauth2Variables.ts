@@ -1,4 +1,4 @@
-import { has } from "lodash";
+import { has } from "lodash-es";
 
 type VariableMap = Record<string, string | undefined>;
 

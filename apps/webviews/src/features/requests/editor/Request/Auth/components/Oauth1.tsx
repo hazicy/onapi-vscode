@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { Checkbox, Flex, Input, Select } from "@/shared/ui/base";
 
-import { includes, map } from "lodash";
+import { includes, map } from "lodash-es";
 
 import GhostCollapse from "@/shared/ui/GhostCollapse";
 import {

@@ -15,7 +15,7 @@ import {
   isString,
   map,
   size,
-} from "lodash";
+} from "lodash-es";
 
 import Sending from "@/features/requests/editor/Sending";
 

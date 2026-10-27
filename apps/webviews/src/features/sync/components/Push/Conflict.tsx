@@ -3,7 +3,7 @@ import TreeCheckbox from "@/features/collections/components/TreeCheckbox/TreeChe
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
-import { cloneDeep, reduce } from "lodash";
+import { cloneDeep, reduce } from "lodash-es";
 
 const customFieldNames = {
   title: "name",

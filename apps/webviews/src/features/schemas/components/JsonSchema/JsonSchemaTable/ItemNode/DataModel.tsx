@@ -13,7 +13,7 @@ import {
   isPlainObject,
   isString,
   values,
-} from "lodash";
+} from "lodash-es";
 
 import ItemNode from "./ItemNode";
 import { useSchemaContext } from "../context";

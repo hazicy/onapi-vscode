@@ -9,7 +9,7 @@ import { MIGRATE_RESULT_STATUS } from "@onapi/http-model/import/constants/migrat
 import { getTeamAndProjectByProjectId } from "@/features/project/events";
 import ApiConflict from "./ApiConflict";
 import { PushApiData, PushEnvData } from "../type";
-import { isArray } from "lodash";
+import { isArray } from "lodash-es";
 import EnvConflict from "./EnvConflict";
 
 type PushRightProps = {

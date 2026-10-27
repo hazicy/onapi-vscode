@@ -52,7 +52,7 @@ import {
   mapKeys,
   merge,
   size,
-} from "lodash";
+} from "lodash-es";
 
 import { Button, Empty, AppIcon, Input, Popover, Tooltip } from "@/shared/ui";
 import { MOCK_LANGUAGE_MAP } from "@onapi/http-model/settings/constants/settings";

@@ -5,7 +5,7 @@ import type { TabsProps } from "@/shared/ui/base";
 import { LineTabs } from "@/shared/components";
 
 import ResultList from "./ResultList/ResultList";
-import { filter, toUpper } from "lodash";
+import { filter, toUpper } from "lodash-es";
 import { Settings } from "@onapi/http-model/testing/types/common";
 import { isAssertPass } from "@/shared/utils/common";
 

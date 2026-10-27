@@ -1,5 +1,6 @@
 import i18next from "i18next";
-import lodashFunctions, { forEach, keys, uniqBy } from "lodash";
+import * as lodashFunctions from "lodash-es";
+import { forEach, keys, uniqBy } from "lodash-es";
 import type { Completion } from "@codemirror/autocomplete";
 
 const createDependencyProposals = function (): Completion[] {

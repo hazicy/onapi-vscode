@@ -6,7 +6,7 @@ import { AutoComplete, Checkbox, Flex, Select } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
 import { produce } from "immer";
-import { filter, includes, isEqual, map, size, trim } from "lodash";
+import { filter, includes, isEqual, map, size, trim } from "lodash-es";
 
 import Button from "@/shared/ui/Button";
 import useApis from "@/features/requests/store/useApis";

@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { message } from "@/shared/ui/base";
 
 import { useMemoizedFn } from "ahooks";
-import { isObject, isString } from "lodash";
+import { isObject, isString } from "lodash-es";
 
 import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 import Modal from "@/shared/ui/Modal";

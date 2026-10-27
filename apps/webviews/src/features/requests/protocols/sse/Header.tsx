@@ -7,7 +7,7 @@ import { Button, Flex } from "@/shared/ui/base";
 import { produce } from "immer";
 import React, { FC, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { isArray, isEqual } from "lodash";
+import { isArray, isEqual } from "lodash-es";
 import { genQueryByUrl, genRestfulByUrl } from "@/features/requests/utils/apis";
 import UrlGroup from "@/features/requests/editor/UrlGroup";
 import useApis from "@/features/requests/store/useApis";

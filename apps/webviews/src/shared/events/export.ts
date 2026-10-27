@@ -3,7 +3,14 @@ import useUserConfig from "@/features/auth/store/useUserConfig";
 import { ImportConfig } from "@onapi/http-model/project/types/export";
 import { getSubstring } from "@/shared/utils/common";
 import { snowflakeId } from "@onapi/http-model/utils/data-tools";
-import { cloneDeep, has, isArray, isEmpty, isPlainObject, keys } from "lodash";
+import {
+  cloneDeep,
+  has,
+  isArray,
+  isEmpty,
+  isPlainObject,
+  keys,
+} from "lodash-es";
 import {
   completionApis,
   completionAttributes,

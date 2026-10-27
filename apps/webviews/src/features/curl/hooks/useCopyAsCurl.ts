@@ -1,4 +1,4 @@
-import { cloneDeep, isString, map } from "lodash";
+import { cloneDeep, isString, map } from "lodash-es";
 
 import useVarReplaces from "../../variables/hooks/useVarReplaces";
 import Har2languages from "har2languages";

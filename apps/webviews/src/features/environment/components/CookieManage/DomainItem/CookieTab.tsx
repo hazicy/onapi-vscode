@@ -15,7 +15,7 @@ import {
   isPlainObject,
   isString,
   trim,
-} from "lodash";
+} from "lodash-es";
 
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";

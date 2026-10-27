@@ -12,7 +12,7 @@ import {
   isNumber,
   isPlainObject,
   map,
-} from "lodash";
+} from "lodash-es";
 
 import AppIcon from "@/shared/ui/AppIcon";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";

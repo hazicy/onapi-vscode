@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Flex, MenuProps } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import { cloneDeep, isEqual } from "lodash";
+import { cloneDeep, isEqual } from "lodash-es";
 
 import { Button } from "@/shared/ui";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";

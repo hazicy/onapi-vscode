@@ -4,7 +4,7 @@ import { FC, ReactNode, useMemo } from "react";
 
 import { TabPaneProps, Tabs, TabsProps } from "@/shared/ui/base";
 
-import { map } from "lodash";
+import { map } from "lodash-es";
 
 import HeaderCount from "./HeaderCount";
 

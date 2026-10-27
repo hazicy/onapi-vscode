@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { cloneDeep, forEach, includes, some } from "lodash";
+import { cloneDeep, forEach, includes, some } from "lodash-es";
 
 import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
 import { TreeDataFilterParams } from "@/features/collections/types/tree";

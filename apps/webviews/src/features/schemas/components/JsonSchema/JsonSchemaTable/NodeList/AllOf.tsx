@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef } from "react";
 
 import { useMemoizedFn } from "ahooks";
 import { produce } from "immer";
-import { isArray, isNumber } from "lodash";
+import { isArray, isNumber } from "lodash-es";
 
 import ItemNode from "../ItemNode/ItemNode";
 

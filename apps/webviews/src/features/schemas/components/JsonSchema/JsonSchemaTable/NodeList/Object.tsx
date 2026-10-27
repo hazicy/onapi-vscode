@@ -17,7 +17,7 @@ import {
   isUndefined,
   omit,
   trim,
-} from "lodash";
+} from "lodash-es";
 
 import { useSchemaContext } from "../context";
 import { SortableList } from "./Sortable";

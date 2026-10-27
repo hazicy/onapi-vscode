@@ -1,6 +1,6 @@
 import React from "react";
 
-import { cloneDeep, isArray } from "lodash";
+import { cloneDeep, isArray } from "lodash-es";
 
 const useListData: (props: any) => any = (props) => {
   const { menuList, filterName } = props;

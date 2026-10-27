@@ -4,7 +4,7 @@ import React from "react";
 import { Flex } from "@/shared/ui/base";
 
 import classNames from "classnames";
-import { includes, isEqual } from "lodash";
+import { includes, isEqual } from "lodash-es";
 
 import AppIcon from "@/shared/ui/AppIcon";
 import Tooltip from "@/shared/ui/Tooltip";

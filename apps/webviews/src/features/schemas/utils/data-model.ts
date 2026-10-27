@@ -10,7 +10,7 @@ import {
   isString,
   isUndefined,
   merge,
-} from "lodash";
+} from "lodash-es";
 
 import { DIFF_DATA_KEYS } from "@/features/schemas/constants/schemas";
 import {

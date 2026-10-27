@@ -26,7 +26,7 @@ const env = (id, extra = {}) => ({
 });
 async function loader(state, serviceResult, envResult) {
   return await load("apps/webviews/src/features/sync/utils/push.ts", (id) => {
-    if (id === "lodash") return nativeDependency(id);
+    if (id === "lodash-es") return nativeDependency(id);
     if (id === "./environmentDiff") return diff;
     if (id === "@/features/project/store/useProjectConfig")
       return { default: { getState: () => state } };

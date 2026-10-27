@@ -7,7 +7,14 @@ import { Flex, Spin, message } from "@/shared/ui/base";
 import { useDebounceFn, useSafeState } from "ahooks";
 import classNames from "classnames";
 import Har2languages from "har2languages";
-import { cloneDeep, isArray, isEmpty, isObject, isString, map } from "lodash";
+import {
+  cloneDeep,
+  isArray,
+  isEmpty,
+  isObject,
+  isString,
+  map,
+} from "lodash-es";
 
 import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 import Button from "@/shared/ui/Button";

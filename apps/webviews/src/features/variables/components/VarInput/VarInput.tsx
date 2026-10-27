@@ -7,7 +7,7 @@ import VarMentions from "@/features/variables/components/VarMentions";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import { useMemoizedFn, useSafeState } from "ahooks";
 import cn from "classnames";
-import { find, head } from "lodash";
+import { find, head } from "lodash-es";
 import { useShallow } from "zustand/react/shallow";
 
 import {

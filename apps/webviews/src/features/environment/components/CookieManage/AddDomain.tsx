@@ -6,7 +6,7 @@ import { Input, message } from "@/shared/ui/base";
 
 import { snowflakeId } from "@onapi/http-model/utils/data-tools";
 import { produce } from "immer";
-import { cloneDeep, isArray, isObject, isString } from "lodash";
+import { cloneDeep, isArray, isObject, isString } from "lodash-es";
 
 import Button from "@/shared/ui/Button";
 

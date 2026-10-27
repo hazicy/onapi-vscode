@@ -1,4 +1,4 @@
-import { get as _get } from "lodash";
+import { get as _get } from "lodash-es";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 import { create } from "@/shared/state/store";

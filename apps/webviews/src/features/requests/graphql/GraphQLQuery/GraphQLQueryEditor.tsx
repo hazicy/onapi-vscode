@@ -42,7 +42,7 @@ import {
   startsWith,
   union,
   unionBy,
-} from "lodash";
+} from "lodash-es";
 
 import GraphQLQueryContext from "@/features/requests/graphql/GraphQLQuery/context/GraphQLQueryContext";
 import GraphQLSchemaProvider from "@/features/requests/graphql/GraphQLQuery/context/GraphQLSchemaProvider";

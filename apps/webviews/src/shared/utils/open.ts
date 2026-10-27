@@ -1,5 +1,5 @@
 import useApis from "@/features/requests/store/useApis";
-import { includes, size } from "lodash";
+import { includes, size } from "lodash-es";
 
 export const openUrl = (url: string, target = "_blank") => {
   window?.vscode.postMessage({

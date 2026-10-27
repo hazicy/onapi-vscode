@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/shared/ui/base";
 
 import cn from "classnames";
-import { isPlainObject } from "lodash";
+import { isPlainObject } from "lodash-es";
 
 import Button from "@/shared/ui/Button";
 import Tooltip from "@/shared/ui/Tooltip";

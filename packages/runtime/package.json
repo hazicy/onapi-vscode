@@ -20,10 +20,10 @@
     "dev": "node build.mjs --watch --development"
   },
   "dependencies": {
-    "@postman/tough-cookie": "4.1.3-postman.1",
     "@onapi/contracts": "workspace:*",
     "@onapi/core": "workspace:*",
     "@onapi/http-model": "workspace:*",
+    "@postman/tough-cookie": "4.1.3-postman.1",
     "file-type": "^22.2.0",
     "https-proxy-agent": "^9.1.0",
     "json5": "^2.2.3",

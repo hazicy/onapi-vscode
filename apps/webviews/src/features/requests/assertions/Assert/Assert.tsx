@@ -6,7 +6,7 @@ import { Flex, Input, Select, SelectProps } from "@/shared/ui/base";
 
 import { DownOutlined } from "@/shared/ui/base/Icons";
 import { produce } from "immer";
-import { find, get, includes, isEqual, map } from "lodash";
+import { find, get, includes, isEqual, map } from "lodash-es";
 
 import PathPickModal from "@/shared/components/PathPickModal";
 import AppIcon from "@/shared/ui/AppIcon";

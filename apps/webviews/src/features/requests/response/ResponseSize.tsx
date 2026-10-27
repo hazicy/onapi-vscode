@@ -29,7 +29,7 @@ import {
   subtract,
   sumBy,
   values,
-} from "lodash";
+} from "lodash-es";
 
 import { Tooltip } from "@/shared/ui";
 import AppIcon from "@/shared/ui/AppIcon";

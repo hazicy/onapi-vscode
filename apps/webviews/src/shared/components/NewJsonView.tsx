@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { CSSProperties, FC, useMemo } from "react";
 import ReactJson from "@microlink/react-json-view";
 
-import { isPlainObject, isString } from "lodash";
+import { isPlainObject, isString } from "lodash-es";
 
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import { copyStringToClipboard } from "@/shared/utils/common";

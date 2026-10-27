@@ -6,7 +6,7 @@ import cn from "classnames";
 import AppIcon from "@/shared/ui/AppIcon";
 import { REQUEST_METHOD_MAP } from "@onapi/http-model/requests/constants/index";
 
-import { isString } from "lodash";
+import { isString } from "lodash-es";
 
 interface Props {
   type: string;

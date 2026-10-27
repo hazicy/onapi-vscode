@@ -1,6 +1,6 @@
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 
-import { find } from "lodash";
+import { find } from "lodash-es";
 
 export const saveEnvironments = (
   environments: import("@onapi/http-model").EnvironmentScope[],

@@ -1,7 +1,7 @@
 import type { ModalFuncProps, ModalProps } from "@/shared/ui/base";
 import { Flex, Modal } from "@/shared/ui/base";
 
-import { map, size } from "lodash";
+import { map, size } from "lodash-es";
 
 import Button, { ButtonProps } from "@/shared/ui/Button";
 import useTheme from "@/shared/hooks/useTheme";

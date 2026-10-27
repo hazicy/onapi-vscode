@@ -2,7 +2,7 @@ import styles from "./DomainItem.module.css";
 import { Dispatch, useMemo } from "react";
 
 import { produce } from "immer";
-import { cloneDeep, keys } from "lodash";
+import { cloneDeep, keys } from "lodash-es";
 
 import Collapse from "@/shared/ui/Collapse/Collapse";
 import Empty from "@/shared/ui/Empty";

@@ -3,8 +3,8 @@ import React, { memo, useMemo, useRef } from "react";
 import { useParams } from "react-router-dom";
 
 import { useMemoizedFn, useSafeState } from "ahooks";
-import { isObject, isPlainObject } from "lodash";
-import { isEmpty } from "lodash";
+import { isObject, isPlainObject } from "lodash-es";
+import { isEmpty } from "lodash-es";
 
 import { DEFAULT_LAYOUTS } from "./constant";
 import context, { LayoutProps } from "./context";

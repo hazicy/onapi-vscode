@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import { Flex, Field, Select } from "@/shared/ui/base";
 
-import { concat, isEqual } from "lodash";
+import { concat, isEqual } from "lodash-es";
 
 import {
   AUTH_ENUM,

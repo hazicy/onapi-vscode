@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Flex } from "@/shared/ui/base";
 
 import { useMemoizedFn } from "ahooks";
-import { isEmpty, isEqual, map, size } from "lodash";
+import { isEmpty, isEqual, map, size } from "lodash-es";
 
 import { LineTabs, SuspenseContent } from "@/shared/components";
 

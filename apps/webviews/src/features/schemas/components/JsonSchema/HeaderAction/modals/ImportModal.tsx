@@ -6,7 +6,7 @@ import { Segmented, message } from "@/shared/ui/base";
 
 import $RefParser from "@apidevtools/json-schema-ref-parser";
 import { XMLParser } from "fast-xml-parser";
-import { isObject, isPlainObject, isString } from "lodash";
+import { isObject, isPlainObject, isString } from "lodash-es";
 
 import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 import Modal from "@/shared/ui/Modal";

@@ -9,7 +9,7 @@ import { Flex, Input, Switch, Upload, message } from "@/shared/ui/base";
 import type { RcFile, UploadChangeParam } from "@/shared/ui/base";
 
 import JSON5 from "json5";
-import { cloneDeep, includes, isArray, isEqual } from "lodash";
+import { cloneDeep, includes, isArray, isEqual } from "lodash-es";
 
 import { Button, AppIcon, Tooltip } from "@/shared/ui";
 import {

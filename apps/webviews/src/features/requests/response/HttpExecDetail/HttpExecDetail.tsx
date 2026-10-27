@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { Alert, Flex } from "@/shared/ui/base";
 
-import { isEmpty, map, size } from "lodash";
+import { isEmpty, map, size } from "lodash-es";
 
 import ResponseSize from "@/features/requests/response/ResponseSize";
 import GhostCollapse from "@/shared/ui/GhostCollapse";

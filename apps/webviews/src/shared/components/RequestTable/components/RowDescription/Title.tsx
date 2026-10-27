@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { Flex } from "@/shared/ui/base";
 
-import { isEqual } from "lodash";
+import { isEqual } from "lodash-es";
 
 import { RequestTableProps } from "../../types";
 

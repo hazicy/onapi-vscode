@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { Flex } from "@/shared/ui/base";
 
-import { isString } from "lodash";
+import { isString } from "lodash-es";
 
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";

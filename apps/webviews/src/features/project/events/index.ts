@@ -1,7 +1,7 @@
 import { MIGRATE_RESULT_STATUS } from "@onapi/http-model/import/constants/migrate/index";
 import { TeamItem } from "@onapi/http-model/auth/types/index";
 import dayjs from "dayjs";
-import { filter, find, get, isEmpty, last, map, size, sortBy } from "lodash";
+import { filter, find, get, isEmpty, last, map, size, sortBy } from "lodash-es";
 
 /**
  * - Get project and team from project list by project ID

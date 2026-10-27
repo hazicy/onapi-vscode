@@ -1,6 +1,6 @@
 import { requestUrl, requestMethod } from "@onapi/http-model";
 import styles from "./All.module.css";
-import { size } from "lodash";
+import { size } from "lodash-es";
 
 import Empty from "@/shared/ui/Empty";
 

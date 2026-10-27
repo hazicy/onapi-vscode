@@ -1,5 +1,5 @@
 import { Tooltip } from "@base-ui/react/tooltip";
-import { isArray, isString, trim } from "lodash";
+import { isArray, isString, trim } from "lodash-es";
 
 import useProjectSetting from "@/features/project/store/useProjectSetting";
 import useUserConfig from "@/features/auth/store/useUserConfig";

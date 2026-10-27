@@ -20,7 +20,7 @@ import {
   isObject,
   isString,
   isUndefined,
-} from "lodash";
+} from "lodash-es";
 import X2JS from "x2js";
 import xpath from "xpath";
 

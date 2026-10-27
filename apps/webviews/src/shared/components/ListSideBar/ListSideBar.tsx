@@ -5,7 +5,7 @@ import { Button, Flex } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
 import classNames from "classnames";
-import { isEqual, map, size } from "lodash";
+import { isEqual, map, size } from "lodash-es";
 
 import { AppIcon } from "@/shared/ui";
 

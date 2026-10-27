@@ -5,7 +5,7 @@ import { TreeProps } from "@/shared/ui/base";
 import { DataNode } from "@/shared/ui/base";
 
 import { produce } from "immer";
-import { assign, concat, forEach, includes, isEqual, last } from "lodash";
+import { assign, concat, forEach, includes, isEqual, last } from "lodash-es";
 
 import {
   DEFAULT_NO_DRAG_INCLUDES_KEYS,

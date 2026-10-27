@@ -11,7 +11,7 @@ import {
 } from "@/shared/ui/base";
 
 import classnames from "classnames";
-import { concat, isEqual, map } from "lodash";
+import { concat, isEqual, map } from "lodash-es";
 
 import AppIcon from "@/shared/ui/AppIcon";
 import Tooltip from "@/shared/ui/Tooltip";

@@ -7,7 +7,7 @@ import { Tree as BaseTree, Dropdown, MenuProps } from "@/shared/ui/base";
 import type { DataNode, TreeProps, TreeHandle } from "@/shared/ui/base";
 
 import { useDebounceFn, useMemoizedFn, useSafeState } from "ahooks";
-import { includes, isEqual, isFunction, map, reduce } from "lodash";
+import { includes, isEqual, isFunction, map, reduce } from "lodash-es";
 
 import AppIcon from "@/shared/ui/AppIcon";
 import { TreeDataItem as ApiTreeDataItem } from "@onapi/http-model/requests/types/api";

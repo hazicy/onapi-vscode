@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import isObject from "lodash/isObject";
+import { isObject } from "lodash-es";
 
 import ItemNode from "../ItemNode/ItemNode";
 

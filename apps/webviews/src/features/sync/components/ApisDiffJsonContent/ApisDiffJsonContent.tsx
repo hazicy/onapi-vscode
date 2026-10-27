@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { Collapse } from "@/shared/ui/base";
 
-import { forEach, size } from "lodash";
+import { forEach, size } from "lodash-es";
 
 import { Empty } from "@/shared/ui";
 

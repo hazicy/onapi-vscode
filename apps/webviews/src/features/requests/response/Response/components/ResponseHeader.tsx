@@ -1,7 +1,7 @@
 import styles from "./ResponseHeader.module.css";
 import { FC, memo } from "react";
 
-import { isArray, isEqual, isPlainObject } from "lodash";
+import { isArray, isEqual, isPlainObject } from "lodash-es";
 
 import BasicTable from "@/shared/components/BasicTable/BasicTable";
 

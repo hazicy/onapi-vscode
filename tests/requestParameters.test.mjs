@@ -7,7 +7,7 @@ let nextId = 0;
 const exportsObject = await load(
   "apps/webviews/src/features/requests/utils/apis.ts",
   (id) => {
-    if (id === "lodash" || id === "url-parse") return nativeDependency(id);
+    if (id === "lodash-es" || id === "url-parse") return nativeDependency(id);
     if (
       [
         "@/shared/utils/dataTools",

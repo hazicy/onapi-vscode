@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { Flex, Tooltip } from "@/shared/ui/base";
 
-import { isObject } from "lodash";
+import { isObject } from "lodash-es";
 
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";

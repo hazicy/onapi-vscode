@@ -16,7 +16,7 @@ import {
 import Search from "./components/Search";
 import AllCheck from "./components/AllCheck";
 
-import { isEqual } from "lodash";
+import { isEqual } from "lodash-es";
 
 export const API_TYPE_INCLUDES: string[] = [
   APIS_TARGET_TYPE_ENUM.FOLDER,

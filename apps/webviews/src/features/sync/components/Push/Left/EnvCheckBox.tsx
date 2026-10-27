@@ -5,7 +5,7 @@ import useProjectConfig from "@/features/project/store/useProjectConfig";
 import TreeCheckbox from "@/features/collections/components/TreeCheckbox/TreeCheckbox";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
 import { PushEnvData } from "../type";
-import { cloneDeep, isArray } from "lodash";
+import { cloneDeep, isArray } from "lodash-es";
 import { AppIcon } from "@/shared/ui";
 import { openEnvPage } from "@/features/requests/events/env";
 import VersionComparison from "@/features/sync/components/VersionComparison";

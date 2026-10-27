@@ -2,7 +2,7 @@ import styles from "./Console.module.css";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 
-import { size } from "lodash";
+import { size } from "lodash-es";
 
 import Empty from "@/shared/ui/Empty";
 

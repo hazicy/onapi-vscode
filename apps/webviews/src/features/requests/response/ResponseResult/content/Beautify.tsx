@@ -2,7 +2,7 @@ import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 import type { EditorOptions } from "@/shared/components/CodeEditor/CodeEditor";
 import { isJSONString } from "@/shared/utils/common";
 import useEditFormat from "@/shared/hooks/useEditFormat";
-import { isString } from "lodash";
+import { isString } from "lodash-es";
 import { Empty } from "@/shared/ui";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";

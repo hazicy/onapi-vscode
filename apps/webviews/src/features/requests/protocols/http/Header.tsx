@@ -4,7 +4,7 @@ import { AnyObject } from "@onapi/http-model/types/common";
 import { produce } from "immer";
 import React, { FC, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { isArray, isEqual } from "lodash";
+import { isArray, isEqual } from "lodash-es";
 import {
   genQueryByUrl,
   genRestfulByUrl,

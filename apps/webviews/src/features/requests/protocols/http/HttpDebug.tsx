@@ -7,7 +7,7 @@ import { DirectionType } from "@onapi/http-model/types/common";
 import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
 import SuspenseContent from "@/shared/components/SuspenseContent";
 
-import { isEqual } from "lodash";
+import { isEqual } from "lodash-es";
 import useApis from "@/features/requests/store/useApis";
 import Request from "@/features/requests/editor/Request/Request";
 import Response from "./Response";

@@ -17,7 +17,7 @@ import {
   isEqual,
   keys,
   startsWith,
-} from "lodash";
+} from "lodash-es";
 
 import { AppIcon, Tooltip } from "@/shared/ui";
 import { MOCK_LANGUAGE_MAP } from "@onapi/http-model/settings/constants/settings";

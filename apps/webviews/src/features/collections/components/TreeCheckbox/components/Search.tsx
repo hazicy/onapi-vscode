@@ -5,7 +5,7 @@ import { Flex, Input } from "@/shared/ui/base";
 
 import { useDebounce, useSafeState } from "ahooks";
 import i18next from "i18next";
-import { concat } from "lodash";
+import { concat } from "lodash-es";
 
 import { TreeDataFilterParams } from "@/features/collections/components/Tree/types";
 import AppIcon from "@/shared/ui/AppIcon";

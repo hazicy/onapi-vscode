@@ -22,7 +22,7 @@ import {
   isString,
   isUndefined,
   map,
-} from "lodash";
+} from "lodash-es";
 import {
   CONTENT_TYPES,
   OPENAPI_TYPES,

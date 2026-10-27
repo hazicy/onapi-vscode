@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { Flex, SegmentedProps, Typography } from "@/shared/ui/base";
 
 import { useMemoizedFn, useSafeState } from "ahooks";
-import { includes, isEqual } from "lodash";
+import { includes, isEqual } from "lodash-es";
 
 import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 import SegmentedTabs from "@/shared/components/SegmentedTabs";

@@ -9,7 +9,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import cn from "classnames";
-import { includes, map } from "lodash";
+import { includes, map } from "lodash-es";
 
 import { AppIcon } from "@/shared/ui";
 

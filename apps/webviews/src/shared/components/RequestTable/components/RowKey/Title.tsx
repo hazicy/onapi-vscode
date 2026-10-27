@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Checkbox, CheckboxProps, Flex } from "@/shared/ui/base";
 
 import cn from "classnames";
-import { isEqual, isNumber } from "lodash";
+import { isEqual, isNumber } from "lodash-es";
 
 import AppIcon from "@/shared/ui/AppIcon";
 import Tooltip from "@/shared/ui/Tooltip";

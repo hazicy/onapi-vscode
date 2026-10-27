@@ -11,7 +11,7 @@ import {
   isNumber,
   round,
   toUpper,
-} from "lodash";
+} from "lodash-es";
 import { formatTimeToDateTimeLong } from "@onapi/http-model/utils/time";
 import { getPercent } from "../utils";
 import { TestingSendingData } from "@onapi/http-model/testing/types/index";

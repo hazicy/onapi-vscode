@@ -6,7 +6,7 @@ import { Input, message } from "@/shared/ui/base";
 
 import { DragEndEvent } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import { cloneDeep, findIndex, isEqual, size, sortBy } from "lodash";
+import { cloneDeep, findIndex, isEqual, size, sortBy } from "lodash-es";
 
 import Table from "@/shared/components/BasicTable/BasicTable";
 import Button from "@/shared/ui/Button";

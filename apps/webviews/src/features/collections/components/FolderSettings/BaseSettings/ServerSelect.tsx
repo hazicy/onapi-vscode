@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Flex, Select } from "@/shared/ui/base";
 
 import { useMemoizedFn } from "ahooks";
-import { find, isEqual, map } from "lodash";
+import { find, isEqual, map } from "lodash-es";
 
 import Tooltip from "@/shared/ui/Tooltip";
 import useProjectConfig from "@/features/project/store/useProjectConfig";

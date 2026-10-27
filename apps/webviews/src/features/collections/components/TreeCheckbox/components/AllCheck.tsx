@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Checkbox, CheckboxProps } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import { includes, reduce, size } from "lodash";
+import { includes, reduce, size } from "lodash-es";
 
 import { TreeDataItem } from "@onapi/http-model/requests/types/api";
 

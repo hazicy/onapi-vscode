@@ -6,7 +6,7 @@ import { Flex, Select, Space, message } from "@/shared/ui/base";
 
 import { useMemoizedFn } from "ahooks";
 import { produce } from "immer";
-import { cloneDeep, find, findIndex, isEqual, map } from "lodash";
+import { cloneDeep, find, findIndex, isEqual, map } from "lodash-es";
 
 import LineTabs from "@/shared/components/LineTabs/LineTabs";
 import RawEditor from "@/shared/components/RawEditor/RawEditor";

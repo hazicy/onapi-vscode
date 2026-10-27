@@ -3,7 +3,7 @@ import React from "react";
 import { message } from "@/shared/ui/base";
 import { version } from "@/../package.json";
 import axios, { AxiosRequestConfig } from "axios";
-import { includes, omit, values } from "lodash";
+import { includes, omit, values } from "lodash-es";
 import { stringify } from "qs";
 
 import {

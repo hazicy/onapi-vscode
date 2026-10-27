@@ -7,7 +7,7 @@ import { Flex, Switch } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
 import { produce } from "immer";
-import { isEqual } from "lodash";
+import { isEqual } from "lodash-es";
 
 import { Popover, Tooltip } from "@/shared/ui";
 import Button from "@/shared/ui/Button";

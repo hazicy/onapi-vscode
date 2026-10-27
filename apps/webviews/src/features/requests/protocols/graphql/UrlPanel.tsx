@@ -10,7 +10,7 @@ import { Dropdown, Flex, MenuProps, Tree } from "@/shared/ui/base";
 import Button from "@/shared/ui/Button";
 import i18next from "i18next";
 import { produce } from "immer";
-import { cloneDeep, head, isEqual } from "lodash";
+import { cloneDeep, head, isEqual } from "lodash-es";
 
 import UrlGroup from "@/features/requests/editor/UrlGroup";
 import { AppIcon } from "@/shared/ui";

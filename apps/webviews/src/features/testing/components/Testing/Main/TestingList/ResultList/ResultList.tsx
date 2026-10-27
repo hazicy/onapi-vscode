@@ -1,5 +1,5 @@
 import styles from "./ResultList.module.css";
-import { ceil, size } from "lodash";
+import { ceil, size } from "lodash-es";
 
 import Empty from "@/shared/ui/Empty";
 

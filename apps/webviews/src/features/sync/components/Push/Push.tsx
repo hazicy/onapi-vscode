@@ -13,7 +13,7 @@ import {
   batchSaveApiService,
   getApisListService,
 } from "@/shared/services/apis";
-import { cloneDeep, forEach, isArray, isPlainObject } from "lodash";
+import { cloneDeep, forEach, isArray, isPlainObject } from "lodash-es";
 import Left from "./Left/Left";
 import Right from "./Right/Right";
 import {
