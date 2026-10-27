@@ -1,8 +1,3 @@
-import {
-  generateRequestCode,
-  getCodeLanguages,
-  selectCodeLanguage,
-} from "./code-generation";
 import { requestDefinition } from "@onapi/domain";
 import type { RequestPanelMessage } from "./panel-message";
 import { fetchGraphQLSchema } from "./graphql-schema";
@@ -212,6 +207,8 @@ export const handelOpenMessage = async (
 
     case "generateCode": {
       try {
+        const { generateRequestCode, getCodeLanguages, selectCodeLanguage } =
+          await import("./code-generation");
         const languages = getCodeLanguages();
         const selection = selectCodeLanguage(data.language, data.variant);
         const request = await getResolvedCodeRequest(
@@ -255,6 +252,7 @@ export const handelOpenMessage = async (
       break;
     case "copyAsCurl": {
       try {
+        const { generateRequestCode } = await import("./code-generation");
         const request = await getResolvedCodeRequest(
           data.apiData,
           context,

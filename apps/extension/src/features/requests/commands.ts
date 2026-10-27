@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
 import { forEach } from "lodash";
-import { generateRequestCode } from "./code-generation";
 import { copyTextToClipboard, showTabName } from "../../platform/host-utils";
 import { getResolvedCodeRequest } from "./execution/http-runner";
 import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
@@ -42,6 +41,7 @@ export const copyAsCurl = async (
   context: vscode.ExtensionContext,
 ) => {
   try {
+    const { generateRequestCode } = await import("./code-generation");
     const request = await getResolvedCodeRequest(apiData, context);
     copyTextToClipboard(await generateRequestCode(request, "curl", "cURL"));
   } catch (error) {
