@@ -1,9 +1,6 @@
 import { EditorView } from "@codemirror/view";
-import {
-  defaultHighlightStyle,
-  syntaxHighlighting,
-} from "@codemirror/language";
-import { oneDarkHighlightStyle } from "@codemirror/theme-one-dark";
+import { HighlightStyle, syntaxHighlighting } from "@codemirror/language";
+import { tags } from "@lezer/highlight";
 
 export function editorTheme(
   dark: boolean,
@@ -11,7 +8,53 @@ export function editorTheme(
   fontFamily = "monospace",
 ) {
   return [
-    syntaxHighlighting(dark ? oneDarkHighlightStyle : defaultHighlightStyle),
+    // Webviews expose UI colors, but not the host theme's TextMate token colors.
+    // Use VS Code's default token palettes as fallbacks for syntax highlighting.
+    syntaxHighlighting(
+      HighlightStyle.define([
+        { tag: tags.keyword, color: dark ? "#569cd6" : "#0000ff" },
+        {
+          tag: [tags.string, tags.special(tags.string)],
+          color: dark ? "#ce9178" : "#a31515",
+        },
+        {
+          tag: [tags.number, tags.bool, tags.null],
+          color: dark ? "#b5cea8" : "#098658",
+        },
+        {
+          tag: [tags.comment, tags.meta],
+          color:
+            "var(--vscode-descriptionForeground, " +
+            (dark ? "#6a9955" : "#008000") +
+            ")",
+          fontStyle: "italic",
+        },
+        {
+          tag: [tags.typeName, tags.className],
+          color: dark ? "#4ec9b0" : "#267f99",
+        },
+        {
+          tag: [
+            tags.function(tags.variableName),
+            tags.function(tags.propertyName),
+          ],
+          color: dark ? "#dcdcaa" : "#795e26",
+        },
+        {
+          tag: [tags.variableName, tags.propertyName, tags.attributeName],
+          color: dark ? "#9cdcfe" : "#001080",
+        },
+        { tag: tags.tagName, color: dark ? "#569cd6" : "#800000" },
+        {
+          tag: [tags.angleBracket, tags.punctuation],
+          color:
+            "var(--vscode-editor-foreground, " +
+            (dark ? "#d4d4d4" : "#000000") +
+            ")",
+        },
+        { tag: tags.invalid, color: "var(--vscode-errorForeground, #f14c4c)" },
+      ]),
+    ),
     EditorView.theme(
       {
         "&": {
@@ -21,27 +64,27 @@ export function editorTheme(
           backgroundColor:
             "var(--vscode-editor-background, var(--color-bg-right))",
         },
-        "@/shared/components/CodeEditor/.cm-scroller": {
+        ".cm-scroller": {
           overflow: "auto",
           fontFamily: fontFamily || "monospace",
         },
-        "@/shared/components/CodeEditor/.cm-content": { minHeight: "100%" },
-        "@/shared/components/CodeEditor/.cm-gutters": {
+        ".cm-content": { minHeight: "100%" },
+        ".cm-gutters": {
           backgroundColor:
             "var(--vscode-editorGutter-background, var(--vscode-editor-background, var(--color-bg-right)))",
           color: "var(--vscode-editorLineNumber-foreground, #888)",
           borderRight: "none",
         },
-        "@/shared/components/CodeEditor/.cm-activeLine": {
+        ".cm-activeLine": {
           backgroundColor:
             "var(--vscode-editor-lineHighlightBackground, transparent)",
         },
-        "@/shared/components/CodeEditor/.cm-activeLineGutter": {
+        ".cm-activeLineGutter": {
           backgroundColor: "transparent",
           color:
             "var(--vscode-editorLineNumber-activeForeground, var(--vscode-editor-foreground))",
         },
-        "@/shared/components/CodeEditor/.cm-selectionBackground": {
+        ".cm-selectionBackground": {
           backgroundColor:
             "var(--vscode-editor-inactiveSelectionBackground, var(--vscode-editor-selectionBackground, Highlight))",
         },
@@ -49,11 +92,11 @@ export function editorTheme(
           backgroundColor:
             "var(--vscode-editor-selectionBackground, Highlight)",
         },
-        "@/shared/components/CodeEditor/.cm-cursor": {
+        ".cm-cursor": {
           borderLeftColor:
             "var(--vscode-editorCursor-foreground, currentColor)",
         },
-        "@/shared/components/CodeEditor/.cm-tooltip": {
+        ".cm-tooltip": {
           zIndex: "100",
           maxWidth: "min(600px, 90vw)",
           color:
@@ -63,21 +106,45 @@ export function editorTheme(
           border:
             "1px solid var(--vscode-editorHoverWidget-border, transparent)",
         },
-        "@/shared/components/CodeEditor/.cm-panels": {
+        ".cm-panels": {
           color:
             "var(--vscode-editorWidget-foreground, var(--vscode-editor-foreground))",
           backgroundColor:
             "var(--vscode-editorWidget-background, var(--vscode-editor-background))",
         },
-        "@/shared/components/CodeEditor/.cm-searchMatch": {
+        ".cm-tooltip-autocomplete": {
+          color:
+            "var(--vscode-editorSuggestWidget-foreground, var(--vscode-editor-foreground))",
+          backgroundColor:
+            "var(--vscode-editorSuggestWidget-background, var(--vscode-editor-background))",
+          borderColor: "var(--vscode-editorSuggestWidget-border, transparent)",
+        },
+        ".cm-tooltip-autocomplete > ul > li[aria-selected]": {
+          color:
+            "var(--vscode-editorSuggestWidget-selectedForeground, var(--vscode-list-activeSelectionForeground))",
+          backgroundColor:
+            "var(--vscode-editorSuggestWidget-selectedBackground, var(--vscode-list-activeSelectionBackground))",
+        },
+        ".cm-selectionMatch": {
+          backgroundColor:
+            "var(--vscode-editor-selectionHighlightBackground, transparent)",
+          outline:
+            "1px solid var(--vscode-editor-selectionHighlightBorder, transparent)",
+        },
+        "&.cm-focused .cm-matchingBracket": {
+          backgroundColor:
+            "var(--vscode-editorBracketMatch-background, transparent)",
+          outline:
+            "1px solid var(--vscode-editorBracketMatch-border, transparent)",
+        },
+        ".cm-searchMatch": {
           backgroundColor:
             "var(--vscode-editor-findMatchHighlightBackground, transparent)",
         },
-        "@/shared/components/CodeEditor/.cm-searchMatch.cm-searchMatch-selected":
-          {
-            backgroundColor:
-              "var(--vscode-editor-findMatchBackground, transparent)",
-          },
+        ".cm-searchMatch.cm-searchMatch-selected": {
+          backgroundColor:
+            "var(--vscode-editor-findMatchBackground, transparent)",
+        },
         "&.cm-focused": { outline: "none" },
       },
       { dark },

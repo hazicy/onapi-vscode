@@ -203,3 +203,54 @@ test("large read-only responses render a viewport and scroll to the end", async 
   await editorPage.scrollTo(source.length);
   await expect(editorPage.content).toContainText("response item 19999");
 });
+
+test("editor surfaces follow live VS Code theme variables", async ({
+  page,
+  editorPage,
+}) => {
+  await editorPage.configure({
+    value: "const answer = 42",
+    language: "javascript",
+  });
+  await page.evaluate(() => {
+    const style = document.documentElement.style;
+    style.setProperty("--vscode-editor-background", "#123456");
+    style.setProperty("--vscode-editorGutter-background", "#234567");
+    style.setProperty("--vscode-editorLineNumber-foreground", "#abcdef");
+    style.setProperty("--vscode-editorCursor-foreground", "#fedcba");
+    style.setProperty("--vscode-editor-lineHighlightBackground", "#345678");
+  });
+  const host = page.locator(".code-editor-host");
+  await expect(host.locator(".cm-editor")).toHaveCSS(
+    "background-color",
+    "rgb(18, 52, 86)",
+  );
+  await expect(host.locator(".cm-gutters")).toHaveCSS(
+    "background-color",
+    "rgb(35, 69, 103)",
+  );
+  await expect(host.locator(".cm-gutters")).toHaveCSS(
+    "color",
+    "rgb(171, 205, 239)",
+  );
+  await expect(host.locator(".cm-activeLine")).toHaveCSS(
+    "background-color",
+    "rgb(52, 86, 120)",
+  );
+  await editorPage.content.click();
+  await expect(host.locator(".cm-cursor").first()).toHaveCSS(
+    "border-left-color",
+    "rgb(254, 220, 186)",
+  );
+  await page.evaluate(() =>
+    document.documentElement.style.setProperty(
+      "--vscode-editorGutter-background",
+      "#654321",
+    ),
+  );
+  await expect(host.locator(".cm-gutters")).toHaveCSS(
+    "background-color",
+    "rgb(101, 67, 33)",
+  );
+  expect(await editorPage.value()).toBe("const answer = 42");
+});
