@@ -1,3 +1,7 @@
+import {
+  beginRequest,
+  cancelRequest,
+} from "@/features/requests/utils/requestExecution";
 import { requestUrl, requestMethod, editedUrl } from "@onapi/domain";
 import styles from "./Header.module.css";
 
@@ -12,14 +16,9 @@ import { genQueryByUrl, genRestfulByUrl } from "@/features/requests/utils/apis";
 import UrlGroup from "@/features/requests/editor/UrlGroup";
 import useApis from "@/features/requests/store/useApis";
 
-import { snowflakeId } from "@onapi/domain/utils/data-tools";
-
 const Header: FC<ApiComponentType> = ({ apisData, onApisDataChange, type }) => {
   const { t } = useTranslation();
   const currentSendingData = useApis((state) => state.currentSendingData);
-  const updateCurrentSendingData = useApis(
-    (store) => store.updateCurrentSendingData,
-  );
 
   const [curServerId, SetCurServerId] = useState("");
 
@@ -36,30 +35,17 @@ const Header: FC<ApiComponentType> = ({ apisData, onApisDataChange, type }) => {
       }),
     );
   };
-  const isSending = isEqual(currentSendingData?.sendStatus, "sending");
+  const isSending = isEqual(currentSendingData?.status, "sending");
 
   const handleSend = (option?: { server_id: string }) => {
-    // Keep the last response visible while opening a new stream.
-
-    updateCurrentSendingData({
-      ...useApis.getState().currentSendingData,
-      error: null,
-      message: undefined,
-      id: apisData?.id,
-      sendStatus: "sending",
-      streamResponse: [
-        {
-          action: "connect",
-          id: snowflakeId(),
-          data: requestUrl(apisData),
-          error: null,
-          msg: "success",
-        },
-      ],
-    });
+    const executionId = beginRequest();
+    if (!executionId) {
+      return;
+    }
 
     window?.vscode.postMessage({
       action: "sendSse",
+      executionId,
       data: apisData,
       option: {
         server_id: curServerId,
@@ -87,30 +73,6 @@ const Header: FC<ApiComponentType> = ({ apisData, onApisDataChange, type }) => {
     [apisData],
   );
 
-  const handleStop = () => {
-    // Terminate send thread
-    window?.vscode.postMessage({
-      action: "stopSendApi",
-    });
-
-    const newCurApiSendingDataSSE = produce(
-      currentSendingData || {},
-      (draft) => {
-        draft.id = apisData.id;
-        draft.sendStatus = "initial";
-        draft.streamResponse?.push({
-          action: "disconnect",
-          data: requestUrl(apisData),
-          error: null,
-          msg: "success",
-          id: snowflakeId(),
-        });
-      },
-    );
-
-    updateCurrentSendingData(newCurApiSendingDataSSE);
-  };
-
   return (
     <div className={styles.container}>
       <UrlGroup
@@ -129,7 +91,7 @@ const Header: FC<ApiComponentType> = ({ apisData, onApisDataChange, type }) => {
           <Button
             type="primary"
             size="middle"
-            onClick={() => (isSending ? handleStop() : handleSend())}
+            onClick={() => (isSending ? cancelRequest() : handleSend())}
             style={{
               padding: 0,
               fontSize: "13px",

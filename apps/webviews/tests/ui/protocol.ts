@@ -1,5 +1,4 @@
 import type { Page } from "@playwright/test";
-import { randomUUID } from "node:crypto";
 
 /** Simulate the same session envelope used by the extension host. */
 export async function emitHttpEvents(
@@ -7,6 +6,24 @@ export async function emitHttpEvents(
   targetId: string,
   events: Record<string, unknown>[],
 ) {
+  const send = page.getByRole("button", { name: "Send", exact: true });
+  await page
+    .getByRole("button", { name: /^(Send|Cancel sending|Close)$/ })
+    .first()
+    .waitFor();
+  if (await send.isVisible()) {
+    await send.click();
+  }
+  const sessionId = await page.evaluate(() => {
+    const messages =
+      (window as any).messages || (window as any).startupMessages || [];
+    return messages.findLast((message: any) =>
+      ["sendApi", "sendSse"].includes(message.action),
+    )?.executionId;
+  });
+  if (!sessionId) {
+    throw new Error("Send a request before emitting its host events");
+  }
   await page.evaluate(
     ({ targetId, sessionId, events }) => {
       let sequence = 0;
@@ -35,6 +52,7 @@ export async function emitHttpEvents(
         });
       }
     },
-    { targetId, sessionId: randomUUID(), events },
+    { targetId, sessionId, events },
   );
+  return { sessionId, sequence: events.length + 1 };
 }

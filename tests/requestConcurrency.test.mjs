@@ -279,3 +279,38 @@ test("disposing the extension context cancels all of its active sessions", async
   await Promise.all([a, b]);
   assert.equal(f.writes.length, 0);
 });
+
+test("cancelled preparation cannot start later or cancel a newer reservation", async () => {
+  const f = await fixture();
+  const owner = {};
+  f.runner.reserveHttpExecution(owner, "A", f.context);
+  f.runner.stopWorker(owner, "A");
+  f.runner.reserveHttpExecution(owner, "B", f.context);
+  const events = [];
+  await f.runner.runCollection(
+    f.configs.one.http.collection,
+    {},
+    f.context,
+    (e) => events.push(e),
+    owner,
+    "A",
+  );
+  assert.equal(f.adapters.length, 0);
+  const current = f.runner.runCollection(
+    f.configs.one.http.collection,
+    {},
+    f.context,
+    (e) => events.push(e),
+    owner,
+    "B",
+  );
+  assert.equal(f.adapters.length, 1);
+  assert.equal(events[0].sessionId, "B");
+  f.runner.stopWorker(owner, "A");
+  assert.equal(f.adapters[0].cancelled, false);
+  f.runner.stopWorker(owner, "B");
+  assert.equal(f.adapters[0].cancelled, true);
+  f.adapters[0].finish();
+  await current;
+  assert.equal(f.writes.length, 0);
+});

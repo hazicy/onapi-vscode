@@ -22,17 +22,47 @@ import { setRequestResult } from "../request-status";
 
 const executions = new Map<
   object,
-  { adapter: HttpAdapter; cancelled: boolean; context: vscode.ExtensionContext }
+  {
+    executionId: string;
+    adapter?: HttpAdapter;
+    cancelled: boolean;
+    context: vscode.ExtensionContext;
+  }
 >();
 const registeredContexts = new WeakSet<vscode.ExtensionContext>();
 
-export function stopWorker(owner: object) {
+export function stopWorker(owner: object, executionId?: string) {
   const execution = executions.get(owner);
-  if (execution) {
+  if (execution && (!executionId || execution.executionId === executionId)) {
     execution.cancelled = true;
-    execution.adapter.cancel();
+    execution.adapter?.cancel();
     executions.delete(owner);
   }
+}
+
+function registerContext(context: vscode.ExtensionContext) {
+  if (!registeredContexts.has(context)) {
+    registeredContexts.add(context);
+    context.subscriptions.push({
+      dispose() {
+        for (const [owner, session] of executions) {
+          if (session.context === context) {
+            stopWorker(owner);
+          }
+        }
+      },
+    });
+  }
+}
+
+export function reserveHttpExecution(
+  owner: object,
+  executionId: string,
+  context: vscode.ExtensionContext,
+) {
+  stopWorker(owner);
+  registerContext(context);
+  executions.set(owner, { executionId, cancelled: false, context });
 }
 
 export function getHttpProjectConfig(
@@ -75,20 +105,15 @@ export function runCollection(
   context: vscode.ExtensionContext,
   emit: (event: ExecutionEnvelope) => void,
   owner: object = {},
+  executionId?: string,
 ) {
-  stopWorker(owner);
-  if (!registeredContexts.has(context)) {
-    registeredContexts.add(context);
-    context.subscriptions.push({
-      dispose() {
-        for (const [owner, session] of executions) {
-          if (session.context === context) {
-            stopWorker(owner);
-          }
-        }
-      },
-    });
+  if (executionId && executions.get(owner)?.executionId !== executionId) {
+    return Promise.resolve();
   }
+  if (!executionId) {
+    stopWorker(owner);
+  }
+  registerContext(context);
   const statusWorkspace = getApiListName(context);
   const workspace = getProjectWorkspace(context);
   const settings =
@@ -109,7 +134,12 @@ export function runCollection(
   const execution = new HttpAdapter(
     new URL("./runtime/worker.js", import.meta.url),
   );
-  const session = { adapter: execution, cancelled: false, context };
+  const session = {
+    executionId: executionId || randomUUID(),
+    adapter: execution,
+    cancelled: false,
+    context,
+  };
   executions.set(owner, session);
   let persistedState: Promise<boolean> = Promise.resolve(true);
   return executionService
@@ -117,7 +147,7 @@ export function runCollection(
       execution,
       { collection, options: executionOptions },
       {
-        sessionId: randomUUID(),
+        sessionId: session.executionId,
         targetId: options?.entrypoint?.execute,
         observer: (envelope) => {
           emit(envelope);
@@ -166,14 +196,23 @@ export const sendApi = (
   context: vscode.ExtensionContext,
   emit: (event: ExecutionEnvelope) => void,
   owner?: object,
-) =>
-  runCollection(
+  executionId?: string,
+) => {
+  if (
+    executionId &&
+    (!owner || executions.get(owner)?.executionId !== executionId)
+  ) {
+    return Promise.resolve();
+  }
+  return runCollection(
     requestCollection(data, context),
     { entrypoint: { execute: data.id, lookupStrategy: "idOrName" } },
     context,
     emit,
     owner,
+    executionId,
   );
+};
 export const sendAutoTest = (
   data: {
     collection: PostmanCollection;

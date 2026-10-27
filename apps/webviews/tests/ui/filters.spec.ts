@@ -32,6 +32,7 @@ test("GraphQL conditions reset dependent values and preserve rows after removal"
   await filtersPage.inOption.click();
   await combos.nth(2).fill("21");
   await filtersPage.age21Option.click();
+  await expect(filtersPage.remove21Button).toBeVisible();
   await page.keyboard.press("Escape");
   await filtersPage.confirmButton.click();
   await expect(filtersPage.filterData).toHaveText(

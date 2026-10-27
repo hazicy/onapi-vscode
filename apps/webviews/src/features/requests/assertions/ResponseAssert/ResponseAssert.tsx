@@ -5,7 +5,7 @@ import type { HttpExecutionState } from "@/features/requests/execution/http-stat
 import AssertList from "./AssertList";
 
 export default function ResponseAssert({
-  sendingData = {},
+  sendingData = { status: "idle" },
 }: {
   sendingData?: HttpExecutionState;
 }) {

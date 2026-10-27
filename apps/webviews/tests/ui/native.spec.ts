@@ -19,6 +19,16 @@ test("GraphQL edits and sends the native request body", async ({
   const editors = requestPage.codeEditorTextbox;
   await expect(editors.first()).toContainText("before");
   await editors.first().fill("query Native { after }");
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          (window as any).messages.findLast(
+            (message: any) => message.action === "updateApiActiveData",
+          )?.data.request.body.graphql.query,
+      ),
+    )
+    .toBe("query Native { after }");
   await editors.nth(1).fill('{"id":2}');
   await expect
     .poll(() =>
@@ -384,4 +394,105 @@ test("response navigation collapses tabs instead of wrapping metadata", async ({
   expect(
     await nav.evaluate((node) => node.scrollWidth <= node.clientWidth),
   ).toBe(true);
+});
+
+test("resend cancellation preserves results without saving examples or switching tabs", async ({
+  page,
+  requestPage,
+}) => {
+  const errors = await requestPage.open(
+    "api",
+    { method: "GET", url: "https://example.com", header: [] },
+    {
+      send_after_save_example: 2,
+      send_after_response_to_tab: 1,
+    },
+  );
+  const exampleCount = () =>
+    page.evaluate(() => {
+      const changes = (window as any).messages.filter(
+        (message: any) => message.action === "updateApiActiveData",
+      );
+      return changes.at(-1)?.data.response?.length || 0;
+    });
+  await requestPage.sendButton.click();
+  await emitHttpEvents(page, "native", [
+    { type: "start" },
+    { type: "request", response: { code: 200, body: '{"previous":true}' } },
+    { type: "done", error: null },
+  ]);
+  await expect.poll(exampleCount).toBe(1);
+  const headers = page
+    .getByRole("tab", { name: "Headers", exact: true })
+    .last();
+  await headers.click();
+  await requestPage.sendButton.click();
+  const cancelled = await emitHttpEvents(page, "native", [{ type: "start" }]);
+  await page
+    .getByRole("button", { name: "Cancel sending", exact: true })
+    .click();
+  await expect(headers).toHaveAttribute("aria-selected", "true");
+  expect(await exampleCount()).toBe(1);
+  await page.evaluate(({ sessionId, sequence }) => {
+    const emit = (native: unknown) =>
+      window.dispatchEvent(
+        new MessageEvent("message", {
+          data: {
+            action: "protocolExecutionEvent",
+            data: {
+              protocolVersion: 1,
+              targetId: "native",
+              sessionId,
+              sequence: ++sequence,
+              timestamp: Date.now(),
+              event: { protocol: "http", type: "runtime.event", native },
+            },
+          },
+        }),
+      );
+    emit({ type: "request", response: { code: 500, body: "late response" } });
+    emit({ type: "done", error: null });
+  }, cancelled);
+  await expect(requestPage.sendButton).toBeVisible();
+  await expect(headers).toHaveAttribute("aria-selected", "true");
+  await page.getByRole("tab", { name: "Response", exact: true }).click();
+  await expect(
+    page.getByRole("textbox", { name: "Code editor" }).last(),
+  ).toContainText('"previous"');
+  expect(await exampleCount()).toBe(1);
+  await requestPage.sendButton.click();
+  const completed = await emitHttpEvents(page, "native", [
+    { type: "start" },
+    { type: "request", response: { code: 201, body: '{"replacement":true}' } },
+    { type: "done", error: null },
+  ]);
+  await expect.poll(exampleCount).toBe(2);
+  await expect(
+    page.getByRole("textbox", { name: "Code editor" }).last(),
+  ).toContainText('"replacement"');
+  await page.evaluate(
+    ({ sessionId, sequence }) =>
+      window.dispatchEvent(
+        new MessageEvent("message", {
+          data: {
+            action: "protocolExecutionEvent",
+            data: {
+              protocolVersion: 1,
+              targetId: "native",
+              sessionId,
+              sequence: sequence + 1,
+              timestamp: Date.now(),
+              event: {
+                protocol: "http",
+                type: "runtime.event",
+                native: { type: "done", error: null },
+              },
+            },
+          },
+        }),
+      ),
+    completed,
+  );
+  expect(await exampleCount()).toBe(2);
+  expect(errors).toEqual([]);
 });

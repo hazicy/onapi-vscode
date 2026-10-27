@@ -52,7 +52,10 @@ export type RequestPanelMessage = {
   [Action in keyof Payloads]: {
     action: Action;
     option?: unknown;
-  } & (undefined extends Payloads[Action]
-    ? { data?: Payloads[Action] }
-    : { data: Payloads[Action] });
+  } & (Action extends "sendApi" | "sendSse" | "stopSendApi"
+    ? { executionId: string }
+    : {}) &
+    (undefined extends Payloads[Action]
+      ? { data?: Payloads[Action] }
+      : { data: Payloads[Action] });
 }[keyof Payloads];

@@ -5,57 +5,88 @@ import type {
   SerializedResponse,
 } from "@onapi/contracts";
 
-// UI state retains the Postman callback payloads without translating request models.
-export interface HttpExecutionState {
-  sendStatus?: "initial" | "sending" | "sendError";
-  id?: string;
-  timestamp?: number;
-  message?: string;
+export type HttpExecutionStatus =
+  | "idle"
+  | "sending"
+  | "succeeded"
+  | "failed"
+  | "cancelled";
+export interface HttpExecutionResult {
+  executionId: string;
+  response: SerializedResponse;
   request?: import("postman-collection").RequestDefinition;
-  response?: SerializedResponse;
   cookies?: unknown;
+  visualizerHtml?: string | null;
+}
+export interface HttpExecutionState {
+  status: HttpExecutionStatus;
+  executionId?: string;
+  sequence?: number;
+  result?: HttpExecutionResult;
   error?: ExecutionError | null;
   events?: ExecutionEvent[];
   consoleList?: ExecutionEvent[];
   assertions?: ExecutionAssertion[];
-  visualizerHtml?: string | null;
-  streamResponse?: {
-    action: string;
-    id: string;
-    data: unknown;
-    error?: unknown;
-    msg?: string;
-  }[];
 }
+export type HttpExecutionAction =
+  | { type: "begin"; executionId: string }
+  | { type: "cancel"; executionId: string }
+  | {
+      type: "event";
+      executionId: string;
+      sequence: number;
+      event: ExecutionEvent;
+    };
 
+// The UI owns execution identity; old display data never defines execution state.
 export function reduceHttpExecutionEvent(
   previous: HttpExecutionState | undefined,
-  event: ExecutionEvent,
+  action: HttpExecutionAction,
 ): HttpExecutionState {
-  const current = previous || {};
+  const current = previous || { status: "idle" };
+  if (action.type === "begin") {
+    return {
+      status: "sending",
+      executionId: action.executionId,
+      sequence: 0,
+      result: current.result,
+      error: null,
+      events: [],
+      consoleList: [],
+      assertions: [],
+    };
+  }
+  if (
+    current.status !== "sending" ||
+    current.executionId !== action.executionId
+  ) {
+    return current;
+  }
+  if (action.type === "cancel") {
+    return { ...current, status: "cancelled" };
+  }
+  if (action.sequence <= (current.sequence || 0)) {
+    return current;
+  }
+  const event = action.event;
   const next = {
     ...current,
+    sequence: action.sequence,
     events: [...(current.events || []), event],
   };
-
   switch (event.type) {
-    case "start":
-      return {
-        ...next,
-        sendStatus: "sending",
-        events: [event],
-        error: null,
-        message: undefined,
-        consoleList: [],
-        assertions: [],
-      };
     case "request":
       return {
         ...next,
-        visualizerHtml: null,
-        response: event.response,
-        request: event.request,
-        cookies: event.cookies,
+        result: event.response
+          ? {
+              executionId: action.executionId,
+              response: event.response,
+              request: event.request,
+              cookies: event.cookies,
+              visualizerHtml: null,
+            }
+          : current.result,
         error: event.error,
       };
     case "console":
@@ -71,19 +102,25 @@ export function reduceHttpExecutionEvent(
     case "exception":
       return { ...next, error: event.error };
     case "item":
-      return event.visualizer
-        ? { ...next, visualizerHtml: event.visualizer }
+      return event.visualizer &&
+        current.result?.executionId === current.executionId
+        ? {
+            ...next,
+            result: { ...current.result, visualizerHtml: event.visualizer },
+          }
         : next;
     case "done": {
       const error = event.error || current.error;
-      return {
-        ...next,
-        sendStatus: error ? "sendError" : "initial",
-        error,
-        message: error?.message,
-      };
+      return { ...next, status: error ? "failed" : "succeeded", error };
     }
     default:
       return next;
   }
+}
+export function hasCompletedResponse(state?: HttpExecutionState): boolean {
+  return (
+    state?.status === "succeeded" &&
+    !!state.result &&
+    state.result.executionId === state.executionId
+  );
 }

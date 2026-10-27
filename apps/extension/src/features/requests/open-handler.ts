@@ -20,6 +20,7 @@ import {
   getResolvedCodeRequest,
   sendApi,
   stopWorker,
+  reserveHttpExecution,
 } from "./execution/http-runner";
 import { globalConfig, DEFAULT_TARGET_NAME } from "../../app/config";
 import { cloneDeep, forEach, isPlainObject, trim } from "lodash";
@@ -146,17 +147,39 @@ export const handelOpenMessage = async (
       }
       break;
     case "sendApi":
-    case "sendSse":
-      await recordRequestHistory(context, data);
-      await sendApi(
-        data,
-        context,
-        (event) => relayExecutionEvent(panel.webview, event),
-        panel,
-      );
+    case "sendSse": {
+      const executionId = message.executionId;
+      reserveHttpExecution(panel, executionId, context);
+      let sequence = 0;
+      const emit = (event: import("@onapi/contracts").ExecutionEnvelope) => {
+        sequence = Math.max(sequence, event.sequence);
+        relayExecutionEvent(panel.webview, event);
+      };
+      try {
+        await recordRequestHistory(context, data);
+        await sendApi(data, context, emit, panel, executionId);
+      } catch (error) {
+        emit({
+          protocolVersion: 1,
+          sessionId: executionId,
+          targetId: data.id,
+          sequence: sequence + 1,
+          timestamp: Date.now(),
+          event: {
+            protocol: "http",
+            type: "execution.error",
+            error: {
+              message: error instanceof Error ? error.message : String(error),
+            },
+          },
+        });
+      } finally {
+        stopWorker(panel, executionId);
+      }
       break;
+    }
     case "stopSendApi":
-      stopWorker(panel);
+      stopWorker(panel, message.executionId);
       break;
 
     case "openEnv":

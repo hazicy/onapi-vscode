@@ -27,7 +27,7 @@ interface Props {
 
 const RealRequest: React.FC<Props> = ({ sendingData }) => {
   const { t } = useTranslation();
-  const requestView = sdkRequestView(sendingData?.request);
+  const requestView = sdkRequestView(sendingData?.result?.request);
   const [tabsValue, setTabsValue] = useSafeState<string | number>("header");
 
   const handleOptionsChange: SegmentedProps["onChange"] = useMemoizedFn(
@@ -55,14 +55,16 @@ const RealRequest: React.FC<Props> = ({ sendingData }) => {
     {
       value: "body",
       label: "body",
-      children: <BodyParameter request={sendingData?.request} />,
+      children: <BodyParameter request={sendingData?.result?.request} />,
     },
   ];
 
   const tabBarExtraContent = isEqual(tabsValue, "body") ? (
     <Flex align={"center"} className={styles.tabBarExtraContent}>
       <div className={styles.title}>{t("supplement.type")}:</div>
-      <div className={styles.content}>{sendingData?.request?.body?.mode}</div>
+      <div className={styles.content}>
+        {sendingData?.result?.request?.body?.mode}
+      </div>
     </Flex>
   ) : null;
 
@@ -74,10 +76,12 @@ const RealRequest: React.FC<Props> = ({ sendingData }) => {
           <Flex align="flex-start">
             <ApisTypeTag
               targetType={APIS_TARGET_TYPE_ENUM.API}
-              method={(sendingData?.request?.method as ApiTypeMethod) || "GET"}
+              method={
+                (sendingData?.result?.request?.method as ApiTypeMethod) || "GET"
+              }
             />
             <div className={styles.url}>
-              {requestUrl({ request: sendingData?.request })}
+              {requestUrl({ request: sendingData?.result?.request })}
             </div>
           </Flex>
         </div>

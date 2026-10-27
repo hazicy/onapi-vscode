@@ -34,14 +34,14 @@ test("request indexes follow collection replacement and clearing console updates
   assert.equal(replacement.one, undefined);
   assert.equal(replacement.two.name, "New");
   const execution = {
-    response: { code: 200 },
+    result: { response: { code: 200 } },
     consoleList: [{ messages: ["log"] }],
   };
   useApis.getState().updateCurrentSendingData(execution);
   useApis.getState().clearConsole();
   assert.equal(
-    useApis.getState().currentSendingData.response,
-    execution.response,
+    useApis.getState().currentSendingData.result.response,
+    execution.result.response,
   );
   assert.equal(useApis.getState().currentSendingData.consoleList.length, 0);
   assert.equal(execution.consoleList.length, 1);

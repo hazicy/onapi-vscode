@@ -1,3 +1,4 @@
+import { hasCompletedResponse } from "@/features/requests/execution/http-state";
 import type { HttpExecutionState } from "@/features/requests/execution/http-state";
 import { responseText } from "@onapi/domain";
 import styles from "./Realtime.module.css";
@@ -19,14 +20,14 @@ const Realtime = memo(({ resultIncludesTabs, sendingData }: Props) => {
   const responseResultRef = useRef<any>(null);
 
   useEffect(() => {
-    if (sendingData?.sendStatus !== "initial") {
+    if (!hasCompletedResponse(sendingData)) {
       return;
     }
     const { systemConfig } = useSystemConfig.getState();
     if (isEqual(systemConfig.send_after_auto_beautify, STATUS_CODE.ENABLE)) {
       responseResultRef.current?.setTabsValue("beautify");
     }
-  }, [sendingData]);
+  }, [sendingData?.status, sendingData?.result]);
 
   if (showError) {
     return <Error errorMessage={errorMsg || ""} />;
@@ -37,9 +38,9 @@ const Realtime = memo(({ resultIncludesTabs, sendingData }: Props) => {
       <ResponseResult
         ref={responseResultRef}
         resultIncludesTabs={resultIncludesTabs}
-        rawHtml={responseText(sendingData?.response)}
-        data={sendingData?.response}
-        html={sendingData?.visualizerHtml}
+        rawHtml={responseText(sendingData?.result?.response)}
+        data={sendingData?.result?.response}
+        html={sendingData?.result?.visualizerHtml}
       />
     </div>
   );

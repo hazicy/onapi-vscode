@@ -108,13 +108,16 @@ function TagPanel() {
           break;
         case PROTOCOL_EXECUTION_EVENT:
           consumeExecutionEvent(message.data, {
-            http: (event) => {
+            http: (event, executionId, sequence) => {
               const state = useApis.getState();
-              const next = reduceHttpExecutionEvent(
-                state.currentSendingData,
-                event,
+              state.updateCurrentSendingData(
+                reduceHttpExecutionEvent(state.currentSendingData, {
+                  type: "event",
+                  executionId,
+                  sequence,
+                  event,
+                }),
               );
-              state.updateCurrentSendingData(next);
             },
             websocket: handelWsResult,
             socketio: handelSocketIoResult,

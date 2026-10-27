@@ -107,7 +107,7 @@ for (const panel of [
     await page.route("**/loaded.html", (route) =>
       route.fulfill({
         contentType: "text/html",
-        body: `<!doctype html><html lang="en" style="--vscode-foreground:#ccc;--vscode-icon-foreground:#aaa;--vscode-button-background:#78c4c0;--vscode-editor-background:#222;--vscode-sideBar-background:#222;--vscode-settings-headerBorder:#383838;--vscode-settings-focusedRowBackground:#282828;--vscode-toolbar-hoverBackground:#333;--vscode-gitDecoration-ignoredResourceForeground:#777;--vscode-input-placeholderForeground:#777;--vscode-input-background:#2e2e2e;--vscode-editorWidget-border:#333"><head><meta charset="utf-8"><link rel="stylesheet" href="/webviews.css"></head><body><div id="root"></div><script>window.vscode={postMessage(){}};window.vscodeData=${JSON.stringify(panel === "tagPanel" ? { kind: "api", initialData: requestInitialData } : null)};window.resourceBaseUrl=location.origin;</script><script type="module" src="/${panel}.js"></script></body></html>`,
+        body: `<!doctype html><html lang="en" style="--vscode-foreground:#ccc;--vscode-icon-foreground:#aaa;--vscode-button-background:#78c4c0;--vscode-editor-background:#222;--vscode-sideBar-background:#222;--vscode-settings-headerBorder:#383838;--vscode-settings-focusedRowBackground:#282828;--vscode-toolbar-hoverBackground:#333;--vscode-gitDecoration-ignoredResourceForeground:#777;--vscode-input-placeholderForeground:#777;--vscode-input-background:#2e2e2e;--vscode-editorWidget-border:#333"><head><meta charset="utf-8"><link rel="stylesheet" href="/webviews.css"></head><body><div id="root"></div><script>window.vscode={postMessage(message){if(message.action==="sendApi")window.testExecutionId=message.executionId}};window.vscodeData=${JSON.stringify(panel === "tagPanel" ? { kind: "api", initialData: requestInitialData } : null)};window.resourceBaseUrl=location.origin;</script><script type="module" src="/${panel}.js"></script></body></html>`,
       }),
     );
     await page.goto("http://127.0.0.1:4180/loaded.html");
@@ -264,6 +264,7 @@ for (const panel of [
       await expect(method.getByRole("combobox")).toContainText("POST");
       await expect(webviewsPage.postOption).toBeHidden();
       await page.screenshot({ path: test.info().outputPath("request.png") });
+      await page.getByRole("button", { name: "Send", exact: true }).click();
       await page.evaluate(() => {
         window.postMessage(
           {
@@ -301,7 +302,7 @@ for (const panel of [
               action: "protocolExecutionEvent",
               data: {
                 protocolVersion: 1,
-                sessionId: "http-ui-session",
+                sessionId: (window as any).testExecutionId,
                 targetId: "test-api",
                 sequence: ++sequence,
                 timestamp: Date.now(),

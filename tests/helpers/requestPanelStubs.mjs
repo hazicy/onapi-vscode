@@ -7,6 +7,7 @@ export const requestPanelStubs = {
     getCodeHarRequest: unused,
     getResolvedCodeRequest: unused,
     sendApi: unused,
+    reserveHttpExecution: unused,
     stopWorker: unused,
   },
   "./execution/websocket-session": {

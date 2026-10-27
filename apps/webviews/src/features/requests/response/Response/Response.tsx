@@ -1,26 +1,17 @@
+import { hasCompletedResponse } from "@/features/requests/execution/http-state";
 import tabSelection from "@/shared/components/LineTabs/LineTabs.module.css";
 import type { HttpExecutionState } from "@/features/requests/execution/http-state";
 import { sdkResponseView } from "@/features/requests/utils/executionView";
 import clsx from "clsx";
 import { responseText } from "@onapi/domain";
 import styles from "./Response.module.css";
-import { FC, lazy, memo, Suspense, useMemo, useState } from "react";
+import { FC, lazy, memo, Suspense, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { TabPaneProps, TabsProps } from "@/shared/ui/base";
 
 import { useMemoizedFn, useSafeState, useUpdateEffect } from "ahooks";
-import { produce } from "immer";
-import {
-  includes as _includes,
-  compact,
-  concat,
-  forEach,
-  isEmpty,
-  isEqual,
-  map,
-  size,
-} from "lodash-es";
+import { compact, isEmpty, isEqual, map, size } from "lodash-es";
 import ErrorContext from "./ErrorContext";
 
 import LineTabs from "@/shared/components/LineTabs/LineTabs";
@@ -29,11 +20,6 @@ import Sending from "@/features/requests/editor/Sending";
 
 import { STATUS_CODE } from "@onapi/domain/constants/common";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
-import { BaseResponse } from "@onapi/domain/requests/types/response";
-import {
-  ApiSendingData,
-  ApiSendingDataSSE,
-} from "@onapi/domain/requests/types/send";
 
 import Empty from "./components/Empty";
 
@@ -89,42 +75,35 @@ const Response: FC<Props> = memo((props) => {
     onResponseDataChange,
   } = props;
   const { t } = useTranslation();
-  const nativeResponse = sdkResponseView(sendingData?.response);
+  const nativeResponse = sdkResponseView(sendingData?.result?.response);
 
   const showError =
-    sendingData?.sendStatus === "sendError" && !isEmpty(sendingData.message);
+    sendingData?.status === "failed" && !!sendingData.error?.message;
   const [selectedKey, setActiveKey] = useSafeState(
     tabsDefaultActiveKey || "realtime",
   );
-  const hasExecution = !isEmpty(sendingData);
+  const hasExecution = !!sendingData && sendingData.status !== "idle";
   const initialTabKey = tabsDefaultActiveKey || "realtime";
   const activeKey = hasExecution ? selectedKey : initialTabKey;
   const [visitedTabs, setVisitedTabs] = useState(
     () => new Set([tabsDefaultActiveKey || "realtime"]),
   );
 
-  const isSendDone = useMemo(
-    () =>
-      !isEmpty(sendingData?.response) &&
-      isEqual(sendingData?.sendStatus, "initial"),
-    [sendingData],
-  );
+  const isSendDone = hasCompletedResponse(sendingData);
+  const isNotEmpty =
+    (sendingData?.status !== "failed" && !!sendingData?.result?.response) ||
+    sendingData?.status === "sending" ||
+    activeKey !== "realtime";
 
-  const isNotEmpty = useMemo(
-    () =>
-      isSendDone ||
-      isEqual(sendingData?.sendStatus, "sending") ||
-      size(sendingData?.streamResponse) > 0 ||
-      !_includes(["realtime"], activeKey),
-    [isSendDone, sendingData?.sendStatus, activeKey],
-  );
-
+  const handledCompletion = useRef<string | undefined>(undefined);
   useUpdateEffect(() => {
     const { systemConfig } = useSystemConfig.getState();
 
-    if (!isSendDone) {
+    if (!isSendDone || handledCompletion.current === sendingData?.executionId) {
       return;
     }
+
+    handledCompletion.current = sendingData?.executionId;
 
     // auto jump to realtime response tab
     if (
@@ -135,21 +114,23 @@ const Response: FC<Props> = memo((props) => {
     }
 
     // according to system config, whether to save result to response example after sending
-    if (isEqual(systemConfig.send_after_save_example, 2)) {
-      handleAutoSaveExampleRaw();
-    } else if (isEqual(systemConfig.send_after_save_example, 3)) {
+    if ([2, 3].includes(systemConfig.send_after_save_example)) {
       handleAutoSaveExampleRaw();
     }
-  }, [isSendDone, sendAfterResponseToTabDisabled]);
+  }, [
+    sendingData?.status,
+    sendingData?.executionId,
+    sendAfterResponseToTabDisabled,
+  ]);
 
   const handleAutoSaveExampleRaw = () => {
-    if (sendingData?.response) {
+    if (sendingData?.result?.response) {
       onResponseDataChange([
         ...(Array.isArray(responseData) ? responseData : []),
         {
-          ...sendingData.response,
-          body: responseText(sendingData.response),
-          originalRequest: sendingData.request,
+          ...sendingData.result.response,
+          body: responseText(sendingData.result.response),
+          originalRequest: sendingData.result.request,
           name: "Response",
         },
       ]);
@@ -186,9 +167,9 @@ const Response: FC<Props> = memo((props) => {
     {
       key: "cookie",
       label: "Cookie",
-      children: <Cookie value={sendingData?.cookies} />,
+      children: <Cookie value={sendingData?.result?.cookies} />,
       countParams: {
-        dataSource: sendingData?.cookies,
+        dataSource: sendingData?.result?.cookies,
       },
     },
     {
@@ -246,10 +227,6 @@ const Response: FC<Props> = memo((props) => {
     return finalItems;
   });
 
-  const handleMemoizedChange = useMemoizedFn((data) =>
-    onResponseDataChange(data),
-  );
-
   if (!hasExecution) {
     return (
       <div className={styles.container}>
@@ -260,10 +237,10 @@ const Response: FC<Props> = memo((props) => {
 
   return (
     <ErrorContext.Provider
-      value={{ showError, errorMsg: sendingData?.message || "" }}
+      value={{ showError, errorMsg: sendingData?.error?.message || "" }}
     >
       <div className={styles.container}>
-        {sendingData?.sendStatus === "sending" && showSending && (
+        {sendingData?.status === "sending" && showSending && (
           <Sending
             hasCancel={false}
             onlySendingLoadingBar={onlySendingLoadingBar}
@@ -273,8 +250,8 @@ const Response: FC<Props> = memo((props) => {
         {!isNotEmpty && (
           <Empty
             errorMessage={
-              sendingData?.sendStatus === "sendError"
-                ? sendingData.message || t("request_panel.failed")
+              sendingData?.status === "failed"
+                ? sendingData.error?.message || t("request_panel.failed")
                 : undefined
             }
             maskMode
@@ -296,8 +273,8 @@ const Response: FC<Props> = memo((props) => {
                 <ResponseSize
                   showProxy={showProxy}
                   showDownload={showDownload && isSendDone}
-                  response={sendingData?.response}
-                  request={sendingData?.request}
+                  response={sendingData?.result?.response}
+                  request={sendingData?.result?.request}
                 />
               </Suspense>
             )

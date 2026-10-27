@@ -26,12 +26,15 @@ export default function useApisHotkeys() {
         return;
       }
       const { apisActiveData } = useApis.getState();
-      if (action === APIS_HOT_KEYS_ENUM.SEND && !beginRequest()) {
+      const executionId =
+        action === APIS_HOT_KEYS_ENUM.SEND ? beginRequest() : undefined;
+      if (action === APIS_HOT_KEYS_ENUM.SEND && !executionId) {
         return;
       }
       window.vscode.postMessage({
         action: action === APIS_HOT_KEYS_ENUM.SEND ? "sendApi" : "saveApiData",
         data: apisActiveData,
+        ...(executionId ? { executionId } : {}),
       });
     },
     {

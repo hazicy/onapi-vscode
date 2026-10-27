@@ -8,7 +8,7 @@ export default function Realtime({ sendingDataSSE }: { sendingDataSSE: any }) {
     .filter((event: any) => event.type === "responseData")
     .map((event: any) => event.data)
     .join("");
-  const body = chunks || responseText(sendingDataSSE?.response);
+  const body = chunks || responseText(sendingDataSSE?.result?.response);
   return (
     <div className={styles.container}>
       {body ? (

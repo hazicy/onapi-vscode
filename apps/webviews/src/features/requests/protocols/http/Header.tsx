@@ -42,14 +42,16 @@ const Header: FC<ApiComponentType> = ({ apisData, onApisDataChange, type }) => {
       }),
     );
   };
-  const isSending = isEqual(currentSendingData?.sendStatus, "sending");
+  const isSending = isEqual(currentSendingData?.status, "sending");
 
   const handleSend = (option?: { server_id: string }) => {
-    if (!beginRequest()) {
+    const executionId = beginRequest();
+    if (!executionId) {
       return;
     }
     window?.vscode.postMessage({
       action: "sendApi",
+      executionId,
       data: apisData,
       option: {
         server_id: curServerId,

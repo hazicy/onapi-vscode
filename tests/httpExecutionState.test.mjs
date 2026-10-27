@@ -1,108 +1,179 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import load from "./helpers/loadTypeScript.mjs";
-
-const { reduceHttpExecutionEvent: reduce } = await load(
+const { reduceHttpExecutionEvent: reduce, hasCompletedResponse } = await load(
   "apps/webviews/src/features/requests/execution/http-state.ts",
 );
+const { createExecutionConsumer } = await load(
+  "apps/webviews/src/features/requests/execution/consume-event.ts",
+);
+const begin = (state, executionId = "current") =>
+  reduce(state, { type: "begin", executionId });
+const event = (
+  state,
+  value,
+  executionId = state.executionId,
+  sequence = (state.sequence || 0) + 1,
+) => reduce(state, { type: "event", executionId, sequence, event: value });
 const plain = (value) => JSON.parse(JSON.stringify(value));
 
-test("a new HTTP execution preserves the previous response while resetting execution bookkeeping", () => {
+test("a new execution preserves the display result and resets runtime data immutably", () => {
   const previous = {
-    response: { code: 500 },
+    status: "succeeded",
+    executionId: "old",
+    result: { executionId: "old", response: { code: 200 } },
     error: { message: "old" },
-    events: [{ type: "done" }],
     consoleList: ["old"],
     assertions: ["old"],
-    visualizerHtml: "old",
   };
   const snapshot = structuredClone(previous);
-  const start = { type: "start" };
-  const next = reduce(previous, start);
-  assert.deepEqual(plain(next), {
-    response: { code: 500 },
-    visualizerHtml: "old",
-    error: null,
-    events: [start],
-    sendStatus: "sending",
-    consoleList: [],
-    assertions: [],
-  });
+  const state = begin(previous);
+  assert.equal(state.result, previous.result);
+  assert.equal(state.status, "sending");
+  assert.equal(state.error, null);
+  assert.deepEqual(plain(state.consoleList), []);
+  assert.equal(hasCompletedResponse(state), false);
   assert.deepEqual(previous, snapshot);
 });
 
-test("HTTP chunks, logs, assertions and visualizers preserve the request result and event order", () => {
+test("native events accumulate logs and assertions and replace response and visualizer", () => {
   const events = [
     { type: "start" },
-    { type: "responseData", data: "data: hello\n\n" },
+    { type: "responseData", data: "chunk" },
     {
       type: "request",
       response: { code: 200 },
       request: { method: "GET" },
-      cookies: [{ name: "session", value: "one" }],
+      cookies: [{ name: "one" }],
     },
     { type: "console", messages: ["hello"] },
-    { type: "assertion", assertions: [{ assertion: "status", passed: true }] },
+    { type: "assertion", assertions: [{ assertion: "status" }] },
     { type: "assertion", assertions: { invalid: true } },
     { type: "item", visualizer: "<p>result</p>" },
-    { type: "done", error: null },
+    { type: "done" },
   ];
-  let state;
-  for (const event of events) {
-    const previous = state && structuredClone(plain(state));
-    const next = reduce(state, event);
-    if (state) assert.deepEqual(plain(state), previous);
+  let state = begin(undefined);
+  for (const value of events) {
+    const snapshot = structuredClone(plain(state));
+    const next = event(state, value);
+    assert.deepEqual(plain(state), snapshot);
     state = next;
   }
   assert.deepEqual(plain(state.events), events);
-  assert.deepEqual(plain(state.response), { code: 200 });
-  assert.deepEqual(plain(state.cookies), [{ name: "session", value: "one" }]);
   assert.deepEqual(plain(state.consoleList), [events[3]]);
   assert.deepEqual(plain(state.assertions), events[4].assertions);
-  assert.equal(state.visualizerHtml, "<p>result</p>");
-  assert.equal(state.sendStatus, "initial");
+  assert.equal(state.result.visualizerHtml, "<p>result</p>");
+  assert.equal(state.result.cookies[0].name, "one");
+  assert.equal(hasCompletedResponse(state), true);
 });
 
-test("HTTP completion retains a script failure when the terminal event has no error", () => {
-  const error = { message: "script failed" };
-  const failed = reduce(reduce(undefined, { type: "start" }), {
-    type: "exception",
-    error,
-  });
-  const complete = reduce(failed, { type: "done", error: null });
-  assert.equal(complete.error, error);
-  assert.equal(complete.sendStatus, "sendError");
-  assert.equal(complete.message, error.message);
-  const terminal = reduce(failed, {
-    type: "done",
-    error: { message: "network failed" },
-  });
-  assert.equal(terminal.message, "network failed");
-  assert.equal(failed.error, error);
+test("cancellation before host startup cannot reassign the old run after a retry", () => {
+  let state = begin(undefined, "A");
+  state = reduce(state, { type: "cancel", executionId: "A" });
+  state = begin(state, "B");
+  for (const value of [
+    { type: "start" },
+    { type: "request", response: { code: 200 } },
+    { type: "done" },
+  ]) {
+    assert.equal(event(state, value, "A"), state);
+  }
+  assert.equal(state.executionId, "B");
+  assert.equal(state.status, "sending");
 });
 
-test("a replacement response replaces previous data and clears its visualizer", () => {
-  const previous = {
-    response: { code: 200, body: "old" },
-    request: { method: "GET" },
-    cookies: [{ name: "old" }],
-    visualizerHtml: "old visualization",
-  };
-  const pending = reduce(previous, { type: "start" });
-  const logging = reduce(pending, {
-    type: "console",
-    messages: ["new execution"],
-  });
-  assert.deepEqual(plain(logging.response), previous.response);
-  const next = reduce(logging, {
+test("only the current execution can cancel or complete and duplicates cannot run twice", () => {
+  let state = begin(undefined);
+  assert.equal(reduce(state, { type: "cancel", executionId: "old" }), state);
+  state = event(state, { type: "request", response: { code: 201 } });
+  assert.equal(
+    event(state, { type: "request", response: { code: 500 } }, "old"),
+    state,
+  );
+  assert.equal(
+    event(
+      state,
+      { type: "console", messages: ["duplicate"] },
+      "current",
+      state.sequence,
+    ),
+    state,
+  );
+  state = event(state, { type: "done" });
+  assert.equal(hasCompletedResponse(state), true);
+  assert.equal(event(state, { type: "done" }), state);
+});
+
+test("cancelling a resend retains the previous result and rejects late responses", () => {
+  let state = event(begin(undefined, "A"), {
     type: "request",
-    response: { code: 201, body: "new" },
-    request: { method: "POST" },
-    cookies: [],
+    response: { code: 200 },
   });
-  assert.deepEqual(plain(next.response), { code: 201, body: "new" });
-  assert.deepEqual(plain(next.request), { method: "POST" });
-  assert.deepEqual(plain(next.cookies), []);
-  assert.equal(next.visualizerHtml, null);
-  assert.equal(previous.visualizerHtml, "old visualization");
+  state = event(state, { type: "done" });
+  const result = state.result;
+  state = begin(state, "B");
+  state = reduce(state, { type: "cancel", executionId: "B" });
+  assert.equal(state.result, result);
+  assert.equal(hasCompletedResponse(state), false);
+  assert.equal(
+    event(state, { type: "request", response: { code: 500 } }),
+    state,
+  );
+});
+
+test("completion with no response cannot save a retained result", () => {
+  const old = {
+    status: "succeeded",
+    result: { executionId: "old", response: { code: 200 } },
+  };
+  const state = event(begin(old), { type: "done" });
+  assert.equal(state.status, "succeeded");
+  assert.equal(state.result, old.result);
+  assert.equal(hasCompletedResponse(state), false);
+});
+
+test("script and network errors retain their cause and preserve old display data", () => {
+  const old = {
+    status: "succeeded",
+    result: { executionId: "old", response: { code: 200 } },
+  };
+  const error = { message: "failed" };
+  let state = event(begin(old), { type: "request", error });
+  state = event(state, { type: "done", error: null });
+  assert.equal(state.status, "failed");
+  assert.equal(state.error, error);
+  assert.equal(state.result, old.result);
+  state = event(begin(state, "retry"), { type: "exception", error });
+  state = event(state, { type: "done" });
+  assert.equal(state.error, error);
+  assert.equal(hasCompletedResponse(state), false);
+});
+
+test("HTTP protocol errors reach the reducer even before session startup", () => {
+  let state = begin(undefined, "failure");
+  const consume = createExecutionConsumer();
+  const views = {
+    http: (value, executionId, sequence) => {
+      state = event(state, value, executionId, sequence);
+    },
+    websocket() {},
+    socketio() {},
+  };
+  consume(
+    {
+      protocolVersion: 1,
+      sessionId: "failure",
+      targetId: "request",
+      sequence: 1,
+      timestamp: 0,
+      event: {
+        protocol: "http",
+        type: "execution.error",
+        error: { message: "preparation failed" },
+      },
+    },
+    views,
+  );
+  assert.equal(state.status, "failed");
+  assert.equal(state.error.message, "preparation failed");
 });

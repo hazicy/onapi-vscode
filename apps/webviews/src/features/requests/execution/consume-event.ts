@@ -1,7 +1,7 @@
 import type { ExecutionEnvelope, ExecutionEvent } from "@onapi/contracts";
 
 export interface ExecutionViews {
-  http(event: ExecutionEvent): void;
+  http(event: ExecutionEvent, executionId: string, sequence: number): void;
   websocket(event: { id?: string; action: string; message: unknown }): void;
   socketio(event: { id?: string; action: string; message: unknown }): void;
 }
@@ -16,7 +16,13 @@ export function consumeExecutionEvent(
   }
   const event = envelope.event;
   if (event.protocol === "http" && "native" in event) {
-    views.http(event.native);
+    views.http(event.native, envelope.sessionId, envelope.sequence);
+  } else if (event.protocol === "http" && event.type === "execution.error") {
+    views.http(
+      { type: "done", error: event.error },
+      envelope.sessionId,
+      envelope.sequence,
+    );
   } else if (event.protocol !== "http" && "result" in event) {
     const action =
       event.type === "connection.opened"
@@ -62,6 +68,11 @@ export function createExecutionConsumer() {
   const active = new Map<string, { sessionId: string; sequence: number }>();
   return (envelope: ExecutionEnvelope, views: ExecutionViews) => {
     if (envelope.protocolVersion !== 1) {
+      return;
+    }
+    // HTTP identity and sequence are checked together by its state reducer.
+    if (envelope.event.protocol === "http") {
+      consumeExecutionEvent(envelope, views);
       return;
     }
     const key = `${envelope.event.protocol}:${envelope.targetId || ""}`;

@@ -18,6 +18,7 @@ before(async () => {
       export { HttpAdapter } from './packages/runtime/src/http/adapter.ts';
       export { WebSocketAdapter } from './packages/runtime/src/websocket/adapter.ts';
       export { SocketIoAdapter } from './packages/runtime/src/socketio/adapter.ts';
+      export { reduceHttpExecutionEvent } from './apps/webviews/src/features/requests/execution/http-state.ts';
       export { createExecutionConsumer } from './apps/webviews/src/features/requests/execution/consume-event.ts';
       export { relayExecutionEvent } from './apps/extension/src/platform/execution/webview-relay.ts';
     `,
@@ -171,8 +172,21 @@ test("core closes failed executions and marks reported protocol failures", async
 test("host relays a single channel and UI rejects replaced sessions and duplicate events", () => {
   const consume = modules.createExecutionConsumer(),
     received = [];
+  let state = modules.reduceHttpExecutionEvent(undefined, {
+    type: "begin",
+    executionId: "new",
+  });
   const views = {
-    http: (e) => received.push(e),
+    http: (e, executionId, sequence) => {
+      const next = modules.reduceHttpExecutionEvent(state, {
+        type: "event",
+        executionId,
+        sequence,
+        event: e,
+      });
+      if (next !== state) received.push(e);
+      state = next;
+    },
     websocket: (e) => received.push(e),
     socketio: (e) => received.push(e),
   };

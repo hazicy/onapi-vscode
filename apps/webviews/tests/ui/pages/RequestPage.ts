@@ -2,7 +2,11 @@ import type { Page } from "@playwright/test";
 export class RequestPage {
   constructor(readonly page: Page) {}
 
-  async open(kind: string, request: unknown) {
+  async open(
+    kind: string,
+    request: unknown,
+    systemConfig: Record<string, unknown> = {},
+  ) {
     const errors: string[] = [];
     this.page.on("pageerror", (error) => {
       errors.push(error.message);
@@ -20,7 +24,7 @@ export class RequestPage {
         response: [],
       },
       projectConfig: {},
-      systemConfig: {},
+      systemConfig,
       vscodeTheme: "Default Dark Modern",
       docBaseUrl: "",
     };

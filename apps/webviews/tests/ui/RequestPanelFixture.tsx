@@ -32,12 +32,10 @@ export default function RequestPanelFixture() {
       <button onClick={() => setWidth(1000)}>Wide panel</button>
       <button
         onClick={() =>
-          useApis
-            .getState()
-            .updateCurrentSendingData({
-              sendStatus: "sendError",
-              message: "connect ECONNREFUSED example.test",
-            })
+          useApis.getState().updateCurrentSendingData({
+            status: "failed",
+            error: { message: "connect ECONNREFUSED example.test" },
+          })
         }
       >
         Fail request

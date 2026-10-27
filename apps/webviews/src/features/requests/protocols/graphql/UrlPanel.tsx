@@ -69,7 +69,7 @@ const Index = memo((props: ApiComponentType) => {
     updateCurrentServerId(tempServerId);
   }, [apiOriginDetailsList]);
 
-  const isSending = isEqual(curApiSendingData?.sendStatus, "sending");
+  const isSending = isEqual(curApiSendingData?.status, "sending");
 
   const urlGroupData = useMemo(
     () => ({
@@ -95,11 +95,13 @@ const Index = memo((props: ApiComponentType) => {
   };
 
   const handleSend = () => {
-    if (!beginRequest()) {
+    const executionId = beginRequest();
+    if (!executionId) {
       return;
     }
     window?.vscode.postMessage({
       action: "sendApi",
+      executionId,
       data: currentData(),
       option: {
         server_id: currentServerId,

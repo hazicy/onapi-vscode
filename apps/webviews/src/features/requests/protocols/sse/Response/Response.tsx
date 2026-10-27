@@ -22,8 +22,8 @@ const Response = memo((props: ApiComponentType) => {
 
   const showResponseSize = useMemo(() => {
     return (
-      curApiSendingDataSSE?.sendStatus !== "sending" &&
-      !!curApiSendingDataSSE?.response
+      curApiSendingDataSSE?.status !== "sending" &&
+      !!curApiSendingDataSSE?.result?.response
     );
   }, [curApiSendingDataSSE]);
 

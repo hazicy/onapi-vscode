@@ -53,7 +53,7 @@ for (const moduleDelay of [0, 250]) {
           };
       window.vscodeData.initialData = initialMessage.data;
       window.vscode = { postMessage(message) {
-        window.startupMessages.push({ action: message.action,
+        window.startupMessages.push({ action: message.action, ...(message.executionId ? {executionId: message.executionId} : {}),
           ...(message.action === "generateCode" ? { data: message.data } : {}),
           contentReady: performance.getEntriesByName('onapi:content-ready').length });
         if (message.action === 'getApiList') {

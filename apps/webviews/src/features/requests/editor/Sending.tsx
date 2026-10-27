@@ -5,8 +5,6 @@ import { useTranslation } from "react-i18next";
 
 import Button from "@/shared/ui/Button";
 
-import useApis from "@/features/requests/store/useApis";
-
 interface SendingProps {
   hasCancel?: boolean;
   onlySendingLoadingBar?: boolean;
@@ -19,19 +17,7 @@ const Sending: React.FC<SendingProps> = ({
   onCancel,
 }) => {
   const { t } = useTranslation();
-  const updateCurrentSendingData = useApis(
-    (store) => store.updateCurrentSendingData,
-  );
-  const handleCancel = () => {
-    updateCurrentSendingData({ sendStatus: "initial" });
-
-    // Terminate the sending thread
-    window?.vscode.postMessage({
-      action: "stopSendApi",
-    });
-
-    onCancel?.();
-  };
+  const handleCancel = () => onCancel?.();
 
   return (
     <div
