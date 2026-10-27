@@ -27,7 +27,7 @@ test("concurrent assembly keeps published Workers available and never exposes pa
     "apps/webviews/public/scalar.standalone.js": "scalar",
     "apps/webviews/public/scalar.LICENSE.txt": "MIT",
     "apps/webviews/public/404.html": "404",
-    "packages/domain/src/mock/license.txt": "license",
+    "packages/domain/src/mock/LICENSE.txt": "mock engine license",
     "README.md": "readme",
     "CHANGELOG.md": "changes",
     "LICENSE.txt": "license",
@@ -43,6 +43,11 @@ test("concurrent assembly keeps published Workers available and never exposes pa
       await mkdir(path.dirname(target), { recursive: true });
       await writeFile(target, contents);
     }
+    // Check exact spelling even on case-insensitive development filesystems.
+    assert.deepEqual(
+      await readdir(path.join(root, "packages/domain/src/mock")),
+      ["LICENSE.txt"],
+    );
     let finished = false;
     const assembly = Promise.all([
       assembleExtension({ workspaceRoot: root }),
@@ -79,6 +84,13 @@ test("concurrent assembly keeps published Workers available and never exposes pa
         "utf8",
       ),
       newRuntime,
+    );
+    assert.equal(
+      await readFile(
+        path.join(root, "apps/extension/dist/licenses/mock-engines.txt"),
+        "utf8",
+      ),
+      "mock engine license",
     );
     const obsolete = path.join(
       root,
