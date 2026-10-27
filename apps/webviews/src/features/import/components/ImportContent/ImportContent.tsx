@@ -69,7 +69,7 @@ const Index = ({
 
   const accept = useMemo(() => {
     if (fileType === IMPORT_TYPE_ENUM.MD) {
-      return "@/features/import/components/ImportContent/.md";
+      return ".md";
     }
     if (fileType === IMPORT_TYPE_ENUM.HAR) {
       return "application/json, .har";

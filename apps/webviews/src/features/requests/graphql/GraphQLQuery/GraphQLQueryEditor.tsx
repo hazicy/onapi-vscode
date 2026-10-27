@@ -154,7 +154,7 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
   const getNewKeys = (keys: string[]) => {
     const list = keys?.reduce(
       (pre, k) => {
-        if (includes(k, "@/features/requests/components/GraphQLQuery")) {
+        if (includes(k, ".")) {
           const res = getPartialStrings(k);
           pre = union(pre.concat(res));
         }
@@ -165,9 +165,7 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
     const keySet = new Set(list);
     let highestLevel = 1;
     forEach(list, (str) => {
-      const level = str.split(
-        "@/features/requests/components/GraphQLQuery",
-      ).length;
+      const level = str.split(".").length;
       // The split array length is one more than the number of dots (including empty string or the first part), so this is the correct level
       if (level > highestLevel) {
         highestLevel = level;
@@ -227,9 +225,7 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
     // Can recursively search here and set a level based on the dot-separated keyList to stop at a certain depth
     let highestLevel = 1;
     forEach(paths, (str) => {
-      const level = str.split(
-        "@/features/requests/components/GraphQLQuery",
-      ).length;
+      const level = str.split(".").length;
       if (level > highestLevel) {
         highestLevel = level;
       }
@@ -411,20 +407,18 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
   }, [querySchema]);
 
   const getPartialStrings = (str: string) => {
-    const parts = str.split("@/features/requests/components/GraphQLQuery");
+    const parts = str.split(".");
     const results = [];
 
     for (let i = 1; i <= parts.length; i++) {
-      results.push(
-        parts.slice(0, i).join("@/features/requests/components/GraphQLQuery"),
-      );
+      results.push(parts.slice(0, i).join("."));
     }
 
     return results;
   };
 
   const gerRemoveKeys = (checked: string[], key: string) => {
-    if (key.includes("@/features/requests/components/GraphQLQuery")) {
+    if (key.includes(".")) {
       const keysPathList = getPartialStrings(key).reverse().slice(1);
       const keys = keysPathList.reduce(
         (pre, item) => {
@@ -445,9 +439,7 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
     if (e?.checked) {
       const list = checked?.reduce(
         (pre, selectKey) => {
-          if (
-            includes(selectKey, "@/features/requests/components/GraphQLQuery")
-          ) {
+          if (includes(selectKey, ".")) {
             const res = getPartialStrings(selectKey);
             pre = union(pre.concat(res));
           }
@@ -489,9 +481,7 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
       } catch (err) {}
     }
     forEach(union(concat(checkKeys, queryKeys)), (str) => {
-      const level = str.split(
-        "@/features/requests/components/GraphQLQuery",
-      ).length;
+      const level = str.split(".").length;
       // The split array length is one more than the number of dots (including empty string or the first part), so this is the correct level
       if (level > highestLevel) {
         highestLevel = level;
