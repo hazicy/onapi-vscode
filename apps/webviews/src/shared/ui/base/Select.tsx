@@ -262,7 +262,15 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
         filter={null}
         multiple={multiple}
         value={selectedOptions}
-        onValueChange={update}
+        onValueChange={(next, details) => {
+          // Escape dismisses options; it must not clear a committed selection
+          // when the popup has already unmounted.
+          if (details.reason === "escape-key") {
+            details.cancel();
+            return;
+          }
+          update(next);
+        }}
         inputValue={search}
         onInputValueChange={(s) => {
           if (

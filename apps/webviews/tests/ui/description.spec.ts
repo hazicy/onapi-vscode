@@ -59,6 +59,15 @@ test("supports keyboard selection and restores focus on Escape", async ({
   );
   await trigger.click();
   await page.keyboard.press("Escape");
+  await expect(descriptionPage.customNameButton).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+  await trigger.click();
+  await descriptionPage.customNameButton.hover();
+  // The selected-description status also contains this text after selection.
+  await expect(descriptionPage.customName).toHaveCount(3);
+  await expect(descriptionPage.customName.nth(1)).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(descriptionPage.customNameButton).toHaveCount(0);
   await expect(trigger).toBeFocused();
 });
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState, type KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { Popover } from "@base-ui/react/popover";
 
@@ -13,11 +13,24 @@ interface Props {
 
 const AiDescription = ({ onChange, filterKey }: Props) => {
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const { t } = useTranslation();
+  const dismissOnEscape = (event: KeyboardEvent) => {
+    if (event.key !== "Escape" || !open) {
+      return;
+    }
+    // Handle this before a description's tooltip consumes Escape.
+    event.preventDefault();
+    event.stopPropagation();
+    setOpen(false);
+    triggerRef.current?.focus();
+  };
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger
+        ref={triggerRef}
+        onKeyDownCapture={dismissOnEscape}
         className={styles.trigger}
         aria-label={t("settings.description.title")}
       >
@@ -30,7 +43,10 @@ const AiDescription = ({ onChange, filterKey }: Props) => {
           align="end"
           sideOffset={4}
         >
-          <Popover.Popup className={styles.popup}>
+          <Popover.Popup
+            className={styles.popup}
+            onKeyDownCapture={dismissOnEscape}
+          >
             <DropContent
               handleSelect={() => setOpen(false)}
               onChange={onChange}

@@ -34,6 +34,10 @@ test("GraphQL conditions reset dependent values and preserve rows after removal"
   await filtersPage.age21Option.click();
   await expect(filtersPage.remove21Button).toBeVisible();
   await page.keyboard.press("Escape");
+  // Escape must also preserve tags once the options popup has unmounted.
+  await expect(filtersPage.age21Option).toHaveCount(0);
+  await combos.nth(2).press("Escape");
+  await expect(filtersPage.remove21Button).toBeVisible();
   await filtersPage.confirmButton.click();
   await expect(filtersPage.filterData).toHaveText(
     '{"query":[{"name":"where","value":{"age":{"in":["21"]}}}]}',
