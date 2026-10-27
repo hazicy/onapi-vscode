@@ -12,7 +12,7 @@ import useUserConfig from "@/features/auth/store/useUserConfig";
 import {
   batchSaveApiService,
   getApisListService,
-} from "@/shared/services/apis";
+} from "@/features/sync/services/apis";
 import { cloneDeep, forEach, isArray, isPlainObject } from "lodash-es";
 import Left from "./Left/Left";
 import Right from "./Right/Right";
@@ -29,7 +29,7 @@ import {
   addProjectEnvSeverService,
   updateProjectEnvService,
   updateProjectEnvSeverService,
-} from "@/shared/services/project";
+} from "@/features/sync/services/project";
 
 const Push = () => {
   const { t } = useTranslation();

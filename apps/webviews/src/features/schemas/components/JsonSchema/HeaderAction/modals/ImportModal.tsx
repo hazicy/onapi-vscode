@@ -10,7 +10,7 @@ import { isObject, isPlainObject, isString } from "lodash-es";
 
 import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 import Modal from "@/shared/ui/Modal";
-import { recursionSetSchemaOrder } from "@/shared/events/export";
+import { recursionSetSchemaOrder } from "@/features/schemas/utils/schema-order";
 import { ThemeToken } from "@/shared/hooks/useTheme";
 import { getSafeJSON } from "@/shared/utils/common";
 

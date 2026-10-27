@@ -10,6 +10,8 @@ import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import { useGlobal } from "@/app/store";
 import type { ApisBaseDataItem } from "@onapi/domain/requests/types/base";
 import { App, modal } from "@/shared/ui/base";
+import LayoutControl from "@/shared/components/ResizablePanels/LayoutControl";
+import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
 
 function TestInsert({ onChange, children }: VariableInsertProps) {
   return (
@@ -111,6 +113,26 @@ export default function SharedComponentsFixture() {
         <div style={{ height: 100 }}>
           <CodeEditor value="unchanged" onMountAutoFormat={false} />
         </div>
+        <LayoutControl />
+        <button
+          onClick={() => {
+            const { systemConfig, updateSystemConfig } =
+              useSystemConfig.getState();
+            updateSystemConfig({ ...systemConfig, tab_direction: -1 });
+          }}
+        >
+          Receive horizontal layout
+        </button>
+        <section
+          aria-label="Preferred panel layout"
+          style={{ width: 800, height: 400 }}
+        >
+          <ResizablePanels
+            showDirectionBtn
+            leftPanel={<div>Preferred request panel</div>}
+            rightPanel={<div>Preferred response panel</div>}
+          />
+        </section>
         <button
           onClick={() =>
             modal.info({

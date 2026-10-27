@@ -15,7 +15,7 @@ const owners = [
   "packages/api-converter",
 ];
 
-function check(source, imports, exceptions = []) {
+function check(source, imports) {
   const output = path.join(root, "test-results");
   fs.mkdirSync(output, { recursive: true });
   const fixture = fs.mkdtempSync(path.join(output, "boundaries-"));
@@ -28,14 +28,9 @@ function check(source, imports, exceptions = []) {
       );
     }
     fs.mkdirSync(path.join(fixture, "scripts"));
-    fs.mkdirSync(path.join(fixture, "tooling"));
     fs.copyFileSync(
       path.join(root, "scripts/check-boundaries.mjs"),
       path.join(fixture, "scripts/check-boundaries.mjs"),
-    );
-    fs.writeFileSync(
-      path.join(fixture, "tooling/webview-boundary-exceptions.json"),
-      JSON.stringify(exceptions),
     );
     const filename = path.join(fixture, "apps/webviews/src", source);
     fs.mkdirSync(path.dirname(filename), { recursive: true });
@@ -70,27 +65,21 @@ test("shared boundaries reject alias, relative and dynamic feature imports", () 
   }
 });
 
-test("shared boundaries allow only exact legacy edges and reject stale exceptions", () => {
-  const edge = "shared/probe.ts -> features/settings/store";
+test("shared boundaries allow shared helpers and reject application state imports", () => {
   const allowed = check(
     "shared/probe.ts",
-    'import value from "@/features/settings/store";',
-    [edge],
+    'import value from "@/shared/state/store";',
   );
   assert.equal(allowed.status, 0, allowed.output);
-  const different = check(
-    "shared/probe.ts",
-    'import value from "@/features/requests/store";',
-    [edge],
-  );
-  assert.equal(different.status, 1);
-  assert.match(
-    different.output,
-    /shared layer imports features\/requests\/store/,
-  );
-  const stale = check("shared/probe.ts", "export {};", [edge]);
-  assert.equal(stale.status, 1);
-  assert.match(stale.output, /Unused Webview boundary exception/);
+  for (const imports of [
+    'import value from "@/app/store";',
+    'export * from "../app/store";',
+    'import("@/app/store");',
+  ]) {
+    const forbidden = check("shared/probe.ts", imports);
+    assert.equal(forbidden.status, 1);
+    assert.match(forbidden.output, /shared layer imports app\/store/);
+  }
 });
 
 test("application store barrel rejects feature re-exports but allows application state", () => {

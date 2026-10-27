@@ -10,7 +10,7 @@ import { isString } from "lodash-es";
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
 import { openUrl } from "@/shared/utils/open";
-import useGlobalTheme from "@/shared/theme";
+import useGlobalTheme from "@/features/settings/hooks/useGlobalTheme";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import useTheme from "@/shared/hooks/useTheme";
 

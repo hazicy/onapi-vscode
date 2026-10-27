@@ -30,7 +30,7 @@ async function loader(state, serviceResult, envResult) {
     if (id === "./environmentDiff") return diff;
     if (id === "@/features/project/store/useProjectConfig")
       return { default: { getState: () => state } };
-    if (id === "@/shared/services/project")
+    if (id === "@/features/sync/services/project")
       return {
         getServiceList: async () =>
           typeof serviceResult === "function" ? serviceResult() : serviceResult,

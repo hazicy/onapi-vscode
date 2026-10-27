@@ -81,3 +81,37 @@ test("static dialogs inherit the application's shared editor preferences", async
   await expect(content).toHaveText("dialog content");
   await expect(content).toHaveCSS("font-size", "19px");
 });
+
+test("layout controls persist preferences and mounted panels follow external settings", async ({
+  page,
+}) => {
+  const horizontal = page.getByRole("button", {
+    name: "Two pane view",
+    exact: true,
+  });
+  const vertical = page.getByRole("button", {
+    name: "Single pane view",
+    exact: true,
+  });
+  const request = page.getByText("Preferred request panel", { exact: true });
+  const response = page.getByText("Preferred response panel", { exact: true });
+  const placement = async () => {
+    const left = await request.boundingBox();
+    const right = await response.boundingBox();
+    return right!.x > left!.x + 100 ? "horizontal" : "vertical";
+  };
+  await horizontal.click();
+  await expect(horizontal).toHaveAttribute("aria-pressed", "true");
+  await expect.poll(placement).toBe("horizontal");
+  await vertical.click();
+  await expect(vertical).toHaveAttribute("aria-pressed", "true");
+  await expect.poll(placement).toBe("vertical");
+  await page.getByRole("button", { name: "Receive horizontal layout" }).click();
+  await expect(horizontal).toHaveAttribute("aria-pressed", "true");
+  await expect.poll(placement).toBe("horizontal");
+  const messages = JSON.parse(await page.getByLabel("Messages").innerText());
+  expect(messages).toEqual([
+    { action: "setSystemConfig", data: { tab_direction: -1 } },
+    { action: "setSystemConfig", data: { tab_direction: 1 } },
+  ]);
+});

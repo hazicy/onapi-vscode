@@ -6,7 +6,7 @@ import { Suspense, useEffect } from "react";
 import { isEqual } from "lodash-es";
 import ReactDOM from "react-dom/client";
 import { App as BaseApp } from "@/shared/ui/base";
-import useGlobalTheme from "@/shared/theme";
+import useGlobalTheme from "@/features/settings/hooks/useGlobalTheme";
 import ErrorBoundary from "@/shared/components/ErrorBoundary";
 import "@/shared/assets/css/reset.css";
 import "@/shared/locale";

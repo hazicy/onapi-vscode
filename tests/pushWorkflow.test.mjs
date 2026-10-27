@@ -113,7 +113,7 @@ async function fixture({
         return versions;
       if (id === "@/features/sync/utils/environmentDiff")
         return environmentDiff;
-      if (id === "@/shared/services/apis")
+      if (id === "@/features/sync/services/apis")
         return {
           getApisListService: async () => (invalidVersions ? {} : { list: [] }),
           batchSaveApiService: async () => {
@@ -122,7 +122,7 @@ async function fixture({
             return { list: uploaded };
           },
         };
-      if (id === "@/shared/services/project") return {};
+      if (id === "@/features/sync/services/project") return {};
       if (id === "./Left/Left" || id === "./Right/Right") return id;
       return nativeDependency(id);
     },

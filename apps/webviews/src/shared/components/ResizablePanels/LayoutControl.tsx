@@ -1,24 +1,11 @@
 import { useTranslation } from "react-i18next";
-import useSystemConfig from "@/features/settings/store/useSystemConfig";
-import { STATUS_CODE } from "@onapi/domain/constants/common";
+import { usePanelPreferences } from "@/shared/contexts/panel-preferences";
 import { Button, Flex } from "@/shared/ui/base";
 import AppIcon from "@/shared/ui/AppIcon";
 
 export default function LayoutControl() {
   const { t } = useTranslation();
-  const direction = useSystemConfig(
-    (state) => state.systemConfig?.tab_direction,
-  );
-
-  const changeDirection = (vertical: boolean) => {
-    const tab_direction = vertical ? STATUS_CODE.ENABLE : STATUS_CODE.DISABLE;
-    const { systemConfig, updateSystemConfig } = useSystemConfig.getState();
-    updateSystemConfig({ ...systemConfig, tab_direction });
-    window?.vscode.postMessage({
-      action: "setSystemConfig",
-      data: { tab_direction },
-    });
-  };
+  const { direction, onDirectionChange } = usePanelPreferences();
 
   return (
     <Flex gap={4} align="center">
@@ -34,11 +21,12 @@ export default function LayoutControl() {
             title={label}
             aria-label={label}
             aria-pressed={
-              vertical
-                ? direction === STATUS_CODE.ENABLE
-                : direction === STATUS_CODE.DISABLE
+              vertical ? direction === "vertical" : direction === "horizontal"
             }
-            onClick={() => changeDirection(vertical)}
+            disabled={!onDirectionChange}
+            onClick={() =>
+              onDirectionChange?.(vertical ? "vertical" : "horizontal")
+            }
           >
             <AppIcon icon={vertical ? "rows-2" : "columns-2"} />
           </Button>

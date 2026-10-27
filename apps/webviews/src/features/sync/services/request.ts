@@ -25,8 +25,8 @@ import {
   RESPONSE_CODES,
   RESPONSE_ERROR_CODES,
 } from "./constants";
-import { RequestConfig } from "./types";
-import { responseError } from "./util";
+import { RequestConfig } from "./request-types";
+import { responseError } from "./response-error";
 
 export const requestBaseHeader = {
   [APIPOST_MACHINE]: "",

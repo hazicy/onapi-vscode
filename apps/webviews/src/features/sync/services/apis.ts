@@ -1,5 +1,5 @@
 import { ApiDetailsData } from "@onapi/domain/requests/types/api";
-import { get, post } from "./utils";
+import { get, post } from "./request";
 import { ApisBaseData } from "@onapi/domain/requests/types/base";
 
 /**

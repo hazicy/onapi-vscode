@@ -28,10 +28,9 @@ packages. Cross-package relative imports are forbidden. The `@/` alias is local
 to Webviews. `pnpm check:boundaries` verifies these rules and dependency ownership.
 
 Within Webviews, shared modules must not add imports from application or feature
-modules. Legacy exceptions are recorded as exact source-to-target edges in
-[`tooling/webview-boundary-exceptions.json`](../tooling/webview-boundary-exceptions.json).
-The checker resolves both aliases and relative imports, rejects new edges and
-requires obsolete exceptions to be removed. Feature stores are imported directly
+modules. The checker resolves both aliases and relative imports and rejects all
+such edges, including re-exports and literal dynamic imports, without legacy
+exceptions. Feature stores are imported directly
 from their owner, rather than re-exported by `app/store`. Generic Zustand helpers
 and UI services live in `shared/state`; application state remains in `app/store`.
 

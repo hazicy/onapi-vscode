@@ -1,4 +1,4 @@
-import { get, post } from "./utils";
+import { get, post } from "./request";
 
 /**
  * Get environment list

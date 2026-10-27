@@ -7,17 +7,6 @@ const builtins = new Set(
   builtinModules.flatMap((name) => [name, `node:${name}`]),
 );
 const failures = [];
-// Exact legacy edges are tracked while application-aware shared components migrate.
-// New edges fail the check, and removed edges must be removed from this list.
-const webviewLegacyEdges = new Set(
-  JSON.parse(
-    fs.readFileSync(
-      new URL("../tooling/webview-boundary-exceptions.json", import.meta.url),
-      "utf8",
-    ),
-  ),
-);
-const usedWebviewLegacyEdges = new Set();
 // Models are the bottom layer; wire contracts may depend only on those models.
 const sharedWorkspaceDependencies = {
   "packages/domain": new Set(),
@@ -101,13 +90,9 @@ for (const owner of owners) {
               source.startsWith("shared/") &&
               (target?.startsWith("features/") || target?.startsWith("app/"))
             ) {
-              const edge = `${source} -> ${target}`;
-              if (webviewLegacyEdges.has(edge))
-                usedWebviewLegacyEdges.add(edge);
-              else
-                failures.push(
-                  `${owner}/src/${source}: shared layer imports ${target}`,
-                );
+              failures.push(
+                `${owner}/src/${source}: shared layer imports ${target}`,
+              );
             }
             if (
               source === "app/store/index.ts" &&
@@ -156,10 +141,6 @@ for (const owner of owners) {
     }
   }
   visit(path.join(root, owner, "src"));
-}
-for (const edge of webviewLegacyEdges) {
-  if (!usedWebviewLegacyEdges.has(edge))
-    failures.push(`Unused Webview boundary exception: ${edge}`);
 }
 if (failures.length)
   throw new Error(`Workspace boundary violations:\n${failures.join("\n")}`);

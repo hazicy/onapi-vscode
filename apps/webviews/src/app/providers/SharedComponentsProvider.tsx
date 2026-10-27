@@ -16,6 +16,11 @@ import {
   SystemHeadersContext,
   type SystemHeaders,
 } from "@/shared/contexts/system-headers";
+import {
+  PanelPreferencesContext,
+  type PanelPreferences,
+} from "@/shared/contexts/panel-preferences";
+import { STATUS_CODE } from "@onapi/domain/constants/common";
 
 function VariableInsert({ onChange, ...props }: VariableInsertProps) {
   return (
@@ -37,6 +42,17 @@ function VariableInsert({ onChange, ...props }: VariableInsertProps) {
 }
 
 const variableControls = { Input: VarInput, Insert: VariableInsert };
+
+const updateDirection: PanelPreferences["onDirectionChange"] = (direction) => {
+  const tab_direction =
+    direction === "vertical" ? STATUS_CODE.ENABLE : STATUS_CODE.DISABLE;
+  const { systemConfig, updateSystemConfig } = useSystemConfig.getState();
+  updateSystemConfig({ ...systemConfig, tab_direction });
+  window.vscode.postMessage({
+    action: "setSystemConfig",
+    data: { tab_direction },
+  });
+};
 
 const updateHeaders: NonNullable<SystemHeaders["onChange"]> = (
   protocol,
@@ -62,16 +78,28 @@ export default function SharedComponentsProvider({
   children: ReactNode;
 }) {
   const theme = useGlobal((state) => state.vscodeTheme);
-  const { fontSize, fontFamily, lightJsonTheme, http, websocket } =
-    useSystemConfig(
-      useShallow(({ systemConfig: config }) => ({
-        fontSize: typeof config.font_size === "number" ? config.font_size : 14,
-        fontFamily: config.font_family || "monospace",
-        lightJsonTheme: ["white", "orange"].includes(config.bg_color),
-        http: config.systemRequestHeader,
-        websocket: config.systemRequestHeaderWebSocket,
-      })),
-    );
+  const {
+    fontSize,
+    fontFamily,
+    lightJsonTheme,
+    http,
+    websocket,
+    direction,
+    language,
+  } = useSystemConfig(
+    useShallow(({ systemConfig: config }) => ({
+      fontSize: typeof config.font_size === "number" ? config.font_size : 14,
+      fontFamily: config.font_family || "monospace",
+      lightJsonTheme: ["white", "orange"].includes(config.bg_color),
+      http: config.systemRequestHeader,
+      websocket: config.systemRequestHeaderWebSocket,
+      direction:
+        config.tab_direction === STATUS_CODE.ENABLE
+          ? ("vertical" as const)
+          : ("horizontal" as const),
+      language: config.language,
+    })),
+  );
   const preferences = useMemo(
     () => ({
       theme: theme || "",
@@ -90,12 +118,18 @@ export default function SharedComponentsProvider({
     }),
     [http, websocket],
   );
+  const panels = useMemo(
+    () => ({ direction, language, onDirectionChange: updateDirection }),
+    [direction, language],
+  );
 
   return (
     <EditorPreferencesContext.Provider value={preferences}>
       <VariableControlsContext.Provider value={variableControls}>
         <SystemHeadersContext.Provider value={headers}>
-          {children}
+          <PanelPreferencesContext.Provider value={panels}>
+            {children}
+          </PanelPreferencesContext.Provider>
         </SystemHeadersContext.Provider>
       </VariableControlsContext.Provider>
     </EditorPreferencesContext.Provider>

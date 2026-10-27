@@ -2,7 +2,7 @@ import SharedComponentsProvider from "@/app/providers/SharedComponentsProvider";
 import { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { App as BaseApp } from "@/shared/ui/base";
-import useGlobalTheme from "@/shared/theme";
+import useGlobalTheme from "@/features/settings/hooks/useGlobalTheme";
 
 import "@/shared/assets/css/reset.css";
 

@@ -5,8 +5,8 @@ import { useShallow } from "zustand/react/shallow";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import { useGlobal } from "@/app/store";
 
-import { getThemeConfig } from "./theme";
-import { generateToken } from "./token";
+import { getThemeConfig } from "@/shared/theme/theme";
+import { generateToken } from "@/shared/theme/token";
 
 /**
  * Use global theme

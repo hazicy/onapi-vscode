@@ -25,9 +25,7 @@ import { useSafeState } from "ahooks";
 import cn from "classnames";
 
 import AppIcon from "@/shared/ui/AppIcon";
-import { STATUS_CODE } from "@onapi/domain/constants/common";
-
-import useSystemConfig from "@/features/settings/store/useSystemConfig";
+import { usePanelPreferences } from "@/shared/contexts/panel-preferences";
 import { DirectionType } from "@onapi/domain/types/common";
 
 const defaultPanelProps = { defaultSize: 50, minSize: 5 };
@@ -84,10 +82,7 @@ const ResizablePanels = forwardRef((props: Props, ref) => {
     onDirectionChange,
   } = props;
 
-  const systemConfigTabDirection = useSystemConfig(
-    (state) => state.systemConfig?.tab_direction,
-  );
-  const language = useSystemConfig((state) => state.systemConfig?.language);
+  const { direction: preferredDirection, language } = usePanelPreferences();
 
   const [direction, setDirection] = useSafeState<DirectionType>(
     panelGroupProps.direction,
@@ -124,20 +119,15 @@ const ResizablePanels = forwardRef((props: Props, ref) => {
     panelGroupProps.direction && setDirection(panelGroupProps.direction);
   }, [panelGroupProps.direction]);
 
-  // Watch system config for split-screen direction changes
+  // Follow the application's preferred direction only for opted-in panels.
   useEffect(() => {
-    if (!showDirectionBtn || !systemConfigTabDirection) {
+    if (!showDirectionBtn || !preferredDirection) {
       return;
     }
 
-    const _direction =
-      systemConfigTabDirection === STATUS_CODE.ENABLE
-        ? "vertical"
-        : "horizontal";
-
-    setDirection(_direction);
-    onDirectionChange?.(_direction);
-  }, [systemConfigTabDirection, showDirectionBtn]);
+    setDirection(preferredDirection);
+    onDirectionChange?.(preferredDirection);
+  }, [preferredDirection, showDirectionBtn]);
 
   useImperativeHandle(ref, () => ({
     setPanelGroupLayout,
