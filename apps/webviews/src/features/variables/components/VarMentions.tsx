@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 import { useMemoizedFn, useSafeState } from "ahooks";
 import cn from "classnames";
 import { isFunction, isObject, isUndefined, map } from "lodash-es";
-import { useShallow } from "zustand/react/shallow";
 
 import { SYSTEM_VARS } from "@/shared/constants/system";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
