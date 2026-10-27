@@ -1,121 +1,74 @@
-.responseResultTabsWrap {
-  overflow-y: hidden;
-}
 .container {
   width: 100%;
   height: 100%;
-  & .responseResultTabsWrap .tabBarExtraContentWrap {
-    margin-left: 6px;
-  }
-  & .responseResultTabsWrap .tabBarExtraContentWrap .selectTrigger {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-    background: transparent;
-    font-size: 12px;
-    padding: 0 4px;
-    padding-left: 6px;
-  }
-}
-.visualizationEmpty {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  white-space: nowrap;
-}
-.segmentedTabsHeader {
-  margin-bottom: 8px;
-}
-.container {
-  & .responseResultTabsWrap .segmentedTabsContent {
-    height: 0;
-    min-height: auto;
-  }
-
-  & .segmentedTabsHeader > .flex {
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  & .responseResultTabsWrap .tabBarExtraContentWrap {
-    display: flex;
-    align-items: center;
-    flex: 0 1 auto;
-    gap: 6px;
-    overflow: visible;
-  }
-  & .tabBarExtraContentWrap .select {
-    min-height: 26px;
-    height: 26px;
-    font-size: 11px;
-  }
-  & [role="tablist"] {
-    border-bottom: 0;
-  }
-  & [role="tab"] {
-    min-height: 28px;
-    padding: 4px 8px;
-    border-bottom: 0;
-    border-radius: 3px;
-    font-size: 11px;
-  }
-  & [role="tab"][data-active] {
-    border-bottom: 0;
-    background: var(--vscode-toolbar-hoverBackground, var(--color-bg-right));
-  }
+  min-width: 0;
+  min-height: 0;
+  padding-top: 8px;
+  font-size: var(--vscode-font-size, 13px);
 }
 .responseResultTabsWrap {
   display: flex;
   flex-direction: column;
+  min-width: 0;
   min-height: 0;
+  overflow: hidden;
+}
+.container .segmentedTabsHeader {
+  flex-shrink: 0;
+  margin-bottom: 8px;
+}
+.container .segmentedTabsHeader > .flex {
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.container .segmentedTabsContent {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 .segmented {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
   padding: 2px;
   border: 1px solid var(--vscode-widget-border, var(--color-border));
-  border-radius: 4px;
+  border-radius: var(--vscode-cornerRadius-small, 4px);
   background: transparent;
 }
-
-.container {
-  min-height: 0;
-  padding-top: 8px;
-  & .responseResultTabsWrap .segmentedTabsHeader {
-    flex-shrink: 0;
-    margin-bottom: 8px;
-    padding-right: 8px;
-  }
-  & .segmentedTabsHeader > .flex {
-    justify-content: space-between;
-    gap: 8px 16px;
-  }
-  & .segmented [role="tablist"] {
-    gap: 2px;
-  }
-  & .segmented [role="tab"] {
-    height: 26px;
-    min-height: 26px;
-    padding: 3px 10px;
-    font-size: 11px;
-    line-height: 18px;
-  }
-  & .responseResultTabsWrap .tabBarExtraContentWrap {
-    margin-left: 0;
-    gap: 6px;
-    align-items: center;
-  }
-  & .tabBarExtraContentWrap .select {
-    min-width: 76px;
-    height: 28px;
-    min-height: 28px;
-    border-radius: 4px;
-    background: transparent;
-  }
-  & .responseResultTabsWrap .segmentedTabsContent {
-    flex: 1;
-    min-height: 0;
-    overflow: hidden;
-  }
+.container .segmented [role="tablist"] {
+  gap: 2px;
+  border: 0;
+}
+.container .segmented [role="tab"] {
+  height: 26px;
+  min-height: 26px;
+  padding: 3px 8px;
+  border: 0;
+  border-radius: 3px;
+  white-space: nowrap;
+  font-size: inherit;
+  line-height: 18px;
+}
+.container .segmented [role="tab"][data-active] {
+  background: var(--vscode-toolbar-hoverBackground, var(--color-bg-right));
+}
+.container .tabBarExtraContentWrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+.container .select {
+  min-width: 70px;
+  height: 28px;
+  min-height: 28px;
+  background: transparent;
+  font-size: inherit;
+}
+.selectTrigger {
+  padding: 0 6px;
 }
 .toolButton {
   display: inline-flex;
@@ -126,20 +79,23 @@
   flex-shrink: 0;
   padding: 0;
   border: 0;
-  border-radius: 4px;
+  border-radius: 3px;
   background: transparent;
   color: var(--vscode-icon-foreground, var(--font-light-color));
-  font-size: 14px;
+  font-size: inherit;
   cursor: pointer;
 }
 .toolButton:hover,
 .toolButton[aria-pressed="true"] {
   background: var(--vscode-toolbar-hoverBackground);
-  color: var(--color-primary);
+  color: var(--vscode-textLink-foreground, var(--color-primary));
 }
-.toolButton {
-  &:focus-visible {
-    outline: 1px solid var(--vscode-focusBorder, var(--color-primary));
-    outline-offset: -1px;
-  }
+.toolButton:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: -1px;
+}
+.visualizationEmpty {
+  display: grid;
+  place-items: center;
+  height: 100%;
 }

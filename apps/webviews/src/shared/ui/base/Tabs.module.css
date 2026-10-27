@@ -13,6 +13,9 @@
   min-width: 0;
 }
 .tabList {
+  min-width: 0;
+  scrollbar-width: thin;
+  overscroll-behavior-x: contain;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -47,6 +50,7 @@
   align-items: center;
 }
 .navWrap {
+  overflow: hidden;
   min-width: 0;
   flex: 1;
 }
@@ -71,4 +75,54 @@
 .tabWithExtra.tabItemActive {
   border-bottom-color: var(--color-primary, #1677ff);
   color: var(--color-primary, #1677ff);
+}
+
+.overflowNavWrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+}
+.overflowList {
+  flex: 1;
+  overflow: hidden;
+  min-height: 36px;
+  position: relative;
+}
+.overflowHidden {
+  position: absolute;
+  left: 0;
+  top: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.overflowMenu {
+  flex-shrink: 0;
+}
+.overflowMenuHidden {
+  position: absolute;
+  right: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.moreTabs {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--vscode-icon-foreground, var(--font-content-color));
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.moreTabs:hover {
+  background: var(--vscode-toolbar-hoverBackground);
+}
+.moreTabs:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: -1px;
 }

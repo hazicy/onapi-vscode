@@ -13,7 +13,11 @@
   transform: matrix(-1, 0, 0, 1, 0, 0);
   width: 189px;
   height: 2px;
-  background: linear-gradient(90deg, var(--color-primary), #ffffff 100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--vscode-progressBar-background, var(--color-primary))
+  );
   animation: animation_56ec475e_lineLoading 2s linear infinite;
 }
 .sendingLoadingContent {
@@ -29,8 +33,15 @@
   z-index: 101;
   color: var(--font-content-color);
   background-color: var(--color-bg-right);
-  opacity: 0.9;
+  font-size: var(--vscode-font-size, 13px);
   & .sendingLoadingContent .sendingLoadingContentText {
-    margin-bottom: 22px;
+    margin-bottom: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sendingLoadingBar {
+    animation: none;
+    width: 100%;
   }
 }

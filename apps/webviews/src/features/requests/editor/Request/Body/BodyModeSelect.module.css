@@ -11,7 +11,7 @@
   padding: 0 6px;
   border-color: transparent;
   background: transparent;
-  font-size: 12px;
+  font-size: var(--vscode-font-size, 13px);
 }
 
 .menu {

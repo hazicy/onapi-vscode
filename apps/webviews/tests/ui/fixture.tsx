@@ -1,3 +1,4 @@
+import RequestPanelFixture from "./RequestPanelFixture";
 import RequestScriptsFixture from "./RequestScriptsFixture";
 import EnvironmentDiffFixture from "./EnvironmentDiffFixture";
 import ResizeFixture from "./ResizeFixture";
@@ -81,7 +82,9 @@ function Fixture() {
 
 createRoot(document.getElementById("root")!).render(
   <SharedComponentsProvider>
-    {new URLSearchParams(location.search).has("requestScripts") ? (
+    {new URLSearchParams(location.search).has("requestPanel") ? (
+      <RequestPanelFixture />
+    ) : new URLSearchParams(location.search).has("requestScripts") ? (
       <RequestScriptsFixture />
     ) : new URLSearchParams(location.search).has("environmentDiff") ? (
       <EnvironmentDiffFixture />

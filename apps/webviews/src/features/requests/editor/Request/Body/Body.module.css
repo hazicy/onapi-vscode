@@ -23,7 +23,7 @@
     gap: 4px;
     align-items: center;
     background: transparent;
-    font-size: 12px;
+    font-size: var(--vscode-font-size, 13px);
     padding: 0 4px;
     padding-left: 6px;
   }

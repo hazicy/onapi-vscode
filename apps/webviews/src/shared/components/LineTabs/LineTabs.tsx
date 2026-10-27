@@ -7,6 +7,7 @@ import { TabPaneProps, Tabs, TabsProps } from "@/shared/ui/base";
 import { map } from "lodash-es";
 
 import HeaderCount from "./HeaderCount";
+import { useTranslation } from "react-i18next";
 
 type LineTabsItems = Omit<TabPaneProps, "tab"> & {
   key: string;
@@ -24,6 +25,7 @@ type Props = TabsProps & {
 };
 
 const LineTabs: FC<Props> = ({ items, wrapStyle, ...resetProps }) => {
+  const { t } = useTranslation();
   const finalItems = useMemo(() => {
     return map(items, (item) => {
       return {
@@ -42,6 +44,8 @@ const LineTabs: FC<Props> = ({ items, wrapStyle, ...resetProps }) => {
   return (
     <div style={{ ...wrapStyle }} className={styles.container}>
       <Tabs
+        overflow
+        overflowLabel={t("request_panel.more_tabs")}
         items={finalItems}
         {...resetProps}
         animated={false}

@@ -401,6 +401,8 @@ export type CollapseProps = DOMProps & {
   })[];
 };
 export type TabsProps = DOMProps & {
+  overflow?: boolean;
+  overflowLabel?: string;
   activeKey?: string;
   defaultActiveKey?: string;
   onChange?: (key: string) => void;

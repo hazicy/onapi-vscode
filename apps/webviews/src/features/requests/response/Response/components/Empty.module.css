@@ -1,23 +1,69 @@
 .container {
+  display: grid;
+  place-items: center;
   height: 100%;
-  &.maskMode {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 10;
-    height: calc(100% - 44px);
-    background-color: var(--color-bg-right);
-  }
-  & .responseEmptyWrap .emptyImage {
-    margin-bottom: 16px;
-  }
-  & .responseEmptyWrap .emptyImage .iconEmptyWrap {
-    font-size: 80px;
-    color: var(--vscode-settings-headerBorder);
-  }
-  & .responseEmptyWrap .emptyDescription {
-    font-size: var(--font-size-12);
-    color: var(--vscode-descriptionForeground, var(--vscode-foreground, #999));
-  }
+  min-width: 0;
+  font-size: var(--vscode-font-size, 13px);
+}
+.maskMode {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  height: calc(100% - 44px);
+  background: var(--vscode-editor-background, var(--color-bg-right));
+}
+.responseEmptyWrap {
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
+  box-sizing: border-box;
+  text-align: center;
+}
+.iconEmptyWrap {
+  font-size: 32px;
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+  opacity: 0.65;
+}
+.emptyDescription {
+  margin: 12px 0;
+  color: var(--vscode-foreground, var(--font-content-color));
+  font-size: inherit;
+}
+.shortcut,
+.hint {
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+  font-size: inherit;
+  line-height: 1.6;
+}
+.shortcut {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.shortcut span {
+  margin-left: 4px;
+}
+.shortcut kbd {
+  padding: 1px 5px;
+  border: 1px solid var(--vscode-keybindingLabel-border, var(--color-border));
+  border-radius: 3px;
+  background: var(--vscode-keybindingLabel-background, transparent);
+  color: var(--vscode-keybindingLabel-foreground, inherit);
+  font: inherit;
+}
+.errorIcon {
+  color: var(--vscode-errorForeground, var(--color-error));
+  opacity: 1;
+}
+.errorMessage {
+  max-height: 140px;
+  overflow: auto;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  color: var(--vscode-errorForeground, var(--color-error));
+  font-family: var(--vscode-editor-font-family, monospace);
 }

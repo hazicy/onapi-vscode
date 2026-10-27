@@ -255,7 +255,11 @@ const Response: FC<Props> = memo((props) => {
 
         {!isNotEmpty && (
           <Empty
-            wrapClassName={showError ? undefined : undefined}
+            errorMessage={
+              sendingData?.sendStatus === "sendError"
+                ? sendingData.message || t("request_panel.failed")
+                : undefined
+            }
             maskMode
             descriptionClassName={styles.emptyDescription}
           />

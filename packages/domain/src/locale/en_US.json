@@ -3217,5 +3217,14 @@
     "508": "Infinite operation loop detected (WebDAV).",
     "510": "Requires protocol extensions not implemented by server.",
     "511": "Client must authenticate for network access (e.g., captive portal)."
+  },
+  "request_panel": {
+    "more": "More actions",
+    "encoding": "Response encoding",
+    "send_hint": "Send a request to see the response",
+    "shortcut_hint": "Send request",
+    "failed": "Request failed",
+    "details": "Check the URL, network connection, and request settings.",
+    "more_tabs": "More tabs"
   }
 }

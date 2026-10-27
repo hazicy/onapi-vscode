@@ -40,7 +40,7 @@ const Sending: React.FC<SendingProps> = ({
       <div className={styles.sendingLoadingBar} />
       {!onlySendingLoadingBar && (
         <div className={styles.sendingLoadingContent}>
-          <div className={styles.sendingLoadingContentText}>
+          <div className={styles.sendingLoadingContentText} aria-live="polite">
             {t("supplement.sending")}
           </div>
           {hasCancel && (

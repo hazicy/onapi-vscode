@@ -81,7 +81,7 @@
   color: var(--color-warning);
 }
 .container .selectSelectionItem {
-  font-size: 12px !important;
+  font-size: var(--vscode-font-size, 13px) !important;
 }
 .container .envDesc {
   overflow: hidden;
@@ -245,7 +245,7 @@
 }
 
 .methodDropdown {
-  font-size: 12px;
+  font-size: var(--vscode-font-size, 13px);
 }
 .methodDropdown .selectItem {
   display: flex;

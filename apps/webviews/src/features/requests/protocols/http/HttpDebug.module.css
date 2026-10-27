@@ -1,38 +1,64 @@
 .container {
   padding: 0 16px 12px;
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
-}
-.container .textBtnHighlight {
-  color: var(--color-primary) !important;
-}
-.container .textBtnHighlight:hover {
-  color: var(--color-primary) !important;
-}
-
-.container {
-  padding: 0 16px 12px;
+  min-width: 0;
   min-height: 0;
+  container-type: inline-size;
 }
 .container .textBtnHighlight {
-  color: var(
-    --vscode-descriptionForeground,
-    var(--font-light-color)
-  ) !important;
-  font-size: 11px;
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+  font-size: inherit;
 }
 .container .textBtnHighlight:hover {
-  color: var(--color-primary) !important;
+  color: var(--vscode-textLink-foreground, var(--color-primary));
   background: var(--vscode-toolbar-hoverBackground);
 }
 .container [role="tablist"] {
   border-bottom: 1px solid var(--vscode-widget-border, var(--color-border));
 }
 .container [role="tab"] {
-  padding: 9px 10px;
-  font-size: 12px;
+  padding: 8px 10px;
+  font-size: inherit;
 }
 .container [role="tab"][data-active] {
   color: var(--vscode-foreground, var(--font-title-color));
   font-weight: 600;
+}
+.actions {
+  flex-shrink: 0;
+}
+.primaryActions {
+  display: flex;
+  align-items: center;
+}
+.compactActions {
+  display: none;
+}
+.moreButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 3px;
+  color: var(--vscode-icon-foreground, inherit);
+  background: transparent;
+  cursor: pointer;
+}
+.moreButton:hover {
+  background: var(--vscode-toolbar-hoverBackground);
+}
+.moreButton:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder);
+}
+@container (max-width: 760px) {
+  .primaryActions {
+    display: none;
+  }
+  .compactActions {
+    display: block;
+  }
 }

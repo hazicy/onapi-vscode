@@ -60,7 +60,7 @@
 }
 .customProxy {
   & .desc {
-    font-size: 12px;
+    font-size: var(--vscode-font-size, 13px);
     color: var(--font-pale-color);
   }
   & .desc > span {
@@ -74,7 +74,7 @@
     text-align: right;
   }
   & .name {
-    font-size: 12px;
+    font-size: var(--vscode-font-size, 13px);
     color: var(--font-title-color);
   }
   & .iconWrapper {
@@ -93,11 +93,11 @@
 }
 .customCodePopover {
   & .desc {
-    font-size: 12px;
+    font-size: var(--vscode-font-size, 13px);
     color: var(--font-pale-color);
   }
   & .name {
-    font-size: 12px;
+    font-size: var(--vscode-font-size, 13px);
     color: var(--font-title-color);
   }
   & .iconCode {
@@ -121,11 +121,11 @@
 }
 .customSizePopover {
   & .desc {
-    font-size: 12px;
+    font-size: var(--vscode-font-size, 13px);
     color: var(--font-pale-color);
   }
   & .name {
-    font-size: 12px;
+    font-size: var(--vscode-font-size, 13px);
     color: var(--font-title-color);
   }
   & .iconWrapper {
@@ -167,7 +167,7 @@
   flex-wrap: wrap;
   gap: 8px;
   padding: 2px 0;
-  font-size: 11px;
+  font-size: var(--vscode-font-size, 13px);
   line-height: 20px;
   font-variant-numeric: tabular-nums;
   color: var(--vscode-descriptionForeground, var(--font-light-color));

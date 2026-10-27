@@ -10,7 +10,13 @@ import {
 } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Flex, SegmentedProps, Select, message } from "@/shared/ui/base";
+import {
+  Flex,
+  Popover,
+  SegmentedProps,
+  Select,
+  message,
+} from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
 import { find, forEach, isArray, isPlainObject, map } from "lodash-es";
@@ -163,12 +169,13 @@ const ResponseResult = forwardRef((props: Props, ref) => {
   };
 
   const handleCopy = () => {
-    if (!rawHtml) {
+    const content = parsedRawHtml || rawHtml;
+    if (!content) {
       message.error(t("supplement.clipboard_error"));
       return;
     }
 
-    copyStringToClipboard(rawHtml, () =>
+    copyStringToClipboard(content, () =>
       message.success(t("supplement.clipboard_success")),
     );
   };
@@ -189,7 +196,7 @@ const ResponseResult = forwardRef((props: Props, ref) => {
             gap={8}
           >
             <Select
-              // style={{ width: 110 }}
+              aria-label="Response format"
               options={RESPONSE_TYPE.map(({ label, ext }) => ({
                 label,
                 value: ext,
@@ -209,17 +216,31 @@ const ResponseResult = forwardRef((props: Props, ref) => {
               className={styles.select}
               triggerClassName={styles.selectTrigger}
             />
-            <Select
-              // style={{ width: 110 }}
-              options={Object.keys(RAW_ENCODE).map((key: string) => ({
-                label: key,
-                value: RAW_ENCODE[key],
-              }))}
-              value={rawEncode || "utf8"}
-              onChange={(newVal: string) => setRawEncode(newVal)}
-              className={styles.select}
-              triggerClassName={styles.selectTrigger}
-            />
+            <Popover
+              trigger="click"
+              placement="bottomRight"
+              title={t("request_panel.encoding")}
+              content={
+                <Select
+                  aria-label={t("request_panel.encoding")}
+                  options={Object.keys(RAW_ENCODE).map((key: string) => ({
+                    label: key,
+                    value: RAW_ENCODE[key],
+                  }))}
+                  value={rawEncode || "utf8"}
+                  onChange={(newVal: string) => setRawEncode(newVal)}
+                />
+              }
+            >
+              <button
+                type="button"
+                className={styles.toolButton}
+                aria-label={t("request_panel.encoding")}
+                title={`${t("request_panel.encoding")}: ${rawEncode}`}
+              >
+                <AppIcon icon="sliders-horizontal" />
+              </button>
+            </Popover>
             <button
               type="button"
               className={styles.toolButton}

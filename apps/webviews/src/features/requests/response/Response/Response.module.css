@@ -5,6 +5,7 @@
 
 .container {
   position: relative;
+  box-sizing: border-box;
   padding: 0 var(--padding16);
   width: 100%;
   height: 100%;
@@ -17,7 +18,7 @@
 }
 .emptyDescription {
   color: var(--vscode-descriptionForeground, var(--font-light-color));
-  font-size: 12px;
+  font-size: var(--vscode-font-size, 13px);
 }
 
 .container {
@@ -28,7 +29,7 @@
   }
   & [role="tab"] {
     padding: 9px 10px;
-    font-size: 12px;
+    font-size: var(--vscode-font-size, 13px);
   }
   & [role="tab"][data-active] {
     color: var(--vscode-foreground, var(--font-title-color));

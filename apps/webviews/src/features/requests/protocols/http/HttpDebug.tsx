@@ -1,7 +1,8 @@
 import styles from "./HttpDebug.module.css";
 import { FC, lazy, useMemo, useState } from "react";
 import { useSafeState } from "ahooks";
-import { Flex } from "@/shared/ui/base";
+import { Dropdown, Flex } from "@/shared/ui/base";
+import AppIcon from "@/shared/ui/AppIcon";
 import { produce } from "immer";
 import { DirectionType } from "@onapi/domain/types/common";
 import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
@@ -75,28 +76,58 @@ const ApiDebug: FC<ApiComponentType> = ({ apisData, onApisDataChange }) => {
 
   const tabBarExtraContent = useMemo(() => {
     return (
-      <Flex align="center">
-        <Button
-          onClick={handleToCode}
-          type="text"
-          mode="light"
-          size="small"
-          style={{ padding: "4px 6px" }}
-          className={styles.textBtnHighlight}
-        >
-          {t("system_settings.shortcuts.apis_detail.code")}
-        </Button>
-        <Button
-          onClick={handleToGlobalParams}
-          type="text"
-          mode="light"
-          size="small"
-          style={{ padding: "4px 6px" }}
-          className={styles.textBtnHighlight}
-        >
-          {t("global_setting.global_title")}{" "}
-          {requestTabActiveKey === "Path" ? "Para" : requestTabActiveKey}
-        </Button>
+      <Flex align="center" className={styles.actions}>
+        <div className={styles.primaryActions}>
+          <Button
+            onClick={handleToCode}
+            type="text"
+            mode="light"
+            size="small"
+            style={{ padding: "4px 6px" }}
+            className={styles.textBtnHighlight}
+          >
+            {t("system_settings.shortcuts.apis_detail.code")}
+          </Button>
+          <Button
+            onClick={handleToGlobalParams}
+            type="text"
+            mode="light"
+            size="small"
+            style={{ padding: "4px 6px" }}
+            className={styles.textBtnHighlight}
+          >
+            {t("global_setting.global_title")}{" "}
+            {requestTabActiveKey === "Path" ? "Para" : requestTabActiveKey}
+          </Button>
+        </div>
+        <div className={styles.compactActions}>
+          <Dropdown
+            trigger={["click"]}
+            menu={{
+              items: [
+                {
+                  key: "code",
+                  label: t("system_settings.shortcuts.apis_detail.code"),
+                  onClick: handleToCode,
+                },
+                {
+                  key: "global",
+                  label: `${t("global_setting.global_title")} ${requestTabActiveKey === "Path" ? "Para" : requestTabActiveKey}`,
+                  onClick: handleToGlobalParams,
+                },
+              ],
+            }}
+          >
+            <button
+              type="button"
+              className={styles.moreButton}
+              aria-label={t("request_panel.more")}
+              title={t("request_panel.more")}
+            >
+              <AppIcon icon="ellipsis" />
+            </button>
+          </Dropdown>
+        </div>
       </Flex>
     );
   }, [requestTabActiveKey]);

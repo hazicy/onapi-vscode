@@ -102,7 +102,7 @@ const Header: FC<ApiComponentType> = ({ apisData, onApisDataChange, type }) => {
             type="button"
             className={styles.sendButton}
             aria-label={t(isSending ? "api.run.sending" : "api.run.send")}
-            title={t(isSending ? "api.run.sending" : "api.run.send")}
+            title={`${t(isSending ? "api.run.sending" : "api.run.send")} (Ctrl/Cmd+Enter)`}
             onClick={() => handleSend()}
             disabled={isSending}
           >
@@ -111,6 +111,9 @@ const Header: FC<ApiComponentType> = ({ apisData, onApisDataChange, type }) => {
               width={18}
               className={isSending ? styles.spinning : undefined}
             />
+            <span className={styles.sendLabel}>
+              {t(isSending ? "api.run.sending" : "api.run.send")}
+            </span>
           </button>
         }
       />
