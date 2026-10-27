@@ -4,7 +4,6 @@ import {
   updateAuthValues,
 } from "@/features/requests/components/Request/Auth/authState";
 import { message } from "@/shared/ui/base";
-import { produce } from "immer";
 import { cloneDeep, isPlainObject, isString, setWith } from "lodash";
 import { useTranslation } from "react-i18next";
 
