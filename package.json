@@ -41,7 +41,6 @@
     "@types/file-saver": "^2.0.7",
     "@types/jsonpath": "^0.2.4",
     "@types/lodash": "^4.17.27",
-    "@types/mocha": "^10.0.10",
     "@types/node": "~26.6.5",
     "@types/postman-collection": "^3.5.11",
     "@types/qs": "^6.15.1",
@@ -55,7 +54,6 @@
     "@vscode/test-electron": "^3.1.0",
     "@vscode/vsce": "^4.0.0",
     "ajv": "^8.20.0",
-    "concurrently": "^10.0.6",
     "curl-to-postmanv2": "^1.8.7",
     "esbuild": "^0.28.2",
     "i18next": "^26.5.10",
@@ -74,7 +72,6 @@
     "typescript": "^7.0.2",
     "vite": "^8.3.5",
     "vite-plugin-node-polyfills": "^0.28.0",
-    "vite-plugin-static-copy": "^4.1.1",
     "vite-plugin-svgr": "^5.2.0"
   },
   "engines": {
