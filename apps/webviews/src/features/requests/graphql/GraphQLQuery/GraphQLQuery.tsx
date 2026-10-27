@@ -1,16 +1,14 @@
+import type { HttpEditorRecord } from "@onapi/domain/requests/record";
 import { useMemoizedFn } from "ahooks";
-import type {
-  GraphQLChangeFuncType,
-  GraphQLDetailsData,
-} from "@onapi/domain/requests/types/graphql";
+import { GraphQLChangeFuncType } from "@onapi/domain/requests/types/graphql";
 import GraphQLQueryContext from "./context/GraphQLQueryContext";
 import GraphQLQueryEditor from "./GraphQLQueryEditor";
 
 interface Props {
-  requestData: GraphQLDetailsData["request"];
-  apiData: GraphQLDetailsData;
+  requestData: HttpEditorRecord["request"];
+  apiData: HttpEditorRecord;
   id: string;
-  onChange: GraphQLChangeFuncType<GraphQLDetailsData>;
+  onChange: GraphQLChangeFuncType<HttpEditorRecord>;
 }
 
 export default function GraphQLQuery({

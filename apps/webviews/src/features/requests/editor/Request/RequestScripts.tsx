@@ -1,4 +1,7 @@
-import type { EventDefinition, ScriptDefinition } from "postman-collection";
+import type {
+  HttpEditorEvent,
+  HttpEditorScript,
+} from "@onapi/domain/requests/record";
 import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 import { useState } from "react";
 import { Collapse, Popconfirm } from "@/shared/ui/base";
@@ -13,11 +16,11 @@ export default function RequestScripts({
   onChange,
 }: {
   listen: string;
-  events: EventDefinition[];
-  onChange: (events: EventDefinition[]) => void;
+  events: HttpEditorEvent[];
+  onChange: (events: HttpEditorEvent[]) => void;
 }) {
   const selected = events.filter((event) => event.listen === listen);
-  const update = (index: number, event: EventDefinition) => {
+  const update = (index: number, event: HttpEditorEvent) => {
     const next = [...events];
     next[events.indexOf(selected[index])] = event;
     onChange(next);
@@ -91,8 +94,8 @@ function ScriptEditor({
   event,
   onChange,
 }: {
-  event: EventDefinition;
-  onChange: (event: EventDefinition) => void;
+  event: HttpEditorEvent;
+  onChange: (event: HttpEditorEvent) => void;
 }) {
   const script = scriptDefinition(event);
   const exec = script.exec;
@@ -114,7 +117,7 @@ function ScriptEditor({
   );
 }
 
-function scriptDefinition(event: EventDefinition): ScriptDefinition {
+function scriptDefinition(event: HttpEditorEvent): HttpEditorScript {
   const script = event.script;
   return typeof script === "string"
     ? { exec: [script] }

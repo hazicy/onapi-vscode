@@ -1,17 +1,15 @@
+import type { HttpEditorRecord } from "@onapi/domain/requests/record";
 import { createContext } from "react";
 
-import {
-  GraphQLChangeFuncType,
-  GraphQLDetailsData,
-} from "@onapi/domain/requests/types/graphql";
+import { GraphQLChangeFuncType } from "@onapi/domain/requests/types/graphql";
 
 type Props = {
-  apiData: GraphQLDetailsData;
-  onChange: GraphQLChangeFuncType<GraphQLDetailsData>;
+  apiData: HttpEditorRecord;
+  onChange: GraphQLChangeFuncType<HttpEditorRecord>;
 };
 
 const GraphQLQueryContext = createContext<Props>({
-  apiData: {} as GraphQLDetailsData,
+  apiData: {} as HttpEditorRecord,
   onChange: function () {},
 });
 

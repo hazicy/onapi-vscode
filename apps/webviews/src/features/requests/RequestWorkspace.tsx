@@ -1,3 +1,7 @@
+import {
+  editorRecordSchema,
+  type EditorRecord,
+} from "@onapi/domain/requests/record";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import styles from "./RequestWorkspace.module.css";
 import { Flex } from "@/shared/ui/base";
@@ -138,12 +142,10 @@ function RequestWorkspaceReady() {
 }
 
 const RequestWorkspace: React.FC<RequestWorkspaceProps> = () => {
-  const apisActiveData: Partial<ApisData> = useApis(
-    (store) => store.apisActiveData,
-  );
+  const apisActiveData: EditorRecord = useApis((store) => store.apisActiveData);
   const updateApisActiveData = useApis((store) => store.updateApisActiveData);
 
-  const onApisDataChange = (newData: ApisData) => {
+  const onApisDataChange = (newData: EditorRecord) => {
     sendRequestPanelMessage({
       action: "updateApiActiveData",
       data: newData,
@@ -155,7 +157,7 @@ const RequestWorkspace: React.FC<RequestWorkspaceProps> = () => {
     if (apisActiveData.kind === "api") {
       return (
         <ApiDebug
-          apisData={apisActiveData as ApiDetailsData}
+          apisData={apisActiveData}
           onApisDataChange={onApisDataChange}
         />
       );
@@ -163,7 +165,7 @@ const RequestWorkspace: React.FC<RequestWorkspaceProps> = () => {
     if (apisActiveData.kind === "sse") {
       return (
         <SseDebug
-          apisData={apisActiveData as ApiDetailsData}
+          apisData={apisActiveData}
           onApisDataChange={onApisDataChange}
         />
       );
@@ -171,8 +173,10 @@ const RequestWorkspace: React.FC<RequestWorkspaceProps> = () => {
     if (apisActiveData.kind === APIS_TARGET_TYPE_ENUM.FOLDER) {
       return (
         <Folder
-          apisData={apisActiveData as ApiDetailsData}
-          onApisDataChange={onApisDataChange}
+          apisData={apisActiveData as unknown as ApiDetailsData}
+          onApisDataChange={(value) =>
+            onApisDataChange(editorRecordSchema.parse(value))
+          }
         />
       );
     }
@@ -181,7 +185,7 @@ const RequestWorkspace: React.FC<RequestWorkspaceProps> = () => {
         <WebSocketDebug
           apisData={apisActiveData as WebSocketDetailsData}
           onApisDataChange={(val) => {
-            onApisDataChange(val as unknown as ApiDetailsData);
+            onApisDataChange(editorRecordSchema.parse(val));
           }}
         />
       );
@@ -191,7 +195,7 @@ const RequestWorkspace: React.FC<RequestWorkspaceProps> = () => {
         <SocketioDebug
           apisData={apisActiveData as SocketIoDetailsData}
           onApisDataChange={(val) => {
-            onApisDataChange(val as unknown as ApiDetailsData);
+            onApisDataChange(editorRecordSchema.parse(val));
           }}
         />
       );
@@ -199,10 +203,8 @@ const RequestWorkspace: React.FC<RequestWorkspaceProps> = () => {
     if (apisActiveData.kind === "graphql") {
       return (
         <GraphqlDebug
-          apisData={apisActiveData as GraphQLDetailsData}
-          onApisDataChange={(val) => {
-            onApisDataChange(val as unknown as ApiDetailsData);
-          }}
+          apisData={apisActiveData}
+          onApisDataChange={onApisDataChange}
         />
       );
     }

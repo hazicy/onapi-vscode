@@ -14,7 +14,10 @@ export default function FormData(props: RequestBodyProps) {
         props.onChange("body", {
           ...props.value,
           mode: "formdata",
-          formdata: rows,
+          formdata: rows.map((entry) => ({
+            ...entry,
+            value: entry.value ?? undefined,
+          })),
         })
       }
       columnSwitchConfig={columnSwitchConfig}

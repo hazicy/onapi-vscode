@@ -4,7 +4,7 @@ type VersionedApi = {
   id: string;
   kind: string;
   parentId: string;
-  version: number;
+  version?: number;
 };
 
 const conflictTypes = new Set([
@@ -32,7 +32,7 @@ export const findApiConflicts = <T extends VersionedApi>(
   return selected
     .filter((item) => {
       const recorded = recordedVersions[item.id];
-      const baseline = isNumber(recorded) ? recorded : item.version;
+      const baseline = isNumber(recorded) ? recorded : (item.version ?? 0);
       const cloudVersion = cloudVersions.get(item.id);
       return (
         conflictTypes.has(item.kind) &&

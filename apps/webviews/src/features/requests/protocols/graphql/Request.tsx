@@ -1,3 +1,7 @@
+import type {
+  HttpEditorProps,
+  HttpEditorRecord,
+} from "@onapi/domain/requests/record";
 import styles from "./Request.module.css";
 import { memo, ReactNode } from "react";
 
@@ -7,16 +11,12 @@ import GraphQLQuery from "@/features/requests/graphql/GraphQLQuery/GraphQLQuery"
 
 import context from "@/shared/components/RawEditor/visualizationContext";
 import RequestPanel from "@/features/requests/editor/Request/Request";
-import {
-  ApiComponentType,
-  GraphQLChangeFuncType,
-  GraphQLDetailsData,
-} from "@onapi/domain/requests/types/graphql";
+import { GraphQLChangeFuncType } from "@onapi/domain/requests/types/graphql";
 import { DirectionType } from "@onapi/domain/types/common";
 
 const Request = memo(
   (
-    props: ApiComponentType & {
+    props: HttpEditorProps & {
       direction: DirectionType;
       tabBarExtraContent?: ReactNode;
     },
@@ -24,11 +24,11 @@ const Request = memo(
     const { direction, apisData, onApisDataChange, tabBarExtraContent } = props;
     const { Provider } = context;
 
-    const handleOnChange: GraphQLChangeFuncType<GraphQLDetailsData> =
+    const handleOnChange: GraphQLChangeFuncType<HttpEditorRecord> =
       useMemoizedFn(
-        <K extends keyof GraphQLDetailsData>(
+        <K extends keyof HttpEditorRecord>(
           key: K,
-          data: GraphQLDetailsData[K],
+          data: HttpEditorRecord[K],
           search_id?: string,
         ) => {
           const newData = {

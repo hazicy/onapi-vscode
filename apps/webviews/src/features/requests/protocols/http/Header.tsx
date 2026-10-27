@@ -1,10 +1,11 @@
+import type { HttpEditorProps } from "@onapi/domain/requests/record";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import {
   beginRequest,
   cancelRequest,
 } from "@/features/requests/utils/requestExecution";
 import { requestUrl, requestMethod, editedUrl } from "@onapi/domain";
-import { ApiComponentType } from "@onapi/domain/requests/types/api";
+
 import { AnyObject } from "@onapi/domain/types/common";
 import { produce } from "immer";
 import React, { FC, useMemo, useState } from "react";
@@ -24,7 +25,7 @@ import styles from "./Header.module.css";
 
 import { CurlDataType } from "@/features/requests/types/other";
 
-const Header: FC<ApiComponentType> = ({ apisData, onApisDataChange, type }) => {
+const Header: FC<HttpEditorProps> = ({ apisData, onApisDataChange, type }) => {
   const { t } = useTranslation();
   const currentSendingData = useApis((store) => store.currentSendingData);
 

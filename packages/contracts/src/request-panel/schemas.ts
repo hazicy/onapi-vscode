@@ -1,11 +1,12 @@
 import * as z from "zod";
 
-/** Keep extension data at runtime; expose only declared fields to callers. */
-export function extensibleObject<Shape extends z.ZodRawShape>(
-  shape: Shape,
-): z.ZodType<z.output<z.ZodObject<Shape>>, z.input<z.ZodObject<Shape>>> {
-  return z.looseObject(shape);
-}
+export { extensibleObject } from "@onapi/domain/schemas/object";
+import { extensibleObject } from "@onapi/domain/schemas/object";
+import {
+  httpEditorRecordSchema,
+  editorRecordSchema,
+  recordIdentityFields,
+} from "@onapi/domain/requests/record";
 
 export const id = z
   .string()
@@ -15,62 +16,13 @@ export const dictionary = z.record(z.string(), z.unknown());
 // SDK and editor extensions must survive round trips, including auth, scripts,
 // examples and protocol-specific metadata. Only the message envelope is strict.
 export const sdkObject = z.record(z.string(), z.unknown());
-const sdkUrl = extensibleObject({
-  protocol: z.string().optional(),
-  host: z.union([z.string(), z.array(z.string())]).optional(),
-  path: z.union([z.string(), z.array(z.string())]).optional(),
-  port: z.string().optional(),
-});
 export const socketParameter = extensibleObject({
   key: z.string().optional(),
   value: z.unknown().optional(),
 });
-export const itemFields = {
-  id,
-  parentId: z.string(),
-  name: z.string(),
-};
-const httpFields = {
-  ...itemFields,
-  kind: z.enum(["api", "graphql", "sse"]),
-  request: extensibleObject({
-    method: z.string().min(1).optional(),
-    // Drafts and variable expressions are valid; URL resolution belongs to runtime.
-    url: z.union([z.string(), sdkUrl]),
-  }),
-};
-export const httpPanelDefinitionSchema = extensibleObject(httpFields);
-export const panelDefinitionSchema = extensibleObject({
-  ...itemFields,
-  kind: z.enum([
-    "api",
-    "graphql",
-    "sse",
-    "folder",
-    "websocket",
-    "socketio",
-    "doc",
-    "grpc",
-    "sample",
-    "sample_group",
-    "socket",
-    "socket_method",
-    "socket_service",
-  ]),
-}).superRefine((value, ctx) => {
-  if (["api", "graphql", "sse"].includes(value.kind)) {
-    const result = httpPanelDefinitionSchema.safeParse(value);
-    if (!result.success) {
-      for (const issue of result.error.issues) {
-        ctx.addIssue({
-          code: "custom",
-          path: issue.path,
-          message: issue.message,
-        });
-      }
-    }
-  }
-});
+export const itemFields = recordIdentityFields;
+export const httpPanelDefinitionSchema = httpEditorRecordSchema;
+export const panelDefinitionSchema = editorRecordSchema;
 export type PanelDefinition = z.infer<typeof panelDefinitionSchema>;
 
 export const panelErrorSchema = extensibleObject({

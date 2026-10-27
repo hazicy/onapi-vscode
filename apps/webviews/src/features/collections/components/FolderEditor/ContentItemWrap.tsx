@@ -1,3 +1,4 @@
+import { editorRecordSchema } from "@onapi/domain/requests/record";
 import { FC, FunctionComponent, memo } from "react";
 
 import { useMemoizedFn } from "ahooks";
@@ -22,7 +23,7 @@ const ContentItemWrap: FC<Props> = memo((props) => {
   const { apisData } = props;
 
   const onApisDataChange = useMemoizedFn((data: ApiDetailsData) => {
-    useApis.getState().updateApisActiveData(data);
+    useApis.getState().updateApisActiveData(editorRecordSchema.parse(data));
   });
 
   return (

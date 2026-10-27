@@ -2,7 +2,7 @@ import { useMemo } from "react";
 
 import { cloneDeep, forEach, includes, some } from "lodash-es";
 
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
+import type { EditorRecord as ApiDetailsData } from "@onapi/domain/requests/record";
 import { TreeDataFilterParams } from "@/features/collections/types/tree";
 import { ShareInfoData } from "@onapi/domain/sharing/types/share";
 

@@ -1,3 +1,7 @@
+import type {
+  HttpEditorProps,
+  HttpEditorRecord,
+} from "@onapi/domain/requests/record";
 import styles from "./Response.module.css";
 import { memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -7,14 +11,10 @@ import { produce } from "immer";
 
 import ResponsePanel from "@/features/requests/response/Response/Response";
 import useApis from "@/features/requests/store/useApis";
-import {
-  ApiComponentType,
-  ApiDetailsData,
-} from "@onapi/domain/requests/types/api";
 
 import Realtime from "./components/Realtime";
 
-const Response = memo((props: ApiComponentType) => {
+const Response = memo((props: HttpEditorProps) => {
   const { apisData, onApisDataChange } = props;
   const { t } = useTranslation();
 
@@ -35,7 +35,7 @@ const Response = memo((props: ApiComponentType) => {
     },
   ];
 
-  const handleOnChange = useMemoizedFn((data: ApiDetailsData["response"]) => {
+  const handleOnChange = useMemoizedFn((data: HttpEditorRecord["response"]) => {
     const newData = produce(apisData, (draft) => {
       draft.response = data;
     });

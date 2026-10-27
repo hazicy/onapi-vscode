@@ -491,11 +491,11 @@ export const convertToSaveFolderTree = (data: { [k: string]: any }) => {
 };
 
 // Get all parent directories
-export const getAllParentDirectories = (
-  jsonData: { [k: string]: ApisBaseData },
+export const getAllParentDirectories = <T extends { parentId: string }>(
+  jsonData: { [k: string]: T },
   targetId: string,
 ) => {
-  const allParents: ApisBaseData[] = [];
+  const allParents: T[] = [];
 
   function getParent(directoryId: string) {
     const directory = jsonData[directoryId];

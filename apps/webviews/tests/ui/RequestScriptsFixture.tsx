@@ -1,10 +1,10 @@
 import { useState } from "react";
-import type { EventDefinition } from "postman-collection";
+import type { HttpEditorEvent } from "@onapi/domain/requests/record";
 import RequestScripts from "@/features/requests/editor/Request/RequestScripts";
 import LineTabs from "@/shared/components/LineTabs/LineTabs";
 
 export default function RequestScriptsFixture() {
-  const [events, setEvents] = useState<EventDefinition[]>([
+  const [events, setEvents] = useState<HttpEditorEvent[]>([
     {
       id: "pre",
       listen: "prerequest",

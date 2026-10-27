@@ -245,10 +245,33 @@ export async function getResolvedCodeRequest(
         values.map((value) => new sdk.Variable(value)),
       ),
   );
-  const request = new sdk.Request(
-    sdk.Property.replaceSubstitutionsIn(data.request, variables, false),
+  const resolved = sdk.Property.replaceSubstitutionsIn(
+    data.request,
+    variables,
+    false,
   );
-  return request;
+  const { auth } = resolved;
+  const authType = auth?.type;
+  // The SDK supports extension auth types that its published TS definitions omit.
+  // Its string-based use() API accepts those types without widening our model.
+  if (authType === "jwt" || authType === "asap") {
+    const request = new sdk.Request({
+      ...resolved,
+      auth: { ...auth, type: undefined },
+    });
+    request.auth?.use(
+      authType,
+      new sdk.VariableList(
+        new sdk.Property({}),
+        (auth?.[authType] || []).map((value) => new sdk.Variable(value)),
+      ),
+    );
+    return request;
+  }
+  return new sdk.Request({
+    ...resolved,
+    auth: auth ? { ...auth, type: authType } : undefined,
+  });
 }
 
 export async function getCodeHarRequest(

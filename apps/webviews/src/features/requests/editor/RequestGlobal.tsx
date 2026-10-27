@@ -1,3 +1,4 @@
+import { httpEventSchema } from "@onapi/domain/requests/record";
 import LineTabs from "@/shared/components/LineTabs/LineTabs";
 import { HttpParameterTable } from "@/shared/components/RequestTable/RequestTable";
 import RequestAuth from "./Request/Auth/Auth";
@@ -49,7 +50,7 @@ export default function RequestGlobal<T extends CollectionSettings>(props: {
           children: (
             <RequestScripts
               listen={listen}
-              events={item.event || []}
+              events={httpEventSchema.array().parse(item.event || [])}
               onChange={(event) => change({ ...item, event })}
             />
           ),

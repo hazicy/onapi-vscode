@@ -14,8 +14,9 @@ Webview transport in
 [bridge/request-panel.ts](../apps/webviews/src/shared/bridge/request-panel.ts),
 and business dispatch in
 [request-panel-handler.ts](../apps/extension/src/features/requests/request-panel-handler.ts).
-Existing editor model adaptation lives in
-[adapters/editor-record.ts](../apps/webviews/src/features/requests/adapters/editor-record.ts).
+HTTP, GraphQL and SSE records are defined in the domain
+[record.ts](../packages/domain/src/requests/record.ts). Contracts reuse that schema,
+and the editor store consumes its inferred types directly, without a cast adapter.
 
 ## Boundaries
 
@@ -42,9 +43,13 @@ variable expressions. Schemas do not resolve variables or enforce URL reachabili
 The `extensibleObject` helper preserves extra fields at runtime and exposes
 only declared fields in the schema's input and output types. Senders use
 `z.input<typeof schema>` directly; no recursive input-type mapping is needed.
-Transport records validate identity and executable request fields; existing
-editor metadata types are adapted at the UI boundary, without filling defaults
-or converting user data. Remote response bodies remain opaque payloads.
+HTTP records validate native URLs, headers, authentication attributes, bodies,
+scripts and response examples. Optional metadata remains optional; validation
+does not fill defaults or change user data. Bootstrap data is validated before
+hydration, and invalid initial records display an error instead of mounting an
+invalid editor. Other protocols retain their existing feature models and use
+identity/metadata validation at this boundary. Remote response bodies remain
+opaque payloads.
 
 When adding a command, update the shared schema and handler, then call the typed
 sender. Add a response schema for new replies and validate it in the listener.

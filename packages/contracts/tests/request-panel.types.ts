@@ -12,7 +12,11 @@ interface EditorRequest {
   parentId: string;
   name: string;
   kind: "api";
-  request: { method: string; url: { host: string[] }; body: { raw: string } };
+  request: {
+    method: string;
+    url: { host: string[] };
+    body: { mode: string; raw: string };
+  };
   editorExtension: { enabled: boolean };
 }
 declare const editorRequest: EditorRequest;
@@ -36,4 +40,22 @@ export function checkRequestPanelTypes() {
   send({ action: "getApiList", typo: true });
   // @ts-expect-error Successful code generation needs the complete result.
   reply({ action: "generatedCode", data: { requestId: "one", code: "curl" } });
+}
+
+import { httpEditorRecordSchema } from "@onapi/domain/requests/record";
+import type { HttpEditorProps } from "@onapi/domain/requests/record";
+
+export function checkParsedEditorRecord(value: unknown) {
+  const record = httpEditorRecordSchema.parse(value);
+  const props: HttpEditorProps = { apisData: record, onApisDataChange() {} };
+  send({ action: "saveApiData", data: record });
+  reply({
+    action: "requestSaved",
+    data: { definition: record, submitted: record },
+  });
+  // @ts-expect-error HTTP editor records expose typed native fields.
+  record.request.method = 42;
+  // @ts-expect-error Required native URL cannot disappear after parsing.
+  record.request = {};
+  return props;
 }

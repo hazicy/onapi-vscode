@@ -1,7 +1,8 @@
+import type { HttpEditorRecord } from "@onapi/domain/requests/record";
 import { TabsProps } from "@/shared/ui/base";
 
 import { ApisBaseDataItem } from "@onapi/domain/requests/types/base";
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
+
 import { GlobalParamsHeaderItem } from "@onapi/domain/project/types/index";
 
 export type RequestTabsItemProps = {
@@ -12,11 +13,9 @@ export type RequestTabsItemProps = {
 };
 
 export interface RequestProps {
-  apiData: import("@onapi/domain/requests/types/api").ApiDetailsData;
+  apiData: HttpEditorRecord;
   requestData: import("@onapi/domain").HttpRequest;
-  onItemChange: (
-    item: import("@onapi/domain/requests/types/api").ApiDetailsData,
-  ) => void;
+  onItemChange: (item: HttpEditorRecord) => void;
   onRequestDataChange: (request: import("@onapi/domain").HttpRequest) => void;
   includesTabs?: string[];
   extra?: TabsProps["items"];

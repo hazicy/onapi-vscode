@@ -115,3 +115,19 @@ test("version application retains zero, last valid response and first local matc
   );
   assert.equal(local[0].version, 3);
 });
+
+test("native records without optional version metadata use the initial conflict baseline", () => {
+  const row = { id: "native", parentId: "0", kind: "api" };
+  assert.deepEqual(
+    JSON.parse(
+      JSON.stringify(
+        findApiConflicts([row], [{ id: "native", version: 1 }], {}),
+      ),
+    ),
+    [row],
+  );
+  assert.equal(
+    findApiConflicts([row], [{ id: "native", version: 0 }], {}).length,
+    0,
+  );
+});

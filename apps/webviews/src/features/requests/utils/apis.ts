@@ -1,3 +1,4 @@
+import { httpRequestSchema } from "@onapi/domain/requests/record";
 import { requestUrl, requestMethod } from "@onapi/domain";
 import { getCollectionServerId } from "@onapi/domain/request-utils";
 import {
@@ -457,10 +458,12 @@ export const genNewWsByUrlChange = (
   return result;
 };
 
-export const getNewApisDataByCurlChange = (
-  apisData: ApiDetailsData,
+export const getNewApisDataByCurlChange = <
+  T extends { request: import("@onapi/domain").HttpRequest },
+>(
+  apisData: T,
   curlData: CurlDataType,
-) => ({ ...apisData, request: curlData.request });
+) => ({ ...apisData, request: httpRequestSchema.parse(curlData.request) });
 
 export {
   genUrlByQuery,

@@ -8,7 +8,7 @@ export interface SdkParameter {
   disabled?: boolean;
   description?: string | import("postman-collection").DescriptionDefinition;
   type?: string;
-  src?: string;
+  src?: string | string[];
   contentType?: string;
 }
 
@@ -25,7 +25,11 @@ export function sdkParameterToRow(
     param_id: parameter.id || id,
     key: parameter.key || "",
     value:
-      parameter.type === "file" ? parameter.src || "" : parameter.value || "",
+      parameter.type === "file"
+        ? Array.isArray(parameter.src)
+          ? parameter.src.join("\n")
+          : parameter.src || ""
+        : parameter.value || "",
     is_checked: parameter.disabled ? -1 : 1,
     description:
       typeof parameter.description === "string"
@@ -60,7 +64,11 @@ export function rowToSdkParameter(
     parameter.type = row.field_type === "File" ? "file" : "text";
   }
   if (parameter.type === "file") {
-    parameter.src = row.value || "";
+    const originalPath = Array.isArray(original?.src)
+      ? original.src.join("\n")
+      : original?.src || "";
+    parameter.src =
+      row.value === originalPath ? original?.src : row.value || "";
     delete parameter.value;
   } else {
     parameter.value =

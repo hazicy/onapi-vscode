@@ -1,3 +1,7 @@
+import {
+  httpResponseSchema,
+  type HttpEditorRecord,
+} from "@onapi/domain/requests/record";
 import { hasCompletedResponse } from "@/features/requests/execution/http-state";
 import tabSelection from "@/shared/components/LineTabs/LineTabs.module.css";
 import type { HttpExecutionState } from "@/features/requests/execution/http-state";
@@ -51,9 +55,9 @@ interface SharedProps {
   sendAfterResponseToTabDisabled?: boolean;
 }
 type Props = SharedProps & {
-  responseData: import("postman-collection").ResponseDefinition[] | undefined;
+  responseData: HttpEditorRecord["response"];
   onResponseDataChange: (
-    value: import("postman-collection").ResponseDefinition[],
+    value: NonNullable<HttpEditorRecord["response"]>,
   ) => void;
 };
 
@@ -127,12 +131,12 @@ const Response: FC<Props> = memo((props) => {
     if (sendingData?.result?.response) {
       onResponseDataChange([
         ...(Array.isArray(responseData) ? responseData : []),
-        {
+        httpResponseSchema.parse({
           ...sendingData.result.response,
           body: responseText(sendingData.result.response),
           originalRequest: sendingData.result.request,
           name: "Response",
-        },
+        }),
       ]);
       return;
     }

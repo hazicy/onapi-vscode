@@ -577,3 +577,39 @@ for (const kind of ["websocket", "socketio"] as const) {
     await expect(connect).toBeVisible();
   });
 }
+
+test("production editor rejects invalid initial HTTP data without mounting a broken request", async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  const initialData = {
+    ...requestInitialData,
+    apiData: {
+      id: "invalid",
+      parentId: "0",
+      name: "Invalid",
+      kind: "api",
+      request: {
+        method: "GET",
+        url: "",
+        header: [{ key: "Accept", value: 42 }],
+      },
+    },
+  };
+  await page.route("**/invalid-record.html", (route) =>
+    route.fulfill({
+      contentType: "text/html",
+      body: `<!doctype html><html><head><link rel="stylesheet" href="/webviews.css"></head><body><div id="root"></div>
+    <script>window.postedMessages=[];window.vscode={postMessage(message){window.postedMessages.push(message)}};window.vscodeData=${JSON.stringify({ kind: "api", initialData })};window.resourceBaseUrl=location.origin;</script>
+    <script type="module" src="/tagPanel.js"></script></body></html>`,
+    }),
+  );
+  await page.goto("http://127.0.0.1:4180/invalid-record.html");
+  await expect(page.getByRole("alert")).toContainText("invalid request data");
+  await expect(
+    page.getByRole("button", { name: "Send", exact: true }),
+  ).toHaveCount(0);
+  expect(await page.evaluate(() => (window as any).postedMessages)).toEqual([]);
+  expect(errors).toEqual([]);
+});

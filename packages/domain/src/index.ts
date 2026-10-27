@@ -5,27 +5,17 @@ import type {
   ItemGroupDefinition,
   VariableScopeDefinition,
   VariableDefinition,
-  RequestDefinition,
-  RequestBodyDefinition,
   QueryParamDefinition,
-  FormParamDefinition,
   UrlDefinition,
 } from "postman-collection";
 
 /** Serializable SDK body fields used by storage, editors and execution. */
-export type HttpRequestBody = Omit<
-  RequestBodyDefinition,
-  "urlencoded" | "formdata" | "file"
-> & {
-  urlencoded?: QueryParamDefinition[];
-  formdata?: FormParamDefinition[];
-  file?: { src: string };
-  graphql?: RequestBodyDefinition["graphql"];
-  options?: { raw?: { language?: string } };
-};
-export type HttpRequest = Omit<RequestDefinition, "body"> & {
-  body?: HttpRequestBody;
-};
+export type HttpRequestBody = import("zod").output<
+  typeof import("./requests/record").httpBodySchema
+>;
+export type HttpRequest = import("zod").output<
+  typeof import("./requests/record").httpRequestSchema
+>;
 
 /** Editor and execution state never belongs to a saved request definition. */
 export function requestDefinition<T extends Record<string, any>>(value: T): T {
@@ -42,9 +32,10 @@ export function requestDefinition<T extends Record<string, any>>(value: T): T {
   return copy;
 }
 
-export type HttpCollectionItem = Omit<ItemDefinition, "request"> &
+export type HttpCollectionItem = Omit<ItemDefinition, "request" | "response"> &
   Omit<ItemGroupDefinition, "item"> & {
     request?: HttpRequest;
+    response?: import("./requests/record").HttpEditorRecord["response"];
     variable?: VariableDefinition[];
     id: string;
     parentId: string;

@@ -1,8 +1,5 @@
+import { editorRecordSchema } from "@onapi/domain/requests/record";
 import useSocketStore from "@/features/requests/store/useApis/websocket";
-import {
-  editorDefinition,
-  editorDefinitions,
-} from "@/features/requests/adapters/editor-record";
 import { readRequestPanelResponse } from "@/shared/bridge/request-panel";
 import SharedComponentsProvider from "@/app/providers/SharedComponentsProvider";
 import { PROTOCOL_EXECUTION_EVENT } from "@onapi/contracts";
@@ -36,7 +33,8 @@ import useGraphQLQuery from "@/features/requests/graphql/GraphQLQuery/useGraphQL
 function initializeRequest(data: any) {
   const { apiData, projectConfig, systemConfig, vscodeTheme, docBaseUrl } =
     data;
-  void preloadRequestProtocol(apiData.kind)?.catch(() => {});
+  const record = editorRecordSchema.parse(apiData);
+  void preloadRequestProtocol(record.kind)?.catch(() => {});
   useProjectConfig.getState().updateProjectConfig(projectConfig);
   useSystemConfig.getState().updateSystemConfig({
     ...useSystemConfig.getState().systemConfig,
@@ -44,13 +42,19 @@ function initializeRequest(data: any) {
   });
   useGlobal.getState().updateVscodeTheme(vscodeTheme);
   useShare.getState().updateDocBaseUrl(docBaseUrl);
-  useApis.getState().updateApisActiveData(apiData);
+  useApis.getState().updateApisActiveData(record);
   performance.mark("onapi:data-ready");
 }
 
 // Hydrate before the first render so a local request needs no host round trip
 // and never suspends on data that is already available in the HTML.
-initializeRequest(window.vscodeData.initialData);
+let initializationError: string | undefined;
+try {
+  initializeRequest(window.vscodeData.initialData);
+} catch {
+  initializationError =
+    "Unable to open request: invalid request data. Please check the saved request.";
+}
 
 function TagPanel() {
   const customTheme = useGlobalTheme();
@@ -101,18 +105,16 @@ function TagPanel() {
           const previous = state.apiOriginDetailsList.find(
             (item) => item.id === active.id,
           );
-          const current = editorDefinitions(message.data).find(
-            (item) => item.id === active.id,
-          );
+          const current = message.data.find((item) => item.id === active.id);
           // Preserve edits when the file changes underneath an open editor.
           if (current && (!previous || isEqual(active, previous))) {
             updateApisActiveData({ ...current });
           }
-          updateApiOriginDetailsList(editorDefinitions(message.data));
+          updateApiOriginDetailsList(message.data);
           break;
         }
         case "setApiList":
-          updateApiOriginDetailsList(editorDefinitions(message.data));
+          updateApiOriginDetailsList(message.data);
           break;
         case PROTOCOL_EXECUTION_EVENT:
           consumeExecutionEvent(message.data, {
@@ -175,14 +177,11 @@ function TagPanel() {
         case "requestSaved":
           useApis
             .getState()
-            .acknowledgeSave(
-              editorDefinition(message.data.definition),
-              editorDefinition(message.data.submitted),
-            );
+            .acknowledgeSave(message.data.definition, message.data.submitted);
           break;
         case "setApiData":
           void preloadRequestProtocol(message.data.kind)?.catch(() => {});
-          updateApisActiveData(editorDefinition(message.data));
+          updateApisActiveData(message.data);
 
           break;
         case "setVscodeTheme":
@@ -244,9 +243,15 @@ const root = ReactDOM.createRoot(rootElement);
 const mount = () =>
   root.render(
     <HotkeysProvider initiallyActiveScopes={["global", "apis"]}>
-      <TagPanel />
+      {initializationError ? (
+        <div role="alert">{initializationError}</div>
+      ) : (
+        <TagPanel />
+      )}
     </HotkeysProvider>,
   );
 Promise.resolve(
-  preloadRequestProtocol(window.vscodeData.initialData.apiData.kind),
+  initializationError
+    ? undefined
+    : preloadRequestProtocol(window.vscodeData.initialData.apiData.kind),
 ).then(mount, mount); // Failed loads still render through the ErrorBoundary.

@@ -1,3 +1,4 @@
+import type { HttpEditorProps } from "@onapi/domain/requests/record";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import {
   beginRequest,
@@ -6,7 +7,6 @@ import {
 import { requestUrl, requestMethod, editedUrl } from "@onapi/domain";
 import styles from "./Header.module.css";
 
-import { ApiComponentType } from "@onapi/domain/requests/types/api";
 import { AnyObject } from "@onapi/domain/types/common";
 import { Button, Flex } from "@/shared/ui/base";
 import { produce } from "immer";
@@ -17,7 +17,7 @@ import { genQueryByUrl, genRestfulByUrl } from "@/features/requests/utils/apis";
 import UrlGroup from "@/features/requests/editor/UrlGroup";
 import useApis from "@/features/requests/store/useApis";
 
-const Header: FC<ApiComponentType> = ({ apisData, onApisDataChange, type }) => {
+const Header: FC<HttpEditorProps> = ({ apisData, onApisDataChange, type }) => {
   const { t } = useTranslation();
   const currentSendingData = useApis((state) => state.currentSendingData);
 

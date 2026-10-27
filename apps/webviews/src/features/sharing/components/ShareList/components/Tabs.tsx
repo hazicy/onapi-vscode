@@ -8,7 +8,7 @@ import clsx from "clsx";
 
 import { isArray } from "lodash-es";
 import { Empty } from "@/shared/ui";
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
+import type { EditorRecord as ApiDetailsData } from "@onapi/domain/requests/record";
 import ApisColorPrefixIcon from "@/shared/ui/ApisColorPrefixIcon";
 import { getBaseIconOfTargetType } from "@/shared/utils/common";
 import { formatTimeToDateTimeLong } from "@onapi/domain/utils/time";

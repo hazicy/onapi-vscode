@@ -1,3 +1,7 @@
+import type {
+  HttpEditorProps,
+  HttpEditorRecord,
+} from "@onapi/domain/requests/record";
 import styles from "./Request.module.css";
 import { memo, ReactNode } from "react";
 
@@ -5,17 +9,14 @@ import { useMemoizedFn } from "ahooks";
 
 import context from "@/shared/components/RawEditor/visualizationContext";
 import RequestPanel from "@/features/requests/editor/Request/Request";
-import {
-  ApiComponentType,
-  ApiDetailsData,
-} from "@onapi/domain/requests/types/api";
+
 import { DirectionType } from "@onapi/domain/types/common";
 
 import type { HttpRequest } from "@onapi/domain";
 
 const Request = memo(
   (
-    props: ApiComponentType & {
+    props: HttpEditorProps & {
       tabOptions?: any;
       direction: DirectionType;
       tabBarExtraContent?: ReactNode;
@@ -32,9 +33,11 @@ const Request = memo(
     } = props;
     const { Provider } = context;
 
-    const handleOnChange = useMemoizedFn((data: ApiDetailsData["request"]) => {
-      onRequestDataChange(data);
-    });
+    const handleOnChange = useMemoizedFn(
+      (data: HttpEditorRecord["request"]) => {
+        onRequestDataChange(data);
+      },
+    );
 
     return (
       <div data-direction={direction} className={styles.container}>

@@ -1,3 +1,7 @@
+import type {
+  HttpEditorProps,
+  HttpEditorRecord,
+} from "@onapi/domain/requests/record";
 import styles from "./HttpDebug.module.css";
 import { FC, lazy, useMemo, useState } from "react";
 import { useSafeState } from "ahooks";
@@ -14,10 +18,7 @@ import Response from "./Response";
 import Header from "./Header";
 import ToolBar from "./ToolBar";
 import { useTranslation } from "react-i18next";
-import {
-  ApiComponentType,
-  ApiDetailsData,
-} from "@onapi/domain/requests/types/api";
+
 import { Button } from "@/shared/ui";
 import context from "@/shared/components/RawEditor/visualizationContext";
 import { openEnvPage } from "@/features/requests/events/env";
@@ -26,7 +27,7 @@ const GenerateCodeDrawer = lazy(
 );
 
 interface ContentProps {
-  value?: ApiDetailsData;
+  value?: HttpEditorRecord;
   curApiSendingData?: any;
 }
 
@@ -37,7 +38,7 @@ const panelProps = {
   collapsedSize: 5,
 };
 
-const ApiDebug: FC<ApiComponentType> = ({ apisData, onApisDataChange }) => {
+const ApiDebug: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
   const { t } = useTranslation();
   const [apiScreenDirection, setApiScreenDirection] =
     useSafeState<DirectionType>("horizontal");
@@ -51,9 +52,9 @@ const ApiDebug: FC<ApiComponentType> = ({ apisData, onApisDataChange }) => {
     // setApiScreenDirection(direction);
   };
 
-  const onRequestDataChange = (val: ApiDetailsData["request"]) => {
+  const onRequestDataChange = (val: HttpEditorRecord["request"]) => {
     onApisDataChange(
-      produce(apisData as ApiDetailsData, (draft) => {
+      produce(apisData, (draft) => {
         draft.request = val;
       }),
     );
@@ -133,14 +134,11 @@ const ApiDebug: FC<ApiComponentType> = ({ apisData, onApisDataChange }) => {
     <>
       <ToolBar
         showLayoutControl
-        apisData={apisData as ApiDetailsData}
+        apisData={apisData}
         onApisDataChange={onApisDataChange}
       />
       <header>
-        <Header
-          apisData={apisData as ApiDetailsData}
-          onApisDataChange={onApisDataChange}
-        />
+        <Header apisData={apisData} onApisDataChange={onApisDataChange} />
       </header>
       <main>
         <ResizablePanels
@@ -172,7 +170,7 @@ const ApiDebug: FC<ApiComponentType> = ({ apisData, onApisDataChange }) => {
                       onChange: (key: string) => setRequestTabActiveKey(key),
                     }}
                     direction={apiScreenDirection}
-                    requestData={(apisData as ApiDetailsData)?.request}
+                    requestData={apisData?.request}
                     apiData={apisData}
                     onRequestDataChange={onRequestDataChange}
                     tabBarExtraContent={tabBarExtraContent}
@@ -185,7 +183,7 @@ const ApiDebug: FC<ApiComponentType> = ({ apisData, onApisDataChange }) => {
           rightPanel={
             <SuspenseContent>
               <Response
-                apisData={apisData as ApiDetailsData}
+                apisData={apisData}
                 onApisDataChange={onApisDataChange}
               />
             </SuspenseContent>

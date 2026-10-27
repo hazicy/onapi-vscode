@@ -1,4 +1,4 @@
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
+import type { EditorRecord as ApiDetailsData } from "@onapi/domain/requests/record";
 import type { TabPaneProps } from "@/shared/ui/base";
 
 export type PanelProps = {

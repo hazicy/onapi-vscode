@@ -1,37 +1,24 @@
 import styles from "./ToolBar.module.css";
 import { saveProjectConfig } from "@/features/requests/events/env";
-import { FC } from "react";
 import { Flex, MenuProps } from "@/shared/ui/base";
-import { useMemoizedFn } from "ahooks";
-import { produce } from "immer";
 import TitleEdit from "@/shared/ui/TitleEdit";
 import EnvDropdown from "@/features/environment/components/EnvDropdown";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
-import { ChangeFuncType } from "@onapi/domain/types/common";
 
 import LayoutControl from "@/shared/components/ResizablePanels/LayoutControl";
 
-interface Props {
+interface Props<T extends { name: string }> {
   showLayoutControl?: boolean;
-  apisData: ApiDetailsData;
-  onApisDataChange: (data: ApiDetailsData) => void;
+  apisData: T;
+  onApisDataChange: (data: T) => void;
 }
-const ToolBar: FC<Props> = ({
+function ToolBar<T extends { name: string }>({
   apisData,
   onApisDataChange,
   showLayoutControl,
-}) => {
+}: Props<T>) {
   const envDetailKeys = useProjectConfig(
     (state) => state.http!.activeEnvironment || "",
-  );
-
-  const handleChange: ChangeFuncType<ApiDetailsData> = useMemoizedFn(
-    <K extends keyof ApiDetailsData>(field: K, value: ApiDetailsData[K]) => {
-      const newData = { ...apisData, [field]: value };
-
-      onApisDataChange(newData);
-    },
   );
 
   const envClick: MenuProps["onClick"] = ({ key }) => {
@@ -55,7 +42,9 @@ const ToolBar: FC<Props> = ({
             maxLength={255}
             className={styles.apisTitleEdit}
             value={apisData?.name}
-            onChange={(event) => handleChange("name", event.target.value)}
+            onChange={(event) =>
+              onApisDataChange({ ...apisData, name: event.target.value })
+            }
           />
         </Flex>
         <Flex style={{ height: 26 }} gap={8} align="center">
@@ -65,6 +54,6 @@ const ToolBar: FC<Props> = ({
       </Flex>
     </div>
   );
-};
+}
 
 export default ToolBar;

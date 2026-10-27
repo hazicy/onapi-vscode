@@ -185,3 +185,17 @@ test("GraphQL schema expansion assigns descendant paths and terminates recursive
   const nested = getChildTree(children[1], schema);
   assert.equal(nested[0].key, "Query.me.friend.id");
 });
+
+test("file parameter arrays survive an unchanged table edit", () => {
+  const file = {
+    key: "upload",
+    type: "file",
+    src: ["/tmp/a.png", "/tmp/b.png"],
+    custom: true,
+  };
+  const row = sdkParameterToRow(file, "row-files");
+  assert.equal(row.value, "/tmp/a.png\n/tmp/b.png");
+  const edited = rowToSdkParameter(row, file, true);
+  assert.deepEqual(edited.src, file.src);
+  assert.equal(edited.custom, true);
+});

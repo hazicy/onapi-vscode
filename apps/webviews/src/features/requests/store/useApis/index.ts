@@ -1,16 +1,13 @@
 import { isEqual } from "lodash-es";
 import { requestDefinition } from "@onapi/domain";
 import type { HttpExecutionState } from "@/features/requests/execution/http-state";
-import type {
-  ApiDetailsData,
-  ApisData,
-} from "@onapi/domain/requests/types/api";
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import { DEFAULT_REQUEST_SYSTEM_HEADERS } from "@onapi/domain/requests/constants/request";
 import { create, devtools } from "@/shared/state/store";
 
 type State = {
-  apiOriginDetailsList: ApiDetailsData[];
-  apisActiveData: ApisData;
+  apiOriginDetailsList: EditorRecord[];
+  apisActiveData: EditorRecord;
   currentSendingData?: HttpExecutionState;
   currentServerId: string;
   systemRequestHeader: typeof DEFAULT_REQUEST_SYSTEM_HEADERS;
@@ -19,9 +16,9 @@ type State = {
   schemaLoading: boolean;
 };
 type Actions = {
-  updateApiOriginDetailsList: (items: ApiDetailsData[]) => void;
-  updateApisActiveData: (item: ApisData) => void;
-  acknowledgeSave: (definition: ApisData, submitted: ApisData) => void;
+  updateApiOriginDetailsList: (items: EditorRecord[]) => void;
+  updateApisActiveData: (item: EditorRecord) => void;
+  acknowledgeSave: (definition: EditorRecord, submitted: EditorRecord) => void;
   updateCurrentSendingData: (result: HttpExecutionState) => void;
   clearConsole: () => void;
   updateCurrentServerId: (id: string) => void;
@@ -31,7 +28,7 @@ type Actions = {
 };
 
 // Derive the lookup from the collection; never maintain a second writable copy.
-const indexes = new WeakMap<ApiDetailsData[], Record<string, ApiDetailsData>>();
+const indexes = new WeakMap<EditorRecord[], Record<string, EditorRecord>>();
 export function selectRequestIndex(state: Pick<State, "apiOriginDetailsList">) {
   const items = state.apiOriginDetailsList;
   let index = indexes.get(items);
@@ -58,7 +55,13 @@ export default create<State & Actions>()(
   devtools(
     (set) => ({
       apiOriginDetailsList: [],
-      apisActiveData: {} as ApisData,
+      apisActiveData: {
+        id: "",
+        parentId: "0",
+        name: "",
+        kind: "api",
+        request: { method: "GET", url: "" },
+      },
       currentSendingData: undefined,
       currentServerId: "",
       systemRequestHeader: DEFAULT_REQUEST_SYSTEM_HEADERS,
@@ -75,11 +78,9 @@ export default create<State & Actions>()(
           );
           const apiOriginDetailsList = exists
             ? state.apiOriginDetailsList.map((item) =>
-                item.id === definition.id
-                  ? (definition as ApiDetailsData)
-                  : item,
+                item.id === definition.id ? definition : item,
               )
-            : [...state.apiOriginDetailsList, definition as ApiDetailsData];
+            : [...state.apiOriginDetailsList, definition];
           const matches =
             state.apisActiveData.id === definition.id &&
             isEqual(

@@ -1,3 +1,7 @@
+import type {
+  HttpEditorProps,
+  HttpEditorRecord,
+} from "@onapi/domain/requests/record";
 import styles from "./SseDebug.module.css";
 import { FC, lazy, useMemo, useState } from "react";
 
@@ -8,10 +12,7 @@ import { SuspenseContent } from "@/shared/components";
 
 import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
 import ResponseRealtimeContext from "@/features/requests/response/Response/components/Realtime/context";
-import {
-  ApiComponentType,
-  ApiDetailsData,
-} from "@onapi/domain/requests/types/api";
+
 import { DirectionType } from "@onapi/domain/types/common";
 import { importDelay } from "@/shared/utils/common";
 import ToolBar from "../http/ToolBar";
@@ -33,7 +34,7 @@ const panelProps = {
   collapsedSize: 5,
 };
 
-const ApiDebug: FC<ApiComponentType> = ({ apisData, onApisDataChange }) => {
+const ApiDebug: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
   const [apiScreenDirection, setApiScreenDirection] =
     useSafeState<DirectionType>("vertical");
   const [requestTabActiveKey, setRequestTabActiveKey] =
@@ -42,9 +43,9 @@ const ApiDebug: FC<ApiComponentType> = ({ apisData, onApisDataChange }) => {
     setApiScreenDirection(direction);
   };
 
-  const onRequestDataChange = (val: ApiDetailsData["request"]) => {
+  const onRequestDataChange = (val: HttpEditorRecord["request"]) => {
     onApisDataChange(
-      produce(apisData as ApiDetailsData, (draft) => {
+      produce(apisData, (draft) => {
         draft.request = val;
       }),
     );
@@ -79,13 +80,13 @@ const ApiDebug: FC<ApiComponentType> = ({ apisData, onApisDataChange }) => {
     <>
       <ToolBar
         showLayoutControl
-        apisData={apisData as ApiDetailsData}
+        apisData={apisData}
         onApisDataChange={onApisDataChange}
       />
       <header>
         <Header
           type={"sse"}
-          apisData={apisData as ApiDetailsData}
+          apisData={apisData}
           onApisDataChange={onApisDataChange}
         />
       </header>

@@ -50,7 +50,7 @@ const bundle = await build({
     },
   ],
 });
-const { getCodeHarRequest } = await import(
+const { getCodeHarRequest, getResolvedCodeRequest } = await import(
   "data:text/javascript;base64," +
     Buffer.from(bundle.outputFiles[0].text).toString("base64")
 );
@@ -103,5 +103,33 @@ for (const variables of ['{"id":"{{id}}"}', { id: "{{id}}" }, "", undefined]) {
       query: "query($id: ID!) { user(id: $id) { name } }",
       variables: variables ? { id: "42" } : {},
     });
+  });
+}
+
+for (const type of ["jwt", "asap"]) {
+  test(`code generation preserves ${type} authentication and substituted attributes`, async () => {
+    const context = {
+      config: {
+        http: {
+          collection: {},
+          environments: [],
+          options: {
+            globals: { values: [{ key: "secret", value: "resolved" }] },
+          },
+        },
+      },
+    };
+    const request = await getResolvedCodeRequest(
+      {
+        request: {
+          method: "GET",
+          url: "https://example.com",
+          auth: { type, [type]: [{ key: "secret", value: "{{secret}}" }] },
+        },
+      },
+      context,
+    );
+    assert.equal(request.auth.type, type);
+    assert.equal(request.auth.parameters().one("secret").value, "resolved");
   });
 }

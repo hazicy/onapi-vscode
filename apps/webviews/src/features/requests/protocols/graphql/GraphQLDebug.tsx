@@ -1,3 +1,7 @@
+import type {
+  HttpEditorProps,
+  HttpEditorRecord,
+} from "@onapi/domain/requests/record";
 import styles from "./GraphQLDebug.module.css";
 import { FC, lazy, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -7,17 +11,14 @@ import { ResizablePanels, SuspenseContent } from "@/shared/components";
 import ResponseRealtimeContext from "@/features/requests/response/Response/components/Realtime/context";
 import GraphQLResponseContext from "@/features/requests/graphql/graphql-response-context";
 import { DirectionContext } from "@/shared/contexts";
-import {
-  ApiComponentType,
-  GraphQLDetailsData,
-} from "@onapi/domain/requests/types/graphql";
+
 import { DirectionType } from "@onapi/domain/types/common";
 import { importDelay } from "@/shared/utils/common";
 
 import UrlPanel from "./UrlPanel";
 
 import ToolBar from "../http/ToolBar";
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
+
 import { Flex } from "@/shared/ui/base";
 import { Button } from "@/shared/ui";
 import useApis from "@/features/requests/store/useApis";
@@ -34,7 +35,7 @@ const panelProps = {
   collapsedSize: 5,
 };
 
-const Index: FC<ApiComponentType> = ({ apisData, onApisDataChange }) => {
+const Index: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
   const { t } = useTranslation();
   const [apiScreenDirection, setApiScreenDirection] =
     useState<DirectionType>("vertical");
@@ -69,9 +70,9 @@ const Index: FC<ApiComponentType> = ({ apisData, onApisDataChange }) => {
     <>
       <ToolBar
         showLayoutControl
-        apisData={apisData as unknown as ApiDetailsData}
+        apisData={apisData}
         onApisDataChange={(val) => {
-          onApisDataChange(val as unknown as GraphQLDetailsData);
+          onApisDataChange(val);
         }}
       />
       <Flex vertical className={styles.container}>

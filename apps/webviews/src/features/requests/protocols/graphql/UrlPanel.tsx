@@ -1,3 +1,4 @@
+import type { HttpEditorProps } from "@onapi/domain/requests/record";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import {
   beginRequest,
@@ -22,10 +23,7 @@ import { AppIcon } from "@/shared/ui";
 
 import useApis from "@/features/requests/store/useApis";
 import useUserConfig from "@/features/auth/store/useUserConfig";
-import {
-  ApiComponentType,
-  type GraphQLDetailsData,
-} from "@onapi/domain/requests/types/graphql";
+import type { HttpEditorRecord as GraphQLDetailsData } from "@onapi/domain/requests/record";
 import { getCollectionServerId } from "@/features/requests/utils/apis";
 import { convertToSaveFolderTree } from "@/shared/utils/common";
 
@@ -42,7 +40,7 @@ const menuProps = {
   items,
 };
 
-const Index = memo((props: ApiComponentType) => {
+const Index = memo((props: HttpEditorProps) => {
   const { t } = useTranslation();
   const { apisData, onApisDataChange } = props;
   const curApiSendingData = useApis((state) => state.currentSendingData);
@@ -80,8 +78,11 @@ const Index = memo((props: ApiComponentType) => {
   );
   const currentData = (): GraphQLDetailsData => {
     const latest = useApis.getState().apisActiveData;
-    return latest?.id === apisData.id
-      ? (latest as GraphQLDetailsData)
+    return latest?.id === apisData.id &&
+      (latest.kind === "api" ||
+        latest.kind === "graphql" ||
+        latest.kind === "sse")
+      ? latest
       : apisData;
   };
   const handleChange = (key: string, value: string) => {

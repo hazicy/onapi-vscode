@@ -1,3 +1,4 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import { get, post } from "./request";
 import { ApisBaseData } from "@onapi/domain/requests/types/base";
@@ -25,6 +26,6 @@ export const getApisDetailsRequest = (data: {
  */
 export const batchSaveApiService = (data: {
   project_id: string;
-  apis: ApiDetailsData[];
+  apis: EditorRecord[];
 }): Promise<{ list: ApiDetailsData[] }> =>
   post({ url: "/ide/vscode/apis/batch_save", data });

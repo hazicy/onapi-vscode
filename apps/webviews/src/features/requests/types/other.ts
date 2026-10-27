@@ -12,7 +12,7 @@ export type ApisItemActionType = {
   tabsValue?: string;
 };
 
-/** A cURL conversion produces an SDK request definition, not legacy parameter tables. */
+/** A cURL conversion produces a serialized HTTP request. */
 export type CurlDataType = {
-  request: import("postman-collection").RequestDefinition;
+  request: import("@onapi/domain").HttpRequest;
 };
