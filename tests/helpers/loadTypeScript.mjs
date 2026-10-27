@@ -50,6 +50,12 @@ export default async function loadTypeScript(
     initializeImportMeta(meta) {
       meta.url = pathToFileURL(filename).href;
     },
+    async importModuleDynamically(id) {
+      const dependency = await linkDependency(id);
+      await dependency.link(() => {});
+      await dependency.evaluate();
+      return dependency;
+    },
   });
   const { program } = parseSync(filename + ".js", compiled);
   const requested = new Map();
@@ -64,7 +70,7 @@ export default async function loadTypeScript(
     }
     requested.set(id, names);
   }
-  await module.link(async (id) => {
+  async function linkDependency(id) {
     let value;
     let dependencyError;
     try {
@@ -135,7 +141,8 @@ export default async function loadTypeScript(
       },
       { context },
     );
-  });
+  }
+  await module.link(linkDependency);
   await module.evaluate();
   return module.namespace;
 }

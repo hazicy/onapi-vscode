@@ -1,5 +1,5 @@
 import codegen from "postman-code-generators";
-import { Request } from "postman-collection";
+import type { Request } from "postman-collection";
 
 export const getCodeLanguages = () => codegen.getLanguageList();
 
@@ -27,13 +27,14 @@ export function selectCodeLanguage(language?: string, variant?: string) {
   return { language: "curl", variant: "cURL", syntax: "sh" };
 }
 
-export function generateRequestCode(
+export async function generateRequestCode(
   source: Request,
   language: string,
   variant: string,
 ): Promise<string> {
   // Keep the URL encoding intact; decoding generated source can change request semantics.
-  const request = new Request(source.toJSON());
+  const { default: sdk } = await import("postman-collection");
+  const request = new sdk.Request(source.toJSON());
   request.url.hash = undefined;
   request.headers.each((header) => {
     header.value = String(header.value ?? "");
