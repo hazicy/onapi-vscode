@@ -3,6 +3,9 @@ import { createRequire } from "node:module";
 const webviewRequire = createRequire(
   new URL("../../apps/webviews/package.json", import.meta.url),
 );
+const contractsRequire = createRequire(
+  new URL("../../packages/contracts/package.json", import.meta.url),
+);
 const modelRequire = createRequire(
   new URL("../../packages/domain/package.json", import.meta.url),
 );
@@ -13,7 +16,7 @@ import { pathToFileURL, fileURLToPath } from "node:url";
 export async function nativeDependency(id) {
   let module;
   try {
-    module = await import(id);
+    module = id === "zod" ? contractsRequire(id) : await import(id);
   } catch (error) {
     try {
       module = modelRequire(id);
@@ -76,14 +79,40 @@ export default async function loadTypeScript(
         nativeDependency,
         globals,
       );
-    } else if (!nonempty(value) && id === "@onapi/contracts") {
+    } else if (
+      !nonempty(value) &&
+      (id === "@onapi/contracts" || id.startsWith("@onapi/contracts/"))
+    ) {
+      const manifestUrl = new URL(
+        "../../packages/contracts/package.json",
+        import.meta.url,
+      );
+      const manifest = JSON.parse(fs.readFileSync(manifestUrl, "utf8"));
+      const subpath =
+        id === "@onapi/contracts"
+          ? "."
+          : `.${id.slice("@onapi/contracts".length)}`;
+      const entry = manifest.exports[subpath];
+      if (typeof entry !== "string")
+        throw new Error(`Unknown contracts export: ${id}`);
       value = await loadTypeScript(
-        fileURLToPath(
-          new URL("../../packages/contracts/src/index.ts", import.meta.url),
-        ),
+        fileURLToPath(new URL(entry, manifestUrl)),
         nativeDependency,
         globals,
       );
+    } else if (
+      !nonempty(value) &&
+      id.startsWith(".") &&
+      dependencies === nativeDependency
+    ) {
+      // Resolve real relative modules only for native loading. Explicit mocks
+      // still fail when they omit or reject a dependency.
+      const target = fileURLToPath(new URL(id, pathToFileURL(filename)));
+      const entry = [target, `${target}.ts`, `${target}/index.ts`].find(
+        (candidate) =>
+          fs.existsSync(candidate) && fs.statSync(candidate).isFile(),
+      );
+      if (entry) value = await loadTypeScript(entry, nativeDependency, globals);
     } else if (!nonempty(value) && id === "postman-url-encoder/parser/index.js")
       value = await nativeDependency(id);
     if (!nonempty(value) && dependencyError) throw dependencyError;

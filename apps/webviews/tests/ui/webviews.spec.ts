@@ -489,3 +489,91 @@ test("production WebSocket request finishes loading without render errors", asyn
   ).toBe(true);
   expect(errors).toEqual([]);
 });
+
+for (const kind of ["websocket", "socketio"] as const) {
+  test(`production ${kind} preparation errors end connecting and ignore stale failures`, async ({
+    page,
+  }) => {
+    const action = kind === "websocket" ? "ws_connect" : "socketio_connect";
+    const targetId = `failure-${kind}`;
+    const initialData = {
+      ...requestInitialData,
+      apiData: {
+        id: targetId,
+        kind,
+        parentId: "0",
+        project_id: "-1",
+        name: "Preparation failure",
+        url: "http://localhost:12345",
+        config: {},
+        request: {
+          header: { parameter: [] },
+          query: { parameter: [] },
+          cookie: { parameter: [] },
+          event: { parameter: [] },
+        },
+        message: [
+          {
+            param_id: "message",
+            name: "Message",
+            request: { mode: "text", raw: "hello" },
+          },
+        ],
+      },
+    };
+    await page.route("**/socket-preparation.html", (route) =>
+      route.fulfill({
+        contentType: "text/html",
+        body: `<!doctype html><html><head><link rel="stylesheet" href="/webviews.css"></head><body><div id="root"></div>
+      <script>window.postedMessages=[];window.vscode={postMessage(message){window.postedMessages.push(message)}};window.vscodeData=${JSON.stringify({ kind, initialData })};window.resourceBaseUrl=location.origin;</script>
+      <script type="module" src="/tagPanel.js"></script></body></html>`,
+      }),
+    );
+    await page.goto("http://127.0.0.1:4180/socket-preparation.html");
+    const connect = page.getByRole("button", { name: "Connect", exact: true });
+    const pending = page.getByRole("button", {
+      name: kind === "websocket" ? "Cancel" : "Connecting...",
+      exact: true,
+    });
+    const lastRequestId = () =>
+      page.evaluate(
+        (action) =>
+          (window as any).postedMessages.findLast(
+            (message: any) => message.action === action,
+          )?.requestId,
+        action,
+      );
+    const fail = (requestId: string) =>
+      page.evaluate(
+        ({ action, targetId, requestId }) => {
+          window.postMessage(
+            {
+              action: "requestPanelError",
+              requestId,
+              data: {
+                action,
+                targetId,
+                error: { message: "Socket option preparation failed" },
+              },
+            },
+            "*",
+          );
+        },
+        { action, targetId, requestId },
+      );
+    await connect.click();
+    await expect(pending).toBeVisible();
+    const old = await lastRequestId();
+    expect(old).toEqual(expect.any(String));
+    await fail(old);
+    await expect(connect).toBeVisible();
+    await connect.click();
+    await expect(pending).toBeVisible();
+    const current = await lastRequestId();
+    expect(current).not.toBe(old);
+    await fail(old);
+    await expect(pending).toBeVisible();
+    await fail(current);
+    await expect(connect).toBeVisible();
+  });
+}

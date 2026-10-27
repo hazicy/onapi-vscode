@@ -1,3 +1,4 @@
+import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import { selectRequestIndex } from "@/features/requests/store/useApis";
 import styles from "./SocketIoDebug.module.css";
 import { FC, lazy, useEffect, useMemo, useState } from "react";
@@ -75,7 +76,7 @@ const SocketIoDebug: FC<SocketIoComponentType> = ({
   const onSave = async () => {
     setSaveLoading(true);
     try {
-      window?.vscode.postMessage({
+      sendRequestPanelMessage({
         action: "saveApiData",
         data: apisData,
       });
@@ -124,7 +125,7 @@ const SocketIoDebug: FC<SocketIoComponentType> = ({
         onSelect={(keys: React.Key[]) => {
           const parentId = head(keys);
           const result = cloneDeep(apisData);
-          window?.vscode.postMessage({
+          sendRequestPanelMessage({
             action: "saveApiData",
             data: { ...result, parentId: parentId as string },
           });

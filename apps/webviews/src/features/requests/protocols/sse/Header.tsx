@@ -1,3 +1,4 @@
+import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import {
   beginRequest,
   cancelRequest,
@@ -43,10 +44,10 @@ const Header: FC<ApiComponentType> = ({ apisData, onApisDataChange, type }) => {
       return;
     }
 
-    window?.vscode.postMessage({
+    sendRequestPanelMessage({
       action: "sendSse",
       executionId,
-      data: apisData,
+      data: { ...apisData, kind: "sse" },
       option: {
         server_id: curServerId,
         ...option,
@@ -109,7 +110,7 @@ const Header: FC<ApiComponentType> = ({ apisData, onApisDataChange, type }) => {
           type="default"
           size="middle"
           onClick={() => {
-            window?.vscode.postMessage({
+            sendRequestPanelMessage({
               action: "saveApiData",
               data: apisData,
             });

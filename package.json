@@ -53,7 +53,6 @@
     "@vscode/test-cli": "^0.0.15",
     "@vscode/test-electron": "^3.1.0",
     "@vscode/vsce": "^4.0.0",
-    "ajv": "^8.20.0",
     "curl-to-postmanv2": "^1.8.7",
     "esbuild": "^0.28.2",
     "i18next": "^26.5.10",

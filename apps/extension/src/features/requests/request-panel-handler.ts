@@ -1,5 +1,6 @@
+import { postRequestPanelResponse } from "../../platform/webviews/request-panel-channel";
 import { requestDefinition } from "@onapi/domain";
-import type { RequestPanelMessage } from "./panel-message";
+import type { RequestPanelCommand } from "@onapi/contracts/request-panel";
 import { fetchGraphQLSchema } from "./graphql-schema";
 import { handlePanelAction } from "../../platform/webviews/panel-actions";
 import { relayExecutionEvent } from "../../platform/execution/webview-relay";
@@ -52,6 +53,7 @@ const saveApiData = async (
   context: vscode.ExtensionContext,
   panel: vscode.WebviewPanel,
   automatic = false,
+  requestId?: string,
 ) => {
   // Local stored data collection
   const newData: ApiDetailsData = requestDefinition(cloneDeep(data));
@@ -84,6 +86,19 @@ const saveApiData = async (
     return saved;
   }
   if (!saved) {
+    if (requestId) {
+      postRequestPanelResponse(panel.webview, {
+        action: "requestPanelError",
+        requestId,
+        data: {
+          action: automatic ? "updateApiActiveData" : "saveApiData",
+          error: {
+            code: "SAVE_FAILED",
+            message: "Failed to save requests. Please try again.",
+          },
+        },
+      });
+    }
     vscode.window.showErrorMessage(
       "Failed to save requests. Please try again.",
     );
@@ -92,8 +107,9 @@ const saveApiData = async (
   setRequestDraft(getApiListName(context), newData.id);
   // Save and update open
   // Automatic saves must not replace newer edits already in the Webview.
-  panel.webview.postMessage({
+  postRequestPanelResponse(panel.webview, {
     action: "requestSaved",
+    ...(requestId ? { requestId } : {}),
     data: { definition: newData, submitted: data },
   });
 
@@ -108,7 +124,7 @@ const saveApiData = async (
   const shareData = getProjectShareData(context);
   if (shareData?.[newData.id]) {
     shareData[newData.id].share_time = Date.now();
-    setProjectShareData(shareData, context);
+    await setProjectShareData(shareData, context);
   }
 
   if (!automatic) {
@@ -116,8 +132,8 @@ const saveApiData = async (
   }
 };
 
-export const handelOpenMessage = async (
-  message: RequestPanelMessage,
+export const handleRequestPanelCommand = async (
+  message: RequestPanelCommand,
   context: vscode.ExtensionContext,
   panel: vscode.WebviewPanel,
   apiData: ApiDetailsData,
@@ -131,14 +147,18 @@ export const handelOpenMessage = async (
 
   switch (action) {
     case "saveApiData":
-      await saveApiData(data, context, panel);
+      await saveApiData(data, context, panel, false, message.requestId);
       break;
     case "updateApiActiveData":
       if (["api", "sse", "graphql", "folder"].includes(data.kind)) {
-        await saveApiData(data, context, panel, true);
+        await saveApiData(data, context, panel, true, message.requestId);
         break;
       }
-      setRequestDraft(getApiListName(context), data.id, cloneDeep(data));
+      setRequestDraft(
+        getApiListName(context),
+        data.id,
+        cloneDeep(data) as unknown as ApiDetailsData,
+      );
       // Update title
       panel.title = showTabName(data?.name) + " ⚈";
       const activeProtocolIcon = getProtocolIcon(context, data);
@@ -213,11 +233,11 @@ export const handelOpenMessage = async (
         });
       }
 
-      context.globalState.update("systemConfig", default_system_config);
+      await context.globalState.update("systemConfig", default_system_config);
 
       // Notify other open tabs
       forEach(globalConfig.openedPanels, (openedPanel, key) => {
-        openedPanel.webview.postMessage({
+        postRequestPanelResponse(openedPanel.webview, {
           action: "setSystemConfig",
           data: default_system_config || {},
         });
@@ -225,7 +245,7 @@ export const handelOpenMessage = async (
 
       break;
     case "createShare":
-      createShare(data, context);
+      await createShare(data, context);
       break;
 
     case "generateCode": {
@@ -244,8 +264,9 @@ export const handelOpenMessage = async (
           selection.language,
           selection.variant,
         );
-        panel.webview.postMessage({
+        postRequestPanelResponse(panel.webview, {
           action: "generatedCode",
+          ...(message.requestId ? { requestId: message.requestId } : {}),
           data: {
             requestId: data.requestId,
             code,
@@ -254,8 +275,9 @@ export const handelOpenMessage = async (
           },
         });
       } catch (error) {
-        panel.webview.postMessage({
+        postRequestPanelResponse(panel.webview, {
           action: "generatedCode",
+          ...(message.requestId ? { requestId: message.requestId } : {}),
           data: {
             requestId: data.requestId,
             error: String(error),
@@ -271,7 +293,10 @@ export const handelOpenMessage = async (
         message?.option,
       );
       // Send HAR request results back to Webview
-      panel.webview.postMessage({ action: "setCodeHar", data: codeHar });
+      postRequestPanelResponse(panel.webview, {
+        action: "setCodeHar",
+        data: codeHar,
+      });
       break;
     case "copyAsCurl": {
       try {
@@ -291,36 +316,44 @@ export const handelOpenMessage = async (
     }
     case "ws_connect":
       await recordRequestHistory(context, data.target);
-      data.option = await prepareWebSocketSessionOptions(data, context);
-
-      connectWebSocketSession(data);
+      connectWebSocketSession({
+        target: data.target,
+        option: await prepareWebSocketSessionOptions(
+          { ...data, option: data.option },
+          context,
+        ),
+      });
       break;
     case "ws_disconnect":
       disconnectWebSocketSession(data);
       break;
     case "ws_send":
-      sendWebSocketMessage(data);
+      await sendWebSocketMessage(data);
       break;
     case "socketio_connect":
       await recordRequestHistory(context, data.target);
-      data.option = await prepareSocketIoSessionOptions(data, context);
-
-      connectSocketIoSession(data);
+      connectSocketIoSession({
+        target: data.target,
+        option: await prepareSocketIoSessionOptions(
+          { ...data, option: data.option },
+          context,
+        ),
+      });
       break;
     case "socketio_disconnect":
       disconnectSocketIoSession(data);
       break;
     case "socketio_send":
-      sendSocketIoMessage(data);
+      await sendSocketIoMessage(data);
       break;
     case "socketio_update_event":
-      updateSocketIoSubscriptions(data);
+      await updateSocketIoSubscriptions(data);
       break;
     case "/proxy/fetch":
-      proxyFetch(data, panel);
+      await proxyFetch(data, panel, message.requestId);
       break;
     case "getGraphQLSchema":
-      await fetchGraphQLSchema(data, context, panel);
+      await fetchGraphQLSchema(data, context, panel, message.requestId);
       break;
   }
 };

@@ -1,3 +1,7 @@
+import {
+  sendRequestPanelMessage,
+  readRequestPanelResponse,
+} from "@/shared/bridge/request-panel";
 import styles2 from "./GenerateCodeDrawer.module.css";
 import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -74,8 +78,9 @@ const GenerateCodeDrawer: React.FC<Props> = (props) => {
     pendingRequest.current = requestId;
     setGenLoading(true);
     setCodeText("");
-    window.vscode.postMessage({
+    sendRequestPanelMessage({
       action: "generateCode",
+      requestId,
       data: { apiData: value, language, variant, requestId },
       option: { server_id: currentServerId },
     });
@@ -83,7 +88,19 @@ const GenerateCodeDrawer: React.FC<Props> = (props) => {
 
   useEffect(() => {
     const receive = (event: MessageEvent) => {
-      const { action, data } = event.data || {};
+      const parsed = readRequestPanelResponse(event.data);
+      if (
+        parsed?.action === "requestPanelError" &&
+        parsed.requestId === pendingRequest.current
+      ) {
+        setGenLoading(false);
+        catchError(parsed.data.error.message, t("supplement.generate_err"));
+        return;
+      }
+      if (parsed?.action !== "generatedCode") {
+        return;
+      }
+      const { action, data } = parsed;
       if (
         action !== "generatedCode" ||
         data?.requestId !== pendingRequest.current
@@ -91,16 +108,19 @@ const GenerateCodeDrawer: React.FC<Props> = (props) => {
         return;
       }
       setGenLoading(false);
-      if (data.error) {
+      if ("error" in data) {
         catchError(data.error, t("supplement.generate_err"));
         return;
       }
-      setLanguages(data.languages);
-      setCodeText(varReplace(data.code));
+      setLanguages(data.languages || []);
+      setCodeText(varReplace(data.code || ""));
       setMenuKey(`${data.language}.${data.variant}`);
-      setEditorLanguage(data.syntax);
-      const mode: [string, string] = [data.language, data.variant];
-      window.vscode.postMessage({
+      setEditorLanguage(data.syntax || "text");
+      const mode: [string, string] = [
+        data.language || "curl",
+        data.variant || "cURL",
+      ];
+      sendRequestPanelMessage({
         action: "setSystemConfig",
         data: { generate_code_mode: mode },
       });

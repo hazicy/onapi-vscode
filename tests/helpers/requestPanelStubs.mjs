@@ -1,8 +1,15 @@
+import load, { nativeDependency } from "./loadTypeScript.mjs";
+const channel = await load(
+  "apps/extension/src/platform/webviews/request-panel-channel.ts",
+  nativeDependency,
+);
 import { unexpectedCall as unused } from "./unexpectedCall.mjs";
 
 // Explicit boundaries shared by request-panel tests. These operations must not
 // run while testing persistence or opening a request that no longer exists.
 export const requestPanelStubs = {
+  "../../platform/webviews/request-panel-channel": channel,
+  "./request-panel-channel": channel,
   "./execution/http-runner": {
     getCodeHarRequest: unused,
     getResolvedCodeRequest: unused,

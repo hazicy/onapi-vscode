@@ -1,8 +1,10 @@
 import { globalConfig } from "../../../app/config";
-import { SocketIoAdapter } from "@onapi/runtime/socketio/adapter";
+import {
+  SocketIoAdapter,
+  type SocketIoExecutionRequest,
+} from "@onapi/runtime/socketio/adapter";
 import { applySocketSettings } from "./socket-settings";
 import * as vscode from "vscode";
-import { SocketIoDetailsData } from "@onapi/domain/requests/types/socketio";
 import {
   createTargetIdMap,
   getSocketCollection,
@@ -21,10 +23,9 @@ const sessions = new Map<string, SocketIoAdapter>();
 export const disconnectSocketIoSession = (targetId: string) => {
   sessions.get(targetId)?.cancel();
 };
-export const connectSocketIoSession = async (data: {
-  option: any;
-  target: SocketIoDetailsData;
-}) => {
+export const connectSocketIoSession = async (
+  data: SocketIoExecutionRequest,
+) => {
   const id = data.target?.id;
   if (!id) {
     return;

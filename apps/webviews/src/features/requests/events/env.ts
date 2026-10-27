@@ -1,3 +1,4 @@
+import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 
 import { find } from "lodash-es";
@@ -30,21 +31,21 @@ export const copyEnv = async ({ id }: { id: string; project_id?: string }) => {
 };
 
 export const saveProjectConfig = (key: any, value: any) => {
-  window?.vscode.postMessage({
+  sendRequestPanelMessage({
     action: "setProjectConfig",
     data: { key, value },
   });
 };
 
 export const openEnvPage = (data?: any) => {
-  window?.vscode.postMessage({
+  sendRequestPanelMessage({
     action: "openEnv",
     data,
   });
 };
 
 export const getProjectConfig = () => {
-  window?.vscode.postMessage({
+  sendRequestPanelMessage({
     action: "getProjectConfig",
   });
 };

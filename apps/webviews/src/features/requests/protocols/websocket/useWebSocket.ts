@@ -1,3 +1,4 @@
+import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import { cloneDeep, isEqual } from "lodash-es";
 
 import useWebSocketStore from "@/features/requests/store/useApis/websocket";
@@ -16,7 +17,7 @@ const useWebSocket = () => {
     // Currently connecting
     if (["connecting", "connect"].includes(status)) {
       // Disconnect
-      window?.vscode.postMessage({
+      sendRequestPanelMessage({
         action: "ws_disconnect",
         data: target?.id,
       });
@@ -26,13 +27,15 @@ const useWebSocket = () => {
 
     // WebSocket connection preprocessing
     const options: any = await getWebSocketSendOptions(target);
-    useWebSocketStore.getState().startConnection(target.id);
+    const requestId = crypto.randomUUID();
+    useWebSocketStore.getState().startConnection(target.id, requestId);
 
     options.server_id = curServerId;
 
     // WebSocket connection request
-    window?.vscode.postMessage({
+    sendRequestPanelMessage({
       action: "ws_connect",
+      requestId,
       data: {
         option: options,
         target,

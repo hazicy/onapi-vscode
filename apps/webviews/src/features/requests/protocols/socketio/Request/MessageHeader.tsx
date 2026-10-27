@@ -1,3 +1,4 @@
+import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import styles from "./Request.module.css";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -133,7 +134,7 @@ const MessageHeader = (props: Props) => {
             )
           }
           onClick={() => {
-            window?.vscode.postMessage({
+            sendRequestPanelMessage({
               action: "socketio_send",
               data: {
                 id: apisActiveKey,

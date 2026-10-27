@@ -31,6 +31,7 @@ export interface HttpExecutionState {
 export type HttpExecutionAction =
   | { type: "begin"; executionId: string }
   | { type: "cancel"; executionId: string }
+  | { type: "failure"; executionId: string; error: ExecutionError }
   | {
       type: "event";
       executionId: string;
@@ -61,6 +62,9 @@ export function reduceHttpExecutionEvent(
     current.executionId !== action.executionId
   ) {
     return current;
+  }
+  if (action.type === "failure") {
+    return { ...current, status: "failed", error: action.error };
   }
   if (action.type === "cancel") {
     return { ...current, status: "cancelled" };

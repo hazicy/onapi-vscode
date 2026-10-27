@@ -42,8 +42,6 @@
     "@prettier/plugin-xml": "^3.4.2",
     "@tanstack/react-table": "^9.3.1",
     "ahooks": "^3.10.0",
-    "ajv": "^8.20.0",
-    "ajv-i18n": "^4.2.0",
     "axios": "^1.20.0",
     "clsx": "^2.1.1",
     "cm6-graphql": "^0.2.2",

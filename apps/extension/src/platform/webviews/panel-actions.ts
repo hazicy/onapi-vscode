@@ -1,10 +1,12 @@
+import type { RequestPanelResponseInput } from "@onapi/contracts/request-panel";
+import { postRequestPanelResponse } from "./request-panel-channel";
 import * as vscode from "vscode";
 import { getCurrentProjectConfig } from "../storage/project-config";
 import { getApiList } from "../../features/requests/request-storage";
 import { getDocBaseUrl, getOpenApi } from "../../features/sharing/share-data";
 import { downloadFile } from "../host-utils";
 
-type Message = { action: string; data?: unknown };
+type Message = { action: string; data?: unknown; requestId?: string };
 
 /** Operations shared by panels; feature-specific writes remain with their owner. */
 export async function handlePanelAction(
@@ -12,26 +14,40 @@ export async function handlePanelAction(
   context: vscode.ExtensionContext,
   panel?: vscode.WebviewPanel | null,
 ) {
-  const post = (action: string, data: unknown) =>
-    panel?.webview.postMessage({ action, data });
+  const post = (response: RequestPanelResponseInput) =>
+    panel &&
+    postRequestPanelResponse(panel.webview, {
+      ...response,
+      ...(message.requestId ? { requestId: message.requestId } : {}),
+    });
   switch (message.action) {
     case "getProjectConfig":
-      post("setProjectConfig", getCurrentProjectConfig(context));
+      post({
+        action: "setProjectConfig",
+        data: getCurrentProjectConfig(context),
+      });
       return true;
     case "getApiList":
-      post("setApiList", getApiList(context));
+      post({ action: "setApiList", data: getApiList(context) });
       return true;
     case "getSystemConfig":
-      post("setSystemConfig", context.globalState.get("systemConfig") || {});
+      post({
+        action: "setSystemConfig",
+        data:
+          context.globalState.get<Record<string, unknown>>("systemConfig") ||
+          {},
+      });
       return true;
     case "getVscodeTheme":
-      post(
-        "setVscodeTheme",
-        vscode.workspace.getConfiguration("workbench").get("colorTheme"),
-      );
+      post({
+        action: "setVscodeTheme",
+        data: vscode.workspace
+          .getConfiguration("workbench")
+          .get<string>("colorTheme"),
+      });
       return true;
     case "getDocBaseUrl":
-      post("setDocBaseUrl", getDocBaseUrl(context));
+      post({ action: "setDocBaseUrl", data: getDocBaseUrl(context) });
       return true;
     case "openNewWindow":
       if (typeof message.data === "string") {

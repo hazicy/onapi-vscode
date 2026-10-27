@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { build } from "esbuild";
-import Ajv from "ajv";
+import { Validator } from "jsonschema";
 import JSON5 from "json5";
 import { fakerLocalesEsbuild } from "../tooling/build/faker-locales.mjs";
 
@@ -178,10 +178,14 @@ test("Schema generation respects constraints, references, compositions and optio
     },
   };
   const snapshot = structuredClone(schema),
-    validate = new Ajv().compile(schema);
+    validator = new Validator();
   for (let i = 0; i < 30; i++) {
     const value = await new api.MockSchema().mock(schema);
-    assert.ok(validate(value), JSON.stringify(validate.errors));
+    const result = validator.validate(value, schema);
+    assert.ok(
+      result.valid,
+      result.errors.map((error) => error.stack).join("\n"),
+    );
     assert.equal(typeof value.name, "string");
     assert.equal(typeof value.nested.enabled, "boolean");
     assert.equal(typeof value.nested.count, "number");

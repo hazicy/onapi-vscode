@@ -1,3 +1,4 @@
+import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import { reduceHttpExecutionEvent } from "@/features/requests/execution/http-state";
 import useApis from "@/features/requests/store/useApis";
 
@@ -30,7 +31,7 @@ export function cancelRequest(): void {
       executionId: currentSendingData.executionId,
     }),
   );
-  window.vscode.postMessage({
+  sendRequestPanelMessage({
     action: "stopSendApi",
     executionId: currentSendingData.executionId,
   });

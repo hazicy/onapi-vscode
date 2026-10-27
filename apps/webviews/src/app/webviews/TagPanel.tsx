@@ -1,3 +1,9 @@
+import useSocketStore from "@/features/requests/store/useApis/websocket";
+import {
+  editorDefinition,
+  editorDefinitions,
+} from "@/features/requests/adapters/editor-record";
+import { readRequestPanelResponse } from "@/shared/bridge/request-panel";
 import SharedComponentsProvider from "@/app/providers/SharedComponentsProvider";
 import { PROTOCOL_EXECUTION_EVENT } from "@onapi/contracts";
 import { createExecutionConsumer } from "@/features/requests/execution/consume-event";
@@ -23,7 +29,6 @@ import { useGlobal } from "@/app/store";
 import { HotkeysProvider } from "react-hotkeys-hook";
 import useApisHotkeys from "@/features/requests/hooks/useApisHotkeys";
 import useShare from "@/features/sharing/store/useShare";
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import useWebSocket from "@/features/requests/protocols/websocket/useWebSocket";
 import useSocketIo from "@/features/requests/protocols/socketio/useWebSocket";
 import useGraphQLQuery from "@/features/requests/graphql/GraphQLQuery/useGraphQLQuery";
@@ -84,7 +89,10 @@ function TagPanel() {
     }
     const consumeExecutionEvent = createExecutionConsumer();
     const messageHandler = async (event: { data: any }) => {
-      const message = event.data; // The JSON data our extension sent
+      const message = readRequestPanelResponse(event.data);
+      if (!message) {
+        return;
+      }
 
       switch (message.action) {
         case "externalStorageChanged": {
@@ -93,18 +101,18 @@ function TagPanel() {
           const previous = state.apiOriginDetailsList.find(
             (item) => item.id === active.id,
           );
-          const current = (message.data as ApiDetailsData[]).find(
+          const current = editorDefinitions(message.data).find(
             (item) => item.id === active.id,
           );
           // Preserve edits when the file changes underneath an open editor.
           if (current && (!previous || isEqual(active, previous))) {
             updateApisActiveData({ ...current });
           }
-          updateApiOriginDetailsList(message.data || []);
+          updateApiOriginDetailsList(editorDefinitions(message.data));
           break;
         }
         case "setApiList":
-          updateApiOriginDetailsList(message?.data || []);
+          updateApiOriginDetailsList(editorDefinitions(message.data));
           break;
         case PROTOCOL_EXECUTION_EVENT:
           consumeExecutionEvent(message.data, {
@@ -126,18 +134,59 @@ function TagPanel() {
         case "setProjectConfig":
           updateProjectConfig({ ...message.data });
           break;
+        case "requestPanelError": {
+          const failure = message.data;
+          if (
+            ["sendApi", "sendSse"].includes(failure.action || "") &&
+            failure.executionId
+          ) {
+            const state = useApis.getState();
+            state.updateCurrentSendingData(
+              reduceHttpExecutionEvent(state.currentSendingData, {
+                type: "failure",
+                executionId: failure.executionId,
+                error: failure.error,
+              }),
+            );
+          }
+          if (
+            (failure.action === "ws_connect" ||
+              failure.action === "socketio_connect") &&
+            failure.targetId &&
+            message.requestId
+          ) {
+            useSocketStore
+              .getState()
+              .failConnection(
+                failure.targetId,
+                message.requestId,
+                failure.error,
+              );
+          }
+          if (failure.action === "getGraphQLSchema") {
+            useApis.getState().updateSchemaLoading(false);
+          }
+          if (failure.action === "/proxy/fetch") {
+            handleProxyFetchResult({ code: 500, error: failure.error.message });
+          }
+          // Save failures never acknowledge or replace the current draft.
+          break;
+        }
         case "requestSaved":
           useApis
             .getState()
-            .acknowledgeSave(message.data.definition, message.data.submitted);
+            .acknowledgeSave(
+              editorDefinition(message.data.definition),
+              editorDefinition(message.data.submitted),
+            );
           break;
         case "setApiData":
           void preloadRequestProtocol(message.data.kind)?.catch(() => {});
-          updateApisActiveData({ ...message.data });
+          updateApisActiveData(editorDefinition(message.data));
 
           break;
         case "setVscodeTheme":
-          updateVscodeTheme(message.data);
+          updateVscodeTheme(message.data || "");
           break;
         case "setSystemConfig":
           updateSystemConfig({ ...systemConfig, ...message.data });
@@ -152,7 +201,16 @@ function TagPanel() {
           handleProxyFetchResult(message.data);
           break;
         case "graphQLSchemaFetchResult":
-          handelGraphQLSchemaFetchResult(message.data);
+          handelGraphQLSchemaFetchResult({
+            ...message.data,
+            data: message.data.data as Parameters<
+              typeof handelGraphQLSchemaFetchResult
+            >[0]["data"],
+            error:
+              typeof message.data.error === "string"
+                ? message.data.error
+                : undefined,
+          });
           break;
       }
     };

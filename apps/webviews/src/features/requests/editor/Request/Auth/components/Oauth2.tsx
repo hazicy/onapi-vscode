@@ -1,3 +1,4 @@
+import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import {
   scopeValues,
   selectActiveEnvironment,
@@ -143,7 +144,7 @@ const Oauth2 = (props: Props) => {
     }
 
     try {
-      window?.vscode.postMessage({
+      sendRequestPanelMessage({
         action: "/proxy/fetch",
         data: {
           url: accessTokenUrl,
@@ -367,7 +368,7 @@ const Oauth2 = (props: Props) => {
 
     try {
       setRefreshLoading(true);
-      window?.vscode.postMessage({
+      sendRequestPanelMessage({
         action: "/proxy/fetch",
         data: {
           url: refreshTokenUrl,

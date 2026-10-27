@@ -47,7 +47,7 @@ async function fixture(
     () => ({}),
   );
   const exports = await load(
-    `apps/extension/src/features/${{ open: "requests/open", sidbar: "sidebar/sidebar", importData: "import/import-data" }[file]}-handler.ts`,
+    `apps/extension/src/features/${{ open: "requests/request-panel", sidbar: "sidebar/sidebar", importData: "import/import-data" }[file]}-handler.ts`,
     (id) => {
       if (id.endsWith("/panel-actions"))
         return { handlePanelAction: () => false };
@@ -145,7 +145,7 @@ async function fixture(
   );
   const handler =
     exports.handleMessage ||
-    exports.handelOpenMessage ||
+    exports.handleRequestPanelCommand ||
     exports.handelImportDataMessage;
   return {
     calls,

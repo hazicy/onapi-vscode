@@ -1,8 +1,13 @@
+import { postRequestPanelResponse } from "./webviews/request-panel-channel";
 import * as vscode from "vscode";
 import { forEach } from "lodash";
 import axios from "axios";
 
-export const proxyFetch = async (data: any, panel: vscode.WebviewPanel) => {
+export const proxyFetch = async (
+  data: any,
+  panel: vscode.WebviewPanel,
+  requestId?: string,
+) => {
   try {
     const paramsData = new URLSearchParams();
     forEach(data?.data, (value, key) => {
@@ -21,20 +26,23 @@ export const proxyFetch = async (data: any, panel: vscode.WebviewPanel) => {
     };
     const response = await axios(config);
     // Return target server response to Webview
-    panel.webview.postMessage({
+    postRequestPanelResponse(panel.webview, {
       action: "proxyFetchResult",
+      ...(requestId ? { requestId } : {}),
       data: { code: 200, data: response.data },
     });
   } catch (error: any) {
     if (error?.response) {
       // Forward errors from target server
-      panel.webview.postMessage({
+      postRequestPanelResponse(panel.webview, {
         action: "proxyFetchResult",
+        ...(requestId ? { requestId } : {}),
         data: { code: error.response.status, error: error.response.data },
       });
     } else {
-      panel.webview.postMessage({
+      postRequestPanelResponse(panel.webview, {
         action: "proxyFetchResult",
+        ...(requestId ? { requestId } : {}),
         data: { code: 500, error: "Internal Proxy Error" },
       });
     }

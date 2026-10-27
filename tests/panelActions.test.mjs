@@ -1,3 +1,4 @@
+import { requestPanelStubs } from "./helpers/requestPanelStubs.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import load from "./helpers/loadTypeScript.mjs";
@@ -31,7 +32,7 @@ test("shared panel actions handle exports and reads without consuming feature me
         };
       if (id.endsWith("/host-utils"))
         return { downloadFile: (...args) => downloads.push(args) };
-      return {};
+      return requestPanelStubs[id] ?? {};
     },
   );
   const context = { globalState: { get: () => ({ language: "en" }) } };

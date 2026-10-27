@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import load from "./helpers/loadTypeScript.mjs";
+import load, { nativeDependency } from "./helpers/loadTypeScript.mjs";
 const executionState = await load(
   "apps/webviews/src/features/requests/execution/http-state.ts",
 );
@@ -18,12 +18,22 @@ test("sending and cancelling preserve results and prevent duplicate sends", asyn
     state.currentSendingData = next;
   };
   const messages = [];
+  const globals = {
+    window: { vscode: { postMessage: (message) => messages.push(message) } },
+  };
+  const bridge = await load(
+    "apps/webviews/src/shared/bridge/request-panel.ts",
+    nativeDependency,
+    globals,
+  );
   const { beginRequest, cancelRequest } = await load(
     "apps/webviews/src/features/requests/utils/requestExecution.ts",
     (id) =>
-      id.endsWith("execution/http-state")
-        ? executionState
-        : { default: { getState: () => state } },
+      id === "@/shared/bridge/request-panel"
+        ? bridge
+        : id.endsWith("execution/http-state")
+          ? executionState
+          : { default: { getState: () => state } },
     {
       window: { vscode: { postMessage: (message) => messages.push(message) } },
     },

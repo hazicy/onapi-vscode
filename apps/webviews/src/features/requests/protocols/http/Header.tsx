@@ -1,3 +1,4 @@
+import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import {
   beginRequest,
   cancelRequest,
@@ -49,10 +50,10 @@ const Header: FC<ApiComponentType> = ({ apisData, onApisDataChange, type }) => {
     if (!executionId) {
       return;
     }
-    window?.vscode.postMessage({
+    sendRequestPanelMessage({
       action: "sendApi",
       executionId,
-      data: apisData,
+      data: { ...apisData, kind: "api" },
       option: {
         server_id: curServerId,
         ...option,

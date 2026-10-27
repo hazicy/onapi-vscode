@@ -1,3 +1,4 @@
+import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import {
   beginRequest,
   cancelRequest,
@@ -99,10 +100,10 @@ const Index = memo((props: ApiComponentType) => {
     if (!executionId) {
       return;
     }
-    window?.vscode.postMessage({
+    sendRequestPanelMessage({
       action: "sendApi",
       executionId,
-      data: currentData(),
+      data: { ...currentData(), kind: "graphql" },
       option: {
         server_id: currentServerId,
       },
@@ -130,7 +131,7 @@ const Index = memo((props: ApiComponentType) => {
     setSaveLoading(true);
     try {
       const result = cloneDeep(apisData);
-      window?.vscode.postMessage({
+      sendRequestPanelMessage({
         action: "saveApiData",
         data: result,
       });
@@ -149,7 +150,7 @@ const Index = memo((props: ApiComponentType) => {
         onSelect={(keys: React.Key[]) => {
           const parentId = head(keys);
           const result = cloneDeep(apisData);
-          window?.vscode.postMessage({
+          sendRequestPanelMessage({
             action: "saveApiData",
             data: { ...result, parentId: parentId as string },
           });

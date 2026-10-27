@@ -1,5 +1,5 @@
 {
   "extends": "../../tooling/tsconfig/browser.json",
-  "include": ["src", "../../tooling/types.d.ts"],
+  "include": ["src", "tests", "../../tooling/types.d.ts"],
   "compilerOptions": {}
 }

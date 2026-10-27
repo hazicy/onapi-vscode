@@ -1,3 +1,4 @@
+import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import type { SocketIoDetailsData } from "@onapi/domain/requests/types/socketio";
 import styles from "../../SocketIoDebug.module.css";
 import React, { useEffect, useMemo, useRef } from "react";
@@ -278,7 +279,7 @@ const Realtime: React.FC<Props> = ({ id, onChange, apiScreenDirection }) => {
         <Sending
           onCancel={() => {
             // Disconnect
-            window?.vscode.postMessage({
+            sendRequestPanelMessage({
               action: "socketio_disconnect",
               data: id,
             });

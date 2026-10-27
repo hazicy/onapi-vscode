@@ -1,3 +1,4 @@
+import { postRequestPanelResponse } from "../../platform/webviews/request-panel-channel";
 import type * as vscode from "vscode";
 import { requestUrl } from "@onapi/domain";
 import { getCurrentRequestServer } from "./request-server";
@@ -8,11 +9,13 @@ export async function fetchGraphQLSchema(
   data: any,
   context: vscode.ExtensionContext,
   panel: vscode.WebviewPanel,
+  requestId?: string,
 ) {
   const server = getCurrentRequestServer(context, data?.currentServerId);
   if (!requestUrl(data?.apiData || {}) && !server?.uri) {
-    panel.webview.postMessage({
+    postRequestPanelResponse(panel.webview, {
       action: "graphQLSchemaFetchResult",
+      ...(requestId ? { requestId } : {}),
       data: {
         code: 200,
         error: "Enter the server URL to retrieve the GraphQL Schema",
@@ -27,8 +30,9 @@ export async function fetchGraphQLSchema(
   });
   const url = harObj?.log?.entries?.[0]?.request?.url?.split("#")?.[0] || "";
   if (!url) {
-    panel.webview.postMessage({
+    postRequestPanelResponse(panel.webview, {
       action: "graphQLSchemaFetchResult",
+      ...(requestId ? { requestId } : {}),
       data: {
         code: 200,
         error: "Enter the server URL to retrieve the GraphQL Schema",
@@ -139,8 +143,9 @@ export async function fetchGraphQLSchema(
   };
 
   const res = await proxyFetch2(param);
-  panel.webview.postMessage({
+  postRequestPanelResponse(panel.webview, {
     action: "graphQLSchemaFetchResult",
+    ...(requestId ? { requestId } : {}),
     data: res,
   });
 }

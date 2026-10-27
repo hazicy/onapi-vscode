@@ -190,7 +190,7 @@ export const getApiDocsUrlById = (
   id: string,
   context: vscode.ExtensionContext,
 ) => {
-  const docBaseUrl = context.globalState.get("docBaseUrl");
+  const docBaseUrl = context.globalState.get<string>("docBaseUrl") || "";
   return `${docBaseUrl}?share_id=${id}`;
 };
 
@@ -221,7 +221,7 @@ export const updatePageDocBaseUrl = (docBaseUrl: string) => {
 };
 
 export const getDocBaseUrl = (context: vscode.ExtensionContext) => {
-  const docBaseUrl = context.globalState.get("docBaseUrl");
+  const docBaseUrl = context.globalState.get<string>("docBaseUrl") || "";
   return docBaseUrl;
 };
 

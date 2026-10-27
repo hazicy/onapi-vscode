@@ -1,3 +1,4 @@
+import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import styles from "./RequestWorkspace.module.css";
 import { Flex } from "@/shared/ui/base";
 import React, { lazy, useEffect, useState } from "react";
@@ -125,7 +126,7 @@ function RequestWorkspaceReady() {
             end: performance.now(),
           });
         }
-        window.vscode.postMessage({ action: "getApiList" });
+        sendRequestPanelMessage({ action: "getApiList" });
       });
     });
     return () => {
@@ -143,7 +144,7 @@ const RequestWorkspace: React.FC<RequestWorkspaceProps> = () => {
   const updateApisActiveData = useApis((store) => store.updateApisActiveData);
 
   const onApisDataChange = (newData: ApisData) => {
-    window?.vscode.postMessage({
+    sendRequestPanelMessage({
       action: "updateApiActiveData",
       data: newData,
     });

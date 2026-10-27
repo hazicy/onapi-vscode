@@ -5,6 +5,7 @@ type ConnectionStatus = "connect" | "connecting" | "disconnect";
 type Pool = {
   [k: string]: {
     status: ConnectionStatus;
+    requestId?: string;
     socketRes: any[];
     responseData?: any;
   };
@@ -17,7 +18,12 @@ type State = {
 };
 
 type Action = {
-  startConnection: (targetId: string) => void;
+  startConnection: (targetId: string, requestId?: string) => void;
+  failConnection: (
+    targetId: string,
+    requestId: string,
+    error: { message: string },
+  ) => void;
   appendConnectionResult: (
     targetId: string,
     status: ConnectionStatus,
@@ -33,17 +39,50 @@ const useApisWebSocket = create<State & Action>()(
     (set) => ({
       websocketConnectionPool: {},
       aborts: {},
-      startConnection: (targetId) =>
+      startConnection: (targetId, requestId) =>
         set((state) => ({
           websocketConnectionPool: {
             ...state.websocketConnectionPool,
             [targetId]: {
               status: "connecting",
+              requestId,
               socketRes:
                 state.websocketConnectionPool[targetId]?.socketRes || [],
             },
           },
         })),
+      failConnection: (targetId, requestId, error) => {
+        set((state) => {
+          const previous = state.websocketConnectionPool[targetId];
+          if (
+            previous?.status !== "connecting" ||
+            previous.requestId !== requestId
+          ) {
+            return state;
+          }
+          return {
+            websocketConnectionPool: {
+              ...state.websocketConnectionPool,
+              [targetId]: {
+                ...previous,
+                status: "disconnect",
+                requestId: undefined,
+                socketRes: [
+                  ...previous.socketRes,
+                  {
+                    action: "error",
+                    message: {
+                      type: "error",
+                      isSuccess: false,
+                      message: error.message,
+                    },
+                  },
+                ],
+              },
+            },
+          };
+        });
+      },
       appendConnectionResult: (targetId, status, data, responseData) => {
         if (!data) {
           return;

@@ -1,3 +1,4 @@
+import { postRequestPanelResponse } from "../../platform/webviews/request-panel-channel";
 import * as vscode from "vscode";
 import { forEach } from "lodash";
 import { copyTextToClipboard, showTabName } from "../../platform/host-utils";
@@ -20,7 +21,10 @@ export const updateOpenData = (
     // Update title
     panel.title = showTabName(apiData?.name);
     // Update content
-    panel.webview.postMessage({ action: "setApiData", data: apiData });
+    postRequestPanelResponse(panel.webview, {
+      action: "setApiData",
+      data: apiData,
+    });
   }
 };
 
@@ -29,9 +33,9 @@ export const updateOpenProjectConfig = (
   projectConfig: ProjectConfigType,
 ) => {
   forEach(openedPanels, (openedPanel) => {
-    openedPanel.webview.postMessage({
+    postRequestPanelResponse(openedPanel.webview, {
       action: "setProjectConfig",
-      data: projectConfig,
+      data: { ...projectConfig },
     });
   });
 };

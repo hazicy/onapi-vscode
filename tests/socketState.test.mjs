@@ -90,3 +90,46 @@ test("an absent socket payload leaves connection state untouched", async () => {
   store.getState().appendConnectionResult("ws", "connect", undefined);
   assert.equal(store.getState(), previous);
 });
+
+for (const targetId of ["ws", "socketio"]) {
+  test(`${targetId} preparation failures reset only the matching pending connection`, async () => {
+    const store = await createSocketStore();
+    const { startConnection, failConnection, appendConnectionResult } =
+      store.getState();
+    appendConnectionResult(targetId, "disconnect", {
+      action: "message",
+      message: "history",
+    });
+    startConnection("other", "other-attempt");
+    startConnection(targetId, "old");
+    startConnection(targetId, "current");
+    const pending = store.getState();
+    failConnection(targetId, "old", { message: "Late error" });
+    assert.equal(store.getState(), pending);
+    failConnection(targetId, "current", { message: "Preparation failed" });
+    const pool = store.getState().websocketConnectionPool;
+    assert.equal(pool[targetId].status, "disconnect");
+    assert.equal(pool[targetId].requestId, undefined);
+    assert.equal(pool[targetId].socketRes.length, 2);
+    assert.equal(
+      pool[targetId].socketRes[1].message.message,
+      "Preparation failed",
+    );
+    assert.equal(pool.other, pending.websocketConnectionPool.other);
+    const failed = store.getState();
+    failConnection(targetId, "current", { message: "Duplicate" });
+    assert.equal(store.getState(), failed);
+
+    startConnection(targetId, "cancelled");
+    appendConnectionResult(targetId, "disconnect", {});
+    const cancelled = store.getState();
+    failConnection(targetId, "cancelled", { message: "Late after cancel" });
+    assert.equal(store.getState(), cancelled);
+
+    startConnection(targetId, "connected");
+    appendConnectionResult(targetId, "connect", { action: "connect" });
+    const connected = store.getState();
+    failConnection(targetId, "connected", { message: "Late after connection" });
+    assert.equal(store.getState(), connected);
+  });
+}

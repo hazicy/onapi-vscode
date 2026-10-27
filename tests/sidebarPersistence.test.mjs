@@ -210,7 +210,7 @@ test("setApiList propagates the actual storage result and selects the project ke
 test("opening a request deleted since the UI rendered safely skips both message handlers", async () => {
   for (const [filename, handler] of [
     ["sidebar/sidebar-handler.ts", "handleMessage"],
-    ["requests/open-handler.ts", "handelOpenMessage"],
+    ["requests/request-panel-handler.ts", "handleRequestPanelCommand"],
   ]) {
     const commands = [];
     const handlers = await loadTypeScript(

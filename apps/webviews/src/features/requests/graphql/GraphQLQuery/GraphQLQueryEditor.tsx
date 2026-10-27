@@ -1,3 +1,4 @@
+import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import styles from "./GraphQLQuery.module.css";
 import {
   forwardRef,
@@ -566,10 +567,10 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
     try {
       updateSchemaLoading(true);
 
-      window?.vscode.postMessage({
+      sendRequestPanelMessage({
         action: "getGraphQLSchema",
         data: {
-          apiData,
+          apiData: { ...apiData, kind: "graphql" },
           currentServerId,
         },
       });

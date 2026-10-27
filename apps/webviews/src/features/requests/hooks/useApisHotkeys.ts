@@ -1,3 +1,4 @@
+import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import { beginRequest } from "@/features/requests/utils/requestExecution";
 import { useHotkeys } from "react-hotkeys-hook";
 import {
@@ -26,16 +27,26 @@ export default function useApisHotkeys() {
         return;
       }
       const { apisActiveData } = useApis.getState();
-      const executionId =
-        action === APIS_HOT_KEYS_ENUM.SEND ? beginRequest() : undefined;
-      if (action === APIS_HOT_KEYS_ENUM.SEND && !executionId) {
-        return;
+      if (action === APIS_HOT_KEYS_ENUM.SEND) {
+        const kind = apisActiveData.kind;
+        if (kind !== "api" && kind !== "graphql" && kind !== "sse") {
+          return;
+        }
+        const executionId = beginRequest();
+        if (!executionId) {
+          return;
+        }
+        sendRequestPanelMessage({
+          action: "sendApi",
+          executionId,
+          data: { ...apisActiveData, kind, request: apisActiveData.request },
+        });
+      } else {
+        sendRequestPanelMessage({
+          action: "saveApiData",
+          data: apisActiveData,
+        });
       }
-      window.vscode.postMessage({
-        action: action === APIS_HOT_KEYS_ENUM.SEND ? "sendApi" : "saveApiData",
-        data: apisActiveData,
-        ...(executionId ? { executionId } : {}),
-      });
     },
     {
       ...DEFAULT_HOT_KEYS_OPTIONS,

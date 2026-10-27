@@ -1,3 +1,4 @@
+import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import {
   cloneDeep,
   forEach,
@@ -32,7 +33,7 @@ const useWebSocket = () => {
 
     if (["connecting", "connect"].includes(status)) {
       // Disconnect
-      window?.vscode.postMessage({
+      sendRequestPanelMessage({
         action: "socketio_disconnect",
         data: target?.id,
       });
@@ -42,11 +43,13 @@ const useWebSocket = () => {
 
     // WebSocket connection preprocessing
     const options = await getWebSocketSendOptions(target, temporaryServerId);
-    useWebSocketStore.getState().startConnection(target.id);
+    const requestId = crypto.randomUUID();
+    useWebSocketStore.getState().startConnection(target.id, requestId);
 
     // WebSocket connection request
-    window?.vscode.postMessage({
+    sendRequestPanelMessage({
       action: "socketio_connect",
+      requestId,
       data: {
         option: options,
         target,
@@ -171,8 +174,8 @@ const useWebSocket = () => {
 
   const handleProxyFetchResult = (event: {
     code: number;
-    data: any;
-    error: string;
+    data?: unknown;
+    error?: unknown;
   }) => {
     const { code, data, error } = event;
     if (code !== 200 || !isPlainObject(data)) {

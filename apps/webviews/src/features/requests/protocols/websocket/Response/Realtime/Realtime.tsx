@@ -1,3 +1,4 @@
+import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import clsx from "clsx";
 import styles from "../../WebSocketDebug.module.css";
 import React, { useEffect, useMemo, useRef } from "react";
@@ -198,7 +199,7 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
         <Sending
           onCancel={() => {
             // Disconnect
-            window?.vscode.postMessage({
+            sendRequestPanelMessage({
               action: "ws_disconnect",
               data: value?.id,
             });

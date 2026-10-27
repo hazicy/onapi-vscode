@@ -1,5 +1,7 @@
-import { WebSocketDetailsData } from "@onapi/domain/requests/types/websocket";
-import { WebSocketAdapter } from "@onapi/runtime/websocket/adapter";
+import {
+  WebSocketAdapter,
+  type WebSocketExecutionRequest,
+} from "@onapi/runtime/websocket/adapter";
 import { globalConfig } from "../../../app/config";
 import * as vscode from "vscode";
 import { ProjectConfigType } from "@onapi/domain/project/types/index";
@@ -17,10 +19,9 @@ const sessions = new Map<string, WebSocketAdapter>();
 export const disconnectWebSocketSession = (targetId: string) => {
   sessions.get(targetId)?.cancel();
 };
-export const connectWebSocketSession = async (data: {
-  option: any;
-  target: WebSocketDetailsData;
-}) => {
+export const connectWebSocketSession = async (
+  data: WebSocketExecutionRequest,
+) => {
   const id = data.target?.id;
   if (!id) {
     return;

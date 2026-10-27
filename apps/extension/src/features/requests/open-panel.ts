@@ -1,4 +1,5 @@
-import type { RequestPanelMessage } from "./panel-message";
+import { postRequestPanelResponse } from "../../platform/webviews/request-panel-channel";
+import { receiveRequestPanelCommand } from "../../platform/webviews/request-panel-channel";
 import { createFeaturePanel } from "../../platform/webviews/create-panel";
 import { stopWorker } from "./execution/http-runner";
 import { disconnectWebSocketSession } from "./execution/websocket-session";
@@ -12,7 +13,7 @@ import path from "path";
 import { getApiList } from "./request-storage";
 import { getCurrentProjectConfig } from "../../platform/storage/project-config";
 import { showTabName } from "../../platform/host-utils";
-import { handelOpenMessage } from "./open-handler";
+import { handleRequestPanelCommand } from "./request-panel-handler";
 import { getDocBaseUrl } from "../sharing/share-data";
 
 export const createOpenPanel = (
@@ -66,21 +67,52 @@ export const createOpenPanel = (
   openedPanels[data?.id] = panel;
 
   // Receive messages from Webview
-  panel.webview.onDidReceiveMessage(async (message: RequestPanelMessage) => {
-    handelOpenMessage(message, context, panel, data);
+  panel.webview.onDidReceiveMessage(async (message: unknown) => {
+    await receiveRequestPanelCommand(
+      message,
+      (validated) => handleRequestPanelCommand(validated, context, panel, data),
+      async (error) => {
+        const source =
+          message && typeof message === "object"
+            ? (message as Record<string, unknown>)
+            : {};
+        try {
+          await postRequestPanelResponse(panel.webview, {
+            action: "requestPanelError",
+            ...(typeof source.requestId === "string" && source.requestId.trim()
+              ? { requestId: source.requestId }
+              : {}),
+            data: {
+              targetId: data.id,
+              action:
+                typeof source.action === "string" ? source.action : undefined,
+              executionId:
+                typeof source.executionId === "string" &&
+                source.executionId.trim()
+                  ? source.executionId
+                  : undefined,
+              error: { message: error.message },
+            },
+          });
+        } catch (deliveryError) {
+          console.error("Failed to deliver request panel error", deliveryError);
+        }
+        await vscode.window.showErrorMessage(error.message);
+      },
+    );
   });
 
   // Listen for Webview view visibility changes
   panel.onDidChangeViewState(() => {
     if (panel.visible) {
       // Get latest directory list
-      panel?.webview.postMessage({
+      postRequestPanelResponse(panel.webview, {
         action: "setApiList",
         data: getApiList(context),
       });
 
       // Get latest project data
-      panel?.webview.postMessage({
+      postRequestPanelResponse(panel.webview, {
         action: "setProjectConfig",
         data: getCurrentProjectConfig(context),
       });

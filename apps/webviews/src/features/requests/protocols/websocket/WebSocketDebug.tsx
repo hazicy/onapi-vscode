@@ -1,3 +1,4 @@
+import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import { selectRequestIndex } from "@/features/requests/store/useApis";
 import styles from "./WebSocketDebug.module.css";
 import { Icon } from "@iconify/react";
@@ -76,7 +77,7 @@ const WsDebug: FC<WebSocketComponentType> = ({
   const onSave = async () => {
     setSaveLoading(true);
     try {
-      window?.vscode.postMessage({
+      sendRequestPanelMessage({
         action: "saveApiData",
         data: apisData,
       });
@@ -126,7 +127,7 @@ const WsDebug: FC<WebSocketComponentType> = ({
           const parentId = head(keys);
           const result = cloneDeep(apisData);
 
-          window?.vscode.postMessage({
+          sendRequestPanelMessage({
             action: "saveApiData",
             data: { ...result, parentId: parentId as string },
           });

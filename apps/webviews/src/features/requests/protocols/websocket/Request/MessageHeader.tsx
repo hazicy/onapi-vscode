@@ -1,3 +1,4 @@
+import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import styles from "./Request.module.css";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -103,7 +104,7 @@ const MessageHeader = (props: Props) => {
           size="small"
           disabled={!(size(trim(value?.raw)) > 0 && connected)}
           onClick={() => {
-            window?.vscode.postMessage({
+            sendRequestPanelMessage({
               action: "ws_send",
               data: {
                 id: apisActiveKey,
