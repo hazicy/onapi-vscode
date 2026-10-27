@@ -141,3 +141,20 @@ test("an unsaved GraphQL request is appended with its SDK body and scripts intac
   });
   assert.equal(context.config.http.collection.item, undefined);
 });
+
+test("edited URLs extract path variables before file extensions and preserve their values", () => {
+  const url = model.editedUrl(
+    "https://example.test/:id.json/:id.xml/:name.csv",
+    {
+      variable: [
+        { key: "id", value: "123" },
+        { key: "name", value: "report" },
+      ],
+    },
+  );
+  assert.deepEqual(plain(url.variable), [
+    { key: "id", value: "123" },
+    { key: "name", value: "report" },
+  ]);
+  assert.deepEqual(plain(url.path), [":id.json", ":id.xml", ":name.csv"]);
+});

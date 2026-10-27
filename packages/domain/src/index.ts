@@ -290,9 +290,7 @@ export function editedUrl(
     ...new Set<string>(
       (parsed.path || [])
         .filter((segment: string) => segment.startsWith(":"))
-        .map(
-          (segment: string) => segment.slice(1).split("@onapi/domain/index")[0],
-        )
+        .map((segment: string) => segment.slice(1).split(".")[0])
         .filter(Boolean),
     ),
   ];

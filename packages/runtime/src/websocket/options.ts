@@ -154,7 +154,7 @@ function bypasses(url: URL, value?: string[] | string) {
     ) {
       return true;
     }
-    if (pattern.startsWith("./index")) {
+    if (pattern.startsWith(".")) {
       return (
         host === pattern.slice(1).toLowerCase() ||
         host.endsWith(pattern.toLowerCase())

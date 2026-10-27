@@ -15,7 +15,7 @@ export * from './packages/domain/src/mock/expressions.js';
 export {generateIdCard,generateBankCard} from './packages/domain/src/mock/cards.ts';
 export {default as MockSchema} from './packages/domain/src/mock/schema.ts';
 export {generateMockBody} from './apps/webviews/src/features/requests/utils/generateMockBody';
-export {createVariableReplacer} from './packages/runtime/src/websocket/options';`,
+export {createVariableReplacer, prepareWebSocket} from './packages/runtime/src/websocket/options';`,
     resolveDir: process.cwd(),
   },
   outfile: "test-results/mock-replacement.mjs",
@@ -355,4 +355,29 @@ test("Faker discovery and execution use the same definitions without a UI fallba
     assert.equal(typeof definition.function, "string");
     assert.equal(typeof definition.params, "object");
   }
+});
+
+test("WebSocket proxy bypass matches dotted domains and their subdomains", async () => {
+  const options = {
+    system_configs: {
+      proxy: {
+        type: 1,
+        protocols: ["http"],
+        bypass: [".example.test"],
+        auth: { host: "http://127.0.0.1:8080" },
+      },
+    },
+  };
+  for (const host of ["example.test", "api.example.test", "API.EXAMPLE.TEST"]) {
+    const prepared = await api.prepareWebSocket(
+      { url: `ws://${host}/` },
+      options,
+    );
+    assert.equal(prepared.clientOptions.agent, undefined, host);
+  }
+  const prepared = await api.prepareWebSocket(
+    { url: "ws://otherexample.test/" },
+    options,
+  );
+  assert.ok(prepared.clientOptions.agent);
 });
