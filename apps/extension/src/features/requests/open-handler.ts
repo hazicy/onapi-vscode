@@ -15,7 +15,11 @@ import {
   getCurrentProjectConfig,
   setProjectConfig,
 } from "../../platform/storage/project-config";
-import { getCodeHarRequest, sendApi, stopWorker } from "./request-runner";
+import {
+  getCodeHarRequest,
+  sendApi,
+  stopWorker,
+} from "./execution/http-runner";
 import { globalConfig, DEFAULT_TARGET_NAME } from "../../app/config";
 import { cloneDeep, forEach, isPlainObject, trim } from "lodash";
 import {
@@ -25,18 +29,18 @@ import {
 } from "../sharing/share-data";
 import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
 import {
-  getWebsocketOption,
-  wsConnect,
-  wsDisconnect,
-  wsSend,
-} from "./transports/websocket";
+  prepareWebSocketSessionOptions,
+  connectWebSocketSession,
+  disconnectWebSocketSession,
+  sendWebSocketMessage,
+} from "./execution/websocket-session";
 import {
-  getSocketIoOption,
-  socketioConnect,
-  socketioDisconnect,
-  socketioSend,
-  socketioUpdateEvent,
-} from "./transports/socketio";
+  prepareSocketIoSessionOptions,
+  connectSocketIoSession,
+  disconnectSocketIoSession,
+  sendSocketIoMessage,
+  updateSocketIoSubscriptions,
+} from "./execution/socketio-session";
 import { proxyFetch } from "../../platform/http-client";
 
 const saveRevisions = new WeakMap<vscode.WebviewPanel, number>();
@@ -220,30 +224,30 @@ export const handelOpenMessage = async (
       break;
     case "ws_connect":
       await recordRequestHistory(context, data.target);
-      data.option = await getWebsocketOption(data, context);
+      data.option = await prepareWebSocketSessionOptions(data, context);
 
-      wsConnect(data);
+      connectWebSocketSession(data);
       break;
     case "ws_disconnect":
-      wsDisconnect(data);
+      disconnectWebSocketSession(data);
       break;
     case "ws_send":
-      wsSend(data);
+      sendWebSocketMessage(data);
       break;
     case "socketio_connect":
       await recordRequestHistory(context, data.target);
-      data.option = await getSocketIoOption(data, context);
+      data.option = await prepareSocketIoSessionOptions(data, context);
 
-      socketioConnect(data);
+      connectSocketIoSession(data);
       break;
     case "socketio_disconnect":
-      socketioDisconnect(data);
+      disconnectSocketIoSession(data);
       break;
     case "socketio_send":
-      socketioSend(data);
+      sendSocketIoMessage(data);
       break;
     case "socketio_update_event":
-      socketioUpdateEvent(data);
+      updateSocketIoSubscriptions(data);
       break;
     case "/proxy/fetch":
       proxyFetch(data, panel);

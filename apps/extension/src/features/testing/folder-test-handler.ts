@@ -1,7 +1,7 @@
-import { getExecutionCollection } from "../requests/request-runner";
+import { getExecutionCollection } from "../requests/execution/http-runner";
 import { relayExecutionEvent } from "../../platform/execution/webview-relay";
 import * as vscode from "vscode";
-import { runCollection, stopWorker } from "../requests/request-runner";
+import { runCollection, stopWorker } from "../requests/execution/http-runner";
 import { getCurrentProjectConfig } from "../../platform/storage/project-config";
 import { getApiListName } from "../requests/request-storage";
 import { getTestingFolderData, setTestingFolderData } from "./report-storage";

@@ -8,7 +8,7 @@ import {
   getSocketCollection,
 } from "@onapi/http-model/request-utils";
 import { SysConfig } from "@onapi/http-model/settings/types/settings";
-import { genSendBaseOptions } from "./prepare-options";
+import { prepareSocketOptions } from "./prepare-socket-options";
 import { getApiList } from "../request-storage";
 import { getCurrentProjectConfig } from "../../../platform/storage/project-config";
 import { ProjectConfigType } from "@onapi/http-model/project/types/index";
@@ -18,10 +18,10 @@ import { executionService } from "../../../platform/execution/service";
 import { relayExecutionEvent } from "../../../platform/execution/webview-relay";
 
 const sessions = new Map<string, SocketIoAdapter>();
-export const socketioDisconnect = (targetId: string) => {
+export const disconnectSocketIoSession = (targetId: string) => {
   sessions.get(targetId)?.cancel();
 };
-export const socketioConnect = async (data: {
+export const connectSocketIoSession = async (data: {
   option: any;
   target: SocketIoDetailsData;
 }) => {
@@ -51,7 +51,7 @@ export const socketioConnect = async (data: {
     }
   }
 };
-export const socketioSend = async (data: {
+export const sendSocketIoMessage = async (data: {
   id: string;
   event: string;
   msg: unknown;
@@ -64,7 +64,7 @@ export const socketioSend = async (data: {
     /* Adapter publishes send errors. */
   }
 };
-export const socketioUpdateEvent = async (data: {
+export const updateSocketIoSubscriptions = async (data: {
   id: string;
   parameter: any[];
 }) => {
@@ -73,7 +73,7 @@ export const socketioUpdateEvent = async (data: {
   }
 };
 
-export const getSocketIoOption = async (
+export const prepareSocketIoSessionOptions = async (
   data: { option: any; target: any },
   context: vscode.ExtensionContext,
 ) => {
@@ -102,7 +102,7 @@ export const getSocketIoOption = async (
       _collection[index] = targetIdMap.get(item.id) || item;
     }
   }
-  const options = await genSendBaseOptions({
+  const options = await prepareSocketOptions({
     scene: "http_request",
     collection: _collection,
     databaseConfigs: {},

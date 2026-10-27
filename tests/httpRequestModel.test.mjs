@@ -4,12 +4,12 @@ import load, { nativeDependency } from "./helpers/loadTypeScript.mjs";
 
 const model = await load("packages/http-model/src/index.ts", nativeDependency);
 const { requestCollection } = await load(
-  "apps/extension/src/features/requests/request-runner.ts",
+  "apps/extension/src/features/requests/execution/http-runner.ts",
   (id) => {
-    if (id === "./merge-runtime-state") return { mergeRuntimeState() {} };
+    if (id === "./merge-http-state") return { mergeHttpState() {} };
     if (id === "@onapi/http-model") return model;
     if (id === "@onapi/runtime/http/adapter") return { HttpAdapter: class {} };
-    if (id === "../../platform/execution/service")
+    if (id === "../../../platform/execution/service")
       return { executionService: {} };
     if (
       /\/(?:project-config|request-storage|report-storage|collection-order|import-curl|prepare-options|html|host-utils|user-config)$/.test(
@@ -24,7 +24,7 @@ const { requestCollection } = await load(
         getProjectConfig: (context) => context.config,
         saveProjectConfig() {},
       };
-    if (id === "./request-status") return { setRequestResult() {} };
+    if (id === "../request-status") return { setRequestResult() {} };
     return nativeDependency(id);
   },
 );

@@ -1,4 +1,4 @@
-import { getExecutionCollection } from "../requests/request-runner";
+import { getExecutionCollection } from "../requests/execution/http-runner";
 import * as vscode from "vscode";
 import { storageChanged } from "../../platform/storage/events";
 import {

@@ -26,7 +26,7 @@ async function fixture(writeSucceeds = true) {
   const { handleMessage } = await loadTypeScript(
     "apps/extension/src/features/sidebar/sidebar-handler.ts",
     (id) => {
-      if (id.endsWith("/request-runner"))
+      if (id.endsWith("/http-runner"))
         return {
           getExecutionCollection: () => ({
             info: { name: "Collection" },

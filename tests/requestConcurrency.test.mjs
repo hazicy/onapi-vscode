@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import load, { nativeDependency } from "./helpers/loadTypeScript.mjs";
 
 const merge = await load(
-  "apps/extension/src/features/requests/merge-runtime-state.ts",
+  "apps/extension/src/features/requests/execution/merge-http-state.ts",
   nativeDependency,
 );
 const { ExecutionService } = await load(
@@ -73,11 +73,11 @@ async function fixture() {
     }
   }
   const runner = await load(
-    "apps/extension/src/features/requests/request-runner.ts",
+    "apps/extension/src/features/requests/execution/http-runner.ts",
     (id) => {
-      if (id === "./merge-runtime-state") return merge;
+      if (id === "./merge-http-state") return merge;
       if (id === "@onapi/runtime/http/adapter") return { HttpAdapter };
-      if (id === "../../platform/execution/service")
+      if (id === "../../../platform/execution/service")
         return { executionService: new ExecutionService() };
       if (
         /\/(?:project-config|request-storage|report-storage|collection-order|import-curl|prepare-options|html|host-utils|user-config)$/.test(
@@ -100,7 +100,7 @@ async function fixture() {
             });
           },
         };
-      if (id === "./request-status")
+      if (id === "../request-status")
         return { setRequestResult: (...args) => results.push(args) };
       if (id === "@onapi/http-model")
         return {

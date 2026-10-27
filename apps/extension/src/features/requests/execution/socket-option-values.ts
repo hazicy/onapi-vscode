@@ -21,7 +21,7 @@ import {
   size,
   values,
 } from "lodash";
-import { Cookies, Env } from "./options";
+import { Cookies, Env } from "./socket-option-types";
 import { DomainInfoProps } from "@onapi/http-model/project/types/cookie";
 import { SysConfig } from "@onapi/http-model/settings/types/settings";
 import { getCollectionServerId } from "@onapi/http-model/request-utils";

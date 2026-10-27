@@ -1,7 +1,7 @@
 import type * as vscode from "vscode";
 import { requestUrl } from "@onapi/http-model";
-import { getCurrentEnvCurrentServer } from "./transports/prepare-options";
-import { getCodeHarRequest } from "./request-runner";
+import { getCurrentRequestServer } from "./request-server";
+import { getCodeHarRequest } from "./execution/http-runner";
 import { proxyFetch2 } from "../../platform/http-client";
 
 export async function fetchGraphQLSchema(
@@ -9,7 +9,7 @@ export async function fetchGraphQLSchema(
   context: vscode.ExtensionContext,
   panel: vscode.WebviewPanel,
 ) {
-  const server = getCurrentEnvCurrentServer(context, data?.currentServerId);
+  const server = getCurrentRequestServer(context, data?.currentServerId);
   if (!requestUrl(data?.apiData || {}) && !server?.uri) {
     panel.webview.postMessage({
       action: "graphQLSchemaFetchResult",

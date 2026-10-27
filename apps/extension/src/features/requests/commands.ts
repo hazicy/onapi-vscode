@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import { cloneDeep, forEach, isString, map } from "lodash";
 import Har2languages from "har2languages";
 import { copyTextToClipboard, showTabName } from "../../platform/host-utils";
-import { getCodeHarRequest } from "./request-runner";
+import { getCodeHarRequest } from "./execution/http-runner";
 import type { ApiDetailsData } from "@onapi/http-model/requests/types/api";
 import type { ProjectConfigType } from "@onapi/http-model/project/types/index";
 export {
@@ -10,7 +10,7 @@ export {
   sendAutoTest,
   stopWorker,
   getCodeHarRequest,
-} from "./request-runner";
+} from "./execution/http-runner";
 
 export const updateOpenData = (
   openedPanels: { [key: string]: vscode.WebviewPanel },

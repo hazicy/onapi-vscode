@@ -6,19 +6,19 @@ import {
 import { ProjectConfigType } from "@onapi/http-model/project/types/index";
 import { SysConfig } from "@onapi/http-model/settings/types/settings";
 
-export type GenSendBaseOptionsType = (params: {
+export type PrepareSocketOptions = (params: {
   envId?: string;
   targetId?: string;
-  scene: SendBaseOptions["scene"];
-  collection?: SendBaseOptions["collection"];
-  databaseConfigs?: SendBaseOptions["database_configs"];
+  scene: SocketHostOptions["scene"];
+  collection?: SocketHostOptions["collection"];
+  databaseConfigs?: SocketHostOptions["database_configs"];
   projectConfig?: ProjectConfigType;
   systemConfig?: SysConfig;
   curServerId?: string;
   type?: string;
-}) => Promise<SendBaseOptions>;
+}) => Promise<SocketHostOptions>;
 
-export interface SendBaseOptions {
+export interface SocketHostOptions {
   scene?: "http_request" | "auto_test";
   env?: Env;
   globals?: Globals;

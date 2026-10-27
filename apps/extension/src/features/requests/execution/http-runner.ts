@@ -1,7 +1,7 @@
-import { mergeRuntimeState } from "./merge-runtime-state";
+import { mergeHttpState } from "./merge-http-state";
 import { HttpAdapter } from "@onapi/runtime/http/adapter";
 import type { ExecutionEnvelope, WorkerRunCommand } from "@onapi/contracts";
-import { executionService } from "../../platform/execution/service";
+import { executionService } from "../../../platform/execution/service";
 import { randomUUID } from "node:crypto";
 import type * as vscode from "vscode";
 import {
@@ -16,9 +16,9 @@ import {
   getProjectWorkspace,
   getProjectConfig,
   saveProjectConfig,
-} from "../../platform/storage/project-config";
-import { getApiList, getApiListName } from "./request-storage";
-import { setRequestResult } from "./request-status";
+} from "../../../platform/storage/project-config";
+import { getApiList, getApiListName } from "../request-storage";
+import { setRequestResult } from "../request-status";
 
 const executions = new Map<
   object,
@@ -141,7 +141,7 @@ export function runCollection(
             !session.cancelled
           ) {
             const config = getProjectConfig(context, workspace);
-            const next = mergeRuntimeState(
+            const next = mergeHttpState(
               before,
               event,
               config.http || createDefaultHttpConfig(),

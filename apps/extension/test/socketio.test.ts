@@ -19,7 +19,7 @@ import {
   type SocketIoTarget,
 } from "@onapi/runtime/socketio/client";
 import type { WebSocketRuntimeOptions } from "@onapi/runtime/websocket/options";
-import { applySocketSettings } from "../src/features/requests/transports/socket-settings";
+import { applySocketSettings } from "../src/features/requests/execution/socket-settings";
 
 async function listen(
   t: TestContext,

@@ -1,12 +1,15 @@
 import type { HttpRequestItem } from "@onapi/http-model";
 import type { ApiDetailsData } from "@onapi/http-model/requests/types/api";
 import type { ShareInfoData } from "@onapi/http-model/sharing/types/share";
-import type { wsConnect, wsSend } from "./transports/websocket";
 import type {
-  socketioConnect,
-  socketioSend,
-  socketioUpdateEvent,
-} from "./transports/socketio";
+  connectWebSocketSession,
+  sendWebSocketMessage,
+} from "./execution/websocket-session";
+import type {
+  connectSocketIoSession,
+  sendSocketIoMessage,
+  updateSocketIoSubscriptions,
+} from "./execution/socketio-session";
 
 type Payloads = {
   getVscodeTheme: undefined;
@@ -28,13 +31,13 @@ type Payloads = {
   getCodeHar: { apiData: HttpRequestItem };
   copyAsCurl: { apiData: HttpRequestItem };
   exportOpenApiById: { id: string };
-  ws_connect: Parameters<typeof wsConnect>[0];
+  ws_connect: Parameters<typeof connectWebSocketSession>[0];
   ws_disconnect: string;
-  ws_send: Parameters<typeof wsSend>[0];
-  socketio_connect: Parameters<typeof socketioConnect>[0];
+  ws_send: Parameters<typeof sendWebSocketMessage>[0];
+  socketio_connect: Parameters<typeof connectSocketIoSession>[0];
   socketio_disconnect: string;
-  socketio_send: Parameters<typeof socketioSend>[0];
-  socketio_update_event: Parameters<typeof socketioUpdateEvent>[0];
+  socketio_send: Parameters<typeof sendSocketIoMessage>[0];
+  socketio_update_event: Parameters<typeof updateSocketIoSubscriptions>[0];
   "/proxy/fetch": Record<string, unknown>;
   getGraphQLSchema: { apiData: HttpRequestItem; currentServerId?: string };
 };

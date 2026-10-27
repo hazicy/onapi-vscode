@@ -3,7 +3,7 @@ import { WebSocketAdapter } from "@onapi/runtime/websocket/adapter";
 import { globalConfig } from "../../../app/config";
 import * as vscode from "vscode";
 import { ProjectConfigType } from "@onapi/http-model/project/types/index";
-import { genSendBaseOptions } from "./prepare-options";
+import { prepareSocketOptions } from "./prepare-socket-options";
 import { getApiList } from "../request-storage";
 import { getCurrentProjectConfig } from "../../../platform/storage/project-config";
 import { getSocketCollection } from "@onapi/http-model/request-utils";
@@ -14,10 +14,10 @@ import { executionService } from "../../../platform/execution/service";
 import { relayExecutionEvent } from "../../../platform/execution/webview-relay";
 
 const sessions = new Map<string, WebSocketAdapter>();
-export const wsDisconnect = (targetId: string) => {
+export const disconnectWebSocketSession = (targetId: string) => {
   sessions.get(targetId)?.cancel();
 };
-export const wsConnect = async (data: {
+export const connectWebSocketSession = async (data: {
   option: any;
   target: WebSocketDetailsData;
 }) => {
@@ -47,7 +47,7 @@ export const wsConnect = async (data: {
     }
   }
 };
-export const wsSend = async (data: {
+export const sendWebSocketMessage = async (data: {
   id: string;
   msg?: unknown;
   type?: string;
@@ -59,7 +59,7 @@ export const wsSend = async (data: {
   }
 };
 
-export const getWebsocketOption = async (
+export const prepareWebSocketSessionOptions = async (
   data: { option: any; target: any },
   context: vscode.ExtensionContext,
 ) => {
@@ -78,7 +78,7 @@ export const getWebsocketOption = async (
     option?.server_id,
   );
 
-  const options = await genSendBaseOptions({
+  const options = await prepareSocketOptions({
     envId: envDetailKeys,
     scene: "http_request",
     collection: _collection,

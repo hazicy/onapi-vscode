@@ -12,7 +12,7 @@ The package manager version is pinned in the root `package.json`.
 | `apps/webviews`          | React multi-entry application, stores, UI components and browser tests                                |
 | `packages/http-model`    | Native request/config models, shared protocol definitions, pure request utilities and Mock generation |
 | `packages/contracts`     | Serializable Worker commands and execution events shared by host and UI                               |
-| `packages/runtime`       | Node Worker and Postman Runtime implementation; no VS Code or UI dependency                           |
+| `packages/runtime`       | HTTP Worker, WebSocket and Socket.IO protocol execution; no VS Code or UI dependency                  |
 | `packages/api-converter` | External import/export formats and collection conversion boundaries                                   |
 | `tooling`                | Shared TypeScript configurations and build plugins                                                    |
 | `tests`                  | Module regressions, cross-workspace integration and persistence tests                                 |
@@ -38,7 +38,7 @@ models must not depend on contracts, Core, runtime, or either application.
 Socket events carry detected MIME types in `contentType`. The Webview selects
 its renderer when consuming an event; runtime and contracts do not name UI
 components. Host-only socket parameter preparation lives in
-`apps/extension/src/features/requests/transports/options.ts`, outside both shared
+`apps/extension/src/features/requests/execution/`, outside both shared
 packages. A type being used during execution does not make it a wire contract.
 
 The model package still includes shared application configuration and Mock
@@ -72,10 +72,18 @@ apps/extension/src/
   app/
   features/
     requests/
-      request-runner.ts
       request-history.ts
       request-status.ts
-      transports/
+      request-server.ts
+      execution/
+        http-runner.ts
+        merge-http-state.ts
+        websocket-session.ts
+        socketio-session.ts
+        prepare-socket-options.ts
+        socket-option-types.ts
+        socket-option-values.ts
+        socket-settings.ts
     sidebar/
     collections/
     environment/
@@ -101,7 +109,7 @@ format implementations under `formats/`, application model adaptation under
 `adapters/`, and the import/export facade in `export.ts`.
 
 - Use kebab-case for ordinary module filenames and non-component directories:
-  `request-runner.ts`, `collection-tree.ts`, `data-tools.ts`.
+  `http-runner.ts`, `collection-tree.ts`, `data-tools.ts`.
 - Use PascalCase for React component files and component directories, and match
   CSS Module names to their component. Hooks use `useSomething.ts`.
 - Use camelCase for functions and variables, PascalCase for types and interfaces,

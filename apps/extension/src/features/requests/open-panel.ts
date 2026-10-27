@@ -1,8 +1,8 @@
 import type { RequestPanelMessage } from "./panel-message";
 import { createFeaturePanel } from "../../platform/webviews/create-panel";
-import { stopWorker } from "./request-runner";
-import { wsDisconnect } from "./transports/websocket";
-import { socketioDisconnect } from "./transports/socketio";
+import { stopWorker } from "./execution/http-runner";
+import { disconnectWebSocketSession } from "./execution/websocket-session";
+import { disconnectSocketIoSession } from "./execution/socketio-session";
 import { setRequestDraft } from "./request-status";
 import { getApiListName } from "./request-storage";
 import { getProtocolIcon } from "../sidebar/protocol-icon";
@@ -94,8 +94,8 @@ export const createOpenPanel = (
       stopWorker(panel);
       setRequestDraft(statusWorkspace, data.id);
       delete openedPanels[data?.id];
-      wsDisconnect(data.id);
-      socketioDisconnect(data.id);
+      disconnectWebSocketSession(data.id);
+      disconnectSocketIoSession(data.id);
     },
     null,
     context.subscriptions,

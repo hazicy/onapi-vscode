@@ -20,6 +20,13 @@ Socket.IO ----------> SocketIoAdapter --------------+        |
   `ExecutionService`. It uses no VS Code, Node or network APIs.
 - `packages/runtime/src/{http,websocket,socketio}/` implements protocol execution.
   Socket clients and their proxy/TLS/variable preparation live here, not in the host.
+- `apps/extension/src/features/requests/execution/` integrates those adapters with
+  the extension host. `http-runner.ts` prepares collection runs and persists
+  updates through `merge-http-state.ts`. `websocket-session.ts` and
+  `socketio-session.ts` manage adapters by request ID and select the destination
+  panel. `prepare-socket-options.ts`, `socket-option-values.ts` and
+  `socket-settings.ts` translate project and VS Code settings into runtime input;
+  `socket-option-types.ts` defines those host preparation types.
 - `apps/extension/src/platform/execution/` creates the shared service and relays
   its events to Webviews. Request handlers select destinations and persist HTTP
   variables, cookies and history; adapters cannot access panels or project storage.

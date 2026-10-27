@@ -1,7 +1,7 @@
 import { getCurrentProjectConfig } from "../../platform/storage/project-config";
-import { getExecutionCollection } from "../requests/request-runner";
+import { getExecutionCollection } from "../requests/execution/http-runner";
 import { createFeaturePanel } from "../../platform/webviews/create-panel";
-import { stopWorker } from "../requests/request-runner";
+import { stopWorker } from "../requests/execution/http-runner";
 import { globalConfig, PANEL_OPTIONS } from "../../app/config";
 import * as vscode from "vscode";
 import { getTestingFolderData, getTestingFolderName } from "./report-storage";

@@ -1,19 +1,13 @@
-import {
-  cloneDeep,
-  find,
-  isEqual,
-  isObject,
-  isUndefined,
-  keys,
-  reduce,
-} from "lodash";
-import { GenSendBaseOptionsType, SendBaseOptions } from "./options";
+import { cloneDeep, find, isEqual, keys, reduce } from "lodash";
+import { PrepareSocketOptions, SocketHostOptions } from "./socket-option-types";
 import { DEFAULT_SOCKET_GLOBAL_PARAMS } from "@onapi/http-model/requests/constants/request";
-import * as vscode from "vscode";
-import { getCookiesOptions, getEnvOptions, getProjectOptions } from "./index";
-import { getCurrentProjectConfig } from "../../../platform/storage/project-config";
+import {
+  getCookiesOptions,
+  getEnvOptions,
+  getProjectOptions,
+} from "./socket-option-values";
 
-export const genSendBaseOptions: GenSendBaseOptionsType = async ({
+export const prepareSocketOptions: PrepareSocketOptions = async ({
   envId,
   scene,
   collection,
@@ -36,7 +30,7 @@ export const genSendBaseOptions: GenSendBaseOptionsType = async ({
     isEqual(env.env_id, envId || envDetailKeys),
   );
 
-  const options: SendBaseOptions = {};
+  const options: SocketHostOptions = {};
   const nativeSettings = projectConfig?.http;
   const nativeEnvironment = nativeSettings?.environments.find(
     (scope) => scope.id === nativeSettings.activeEnvironment,
@@ -145,35 +139,4 @@ export const genSendBaseOptions: GenSendBaseOptionsType = async ({
   }
 
   return options;
-};
-
-export const getCurrentEnvCurrentServer = (
-  context: vscode.ExtensionContext,
-  curServerId: string,
-) => {
-  const { envDetailKeys, envList, serverList } =
-    getCurrentProjectConfig(context) || {};
-  let curEnv: any = find(envList, (env) => isEqual(env.env_id, envDetailKeys));
-
-  if (isUndefined(curEnv) || !isObject(curEnv)) {
-    curEnv = {
-      env_id: "",
-      env_name: "",
-      env_pre_url: "",
-      env_pre_urls: {},
-      environment: {},
-    };
-  }
-
-  const defaultSererId =
-    curServerId ||
-    find(serverList, (im) => im?.is_default === 1)?.server_id ||
-    "";
-
-  const defaultServer =
-    find(curEnv?.server_list, (findItem) =>
-      isEqual(findItem?.server_id, defaultSererId),
-    ) || {};
-
-  return defaultServer;
 };

@@ -11,7 +11,9 @@ const { requestUrl } = await load(
   () => ({}),
 );
 const bundle = await build({
-  entryPoints: ["apps/extension/src/features/requests/request-runner.ts"],
+  entryPoints: [
+    "apps/extension/src/features/requests/execution/http-runner.ts",
+  ],
   bundle: true,
   write: false,
   platform: "node",
@@ -27,7 +29,7 @@ const bundle = await build({
         builder.onResolve(
           {
             filter:
-              /^(.*\/(?:project-config|request-storage|report-storage|collection-order|import-curl|prepare-options|html|host-utils|user-config)|\.\/request-status|@onapi\/http-model)$/,
+              /^(.*\/(?:project-config|request-storage|report-storage|collection-order|import-curl|prepare-options|html|host-utils|user-config)|\.\.\/request-status|@onapi\/http-model)$/,
           },
           () => ({
             path: "host-stubs",

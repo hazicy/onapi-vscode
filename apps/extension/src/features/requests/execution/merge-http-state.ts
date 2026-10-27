@@ -37,7 +37,7 @@ export function mergeRuntimeEntries<T extends { key?: string }>(
   return [...merged.values()];
 }
 
-export function mergeRuntimeState(
+export function mergeHttpState(
   before: RuntimeState,
   result: RuntimeState,
   current: HttpProjectConfig,

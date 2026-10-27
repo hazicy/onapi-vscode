@@ -30,7 +30,7 @@ for the official `Runner.run` / `run.start` API. It rehydrates serialized SDK
 scopes and cookie jars and serializes callback events across the Worker boundary.
 [HttpAdapter](../packages/runtime/src/http/adapter.ts) owns Worker execution and
 maps callbacks into the shared Core event channel. The host
-[request-runner.ts](../apps/extension/src/features/requests/request-runner.ts) persists
+[http-runner.ts](../apps/extension/src/features/requests/execution/http-runner.ts) persists
 native variable/cookie updates. The old custom `pm` aliases, Faker-expression
 translation, visual task objects, and custom loop/condition scheduler are gone.
 Use the official Postman scripting API and collection execution controls.
