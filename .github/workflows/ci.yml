@@ -6,11 +6,11 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v5
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
@@ -20,13 +20,28 @@ jobs:
       - name: Check Webview types
         run: pnpm --dir apps/webviews typecheck
       - run: pnpm typecheck:e2e
-      - run: pnpm test:unit
+      - name: Run unit tests
+        id: unit-tests
+        shell: bash
+        run: |
+          set -o pipefail
+          pnpm test:unit 2>&1 | tee unit-tests.log
+      - name: Report failed unit tests
+        if: failure() && steps.unit-tests.outcome == 'failure'
+        run: node scripts/report-unit-failures.mjs unit-tests.log
+      - name: Upload unit test log
+        if: always() && steps.unit-tests.outcome != 'skipped'
+        uses: actions/upload-artifact@v6
+        with:
+          name: unit-test-log
+          path: unit-tests.log
+          if-no-files-found: ignore
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm build
       - run: pnpm test:ui
       - run: pnpm test:editor
       - run: pnpm package
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: extension
           path: artifacts/*.vsix
