@@ -1,5 +1,4 @@
 import styles from "./ResponseAssert.module.css";
-import clsx from "clsx";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -9,7 +8,7 @@ import { isArray } from "lodash-es";
 
 import { CheckCircleFilled, CloseCircleFilled } from "@/shared/ui/base/Icons";
 
-import { ApiSendingData } from "@onapi/domain/requests/types/send";
+import AppIcon from "@/shared/ui/AppIcon";
 
 export type HttpAssertion = import("@onapi/contracts").ExecutionAssertion;
 interface ListProps {
@@ -27,10 +26,13 @@ const List: React.FC<ListProps> = ({ asserts }) => {
               <span
                 key={index}
                 data-passed={!item.error && !item.skipped}
-                className={clsx(styles.responseAssertItem, styles.contentItem)}
+                data-skipped={!!item.skipped}
+                className={styles.responseAssertItem}
               >
                 <Space>
-                  {!item.error && !item.skipped ? (
+                  {item.skipped ? (
+                    <AppIcon icon="minus" />
+                  ) : !item.error ? (
                     <CheckCircleFilled />
                   ) : (
                     <CloseCircleFilled />

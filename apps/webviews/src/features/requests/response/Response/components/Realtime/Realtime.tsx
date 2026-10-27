@@ -1,99 +1,29 @@
 import type { HttpExecutionState } from "@/features/requests/execution/http-state";
 import { responseText } from "@onapi/domain";
 import styles from "./Realtime.module.css";
-import { FC, memo, useContext, useEffect, useRef } from "react";
-import { useTranslation } from "react-i18next";
-
-import { useSafeState } from "ahooks";
-import { isEmpty, isEqual } from "lodash-es";
-
-import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
+import { memo, useContext, useEffect, useRef } from "react";
+import { isEqual } from "lodash-es";
 import ResponseResult from "@/features/requests/response/ResponseResult/ResponseResult";
-import ResponseAssert from "@/features/requests/assertions/ResponseAssert/ResponseAssert";
 import ErrorContext from "@/features/requests/response/Response/ErrorContext";
 import Error from "@/features/requests/response/Response/components/Error";
 import { STATUS_CODE } from "@onapi/domain/constants/common";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
-import { DirectionType } from "@onapi/domain/types/common";
-
-const panelProps = {
-  defaultSize: 50,
-  minSize: 3,
-  collapsible: true,
-  collapsedSize: 3,
-};
 
 interface Props {
   resultIncludesTabs?: string[];
   sendingData?: HttpExecutionState;
-  responseData: import("postman-collection").ResponseDefinition[] | undefined;
-  onResponseDataChange: (
-    value: import("postman-collection").ResponseDefinition[],
-  ) => void;
 }
 
-const Realtime: FC<Props> = memo((props) => {
-  const { t } = useTranslation();
-  const {
-    resultIncludesTabs,
-    sendingData,
-    responseData,
-    onResponseDataChange,
-  } = props || {};
-
+const Realtime = memo(({ resultIncludesTabs, sendingData }: Props) => {
   const { showError, errorMsg } = useContext(ErrorContext);
-
-  const systemConfigTabDirection = useSystemConfig(
-    (state) => state.systemConfig?.tab_direction,
-  );
-
-  const [curDirection, setCurDirection] =
-    useSafeState<DirectionType>("horizontal");
-
   const responseResultRef = useRef<any>(null);
-  const resizablePanelsRef = useRef<any>(null);
 
   useEffect(() => {
-    if (!systemConfigTabDirection) {
+    if (sendingData?.sendStatus !== "initial") {
       return;
     }
-
-    if (systemConfigTabDirection === 1) {
-      setCurDirection("horizontal");
-    }
-
-    if (systemConfigTabDirection === -1) {
-      setCurDirection("vertical");
-    }
-
-    const size = panelProps.collapsedSize;
-    resizablePanelsRef.current?.setPanelGroupLayout([100 - size, size]);
-  }, [systemConfigTabDirection, resizablePanelsRef]);
-
-  useEffect(() => {
     const { systemConfig } = useSystemConfig.getState();
-
-    if (isEmpty(sendingData) || !isEqual(sendingData?.sendStatus, "initial")) {
-      return;
-    }
-
-    // according to system config, whether to show assertion and validation results by default
-    if (
-      isEqual(
-        systemConfig.assertions_and_validation_results,
-        STATUS_CODE.ENABLE,
-      )
-    ) {
-      resizablePanelsRef.current?.resetLayout();
-    } else {
-      const size = panelProps.collapsedSize;
-      resizablePanelsRef.current?.setPanelGroupLayout([100 - size, size]);
-    }
-
-    // for non-Monaco type, jump to preview
     if (isEqual(systemConfig.send_after_auto_beautify, STATUS_CODE.ENABLE)) {
-      // Auto-switch to "beautify" panel after sending based on system config
-
       responseResultRef.current?.setTabsValue("beautify");
     }
   }, [sendingData]);
@@ -104,28 +34,12 @@ const Realtime: FC<Props> = memo((props) => {
 
   return (
     <div className={styles.container}>
-      <ResizablePanels
-        ref={resizablePanelsRef}
-        panelGroupProps={{ direction: curDirection }}
-        leftPanel={
-          <ResponseResult
-            ref={responseResultRef}
-            resultIncludesTabs={resultIncludesTabs}
-            rawHtml={responseText(sendingData?.response)}
-            data={sendingData?.response}
-            html={sendingData?.visualizerHtml}
-          />
-        }
-        leftPanelProps={{
-          ...panelProps,
-          collapseTitle: t("common.response_component.title"),
-        }}
-        rightPanel={<ResponseAssert sendingData={sendingData} />}
-        rightPanelProps={{
-          ...panelProps,
-          collapseTitle: t("common.test_component.title"),
-        }}
-        showRightCollapseBtn
+      <ResponseResult
+        ref={responseResultRef}
+        resultIncludesTabs={resultIncludesTabs}
+        rawHtml={responseText(sendingData?.response)}
+        data={sendingData?.response}
+        html={sendingData?.visualizerHtml}
       />
     </div>
   );

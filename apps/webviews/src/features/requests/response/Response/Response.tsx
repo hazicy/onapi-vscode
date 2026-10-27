@@ -41,6 +41,9 @@ const ResponseSize = lazy(
   () => import("@/features/requests/response/ResponseSize"),
 );
 
+const ResponseAssert = lazy(
+  () => import("@/features/requests/assertions/ResponseAssert/ResponseAssert"),
+);
 const Console = lazy(() => import("./components/Console"));
 const Cookie = lazy(() => import("./components/Cookie"));
 const RealRequest = lazy(() => import("./components/RealRequest"));
@@ -154,6 +157,11 @@ const Response: FC<Props> = memo((props) => {
     }
   };
 
+  const assertions = sendingData?.assertions || [];
+  const passedTests = assertions.filter(
+    (item) => !item.error && !item.skipped,
+  ).length;
+
   const originItems: Array<
     TabPaneProps & { countParams?: any; key: string; label: React.ReactNode }
   > = [
@@ -164,8 +172,6 @@ const Response: FC<Props> = memo((props) => {
         <Realtime
           resultIncludesTabs={resultIncludesTabs}
           sendingData={sendingData}
-          responseData={responseData}
-          onResponseDataChange={onResponseDataChange}
         />
       ),
     },
@@ -189,6 +195,20 @@ const Response: FC<Props> = memo((props) => {
       key: "realRequest",
       label: t("api.run.real_request"),
       children: <RealRequest sendingData={sendingData} />,
+    },
+    {
+      key: "testResults",
+      label: (
+        <span className={styles.testResultsLabel}>
+          {t("common.test_component.title")}
+          {assertions.length > 0 && (
+            <span className={styles.testResultsCount}>
+              {passedTests}/{assertions.length}
+            </span>
+          )}
+        </span>
+      ),
+      children: <ResponseAssert sendingData={sendingData} />,
     },
     {
       key: "console",

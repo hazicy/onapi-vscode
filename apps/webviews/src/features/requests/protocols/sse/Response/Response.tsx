@@ -61,6 +61,7 @@ const Response = memo((props: ApiComponentType) => {
           "cookie",
           "responseExample",
           "realRequest",
+          "testResults",
           "console",
         ]}
         onResponseDataChange={handleOnChange}

@@ -406,6 +406,7 @@
       "failed": "Failed to connect"
     },
     "test_component": {
+      "empty": "No tests yet. Add tests in the post-response script.",
       "title": "Test results",
       "tip": "Global enable or disable can be set in system settings",
       "tip_set": "setting",

@@ -36,6 +36,7 @@ const Response = memo((props: ApiComponentType) => {
           "responseHeader",
           "cookie",
           "realRequest",
+          "testResults",
           "console",
         ]}
         responseData={apisData.response}

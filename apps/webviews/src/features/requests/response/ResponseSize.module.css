@@ -164,7 +164,8 @@
 .responseSize {
   min-height: 28px;
   flex-shrink: 0;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  white-space: nowrap;
   gap: 8px;
   padding: 2px 0;
   font-size: var(--vscode-font-size, 13px);

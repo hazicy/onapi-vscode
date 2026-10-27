@@ -291,3 +291,97 @@ test("native form files retain SDK fields when editing paths and selection", asy
     });
   expect(errors).toEqual([]);
 });
+
+test("HTTP test results have a dedicated tab with counts and failure details", async ({
+  page,
+  requestPage,
+}) => {
+  await requestPage.open("api", {
+    method: "GET",
+    url: "https://example.com",
+    header: [],
+  });
+  await expect(page.getByRole("tab", { name: /Test results/i })).toHaveCount(0);
+  await emitHttpEvents(page, "native", [
+    { type: "start" },
+    {
+      type: "request",
+      response: { code: 200, body: "{}" },
+      request: { method: "GET" },
+    },
+    {
+      type: "assertion",
+      assertions: [
+        { assertion: "Status is 200" },
+        { assertion: "Required field", error: { message: "Missing name" } },
+        { assertion: "Optional check", skipped: true },
+      ],
+    },
+    { type: "done", error: null },
+  ]);
+  const results = page.getByRole("tab", { name: /Test results.*1\/3/i });
+  await expect(results).toBeVisible();
+  await results.click();
+  await expect(page.getByText("Status is 200", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("Required field: Missing name", { exact: true }),
+  ).toBeVisible();
+  await expect(page.locator('[data-skipped="true"]')).toContainText(
+    "Optional check",
+  );
+  await emitHttpEvents(page, "native", [
+    { type: "start" },
+    { type: "request", response: { code: 200, body: "{}" } },
+    { type: "done", error: null },
+  ]);
+  await page.getByRole("tab", { name: /Test results/i }).click();
+  await expect(
+    page.getByText("No tests yet. Add tests in the post-response script."),
+  ).toBeVisible();
+});
+
+test("response navigation collapses tabs instead of wrapping metadata", async ({
+  page,
+  requestPage,
+}) => {
+  await page.setViewportSize({ width: 480, height: 1000 });
+  await requestPage.open("api", {
+    method: "GET",
+    url: "https://example.com",
+    header: [],
+  });
+  await expect(requestPage.sendButton).toBeVisible();
+  await requestPage.sendButton.click();
+  await emitHttpEvents(page, "native", [
+    { type: "start" },
+    {
+      type: "request",
+      response: { code: 200, body: "{}", responseTime: 123, responseSize: 456 },
+    },
+    { type: "done", error: null },
+  ]);
+  const response = page.getByRole("tab", { name: "Response", exact: true });
+  const nav = response.locator(
+    'xpath=ancestor::*[contains(@class, "_tabsNav_")]',
+  );
+  const more = nav.getByRole("button", { name: "More tabs", exact: true });
+  await expect(more).toBeVisible();
+  const status = nav.getByText("200", { exact: true });
+  await expect(status).toBeVisible();
+  await expect(nav).toHaveCSS("flex-wrap", "nowrap");
+  const tabBox = await response.boundingBox();
+  const statusBox = await status.boundingBox();
+  expect(
+    Math.abs(
+      tabBox!.y + tabBox!.height / 2 - statusBox!.y - statusBox!.height / 2,
+    ),
+  ).toBeLessThan(4);
+  await more.click();
+  await page.getByRole("menuitem", { name: /Test results/i }).click();
+  await expect(
+    page.getByRole("tab", { name: /Test results/i }),
+  ).toHaveAttribute("aria-selected", "true");
+  expect(
+    await nav.evaluate((node) => node.scrollWidth <= node.clientWidth),
+  ).toBe(true);
+});
