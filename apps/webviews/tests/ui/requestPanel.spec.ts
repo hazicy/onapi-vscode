@@ -59,6 +59,20 @@ test("parameter rows use compact sizing and follow host font size", async ({
   await expect(
     params.locator("[class*='_key_'] > div > div").first(),
   ).toHaveCSS("height", "32px");
+  const controls = params.getByRole("textbox");
+  const keyBox = await controls.nth(0).boundingBox();
+  const valueBox = await controls.nth(1).boundingBox();
+  expect(keyBox).not.toBeNull();
+  expect(valueBox).not.toBeNull();
+  expect(valueBox!.height).toBe(keyBox!.height);
+  expect(valueBox!.y).toBe(keyBox!.y);
+  const keyFrame = params.locator("[class*='_key_'] > div > div").first();
+  const valueFrame = params.locator("[class*='_value_']").first();
+  expect((await valueFrame.boundingBox())!.height).toBe(
+    (await keyFrame.boundingBox())!.height,
+  );
+  await controls.nth(1).focus();
+  expect((await controls.nth(1).boundingBox())!.height).toBe(keyBox!.height);
 });
 
 test("response tools keep encoding in a popover and wrap without overflowing", async ({

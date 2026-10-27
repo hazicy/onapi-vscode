@@ -1,4 +1,5 @@
 .row {
+  --request-parameter-height: 32px;
   font-size: var(--vscode-font-size, 13px);
   display: flex;
   align-items: center;
@@ -13,13 +14,14 @@
   min-width: 0;
 }
 .key > div {
+  height: var(--request-parameter-height);
   align-items: center;
   gap: 6px;
 }
 .key > div > div {
   min-width: 0;
   flex: 1;
-  height: 32px;
+  height: var(--request-parameter-height);
   box-sizing: border-box;
   border: 1px solid var(--color-border);
   border-radius: var(--vscode-cornerRadius-small, 3px);
@@ -36,12 +38,14 @@
 }
 .value {
   box-sizing: border-box;
-  min-height: 32px;
+  height: var(--request-parameter-height);
+  min-height: var(--request-parameter-height);
   padding-inline: 8px;
   border: 1px solid var(--color-border);
   border-radius: var(--vscode-cornerRadius-small, 3px);
 }
 .value > div {
+  height: 100%;
   align-items: center;
 }
 .key > div > div:focus-within,

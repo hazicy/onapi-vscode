@@ -25,13 +25,13 @@
   padding: 4px 12px;
   border: 1px solid transparent;
   background-color: transparent;
-  height: 36px;
+  height: var(--request-parameter-height, 36px);
   transition:
     border-color 0.15s,
     background-color 0.15s;
 }
 .container {
-  height: 36px;
+  height: var(--request-parameter-height, 36px);
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -40,7 +40,7 @@
 
   & .miniEditor:not(.editorActive) {
     z-index: 1;
-    height: 36px;
+    height: var(--request-parameter-height, 36px);
     overflow: hidden;
   }
   & .miniEditor:not(.editorActive) .insertIcon {
@@ -98,7 +98,7 @@
   color: var(--font-content-color);
 }
 .select {
-  height: 36px;
+  height: var(--request-parameter-height, 36px);
 }
 .rowDescription {
   position: relative;
