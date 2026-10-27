@@ -16,7 +16,7 @@ import type {
 } from "@/shared/components/RequestTable/sdk";
 import type { HttpParameterTableProps } from "@/shared/components/RequestTable/RequestTable";
 import type { RequestProps } from "./types";
-import { compact, concat, head, map, size } from "lodash-es";
+import { compact, head, map, size } from "lodash-es";
 import LineTabs from "@/shared/components/LineTabs/LineTabs";
 import SuspenseContent from "@/shared/components/SuspenseContent";
 import { useTranslation } from "react-i18next";

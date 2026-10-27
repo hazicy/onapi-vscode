@@ -6,10 +6,7 @@ import { Flex, message, Tooltip } from "@/shared/ui/base";
 
 import SuspenseContent from "@/shared/components/SuspenseContent";
 import BodyModeSelect from "./BodyModeSelect";
-import {
-  REQUEST_BODY_MODE_ENUM,
-  REQUEST_RAW_MODE_LIST,
-} from "@onapi/domain/requests/constants/index";
+import { REQUEST_BODY_MODE_ENUM } from "@onapi/domain/requests/constants/index";
 
 import { RequestBodyProps } from "./types";
 
