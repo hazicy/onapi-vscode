@@ -1,6 +1,7 @@
 import type { EventDefinition, ScriptDefinition } from "postman-collection";
 import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
-import SortableCollapse from "@/shared/components/SortableCollapse/SortableCollapse";
+import { useState } from "react";
+import { Collapse, Popconfirm } from "@/shared/ui/base";
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
 import styles from "./RequestScripts.module.css";
@@ -21,61 +22,63 @@ export default function RequestScripts({
     next[events.indexOf(selected[index])] = event;
     onChange(next);
   };
+  const [activeKeys, setActiveKeys] = useState<string[]>([]);
   return (
     <div className={styles.container}>
-      <SortableCollapse
-        rowKey="id"
-        sortable={false}
-        isTree={false}
-        showOrderNumber={false}
-        sortItemList={selected.map((event, index) => ({
-          ...event,
-          id: event.id || String(index),
-        }))}
-        customHeader={(event: EventDefinition) => (
-          <span>
-            {scriptDefinition(event).name ||
-              (listen === "test" ? "Tests" : "Pre-request script")}
-          </span>
-        )}
-        customContent={(event: EventDefinition) => {
-          const index = selected.findIndex(
-            (item, i) => (item.id || String(i)) === event.id,
-          );
-          return (
-            <ScriptEditor
-              event={selected[index]}
-              onChange={(value) => update(index, value)}
-            />
-          );
-        }}
-        defaultTools={{
-          onDelete: (event: EventDefinition) =>
-            onChange(
-              events.filter(
-                (item) =>
-                  item !==
-                  selected.find(
-                    (item, i) => (item.id || String(i)) === event.id,
-                  ),
-              ),
+      <Collapse
+        activeKey={activeKeys}
+        onChange={(keys) =>
+          setActiveKeys(Array.isArray(keys) ? keys.map(String) : [String(keys)])
+        }
+        itemClassName={styles.script}
+        headerClassName={styles.header}
+        triggerClassName={styles.trigger}
+        panelClassName={styles.panel}
+        items={selected.map((event, index) => {
+          const key = event.id || String(index);
+          return {
+            key,
+            label:
+              scriptDefinition(event).name ||
+              (listen === "test" ? "Tests" : "Pre-request script"),
+            extra: (
+              <Popconfirm
+                title="Delete script?"
+                onConfirm={() =>
+                  onChange(events.filter((item) => item !== event))
+                }
+              >
+                <button
+                  type="button"
+                  className={styles.deleteButton}
+                  aria-label="Delete script"
+                >
+                  <AppIcon icon="trash-2" />
+                </button>
+              </Popconfirm>
             ),
-        }}
+            children: (
+              <div className={styles.editor}>
+                <ScriptEditor
+                  event={event}
+                  onChange={(value) => update(index, value)}
+                />
+              </div>
+            ),
+          };
+        })}
       />
       <Button
-        size="large"
         type="dashed"
         icon={<AppIcon icon="plus" />}
-        onClick={() =>
+        onClick={() => {
+          const id = crypto.randomUUID();
           onChange([
             ...events,
-            {
-              id: crypto.randomUUID(),
-              listen,
-              script: { type: "text/javascript", exec: [""] },
-            },
-          ])
-        }
+            { id, listen, script: { type: "text/javascript", exec: [""] } },
+          ]);
+          setActiveKeys((keys) => [...keys, id]);
+        }}
         className={styles.addButton}
       >
         Add script
