@@ -31,6 +31,10 @@ async function main() {
         fileURLToPath(new URL(".", import.meta.url)),
         "store.ts",
       ),
+      "@/features/settings/store/useSystemConfig": path.join(
+        fileURLToPath(new URL(".", import.meta.url)),
+        "system-config.ts",
+      ),
       "@/shared/utils/global": path.join(
         fileURLToPath(new URL(".", import.meta.url)),
         "global.ts",

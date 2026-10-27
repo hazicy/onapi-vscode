@@ -10,7 +10,7 @@ const {
 } = await load(
   "apps/webviews/src/features/requests/store/useApis/index.ts",
   (id) => {
-    if (id === "@/app/store/utils")
+    if (id === "@/shared/state/store")
       return { create: zustand.create, devtools: (initializer) => initializer };
     if (id.endsWith("requests/constants/request"))
       return { DEFAULT_REQUEST_SYSTEM_HEADERS: [] };

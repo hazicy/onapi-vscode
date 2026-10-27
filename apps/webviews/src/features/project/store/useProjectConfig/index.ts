@@ -4,7 +4,7 @@ import {
   INIT_ENV_LIST,
   INIT_SERVER_LIST,
 } from "@onapi/http-model/project/constants/project";
-import { create } from "@/app/store/utils";
+import { create } from "@/shared/state/store";
 import { EnvList, ServerItem } from "@onapi/http-model/environment/types/index";
 import { SocketGlobalParams } from "@onapi/http-model/project/types/index";
 import { DomainInfoProps } from "@onapi/http-model/project/types/cookie";

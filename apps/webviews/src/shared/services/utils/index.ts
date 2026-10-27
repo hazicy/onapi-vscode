@@ -15,7 +15,9 @@ import {
   APIPOST_VERSION,
 } from "@onapi/http-model/auth/constants/user";
 
-import { useUiServices, useGlobal, useSystemConfig } from "@/app/store";
+import useUiServices from "@/shared/state/ui-services";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
+import { useGlobal } from "@/app/store";
 
 import {
   HTTP_METHODS,

@@ -27,7 +27,8 @@ import SuspenseContent from "@/shared/components/SuspenseContent";
 import Sending from "@/features/requests/components/Sending";
 
 import { STATUS_CODE } from "@onapi/http-model/constants/common";
-import { useGlobal, useSystemConfig } from "@/app/store";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
+import { useGlobal } from "@/app/store";
 import { BaseResponse } from "@onapi/http-model/requests/types/response";
 import {
   ApiSendingData,

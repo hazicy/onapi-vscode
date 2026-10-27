@@ -5,7 +5,9 @@ import { Flex, message, Spin, Typography } from "@/shared/ui/base";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 import { Modal } from "@/shared/ui/Modal";
-import { useApis, useProjectConfig, useUserConfig } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
+import useUserConfig from "@/features/auth/store/useUserConfig";
 
 import {
   batchSaveApiService,

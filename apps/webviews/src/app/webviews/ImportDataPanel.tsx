@@ -10,12 +10,10 @@ import ImportData from "@/features/import/components/ImportData";
 import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
 import GlobalStyle from "../../shared/theme/globalStyle";
-import {
-  useApis,
-  useGlobal,
-  useSystemConfig,
-  useUserConfig,
-} from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
+import useUserConfig from "@/features/auth/store/useUserConfig";
+import { useGlobal } from "@/app/store";
 
 import { isArray } from "lodash";
 import useImportData from "@/features/import/store/useImportData";

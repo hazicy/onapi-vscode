@@ -18,7 +18,7 @@ import { EnvListItem } from "@onapi/http-model/environment/types/index";
 import ItemMenu from "./ItemMenu";
 import ServerPop from "./ServerPop";
 
-import { useProjectConfig } from "@/app/store";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
 import { snowflakeId } from "@onapi/http-model/utils/data-tools";
 import { saveProjectConfig } from "@/features/requests/events/env";
 

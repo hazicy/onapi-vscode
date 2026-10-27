@@ -40,7 +40,7 @@ import {
   RESPONSE_CODE_DESC_MAP,
 } from "@onapi/http-model/requests/constants/response";
 import useTheme from "@/shared/hooks/useTheme";
-import { useSystemConfig } from "@/app/store";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import {
   ApiSendResponseDataProxy,
   ApiSendingData,

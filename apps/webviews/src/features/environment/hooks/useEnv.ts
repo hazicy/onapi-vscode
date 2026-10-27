@@ -1,4 +1,6 @@
-import { useProjectConfig, useStorage, useUserConfig } from "@/app/store";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
+import useUserConfig from "@/features/auth/store/useUserConfig";
+import { useStorage } from "@/app/store";
 import {
   readAuthValues,
   updateAuthValues,

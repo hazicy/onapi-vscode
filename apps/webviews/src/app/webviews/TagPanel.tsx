@@ -15,12 +15,10 @@ import Content, {
 import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
 import GlobalStyle from "../../shared/theme/globalStyle";
-import {
-  useApis,
-  useGlobal,
-  useProjectConfig,
-  useSystemConfig,
-} from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
+import { useGlobal } from "@/app/store";
 import { HotkeysProvider } from "react-hotkeys-hook";
 import useApisHotkeys from "@/features/requests/hooks/useHotKeys/useApisHotkeys";
 import useShare from "@/features/sharing/store/useShare";

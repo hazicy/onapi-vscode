@@ -4,8 +4,8 @@ import {
 } from "@/features/project/store/useProjectConfig/selectors";
 import { getI18n } from "react-i18next";
 import { getGlobals } from "../../features/requests/utils/send/utils";
-import { useProjectConfig } from "@/app/store";
-import { entries, find, has, merge } from "lodash";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
+import { has, merge } from "lodash";
 import { convertVarFormat } from "./common";
 
 export const getEditorVariable = async (originKey: string) => {

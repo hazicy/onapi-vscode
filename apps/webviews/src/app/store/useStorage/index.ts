@@ -1,7 +1,7 @@
 import { get as _get } from "lodash";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-import { create } from "@/app/store/utils";
+import { create } from "@/shared/state/store";
 
 type State = {
   oauthRefreshData: {

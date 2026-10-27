@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import Button from "@/shared/ui/Button";
 
-import { useApis } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
 
 interface SendingProps {
   hasCancel?: boolean;

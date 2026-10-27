@@ -4,7 +4,7 @@ import { useMemoizedFn } from "ahooks";
 
 import { SuspenseContent } from "@/shared/components";
 
-import { useApis } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
 import { ApiDetailsData, ApisData } from "@onapi/http-model/requests/types/api";
 
 interface Props {

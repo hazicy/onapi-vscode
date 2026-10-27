@@ -11,7 +11,7 @@ import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
 import { openUrl } from "@/shared/utils/open";
 import useGlobalTheme from "@/shared/theme";
-import { useSystemConfig } from "@/app/store";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import useTheme from "@/shared/hooks/useTheme";
 
 interface Props {

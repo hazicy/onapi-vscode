@@ -1,5 +1,5 @@
 import type { HttpProjectConfig } from "@onapi/http-model";
-import { create } from "@/app/store/utils";
+import { create } from "@/shared/state/store";
 import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
 import { EnvList } from "@onapi/http-model/environment/types/index";
 import { IDataModel } from "@/features/schemas/types";

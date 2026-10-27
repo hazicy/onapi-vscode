@@ -11,8 +11,8 @@ import {
   VARIABLE_TABS_VALUE,
   VAR_OPTIONS_KEY,
 } from "@/features/variables/constants/variable";
-import { VariableInsertContext } from "@/shared/contexts";
-import { useSystemConfig } from "@/app/store";
+import VariableInsertContext from "@/features/variables/contexts/variable-insert";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import {
   FuncListRenderItem,
   InsertAction,

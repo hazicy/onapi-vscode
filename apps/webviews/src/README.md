@@ -8,7 +8,7 @@ configuration types live in `@onapi/http-model`; cross-process events live in
 src/
   app/
     webviews/                 # React entry points and VS Code bridge setup
-    store/                    # Application state and store exports
+    store/                    # Application state only (global and storage)
   features/
     requests/                 # HTTP, GraphQL, SSE, WebSocket and Socket.IO
     collections/              # Collection tree and folder settings
@@ -35,6 +35,7 @@ src/
     locale/                   # Localization
     theme/                    # Theme configuration
     contexts/                 # Shared React contexts
+    state/                    # Generic store factory and UI services
     types/                    # Common types
     constants/                # Common constants
 ```
@@ -54,6 +55,17 @@ src/
   `hooks/`, `types/`, `constants/`, `events/` and `utils/` as needed.
 - Import feature components and hooks from their feature paths; do not re-export
   them from shared barrels. Shared barrels expose reusable building blocks only.
+- Import feature stores directly from their owning feature. `app/store` exposes
+  application state only; `shared/state/store` owns the reusable Zustand factory,
+  and `shared/state/ui-services` owns common modal and notification services.
+- Keep variable insertion context in `features/variables/contexts` and Schema
+  conversion tools in `features/schemas/utils`, beside their owning features.
+- Shared code must not introduce dependencies on `features/` or `app/`.
+  `pnpm check:boundaries` enforces this for alias and relative imports. Existing
+  dependencies are tracked individually in
+  [boundary exceptions](../../../tooling/webview-boundary-exceptions.json);
+  remove an exception when its dependency is removed. The check rejects stale
+  exceptions as well as new dependencies.
 - Use `@/features/...`, `@/shared/...` and `@/app/...` for cross-directory imports.
   Relative imports are suitable within a component or feature.
 - Public panel IDs and generated bundle names remain camelCase. Their source

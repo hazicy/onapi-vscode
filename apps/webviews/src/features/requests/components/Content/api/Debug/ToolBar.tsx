@@ -6,7 +6,7 @@ import { useMemoizedFn } from "ahooks";
 import { produce } from "immer";
 import TitleEdit from "@/shared/ui/TitleEdit";
 import EnvDropdown from "@/features/environment/components/EnvDropdown";
-import { useProjectConfig } from "@/app/store";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
 import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
 import { ChangeFuncType } from "@onapi/http-model/types/common";
 

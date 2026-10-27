@@ -2,7 +2,8 @@ import styles from "./index.module.css";
 import { useEffect, useRef } from "react";
 import { EditorState } from "@codemirror/state";
 import { EditorView, lineNumbers } from "@codemirror/view";
-import { useGlobal, useSystemConfig } from "@/app/store";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
+import { useGlobal } from "@/app/store";
 import {
   editorTheme,
   isDarkTheme,

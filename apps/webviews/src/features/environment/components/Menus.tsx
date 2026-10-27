@@ -15,7 +15,7 @@ import { useShallow } from "zustand/react/shallow";
 import { Tooltip } from "@/shared/ui";
 import AppIcon from "@/shared/ui/AppIcon";
 import { copyEnv, saveProjectConfig } from "@/features/requests/events/env";
-import { useProjectConfig } from "@/app/store";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
 
 import DraggableMenu from "./DraggableMenu";
 import { DraggableMenuProps } from "./DraggableMenu/types";

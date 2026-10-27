@@ -11,12 +11,10 @@ import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
 import GlobalStyle from "../../shared/theme/globalStyle";
 import { isArray, isPlainObject } from "lodash";
-import {
-  useApis,
-  useProjectConfig,
-  useSystemConfig,
-  useUserConfig,
-} from "../../app/store";
+import useApis from "@/features/requests/store/useApis";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
+import useUserConfig from "@/features/auth/store/useUserConfig";
 
 function PushPanel() {
   const customTheme = useGlobalTheme();

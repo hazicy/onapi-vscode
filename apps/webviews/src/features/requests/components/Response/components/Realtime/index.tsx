@@ -13,7 +13,7 @@ import ResponseAssert from "@/features/requests/components/ResponseAssert";
 import ErrorContext from "@/features/requests/components/Response/ErrorContext";
 import Error from "@/features/requests/components/Response/components/Error";
 import { STATUS_CODE } from "@onapi/http-model/constants/common";
-import { useSystemConfig } from "@/app/store";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import { DirectionType } from "@onapi/http-model/types/common";
 
 const panelProps = {

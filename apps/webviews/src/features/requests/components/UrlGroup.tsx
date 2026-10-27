@@ -25,7 +25,8 @@ import { PROTOCOL_OPTIONS } from "@onapi/http-model/requests/constants/index";
 import { METHODS_MAP } from "@onapi/http-model/constants/common";
 import useTheme from "@/shared/hooks/useTheme";
 import { openEnvPage } from "@/features/requests/events/env";
-import { useApis, useProjectConfig } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
 
 import VarInput from "../../variables/components/VarInput";
 

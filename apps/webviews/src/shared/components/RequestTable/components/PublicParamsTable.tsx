@@ -8,7 +8,7 @@ import cn from "classnames";
 import { concat, filter, isEqual, map, size, trim } from "lodash";
 
 import AppIcon from "@/shared/ui/AppIcon";
-import { useSystemConfig } from "@/app/store";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import { ApisBaseDataItem } from "@onapi/http-model/requests/types/base";
 import { DefaultRequestSystemHeaders } from "@onapi/http-model/requests/types/request";
 import { GlobalParamsHeaderItem } from "@onapi/http-model/project/types/index";

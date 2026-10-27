@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Flex, Input, Checkbox, message } from "@/shared/ui/base";
 import Table from "@/shared/components/BasicTable";
 import Button from "@/shared/ui/Button";
-import { useProjectConfig } from "@/app/store";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
 import { saveProjectConfig } from "@/features/requests/events/env";
 import styles from "./index.module.css";
 

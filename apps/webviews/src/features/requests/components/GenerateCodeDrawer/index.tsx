@@ -17,7 +17,8 @@ import useVarReplaces from "@/features/variables/hooks/useVarReplaces";
 import { copyStringToClipboard } from "@/shared/utils/common";
 import { catchError } from "@/shared/utils/notify";
 
-import { useApis, useSystemConfig } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
 
 interface Props {
   value: any;

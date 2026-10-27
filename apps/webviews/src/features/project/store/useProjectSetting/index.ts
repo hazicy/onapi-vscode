@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { devtools } from "@/app/store/utils";
+import { devtools } from "@/shared/state/store";
 import {
   AutoImportItem,
   ConnectToDatabaseItem,

@@ -7,6 +7,17 @@ const builtins = new Set(
   builtinModules.flatMap((name) => [name, `node:${name}`]),
 );
 const failures = [];
+// Exact legacy edges are tracked while application-aware shared components migrate.
+// New edges fail the check, and removed edges must be removed from this list.
+const webviewLegacyEdges = new Set(
+  JSON.parse(
+    fs.readFileSync(
+      new URL("../tooling/webview-boundary-exceptions.json", import.meta.url),
+      "utf8",
+    ),
+  ),
+);
+const usedWebviewLegacyEdges = new Set();
 // Models are the bottom layer; wire contracts may depend only on those models.
 const sharedWorkspaceDependencies = {
   "packages/http-model": new Set(),
@@ -72,6 +83,40 @@ for (const owner of owners) {
           },
         }).visit(program);
         for (const id of imports) {
+          if (owner === "apps/webviews") {
+            const sourceRoot = path.join(root, owner, "src");
+            const source = path
+              .relative(sourceRoot, filename)
+              .split(path.sep)
+              .join("/");
+            const targetPath = id.startsWith("@/")
+              ? path.resolve(sourceRoot, id.slice(2))
+              : id.startsWith(".")
+                ? path.resolve(path.dirname(filename), id)
+                : undefined;
+            const target =
+              targetPath &&
+              path.relative(sourceRoot, targetPath).split(path.sep).join("/");
+            if (
+              source.startsWith("shared/") &&
+              (target?.startsWith("features/") || target?.startsWith("app/"))
+            ) {
+              const edge = `${source} -> ${target}`;
+              if (webviewLegacyEdges.has(edge))
+                usedWebviewLegacyEdges.add(edge);
+              else
+                failures.push(
+                  `${owner}/src/${source}: shared layer imports ${target}`,
+                );
+            }
+            if (
+              source === "app/store/index.ts" &&
+              target?.startsWith("features/")
+            )
+              failures.push(
+                `${owner}: application store barrel re-exports a feature store`,
+              );
+          }
           if (id.startsWith(".")) {
             const target = path.resolve(path.dirname(filename), id);
             if (!target.startsWith(path.join(root, owner) + path.sep))
@@ -111,6 +156,10 @@ for (const owner of owners) {
     }
   }
   visit(path.join(root, owner, "src"));
+}
+for (const edge of webviewLegacyEdges) {
+  if (!usedWebviewLegacyEdges.has(edge))
+    failures.push(`Unused Webview boundary exception: ${edge}`);
 }
 if (failures.length)
   throw new Error(`Workspace boundary violations:\n${failures.join("\n")}`);

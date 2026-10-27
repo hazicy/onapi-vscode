@@ -28,8 +28,8 @@ async function loader(state, serviceResult, envResult) {
   return await load("apps/webviews/src/features/sync/utils/push.ts", (id) => {
     if (id === "lodash") return nativeDependency(id);
     if (id === "./environmentDiff") return diff;
-    if (id === "@/app/store")
-      return { useProjectConfig: { getState: () => state } };
+    if (id === "@/features/project/store/useProjectConfig")
+      return { default: { getState: () => state } };
     if (id === "@/shared/services/project")
       return {
         getServiceList: async () =>

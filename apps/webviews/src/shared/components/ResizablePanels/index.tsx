@@ -27,7 +27,7 @@ import cn from "classnames";
 import AppIcon from "@/shared/ui/AppIcon";
 import { STATUS_CODE } from "@onapi/http-model/constants/common";
 
-import { useSystemConfig } from "@/app/store";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import { DirectionType } from "@onapi/http-model/types/common";
 
 const defaultPanelProps = { defaultSize: 50, minSize: 5 };

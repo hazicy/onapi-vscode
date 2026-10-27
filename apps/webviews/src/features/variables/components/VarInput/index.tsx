@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Input, message } from "@/shared/ui/base";
 import type { InputRef } from "@/shared/ui/base";
 import VarMentions from "@/features/variables/components/VarMentions";
-import { useProjectConfig } from "@/app/store";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
 import { useMemoizedFn, useSafeState } from "ahooks";
 import cn from "classnames";
 import { find, head } from "lodash";

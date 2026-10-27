@@ -10,7 +10,7 @@ import {
   ApiDetailsData,
 } from "@onapi/http-model/requests/types/api";
 
-import { useApis } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
 
 const Response = memo((props: ApiComponentType) => {
   const { apisData, onApisDataChange } = props;

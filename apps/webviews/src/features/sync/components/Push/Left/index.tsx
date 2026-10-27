@@ -7,7 +7,8 @@ import { AppIcon } from "@/shared/ui";
 import { PushApiData, PushEnvData } from "../type";
 import ApiCheckBox from "./ApiCheckBox";
 import EnvCheckBox from "./EnvCheckBox";
-import { useApis, useProjectConfig } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
 
 type PushLeftProps = {
   halfCheckedKeys: Array<React.Key>;

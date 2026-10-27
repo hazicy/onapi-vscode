@@ -14,7 +14,7 @@ import { IEnvDataItem } from "@onapi/http-model/project/types/variable";
 
 import ValueInput from "./ValueInput";
 
-import { useProjectConfig } from "@/app/store";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
 import { saveProjectConfig } from "@/features/requests/events/env";
 
 export const defaultDataItem: IEnvDataItem = {

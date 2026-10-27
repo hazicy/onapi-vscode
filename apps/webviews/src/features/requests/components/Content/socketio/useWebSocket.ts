@@ -14,7 +14,9 @@ import useWebSocketStore from "@/features/requests/store/useApis/websocket";
 import { getWebSocketSendOptions } from "./utils";
 import { message } from "@/shared/ui/base";
 import { useTranslation } from "react-i18next";
-import { useApis, useStorage, useUserConfig } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
+import useUserConfig from "@/features/auth/store/useUserConfig";
+import { useStorage } from "@/app/store";
 import { produce } from "immer";
 import { AuthOauth2 } from "@onapi/http-model/requests/types/auth";
 

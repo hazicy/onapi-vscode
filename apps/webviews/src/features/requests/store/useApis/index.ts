@@ -6,7 +6,7 @@ import type {
   ApisData,
 } from "@onapi/http-model/requests/types/api";
 import { DEFAULT_REQUEST_SYSTEM_HEADERS } from "@onapi/http-model/requests/constants/request";
-import { create, devtools } from "@/app/store/utils";
+import { create, devtools } from "@/shared/state/store";
 
 type State = {
   apiOriginDetailsList: ApiDetailsData[];

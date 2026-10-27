@@ -11,7 +11,9 @@ import Environment from "@/features/environment/components";
 import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
 import GlobalStyle from "../../shared/theme/globalStyle";
-import { useSystemConfig, useProjectConfig, useGlobal } from "../../app/store";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
+import { useGlobal } from "@/app/store";
 import useEnv from "@/features/environment/hooks/useEnv";
 
 function EnvironmentPanel() {

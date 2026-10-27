@@ -1,4 +1,4 @@
-import { useApis } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
 import { message } from "@/shared/ui/base";
 import { produce } from "immer";
 import { useTranslation } from "react-i18next";

@@ -20,7 +20,7 @@ import ToolBar from "../../api/Debug/ToolBar";
 import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
 import { Flex } from "@/shared/ui/base";
 import { Button } from "@/shared/ui";
-import { useApis } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
 const GenerateCodeDrawer = lazy(
   () => import("@/features/requests/components/GenerateCodeDrawer"),
 );

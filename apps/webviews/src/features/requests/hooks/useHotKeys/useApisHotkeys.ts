@@ -5,7 +5,7 @@ import {
   DEFAULT_HOT_KEYS_OPTIONS,
   SYSTEM_HOT_KEYS_SCOPES_ENUM,
 } from "@/shared/constants/hotkeys";
-import { useApis } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
 import { handleHotKeysEventAction } from "@/shared/utils/hotkeys";
 
 const shortcuts = Object.values(DEFAULT_APIS_HOT_KEYS_MAP).flat();

@@ -15,7 +15,8 @@ import { cloneDeep, head, isEqual } from "lodash";
 import UrlGroup from "@/features/requests/components/UrlGroup";
 import { AppIcon } from "@/shared/ui";
 
-import { useApis, useUserConfig } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
+import useUserConfig from "@/features/auth/store/useUserConfig";
 import {
   ApiComponentType,
   type GraphQLDetailsData,

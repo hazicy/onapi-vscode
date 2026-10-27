@@ -78,16 +78,21 @@ async function fixture({
         };
       if (id === "@/shared/ui/Modal")
         return { Modal: { useModal: () => [{}, null] } };
-      if (id === "@/app/store")
+      if (id === "@/features/requests/store/useApis")
         return {
-          useApis: (selector) =>
+          default: (selector) =>
             selector({
               apiOriginDetailsList: local,
               localProjectApisVersion: {},
             }),
-          useProjectConfig: (selector) =>
-            selector({ envList: [], serverList: [] }),
-          useUserConfig: (selector) =>
+        };
+      if (id === "@/features/project/store/useProjectConfig")
+        return {
+          default: (selector) => selector({ envList: [], serverList: [] }),
+        };
+      if (id === "@/features/auth/store/useUserConfig")
+        return {
+          default: (selector) =>
             selector({ currentProject: { project_id: "target" } }),
         };
       if (id === "@/features/sync/utils/push")

@@ -20,7 +20,7 @@ import {
   IMPORT_TYPE_LIST,
   ImportLocationEnum,
 } from "@onapi/http-model/settings/constants/settings";
-import { useSystemConfig } from "@/app/store";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import { isString } from "lodash";
 
 const { Title } = Typography;

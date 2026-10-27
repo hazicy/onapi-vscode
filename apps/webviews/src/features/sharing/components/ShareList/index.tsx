@@ -6,7 +6,7 @@ import { Flex, Input, MenuProps, message, Typography } from "@/shared/ui/base";
 import { useSafeState } from "ahooks";
 import useDocsData from "./hooks/useDocsData";
 import useShare from "@/features/sharing/store/useShare";
-import { useApis } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
 import { last } from "lodash";
 import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
 import { useTranslation } from "react-i18next";

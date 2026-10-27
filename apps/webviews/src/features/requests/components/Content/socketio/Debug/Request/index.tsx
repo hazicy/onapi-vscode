@@ -10,7 +10,8 @@ import context from "@/shared/components/RawEditor/visualizationContext";
 import RequestTable from "@/shared/components/RequestTable";
 import { useTableColumnSwitchConfig } from "@/shared/hooks";
 
-import { useApis, useProjectConfig } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
 import useWebSocketStore from "@/features/requests/store/useApis/websocket";
 import { ApisBaseDataItem } from "@onapi/http-model/requests/types/base";
 import { SocketIoDetailsData } from "@onapi/http-model/requests/types/socketio";

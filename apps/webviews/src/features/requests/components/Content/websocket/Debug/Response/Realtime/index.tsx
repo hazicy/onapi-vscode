@@ -17,7 +17,7 @@ import ResponseResult from "@/features/requests/components/ResponseResult";
 import { AppIcon, Tooltip } from "@/shared/ui";
 import Empty from "../Empty";
 import Button from "@/shared/ui/Button";
-import { useApis } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
 import useWebSocketStore from "@/features/requests/store/useApis/websocket";
 import { MessageItem } from "@onapi/http-model/requests/types/websocket";
 

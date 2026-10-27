@@ -1,5 +1,5 @@
 import { ADD_CASE_DEFAULT } from "@onapi/http-model/testing/constants/default/index";
-import { create } from "@/app/store/utils";
+import { create } from "@/shared/state/store";
 import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
 import {
   EventItem,

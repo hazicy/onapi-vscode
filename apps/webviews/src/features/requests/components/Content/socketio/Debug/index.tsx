@@ -15,7 +15,9 @@ import UrlGroup from "@/features/requests/components/UrlGroup";
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
-import { useApis, useProjectConfig, useUserConfig } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
+import useUserConfig from "@/features/auth/store/useUserConfig";
 import useApisWebSocket from "@/features/requests/store/useApis/websocket";
 import {
   SocketIoComponentType,

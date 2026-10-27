@@ -8,7 +8,7 @@ import ResizablePanels from "@/shared/components/ResizablePanels";
 import SuspenseContent from "@/shared/components/SuspenseContent";
 
 import { isEqual } from "lodash";
-import { useApis } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
 import Request from "@/features/requests/components/Request";
 import Response from "./Response";
 import Header from "./Header";

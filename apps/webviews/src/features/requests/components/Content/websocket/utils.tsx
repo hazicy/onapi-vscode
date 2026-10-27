@@ -1,7 +1,7 @@
 import { completionHttpProtocol as completeHttpProtocol } from "@onapi/http-model/utils/data-tools";
 import { isPlainObject, isString } from "lodash";
 
-import { useProjectConfig } from "@/app/store";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
 
 export const completionHttpProtocol = (data: any) => {
   return completeHttpProtocol(data);

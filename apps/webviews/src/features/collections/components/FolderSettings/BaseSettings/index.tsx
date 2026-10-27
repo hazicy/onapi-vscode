@@ -8,7 +8,7 @@ import { useDebounceEffect } from "ahooks";
 import { produce } from "immer";
 
 import useFolders from "@/features/collections/hooks/useFolders";
-import { useApis } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
 import { FolderDetailsData } from "@onapi/http-model/requests/types/folder";
 import { ChangeFuncType } from "@onapi/http-model/types/common";
 

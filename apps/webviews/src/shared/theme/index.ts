@@ -2,7 +2,8 @@ import { useMemo } from "react";
 
 import { useShallow } from "zustand/react/shallow";
 
-import { useGlobal, useSystemConfig } from "@/app/store";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
+import { useGlobal } from "@/app/store";
 
 import { getThemeConfig } from "./theme";
 import { generateToken } from "./token";

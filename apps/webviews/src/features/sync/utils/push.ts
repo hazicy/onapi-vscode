@@ -1,5 +1,5 @@
 import { getEnvListService, getServiceList } from "@/shared/services/project";
-import { useProjectConfig } from "@/app/store";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
 import type {
   EnvListItem,
   ServerItem,

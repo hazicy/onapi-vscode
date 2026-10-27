@@ -10,7 +10,7 @@ import { find, head, includes, isArray, last, map } from "lodash";
 import { SegmentedTabs } from "@/shared/components";
 
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
-import { useSystemConfig } from "@/app/store";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
 
 import ContentItemWrap from "./components/ContentItemWrap";
 import { APIS_CONTENT_MAP } from "./constants";

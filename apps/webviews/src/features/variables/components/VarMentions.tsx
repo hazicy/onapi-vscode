@@ -9,7 +9,7 @@ import { isFunction, isObject, isUndefined, map } from "lodash";
 import { useShallow } from "zustand/react/shallow";
 
 import { SYSTEM_VARS } from "@/shared/constants/system";
-import { useProjectConfig } from "@/app/store";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
 
 const envVarMarkVarsList = [];
 

@@ -11,7 +11,7 @@ import {
   getNewApisDataByCurlChange,
 } from "@/features/requests/utils/apis";
 import UrlGroup from "@/features/requests/components/UrlGroup";
-import { useApis } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
 import { Icon } from "@iconify/react";
 import sendHorizontal from "@iconify-icons/lucide/send-horizontal";
 import loaderCircle from "@iconify-icons/lucide/loader-circle";

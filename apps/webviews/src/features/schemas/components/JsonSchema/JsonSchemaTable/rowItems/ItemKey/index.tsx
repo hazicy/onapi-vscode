@@ -12,7 +12,8 @@ import { isObject, isString, isUndefined } from "lodash";
 
 import { AppIcon, Tooltip } from "@/shared/ui";
 import Button from "@/shared/ui/Button";
-import { useProjectSetting, useUserConfig } from "@/app/store";
+import useProjectSetting from "@/features/project/store/useProjectSetting";
+import useUserConfig from "@/features/auth/store/useUserConfig";
 
 import { useSchemaContext } from "../../context";
 import SplitBar from "../SplitBar";

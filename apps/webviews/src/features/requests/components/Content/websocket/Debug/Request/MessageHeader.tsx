@@ -8,7 +8,7 @@ import { useSafeState } from "ahooks";
 import { includes, size, trim } from "lodash";
 
 import Button from "@/shared/ui/Button";
-import { useApis } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
 import useApisWebSocket from "@/features/requests/store/useApis/websocket";
 import { WebSocketDetailsData } from "@onapi/http-model/requests/types/websocket";
 

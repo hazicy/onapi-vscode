@@ -25,7 +25,7 @@ import ResponseResult from "@/features/requests/components/ResponseResult";
 
 import { Tooltip } from "@/shared/ui";
 import Empty from "@/shared/ui/Empty";
-import { useApis } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
 import useWebSocketStore from "@/features/requests/store/useApis/websocket";
 import { MessageItem } from "@onapi/http-model/requests/types/socketio";
 import { hexToRGBA } from "@/shared/utils/common";

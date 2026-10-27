@@ -11,7 +11,7 @@ import {
 } from "lodash";
 
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
-import { useApis } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
 import { arrayToTreeObject, flatTreeItems } from "@/shared/utils/common";
 import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
 

@@ -3,7 +3,7 @@ import styles from "./Console.module.css";
 import { FC, memo } from "react";
 
 import Console from "@/features/requests/components/Console";
-import { useApis } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
 import { ApiSendingData } from "@onapi/http-model/requests/types/send";
 
 interface Props {

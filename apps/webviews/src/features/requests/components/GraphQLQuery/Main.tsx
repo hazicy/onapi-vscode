@@ -48,7 +48,7 @@ import GraphQLQueryContext from "@/features/requests/components/GraphQLQuery/con
 import GraphQLSchemaProvider from "@/features/requests/components/GraphQLQuery/context/GraphQLSchemaProvider";
 import CodeEditor from "@/shared/components/CodeEditor";
 import { Button, Empty, AppIcon } from "@/shared/ui";
-import { useApis } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
 
 import { FilterDataType } from "@onapi/http-model/requests/types/graphql";
 import { AnyObject } from "@onapi/http-model/types/common";

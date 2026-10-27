@@ -5,7 +5,7 @@ import { map, size } from "lodash";
 
 import Button, { ButtonProps } from "@/shared/ui/Button";
 import useTheme from "@/shared/hooks/useTheme";
-import { useUiServices } from "@/app/store";
+import useUiServices from "@/shared/state/ui-services";
 
 const defaultProps = {
   centered: true, // default centered display

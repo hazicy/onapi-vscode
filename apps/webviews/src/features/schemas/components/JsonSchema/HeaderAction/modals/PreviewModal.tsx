@@ -12,9 +12,9 @@ import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
 import Modal from "@/shared/ui/Modal";
 import useSchemasHook from "@/features/schemas/hooks/useSchemas";
-import { useSchemas } from "@/app/store";
+import useSchemas from "@/features/schemas/store/useSchemas";
 import { EditFormat } from "@/shared/utils/editFormat";
-import { parseModelToJsonSchema } from "@/shared/utils/dataModel";
+import { parseModelToJsonSchema } from "@/features/schemas/utils/data-model";
 
 const PreviewModal: React.FC<any> = (props) => {
   const { value, onCancel, themeToken } = props;

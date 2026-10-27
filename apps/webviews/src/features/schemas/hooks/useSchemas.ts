@@ -1,6 +1,6 @@
 import useProjectSetting from "@/features/project/store/useProjectSetting";
 import { EditFormat } from "@/shared/utils/editFormat";
-import { parseModelToJsonSchema } from "@/shared/utils/dataModel";
+import { parseModelToJsonSchema } from "@/features/schemas/utils/data-model";
 import { useMemoizedFn } from "ahooks";
 import { message } from "@/shared/ui/base";
 import { cloneDeep, isObject } from "lodash";

@@ -10,7 +10,8 @@ import Curl from "@/features/curl/components/Curl";
 import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
 import GlobalStyle from "../../shared/theme/globalStyle";
-import { useGlobal, useSystemConfig } from "../../app/store";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
+import { useGlobal } from "@/app/store";
 
 function CurlPanel() {
   const customTheme = useGlobalTheme();

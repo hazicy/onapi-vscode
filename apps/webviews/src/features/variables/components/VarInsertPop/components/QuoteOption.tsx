@@ -10,7 +10,7 @@ import { concat, entries, filter, find, isString, map, size } from "lodash";
 
 import { Empty, Tooltip } from "@/shared/ui";
 import { SYSTEM_VARS } from "@/shared/constants/system";
-import { useProjectConfig } from "@/app/store";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
 
 interface Props {
   value: string;

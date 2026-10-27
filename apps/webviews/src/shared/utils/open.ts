@@ -1,5 +1,5 @@
-import { useApis } from "@/app/store";
-import { includes, isEmpty, size } from "lodash";
+import useApis from "@/features/requests/store/useApis";
+import { includes, size } from "lodash";
 
 export const openUrl = (url: string, target = "_blank") => {
   window?.vscode.postMessage({

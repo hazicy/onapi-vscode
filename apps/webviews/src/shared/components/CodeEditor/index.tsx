@@ -44,7 +44,8 @@ import {
 } from "@codemirror/autocomplete";
 import { highlightSelectionMatches, searchKeymap } from "@codemirror/search";
 import { lintGutter, lintKeymap, linter } from "@codemirror/lint";
-import { useGlobal, useSystemConfig } from "@/app/store";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
+import { useGlobal } from "@/app/store";
 import { getEditorVariable } from "@/shared/utils/global";
 import { scriptCompletions } from "./completion";
 import { formatDocument } from "./format";

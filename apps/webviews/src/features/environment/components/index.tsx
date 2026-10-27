@@ -11,7 +11,7 @@ import ParamsManage from "./ParamsManage";
 import VariableManage from "./VariableManage";
 import { head } from "lodash";
 import Menus from "./Menus";
-import { useProjectConfig } from "@/app/store";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
 import { snowflakeId } from "@onapi/http-model/utils/data-tools";
 
 interface Props {

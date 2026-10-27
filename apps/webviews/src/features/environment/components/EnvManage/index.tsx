@@ -13,7 +13,7 @@ import Table from "@/shared/components/BasicTable";
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
 
-import { useProjectConfig } from "@/app/store";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
 import type { EnvironmentScope as EnvListItem } from "@onapi/http-model";
 type EnvList = EnvListItem[];
 import { openUrl } from "@/shared/utils/open";

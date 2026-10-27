@@ -15,7 +15,7 @@ import {
 } from "lodash";
 
 import AppIcon from "@/shared/ui/AppIcon";
-import { useSystemConfig } from "@/app/store";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import { ApiSendResponseDataConsoleItem } from "@onapi/http-model/requests/types/send";
 
 import { ConsoleContentProps } from "./types";

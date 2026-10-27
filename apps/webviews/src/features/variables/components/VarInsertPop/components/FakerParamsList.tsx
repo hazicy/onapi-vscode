@@ -22,7 +22,7 @@ import {
 import { AppIcon, Tooltip } from "@/shared/ui";
 import { MOCK_LANGUAGE_MAP } from "@onapi/http-model/settings/constants/settings";
 import { FAKERJS_BOOLEAN_OPTIONS } from "@/features/variables/constants/variable";
-import { useSystemConfig } from "@/app/store";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import { transKey } from "@/features/variables/utils/variable";
 
 interface Props {

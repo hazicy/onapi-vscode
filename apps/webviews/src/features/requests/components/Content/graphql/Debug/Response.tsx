@@ -5,7 +5,7 @@ import { useMemoizedFn } from "ahooks";
 import { produce } from "immer";
 
 import ResponsePanel from "@/features/requests/components/Response";
-import { useApis } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
 import {
   ApiComponentType,
   GraphQLDetailsData,

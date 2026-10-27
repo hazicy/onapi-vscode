@@ -70,12 +70,10 @@ import {
   FAKERJS_FORMAT_LIST,
   DATE_FORMAT_OPTIONS,
 } from "@/features/variables/constants/variable";
-import { VariableInsertContext } from "@/shared/contexts";
-import {
-  useProjectConfig,
-  useProjectSetting,
-  useSystemConfig,
-} from "@/app/store";
+import VariableInsertContext from "@/features/variables/contexts/variable-insert";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
+import useProjectSetting from "@/features/project/store/useProjectSetting";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import {
   FuncListRenderItem,
   InsertAction,

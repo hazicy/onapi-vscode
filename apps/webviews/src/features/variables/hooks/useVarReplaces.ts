@@ -1,4 +1,4 @@
-import { useProjectConfig } from "@/app/store";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
 import {
   scopeValues,
   selectActiveEnvironment,

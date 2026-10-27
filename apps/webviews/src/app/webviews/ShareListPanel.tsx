@@ -14,7 +14,8 @@ import GlobalStyle from "../../shared/theme/globalStyle";
 
 import { HotkeysProvider } from "react-hotkeys-hook";
 import useShare from "@/features/sharing/store/useShare";
-import { useApis, useSystemConfig } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
 
 function ShareListPanel() {
   const customTheme = useGlobalTheme();

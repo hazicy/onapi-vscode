@@ -1,4 +1,4 @@
-import { create, devtools } from "@/app/store/utils";
+import { create, devtools } from "@/shared/state/store";
 
 type ConnectionStatus = "connect" | "connecting" | "disconnect";
 

@@ -5,7 +5,7 @@ import ReactJson from "@microlink/react-json-view";
 
 import { isPlainObject, isString } from "lodash";
 
-import { useSystemConfig } from "@/app/store";
+import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import { copyStringToClipboard } from "@/shared/utils/common";
 import JSON5 from "json5";
 

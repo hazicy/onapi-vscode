@@ -8,7 +8,7 @@ import { useMemoizedFn } from "ahooks";
 import { find, isEqual, map } from "lodash";
 
 import Tooltip from "@/shared/ui/Tooltip";
-import { useProjectConfig } from "@/app/store";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
 
 const optionsContentDefaultStyle: React.CSSProperties = {
   overflow: "hidden",

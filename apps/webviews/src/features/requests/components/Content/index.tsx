@@ -2,7 +2,7 @@ import styles from "./index.module.css";
 import { Flex } from "@/shared/ui/base";
 import React, { lazy, useEffect, useState } from "react";
 
-import { useApis } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
 import { ApiDetailsData, ApisData } from "@onapi/http-model/requests/types/api";
 
 // Reuse the preload promise and render its resolved component synchronously.

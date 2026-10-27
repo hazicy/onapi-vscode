@@ -1,4 +1,4 @@
-import { create } from "@/app/store/utils";
+import { create } from "@/shared/state/store";
 import { IDataModel } from "@/features/schemas/types";
 
 type State = {

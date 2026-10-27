@@ -12,7 +12,7 @@ import {
   FUNCTION_DEFAULT_VALUE,
   INNER_FUNC_LIST,
 } from "@/features/variables/constants/variable";
-import { useProjectSetting } from "@/app/store";
+import useProjectSetting from "@/features/project/store/useProjectSetting";
 import {
   FuncListRenderItem,
   InnerFuncListItem,

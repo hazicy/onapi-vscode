@@ -19,7 +19,7 @@ import {
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
 import Tooltip from "@/shared/ui/Tooltip";
-import { useProjectSetting } from "@/app/store";
+import useProjectSetting from "@/features/project/store/useProjectSetting";
 
 import ItemSettings from "./ItemSettings";
 

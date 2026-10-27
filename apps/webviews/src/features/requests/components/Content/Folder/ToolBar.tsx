@@ -9,7 +9,9 @@ import { cloneDeep, isEqual } from "lodash";
 import { Button } from "@/shared/ui";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
 
-import { useApis, useProjectConfig, useUserConfig } from "@/app/store";
+import useApis from "@/features/requests/store/useApis";
+import useProjectConfig from "@/features/project/store/useProjectConfig";
+import useUserConfig from "@/features/auth/store/useUserConfig";
 import EnvDropdown from "@/features/environment/components/EnvDropdown";
 import { saveProjectConfig } from "@/features/requests/events/env";
 
