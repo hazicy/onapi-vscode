@@ -1,18 +1,19 @@
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./fixtures";
 
-test.beforeEach(async ({ page }) => {
-  await page.goto("/?data");
+test.beforeEach(async ({ dataPage }) => {
+  await dataPage.open();
 });
 
 test("table sorting, pagination and disabled selection stay consistent", async ({
-  page,
+  dataPage,
 }) => {
-  const table = page.getByRole("region", { name: "Data table", exact: true });
+  const table = dataPage.dataTableRegion;
   await expect(table.getByRole("row")).toHaveCount(3);
   await table.getByRole("button", { name: "Count" }).click();
   await expect(table.getByRole("row").nth(1)).toContainText("Second");
   await table.getByRole("checkbox", { name: "Select all rows" }).check();
-  await expect(page.getByLabel("Selected rows")).toHaveText('["one","three"]');
+  await expect(dataPage.selectedRows).toHaveText('["one","three"]');
   await expect(
     table.getByRole("row").nth(1).getByRole("checkbox"),
   ).toBeDisabled();
@@ -24,11 +25,11 @@ test("table sorting, pagination and disabled selection stay consistent", async (
 });
 
 test("tree cascades checks, reports half checks and respects disabled boundaries", async ({
-  page,
+  dataPage,
 }) => {
-  const tree = page.getByRole("tree", { name: "Files", exact: true });
+  const tree = dataPage.filesTree;
   await tree.getByRole("checkbox", { name: "Select Alpha" }).check();
-  await expect(page.getByLabel("Half checked keys")).toHaveText('["folder"]');
+  await expect(dataPage.halfCheckedKeys).toHaveText('["folder"]');
   await tree
     .getByRole("checkbox", { name: "Select Folder", exact: true })
     .check();
@@ -38,63 +39,51 @@ test("tree cascades checks, reports half checks and respects disabled boundaries
   await expect(
     tree.getByRole("checkbox", { name: "Select Disabled" }),
   ).not.toBeChecked();
-  await expect(page.getByLabel("Half checked keys")).toHaveText("[]");
+  await expect(dataPage.halfCheckedKeys).toHaveText("[]");
   await tree.getByRole("checkbox", { name: "Select Alpha" }).uncheck();
-  await expect(page.getByLabel("Half checked keys")).toHaveText('["folder"]');
-  await page.getByRole("button", { name: "Clear tree checks" }).click();
+  await expect(dataPage.halfCheckedKeys).toHaveText('["folder"]');
+  await dataPage.clearTreeChecksButton.click();
   await expect(
     tree.getByRole("checkbox", { name: "Select Beta" }),
   ).not.toBeChecked();
 });
 
 test("tree keyboard navigation and lazy expansion work without duplicate loads", async ({
-  page,
+  dataPage,
 }) => {
-  const folder = page.getByRole("treeitem", {
-    name: "Lazy folder",
-    exact: true,
-  });
+  const folder = dataPage.lazyFolderTreeitem;
   await folder.focus();
   await folder.press("ArrowRight");
-  const child = page.getByRole("treeitem", {
-    name: "Loaded child",
-    exact: true,
-  });
+  const child = dataPage.loadedChildTreeitem;
   await expect(child).toBeVisible();
   await folder.press("ArrowDown");
   await expect(child).toBeFocused();
-  await page.getByRole("button", { name: "Collapse Lazy folder" }).click();
+  await dataPage.collapseLazyFolderButton.click();
   await expect(child).toHaveCount(0);
-  await page.getByRole("button", { name: "Expand Lazy folder" }).click();
+  await dataPage.expandLazyFolderButton.click();
   await expect(child).toBeVisible();
-  await expect(page.getByLabel("Load count")).toHaveText("1");
+  await expect(dataPage.loadCount).toHaveText("1");
 });
 
 test("tree select supports custom fields, search and controlled reset", async ({
-  page,
+  dataPage,
 }) => {
-  const picker = page.getByRole("combobox", { name: "Folder choice" });
+  const picker = dataPage.folderChoiceCombobox;
   await picker.click();
-  await page.getByRole("textbox", { name: "Search tree" }).fill("Second");
-  await page
-    .getByRole("treeitem", { name: "Second choice", exact: true })
-    .click();
-  await expect(page.getByLabel("Chosen folder")).toHaveText("second");
+  await dataPage.searchTreeTextbox.fill("Second");
+  await dataPage.secondChoiceTreeitem.click();
+  await expect(dataPage.chosenFolder).toHaveText("second");
   await expect(picker).toContainText("Second choice");
-  await page.getByRole("button", { name: "Reset choice" }).click();
+  await dataPage.resetChoiceButton.click();
   await expect(picker).not.toContainText("Second choice");
   await picker.click();
-  await expect(
-    page.getByRole("treeitem", { name: "First choice", exact: true }),
-  ).toBeVisible();
+  await expect(dataPage.firstChoiceTreeitem).toBeVisible();
 });
 
 test("native picker filters files, limits count, removes files and reselects the same file", async ({
-  page,
+  dataPage,
 }) => {
-  const input = page
-    .getByRole("region", { name: "Local files" })
-    .locator('input[type="file"]');
+  const input = dataPage.localFilesRegion.locator('input[type="file"]');
   const file = (name: string) => ({
     name,
     mimeType: "application/json",
@@ -107,21 +96,18 @@ test("native picker filters files, limits count, removes files and reselects the
     file("three.json"),
     { name: "bad.txt", mimeType: "text/plain", buffer: Buffer.from("bad") },
   ]);
-  await expect(page.getByLabel("File names")).toHaveText("two.json,three.json");
-  await expect(page.getByLabel("File changes")).toHaveText("3");
-  await page
-    .getByRole("button", { name: "Remove two.json", exact: true })
-    .click();
+  await expect(dataPage.fileNames).toHaveText("two.json,three.json");
+  await expect(dataPage.fileChanges).toHaveText("3");
+  await dataPage.removeTwoJsonButton.click();
   await input.setInputFiles(file("three.json"));
-  await expect(page.getByLabel("File changes")).toHaveText("5");
+  await expect(dataPage.fileChanges).toHaveText("5");
 });
 
 test("table rows retain draggable handles and resizable headers", async ({
   page,
+  dataPage,
 }) => {
-  const region = page.getByRole("region", {
-    name: "Resizable draggable table",
-  });
+  const region = dataPage.resizableDraggableTableRegion;
   await expect(region.locator(".react-resizable-handle")).toHaveCount(2);
   const rows = region.getByRole("row");
   const before = await rows.nth(1).getByRole("cell").nth(1).boundingBox();
@@ -144,30 +130,27 @@ test("table rows retain draggable handles and resizable headers", async ({
 });
 
 test("tree drag moves a leaf into a folder and rejects moving a folder into its descendant", async ({
-  page,
+  dataPage,
 }) => {
-  const tree = page.getByRole("tree", { name: "Files", exact: true });
+  const tree = dataPage.filesTree;
   await tree
     .getByRole("treeitem", { name: "Alpha", exact: true })
     .dragTo(tree.getByRole("treeitem", { name: "Destination", exact: true }));
-  await expect(page.getByLabel("Tree drop")).toContainText('"dragged":"a"');
-  await expect(page.getByLabel("Tree drop")).toContainText(
-    '"target":"destination"',
-  );
-  await expect(page.getByLabel("Tree drop")).toContainText('"gap":false');
-  const previous = await page.getByLabel("Tree drop").innerText();
+  await expect(dataPage.treeDrop).toContainText('"dragged":"a"');
+  await expect(dataPage.treeDrop).toContainText('"target":"destination"');
+  await expect(dataPage.treeDrop).toContainText('"gap":false');
+  const previous = await dataPage.treeDrop.innerText();
   await tree
     .getByRole("treeitem", { name: "Folder", exact: true })
     .dragTo(tree.getByRole("treeitem", { name: "Beta", exact: true }));
-  await expect(page.getByLabel("Tree drop")).toHaveText(previous);
+  await expect(dataPage.treeDrop).toHaveText(previous);
 });
 
 test("table drag reorders records through the existing sortable handle", async ({
   page,
+  dataPage,
 }) => {
-  const region = page.getByRole("region", {
-    name: "Resizable draggable table",
-  });
+  const region = dataPage.resizableDraggableTableRegion;
   const rows = region.getByRole("row");
   const handle = rows
     .nth(1)
@@ -191,11 +174,12 @@ test("table drag reorders records through the existing sortable handle", async (
     { steps: 10 },
   );
   await page.mouse.up();
-  await expect(page.getByLabel("Row order")).toHaveText("two,three,one");
+  await expect(dataPage.rowOrder).toHaveText("two,three,one");
 });
 
 test("dropping local files uses the same validation pipeline as file selection", async ({
   page,
+  dataPage,
 }) => {
   const transfer = await page.evaluateHandle(() => {
     const data = new DataTransfer();
@@ -205,18 +189,17 @@ test("dropping local files uses the same validation pipeline as file selection",
     data.items.add(new File(["bad"], "rejected.txt", { type: "text/plain" }));
     return data;
   });
-  await page
-    .getByRole("region", { name: "Local files" })
+  await dataPage.localFilesRegion
     .getByRole("button", { name: "Choose file", exact: true })
     .dispatchEvent("drop", { dataTransfer: transfer });
-  await expect(page.getByLabel("File names")).toHaveText("dropped.json");
-  await expect(page.getByLabel("File changes")).toHaveText("1");
+  await expect(dataPage.fileNames).toHaveText("dropped.json");
+  await expect(dataPage.fileChanges).toHaveText("1");
 });
 
 test("tree keyboard Enter selects a focused item and Space toggles its checkbox", async ({
-  page,
+  dataPage,
 }) => {
-  const tree = page.getByRole("tree", { name: "Files", exact: true });
+  const tree = dataPage.filesTree;
   const folder = tree.getByRole("treeitem", { name: "Folder", exact: true });
   await folder.focus();
   await folder.press("ArrowDown");
@@ -228,5 +211,5 @@ test("tree keyboard Enter selects a focused item and Space toggles its checkbox"
   await expect(
     tree.getByRole("checkbox", { name: "Select Alpha" }),
   ).toBeChecked();
-  await expect(page.getByLabel("Half checked keys")).toHaveText('["folder"]');
+  await expect(dataPage.halfCheckedKeys).toHaveText('["folder"]');
 });

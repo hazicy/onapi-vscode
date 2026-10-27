@@ -1,4 +1,5 @@
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./fixtures";
 import { generateScopedName } from "../../../../tooling/build/css-modules.mjs";
 
 const requestInitialData = {
@@ -64,6 +65,7 @@ for (const panel of [
 ]) {
   test(`production ${panel} initializes without module errors`, async ({
     page,
+    webviewsPage,
   }) => {
     const errors: string[] = [];
     page.on("pageerror", (error) => errors.push(error.message));
@@ -78,7 +80,7 @@ for (const panel of [
       }),
     );
     await page.goto("http://127.0.0.1:4180/smoke.html");
-    await expect(page.locator("#root > *")).not.toHaveCount(0);
+    await expect(webviewsPage.rootChildren).not.toHaveCount(0);
     expect(errors).toEqual([]);
   });
 }
@@ -95,6 +97,7 @@ for (const panel of [
 ]) {
   test(`production ${panel} renders loaded application content`, async ({
     page,
+    webviewsPage,
   }) => {
     const errors: string[] = [];
     page.on("pageerror", (error) => {
@@ -108,7 +111,7 @@ for (const panel of [
       }),
     );
     await page.goto("http://127.0.0.1:4180/loaded.html");
-    await expect(page.locator("#root > *")).not.toHaveCount(0);
+    await expect(webviewsPage.rootChildren).not.toHaveCount(0);
     await page.evaluate((panel) => {
       const send = (action: string, data: unknown) =>
         window.postMessage({ action, data }, "*");
@@ -162,7 +165,7 @@ for (const panel of [
         page.locator(`#root ${componentSelector("skeleton")}`),
       ).toHaveCount(0);
     }
-    await expect(page.locator("#root")).not.toHaveText("");
+    await expect(webviewsPage.root).not.toHaveText("");
     if (panel === "tagPanel") {
       await expect
         .poll(() =>
@@ -191,13 +194,12 @@ for (const panel of [
             "rgba(0, 0, 0, 0)",
           );
         }
-        await page
-          .getByRole("tab")
+        await webviewsPage.tabs
           .filter({ hasText: /^Params(?:\s*\d+)?$/ })
           .click();
-        const paramsTab = page
-          .getByRole("tab")
-          .filter({ hasText: /^Params(?:\s*\d+)?$/ });
+        const paramsTab = webviewsPage.tabs.filter({
+          hasText: /^Params(?:\s*\d+)?$/,
+        });
         const count = paramsTab.locator(componentSelector("tabsCountBadge"));
         await expect(count).toHaveText("1");
         const tabBox = await paramsTab.boundingBox();
@@ -209,9 +211,7 @@ for (const panel of [
               (countBox!.y + countBox!.height / 2),
           ),
         ).toBeLessThanOrEqual(2);
-        const table = page.getByRole("tabpanel", {
-          name: /^Params(?:\s*\d+)?$/,
-        });
+        const table = webviewsPage.paramsPanel;
         const selectAll = table.getByRole("checkbox").first();
         await expect(selectAll).toHaveCSS("width", "16px");
         const key = table.getByRole("textbox").nth(0);
@@ -225,12 +225,9 @@ for (const panel of [
           expect(box!.width).toBeGreaterThan(100);
           expect(box!.height).toBeGreaterThan(10);
         }
-        const urlInput = page.getByRole("textbox", {
-          name: "Enter URL or paste cURL text",
-        });
+        const urlInput = webviewsPage.requestUrl;
         for (const editor of [urlInput, key, value]) {
-          await page
-            .getByRole("tab")
+          await webviewsPage.tabs
             .filter({ hasText: /^Params(?:\s*\d+)?$/ })
             .click();
           const measure = () =>
@@ -262,14 +259,10 @@ for (const panel of [
       const method = urlGroup.locator(componentSelector("select")).first();
       await method.locator("button").click();
       await page.waitForTimeout(300);
-      await expect(
-        page.getByRole("option", { name: "POST", exact: true }),
-      ).toBeVisible();
-      await page.getByRole("option", { name: "POST", exact: true }).click();
+      await expect(webviewsPage.postOption).toBeVisible();
+      await webviewsPage.postOption.click();
       await expect(method.getByRole("combobox")).toContainText("POST");
-      await expect(
-        page.getByRole("option", { name: "POST", exact: true }),
-      ).toBeHidden();
+      await expect(webviewsPage.postOption).toBeHidden();
       await page.screenshot({ path: test.info().outputPath("request.png") });
       await page.evaluate(() => {
         window.postMessage(
@@ -356,9 +349,7 @@ for (const panel of [
         await expect(wrapButton).toHaveAttribute("aria-pressed", "false");
         await wrapButton.click();
         await expect(wrapButton).toHaveAttribute("aria-pressed", "true");
-        await expect(
-          page.getByRole("textbox", { name: "Code editor" }).first(),
-        ).toBeVisible();
+        await expect(webviewsPage.codeEditorTextbox.first()).toBeVisible();
         await page.screenshot({
           path: test.info().outputPath(`response-${width}.png`),
         });
@@ -370,6 +361,7 @@ for (const panel of [
 
 test("production WebSocket request finishes loading without render errors", async ({
   page,
+  webSocketPage,
 }) => {
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
@@ -406,29 +398,23 @@ test("production WebSocket request finishes loading without render errors", asyn
     }),
   );
   await page.goto("http://127.0.0.1:4180/ws.html");
-  await expect(page.locator(".websocket")).toBeAttached();
-  await expect(page.locator(".cm-editor").first()).toBeVisible();
+  await expect(webSocketPage.websocket).toBeAttached();
+  await expect(webSocketPage.editors.first()).toBeVisible();
   await expect(page.locator(componentSelector("skeleton"))).toHaveCount(0);
-  await expect(page.getByRole("alert")).toHaveCount(0);
-  await expect(page.getByRole("status")).toHaveText("Disconnected");
-  await expect(
-    page.getByText("Connect to send a message", { exact: true }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "Send", exact: true }),
-  ).toBeDisabled();
-  await expect(
-    page.getByRole("button", { name: "Clear Messages", exact: true }),
-  ).toBeDisabled();
+  await expect(webSocketPage.alert).toHaveCount(0);
+  await expect(webSocketPage.status).toHaveText("Disconnected");
+  await expect(webSocketPage.connectToSendAMessage).toBeVisible();
+  await expect(webSocketPage.sendButton).toBeDisabled();
+  await expect(webSocketPage.clearMessagesButton).toBeDisabled();
   await page.setViewportSize({ width: 650, height: 760 });
-  const editor = page.locator(".cm-editor").first();
+  const editor = webSocketPage.editors.first();
   expect((await editor.boundingBox())!.height).toBeGreaterThan(120);
-  await editor.locator(".cm-content").fill("hello");
-  await page.getByRole("button", { name: "Connect", exact: true }).click();
-  await expect(page.getByRole("status")).toHaveText("Connecting");
-  await page.getByRole("button", { name: "Cancel", exact: true }).click();
-  await expect(page.getByRole("status")).toHaveText("Disconnected");
-  await page.getByRole("button", { name: "Connect", exact: true }).click();
+  await webSocketPage.messageEditor.content.fill("hello");
+  await webSocketPage.connectButton.click();
+  await expect(webSocketPage.status).toHaveText("Connecting");
+  await webSocketPage.cancelButton.click();
+  await expect(webSocketPage.status).toHaveText("Disconnected");
+  await webSocketPage.connectButton.click();
   let sequence = 0;
   const emit = (event: Record<string, unknown>) =>
     page.evaluate(
@@ -457,11 +443,9 @@ test("production WebSocket request finishes loading without render errors", asyn
       size: "0 B",
     },
   });
-  await expect(page.getByRole("status")).toHaveText("Connected");
-  await expect(
-    page.getByRole("button", { name: "Send", exact: true }),
-  ).toBeEnabled();
-  await page.getByRole("button", { name: "Send", exact: true }).click();
+  await expect(webSocketPage.status).toHaveText("Connected");
+  await expect(webSocketPage.sendButton).toBeEnabled();
+  await webSocketPage.sendButton.click();
   expect(
     await page.evaluate(() =>
       (window as any).postedMessages.some(
@@ -482,39 +466,22 @@ test("production WebSocket request finishes loading without render errors", asyn
       size: "5 B",
     },
   });
-  await page.locator(".websocket").getByText("hello", { exact: true }).click();
-  await expect(page.locator(".cm-editor").nth(1)).toContainText("hello");
-  await page
-    .getByRole("textbox", { name: "Search", exact: true })
-    .fill("does-not-exist");
+  await webSocketPage.websocket.getByText("hello", { exact: true }).click();
+  await expect(webSocketPage.editors.nth(1)).toContainText("hello");
+  await webSocketPage.searchTextbox.fill("does-not-exist");
+  await expect(webSocketPage.noMatchingMessages).toBeVisible();
+  await webSocketPage.resetFiltersButton.click();
+  await expect(webSocketPage.searchTextbox).toHaveValue("");
+  await webSocketPage.clearMessagesButton.click();
+  await expect(webSocketPage.noMessagesYet).toBeVisible();
   await expect(
-    page.getByText("No matching messages", { exact: true }),
-  ).toBeVisible();
-  await page
-    .getByRole("button", { name: "Reset filters", exact: true })
-    .click();
-  await expect(
-    page.getByRole("textbox", { name: "Search", exact: true }),
-  ).toHaveValue("");
-  await page
-    .getByRole("button", { name: "Clear Messages", exact: true })
-    .click();
-  await expect(
-    page.getByText("No messages yet", { exact: true }),
+    webSocketPage.connectedSendAMessageOrWaitForTheServerToRespond,
   ).toBeVisible();
   await expect(
-    page.getByText(
-      "Connected. Send a message or wait for the server to respond.",
-      { exact: true },
-    ),
+    webSocketPage.selectAMessageOnTheLeftToInspectItsContent,
   ).toBeVisible();
-  await expect(
-    page.getByText("Select a message on the left to inspect its content.", {
-      exact: true,
-    }),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Disconnect", exact: true }).click();
-  await expect(page.getByRole("status")).toHaveText("Disconnected");
+  await webSocketPage.disconnectButton.click();
+  await expect(webSocketPage.status).toHaveText("Disconnected");
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= window.innerWidth,

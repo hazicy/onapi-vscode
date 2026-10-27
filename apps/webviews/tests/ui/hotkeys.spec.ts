@@ -1,4 +1,6 @@
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./fixtures";
+import { RequestPage } from "./pages/RequestPage";
 
 for (const platform of ["mac", "windows"] as const) {
   test(`${platform} request shortcuts send from URL and body editors and save`, async ({
@@ -16,6 +18,7 @@ for (const platform of ["mac", "windows"] as const) {
       platform === "mac" ? "MacIntel" : "Win32",
     );
     const page = await context.newPage();
+    const requestPage = new RequestPage(page);
     const initialData = {
       apiData: {
         id: "hotkey-api",
@@ -57,19 +60,14 @@ for (const platform of ["mac", "windows"] as const) {
             (message: any) => message.action === "sendApi",
           ),
         );
-      const url = page.getByRole("textbox", {
-        name: "Enter URL or paste cURL text",
-      });
+      const url = requestPage.enterURLOrPasteCURLTextTextbox;
       await url.click();
       await page.keyboard.press(`${modifier}+Enter`);
       await expect.poll(sent).toHaveLength(1);
-      await page
-        .getByRole("tab")
-        .filter({ hasText: /^(?:Body|JSON|Raw)$/ })
-        .click();
-      const editor = page
-        .getByRole("textbox", { name: "Code editor" })
-        .and(page.locator('[contenteditable="true"]'));
+      await requestPage.tab.filter({ hasText: /^(?:Body|JSON|Raw)$/ }).click();
+      const editor = requestPage.codeEditorTextbox.and(
+        requestPage.contenteditableTrue,
+      );
       await editor.fill('{"updated":true}');
       const content = await editor.innerText();
       await page.keyboard.down(modifier);

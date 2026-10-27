@@ -1,9 +1,11 @@
 import { emitHttpEvents } from "./protocol";
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./fixtures";
 
 for (const moduleDelay of [0, 250]) {
   test(`request startup hydrates before rendering and defers optional modules (${moduleDelay}ms module delay)`, async ({
     page,
+    requestPage,
   }) => {
     const errors: string[] = [];
     const scripts: string[] = [];
@@ -63,9 +65,7 @@ for (const moduleDelay of [0, 250]) {
       }),
     );
     await page.goto("http://127.0.0.1:4180/startup.html");
-    await expect(
-      page.getByPlaceholder("Enter URL or paste cURL text"),
-    ).toBeVisible();
+    await expect(requestPage.enterURLOrPasteCURLTextInput).toBeVisible();
     await expect
       .poll(() =>
         page.evaluate(() =>
@@ -113,7 +113,7 @@ for (const moduleDelay of [0, 250]) {
     expect(await page.evaluate(() => (window as any).loadingRowCounts)).toEqual(
       [],
     );
-    await expect(page.getByLabel("Loading", { exact: true })).toHaveCount(0);
+    await expect(requestPage.loading).toHaveCount(0);
     // A hidden request tab must not fetch its module until first selected,
     // even though the underlying Tabs panels use keepMounted.
     await page.waitForLoadState("networkidle");
@@ -133,23 +133,19 @@ for (const moduleDelay of [0, 250]) {
     // Includes modules loaded after the first paint (for example the collection
     // selector). Catch heavy utilities returning to the initial page dependency graph.
     expect(startupPayload.jsBytes).toBeLessThan(2_400_000);
-    await page.getByRole("tab", { name: "Path", exact: true }).click();
-    await expect(
-      page.getByRole("tab", { name: "Path", exact: true }),
-    ).toHaveAttribute("aria-selected", "true");
-    await page.getByRole("tab", { name: "Params", exact: true }).click();
+    await requestPage.pathTab.click();
+    await expect(requestPage.pathTab).toHaveAttribute("aria-selected", "true");
+    await requestPage.paramsTab.click();
     await page.waitForLoadState("networkidle");
     const beforeConsole = scripts.length;
-    await page.getByRole("tab", { name: "Console", exact: true }).click();
+    await requestPage.consoleTab.click();
     await expect.poll(() => scripts.length).toBeGreaterThan(beforeConsole);
-    await page.getByRole("tab", { name: "Response", exact: true }).click();
+    await requestPage.responseTab.click();
     // The deferred response implementation must still handle host results.
     await emitHttpEvents(page, "startup-api", [
       { type: "done", error: { message: "Startup deferred response check" } },
     ]);
-    await expect(
-      page.getByText("Startup deferred response check", { exact: true }),
-    ).toBeVisible();
+    await expect(requestPage.startupDeferredResponseCheck).toBeVisible();
     await emitHttpEvents(page, "startup-api", [
       { type: "start" },
       {
@@ -168,10 +164,8 @@ for (const moduleDelay of [0, 250]) {
       },
       { type: "done", error: null },
     ]);
-    await expect(
-      page.getByRole("button", { name: "Toggle word wrap" }),
-    ).toBeVisible();
-    await page.getByRole("button", { name: "Code", exact: true }).click();
+    await expect(requestPage.toggleWordWrapButton).toBeVisible();
+    await requestPage.codeButton.click();
     await expect
       .poll(() =>
         page.evaluate(() =>

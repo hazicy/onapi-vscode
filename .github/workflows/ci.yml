@@ -19,6 +19,7 @@ jobs:
         run: pnpm --filter '!@onapi/webviews' -r typecheck
       - name: Check Webview types
         run: pnpm --dir apps/webviews typecheck
+      - run: pnpm typecheck:e2e
       - run: pnpm test:unit
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm build

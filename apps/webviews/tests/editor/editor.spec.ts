@@ -1,21 +1,14 @@
-import { test, expect, type Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
+import { test } from "./fixtures";
 
-async function configure(page: Page, props: Record<string, unknown>) {
-  await page.evaluate(
-    (props) => (window as any).editorTest.configure(props),
-    props,
-  );
-}
-const value = (page: Page) =>
-  page.evaluate(() => (window as any).editorTest.value());
 const browserErrors = new WeakMap<Page, string[]>();
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page, editorPage }) => {
   const errors: string[] = [];
   browserErrors.set(page, errors);
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.goto("/");
-  await expect(page.locator(".code-editor-host .cm-content")).toBeVisible();
+  await editorPage.open();
+  await expect(editorPage.content).toBeVisible();
 });
 
 test.afterEach(async ({ page }) => {
@@ -23,142 +16,117 @@ test.afterEach(async ({ page }) => {
 });
 
 test("controlled typing, selection insertion, undo and external updates", async ({
-  page,
+  editorPage,
 }) => {
-  const content = page.locator(".code-editor-host .cm-content");
-  await configure(page, { value: "hello world" });
-  await expect.poll(() => value(page)).toBe("hello world");
-  await page.evaluate(() => {
-    (window as any).editorTest.select(6, 11);
-    (window as any).editorTest.insert("{{token}}");
-  });
-  await expect.poll(() => value(page)).toBe("hello {{token}}");
+  const content = editorPage.content;
+  await editorPage.configure({ value: "hello world" });
+  await expect.poll(() => editorPage.value()).toBe("hello world");
+  await editorPage.replaceSelection(6, 11, "{{token}}");
+  await expect.poll(() => editorPage.value()).toBe("hello {{token}}");
   await content.press("ControlOrMeta+z");
-  await expect.poll(() => value(page)).toBe("hello world");
-  await configure(page, { value: "new response" });
-  await expect.poll(() => value(page)).toBe("new response");
-  const changes = await page.evaluate(() =>
-    (window as any).editorTest.changes(),
-  );
+  await expect.poll(() => editorPage.value()).toBe("hello world");
+  await editorPage.configure({ value: "new response" });
+  await expect.poll(() => editorPage.value()).toBe("new response");
+  const changes = await editorPage.changes();
   expect(changes).not.toContain("new response");
-  await content.press("ControlOrMeta+End");
-  await content.pressSequentially("!");
-  await expect.poll(() => value(page)).toBe("new response!");
+  await editorPage.editor.append("!");
+  await expect.poll(() => editorPage.value()).toBe("new response!");
 });
 
 test("JSON formatting preserves comments and large numbers; invalid input stays untouched", async ({
-  page,
+  editorPage,
 }) => {
   const original = '{/*keep*/"id":9007199254740993123,"items":[1,2,],}';
-  await configure(page, { value: original, language: "json" });
-  await expect.poll(() => value(page)).toBe(original);
-  await page.evaluate(() => (window as any).editorTest.format());
-  const formatted = await value(page);
+  await editorPage.configure({ value: original, language: "json" });
+  await expect.poll(() => editorPage.value()).toBe(original);
+  await editorPage.format();
+  const formatted = await editorPage.value();
   expect(formatted).toContain("/*keep*/");
   expect(formatted).toContain("9007199254740993123");
   expect(formatted).toContain("\n");
-  await configure(page, { value: "{invalid" });
-  await expect.poll(() => value(page)).toBe("{invalid");
-  await page.evaluate(() => (window as any).editorTest.format());
-  expect(await value(page)).toBe("{invalid");
-  expect(
-    await page.evaluate(() =>
-      (window as any).editorTest.jsonDiagnostics('{"a":1,}'),
-    ),
-  ).toEqual(
+  await editorPage.configure({ value: "{invalid" });
+  await expect.poll(() => editorPage.value()).toBe("{invalid");
+  await editorPage.format();
+  expect(await editorPage.value()).toBe("{invalid");
+  expect(await editorPage.diagnostics('{"a":1,}')).toEqual(
     expect.arrayContaining([expect.objectContaining({ severity: "warning" })]),
   );
-  expect(
-    await page.evaluate(() =>
-      (window as any).editorTest.jsonDiagnostics('{"a":}'),
-    ),
-  ).toEqual(
+  expect(await editorPage.diagnostics('{"a":}')).toEqual(
     expect.arrayContaining([expect.objectContaining({ severity: "error" })]),
   );
 });
 
 test("read-only mode, wrap, line numbers and theme can change without losing content", async ({
-  page,
+  editorPage,
 }) => {
-  await configure(page, {
+  await editorPage.configure({
     value: "protected",
     readOnly: true,
     options: { wordWrap: "off", lineNumbers: "off" },
   });
-  const content = page.locator(".code-editor-host .cm-content");
+  const content = editorPage.content;
   await expect(content).toHaveAttribute("contenteditable", "false");
-  await expect(page.locator(".code-editor-host .cm-lineNumbers")).toHaveCount(
-    0,
-  );
+  await expect(editorPage.lineNumbers).toHaveCount(0);
   await expect(content).not.toHaveClass(/cm-lineWrapping/);
-  await page.evaluate(() => (window as any).editorTest.insert("wrong"));
-  expect(await value(page)).toBe("protected");
-  await configure(page, {
+  await editorPage.insert("wrong");
+  expect(await editorPage.value()).toBe("protected");
+  await editorPage.configure({
     readOnly: false,
     options: { wordWrap: "on", lineNumbers: "on" },
   });
   await expect(content).toHaveAttribute("contenteditable", "true");
   await expect(content).toHaveClass(/cm-lineWrapping/);
-  await page.evaluate(() =>
-    (window as any).editorTest.setTheme("Default Light Modern"),
-  );
-  await expect
-    .poll(() => page.evaluate(() => (window as any).editorTest.dark()))
-    .toBe(false);
-  expect(await value(page)).toBe("protected");
+  await editorPage.setTheme("Default Light Modern");
+  await expect.poll(() => editorPage.isDark()).toBe(false);
+  expect(await editorPage.value()).toBe("protected");
 });
 
 test("script completion replaces the entire dotted expression", async ({
-  page,
+  editorPage,
 }) => {
-  await configure(page, { language: "javascript", value: "" });
-  const content = page.locator(".code-editor-host .cm-content");
+  await editorPage.configure({ language: "javascript", value: "" });
+  const content = editorPage.content;
   await content.click();
   await content.pressSequentially("onapi.getGlobalV", { delay: 50 });
-  await expect(page.locator(".cm-tooltip-autocomplete")).toBeVisible();
-  await page
-    .getByRole("option", { name: "onapi.getGlobalVariable", exact: true })
-    .click();
-  await expect.poll(() => value(page)).toBe("onapi.getGlobalVariable");
+  await expect(editorPage.completions).toBeVisible();
+  await editorPage.completion("onapi.getGlobalVariable").click();
+  await expect.poll(() => editorPage.value()).toBe("onapi.getGlobalVariable");
 });
 
-test("variable hover uses the current value lookup", async ({ page }) => {
-  await configure(page, {
+test("variable hover uses the current value lookup", async ({
+  page,
+  editorPage,
+}) => {
+  await editorPage.configure({
     language: "json",
     value: '{"token":"{{token}}"}',
     options: { hover: { enabled: true, delay: 10 } },
   });
-  const line = page.locator(".code-editor-host .cm-line");
+  const line = editorPage.lines;
   await expect(line).toHaveText('{"token":"{{token}}"}');
   const box = await line.boundingBox();
   await page.mouse.move(box!.x + 14 * 8.4, box!.y + box!.height / 2);
-  await expect(page.locator(".cm-tooltip-hover")).toContainText(
-    "example-token",
-  );
+  await expect(editorPage.hoverTooltip).toContainText("example-token");
 });
 
 test("diff view highlights changes, updates and stays read-only", async ({
-  page,
+  editorPage,
 }) => {
-  const contents = page.locator(".cm-mergeView .cm-content");
+  const contents = editorPage.diffContents;
   await expect(contents).toHaveCount(2);
   await expect(contents.nth(0)).toHaveText('{"a":1}');
   await expect(contents.nth(1)).toHaveText('{"a":2}');
   await expect(contents.nth(1)).toHaveAttribute("contenteditable", "false");
-  await expect(
-    page.locator(".cm-mergeView .cm-changedLine").first(),
-  ).toBeVisible();
-  await page.evaluate(() =>
-    (window as any).editorTest.setDiff({
-      prevValue: "before",
-      nextValue: "after",
-    }),
-  );
+  await expect(editorPage.changedLines.first()).toBeVisible();
+  await editorPage.setDiff({
+    prevValue: "before",
+    nextValue: "after",
+  });
   await expect(contents.nth(1)).toHaveText("after");
 });
 
 test("every supported language and formatter loads in the browser", async ({
-  page,
+  editorPage,
 }) => {
   const languages = [
     "json",
@@ -185,13 +153,7 @@ test("every supported language and formatter loads in the browser", async ({
     "text",
   ];
   for (const language of languages) {
-    expect(
-      await page.evaluate(
-        (name) => (window as any).editorTest.language(name),
-        language,
-      ),
-      language,
-    ).toBe(2);
+    expect(await editorPage.loadLanguage(language), language).toBe(2);
   }
   for (const [language, source] of [
     ["javascript", "const a={x:1}"],
@@ -202,51 +164,42 @@ test("every supported language and formatter loads in the browser", async ({
     ["graphql", "{user{id}}"],
     ["yaml", "a: [1,2]"],
   ]) {
-    const result = await page.evaluate(
-      ([source, language]) =>
-        (window as any).editorTest.formatDocument(source, language),
-      [source, language],
-    );
+    const result = await editorPage.formatDocument(source, language);
     expect(result, language).not.toBe(source);
   }
 });
 
-test("a pending formatter never overwrites newer content", async ({ page }) => {
-  await configure(page, { value: "const a={x:1}", language: "javascript" });
-  await expect.poll(() => value(page)).toBe("const a={x:1}");
-  await page.evaluate(() => {
-    void (window as any).editorTest.format();
-    (window as any).editorTest.select(0);
-    (window as any).editorTest.insert("//new\n");
+test("a pending formatter never overwrites newer content", async ({
+  page,
+  editorPage,
+}) => {
+  await editorPage.configure({
+    value: "const a={x:1}",
+    language: "javascript",
   });
-  await expect.poll(() => value(page)).toBe("//new\nconst a={x:1}");
+  await expect.poll(() => editorPage.value()).toBe("const a={x:1}");
+  await editorPage.formatThenPrepend("//new\n");
+  await expect.poll(() => editorPage.value()).toBe("//new\nconst a={x:1}");
   await page.waitForLoadState("networkidle");
-  expect(await value(page)).toBe("//new\nconst a={x:1}");
+  expect(await editorPage.value()).toBe("//new\nconst a={x:1}");
 });
 
 test("large read-only responses render a viewport and scroll to the end", async ({
-  page,
+  editorPage,
 }) => {
   const source = Array.from(
     { length: 20000 },
     (_, i) => `{"id":${i},"message":"response item ${i}"}`,
   ).join("\n");
-  await configure(page, {
+  await editorPage.configure({
     value: source,
     readOnly: true,
     options: { wordWrap: "off" },
   });
   await expect
-    .poll(() => page.evaluate(() => (window as any).editorTest.value().length))
+    .poll(async () => (await editorPage.value()).length)
     .toBe(source.length);
-  expect(await page.locator(".code-editor-host .cm-line").count()).toBeLessThan(
-    1000,
-  );
-  await page.evaluate(
-    (length) => (window as any).editorTest.scrollTo(length),
-    source.length,
-  );
-  await expect(page.locator(".code-editor-host .cm-content")).toContainText(
-    "response item 19999",
-  );
+  expect(await editorPage.lines.count()).toBeLessThan(1000);
+  await editorPage.scrollTo(source.length);
+  await expect(editorPage.content).toContainText("response item 19999");
 });

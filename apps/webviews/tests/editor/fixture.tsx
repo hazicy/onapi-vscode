@@ -13,6 +13,7 @@ import { EditorState } from "@codemirror/state";
 import { setTheme } from "./store";
 import { EditFormat } from "../../src/shared/utils/editFormat";
 import useEditFormat from "../../src/shared/hooks/useEditFormat";
+import type { EditorTestApi } from "./api";
 
 function Fixture() {
   const [props, setProps] = useState<Props>({
@@ -33,7 +34,7 @@ function Fixture() {
     EditorView.findFromDOM(
       document.querySelector(".code-editor-host .cm-editor")!,
     )!;
-  (window as any).editorTest = {
+  window.editorTest = {
     configure: (next: Partial<Props>) =>
       setProps((previous) => ({ ...previous, ...next })),
     setMounted,
@@ -55,7 +56,7 @@ function Fixture() {
     language: async (name: string) =>
       EditorState.create({ doc: "{}", extensions: [await loadLanguage(name)] })
         .doc.length,
-  };
+  } satisfies EditorTestApi;
   return (
     <>
       <div className="code-editor-host" style={{ height: 280, width: 700 }}>

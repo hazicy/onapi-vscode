@@ -1,46 +1,45 @@
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./fixtures";
 
 test("GraphQL conditions reset dependent values and preserve rows after removal", async ({
   page,
+  filtersPage,
 }) => {
-  await page.goto("/?filters");
-  const combos = page.getByRole("combobox");
+  await filtersPage.open();
+  const combos = filtersPage.combobox;
   await combos.nth(0).click();
-  await page.getByRole("option", { name: "age", exact: true }).click();
+  await filtersPage.ageOption.click();
   await combos.nth(1).click();
-  await page.getByRole("option", { name: "eq", exact: true }).click();
-  await page.getByRole("textbox").fill("18");
-  await page.getByRole("button", { name: "Add Condition" }).click();
+  await filtersPage.eqOption.click();
+  await filtersPage.textbox.fill("18");
+  await filtersPage.addConditionButton.click();
   await combos.nth(2).click();
-  await page.getByRole("option", { name: "name", exact: true }).click();
+  await filtersPage.nameOption.click();
   await combos.nth(3).click();
-  await page.getByRole("option", { name: "eq", exact: true }).click();
-  await page.getByRole("textbox").nth(1).fill("alice");
+  await filtersPage.eqOption.click();
+  await filtersPage.textbox.nth(1).fill("alice");
   // Remove the first condition; the second retains its own identity and value.
-  await page
-    .locator("form > div")
+  await filtersPage.conditions
     .first()
     .getByRole("button", { name: "Remove condition" })
     .click();
-  await expect(page.getByRole("textbox")).toHaveValue("alice");
+  await expect(filtersPage.textbox).toHaveValue("alice");
   // Changing the field clears the operation and value from the previous field.
   await combos.nth(0).click();
-  await page.getByRole("option", { name: "age", exact: true }).click();
-  await expect(page.getByRole("textbox")).toHaveValue("");
+  await filtersPage.ageOption.click();
+  await expect(filtersPage.textbox).toHaveValue("");
   await combos.nth(1).click();
-  await page.getByRole("option", { name: "in", exact: true }).click();
+  await filtersPage.inOption.click();
   await combos.nth(2).fill("21");
-  await page.getByRole("option", { name: "21", exact: true }).click();
+  await filtersPage.age21Option.click();
   await page.keyboard.press("Escape");
-  await page.getByRole("button", { name: "Confirm", exact: true }).click();
-  await expect(page.getByLabel("Filter data")).toHaveText(
+  await filtersPage.confirmButton.click();
+  await expect(filtersPage.filterData).toHaveText(
     '{"query":[{"name":"where","value":{"age":{"in":["21"]}}}]}',
   );
-  await page.getByRole("button", { name: "Reopen filters" }).click();
-  await expect(
-    page.getByRole("button", { name: "Remove 21", exact: true }),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Clear Conditions" }).click();
-  await expect(page.getByRole("combobox")).toHaveCount(2);
-  await expect(page.getByRole("textbox")).toHaveValue("");
+  await filtersPage.reopenFiltersButton.click();
+  await expect(filtersPage.remove21Button).toBeVisible();
+  await filtersPage.clearConditionsButton.click();
+  await expect(filtersPage.combobox).toHaveCount(2);
+  await expect(filtersPage.textbox).toHaveValue("");
 });

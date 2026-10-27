@@ -3,25 +3,29 @@
 Use Node.js 22.19+ and the pnpm version pinned in the root manifest.
 See [workspace architecture](../docs/monorepo.md) for dependency boundaries.
 
-| Command                          | Result                                                        |
-| -------------------------------- | ------------------------------------------------------------- |
-| `pnpm install --frozen-lockfile` | Install all workspaces using the committed lockfile           |
-| `pnpm build`                     | Production builds, assembly and artifact checks               |
-| `pnpm compile`                   | Development bundles with source maps and assembly             |
-| `pnpm dev`                       | Initial build, Webview HMR, host/runtime watches and assembly |
-| `pnpm package`                   | Build and package a VSIX in `artifacts/`                      |
-| `pnpm lint`                      | Check application and package source with Oxlint              |
-| `pnpm check:boundaries`          | Verify declared dependencies and package boundaries           |
-| `pnpm test:unit`                 | Cross-workspace execution, storage and conversion regressions |
-| `pnpm test:ui`                   | Browser controls and production Webview flows                 |
-| `pnpm test:editor`               | CodeMirror, response formatting and large-body regressions    |
-| `pnpm test:websocket`            | Local WebSocket protocol regressions                          |
-| `pnpm test:socketio`             | Local Socket.IO protocol regressions                          |
-| `pnpm typecheck`                 | All workspace type checks, including existing frontend errors |
+| Command                          | Result                                                         |
+| -------------------------------- | -------------------------------------------------------------- |
+| `pnpm install --frozen-lockfile` | Install all workspaces using the committed lockfile            |
+| `pnpm build`                     | Production builds, assembly and artifact checks                |
+| `pnpm compile`                   | Development bundles with source maps and assembly              |
+| `pnpm dev`                       | Initial build, Webview HMR, host/runtime watches and assembly  |
+| `pnpm package`                   | Build and package a VSIX in `artifacts/`                       |
+| `pnpm lint`                      | Check application and package source with Oxlint               |
+| `pnpm check:boundaries`          | Verify declared dependencies and package boundaries            |
+| `pnpm test:unit`                 | Cross-workspace execution, storage and conversion regressions  |
+| `pnpm test:ui`                   | Browser controls and production Webview flows                  |
+| `pnpm test:editor`               | CodeMirror, response formatting and large-body regressions     |
+| `pnpm test:websocket`            | Local WebSocket protocol regressions                           |
+| `pnpm test:socketio`             | Local Socket.IO protocol regressions                           |
+| `pnpm typecheck`                 | All workspace type checks, including existing frontend errors  |
+| `pnpm typecheck:e2e`             | TypeScript checks for browser tests, fixtures and Page Objects |
 
 Run `pnpm exec playwright install chromium` before browser tests. Build production
 assets before running `test:ui`. Tests that use local HTTP or protocol servers
 need permission to listen on loopback interfaces.
+
+See the [Webview browser test guide](../apps/webviews/tests/README.md) for Page
+Object, component object and fixture responsibilities.
 
 ## Build ownership
 

@@ -1,44 +1,12 @@
 import { emitHttpEvents } from "./protocol";
-import { expect, test, type Page } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./fixtures";
 
-async function openRequest(page: Page, kind: string, request: unknown) {
-  const errors: string[] = [];
-  page.on("pageerror", (error) => {
-    errors.push(error.message);
-    console.error(error.message);
-  });
-  const initialData = {
-    apiData: {
-      id: "native",
-      parentId: "0",
-      project_id: "-1",
-      name: "Native request",
-      kind,
-      request,
-      event: [],
-      response: [],
-    },
-    projectConfig: {},
-    systemConfig: {},
-    vscodeTheme: "Default Dark Modern",
-    docBaseUrl: "",
-  };
-  await page.route("**/native.html", (route) =>
-    route.fulfill({
-      contentType: "text/html",
-      body: `<!doctype html><html><head><link rel="stylesheet" href="/webviews.css"></head><body><div id="root"></div><script>
-      window.vscodeData=${JSON.stringify({ kind, initialData })};
-      window.messages=[];window.vscode={postMessage(message){window.messages.push(message)}};
-      window.resourceBaseUrl=location.origin;
-      </script><script type="module" src="/tagPanel.js"></script></body></html>`,
-    }),
-  );
-  await page.goto("http://127.0.0.1:4180/native.html");
-  return errors;
-}
-
-test("GraphQL edits and sends the native request body", async ({ page }) => {
-  const errors = await openRequest(page, "graphql", {
+test("GraphQL edits and sends the native request body", async ({
+  page,
+  requestPage,
+}) => {
+  const errors = await requestPage.open("graphql", {
     method: "POST",
     url: "https://example.com/graphql",
     header: [],
@@ -48,7 +16,7 @@ test("GraphQL edits and sends the native request body", async ({ page }) => {
     },
   });
   // The query editor and variable editor read the imported native body directly.
-  const editors = page.getByRole("textbox", { name: "Code editor" });
+  const editors = requestPage.codeEditorTextbox;
   await expect(editors.first()).toContainText("before");
   await editors.first().fill("query Native { after }");
   await editors.nth(1).fill('{"id":2}');
@@ -63,13 +31,10 @@ test("GraphQL edits and sends the native request body", async ({ page }) => {
       ),
     )
     .toBe(true);
-  const urlInput = page.getByRole("textbox", {
-    name: "Enter URL",
-    exact: true,
-  });
+  const urlInput = requestPage.enterURLTextbox;
   await expect(urlInput).toHaveValue("https://example.com/graphql");
   await urlInput.fill("https://example.com/changed");
-  await page.getByRole("button", { name: "Send", exact: true }).click();
+  await requestPage.sendButton.click();
   await expect
     .poll(() =>
       page.evaluate(
@@ -97,31 +62,29 @@ test("GraphQL edits and sends the native request body", async ({ page }) => {
 
 test("SSE displays native responseData while the request is running", async ({
   page,
+  requestPage,
 }) => {
-  const errors = await openRequest(page, "sse", {
+  const errors = await requestPage.open("sse", {
     method: "GET",
     url: "https://example.com/events",
     header: [],
   });
-  await expect(page.locator("input").first()).toBeVisible();
+  await expect(requestPage.input.first()).toBeVisible();
   await emitHttpEvents(page, "native", [
     { type: "start" },
     { type: "responseData", data: "data: hello\n\n" },
     { type: "responseData", data: "data: world\n\n" },
   ]);
-  await expect(
-    page.getByRole("textbox", { name: "Code editor" }),
-  ).toContainText("data: hello");
-  await expect(
-    page.getByRole("textbox", { name: "Code editor" }),
-  ).toContainText("data: world");
+  await expect(requestPage.codeEditorTextbox).toContainText("data: hello");
+  await expect(requestPage.codeEditorTextbox).toContainText("data: world");
   expect(errors).toEqual([]);
 });
 
 test("API Key controls write the native apikey attributes", async ({
   page,
+  requestPage,
 }) => {
-  const errors = await openRequest(page, "api", {
+  const errors = await requestPage.open("api", {
     method: "GET",
     url: "https://example.com",
     header: [],
@@ -134,11 +97,11 @@ test("API Key controls write the native apikey attributes", async ({
       ],
     },
   });
-  await page.getByRole("tab", { name: "Auth", exact: true }).click();
-  const panel = page.getByRole("tabpanel", { name: "Auth", exact: true });
+  await requestPage.authTab.click();
+  const panel = requestPage.authTabpanel;
   await expect(panel.getByRole("textbox").first()).toHaveValue("x-api-key");
   await panel.getByRole("textbox").first().fill("x-native-key");
-  await page.getByRole("button", { name: "Send", exact: true }).click();
+  await requestPage.sendButton.click();
   await expect
     .poll(() =>
       page.evaluate(
@@ -160,7 +123,10 @@ test("API Key controls write the native apikey attributes", async ({
   expect(errors).toEqual([]);
 });
 
-test("Cookie manager saves the native requester jar", async ({ page }) => {
+test("Cookie manager saves the native requester jar", async ({
+  page,
+  requestPage,
+}) => {
   const errors: string[] = [];
   page.on("pageerror", (error) => {
     errors.push(error.message);
@@ -185,12 +151,12 @@ test("Cookie manager saves the native requester jar", async ({ page }) => {
   await page.evaluate(() =>
     window.postMessage({ action: "setProjectConfig", data: {} }, "*"),
   );
-  await expect(page.getByRole("table")).toBeVisible();
-  const fields = page.getByRole("table").getByRole("textbox");
+  await expect(requestPage.table).toBeVisible();
+  const fields = requestPage.table.getByRole("textbox");
   await fields.nth(0).fill("session");
   await fields.nth(1).fill("native");
   await fields.nth(2).fill("example.com");
-  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await requestPage.saveButton.click();
   await expect
     .poll(() =>
       page.evaluate(
@@ -225,15 +191,14 @@ test("Cookie manager saves the native requester jar", async ({ page }) => {
 
 test("pasting cURL replaces the SDK request without writing legacy parameter tables", async ({
   page,
+  requestPage,
 }) => {
-  const errors = await openRequest(page, "api", {
+  const errors = await requestPage.open("api", {
     method: "GET",
     url: "https://example.com/before",
     header: [],
   });
-  const url = page.getByRole("textbox", {
-    name: "Enter URL or paste cURL text",
-  });
+  const url = requestPage.enterURLOrPasteCURLTextTextbox;
   await url.evaluate((element, command) => {
     const clipboardData = new DataTransfer();
     clipboardData.setData("text/plain", command);
@@ -283,8 +248,9 @@ test("pasting cURL replaces the SDK request without writing legacy parameter tab
 
 test("native form files retain SDK fields when editing paths and selection", async ({
   page,
+  requestPage,
 }) => {
-  const errors = await openRequest(page, "api", {
+  const errors = await requestPage.open("api", {
     method: "POST",
     url: "https://example.com/upload",
     header: [],
@@ -302,8 +268,8 @@ test("native form files retain SDK fields when editing paths and selection", asy
       ],
     },
   });
-  await page.getByRole("tab", { name: "Multi-Part", exact: true }).click();
-  const body = page.getByRole("tabpanel", { name: "Multi-Part", exact: true });
+  await requestPage.multiPartTab.click();
+  const body = requestPage.multiPartTabpanel;
   await body.getByPlaceholder("File path").fill("/tmp/after.png");
   await body.getByRole("checkbox").first().check();
   await expect

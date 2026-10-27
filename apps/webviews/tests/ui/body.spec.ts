@@ -1,14 +1,13 @@
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./fixtures";
 
 test("Body type dropdown sits next to its tab and changes Postman body formats", async ({
   page,
+  bodyPage,
 }) => {
-  await page.goto("/?body");
-  const tab = page.getByRole("tab", { name: "Body", exact: true });
-  const selector = page.getByRole("combobox", {
-    name: "Body type",
-    exact: true,
-  });
+  await bodyPage.open();
+  const tab = bodyPage.bodyTab;
+  const selector = bodyPage.bodyTypeCombobox;
   await expect(selector).toHaveCount(1);
   const tabBounds = await tab.boundingBox();
   const selectBounds = await selector.boundingBox();
@@ -37,38 +36,25 @@ test("Body type dropdown sits next to its tab and changes Postman body formats",
 
   await expect(tab.getByRole("button")).toHaveCount(0);
   await expect(
-    page.getByRole("tabpanel").getByRole("combobox", { name: "Body type" }),
+    bodyPage.tabpanel.getByRole("combobox", { name: "Body type" }),
   ).toHaveCount(0);
   await selector.click();
   for (const name of ["Form Data", "Text Content", "Other"]) {
     await expect(page.getByRole("group", { name, exact: true })).toBeVisible();
   }
-  await expect(page.locator('[class*="popupArrow"]')).toBeVisible();
-  await expect(
-    page
-      .getByRole("option", { name: "No Body", exact: true })
-      .locator('[class*="check"]'),
-  ).toBeVisible();
+  await expect(bodyPage.menuArrow).toBeVisible();
+  await expect(bodyPage.noBodyOption.locator('[class*="check"]')).toBeVisible();
   await page.screenshot({ path: "test-results/body-type-menu.png" });
-  await page.getByRole("option", { name: "Multi-Part", exact: true }).click();
-  await expect(page.getByLabel("Body data")).toContainText('"mode":"formdata"');
-  await expect(
-    page.getByRole("tab", { name: "Multi-Part", exact: true }),
-  ).toBeVisible();
-  await selector.click();
-  await page.getByRole("option", { name: "JSON", exact: true }).click();
-  await expect(
-    page.getByRole("tab", { name: /^JSON(?: \d+)?$/ }),
-  ).toBeVisible();
-  await expect(page.getByLabel("Body data")).toContainText('"mode":"raw"');
-  await expect(page.getByLabel("Body data")).toContainText('"language":"json"');
-  await selector.click();
-  await page.getByRole("option", { name: "XML", exact: true }).click();
-  await expect(page.getByRole("tab", { name: /^XML(?: \d+)?$/ })).toBeVisible();
-  await expect(page.getByLabel("Body data")).toContainText('"language":"xml"');
-  await selector.click();
-  await page.getByRole("option", { name: "No Body", exact: true }).click();
-  await expect(
-    page.getByRole("tab", { name: "Body", exact: true }),
-  ).toBeVisible();
+  await bodyPage.multiPartOption.click();
+  await expect(bodyPage.bodyData).toContainText('"mode":"formdata"');
+  await expect(bodyPage.multiPartTab).toBeVisible();
+  await bodyPage.typeSelect.choose("JSON");
+  await expect(bodyPage.jsonTab).toBeVisible();
+  await expect(bodyPage.bodyData).toContainText('"mode":"raw"');
+  await expect(bodyPage.bodyData).toContainText('"language":"json"');
+  await bodyPage.typeSelect.choose("XML");
+  await expect(bodyPage.xmlTab).toBeVisible();
+  await expect(bodyPage.bodyData).toContainText('"language":"xml"');
+  await bodyPage.typeSelect.choose("No Body");
+  await expect(bodyPage.bodyTab).toBeVisible();
 });
