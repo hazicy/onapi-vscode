@@ -47,9 +47,7 @@ async function main() {
       `<style>html,body{margin:0;background:transparent}svg{display:block;width:256px;height:256px}</style>${svg}`,
     );
     const png = await page.screenshot({ omitBackground: true });
-    for (const filename of ["onapi-icon.png", "logo_icon.png"]) {
-      await fs.writeFile(path.join(images, filename), png);
-    }
+    await fs.writeFile(path.join(images, "logo_icon.png"), png);
     await page.setContent(
       `<style>html,body{margin:0;background:transparent}svg{display:block;width:256px;height:256px}</style>${card}`,
     );
@@ -57,6 +55,10 @@ async function main() {
       path: path.join(images, "onapi-readme-card.png"),
       omitBackground: true,
     });
+    await fs.copyFile(
+      path.join(images, "onapi-readme-card.png"),
+      path.join(images, "onapi-icon.png"),
+    );
     const logo = await fs.readFile(path.join(images, "onapi-logo.svg"), "utf8");
     const width = 988;
     const height = 448;
