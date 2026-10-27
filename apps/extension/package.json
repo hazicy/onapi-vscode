@@ -36,7 +36,7 @@
     "type": "git",
     "url": "https://github.com/hazicy/onapi-vscode.git"
   },
-  "publisher": "hazicy",
+  "publisher": "onapi",
   "type": "module",
   "main": "./dist/extension.js",
   "scripts": {
