@@ -64,6 +64,7 @@ const RequestTable: FC<RequestTableProps & { fileValue?: "path" | "base64" }> =
           coordinateGetter: sortableKeyboardCoordinates,
         }),
       );
+
       const lastRowDataRef = useRef<ApisBaseDataItem | null>(null);
 
       const tableDataList = useMemo(() => {

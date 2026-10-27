@@ -2,7 +2,6 @@ import styles from "./Request.module.css";
 import { memo, ReactNode } from "react";
 
 import { useMemoizedFn } from "ahooks";
-import { produce } from "immer";
 
 import GraphQLQuery from "@/features/requests/graphql/GraphQLQuery/GraphQLQuery";
 
