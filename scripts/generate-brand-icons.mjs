@@ -50,6 +50,13 @@ async function main() {
     for (const filename of ["onapi-icon.png", "logo_icon.png"]) {
       await fs.writeFile(path.join(images, filename), png);
     }
+    await page.setContent(
+      `<style>html,body{margin:0;background:transparent}svg{display:block;width:256px;height:256px}</style>${card}`,
+    );
+    await page.screenshot({
+      path: path.join(images, "onapi-readme-card.png"),
+      omitBackground: true,
+    });
     const logo = await fs.readFile(path.join(images, "onapi-logo.svg"), "utf8");
     const width = 988;
     const height = 448;

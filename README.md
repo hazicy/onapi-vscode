@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./apps/webviews/public/images/onapi-readme-card.svg" alt="OnAPI Continuous symbol" width="88" />
+  <img src="./apps/webviews/public/images/onapi-readme-card.png" alt="OnAPI Continuous symbol" width="88" />
 </p>
 <p align="center">
   <strong>Your APIs, inside VS Code.</strong><br />
