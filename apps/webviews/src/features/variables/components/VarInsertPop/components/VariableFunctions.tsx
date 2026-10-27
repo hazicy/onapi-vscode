@@ -1,13 +1,13 @@
+import useProjectSetting from "@/features/project/store/useProjectSetting";
+import { INNER_FUNC_LIST } from "@/features/variables/constants/variable";
+import { transFuncName } from "@/features/variables/utils/variable";
+import { AppIcon, Button } from "@/shared/ui";
+import { Flex } from "@/shared/ui/base";
+import type { FuncListRenderItem } from "@onapi/domain/requests/types/variable";
+import clsx from "clsx";
+import { cloneDeep } from "lodash-es";
 import { forwardRef, useImperativeHandle, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { cloneDeep } from "lodash-es";
-import clsx from "clsx";
-import { Flex } from "@/shared/ui/base";
-import { AppIcon, Button } from "@/shared/ui";
-import { INNER_FUNC_LIST } from "@/features/variables/constants/variable";
-import useProjectSetting from "@/features/project/store/useProjectSetting";
-import { transFuncName } from "@/features/variables/utils/variable";
-import type { FuncListRenderItem } from "@onapi/domain/requests/types/variable";
 import FunctionModal from "./FunctionModal";
 import styles from "./VarContent.module.css";
 
