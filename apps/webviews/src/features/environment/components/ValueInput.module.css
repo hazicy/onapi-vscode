@@ -1,0 +1,31 @@
+.valueInputTextarea {
+  position: relative;
+  width: 100%;
+}
+.container {
+  width: 100%;
+  height: 36px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  & .valueInputTextarea .input {
+    padding: 4px 12px;
+    overflow: hidden;
+    border: 1px solid transparent;
+    resize: none;
+  }
+  & .valueInputTextarea .input:hover {
+    border: 1px solid var(--color-primary);
+    background-color: var(--highlight-change-color);
+  }
+  & .valueInputTextarea .input:focus {
+    z-index: 700;
+    border: 1px solid var(--color-primary);
+    color: var(--font-content-color);
+    background-color: var(--highlight-change-color);
+  }
+  & .valueInputTextarea .input::placeholder {
+    line-height: 28px;
+  }
+}

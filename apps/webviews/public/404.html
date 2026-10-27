@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 Not Found</title>
+  </head>
+  <style>
+    body {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(180deg, #f6e3ff 0%, #ffffff 49.9%);
+    }
+
+    .wrap {
+      width: 580px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .not-found {
+      font-size: 44px;
+      color: #e0790b;
+      font-weight: 900;
+      margin: 0;
+      text-align: center;
+    }
+
+    ul,
+    ol,
+    li {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .img {
+      width: 170px;
+      margin-top: 50px;
+      margin-left: 50px;
+    }
+    ul {
+      text-align: center;
+    }
+    .text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  </style>
+
+  <body>
+    <img class="img" src="./images/onapi-logo.svg" alt="onapi" />
+    <div class="wrap">
+      <div>
+        <h1 class="not-found">404 - Not Found</h1>
+        <p>
+          Oops! The link you're looking for is no longer available or has been
+          removed.
+        </p>
+        <div class="text">
+          <p style="font-weight: 600">What you can do:</p>
+          <ul>
+            <li>Check the URL for typos</li>
+            <li>Go back to VS Code to create a new link</li>
+            <li>
+              Visit our
+              <a href="https://www.echoapi.com/wiki/docs/vscode/docs"
+                >documentation</a
+              >
+              for help
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="wrap" style="margin: 0 auto; margin-bottom: 50px">
+      <p>
+        Need more assistance?
+        <a href="https://github.com/hazicy/onapi-vscode/issues"
+          >Contact support</a
+        >.
+      </p>
+    </div>
+  </body>
+</html>

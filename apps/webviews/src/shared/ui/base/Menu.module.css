@@ -1,0 +1,32 @@
+.item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  padding: 4px 8px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: var(--vscode-cornerRadius-xSmall, 2px);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.item[data-highlighted],
+.item:hover {
+  background: var(--popover-select-bg-hover-color, #eee);
+}
+.item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.menu {
+  list-style: none;
+  padding: 4px;
+  margin: 0;
+}
+.item {
+  width: 100%;
+}

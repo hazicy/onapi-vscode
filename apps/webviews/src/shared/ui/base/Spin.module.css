@@ -1,0 +1,31 @@
+.host {
+  position: relative;
+}
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  background: rgb(128 128 128 / 10%);
+}
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.content {
+  min-width: 0;
+}

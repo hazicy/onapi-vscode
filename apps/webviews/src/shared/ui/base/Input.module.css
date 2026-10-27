@@ -1,0 +1,74 @@
+.input {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  padding: 4px 8px;
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: var(--vscode-cornerRadius-small, 4px);
+  background: var(--vscode-input-background, var(--color-bg-right, #fff));
+  color: var(--font-content-color, #222);
+  font: inherit;
+  outline: none;
+}
+.affix {
+  width: 100%;
+  padding: 0 8px;
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: var(--vscode-cornerRadius-small, 4px);
+  background: var(--vscode-input-background, transparent);
+}
+.affix > .input {
+  border: 0;
+  background: transparent;
+  padding-inline: 0;
+}
+.affix:focus-within {
+  border-color: var(--control-focus-border, var(--vscode-focusBorder, #1677ff));
+}
+.input:focus {
+  border-color: var(--control-focus-border, var(--vscode-focusBorder, #1677ff));
+}
+.input:disabled {
+  opacity: 0.5;
+}
+.borderless {
+  border: 0;
+  background: transparent;
+}
+.group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+.group > .input {
+  flex: 1;
+  width: 100%;
+}
+.group > button {
+  border: 0;
+  background: none;
+  color: inherit;
+}
+
+.input {
+  background: var(--vscode-input-background);
+  border-color: var(
+    --ui-input-border,
+    var(
+      --vscode-input-border,
+      var(--vscode-settings-numberInputBorder, transparent)
+    )
+  );
+}
+.outlined:hover {
+  border-color: var(--color-primary);
+}
+.outlined:focus {
+  border-color: var(
+    --control-focus-border,
+    var(--vscode-focusBorder, var(--color-primary))
+  );
+  background: var(--ui-input-focus-bg, var(--vscode-input-background));
+}

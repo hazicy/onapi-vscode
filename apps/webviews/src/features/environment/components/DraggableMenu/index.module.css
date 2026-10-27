@@ -1,0 +1,59 @@
+.container {
+  width: 240px;
+  overflow: hidden;
+}
+.draggableMenuGroup {
+  & .draggableMenuItemGroupTitle {
+    padding: 8px 0;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+}
+.draggableMenuItem {
+  overflow-y: auto;
+  & .draggableMenuItem {
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding-inline: 20px 10px;
+    width: calc(100% - 8px);
+    height: 36px;
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-14);
+    line-height: 40px;
+    color: var(--font-content-color);
+    margin-block: 2px;
+    background-color: transparent;
+    cursor: pointer;
+    transition:
+      border-color 0.3s,
+      background-color 0.3s,
+      padding 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  }
+  & .draggableMenuItem .iconDrag {
+    visibility: hidden;
+    position: absolute;
+    left: 6px;
+    color: var(--icon-color);
+  }
+  & .draggableMenuItemSelected {
+    background-color: var(--popover-select-bg-hover-color);
+  }
+  & .draggableMenuItem .draggableMenuTitleContent {
+    margin-inline-start: 10px;
+    flex: 1;
+    min-width: 100px;
+    color: var(--icon-color);
+  }
+  & .draggableMenuItem:hover {
+    background-color: var(--popover-select-bg-hover-color);
+  }
+  & .draggableMenuItem:hover .iconDrag {
+    visibility: visible;
+  }
+}

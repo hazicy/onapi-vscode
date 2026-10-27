@@ -1,0 +1,184 @@
+.select:focus-within {
+  border-color: var(--control-focus-border, var(--vscode-focusBorder, #1677ff));
+}
+.select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  box-sizing: border-box;
+  min-width: 80px;
+  min-height: 30px;
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: var(--vscode-cornerRadius-small, 4px);
+  background: var(--color-bg-right, #fff);
+  color: var(--font-content-color, #222);
+  font: inherit;
+}
+.trigger,
+.input {
+  min-width: 0;
+  flex: 1;
+  padding: 4px 8px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  outline: none;
+}
+.arrow,
+.clear {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 2px 6px;
+  cursor: pointer;
+}
+.arrow {
+  margin-left: auto;
+}
+.input {
+  width: 40px;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 4px;
+  border-radius: var(--vscode-cornerRadius-xSmall, 2px);
+  background: var(--color-bg-gray, #eee);
+}
+.chip > button {
+  background: none;
+  border: 0;
+  color: inherit;
+}
+.positioner {
+  z-index: 1200;
+  outline: none;
+}
+.popup {
+  min-width: var(--anchor-width, 120px);
+  max-width: min(600px, calc(100vw - 16px));
+  max-height: min(480px, var(--available-height, 480px));
+  padding: 4px;
+  overflow: auto;
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: var(--vscode-cornerRadius-medium, 6px);
+  background: var(--popover-select-bg-color, var(--color-bg-right, #fff));
+  color: var(--font-content-color, #222);
+  box-shadow: 0 4px 16px #0003;
+  outline: none;
+}
+.popup[hidden],
+.popup[data-closed] {
+  display: none;
+}
+.popupArrow {
+  display: flex;
+  color: var(--popover-select-bg-color, var(--color-bg-right, #fff));
+}
+.popupArrow[data-side="bottom"] {
+  top: -8px;
+}
+.popupArrow[data-side="top"] {
+  bottom: -8px;
+  transform: rotate(180deg);
+}
+.popupArrow path {
+  fill: currentColor;
+  stroke: var(--color-border, #ddd);
+  stroke-width: 1;
+}
+.option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  padding: 4px 8px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: var(--vscode-cornerRadius-xSmall, 2px);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.option[data-highlighted] {
+  background: var(--popover-select-bg-hover-color, #eee);
+}
+.option[data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.itemIndicator {
+  margin-left: auto;
+}
+
+.select.borderless {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.borderless:focus-within {
+  outline: none;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+}
+.trigger > .arrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  pointer-events: none;
+}
+
+.popup {
+  box-shadow:
+    rgba(255, 255, 255, 0.72) 0px 0px 1px,
+    rgba(0, 0, 0, 0.1) 0px 16px 24px -8px;
+}
+
+.arrow {
+  font-size: 10px;
+}
+.select {
+  border-color: var(--ui-select-border, var(--color-border, #ddd));
+}
+.select:focus-within {
+  background: var(--ui-select-focus-bg, var(--color-bg-right, #fff));
+}
+.option[data-highlighted]:not([data-disabled]) {
+  background: var(--vscode-list-inactiveSelectionBackground);
+}
+
+.groupLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px 4px;
+  color: var(--font-light-color, #7c8fb0);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.groupLabel::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--color-border, #e3e8ef);
+}

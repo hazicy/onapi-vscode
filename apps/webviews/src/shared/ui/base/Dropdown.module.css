@@ -1,0 +1,102 @@
+.splitButton {
+  display: inline-flex;
+  align-items: stretch;
+  min-width: 0;
+  vertical-align: middle;
+}
+
+.splitButton > button:first-child {
+  flex: 1;
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.splitButton > button:last-child {
+  flex: 0 0 auto;
+  padding-inline: 7px;
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+  border-inline-start: 1px solid var(--color-border, #ddd);
+}
+.positioner {
+  z-index: 1200;
+  outline: none;
+}
+.popup {
+  min-width: var(--anchor-width, 120px);
+  max-width: min(600px, calc(100vw - 16px));
+  max-height: min(480px, var(--available-height, 480px));
+  padding: 4px;
+  overflow: auto;
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: var(--vscode-cornerRadius-medium, 6px);
+  background: var(--popover-select-bg-color, var(--color-bg-right, #fff));
+  color: var(--font-content-color, #222);
+  box-shadow: 0 4px 16px #0003;
+  outline: none;
+}
+.popup[hidden],
+.popup[data-closed] {
+  display: none;
+}
+.menuItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  padding: 4px 8px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: var(--vscode-cornerRadius-xSmall, 2px);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.menuItem[data-highlighted],
+.menuItem:hover {
+  background: var(--popover-select-bg-hover-color, #eee);
+}
+.menuItem:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.menuGroup {
+  padding: 6px 8px;
+  color: var(--font-light-color, #888);
+}
+.menuItem {
+  width: 100%;
+}
+.separator {
+  border: 0;
+  background: var(--color-border, #ddd);
+  height: 1px;
+  margin: 8px 0;
+}
+.separator[aria-orientation="vertical"] {
+  height: 1em;
+  width: 1px;
+  margin: 0 8px;
+}
+
+.menuItem {
+  color: var(--font-content-color);
+}
+.menuItem:hover,
+.menuItem[data-highlighted] {
+  color: var(--color-primary);
+  background: var(--color-primary-opacity);
+}
+.menuItemSelected {
+  color: var(--vscode-foreground);
+  text-shadow: 0 0 0.25px currentColor;
+}
+
+.popup {
+  box-shadow:
+    rgba(255, 255, 255, 0.72) 0px 0px 1px,
+    rgba(0, 0, 0, 0.1) 0px 16px 24px -8px;
+}

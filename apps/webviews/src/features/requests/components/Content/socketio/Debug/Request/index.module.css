@@ -1,0 +1,29 @@
+.input {
+  /* width: 120px; */
+  width: 100%;
+}
+.inputNumber {
+  width: 100%;
+}
+.select {
+  width: 100%;
+}
+.settingDesc {
+  color: var(--font-light-color);
+}
+.rawEditor {
+  flex: 1;
+  height: 0;
+}
+.messageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 7px;
+  & .selectTrigger {
+    font-size: 12px !important;
+  }
+  & .select .selectArrow {
+    font-size: 10px;
+  }
+}

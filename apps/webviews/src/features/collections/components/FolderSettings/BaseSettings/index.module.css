@@ -1,0 +1,47 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  & .folderBaseConfigWrap .folderBaseInput {
+    /* padding-right: 0; */
+    padding-left: 0;
+    width: 100%;
+    height: 32px;
+    border-radius: 0;
+    /* border: none;
+      border-bottom: 1px solid transparent; */
+    /* box-shadow: none;
+      outline: none; */
+    font-size: 16px;
+  }
+}
+.container .folderBaseConfigWrap .folderBaseInput:hover,
+.container .folderBaseConfigWrap .folderBaseInput:focus {
+  border: 1px solid var(--vscode-settings-numberInputBorder, transparent);
+  background: var(--vscode-input-background);
+  box-shadow: none;
+}
+.container {
+  & .folderBaseConfigWrap .folderConfigWrap {
+    margin-top: 12px;
+    width: 100%;
+  }
+  & .folderBaseConfigWrap .folderConfigWrap .folderConfigItemWrap {
+    overflow: hidden;
+    flex: 1;
+  }
+  & .folderBaseConfigWrap .folderConfigWrap .folderConfigItemWrap > .label {
+    color: var(--font-light-color);
+  }
+  & .folderBaseConfigWrap .folderConfigWrap .folderConfigItemWrap:last-of-type {
+    margin-left: 12px;
+  }
+  & .folderBaseConfigWrap .folderConfigWrap .folderConfigItemWrap .select {
+    margin-top: 12px;
+  }
+}
+.selectGroup {
+  font-size: 14px;
+  color: var(--font-light-color);
+}

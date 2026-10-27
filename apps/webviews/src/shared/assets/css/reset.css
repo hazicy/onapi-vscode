@@ -1,0 +1,149 @@
+@import "./normalize.css";
+
+html {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background-color: #fff;
+  font-size: 14px;
+
+  font-family: var(
+    --vscode-font-family,
+    -apple-system,
+    system-ui,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif
+  );
+  overflow: hidden;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+  outline: none;
+}
+
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+form,
+fieldset,
+input,
+textarea,
+p,
+blockquote,
+address,
+table,
+th,
+tr,
+td {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol,
+li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+body {
+  font-family: inherit;
+  line-height: 1.4;
+  height: 100%;
+  /* TODO 用户禁止选中，位置是否需要调整 */
+  /* user-select: none; */
+}
+
+a:link,
+a:visited,
+a:hover,
+a:active {
+  text-decoration: inherit;
+}
+
+body {
+  overflow: hidden;
+  /* letter-spacing: 0.04em; */
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-bg-page);
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* 滚动条轨道样式 */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* 滚动条滑块样式 */
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-bg-color);
+  border-radius: var(--border-radius);
+}
+
+/* 滚动条轨道hover样式 */
+::-webkit-scrollbar-track:hover {
+  background-color: transparent !important;
+}
+
+/* 滚动条滑块hover样式 */
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover-bg-color);
+}
+
+.ant-dropdown-menu.md-drop-menu,
+.ant-dropdown-menu-submenu.md-drop-menu {
+  .ant-dropdown-menu {
+    background-color: var(--popover-select-bg-color);
+  }
+
+  background-color: var(--popover-select-bg-color);
+
+  * {
+    color: var(--font-content-color) !important;
+  }
+
+  .ant-dropdown-menu-item,
+  .ant-dropdown-menu-submenu {
+    background-color: var(--popover-select-bg-color);
+    color: var(--font-content-color) !important;
+
+    &:hover {
+      background-color: var(--popover-select-bg-hover-color);
+    }
+  }
+}
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+.ant-message .ant-message-notice-content {
+  background-color: var(--popover-select-bg-color) !important;
+  color: var(--font-content-color);
+}

@@ -1,0 +1,102 @@
+.container {
+  box-shadow: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 16px;
+  font-size: var(--font-size-14);
+  line-height: 1;
+  &.type-default {
+    /* color: var(--font-content-color); */
+    background: transparent;
+  }
+  & > div {
+    /* remove ripple */
+    display: none;
+  }
+  &.size-large {
+    height: 40px;
+    font-size: var(--font-size-14);
+  }
+  &.size-middle {
+    height: 32px;
+    font-size: var(--font-size-14);
+  }
+  &.size-small {
+    height: 26px;
+    font-size: var(--font-size-12);
+  }
+  &.size-mini {
+    padding-right: 8px;
+    padding-left: 8px;
+    height: 24px;
+    font-size: var(--font-size-12);
+  }
+  &.type-dashed {
+    border-color: var(--color-dashed);
+    box-shadow: none;
+    border-style: dashed;
+  }
+  &.type-dashed:hover {
+    border-color: var(--selected-border-color);
+    color: var(--color-primary);
+  }
+  &.type-primary.mode-light {
+    color: var(--color-primary);
+    background-color: var(--color-primary-opacity);
+  }
+  &.type-primary.mode-light:hover {
+    color: var(--color-font-light-hover);
+    background-color: var(--color-bg-light-hover);
+  }
+  &.type-primary.mode-success {
+    color: #26cea4;
+    background-color: #26ce10;
+  }
+  &.type-primary.mode-error {
+    color: #ff583e;
+    background-color: #ff5806;
+  }
+}
+.container.type-primary.mode-error,
+.container.type-primary.mode-success {
+  border: none;
+}
+.container.type-primary.mode-error:hover,
+.container.type-primary.mode-success:hover {
+  /* background: initial; */
+}
+.container {
+  &.type-text {
+    color: var(--vscode-tab-inactiveForeground);
+  }
+  &.type-text.mode-background {
+    color: var(--font-title-color);
+    background-color: var(--color-bg-gray);
+  }
+  &.type-text.mode-background:hover {
+    color: var(--color-primary);
+    background-color: var(--color-primary-opacity);
+  }
+  &.type-text.mode-light:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+    /* background-color: var(--color-primary-opacity); */
+  }
+  &.type-text.mode-menu-item {
+    color: var(--font-title-color);
+  }
+  &.type-text.mode-menu-item:hover {
+    /* color: var(--color-primary); */
+    background-color: var(--vscode-list-inactiveSelectionBackground);
+  }
+  &.type-text:active {
+    background: none !important;
+  }
+  &.type-text:hover {
+    color: var(--color-primary);
+    background-color: none;
+    text-decoration: underline;
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "extends": "../../tooling/tsconfig/browser.json",
+  "include": ["src", "../../tooling/types.d.ts"],
+  "compilerOptions": {}
+}

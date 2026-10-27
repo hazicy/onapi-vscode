@@ -1,0 +1,11 @@
+.app {
+  color: var(--font-content-color, var(--vscode-foreground, #222));
+  font-size: var(--font-size-14, 14px);
+  line-height: var(--line-height, 1.4);
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}

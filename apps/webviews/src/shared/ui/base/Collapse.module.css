@@ -1,0 +1,39 @@
+.collapse {
+  width: 100%;
+}
+.item {
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: var(--vscode-cornerRadius-small, 4px);
+  margin-bottom: 8px;
+}
+.item > h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0;
+  font: inherit;
+}
+.trigger {
+  flex: 1;
+  padding: 8px 12px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.trigger:before {
+  display: inline-block;
+  content: "›";
+  margin-right: 8px;
+}
+.trigger[data-panel-open]:before {
+  transform: rotate(90deg);
+}
+.panel {
+  padding: 8px 12px;
+}
+.panel[hidden] {
+  display: none;
+}

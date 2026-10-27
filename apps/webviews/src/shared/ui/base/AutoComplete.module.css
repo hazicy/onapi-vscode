@@ -1,0 +1,125 @@
+.select:focus-within {
+  border-color: var(--control-focus-border, var(--vscode-focusBorder, #1677ff));
+}
+.select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  box-sizing: border-box;
+  min-width: 80px;
+  min-height: 30px;
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: var(--vscode-cornerRadius-small, 4px);
+  background: var(--color-bg-right, #fff);
+  color: var(--font-content-color, #222);
+  font: inherit;
+}
+.selectInput {
+  min-width: 0;
+  flex: 1;
+  padding: 4px 8px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  outline: none;
+}
+.selectInput {
+  width: 40px;
+}
+.arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  margin-right: 2px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--font-light-color);
+  cursor: pointer;
+}
+.arrow:hover {
+  color: var(--font-content-color);
+}
+.arrow:disabled {
+  cursor: default;
+}
+.positioner {
+  z-index: 1200;
+  outline: none;
+}
+.popup {
+  min-width: var(--anchor-width, 120px);
+  max-width: min(600px, calc(100vw - 16px));
+  max-height: min(480px, var(--available-height, 480px));
+  padding: 4px;
+  overflow: auto;
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: var(--vscode-cornerRadius-medium, 6px);
+  background: var(--popover-select-bg-color, var(--color-bg-right, #fff));
+  color: var(--font-content-color, #222);
+  box-shadow: 0 4px 16px #0003;
+  outline: none;
+}
+.popup[hidden],
+.popup[data-closed] {
+  display: none;
+}
+.arrowPopup {
+  min-width: 180px;
+  overflow: visible;
+}
+.options {
+  max-height: min(460px, calc(var(--available-height, 480px) - 18px));
+  overflow: auto;
+}
+.popupArrow {
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+}
+.popupArrow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: rotate(45deg);
+  border-top: 1px solid var(--color-border, #ddd);
+  border-left: 1px solid var(--color-border, #ddd);
+  background: var(--popover-select-bg-color, var(--color-bg-right, #fff));
+}
+.popupArrow[data-side="bottom"] {
+  top: -6px;
+}
+.popupArrow[data-side="top"] {
+  bottom: -6px;
+  transform: rotate(180deg);
+}
+.option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  padding: 4px 8px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: var(--vscode-cornerRadius-xSmall, 2px);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.option[data-highlighted] {
+  background: var(--popover-select-bg-hover-color, #eee);
+}
+.option[data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

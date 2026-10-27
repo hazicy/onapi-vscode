@@ -1,0 +1,22 @@
+.iconSpan {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 16px;
+  border-radius: 2px;
+}
+.icon {
+  font-size: var(--font-size-14);
+}
+.container {
+  height: 100%;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  overflow-y: auto;
+  & .iconSpan.message {
+    background-color: #219011;
+  }
+  & .iconSpan.send {
+    background-color: #ffc700;
+  }
+}

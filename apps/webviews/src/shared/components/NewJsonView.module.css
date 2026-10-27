@@ -1,0 +1,15 @@
+/* Third-party DOM classes are matched only within the component selectors below. */
+.container {
+  height: 100%;
+  max-height: 400px;
+  overflow: auto;
+}
+.otherPreView {
+  padding: 12px;
+  min-height: 200px;
+  overflow: hidden;
+  background-color: var(--background-color-primary);
+  & pre {
+    overflow-x: auto;
+  }
+}

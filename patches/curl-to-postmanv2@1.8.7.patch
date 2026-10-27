@@ -1,0 +1,13 @@
+diff --git a/src/lib.js b/src/lib.js
+index 852e1e68ce5912d11e8e15b0c98014713785f353..e3a3510d179924884017fd8ee7b5a872d88c7f9b 100644
+--- a/src/lib.js
++++ b/src/lib.js
+@@ -199,7 +199,7 @@ var program,
+ 
+       for (let i = 0; i < numHeaders; i++) {
+         let thisHeader = headerArray[i],
+-          keyIndex;
++          keyIndex, key, value;
+ 
+         if (!(typeof thisHeader === 'string')) {
+           console.warn('Unparseable header in curl conversion: ', thisHeader);

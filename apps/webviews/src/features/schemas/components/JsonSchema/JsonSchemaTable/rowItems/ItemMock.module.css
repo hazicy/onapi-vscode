@@ -1,0 +1,17 @@
+.mockAutoVars {
+  height: 100%;
+}
+.container {
+  /* padding-left: 5px; */
+  position: relative;
+  & .mockAutoVars .selectTrigger {
+    height: 32px;
+    border-radius: var(--border-radius);
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+}
+.container .mockAutoVars .selectTrigger:hover,
+.container .mockAutoVars .selectTrigger:focus {
+  box-shadow: none;
+}

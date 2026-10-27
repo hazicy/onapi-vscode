@@ -1,0 +1,17 @@
+.error {
+  color: var(--color-error, #f92814);
+}
+.formItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.formItem > label {
+  padding-top: 5px;
+  min-width: 100px;
+}
+.formItem > div {
+  flex: 1;
+  min-width: 0;
+}

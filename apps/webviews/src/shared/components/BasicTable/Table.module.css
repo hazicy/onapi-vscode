@@ -1,0 +1,81 @@
+/* Third-party DOM classes are matched only within the component selectors below. */
+.container {
+  height: 100%;
+}
+.container table::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+.container .table {
+  height: 100%;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-table-border);
+  border-bottom: none;
+}
+.container .table tr {
+  height: 36px;
+}
+.container .table td,
+.container .table th {
+  padding: 4px 10px;
+  border-right: none !important;
+}
+.container .table thead th[aria-sort] {
+  transition: none;
+}
+.container [class~="react-resizable"] {
+  position: relative;
+  background-clip: padding-box;
+}
+.container [class~="react-resizable-handle"] {
+  position: absolute;
+  right: -5px;
+  bottom: 0;
+  z-index: 1;
+  width: 10px;
+  height: 100%;
+  cursor: col-resize;
+  user-select: none;
+  touch-action: none;
+}
+.container [class~="react-resizable-handle"]::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1px;
+  height: 1.4em;
+  background-color: var(--color-border);
+  content: "";
+  transition: background-color 0.2s;
+}
+.container [class~="react-resizable-handle"]:hover::before,
+.container [class~="react-resizable-handle"]:active::before {
+  background-color: var(--color-primary) !important;
+}
+.table {
+  flex: 1;
+  height: 100%;
+}
+.table .sortHandle {
+  width: 30px;
+  min-width: 30px;
+  text-align: center;
+}
+
+.container .table th {
+  background: var(
+    --vscode-editorWidget-background,
+    var(--vscode-input-background)
+  );
+  color: var(--vscode-foreground, var(--font-title-color));
+  font-size: 12px;
+  font-weight: 500;
+}
+.container .table td {
+  font-size: 12px;
+}
+
+/* Cells grow through the table layout; native textarea grips break row alignment. */
+.container .table td textarea {
+  resize: none;
+}

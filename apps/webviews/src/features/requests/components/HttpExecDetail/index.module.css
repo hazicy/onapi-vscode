@@ -1,0 +1,21 @@
+.assertItem {
+  padding: 2px 12px;
+  padding-left: 16px;
+  border-radius: 4px;
+  font-size: var(--font-size-14);
+}
+.container {
+  width: 100%;
+  & .urlContainer .icon {
+    width: auto;
+  }
+  & .urlContainer .url {
+    margin-left: 8px;
+    font-size: var(--font-size-14);
+    color: var(--font-content-color);
+    word-break: break-all;
+  }
+  & .assertItem .alertMessage {
+    max-width: 510px;
+  }
+}

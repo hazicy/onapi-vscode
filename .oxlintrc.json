@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "off"
+  },
+  "rules": {
+    "curly": "warn",
+    "eqeqeq": "warn",
+    "no-throw-literal": "warn"
+  },
+  "ignorePatterns": [
+    "**/out/**",
+    "**/dist/**",
+    "**/.build/**",
+    "**/node_modules/**",
+    "**/*.d.ts",
+    "**/public/**"
+  ]
+}

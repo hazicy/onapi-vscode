@@ -1,0 +1,86 @@
+.select:focus-within {
+  border-color: var(--control-focus-border, var(--vscode-focusBorder, #1677ff));
+}
+.select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  box-sizing: border-box;
+  min-width: 80px;
+  min-height: 30px;
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: var(--vscode-cornerRadius-small, 4px);
+  background: var(--color-bg-right, #fff);
+  color: var(--font-content-color, #222);
+  font: inherit;
+}
+.positioner {
+  z-index: 1200;
+  outline: none;
+}
+.popup {
+  min-width: var(--anchor-width, 120px);
+  max-width: min(600px, calc(100vw - 16px));
+  max-height: min(480px, var(--available-height, 480px));
+  padding: 4px;
+  overflow: auto;
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: var(--vscode-cornerRadius-medium, 6px);
+  background: var(--popover-select-bg-color, var(--color-bg-right, #fff));
+  color: var(--font-content-color, #222);
+  box-shadow: 0 4px 16px #0003;
+  outline: none;
+}
+.popup[hidden],
+.popup[data-closed] {
+  display: none;
+}
+.control {
+  display: flex;
+  align-items: center;
+  min-height: 30px;
+  border: 1px solid var(--color-border, var(--vscode-input-border, #888));
+  border-radius: var(--border-radius, 4px);
+  background: var(--vscode-input-background);
+  color: inherit;
+}
+.control:focus-within {
+  outline: 1px solid var(--vscode-focusBorder, #1677ff);
+}
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  padding: 4px 8px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.trigger > span:first-child {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.panel {
+  min-width: var(--anchor-width);
+  max-height: min(400px, var(--available-height));
+  overflow: auto;
+}
+
+.placeholder {
+  color: var(--vscode-input-placeholderForeground, var(--font-light-color));
+}
+.clearButton {
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}

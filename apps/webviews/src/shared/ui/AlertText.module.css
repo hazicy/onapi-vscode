@@ -1,0 +1,9 @@
+.alertMessage {
+  color: var(--font-content-color);
+}
+.container {
+  padding: 4px 8px;
+  border: none;
+  line-height: 22px;
+  background-color: var(--color-bg-page);
+}

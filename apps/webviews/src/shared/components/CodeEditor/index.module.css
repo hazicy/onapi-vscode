@@ -1,0 +1,24 @@
+/* Third-party DOM classes are matched only within the component selectors below. */
+.codeEditorHost {
+  height: 100%;
+  overflow: hidden;
+}
+.container {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  border-bottom: 1px solid var(--color-border);
+  & [class~="cm-editor"] {
+    height: 100%;
+  }
+  & [class~="cm-scroller"] {
+    scrollbar-width: thin;
+  }
+  & [class~="cm-scroller"]::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  & [class~="cm-scroller"]::-webkit-scrollbar-thumb {
+    background: var(--vscode-scrollbarSlider-background, #8886);
+  }
+}

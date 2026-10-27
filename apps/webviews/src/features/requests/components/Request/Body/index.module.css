@@ -1,0 +1,43 @@
+.container {
+  width: 100%;
+  height: 100%;
+  & .otherBtn .button:hover {
+    opacity: 0.6;
+  }
+  & > .flex {
+    height: 100%;
+  }
+  & > .flex .requestBodyHeader {
+    display: flex;
+    /* height: 28px; */
+    height: 24px;
+    /* padding-left: 8px; */
+  }
+  & > .flex .requestBodyContentWrap {
+    flex: 1;
+    margin-top: 8px;
+    height: 0;
+  }
+  & .requestBodyHeader .select .selectTrigger {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    background: transparent;
+    font-size: 12px;
+    padding: 0 4px;
+    padding-left: 6px;
+  }
+}
+.requestBodyContent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+  width: 100%;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+  & .uploadWrapper {
+    text-align: center;
+  }
+}

@@ -1,0 +1,84 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 4px 12px;
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: var(--vscode-cornerRadius-small, 4px);
+  background: transparent;
+  color: var(--font-content-color, #222);
+  font: inherit;
+  cursor: pointer;
+  box-sizing: border-box;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.button:has(.icon) {
+  padding: 4px 8px;
+}
+.button:hover {
+  color: var(--color-primary, #1677ff);
+  border-color: var(--color-primary, #1677ff);
+}
+.button:focus-visible {
+  outline: 1px solid
+    var(--control-focus-border, var(--vscode-focusBorder, #1677ff));
+  outline-offset: 2px;
+}
+.small {
+  min-height: 24px;
+  padding: 2px 7px;
+  font-size: var(--font-size-12, 12px);
+}
+.large {
+  min-height: 40px;
+  padding-inline: 15px;
+}
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.button-primary {
+  background: var(--color-primary, #1677ff);
+  color: var(--vscode-button-foreground, #fff);
+  border-color: transparent;
+}
+.button-text,
+.button-link {
+  border-color: transparent;
+}
+.button-link {
+  color: var(--color-primary, #1677ff);
+}
+.button-dashed {
+  border-style: dashed;
+}
+.icon {
+  display: inline-flex;
+  align-items: center;
+}
+.danger {
+  color: var(--color-error, #f92814);
+}
+.block {
+  width: 100%;
+}
+.button.ghost {
+  background: transparent;
+}
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

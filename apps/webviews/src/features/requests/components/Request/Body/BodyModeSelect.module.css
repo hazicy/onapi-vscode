@@ -1,0 +1,73 @@
+.select {
+  font-family: var(--vscode-font-family, system-ui, sans-serif);
+  flex-shrink: 0;
+  min-height: 24px;
+  max-width: 150px;
+  margin-right: 8px;
+}
+.select .trigger {
+  min-height: 24px;
+  height: 24px;
+  padding: 0 6px;
+  border-color: transparent;
+  background: transparent;
+  font-size: 12px;
+}
+
+.menu {
+  font-family: var(--vscode-font-family, system-ui, sans-serif);
+  width: 220px;
+  min-width: 220px;
+  padding: 6px 0;
+  overflow: visible;
+  border-radius: 8px;
+}
+.menuList {
+  max-height: min(460px, calc(var(--available-height, 480px) - 20px));
+  overflow: auto;
+}
+.menu .groupLabel {
+  padding: 8px 10px 6px;
+  font-weight: 500;
+}
+.menu .option {
+  min-height: 34px;
+  padding: 5px 16px 5px 44px;
+  border-radius: 0;
+  font-size: 13px;
+}
+.menu .check {
+  position: absolute;
+  left: 18px;
+  margin-left: 0;
+  color: var(--font-content-color);
+}
+
+.select.iconOnly {
+  align-self: stretch;
+  min-height: 0;
+  height: auto;
+  min-width: 18px;
+  width: 18px;
+  max-width: 18px;
+  margin-right: 0;
+  color: inherit;
+}
+.iconOnly .trigger {
+  height: 100%;
+  padding: 0;
+  gap: 0;
+  justify-content: center;
+}
+.arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.arrow svg {
+  display: block;
+}
+.hiddenLabel {
+  display: none;
+}

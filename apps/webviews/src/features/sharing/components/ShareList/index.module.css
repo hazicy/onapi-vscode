@@ -1,0 +1,94 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 16px;
+  background-color: var(--color-bg-right);
+}
+.itemTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 8px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-border);
+  & .moreOperateWrap {
+    display: flex;
+    margin-left: 4px;
+    flex: 1;
+    justify-content: flex-end;
+    visibility: hidden;
+  }
+  & .panelIcon {
+    width: 28px;
+    height: 28px;
+  }
+  &:hover .moreOperateWrap {
+    display: flex;
+    visibility: visible;
+  }
+}
+.itemTitle:hover,
+.itemTitle.selectItem {
+  background: var(--vscode-list-hoverBackground, #303030);
+}
+.itemTitle {
+  & .time {
+    font-size: 10px;
+    flex: 1;
+  }
+  & .name {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    flex: 1;
+    overflow: hidden;
+  }
+  & .name svg {
+    font-size: 14px;
+  }
+}
+.tabs {
+  position: relative;
+  flex: 1;
+  overflow-y: auto;
+  & .shareListDeleteBtn {
+    display: none;
+  }
+  & .shareListDeleteBtn.show {
+    display: flex;
+  }
+  & .flex .button {
+    margin-left: 12px;
+    padding: 4px 8px;
+    height: 28px;
+  }
+  & .tabs {
+    height: 100%;
+  }
+  & .tabs .tabsContent {
+    height: 100%;
+  }
+  & .tabs .tabsContent .tabsTabpane {
+    height: 100%;
+  }
+  & .tabsTab {
+    padding: 10px;
+  }
+  & .tabsTab .tabsTabBtn {
+    font-size: var(--font-size-14);
+  }
+  & .checkboxGroup {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+.shareList {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  flex: 1;
+}

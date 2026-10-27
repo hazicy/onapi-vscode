@@ -1,0 +1,103 @@
+.input {
+  background-color: var(--search-big-select-color);
+  box-shadow: none;
+}
+.select {
+  background-color: var(--search-big-select-color);
+}
+.selectTrigger {
+  box-shadow: none;
+}
+.segmentedTabsContent {
+  min-height: 180px;
+}
+.optionsList {
+  width: 100%;
+}
+.container {
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  width: 320px;
+  /* min-height: 220px; */
+  /* max-height: 265px; */
+  opacity: 0;
+  transition: opacity 0.1s ease-in-out;
+  pointer-events: none;
+  & .select * {
+    box-shadow: none !important;
+  }
+  &.active {
+    opacity: 1;
+    pointer-events: unset;
+  }
+  & .varTabs .segmentedItem {
+    flex: 1;
+  }
+  & .optionsList .iconContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  & .optionsList .iconContent .icon {
+    font-size: 16px;
+  }
+  & .optionsList .iconContent.var {
+    background: #af711a;
+  }
+  & .optionsList .iconContent.var .icon {
+    color: #b071ff;
+  }
+  & .optionsList .iconContent.mock {
+    background: #067c18;
+  }
+  & .optionsList .iconContent.mock .icon {
+    color: #067ced;
+  }
+  & .optionsList .iconContent.fixed {
+    background: #43bf16;
+  }
+  & .optionsList .iconContent.fixed .icon {
+    color: #43bfb0;
+  }
+  & .optionsList .iconContent.desc {
+    background: #00ac0a;
+  }
+  & .optionsList .iconContent.desc .icon {
+    color: #00ac64;
+  }
+  & .optionsList .iconContent.aiDesc {
+    background: #ee5608;
+  }
+  & .optionsList .iconContent.aiDesc .icon {
+    color: #ee564c;
+  }
+  & .optionsList .iconContent.aiValue {
+    background: #ff9c14;
+  }
+}
+.listItem {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  width: 100%;
+  min-height: 55px;
+  box-sizing: border-box;
+  gap: 12px;
+  & .label {
+    font-size: 14px;
+    color: var(--font-title-color);
+  }
+  & .desc {
+    color: var(--font-light-color);
+  }
+  &:hover {
+    border-radius: 4px;
+    background-color: var(--popover-select-bg-hover-color);
+    cursor: pointer;
+  }
+}

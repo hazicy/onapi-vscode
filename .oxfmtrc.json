@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 80,
+  "tabWidth": 2,
+  "semi": true,
+  "singleQuote": false,
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/.build/**",
+    "**/out/**",
+    "test-results/**",
+    "playwright-report/**",
+    "**/.vscode-test/**",
+    "**/public/**",
+    "pnpm-lock.yaml",
+    ".pnpm-store/**"
+  ]
+}

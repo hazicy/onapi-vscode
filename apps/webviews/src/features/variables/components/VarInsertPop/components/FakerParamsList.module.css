@@ -1,0 +1,85 @@
+.param {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 6px;
+  padding: 6px;
+  border-radius: 4px;
+  background-color: var(--popover-select-bg-color);
+  box-sizing: border-box;
+}
+.selection {
+  display: flex;
+  flex-wrap: wrap;
+}
+.container {
+  padding: 6px;
+  border-radius: 4px;
+  background-color: var(--color-primary-opacity);
+  box-sizing: border-box;
+  & .param.footer {
+    margin-bottom: 0;
+  }
+  & .param .paramItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px;
+    min-height: 28px;
+    border-radius: 4px;
+    gap: 4px;
+    box-sizing: border-box;
+  }
+  & .param .paramItem .paramItemDel {
+    visibility: hidden;
+  }
+  & .param .paramItem:hover {
+    background-color: var(--form-hover-color);
+  }
+  & .param .paramItem:hover .paramItemDel {
+    visibility: visible;
+  }
+  & .param .paramItem .paramContent {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 4px;
+  }
+  & .param .paramItem .paramItemDesc {
+    width: 120px;
+    font-size: 14px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  & .param .paramItem .paramItemCom {
+    flex: 1;
+    width: 0;
+  }
+  & .param .paramItem .paramItemCom > * {
+    width: 100%;
+  }
+  & .param .paramItem .paramItemCom .select {
+    min-width: 88px;
+  }
+  & .selection .selectItem {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 5px;
+    min-height: 24px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--font-content-color);
+    box-sizing: border-box;
+    gap: 4px;
+  }
+  & .selection .selectItem:hover {
+    border: 1px solid var(--selected-border-color);
+    color: var(--color-primary);
+    background-color: var(--popover-select-bg-color);
+    cursor: pointer;
+  }
+}

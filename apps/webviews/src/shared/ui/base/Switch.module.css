@@ -1,0 +1,33 @@
+.switch:focus-visible {
+  outline: 1px solid
+    var(--control-focus-border, var(--vscode-focusBorder, #1677ff));
+  outline-offset: 2px;
+}
+.switch {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  min-width: 32px;
+  height: 20px;
+  padding: 2px;
+  border: 0;
+  border-radius: var(--vscode-cornerRadius-circle, 9999px);
+  background: var(--color-border, #aaa);
+  color: #fff;
+  cursor: pointer;
+}
+.switch[data-checked] {
+  background: var(--color-primary, #1677ff);
+}
+.thumb {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  transform: translateX(0);
+  transition: transform 0.15s;
+}
+.switch[data-checked] > .thumb {
+  transform: translateX(12px);
+}

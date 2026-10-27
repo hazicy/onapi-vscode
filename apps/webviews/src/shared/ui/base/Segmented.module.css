@@ -1,0 +1,41 @@
+.tabList {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: auto;
+}
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--font-light-color, #888);
+  font: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tab[data-active] {
+  color: var(--color-primary, #1677ff);
+  border-color: var(--color-primary, #1677ff);
+}
+.segmented {
+  display: inline-flex;
+  background: var(--color-bg-gray, transparent);
+  border-radius: var(--vscode-cornerRadius-small, 4px);
+  padding: 2px;
+}
+.segmented .tab[data-active] {
+  background: var(--color-bg-right, #fff);
+  border-color: transparent;
+  border-radius: var(--vscode-cornerRadius-xSmall, 2px);
+}
+
+.tab[data-active] {
+  background: var(--vscode-input-background);
+}
+.tab {
+  transition: all 0.05s;
+}

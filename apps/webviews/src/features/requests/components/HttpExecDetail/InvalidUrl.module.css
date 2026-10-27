@@ -1,0 +1,16 @@
+.icon {
+  font-size: 58px;
+  color: var(--icon-color);
+}
+.text {
+  padding: 4px 8px;
+  border-radius: var(--border-radius);
+  text-align: center;
+  color: #fe5a41;
+  background-color: rgba(254, 90, 65, 0.1);
+  word-break: break-all;
+}
+.container {
+  width: 100%;
+  height: 100%;
+}

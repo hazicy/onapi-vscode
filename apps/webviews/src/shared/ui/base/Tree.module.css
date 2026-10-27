@@ -1,0 +1,60 @@
+.tree [data-part="list"] {
+  position: relative;
+}
+.tree [role="treeitem"] {
+  display: flex;
+  align-items: center;
+  min-height: 28px;
+}
+.tree [data-part="switcher"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  cursor: pointer;
+}
+.tree [data-part="content"] {
+  display: inline-flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  padding: 2px 4px;
+  cursor: pointer;
+}
+.tree [data-part="title"] {
+  flex: 1;
+  min-width: 0;
+}
+.tree [aria-selected="true"] {
+  background: var(--color-bg-folder-hover, #eee);
+}
+.tree [data-part="drop-indicator"] {
+  position: absolute;
+  height: 2px;
+  background: var(--color-primary, #1677ff);
+}
+
+.tree [data-part="switcher"] {
+  border: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  flex-shrink: 0;
+}
+.tree [role="treeitem"]:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder, #1677ff);
+  outline-offset: -1px;
+}
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.dropTarget {
+  outline: 1px solid var(--vscode-focusBorder, #1677ff);
+  outline-offset: -1px;
+}
+
+.tree [data-drop-preview] {
+  background: var(--color-bg-folder-hover, transparent);
+}

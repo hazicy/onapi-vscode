@@ -1,0 +1,15 @@
+.positioner {
+  z-index: 1200;
+  outline: none;
+}
+.tooltip[data-closed] {
+  display: none;
+}
+.tooltip {
+  max-width: 320px;
+  padding: 6px 8px;
+  border-radius: var(--vscode-cornerRadius-small, 4px);
+  background: var(--font-title-color, #222);
+  color: var(--color-bg-right, #fff);
+  overflow-wrap: anywhere;
+}

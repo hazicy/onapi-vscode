@@ -1,0 +1,60 @@
+import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
+import {
+  DEFAULT_API_DATA,
+  DEFAULT_API_SAMPLE_DATA,
+  DEFAULT_API_SAMPLE_GROUP_DATA,
+  DEFAULT_DOC_DATA,
+  DEFAULT_FOLDER_DATA,
+  DEFAULT_GRPC_DATA,
+  DEFAULT_SOCKET_DATA,
+  DEFAULT_SOCKET_SERVICE_DATA,
+  DEFAULT_SSE_DATA,
+  DEFAULT_WEBSOCKET_DATA,
+  DEFAULT_SOCKETIO_DATA,
+  DEFAULT_GRAPHQL_DATA,
+} from "@onapi/http-model/requests/constants/default";
+import { STATUS_CODE } from "@onapi/http-model/constants/common";
+import { ApisDataTypeMapping } from "@onapi/http-model/requests/types/base";
+
+export const APIS_VIEW_DEFAULT_STATUS = {
+  is_force: STATUS_CODE.DISABLE,
+};
+
+export const APIS_BASE_DEFAULT_DATA: Record<string, any> = {
+  [APIS_TARGET_TYPE_ENUM.API]: DEFAULT_API_DATA,
+  [APIS_TARGET_TYPE_ENUM.SSE]: DEFAULT_SSE_DATA,
+  [APIS_TARGET_TYPE_ENUM.FOLDER]: DEFAULT_FOLDER_DATA,
+  [APIS_TARGET_TYPE_ENUM.DOC]: DEFAULT_DOC_DATA,
+  [APIS_TARGET_TYPE_ENUM.GRPC]: DEFAULT_GRPC_DATA,
+  [APIS_TARGET_TYPE_ENUM.API_SAMPLE]: DEFAULT_API_SAMPLE_DATA,
+  [APIS_TARGET_TYPE_ENUM.API_SAMPLE_GROUP]: DEFAULT_API_SAMPLE_GROUP_DATA,
+  [APIS_TARGET_TYPE_ENUM.SOCKET]: DEFAULT_SOCKET_SERVICE_DATA,
+  [APIS_TARGET_TYPE_ENUM.SOCKET_METHOD]: DEFAULT_SOCKET_DATA,
+  [APIS_TARGET_TYPE_ENUM.WEBSOCKET]: DEFAULT_WEBSOCKET_DATA,
+  [APIS_TARGET_TYPE_ENUM.SOCKETIO]: DEFAULT_SOCKETIO_DATA,
+  [APIS_TARGET_TYPE_ENUM.GRAPHQL]: DEFAULT_GRAPHQL_DATA,
+};
+
+const DEFAULT_COLOR_MAP = {
+  doc: "doc",
+  websocket: "ws",
+  grpc: "grpc",
+  socket_method: "socket-service",
+  socket: "socket",
+  note: "note",
+};
+
+export const ColorMap = (type: any, method: any) => {
+  const maps: any = DEFAULT_COLOR_MAP;
+  if (method) {
+    maps["api"] = ["post", "delete", "get", "put", "patch"].includes(
+      method?.toLowerCase(),
+    )
+      ? method?.toLowerCase()
+      : "api-extra";
+  }
+  if (maps[type]) {
+    return maps[type];
+  }
+  return maps.doc;
+};

@@ -1,0 +1,61 @@
+.container {
+  padding-bottom: 12px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--font-title-color);
+}
+.envManage {
+  width: 100%;
+  height: 100%;
+  & .envManageFlex {
+    height: 100%;
+  }
+}
+.envManage tbody td,
+.envManage thead th {
+  padding: 0;
+  /* height: 32px; */
+}
+.envManage tbody td input,
+.envManage thead th input,
+.envManage tbody td textarea,
+.envManage thead th textarea {
+  height: 36px;
+  border-color: transparent;
+}
+.envManage tbody td input:hover,
+.envManage thead th input:hover,
+.envManage tbody td textarea:hover,
+.envManage thead th textarea:hover,
+.envManage tbody td input:focus,
+.envManage thead th input:focus,
+.envManage tbody td textarea:focus,
+.envManage thead th textarea:focus {
+  border-color: var(--color-primary);
+  background-color: var(--highlight-change-color);
+}
+.envManage {
+  & .envManageContent {
+    flex: 1;
+    overflow-y: auto;
+  }
+  & .envManageContent .envManageInput {
+    margin-bottom: 12px;
+  }
+  & .envManageContent tbody tr:hover .icon {
+    visibility: visible;
+  }
+  & thead th {
+    padding: 0 12px;
+  }
+}
+.envOp {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  & .icon {
+    visibility: hidden;
+    color: var(--icon-color);
+  }
+}

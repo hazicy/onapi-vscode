@@ -1,0 +1,20 @@
+.separator {
+  border: 0;
+  background: var(--color-border, #ddd);
+  height: 1px;
+  margin: 8px 0;
+}
+.separator[aria-orientation="vertical"] {
+  height: 1em;
+  width: 1px;
+  margin: 0 8px;
+}
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.divider > span {
+  flex: 1;
+  border-top: 1px solid var(--color-border, #ddd);
+}

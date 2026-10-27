@@ -1,0 +1,76 @@
+.container {
+  width: 100%;
+}
+.label {
+  margin-bottom: var(--margin8);
+  & .text {
+    font-size: 14px;
+    color: var(--font-title-color);
+  }
+  & .text:hover {
+    color: var(--color-primary);
+  }
+  & .labelRight {
+    flex-shrink: 0;
+    margin-left: 30px;
+  }
+  & .labelRight .consResponseTitle {
+    font-size: 12px;
+    color: var(--font-content-color);
+  }
+  & .labelRight .consResponseCode {
+    color: #3cc071;
+  }
+  & .consTime {
+    /* width: 58px; */
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    font-size: 14px;
+    color: var(--font-light-color);
+  }
+}
+.children {
+  padding-left: 16px;
+  & .childText {
+    font-size: var(--font-size-14);
+    color: var(--font-title-color);
+  }
+  & .collapseItem .collapseHeader {
+    margin-bottom: 0;
+  }
+  & .collapseHeaderText {
+    font-size: 14px;
+    color: var(--font-title-color);
+  }
+}
+.consoleItem {
+  padding: 8px 12px;
+  border-radius: var(--border-radius);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--font-title-color);
+  & .time {
+    margin-right: 32px;
+    color: var(--font-light-color);
+  }
+  & .consoleItemContent {
+    padding: 0 8px;
+    border-right: 1px solid var(--color-border);
+    word-break: break-all;
+  }
+  & .consoleItemContent:last-of-type {
+    border-right: none;
+  }
+  &.error {
+    background-color: #ff5806;
+  }
+  &.error .icon {
+    color: #ff583e;
+  }
+  &.warn {
+    background-color: #ffc003;
+  }
+  &.warn .icon {
+    color: #ff8a00;
+  }
+}

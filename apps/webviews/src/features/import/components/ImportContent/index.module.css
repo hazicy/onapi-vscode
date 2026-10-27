@@ -1,0 +1,58 @@
+.importProjectItem {
+  margin-top: 16px;
+  border-bottom: 1px solid var(--color-table-border);
+  font-size: var(--font-size-14);
+  display: flex;
+  flex-direction: column;
+}
+.importProjectItemTitle {
+  margin-bottom: 16px;
+}
+.importProjectItemContent {
+  /* display:flex;flex-direction:row;align-items:center;justify-content:flex-start;; */
+  width: 100%;
+  flex: 1;
+  border-radius: 4px;
+}
+.importProjectItemContent .swaggerInput {
+  padding: 0 0 20px;
+  width: 100%;
+}
+.importProjectItemContent .uploadWrapper {
+  padding: 0 0 20px;
+  width: 100%;
+  font-size: var(--font-size-14);
+}
+.importProjectItemContent .uploadWrapper .antUploadDragIcon {
+  margin-bottom: 12px;
+  font-size: var(--font-size-24);
+}
+.importProjectItemContent .uploadListItem {
+  padding: 0 12px;
+  height: 22px;
+  color: var(--color-primary);
+}
+.importProjectItemContent {
+  /* display:flex;flex-direction:row;align-items:center;justify-content:flex-start;; */
+  width: 100%;
+  /* height: 100%; */
+  border-radius: 4px;
+}
+.importExportNow {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: var(--font-size-14);
+}
+.curlCodeEditor {
+  height: 218px;
+}
+.importProjectFullTitle {
+  display: flex;
+  min-width: 120px;
+  font-size: var(--font-size-14);
+  color: var(--font-content-color);
+}
+
+.importProjectUploadContent {
+  min-width: 0;
+}

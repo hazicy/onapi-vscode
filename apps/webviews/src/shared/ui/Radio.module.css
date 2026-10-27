@@ -1,0 +1,53 @@
+.container {
+  & label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  & .radio .radioInner {
+    /* width: 16px; */
+    /* height: 16px; */
+    background-color: transparent;
+  }
+  & .radio .radioInner::after {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    width: 8px;
+    height: 8px;
+    background-color: var(--color-primary);
+  }
+}
+.radioGroup {
+  /* 1 */
+  & .radioGroup {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  & .radioGroup label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  & .radioGroup .radio .radioInner {
+    /* width: 16px; */
+    /* height: 16px; */
+    background-color: transparent;
+  }
+  & .radioGroup .radio .radioInner::after {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    width: 8px;
+    height: 8px;
+    background-color: var(--color-primary);
+  }
+}

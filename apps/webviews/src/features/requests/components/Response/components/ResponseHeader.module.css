@@ -1,0 +1,7 @@
+.tableCellSpan {
+  word-break: break-all;
+}
+.container {
+  width: 100%;
+  height: 100%;
+}

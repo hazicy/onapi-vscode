@@ -1,0 +1,60 @@
+import buttonStyles from "./Button.module.css";
+import { forwardRef } from "./forwardRef";
+import { Button as BaseButton } from "@base-ui/react/button";
+import cx from "classnames";
+import type { ButtonProps } from "./types";
+
+export const Button = forwardRef<HTMLElement, ButtonProps>(
+  (
+    {
+      iconClassName,
+
+      type = "default",
+      htmlType = "button",
+      size = "middle",
+      loading = false,
+      icon,
+      children,
+      className,
+      rootClassName,
+      danger,
+      ghost,
+      block,
+      shape,
+      ...props
+    },
+    ref,
+  ) => (
+    <BaseButton
+      {...props}
+      ref={ref}
+      type={htmlType}
+      disabled={props.disabled || !!loading}
+      className={cx(
+        buttonStyles.button,
+        type !== "default" && buttonStyles[`button-${type}`],
+        size === "small"
+          ? buttonStyles.small
+          : size === "large"
+            ? buttonStyles.large
+            : undefined,
+        className,
+        rootClassName,
+        {
+          [buttonStyles.danger]: danger,
+          [buttonStyles.block]: block,
+          [buttonStyles.ghost]: ghost,
+        },
+      )}
+    >
+      {loading ? (
+        <span className={buttonStyles.spinner} aria-label="Loading" />
+      ) : (
+        icon && (
+          <span className={cx(buttonStyles.icon, iconClassName)}>{icon}</span>
+        )
+      )}
+      {children}
+    </BaseButton>
+  ),
+);

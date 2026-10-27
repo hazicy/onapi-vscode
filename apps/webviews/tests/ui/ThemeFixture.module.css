@@ -1,0 +1,8 @@
+.container {
+  &[data-disabled="true"] {
+    cursor: not-allowed;
+  }
+  &:not([data-disabled="true"]):hover {
+    color: var(--color-primary);
+  }
+}

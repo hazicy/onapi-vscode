@@ -1,0 +1,74 @@
+.tabs {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.tabs > .nav {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+.tabs > .contentHolder {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+}
+.tabList {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: auto;
+}
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--font-light-color, #888);
+  font: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tab[data-active] {
+  color: var(--color-primary, #1677ff);
+  border-color: var(--color-primary, #1677ff);
+}
+.tabPanel {
+  min-height: 0;
+}
+.tabPanel[hidden] {
+  display: none;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+}
+.navWrap {
+  min-width: 0;
+  flex: 1;
+}
+.content {
+  min-height: 0;
+}
+
+.tabItem {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.tabWithExtra {
+  align-items: stretch;
+  border-bottom: 2px solid transparent;
+  color: var(--font-light-color, #888);
+}
+.tabWithExtra .tab {
+  padding-right: 0;
+  border-bottom: 0;
+}
+.tabWithExtra.tabItemActive {
+  border-bottom-color: var(--color-primary, #1677ff);
+  color: var(--color-primary, #1677ff);
+}

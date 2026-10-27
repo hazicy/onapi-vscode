@@ -1,0 +1,179 @@
+.container {
+  width: 100%;
+  height: 100%;
+}
+.container .resizablePanelHandle {
+  position: relative;
+  transition: background-color 0.3s;
+}
+.container .resizablePanelHandle.staticHandleBorder {
+  background-color: var(--divider-color);
+}
+.container .resizablePanelHandle.resizableLineHidden {
+  display: none;
+}
+.container .resizablePanelHandle .rightCollapseBtn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--color-bg-right);
+  box-shadow: 0 2px 4px var(--box-shadow-modal-color);
+  cursor: pointer;
+}
+.container .resizablePanelHandle .rightCollapseBtn > .icon {
+  font-size: 14px;
+}
+.container .resizablePanelHandle .rightCollapseBtn:hover {
+  color: var(--color-primary);
+}
+.container .resizablePanelHandle .resizableBar {
+  position: absolute;
+  z-index: 2;
+}
+.container .resizablePanelHandle.horizontal {
+  width: 2px;
+  height: auto;
+}
+.container .resizablePanelHandle.horizontal .resizableBar {
+  left: -5px;
+  width: 10px;
+  height: 100%;
+}
+.container .resizablePanelHandle.horizontal .rightCollapseBtn {
+  top: 50%;
+  left: 0;
+}
+.container .resizablePanelHandle.vertical {
+  width: 100%;
+  height: 2px;
+}
+.container .resizablePanelHandle.vertical .resizableBar {
+  top: -5px;
+  width: 100%;
+  height: 10px;
+}
+.container .resizablePanelHandle.vertical .rightCollapseBtn {
+  top: 0;
+  left: 50%;
+}
+.container .resizablePanelHandle:hover,
+.container .resizablePanelHandle:active {
+  background-color: var(--color-primary);
+}
+.container .resizablePanelLeftWrap .leftCollapseWrap,
+.container .resizablePanelRightWrap .leftCollapseWrap,
+.container .resizablePanelLeftWrap .rightCollapseWrap,
+.container .resizablePanelRightWrap .rightCollapseWrap {
+  width: 100%;
+  height: 100%;
+  background-color: var(--vscode-sideBar-background);
+  cursor: pointer;
+}
+.container .resizablePanelLeftWrap .leftCollapseWrap .flex,
+.container .resizablePanelRightWrap .leftCollapseWrap .flex,
+.container .resizablePanelLeftWrap .rightCollapseWrap .flex,
+.container .resizablePanelRightWrap .rightCollapseWrap .flex {
+  height: 100%;
+}
+.container .resizablePanelLeftWrap .leftCollapseWrap .flex > .icon,
+.container .resizablePanelRightWrap .leftCollapseWrap .flex > .icon,
+.container .resizablePanelLeftWrap .rightCollapseWrap .flex > .icon,
+.container .resizablePanelRightWrap .rightCollapseWrap .flex > .icon {
+  font-size: 12px;
+}
+.container .resizablePanelLeftWrap .leftCollapseWrap .flex .collapseTitle,
+.container .resizablePanelRightWrap .leftCollapseWrap .flex .collapseTitle,
+.container .resizablePanelLeftWrap .rightCollapseWrap .flex .collapseTitle,
+.container .resizablePanelRightWrap .rightCollapseWrap .flex .collapseTitle {
+  font-size: var(--font-size-14);
+  color: var(--font-content-color);
+  word-break: keep-all;
+}
+.container
+  .resizablePanelLeftWrap
+  .leftCollapseWrap
+  .flex
+  .collapseTitle.noSpacing,
+.container
+  .resizablePanelRightWrap
+  .leftCollapseWrap
+  .flex
+  .collapseTitle.noSpacing,
+.container
+  .resizablePanelLeftWrap
+  .rightCollapseWrap
+  .flex
+  .collapseTitle.noSpacing,
+.container
+  .resizablePanelRightWrap
+  .rightCollapseWrap
+  .flex
+  .collapseTitle.noSpacing {
+  letter-spacing: 1px !important;
+}
+.container
+  .resizablePanelLeftWrap
+  .leftCollapseWrap
+  .flex
+  .collapseTitle.vertical,
+.container
+  .resizablePanelRightWrap
+  .leftCollapseWrap
+  .flex
+  .collapseTitle.vertical,
+.container
+  .resizablePanelLeftWrap
+  .rightCollapseWrap
+  .flex
+  .collapseTitle.vertical,
+.container
+  .resizablePanelRightWrap
+  .rightCollapseWrap
+  .flex
+  .collapseTitle.vertical {
+  margin-left: 4px;
+  letter-spacing: 2px;
+}
+.container
+  .resizablePanelLeftWrap
+  .leftCollapseWrap
+  .flex
+  .collapseTitle.horizontal,
+.container
+  .resizablePanelRightWrap
+  .leftCollapseWrap
+  .flex
+  .collapseTitle.horizontal,
+.container
+  .resizablePanelLeftWrap
+  .rightCollapseWrap
+  .flex
+  .collapseTitle.horizontal,
+.container
+  .resizablePanelRightWrap
+  .rightCollapseWrap
+  .flex
+  .collapseTitle.horizontal {
+  margin-top: 8px;
+  letter-spacing: 4px;
+  writing-mode: vertical-lr;
+}
+.container .resizablePanelRightWrap {
+  position: relative;
+}
+.container .resizablePanelHandle.staticHandleBorder {
+  background: var(
+    --vscode-panel-border,
+    var(--vscode-widget-border, var(--color-border))
+  );
+}
+.container .resizablePanelHandle:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder, var(--color-primary));
+}

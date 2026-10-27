@@ -1,0 +1,41 @@
+<svg width="128" height="128" xmlns="http://www.w3.org/2000/svg" stroke="#e27348">
+    <g fill="none" fill-rule="evenodd" transform="translate(1 1)" stroke-width="2">
+        <circle cx="64" cy="64" r="16" >
+            <animate attributeName="r"
+                 begin="1.5s" dur="3s"
+                 values="22;64"
+                 calcMode="linear"
+                 repeatCount="indefinite" />
+            <animate attributeName="stroke-opacity"
+                 begin="1.5s" dur="3s"
+                 values="2;0" calcMode="linear"
+                 repeatCount="indefinite" />
+            <animate attributeName="stroke-width"
+                 begin="1.5s" dur="3s"
+                 values="5;0" calcMode="linear"
+                 repeatCount="indefinite" />
+        </circle>
+        <circle cx="64" cy="64" r="16" >
+            <animate attributeName="r"
+                 begin="3s" dur="3s"
+                 values="22;64"
+                 calcMode="linear"
+                 repeatCount="indefinite" />
+            <animate attributeName="stroke-opacity"
+                 begin="3s" dur="3s"
+                 values="2;0" calcMode="linear"
+                 repeatCount="indefinite" />
+            <animate attributeName="stroke-width"
+                 begin="3s" dur="3s"
+                 values="5;0" calcMode="linear"
+                 repeatCount="indefinite" />
+        </circle>
+        <circle cx="64" cy="64" r="18">
+            <animate attributeName="r"
+                 begin="0s" dur="1.5s"
+                 values="18;3;6;9;12;15;18"
+                 calcMode="linear"
+                 repeatCount="indefinite" />
+        </circle>
+    </g>
+</svg>

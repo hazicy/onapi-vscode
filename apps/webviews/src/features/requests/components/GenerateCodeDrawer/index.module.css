@@ -1,0 +1,51 @@
+.spinNestedLoading {
+  height: 100%;
+}
+.menu {
+  padding: 16px 8px;
+  width: 212px;
+  min-width: 212px;
+  max-height: 100%;
+  overflow: auto;
+  border-right: 1px solid var(--color-border);
+  overflow-y: auto;
+  color: var(--font-content-color);
+  background-color: var(--color-bg-page);
+}
+.menuItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 4px;
+  padding: 0 8px;
+  height: 32px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+.container {
+  height: 100%;
+  & .spinNestedLoading .spinContainer {
+    height: 100%;
+  }
+  & .spinNestedLoading .spinContainer > .flex {
+    height: 100%;
+  }
+}
+.container .menuItem:hover,
+.container .menuItem.active {
+  /* color: var(--color-primary); */
+  background-color: var(--vscode-list-inactiveSelectionBackground);
+}
+.edit {
+  flex: 1;
+  height: 100%;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+.container {
+}
+.languagesIcon {
+  margin-right: 8px;
+  font-size: var(--font-size-16);
+}

@@ -1,0 +1,42 @@
+.flex {
+  display: flex;
+}
+.checkbox:focus-visible {
+  outline: 1px solid
+    var(--control-focus-border, var(--vscode-focusBorder, #1677ff));
+  outline-offset: 2px;
+}
+.checkLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--check-box-border-color, #888);
+  border-radius: var(--vscode-cornerRadius-small, 4px);
+  background: transparent;
+  color: #fff;
+}
+.checkbox[data-checked] {
+  background: var(--color-primary, #1677ff);
+}
+.checkbox[data-disabled] {
+  opacity: 0.5;
+}
+
+.checkbox {
+  flex-shrink: 0;
+  padding: 0;
+  line-height: 1;
+  font-size: 12px;
+}
+.checkbox[data-indeterminate] {
+  background: var(--color-primary, #1677ff);
+}

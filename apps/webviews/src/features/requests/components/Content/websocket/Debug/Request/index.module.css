@@ -1,0 +1,40 @@
+.inputNumber {
+  width: 100%;
+}
+.select {
+  width: 100%;
+}
+.settingDesc {
+  color: var(--font-light-color);
+}
+.messageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 7px;
+  & .selectTrigger {
+    font-size: 12px !important;
+  }
+  & .select .selectArrow {
+    font-size: 10px;
+  }
+}
+.rawEditor {
+  flex: 1;
+  min-height: 0;
+  height: 0;
+}
+.sendActions {
+  min-width: 0;
+  justify-content: flex-end;
+}
+.sendHint {
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+  font-size: 12px;
+  line-height: 1.5;
+}
+.messageHeader {
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 0;
+}

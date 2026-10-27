@@ -1,0 +1,25 @@
+.item {
+  padding: 12px 16px;
+  background: var(--table-header-bg-color);
+  border: 1px solid var(--color-border);
+  white-space: nowrap;
+  border-radius: 4px;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /* overflow-y: auto; */
+  flex: 1;
+}
+.customPopover {
+  max-height: 190px;
+  overflow-y: auto;
+  & .errorTitle {
+    color: var(--font-light-color);
+  }
+  & .errorText {
+    color: var(--color-error);
+    font-size: 12px;
+  }
+}

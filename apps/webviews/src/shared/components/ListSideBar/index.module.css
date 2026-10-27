@@ -1,0 +1,104 @@
+.expandDivider {
+  display: flex;
+  align-items: center;
+  width: 8px;
+  border-radius: 78px;
+  background-color: var(--color-bg-page);
+}
+.container {
+  & > .sideTreeWrap {
+    width: 180px;
+    background: var(--color-bg-page);
+    transition: width 0.1s linear;
+  }
+  & > .sideTreeWrap .basicTabsCon {
+    flex: 1;
+    padding-top: 8px;
+    height: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+  & > .sideTreeWrap .basicTabsCon ul {
+    width: 100%;
+    height: 100%;
+  }
+  & > .sideTreeWrap .basicTabsCon .iconClose {
+    visibility: hidden;
+    transform: rotate(90deg);
+    font-size: var(--font-size-14);
+  }
+  & > .sideTreeWrap .basicTabsCon .basicTabBar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 8px;
+    margin-bottom: 4px;
+    padding: 0 12px;
+    height: 32px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  & > .sideTreeWrap .basicTabsCon .basicTabBarActive {
+    background-color: var(--color-bg-folder-hover);
+    color: var(--vscode-foreground);
+  }
+  & > .sideTreeWrap .basicTabsCon .basicTabBar:hover {
+    background-color: var(--color-bg-folder-hover);
+  }
+  & > .sideTreeWrap .basicTabsCon .basicTabBar:hover .iconClose {
+    visibility: visible;
+  }
+  & > .sideTreeWrap .basicTabsCon .basicTabBar .input {
+    box-shadow: none;
+    border-radius: 0;
+    border-color: transparent;
+    cursor: pointer;
+  }
+  & > .sideTreeWrap .basicTabsCon .basicTabBar .input.editInput {
+    border-color: var(--color-primary);
+    cursor: text;
+  }
+  & > .sideTreeWrap .basicTabsCon .basicTabBar .dropdownMenuItem {
+    padding: 0;
+  }
+  & > .sideTreeWrap .basicTabsCon .basicTabBar .itemLabel {
+    padding: 8px 12px;
+  }
+  & > .sideTreeWrap .basicTabsCon .basicTabBar .itemLabel .icon {
+    font-size: 16px;
+    margin-inline-end: 8px;
+  }
+  & > .sideTreeWrap .addBtnCon {
+    padding: 12px 10px;
+  }
+  & > .sideTreeWrap .addBtnCon button {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+  & > .sideTreeWrap.expand {
+    width: 0;
+    overflow: hidden;
+    transition: width 0.1s linear;
+  }
+  & > .sideTreeWrap.expand .inputAffixWrapper {
+    display: none;
+  }
+  & > .sideTreeWrap.expand [role="tree"] {
+    overflow: hidden;
+  }
+  & .expandDivider .iconWrap {
+    width: 8px;
+    height: 24px;
+    border-radius: 65px;
+    line-height: 24px;
+    text-align: center;
+    background-color: var(--vscode-badge-background);
+    cursor: pointer;
+  }
+  & .expandDivider .iconWrap .icon {
+    margin-left: -2px;
+    font-size: var(--font-size-12);
+    color: var(--white-color);
+  }
+}

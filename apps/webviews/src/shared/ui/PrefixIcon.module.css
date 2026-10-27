@@ -1,0 +1,76 @@
+.container {
+  display: inline-flex;
+  align-items: center;
+  width: 36px;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: var(--font-size-12);
+  font-weight: 700;
+  text-align: left;
+  color: var(--color-success);
+  & svg {
+    font-size: var(--font-size-14);
+  }
+  &.post {
+    color: var(--color-warning);
+  }
+  &.DEFAULT {
+    color: var(--color-success);
+  }
+  &.get {
+    color: var(--color-success);
+  }
+}
+.container.put,
+.container.socket {
+  color: var(--color-info);
+}
+.container.socket,
+.container.testing,
+.container.kit {
+  width: auto;
+}
+.container.socketMethod,
+.container.doc {
+  color: var(--color-info);
+}
+.container {
+  &.delete {
+    color: var(--color-error);
+  }
+  &.gql {
+    color: #f80ba0;
+  }
+}
+.container.grpc,
+.container.ws,
+.container.patch {
+  color: var(--color-success);
+}
+.container {
+  &.notes {
+    width: auto;
+    color: #f7b300;
+  }
+  &.testing {
+    color: #067ced;
+  }
+  &.kit {
+    color: #7879f1;
+  }
+}
+.container.dataModel,
+.container.apiSample {
+  width: auto;
+}
+.container {
+  &.dataModel {
+    color: #30d4ad;
+  }
+  &.apiSample {
+    color: #4c80ff;
+  }
+  &.sse {
+    color: #65e0ff;
+  }
+}

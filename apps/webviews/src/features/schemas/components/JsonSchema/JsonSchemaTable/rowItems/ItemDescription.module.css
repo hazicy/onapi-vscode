@@ -1,0 +1,74 @@
+/* Third-party DOM classes are matched only within the component selectors below. */
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.itemManage {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 10px;
+  width: 100px;
+  height: 32px;
+}
+.descRowDescription {
+  display: flex;
+  min-width: calc(100% - 100px);
+  height: 30px;
+}
+.itemRequired {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: var(--font-light-color);
+  background-color: var(--color-border);
+  cursor: pointer;
+}
+.container {
+  & .descRowDescription .textarea {
+    width: 100%;
+  }
+  & .descRowDescription .input {
+    margin: 0 8px;
+    padding: 2px 4px;
+    width: calc(100% - 100px);
+    min-height: 32px !important;
+    overflow: hidden;
+    border-radius: 0;
+    border: 1px solid transparent;
+    border-bottom: var(--color-border) 1px solid;
+    font-size: 12px;
+    resize: none;
+  }
+  & .descRowDescription .input:hover {
+    height: 32px;
+    /* border-radius: 4px; */
+    border: 1px solid var(--color-primary);
+    background-color: var(--highlight-change-color);
+    /* background-color: var(--highlight-change-color); */
+  }
+  & .descRowDescription .input:focus {
+    z-index: 700;
+    width: calc(100% - 100px);
+    height: 32px;
+    border-radius: 4px;
+    /* border-radius: 4px; */
+    border: 1px solid var(--color-primary);
+    color: var(--font-content-color);
+    background-color: var(--highlight-change-color);
+  }
+  & .descRowDescription .input::placeholder {
+    line-height: 26px;
+  }
+  & .descRowDescription > textarea {
+    border-radius: 0;
+  }
+  & .itemRequired.required {
+    color: var(--color-primary);
+  }
+}

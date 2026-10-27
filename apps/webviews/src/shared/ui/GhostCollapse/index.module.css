@@ -1,0 +1,22 @@
+.container {
+  & .collapse .collapseItem:not(:first-child) {
+    margin-top: 16px;
+  }
+  & .collapse .collapseHeader {
+    margin-bottom: 8px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  & .collapse .collapseHeader .collapseHeaderText {
+    font-size: var(--font-size-14);
+  }
+  & .collapse .collapseContent .collapseContentBox {
+    padding: 0;
+  }
+  & .collapse.fitContent .collapseHeader {
+    width: fit-content;
+  }
+}

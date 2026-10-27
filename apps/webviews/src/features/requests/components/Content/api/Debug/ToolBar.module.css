@@ -1,0 +1,13 @@
+.container {
+  margin-bottom: 12px;
+  padding: 0 16px;
+  & .tabBarExtraContentWrap .editWrap .apisTitleEdit {
+    border-color: transparent;
+    border-bottom-color: var(--color-table-border);
+    font-size: var(--font-size-14);
+    background: transparent;
+  }
+  & .tabBarExtraContentWrap .editWrap .apisTitleEdit:hover {
+    border-bottom-color: var(--selected-border-color);
+  }
+}

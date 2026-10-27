@@ -1,0 +1,198 @@
+.tabs {
+  width: 100%;
+  height: 100%;
+}
+.container {
+  width: 100%;
+  height: 100%;
+  /* height: calc(100% - 40px); */
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  & .urlPanel .flex .urlGroup {
+    flex: 1;
+  }
+}
+.tabsContent {
+  height: 100%;
+  /* height: calc(100% - 60px); */
+}
+.wsHeader {
+  margin-bottom: 16px;
+}
+.container {
+  & .urlPanel .button {
+    height: 36px;
+    font-size: var(--font-size-14);
+  }
+  & .urlPanel .button:first-child {
+    width: 70px;
+  }
+  & .wsHeader .iconColor {
+    margin-left: 4px;
+    font-size: var(--font-size-12);
+    line-height: 1;
+    color: var(--icon-color);
+  }
+  & .wsHeader .inputOutlined {
+    height: 32px;
+    font-size: var(--font-size-12);
+    background: var(--vscode-input-background);
+    border: 1px solid var(--vscode-settings-numberInputBorder, transparent);
+  }
+  & .wsHeader .select {
+    height: 32px;
+  }
+  & .wsHeader .selectTrigger {
+    font-size: var(--font-size-12);
+  }
+  & .wsHeader .selectDropdown .selectItem {
+    font-size: var(--font-size-12) !important;
+  }
+}
+.lineBar {
+  height: 100%;
+  & .tabsNav {
+    margin-bottom: 0;
+  }
+}
+.saveDropDown {
+  padding: 8px;
+  padding-right: 0;
+  width: 200px;
+  height: 100%;
+  border-radius: 4px;
+  background-color: var(--popover-select-bg-color);
+  box-shadow:
+    0 6px 16px 0 #000000,
+    0 3px 6px -4px #000000,
+    0 9px 28px 8px #000000;
+  & [role="tree"] {
+    width: 100%;
+    background-color: var(--popover-select-bg-color);
+  }
+  & [role="tree"] [data-part="list"] {
+    padding-right: 12px;
+  }
+  & [role="tree"] [data-part="content"] {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 0;
+    height: 100%;
+  }
+  & [role="tree"] [data-part="content"] [data-part="title"] {
+    display: flex;
+    width: 100%;
+  }
+  & [role="tree"] [data-part="content"] [data-part="title"] .dropdownTreeTitle {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+.exampleLabel {
+  display: flex;
+  max-width: 200px;
+  & .name {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+.exampleList {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  min-width: 240px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--popover-select-bg-color);
+  box-shadow: 0 12px 18px -4px var(--box-shadow-modal-color);
+  & .dropdownMenu {
+    margin-top: 8px;
+    padding: 0;
+    box-shadow: none;
+    max-height: 260px;
+    overflow-y: auto;
+  }
+}
+.websocketLeftPanel {
+  height: 100%;
+  padding: 8px;
+  & .button {
+    border: none;
+    padding: 4px 0;
+  }
+  & .select .selectTrigger {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    background: transparent;
+    font-size: 12px;
+    padding: 0 4px;
+    padding-left: 6px;
+  }
+}
+.container {
+  min-height: 0;
+  height: 0;
+}
+.container .urlPanel .button:first-child {
+  width: auto;
+  min-width: 100px;
+  white-space: nowrap;
+}
+.connectionStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+  font-size: 11px;
+  white-space: nowrap;
+}
+.statusDot {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: currentColor;
+}
+.connectionStatus[data-status="connect"] {
+  color: var(--vscode-testing-iconPassed, #73c991);
+}
+.connectionStatus[data-status="connecting"] {
+  color: var(--vscode-editorWarning-foreground, #cca700);
+}
+.websocketLeftPanel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+.wsHeader {
+  flex-shrink: 0;
+  margin-bottom: 8px;
+}
+.messageFilters {
+  width: 100%;
+  flex-wrap: wrap;
+}
+.messageSearch {
+  flex: 1 1 120px;
+  min-width: 100px;
+}
+.messageList {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}

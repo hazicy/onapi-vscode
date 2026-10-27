@@ -1,0 +1,12 @@
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+.skeleton > span {
+  display: block;
+  height: 16px;
+  background: var(--color-bg-gray, #ddd);
+  border-radius: var(--vscode-cornerRadius-xSmall, 2px);
+}

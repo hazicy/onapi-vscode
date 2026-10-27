@@ -1,0 +1,58 @@
+.innerContent {
+  width: 100%;
+  gap: 2px;
+}
+.container {
+  width: 100%;
+  max-height: 500px;
+  overflow-y: auto;
+  & .innerContent .tipTitle {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--font-light-color);
+  }
+  & .innerContent .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 12px;
+    width: 100%;
+    box-sizing: border-box;
+    line-height: 32px;
+  }
+  & .innerContent .item:hover {
+    border-radius: 4px;
+    background: var(--vscode-editorHoverWidget-statusBarBackground);
+    cursor: pointer;
+  }
+  & .innerContent .item.active {
+    border-radius: 4px;
+    background: var(--popover-select-bg-hover-color);
+  }
+  & .innerContent .item .name {
+    flex: 1;
+    width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--font-content-color);
+  }
+  & .innerContent .item .render {
+    display: flex;
+    width: 190px;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--font-light-color);
+    gap: 8px;
+  }
+  & .innerContent .item .render.customDesc {
+    display: inline-block;
+    max-width: 190px;
+    text-align: right;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}

@@ -1,0 +1,78 @@
+.list {
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.item {
+  display: block;
+  box-sizing: border-box;
+  width: 224px;
+  height: 32px;
+  padding: 0 0 0 8px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: var(--font-size-14);
+  line-height: 32px;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.item:hover,
+.item:focus-visible {
+  color: var(--color-primary);
+  background-color: var(--color-primary-opacity);
+}
+
+.item:focus-visible,
+.trigger:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--font-light-color);
+  font: inherit;
+  cursor: pointer;
+}
+
+.trigger:hover,
+.trigger[data-popup-open] {
+  color: var(--color-primary);
+}
+
+.positioner {
+  z-index: 1050;
+}
+
+.popup {
+  padding: 12px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius, 6px);
+  background: var(--popover-select-bg-color, var(--color-bg-right));
+  color: var(--font-content-color);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 16%);
+}
+
+.tooltipPositioner {
+  z-index: 1070;
+}
+
+.tooltip {
+  max-width: 320px;
+  padding: 6px 8px;
+  border-radius: var(--border-radius, 6px);
+  background: var(--font-title-color, #222);
+  color: var(--color-bg-right, #fff);
+  font-size: var(--font-size-14);
+  overflow-wrap: anywhere;
+}

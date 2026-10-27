@@ -1,0 +1,73 @@
+.segmentedTabsContent {
+  min-height: 100px !important;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+  gap: 12px;
+  & .eventBtns .button {
+    padding: 0px 12px;
+    height: 24px;
+  }
+  & .eventBtns .selectAll {
+    padding: 0px !important;
+  }
+}
+.testingConfig {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.functional {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--table-header-bg-color);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  & .switchName {
+    cursor: pointer;
+  }
+}
+
+.functional .uploadWrapper {
+  background: var(--search-bg-color);
+}
+.functional {
+  & .uploadWrapper {
+    border-radius: 4px;
+    border: 1px solid var(--color-table-border);
+    height: 32px;
+  }
+  & .uploadWrapper.disabled {
+    cursor: not-allowed;
+  }
+}
+.functional {
+  & .fileNameWrap {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    line-height: 30px;
+    background: var(--search-bg-color);
+    white-space: nowrap;
+    padding: 0 4px;
+    border-radius: 4px;
+    border: 1px solid var(--vscode-editor-lineHighlightBorder, #262628);
+  }
+  & .fileNameWrap:hover {
+    border: 1px solid var(--color-primary);
+  }
+  & .fileNameWrap .name {
+    max-width: 180px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  & .fileNameWrap.disabled {
+    cursor: not-allowed;
+  }
+}

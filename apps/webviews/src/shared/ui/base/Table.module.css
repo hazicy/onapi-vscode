@@ -1,0 +1,49 @@
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+.table {
+  width: 100%;
+  overflow: auto;
+}
+.table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table th,
+.table td {
+  padding: var(--ui-table-padding, 6px 8px);
+  border-bottom: 1px solid var(--color-table-border, var(--color-border, #ddd));
+  text-align: left;
+}
+.table th {
+  background: var(
+    --ui-table-header-bg,
+    var(--table-header-bg-color, transparent)
+  );
+}
+.table.bordered td,
+.table.bordered th {
+  border-inline-end: 1px solid
+    var(--color-table-border, var(--color-border, #ddd));
+}
+.table tr:hover > td {
+  background: var(--color-bg-folder-hover, transparent);
+}
+.sortHeader {
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.table {
+  --ui-input-border: transparent;
+  --ui-input-focus-bg: var(--highlight-change-color);
+  --ui-select-border: transparent;
+  --ui-select-focus-bg: var(--highlight-change-color);
+}

@@ -1,0 +1,36 @@
+.customScriptContainer {
+  width: 100%;
+  height: 280px;
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.container {
+  & .customScriptContainer .codeEditorContainer {
+    flex: 1;
+    width: 10px;
+    height: 280px;
+  }
+  & .customScriptContainer .rightVarList {
+    width: 240px;
+    height: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+  }
+  & .customScriptContainer .rightVarList .varItem {
+    padding: 8px 16px;
+    width: 100%;
+    /* background-color: var(--color-bg-page); */
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    transition: all 0.3s;
+  }
+}
+.container .customScriptContainer .rightVarList .varItem:hover,
+.container .customScriptContainer .rightVarList .varItem.active {
+  background-color: var(--vscode-list-inactiveSelectionBackground);
+}

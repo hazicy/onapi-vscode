@@ -1,0 +1,130 @@
+.envSelectWrap {
+  padding: 4px 8px;
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+  border-right: 1px solid var(--color-table-border);
+  background-color: var(--search-big-bg-color);
+  cursor: pointer;
+}
+.iconManageEnv {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 8px;
+  width: 24px;
+  /* height: 26px; */
+  height: 100%;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  /* border: 1px solid var(--color-table-border); */
+  border: 1px solid transparent;
+  border-left: none;
+  background-color: var(--search-big-bg-color);
+  cursor: pointer;
+}
+.iconManageEnv:hover {
+  border-color: var(--color-primary);
+  border-left: 1px solid var(--color-primary);
+}
+.container {
+  width: 100%;
+  height: 100%;
+  & .envSelectWrap .icon {
+    font-size: var(--font-size-14);
+    color: var(--font-light-color);
+  }
+  & .envSelectWrap .title {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    max-width: 176px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: var(--font-size-14);
+    color: var(--font-content-color);
+  }
+  & .envSelectWrap .title i {
+    font-style: normal;
+  }
+  & .envSelectWrap .title .icon {
+    display: inline-block;
+    margin: 0 4px;
+    padding: 0 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    font-size: var(--font-size-12);
+    text-align: center;
+    color: #067ced !important;
+    background-color: #7fc50d;
+  }
+  & .envSelectWrap .title .name {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  & .iconManageEnv .icon {
+    font-size: 16px;
+    color: var(--icon-color);
+  }
+  &.envDropdownDisabled {
+    opacity: 0.3;
+  }
+}
+.container.envDropdownDisabled,
+.container.envDropdownDisabled .iconManageEnv,
+.container.envDropdownDisabled .envSelectWrap,
+.container.envDropdownDisabled .envSelectSetting {
+  cursor: not-allowed;
+}
+.envDropdownRender {
+  padding: 8px;
+  min-width: 240px;
+  border-radius: 8px;
+  /* border: 1px solid var(--color-border); */
+  background-color: var(--popover-select-bg-color);
+  box-shadow: 0 12px 18px -4px var(--box-shadow-modal-color);
+  & .dropdownMenu {
+    margin-top: 8px;
+    padding: 0;
+    box-shadow: none;
+    max-height: 260px;
+    overflow-y: auto;
+  }
+  & .dropdownMenu .dropdownMenuItem {
+    padding: 4px 8px;
+    height: 32px;
+  }
+  & .dropdownMenu .dropdownMenuItem .icon {
+    visibility: hidden;
+  }
+  & .dropdownMenu .dropdownMenuItem:hover .icon {
+    visibility: visible;
+  }
+  & .dropdownMenu .dropdownMenuItem .operateWrap .icon {
+    font-size: var(--font-size-14);
+    color: var(--icon-color);
+  }
+  & .envPopoverInput {
+    background: var(--vscode-input-background);
+    border: 1px solid var(--vscode-settings-numberInputBorder, transparent);
+  }
+  & .envPopoverInput svg {
+    color: var(--vscode-input-placeholderForeground);
+  }
+  & .addEnvBtn {
+    padding: 0;
+    height: auto;
+  }
+}
+.envLabel {
+  max-width: 300px;
+  & .name {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}

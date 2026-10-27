@@ -1,0 +1,30 @@
+/* Third-party DOM classes are matched only within the component selectors below. */
+.collapseContentBox {
+  padding: 0 !important;
+}
+.container {
+  height: 500px;
+  overflow: auto;
+}
+.versionEdit {
+  display: flex;
+  flex-direction: column;
+  height: 320px;
+  & .codeDiffHost {
+    height: 100%;
+    min-height: 0;
+  }
+  & [class~="cm-mergeView"] {
+    height: 100%;
+  }
+  & [class~="cm-mergeViewEditors"] {
+    height: 100%;
+  }
+  & [class~="cm-mergeViewEditor"] {
+    min-width: 0;
+    overflow: hidden;
+  }
+  & [class~="cm-editor"] {
+    height: 100%;
+  }
+}

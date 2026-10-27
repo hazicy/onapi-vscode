@@ -1,0 +1,59 @@
+.container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+  padding-bottom: 8px;
+  & > .urlGroupWrap {
+    flex: 1;
+    min-width: 0;
+    height: 32px;
+    padding: 0 4px 0 8px;
+    box-sizing: border-box;
+    border: 1px solid var(--vscode-input-border, #dfe4ee);
+    border-radius: var(--vscode-cornerRadius-small, 4px);
+    background: var(--vscode-input-background, var(--color-bg-right));
+    font-family: var(--vscode-editor-font-family, monospace);
+  }
+  & > .urlGroupWrap:focus-within {
+    border-color: var(--vscode-focusBorder, var(--color-primary));
+  }
+}
+.sendButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--vscode-cornerRadius-small, 4px);
+  background: transparent;
+  color: var(--vscode-textLink-foreground, #647da8);
+  cursor: pointer;
+  &:hover {
+    background: var(--vscode-toolbar-hoverBackground, #647da814);
+  }
+  &:focus-visible {
+    outline: 1px solid var(--vscode-focusBorder, var(--color-primary));
+    outline-offset: 1px;
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+.spinning {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spinning {
+    animation: none;
+  }
+}

@@ -1,0 +1,14 @@
+.label {
+  flex-shrink: 0;
+  width: 56px;
+  font-size: var(--font-size-14);
+}
+.selectArrow {
+  font-size: var(--font-size-12);
+}
+.container {
+}
+.desc {
+  font-size: 12px;
+  color: var(--font-light-color);
+}

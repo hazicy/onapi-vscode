@@ -1,0 +1,11 @@
+.upload {
+  display: inline-block;
+}
+
+.dropzone {
+  padding: 24px;
+  border: 1px dashed var(--color-border, #ddd);
+  border-radius: var(--vscode-cornerRadius-small, 4px);
+  text-align: center;
+  cursor: pointer;
+}

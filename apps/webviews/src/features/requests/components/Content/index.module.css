@@ -1,0 +1,56 @@
+.apiDebug {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-bg-right);
+  padding-top: 12px;
+  overflow: auto;
+  & > header {
+    padding: 0 16px;
+  }
+  & > header .button {
+    height: 32px;
+    width: 70px;
+  }
+  & > main {
+    flex: 1;
+    height: 0;
+  }
+}
+.saveDropDown {
+  padding: 8px;
+  padding-right: 0;
+  width: 200px;
+  height: 100%;
+  border-radius: 4px;
+  background-color: var(--popover-select-bg-color);
+  box-shadow:
+    0 6px 16px 0 #000000,
+    0 3px 6px -4px #000000,
+    0 9px 28px 8px #000000;
+  & [role="tree"] {
+    width: 100%;
+    background-color: var(--popover-select-bg-color);
+  }
+  & [role="tree"] [data-part="list"] {
+    padding-right: 12px;
+  }
+  & [role="tree"] [data-part="content"] {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 0;
+    height: 100%;
+  }
+  & [role="tree"] [data-part="content"] [data-part="title"] {
+    display: flex;
+    width: 100%;
+  }
+  & [role="tree"] [data-part="content"] [data-part="title"] .dropdownTreeTitle {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}

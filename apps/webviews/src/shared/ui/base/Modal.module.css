@@ -1,0 +1,52 @@
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+.container {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.mask {
+  position: absolute;
+  inset: 0;
+  background: var(--modal-mask-bg, #0007);
+  pointer-events: auto;
+}
+.modal {
+  position: relative;
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  padding: 16px 20px;
+  border-radius: var(--vscode-cornerRadius-medium, 6px);
+  background: var(--modal-content-bg, var(--color-bg-right, #fff));
+  color: var(--font-content-color, #222);
+  box-shadow: 0 8px 32px #0004;
+  pointer-events: auto;
+  outline: none;
+}
+.modal[hidden],
+.mask[hidden] {
+  display: none;
+}
+.modal > h2 {
+  font: inherit;
+  font-weight: 600;
+  margin: 0 20px 16px 0;
+}
+.close {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-size: 20px;
+  cursor: pointer;
+}

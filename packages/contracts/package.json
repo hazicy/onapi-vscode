@@ -1,0 +1,23 @@
+{
+  "name": "@onapi/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@onapi/http-model": "workspace:*",
+    "postman-collection": "^5.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "~26.6.5",
+    "@types/postman-collection": "^3.5.11",
+    "@types/react": "^19.3.0"
+  }
+}

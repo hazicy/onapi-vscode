@@ -1,0 +1,17 @@
+.title {
+  font-size: 16px;
+  font-family: 600;
+  line-height: 28px;
+  color: var(--font-title-color);
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: var(--search-big-select-color);
+  width: 400px;
+  padding: 20px;
+  border-left: 1px solid var(--color-table-border);
+  font-size: 14px;
+  gap: 16px;
+}

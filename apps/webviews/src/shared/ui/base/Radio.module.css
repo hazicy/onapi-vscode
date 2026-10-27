@@ -1,0 +1,35 @@
+.flex {
+  display: flex;
+}
+.radio:focus-visible {
+  outline: 1px solid
+    var(--control-focus-border, var(--vscode-focusBorder, #1677ff));
+  outline-offset: 2px;
+}
+.checkLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.radio {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--check-box-border-color, #888);
+  border-radius: var(--vscode-cornerRadius-xSmall, 2px);
+  background: transparent;
+  color: #fff;
+}
+.radio {
+  border-radius: 50%;
+}
+.radio[data-checked] {
+  border: 5px solid var(--color-primary, #1677ff);
+}
+.radio[data-disabled] {
+  opacity: 0.5;
+}

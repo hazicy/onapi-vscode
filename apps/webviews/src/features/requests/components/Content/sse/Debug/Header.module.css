@@ -1,0 +1,14 @@
+.button {
+  height: 36px !important;
+}
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 4px;
+  & > .urlGroupWrap {
+    flex: 1;
+  }
+}

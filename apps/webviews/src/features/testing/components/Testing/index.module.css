@@ -1,0 +1,25 @@
+.folderName {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--font-title-color);
+}
+.historyReport {
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--font-light-color);
+  text-decoration: underline;
+}
+.historyReport:hover {
+  color: var(--color-primary);
+}
+.folderSendingBtn {
+  background: var(--icon-color);
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--color-bg-right);
+  padding: 16px;
+  gap: 12px;
+}

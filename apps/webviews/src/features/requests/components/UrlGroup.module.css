@@ -1,0 +1,305 @@
+/* Third-party DOM classes are matched only within the component selectors below. */
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 999;
+  padding: 2px;
+  padding-left: 0;
+  height: 36px;
+  border-radius: var(--border-radius);
+  background-color: var(--search-big-bg-color);
+  border: 1px solid var(--color-border);
+}
+.container .line {
+  height: 18px;
+  width: 1px;
+  background: var(--color-border);
+  margin-right: 4px;
+}
+.container .selectArrow {
+  transform: rotate(0deg);
+  font-size: var(--font-size-14);
+  transition: all 0.3s linear;
+}
+.container .button {
+  height: 36px !important;
+}
+.container .select {
+  height: 30px;
+}
+.container .selectTrigger {
+  box-shadow: none !important;
+}
+.container .selectTrigger .selectSelectionSearch input {
+  height: 100% !important;
+}
+.container .selectOpen .selectArrow {
+  transform: rotate(180deg);
+  transition: all 0.3s linear;
+}
+.container .rightSelectHttp .selectTrigger {
+  width: 100px;
+  border: none !important;
+}
+.container .select:not(.rightSelect) {
+  /* margin-right: 8px; */
+}
+.container .select:not(.rightSelect) .selectTrigger {
+  background: transparent !important;
+  max-width: 110px;
+  border: none;
+  border-radius: 0;
+}
+.container .select:not(.rightSelect) .selectSelectionItem {
+  padding-right: 16px;
+  font-weight: 600;
+  color: var(--color-success);
+}
+.container .select:not(.rightSelect).post .selectSelectionItem {
+  color: var(--color-warning);
+}
+.container .select:not(.rightSelect).get .selectSelectionItem {
+  color: var(--color-success);
+}
+.container .select:not(.rightSelect).put .selectSelectionItem {
+  color: #ff0;
+  color: var(--color-info);
+}
+.container .select:not(.rightSelect).delete .selectSelectionItem {
+  color: var(--color-error);
+}
+.container .select:not(.rightSelect).patch .selectSelectionItem {
+  color: undefined;
+}
+.container .select:not(.rightSelect).raw .selectSelectionItem {
+  color: var(--color-warning);
+}
+.container .select:not(.rightSelect).socket.io .selectSelectionItem {
+  color: var(--color-warning);
+}
+.container .selectSelectionItem {
+  font-size: 12px !important;
+}
+.container .envDesc {
+  overflow: hidden;
+  font-size: var(--font-size-14);
+  line-height: 36px;
+  white-space: nowrap;
+  color: var(--font-light-color);
+  text-overflow: ellipsis;
+}
+.container .rightSelect {
+  position: relative;
+}
+.container .rightSelect .selectTrigger {
+  background: transparent !important;
+  border-radius: 0;
+}
+.container .rightSelect:hover .selectTrigger {
+  /* background-color: var(--popover-select-bg-color) !important; */
+}
+.container .rightSelect.select:focus-within .selectTrigger {
+  /* background-color: var(--popover-select-bg-color) !important; */
+}
+.container .miniEditor {
+  padding: 0 4px;
+  height: 30px;
+  /* border-radius: var(--border-radius); */
+  border: 1px solid transparent;
+  transition: all 0.3s;
+  line-height: 28px;
+  /* background-color: var(--background-color-fifth); */
+}
+.container .miniEditor::placeholder {
+  color: var(--vscode-input-placeholderForeground);
+}
+.container .miniEditor:hover,
+.container .miniEditor.editorActive {
+  border: 1px solid var(--color-primary);
+  /* color: var(--content-color-primary); */
+  background-color: var(--color-bg-right);
+  appearance: none;
+}
+.container .miniEditor.editorActive {
+  height: 30px;
+}
+.container .grpcUrlName {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 0 4px;
+  height: 100%;
+  font-size: var(--font-size-14);
+  color: var(--font-content-color);
+}
+.container .grpcMethod {
+  color: var(--font-content-color);
+}
+.container .urlGroupInput {
+  border-color: transparent;
+}
+.container .urlGroupInput:hover {
+  border-color: var(--color-primary);
+}
+.container .urlGroupContainer {
+  display: flex;
+  flex-grow: 1;
+  width: 0;
+  height: 100%;
+}
+.container .urlGroupContainer .envDesc {
+  max-width: 50%;
+}
+.methodDropdown {
+  display: flex;
+  flex-direction: column;
+}
+.methodDropdown .selectItem {
+  cursor: pointer;
+}
+.methodDropdown .selectItem .selectItemIconDelete {
+  display: none;
+}
+.methodDropdown .selectItem:hover {
+  background: var(--color-bg-folder-hover);
+}
+.methodDropdown .selectItem:hover .selectItemIconDelete {
+  display: block;
+}
+.methodDropdown .selectItem:hover .selectItemIconDelete:hover {
+  color: var(--color-primary);
+}
+.optionsItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+}
+.optionsItem .label {
+  max-width: 100px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.optionsItem .uri {
+  flex: 1;
+  width: 0;
+  text-align: right;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--font-light-color);
+}
+
+.container > .select,
+.container .urlGroupContainer > .select {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  min-height: 28px;
+  flex-wrap: nowrap;
+}
+.container > .select:first-child {
+  min-width: 84px;
+  max-width: 100px;
+  font-weight: 600;
+  color: var(--color-success);
+}
+.container > .select.post {
+  color: var(--color-warning);
+}
+.container > .select.put {
+  color: var(--color-info);
+}
+.container > .select.delete {
+  color: var(--color-error);
+}
+.container .line {
+  flex-shrink: 0;
+  height: 20px;
+  background: var(--vscode-widget-border, var(--color-border));
+}
+.container .urlGroupContainer .miniEditor,
+.container .urlGroupContainer .miniEditor:hover,
+.container .urlGroupContainer .miniEditor.editorActive {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+.container .rightSelect {
+  border-left: 1px solid var(--vscode-widget-border, var(--color-border));
+  margin-right: 4px;
+}
+.container .select [role="combobox"]:focus-visible {
+  outline: none;
+}
+
+.container > .select:first-child input::placeholder {
+  color: inherit;
+  opacity: 1;
+}
+
+.methodDropdown {
+  font-size: 12px;
+}
+.methodDropdown .selectItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 28px;
+  padding: 5px 12px;
+  border-radius: 3px;
+  line-height: 18px;
+}
+.methodPopup {
+  overflow: visible;
+  border-radius: var(--vscode-cornerRadius-small, 4px);
+}
+.methodPopup > .selectItemList {
+  max-height: min(280px, calc(var(--available-height, 400px) - 64px));
+  overflow-y: auto;
+}
+.methodPopup .selectItem {
+  position: relative;
+  min-height: 26px;
+  padding: 4px 16px 4px 28px;
+  font-size: var(--vscode-font-size, 13px);
+  line-height: 18px;
+}
+.methodPopup .selectItem > :last-child:not(:first-child) {
+  position: absolute;
+  left: 8px;
+  margin: 0;
+}
+.methodPopup .selectItem[data-highlighted] {
+  background: var(
+    --vscode-list-hoverBackground,
+    var(--popover-select-bg-hover-color)
+  );
+  color: var(--vscode-list-hoverForeground, inherit);
+}
+.methodCheck {
+  flex-shrink: 0;
+}
+.methodDropdown .selectItem .selectItemOptionContent {
+  flex: 1;
+}
+.methodDropdown .selectItem[data-selected] {
+  color: var(
+    --vscode-list-activeSelectionForeground,
+    var(--font-content-color)
+  );
+  background: var(
+    --vscode-list-activeSelectionBackground,
+    var(--popover-select-bg-hover-color)
+  );
+}
+.container > .select:first-child {
+  max-width: 110px;
+}

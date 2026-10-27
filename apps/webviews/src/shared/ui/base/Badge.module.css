@@ -1,0 +1,10 @@
+.badge {
+  display: inline-flex;
+  position: relative;
+}
+.badge > sup {
+  background: var(--color-error, #f92814);
+  color: white;
+  border-radius: var(--vscode-cornerRadius-circle, 9999px);
+  padding: 1px 5px;
+}
