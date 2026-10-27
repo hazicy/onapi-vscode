@@ -1,13 +1,13 @@
-import { WebSocketDetailsData } from "@onapi/http-model/requests/types/websocket";
+import { WebSocketDetailsData } from "@onapi/domain/requests/types/websocket";
 import { WebSocketAdapter } from "@onapi/runtime/websocket/adapter";
 import { globalConfig } from "../../../app/config";
 import * as vscode from "vscode";
-import { ProjectConfigType } from "@onapi/http-model/project/types/index";
+import { ProjectConfigType } from "@onapi/domain/project/types/index";
 import { prepareSocketOptions } from "./prepare-socket-options";
 import { getApiList } from "../request-storage";
 import { getCurrentProjectConfig } from "../../../platform/storage/project-config";
-import { getSocketCollection } from "@onapi/http-model/request-utils";
-import { SysConfig } from "@onapi/http-model/settings/types/settings";
+import { getSocketCollection } from "@onapi/domain/request-utils";
+import { SysConfig } from "@onapi/domain/settings/types/settings";
 import { applySocketSettings } from "./socket-settings";
 import { randomUUID } from "node:crypto";
 import { executionService } from "../../../platform/execution/service";

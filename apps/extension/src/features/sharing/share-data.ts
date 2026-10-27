@@ -1,14 +1,14 @@
 import { forEach } from "lodash";
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
-import { ShareInfoData } from "@onapi/http-model/sharing/types/share";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
+import { ShareInfoData } from "@onapi/domain/sharing/types/share";
 import { exportMethod } from "@onapi/api-converter/export";
 import { isPlainObject } from "lodash";
 import * as vscode from "vscode";
-import { DEFAULT_PROJECT } from "@onapi/http-model/project/constants/project";
+import { DEFAULT_PROJECT } from "@onapi/domain/project/constants/project";
 import { getCurrentProjectConfig } from "../../platform/storage/project-config";
-import { EnvList } from "@onapi/http-model/environment/types/index";
-import { AnyObject } from "@onapi/http-model/types/common";
-import { Project } from "@onapi/http-model/auth/types/index";
+import { EnvList } from "@onapi/domain/environment/types/index";
+import { AnyObject } from "@onapi/domain/types/common";
+import { Project } from "@onapi/domain/auth/types/index";
 import { globalConfig } from "../../app/config";
 
 export const createShare = async (

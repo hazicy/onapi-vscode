@@ -1,6 +1,6 @@
-import { bufferToRaw } from "@onapi/http-model/utils/response-tools";
+import { bufferToRaw } from "@onapi/domain/utils/response-tools";
 import type { SerializedResponse } from "@onapi/contracts";
-import type { ApiSendingData } from "@onapi/http-model/requests/types/send";
+import type { ApiSendingData } from "@onapi/domain/requests/types/send";
 
 /** Prepare download bytes without changing the response held in the store. */
 export function responseDownload(

@@ -1,8 +1,8 @@
-import { requestUrl, requestMethod, editedUrl } from "@onapi/http-model";
+import { requestUrl, requestMethod, editedUrl } from "@onapi/domain";
 import styles from "./Header.module.css";
 
-import { ApiComponentType } from "@onapi/http-model/requests/types/api";
-import { AnyObject } from "@onapi/http-model/types/common";
+import { ApiComponentType } from "@onapi/domain/requests/types/api";
+import { AnyObject } from "@onapi/domain/types/common";
 import { Button, Flex } from "@/shared/ui/base";
 import { produce } from "immer";
 import React, { FC, useMemo, useState } from "react";
@@ -12,7 +12,7 @@ import { genQueryByUrl, genRestfulByUrl } from "@/features/requests/utils/apis";
 import UrlGroup from "@/features/requests/editor/UrlGroup";
 import useApis from "@/features/requests/store/useApis";
 
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
 
 const Header: FC<ApiComponentType> = ({ apisData, onApisDataChange, type }) => {
   const { t } = useTranslation();

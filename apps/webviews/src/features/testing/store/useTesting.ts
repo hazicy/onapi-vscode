@@ -1,21 +1,21 @@
-import { ADD_CASE_DEFAULT } from "@onapi/http-model/testing/constants/default/index";
+import { ADD_CASE_DEFAULT } from "@onapi/domain/testing/constants/default/index";
 import { create } from "@/shared/state/store";
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import {
   EventItem,
   TestingData,
   TestingDataListItem,
   TestingDetailData,
   TestingSendingData,
-} from "@onapi/http-model/testing/types/index";
+} from "@onapi/domain/testing/types/index";
 import {
   RunnerTestingItem,
   Settings,
-} from "@onapi/http-model/testing/types/common";
+} from "@onapi/domain/testing/types/common";
 import {
   TestingReportList,
   TestingReportListRes,
-} from "@onapi/http-model/testing/types/res/index";
+} from "@onapi/domain/testing/types/res/index";
 
 type State = {
   // raw base data flat list

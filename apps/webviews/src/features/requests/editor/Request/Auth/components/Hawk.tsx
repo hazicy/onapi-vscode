@@ -11,7 +11,7 @@ import GhostCollapse from "@/shared/ui/GhostCollapse";
 import {
   AUTH_ENUM,
   HAWK_ALGOTITH_OPTIONS,
-} from "@onapi/http-model/requests/constants/auth";
+} from "@onapi/domain/requests/constants/auth";
 
 const options = map(HAWK_ALGOTITH_OPTIONS, (item) => ({
   label: item,

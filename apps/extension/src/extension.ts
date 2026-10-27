@@ -19,8 +19,8 @@ import { handleMessage } from "./features/sidebar/sidebar-handler";
 import {
   DEFAULT_PROJECT,
   DEFAULT_TEAM_PROJECT,
-} from "@onapi/http-model/project/constants/project";
-import { Project, TeamItem } from "@onapi/http-model/auth/types/index";
+} from "@onapi/domain/project/constants/project";
+import { Project, TeamItem } from "@onapi/domain/auth/types/index";
 import { randomUUID } from "node:crypto";
 import { registerSidebarTree } from "./features/sidebar/register";
 

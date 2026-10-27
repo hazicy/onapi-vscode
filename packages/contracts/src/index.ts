@@ -3,7 +3,7 @@ import type {
   HttpProjectConfig,
   EnvironmentScope,
   SerializedCookieJar,
-} from "@onapi/http-model";
+} from "@onapi/domain";
 import type { RequestDefinition, ResponseDefinition } from "postman-collection";
 
 export const REQUEST_EXECUTION_EVENT = "requestExecutionEvent" as const;

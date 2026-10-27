@@ -8,7 +8,7 @@ const root = path.resolve(import.meta.dirname, "..");
 const owners = [
   "apps/extension",
   "apps/webviews",
-  "packages/http-model",
+  "packages/domain",
   "packages/contracts",
   "packages/core",
   "packages/runtime",

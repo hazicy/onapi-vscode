@@ -2,7 +2,7 @@ import { useMemoizedFn } from "ahooks";
 import type {
   GraphQLChangeFuncType,
   GraphQLDetailsData,
-} from "@onapi/http-model/requests/types/graphql";
+} from "@onapi/domain/requests/types/graphql";
 import GraphQLQueryContext from "./context/GraphQLQueryContext";
 import GraphQLQueryEditor from "./GraphQLQueryEditor";
 
@@ -19,7 +19,7 @@ export default function GraphQLQuery({
   onChange,
 }: Props) {
   const update = useMemoizedFn(
-    (body: import("@onapi/http-model").HttpRequestBody) =>
+    (body: import("@onapi/domain").HttpRequestBody) =>
       onChange("request", { ...requestData, body }),
   );
   return (

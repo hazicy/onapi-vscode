@@ -8,8 +8,8 @@ import { useTranslation } from "react-i18next";
 import { Input, ModalProps } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import { isJson } from "@onapi/http-model/utils/data-tools";
-import { isXml } from "@onapi/http-model/utils/response-tools";
+import { isJson } from "@onapi/domain/utils/data-tools";
+import { isXml } from "@onapi/domain/utils/response-tools";
 import { XMLBuilder } from "fast-xml-parser";
 import jsonpath from "jsonpath";
 import {

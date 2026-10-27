@@ -1,8 +1,8 @@
 import type {
   OnapiGraphQLRequest,
   OnapiGraphQLQuery,
-} from "@onapi/http-model/import/types/onapi";
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
+} from "@onapi/domain/import/types/onapi";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import i18next from "i18next";
 import {
   cloneDeep,
@@ -15,46 +15,43 @@ import {
   keys,
 } from "lodash";
 
-import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
-import { DEFAULT_WEBSOCKET_MESSAGE } from "@onapi/http-model/requests/constants/request";
-import { Auth } from "@onapi/http-model/requests/types/auth";
+import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
+import { DEFAULT_WEBSOCKET_MESSAGE } from "@onapi/domain/requests/constants/request";
+import { Auth } from "@onapi/domain/requests/types/auth";
 import {
   ApisBaseDataItem,
   ExpectItem,
-} from "@onapi/http-model/requests/types/base";
+} from "@onapi/domain/requests/types/base";
 import {
   GrpcProtos,
   GrpcProtosServices,
   GrpcProtosServicesMethods,
   IncludesInfo,
-} from "@onapi/http-model/requests/types/grpc";
+} from "@onapi/domain/requests/types/grpc";
 import {
   ApisBaseRequestBody,
   SocketRequestBody,
-} from "@onapi/http-model/requests/types/request";
-import { BaseResponse } from "@onapi/http-model/requests/types/response";
-import { SocketDetailsData } from "@onapi/http-model/requests/types/socket";
-import { SocketServiceDetailsData } from "@onapi/http-model/requests/types/socket-service";
+} from "@onapi/domain/requests/types/request";
+import { BaseResponse } from "@onapi/domain/requests/types/response";
+import { SocketDetailsData } from "@onapi/domain/requests/types/socket";
+import { SocketServiceDetailsData } from "@onapi/domain/requests/types/socket-service";
 import {
   SocketIoConfig,
   SocketIoRequest,
-} from "@onapi/http-model/requests/types/socketio";
+} from "@onapi/domain/requests/types/socketio";
 import {
   MessageItem,
   WebSocketRequest,
   WebSocketConfig,
-} from "@onapi/http-model/requests/types/websocket";
-import {
-  EnvListItem,
-  ServerItem,
-} from "@onapi/http-model/environment/types/index";
-import type { OnapiGlobalParams } from "@onapi/http-model/import/types/onapi";
+} from "@onapi/domain/requests/types/websocket";
+import { EnvListItem, ServerItem } from "@onapi/domain/environment/types/index";
+import type { OnapiGlobalParams } from "@onapi/domain/import/types/onapi";
 import {
   ApiProjectImportParams,
   GlobalVars,
-} from "@onapi/http-model/project/types/export";
-import { genUrlByQuery } from "@onapi/http-model/request-utils";
-import { getSubstring } from "@onapi/http-model/request-utils";
+} from "@onapi/domain/project/types/export";
+import { genUrlByQuery } from "@onapi/domain/request-utils";
+import { getSubstring } from "@onapi/domain/request-utils";
 
 export const completionServerList = (
   server_list: ServerItem[],

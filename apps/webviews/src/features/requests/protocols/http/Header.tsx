@@ -1,6 +1,6 @@
-import { requestUrl, requestMethod, editedUrl } from "@onapi/http-model";
-import { ApiComponentType } from "@onapi/http-model/requests/types/api";
-import { AnyObject } from "@onapi/http-model/types/common";
+import { requestUrl, requestMethod, editedUrl } from "@onapi/domain";
+import { ApiComponentType } from "@onapi/domain/requests/types/api";
+import { AnyObject } from "@onapi/domain/types/common";
 import { produce } from "immer";
 import React, { FC, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

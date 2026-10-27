@@ -13,9 +13,9 @@ import {
 } from "lodash-es";
 
 import useProjectSetting from "@/features/project/store/useProjectSetting";
-import { CustomAttributeItem } from "@onapi/http-model/project/types/index";
+import { CustomAttributeItem } from "@onapi/domain/project/types/index";
 import { isJSON } from "@/shared/utils/common";
-import { EnvListItem } from "@onapi/http-model/environment/types/index";
+import { EnvListItem } from "@onapi/domain/environment/types/index";
 
 // Authentication methods
 const authList: { [k: string]: string } = {

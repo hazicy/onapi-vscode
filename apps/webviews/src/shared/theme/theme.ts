@@ -1,4 +1,4 @@
-import { PRIMARY_COLOR_MAP } from "@onapi/http-model/constants/common";
+import { PRIMARY_COLOR_MAP } from "@onapi/domain/constants/common";
 import { hexToRGBA } from "@/shared/utils/common";
 
 /**

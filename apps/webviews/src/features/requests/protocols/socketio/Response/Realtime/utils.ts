@@ -1,4 +1,4 @@
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { includes, isPlainObject, isString, toString, trim } from "lodash-es";
 
 // Handle websocket data

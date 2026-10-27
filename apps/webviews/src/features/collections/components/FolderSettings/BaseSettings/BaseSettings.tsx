@@ -9,8 +9,8 @@ import { produce } from "immer";
 
 import useFolders from "@/features/collections/hooks/useFolders";
 import useApis from "@/features/requests/store/useApis";
-import { FolderDetailsData } from "@onapi/http-model/requests/types/folder";
-import { ChangeFuncType } from "@onapi/http-model/types/common";
+import { FolderDetailsData } from "@onapi/domain/requests/types/folder";
+import { ChangeFuncType } from "@onapi/domain/types/common";
 
 import ServerSelect from "./ServerSelect";
 

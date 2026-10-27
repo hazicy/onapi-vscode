@@ -19,7 +19,7 @@ import Empty from "../Empty";
 import Button from "@/shared/ui/Button";
 import useApis from "@/features/requests/store/useApis";
 import useWebSocketStore from "@/features/requests/store/useApis/websocket";
-import { MessageItem } from "@onapi/http-model/requests/types/websocket";
+import { MessageItem } from "@onapi/domain/requests/types/websocket";
 
 import useWebSocket from "../../useWebSocket";
 import Header from "./Header";

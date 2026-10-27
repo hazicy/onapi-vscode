@@ -21,8 +21,8 @@ import { find, includes, isArray, isString } from "lodash-es";
 
 import AppIcon from "@/shared/ui/AppIcon";
 import Tooltip from "@/shared/ui/Tooltip";
-import { PROTOCOL_OPTIONS } from "@onapi/http-model/requests/constants/index";
-import { METHODS_MAP } from "@onapi/http-model/constants/common";
+import { PROTOCOL_OPTIONS } from "@onapi/domain/requests/constants/index";
+import { METHODS_MAP } from "@onapi/domain/constants/common";
 import useTheme from "@/shared/hooks/useTheme";
 import { openEnvPage } from "@/features/requests/events/env";
 import useApis from "@/features/requests/store/useApis";

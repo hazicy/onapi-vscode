@@ -11,8 +11,8 @@ import ResponseRealtimeContext from "@/features/requests/response/Response/compo
 import {
   ApiComponentType,
   ApiDetailsData,
-} from "@onapi/http-model/requests/types/api";
-import { DirectionType } from "@onapi/http-model/types/common";
+} from "@onapi/domain/requests/types/api";
+import { DirectionType } from "@onapi/domain/types/common";
 import { importDelay } from "@/shared/utils/common";
 import ToolBar from "../http/ToolBar";
 import Header from "./Header";

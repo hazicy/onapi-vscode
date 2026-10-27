@@ -3,7 +3,7 @@ import { Flex } from "@/shared/ui/base";
 import React, { lazy, useEffect, useState } from "react";
 
 import useApis from "@/features/requests/store/useApis";
-import { ApiDetailsData, ApisData } from "@onapi/http-model/requests/types/api";
+import { ApiDetailsData, ApisData } from "@onapi/domain/requests/types/api";
 
 // Reuse the preload promise and render its resolved component synchronously.
 // React.lazy alone suspends on its first render even if import() is cached.
@@ -64,10 +64,10 @@ const GraphqlDebug = protocolLoaders.graphql.Component;
 if (window.vscodeData?.kind) {
   void preloadRequestProtocol(window.vscodeData.kind)?.catch(() => {});
 }
-import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
-import { WebSocketDetailsData } from "@onapi/http-model/requests/types/websocket";
-import { SocketIoDetailsData } from "@onapi/http-model/requests/types/socketio";
-import { GraphQLDetailsData } from "@onapi/http-model/requests/types/graphql";
+import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
+import { WebSocketDetailsData } from "@onapi/domain/requests/types/websocket";
+import { SocketIoDetailsData } from "@onapi/domain/requests/types/socketio";
+import { GraphQLDetailsData } from "@onapi/domain/requests/types/graphql";
 
 interface RequestWorkspaceProps {
   value?: ApiDetailsData;

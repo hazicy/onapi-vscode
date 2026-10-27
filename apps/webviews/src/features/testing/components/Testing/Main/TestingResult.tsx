@@ -12,10 +12,10 @@ import {
   round,
   toUpper,
 } from "lodash-es";
-import { formatTimeToDateTimeLong } from "@onapi/http-model/utils/time";
+import { formatTimeToDateTimeLong } from "@onapi/domain/utils/time";
 import { getPercent } from "../utils";
-import { TestingSendingData } from "@onapi/http-model/testing/types/index";
-import { Settings } from "@onapi/http-model/testing/types/common";
+import { TestingSendingData } from "@onapi/domain/testing/types/index";
+import { Settings } from "@onapi/domain/testing/types/common";
 import { isAssertPass } from "@/shared/utils/common";
 import { t } from "i18next";
 

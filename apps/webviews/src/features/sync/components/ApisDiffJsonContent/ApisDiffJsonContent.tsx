@@ -11,7 +11,7 @@ import { Empty } from "@/shared/ui";
 import Edit from "./Edit";
 import useFormat from "./hooks";
 
-import { EnvListItem } from "@onapi/http-model/environment/types/index";
+import { EnvListItem } from "@onapi/domain/environment/types/index";
 
 interface Props {
   prevDetails: EnvListItem;

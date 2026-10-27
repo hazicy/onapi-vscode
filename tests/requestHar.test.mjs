@@ -6,10 +6,7 @@ import { build } from "esbuild";
 import load from "./helpers/loadTypeScript.mjs";
 
 const require = createRequire(import.meta.url);
-const { requestUrl } = await load(
-  "packages/http-model/src/index.ts",
-  () => ({}),
-);
+const { requestUrl } = await load("packages/domain/src/index.ts", () => ({}));
 const bundle = await build({
   entryPoints: [
     "apps/extension/src/features/requests/execution/http-runner.ts",
@@ -29,7 +26,7 @@ const bundle = await build({
         builder.onResolve(
           {
             filter:
-              /^(.*\/(?:project-config|request-storage|report-storage|collection-order|import-curl|prepare-options|html|host-utils|user-config)|\.\.\/request-status|@onapi\/http-model)$/,
+              /^(.*\/(?:project-config|request-storage|report-storage|collection-order|import-curl|prepare-options|html|host-utils|user-config)|\.\.\/request-status|@onapi\/domain)$/,
           },
           () => ({
             path: "host-stubs",

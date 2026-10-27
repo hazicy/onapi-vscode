@@ -1,5 +1,5 @@
-import { INIT_DEFAULT_API_DATAS } from "@onapi/http-model/requests/constants/default";
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
+import { INIT_DEFAULT_API_DATAS } from "@onapi/domain/requests/constants/default";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { cloneDeep, isArray } from "lodash";
 import * as vscode from "vscode";
 import { getVscodeFontFamily, getVscodeFontSize } from "../platform/host-utils";

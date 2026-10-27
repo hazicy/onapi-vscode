@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
-import { STATUS_CODE } from "@onapi/http-model/constants/common";
+import { STATUS_CODE } from "@onapi/domain/constants/common";
 import { Button, Flex } from "@/shared/ui/base";
 import AppIcon from "@/shared/ui/AppIcon";
 

@@ -10,7 +10,7 @@ import { cloneDeep, isPlainObject, keyBy, keys, mapValues } from "lodash-es";
 import Table from "@/shared/components/BasicTable/BasicTable";
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
-import { IEnvDataItem } from "@onapi/http-model/project/types/variable";
+import { IEnvDataItem } from "@onapi/domain/project/types/variable";
 
 import ValueInput from "./ValueInput";
 

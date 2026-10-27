@@ -7,7 +7,7 @@ import { Checkbox, CheckboxProps } from "@/shared/ui/base";
 import { useSafeState } from "ahooks";
 import { includes, reduce, size } from "lodash-es";
 
-import { TreeDataItem } from "@onapi/http-model/requests/types/api";
+import { TreeDataItem } from "@onapi/domain/requests/types/api";
 
 import i18next from "i18next";
 

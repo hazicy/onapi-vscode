@@ -1,8 +1,8 @@
-import type { ApiSendingData } from "@onapi/http-model/requests/types/send";
+import type { ApiSendingData } from "@onapi/domain/requests/types/send";
 import {
   HTTP_TIME_ARRAY,
   HTTPS_TIME_ARRAY,
-} from "@onapi/http-model/requests/constants/response";
+} from "@onapi/domain/requests/constants/response";
 
 type Timings = NonNullable<ApiSendingData["response"]>["formatTimings"];
 const timingNames: Record<string, string> = {

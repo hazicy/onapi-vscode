@@ -6,7 +6,7 @@ import {
   TeamItem,
   UserInfo,
   UserListRes,
-} from "@onapi/http-model/auth/types/index";
+} from "@onapi/domain/auth/types/index";
 
 type State = {
   /**current user readonly permission */

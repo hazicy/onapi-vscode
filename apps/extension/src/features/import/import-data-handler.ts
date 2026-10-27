@@ -12,11 +12,8 @@ import {
 } from "../../platform/storage/project-config";
 import { curlImport } from "../curl/import-curl";
 import { importMethod } from "@onapi/api-converter/export";
-import { IMPORT_TYPE_ENUM } from "@onapi/http-model/settings/constants/settings";
-import {
-  fromPostmanCollection,
-  createDefaultHttpConfig,
-} from "@onapi/http-model";
+import { IMPORT_TYPE_ENUM } from "@onapi/domain/settings/constants/settings";
+import { fromPostmanCollection, createDefaultHttpConfig } from "@onapi/domain";
 
 export async function handelImportDataMessage(
   message: { action: string; data: any },

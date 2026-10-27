@@ -102,7 +102,7 @@ async function fixture() {
         };
       if (id === "../request-status")
         return { setRequestResult: (...args) => results.push(args) };
-      if (id === "@onapi/http-model")
+      if (id === "@onapi/domain")
         return {
           createDefaultHttpConfig: () => config().http,
           toPostmanCollection() {},

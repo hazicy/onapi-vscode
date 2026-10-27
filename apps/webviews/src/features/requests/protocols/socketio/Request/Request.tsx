@@ -13,8 +13,8 @@ import { useTableColumnSwitchConfig } from "@/shared/hooks";
 import useApis from "@/features/requests/store/useApis";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import useWebSocketStore from "@/features/requests/store/useApis/websocket";
-import { ApisBaseDataItem } from "@onapi/http-model/requests/types/base";
-import { SocketIoDetailsData } from "@onapi/http-model/requests/types/socketio";
+import { ApisBaseDataItem } from "@onapi/domain/requests/types/base";
+import { SocketIoDetailsData } from "@onapi/domain/requests/types/socketio";
 import { genUrlByQuery } from "@/features/requests/utils/apis";
 import {
   calcTabLineBodyHeaderNum,

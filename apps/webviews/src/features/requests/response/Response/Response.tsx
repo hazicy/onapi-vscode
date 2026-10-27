@@ -1,7 +1,7 @@
 import type { HttpExecutionState } from "@/features/requests/execution/http-state";
 import { sdkResponseView } from "@/features/requests/utils/executionView";
 import classNames from "classnames";
-import { responseText } from "@onapi/http-model";
+import { responseText } from "@onapi/domain";
 import styles from "./Response.module.css";
 import { FC, lazy, memo, Suspense, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -26,14 +26,14 @@ import LineTabs from "@/shared/components/LineTabs/LineTabs";
 import SuspenseContent from "@/shared/components/SuspenseContent";
 import Sending from "@/features/requests/editor/Sending";
 
-import { STATUS_CODE } from "@onapi/http-model/constants/common";
+import { STATUS_CODE } from "@onapi/domain/constants/common";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import { useGlobal } from "@/app/store";
-import { BaseResponse } from "@onapi/http-model/requests/types/response";
+import { BaseResponse } from "@onapi/domain/requests/types/response";
 import {
   ApiSendingData,
   ApiSendingDataSSE,
-} from "@onapi/http-model/requests/types/send";
+} from "@onapi/domain/requests/types/send";
 
 import Empty from "./components/Empty";
 

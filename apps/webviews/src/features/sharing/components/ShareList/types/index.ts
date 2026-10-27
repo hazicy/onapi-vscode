@@ -1,4 +1,4 @@
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import type { TabPaneProps } from "@/shared/ui/base";
 
 export type PanelProps = {

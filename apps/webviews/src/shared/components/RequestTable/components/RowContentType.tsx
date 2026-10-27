@@ -8,7 +8,7 @@ import { AutoComplete } from "@/shared/ui/base";
 
 import { map } from "lodash-es";
 
-import { REQUEST_CONTENT_TYPE } from "@onapi/http-model/requests/constants/index";
+import { REQUEST_CONTENT_TYPE } from "@onapi/domain/requests/constants/index";
 
 import { ItemProps } from "../types";
 

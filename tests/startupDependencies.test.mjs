@@ -22,10 +22,7 @@ const original = {
   },
 };
 const plain = (value) => JSON.parse(JSON.stringify(value));
-const tools = await load(
-  "packages/http-model/src/utils/data-tools.ts",
-  () => ({}),
-);
+const tools = await load("packages/domain/src/utils/data-tools.ts", () => ({}));
 
 test("lightweight query and JSON helpers preserve existing data semantics", () => {
   for (const value of [
@@ -132,7 +129,7 @@ test("lightweight IDs retain the existing seed, timestamp, radix and sequence la
     }
   }
   const actual = await load(
-    "packages/http-model/src/utils/data-tools.ts",
+    "packages/domain/src/utils/data-tools.ts",
     () => ({}),
     {
       Date: FixedDate,

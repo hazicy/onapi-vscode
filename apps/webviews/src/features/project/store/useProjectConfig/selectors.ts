@@ -1,4 +1,4 @@
-import type { HttpProjectConfig } from "@onapi/http-model";
+import type { HttpProjectConfig } from "@onapi/domain";
 import type { VariableScopeDefinition } from "postman-collection";
 
 type ProjectState = { http: HttpProjectConfig };

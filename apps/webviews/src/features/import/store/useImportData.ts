@@ -1,7 +1,7 @@
-import type { HttpProjectConfig } from "@onapi/http-model";
+import type { HttpProjectConfig } from "@onapi/domain";
 import { create } from "@/shared/state/store";
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
-import { EnvList } from "@onapi/http-model/environment/types/index";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
+import { EnvList } from "@onapi/domain/environment/types/index";
 import { IDataModel } from "@/features/schemas/types";
 
 type State = {

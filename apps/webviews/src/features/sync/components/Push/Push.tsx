@@ -21,7 +21,7 @@ import {
   getEnvConflictList,
 } from "@/features/sync/utils/push";
 import { resolveEnvironmentConflicts } from "@/features/sync/utils/environmentDiff";
-import { findApiConflicts } from "@onapi/http-model/sync/utils/api-versions";
+import { findApiConflicts } from "@onapi/domain/sync/utils/api-versions";
 import { PushApiData, PushEnvData } from "./type";
 import { produce } from "immer";
 import {

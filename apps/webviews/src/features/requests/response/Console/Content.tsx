@@ -4,7 +4,7 @@ import ReactJson from "@microlink/react-json-view";
 
 import { Flex } from "@/shared/ui/base";
 
-import { isJson } from "@onapi/http-model/utils/data-tools";
+import { isJson } from "@onapi/domain/utils/data-tools";
 import {
   includes,
   isArray,
@@ -16,11 +16,11 @@ import {
 
 import AppIcon from "@/shared/ui/AppIcon";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
-import { ApiSendResponseDataConsoleItem } from "@onapi/http-model/requests/types/send";
+import { ApiSendResponseDataConsoleItem } from "@onapi/domain/requests/types/send";
 
 import { ConsoleContentProps } from "./types";
 
-import { formatTime, TIME_FORMAT } from "@onapi/http-model/utils/time";
+import { formatTime, TIME_FORMAT } from "@onapi/domain/utils/time";
 
 const CONSOLE_LEVEL_ICON_MAP: Partial<{ [x in keyof Console]: string }> = {
   error: "circle-alert",

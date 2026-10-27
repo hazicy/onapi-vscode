@@ -18,12 +18,12 @@ import {
 import JSON5 from "json5";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import useProjectSetting from "@/features/project/store/useProjectSetting";
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
-import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
+import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 import { getUpwardFolderId } from "../../../shared/utils/common";
-import { ServerItem } from "@onapi/http-model/environment/types/index";
-import { SysConfig } from "@onapi/http-model/settings/types/settings";
-import { GraphQLDetailsData } from "@onapi/http-model/requests/types/graphql";
+import { ServerItem } from "@onapi/domain/environment/types/index";
+import { SysConfig } from "@onapi/domain/settings/types/settings";
+import { GraphQLDetailsData } from "@onapi/domain/requests/types/graphql";
 
 // Get global variables
 export const getGlobals = async () => {

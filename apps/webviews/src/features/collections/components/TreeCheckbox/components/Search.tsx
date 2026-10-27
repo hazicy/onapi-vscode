@@ -13,7 +13,7 @@ import {
   DEFAULT_API_MARK_ENUM,
   DEFAULT_API_MARK_ENUM_ALL_OPTION,
   DEFAULT_API_MARK_ENUM_LIST,
-} from "@onapi/http-model/requests/constants/index";
+} from "@onapi/domain/requests/constants/index";
 
 const DEFAULT_API_MARK_LIST = concat(
   [DEFAULT_API_MARK_ENUM_ALL_OPTION],

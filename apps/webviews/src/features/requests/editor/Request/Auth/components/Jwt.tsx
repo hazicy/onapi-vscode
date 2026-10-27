@@ -14,7 +14,7 @@ import {
   AUTH_INSERT_LOCATION,
   AUTH_INSERT_VALUE,
   JWT_ALGORITHM_OPTIONS,
-} from "@onapi/http-model/requests/constants/auth";
+} from "@onapi/domain/requests/constants/auth";
 
 import CodeEditor from "./CodeEditor";
 

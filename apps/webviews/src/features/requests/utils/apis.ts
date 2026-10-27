@@ -1,9 +1,9 @@
-import { requestUrl, requestMethod } from "@onapi/http-model";
-import { getCollectionServerId } from "@onapi/http-model/request-utils";
+import { requestUrl, requestMethod } from "@onapi/domain";
+import { getCollectionServerId } from "@onapi/domain/request-utils";
 import {
   ApisBaseDataItem,
   TypeFiledType,
-} from "@onapi/http-model/requests/types/base";
+} from "@onapi/domain/requests/types/base";
 import urlParse from "url-parse";
 import {
   isURL,
@@ -27,23 +27,23 @@ import {
   CONTENT_TYPES,
   OPENAPI_TYPES,
   STATUS_CODE,
-} from "@onapi/http-model/constants/common";
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
-import { AnyObject } from "@onapi/http-model/types/common";
+} from "@onapi/domain/constants/common";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
+import { AnyObject } from "@onapi/domain/types/common";
 import {
   ApiDetailsData,
   ApisData,
   ParametersItem,
-} from "@onapi/http-model/requests/types/api";
-import { EnvListItem } from "@onapi/http-model/environment/types/index";
+} from "@onapi/domain/requests/types/api";
+import { EnvListItem } from "@onapi/domain/environment/types/index";
 import useApis from "@/features/requests/store/useApis";
-import { ApiSendResponseData } from "@onapi/http-model/requests/types/send";
-import { formatTime, TIME_FORMAT } from "@onapi/http-model/utils/time";
+import { ApiSendResponseData } from "@onapi/domain/requests/types/send";
+import { formatTime, TIME_FORMAT } from "@onapi/domain/utils/time";
 import dayjs from "dayjs";
-import { ApisBaseRequestBody } from "@onapi/http-model/requests/types/request";
-import { DEFAULT_API_RESPONSE } from "@onapi/http-model/requests/constants/response";
-import { WebSocketDetailsData } from "@onapi/http-model/requests/types/websocket";
-import { SocketIoDetailsData } from "@onapi/http-model/requests/types/socketio";
+import { ApisBaseRequestBody } from "@onapi/domain/requests/types/request";
+import { DEFAULT_API_RESPONSE } from "@onapi/domain/requests/constants/response";
+import { WebSocketDetailsData } from "@onapi/domain/requests/types/websocket";
+import { SocketIoDetailsData } from "@onapi/domain/requests/types/socketio";
 import { UrlGroupProps } from "@/features/requests/editor/UrlGroup";
 import { produce } from "immer";
 import { CurlDataType } from "@/features/requests/types/other";
@@ -467,4 +467,4 @@ export {
   getHistoryOpensData,
   getCollectionServerId,
   getParameterDataFilterContentLength,
-} from "@onapi/http-model/request-utils";
+} from "@onapi/domain/request-utils";

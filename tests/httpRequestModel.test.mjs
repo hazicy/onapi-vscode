@@ -2,12 +2,12 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import load, { nativeDependency } from "./helpers/loadTypeScript.mjs";
 
-const model = await load("packages/http-model/src/index.ts", nativeDependency);
+const model = await load("packages/domain/src/index.ts", nativeDependency);
 const { requestCollection } = await load(
   "apps/extension/src/features/requests/execution/http-runner.ts",
   (id) => {
     if (id === "./merge-http-state") return { mergeHttpState() {} };
-    if (id === "@onapi/http-model") return model;
+    if (id === "@onapi/domain") return model;
     if (id === "@onapi/runtime/http/adapter") return { HttpAdapter: class {} };
     if (id === "../../../platform/execution/service")
       return { executionService: {} };

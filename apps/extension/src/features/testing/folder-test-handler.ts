@@ -5,7 +5,7 @@ import { runCollection, stopWorker } from "../requests/execution/http-runner";
 import { getCurrentProjectConfig } from "../../platform/storage/project-config";
 import { getApiListName } from "../requests/request-storage";
 import { getTestingFolderData, setTestingFolderData } from "./report-storage";
-import type { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
 export async function handelFolderTestMessage(
   message: { action: string; data: any },

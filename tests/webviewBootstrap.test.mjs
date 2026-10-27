@@ -9,10 +9,9 @@ test("embedded request data preserves script-like bodies without breaking the HT
     async (id) => {
       if (id === "os") return { platform: () => "darwin" };
       if (
-        [
-          "@/shared/locale/language",
-          "@onapi/http-model/locale/language",
-        ].includes(id)
+        ["@/shared/locale/language", "@onapi/domain/locale/language"].includes(
+          id,
+        )
       )
         return { language: "en" };
       return {};

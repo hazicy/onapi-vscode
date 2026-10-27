@@ -2,7 +2,7 @@ import { createFeaturePanel } from "../../platform/webviews/create-panel";
 import { globalConfig, PANEL_OPTIONS } from "../../app/config";
 import * as vscode from "vscode";
 import { handelEnvMessage } from "./environment-handler";
-import { ENV_MANAGE_ENUM } from "@onapi/http-model/environment";
+import { ENV_MANAGE_ENUM } from "@onapi/domain/environment";
 
 export const createEnvironmentPanel = (
   data: any,

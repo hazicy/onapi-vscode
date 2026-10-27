@@ -1,4 +1,4 @@
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import { cloneDeep, forEach, isArray, isNumber } from "lodash";
 import * as vscode from "vscode";
 import {

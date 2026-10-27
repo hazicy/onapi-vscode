@@ -1,10 +1,10 @@
 import { initReactI18next } from "react-i18next";
 
 import i18n from "i18next";
-import { language } from "@onapi/http-model/locale/language";
+import { language } from "@onapi/domain/locale/language";
 
-import en from "@onapi/http-model/locale/en_US.json";
-import cn from "@onapi/http-model/locale/zh_CN.json";
+import en from "@onapi/domain/locale/en_US.json";
+import cn from "@onapi/domain/locale/zh_CN.json";
 
 const resources = {
   "zh-cn": {

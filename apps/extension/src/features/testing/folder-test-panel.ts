@@ -7,8 +7,8 @@ import * as vscode from "vscode";
 import { getTestingFolderData, getTestingFolderName } from "./report-storage";
 import { showTabName } from "../../platform/host-utils";
 import { handelFolderTestMessage } from "./folder-test-handler";
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
-import { ADD_CASE_DEFAULT } from "@onapi/http-model/testing/constants/default/index";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
+import { ADD_CASE_DEFAULT } from "@onapi/domain/testing/constants/default/index";
 import { cloneDeep } from "lodash";
 
 export const createFolderTestPanel = (

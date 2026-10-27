@@ -168,11 +168,11 @@ test("native sidebar panels, test commands and workspace request history", async
             builder.onResolve(
               {
                 filter:
-                  /^vscode$|(^|\/)(project-config|request-storage|report-storage|collection-order|import-curl|prepare-options|html|host-utils|user-config|storage|sidebar-handler|commands|data-tools|share-data|config)$|^@onapi\/http-model\/requests\/constants\/(common|index)$/,
+                  /^vscode$|(^|\/)(project-config|request-storage|report-storage|collection-order|import-curl|prepare-options|html|host-utils|user-config|storage|sidebar-handler|commands|data-tools|share-data|config)$|^@onapi\/domain\/requests\/constants\/(common|index)$/,
               },
               (args) => {
                 const key =
-                  args.path === "@onapi/http-model/requests/constants/index"
+                  args.path === "@onapi/domain/requests/constants/index"
                     ? "constants"
                     : ({
                         "project-config": "utils",

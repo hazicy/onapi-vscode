@@ -15,23 +15,22 @@ export default async (
     if (id === "lodash") return nativeDependency(id);
     if (id === "i18next") return { t: (key) => key };
     if (
-      [
-        "@/shared/utils/dataTools",
-        "@onapi/http-model/utils/data-tools",
-      ].includes(id)
+      ["@/shared/utils/dataTools", "@onapi/domain/utils/data-tools"].includes(
+        id,
+      )
     )
       return { snowflakeId: () => `id-${++nextId}` };
     if (
       [
         "@/features/requests/constants/auth",
-        "@onapi/http-model/requests/constants/auth",
+        "@onapi/domain/requests/constants/auth",
       ].includes(id)
     )
       return { DEFAULT_AUTH: { type: "noauth" } };
     if (
       [
         "@/features/requests/constants/response",
-        "@onapi/http-model/requests/constants/response",
+        "@onapi/domain/requests/constants/response",
       ].includes(id)
     )
       return {

@@ -7,8 +7,8 @@ import { produce } from "immer";
 import TitleEdit from "@/shared/ui/TitleEdit";
 import EnvDropdown from "@/features/environment/components/EnvDropdown";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
-import { ChangeFuncType } from "@onapi/http-model/types/common";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
+import { ChangeFuncType } from "@onapi/domain/types/common";
 
 import LayoutControl from "@/shared/components/ResizablePanels/LayoutControl";
 

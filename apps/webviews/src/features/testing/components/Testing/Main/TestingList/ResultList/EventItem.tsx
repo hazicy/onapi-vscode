@@ -5,7 +5,7 @@ import HttpExecDetail from "@/features/requests/response/HttpExecDetail/HttpExec
 import { AppIcon } from "@/shared/ui";
 import PrefixIcon from "@/shared/ui/PrefixIcon";
 import useTheme from "@/shared/hooks/useTheme";
-import { RuntimeResponse } from "@onapi/http-model/testing/types/index";
+import { RuntimeResponse } from "@onapi/domain/testing/types/index";
 import CustomPopover from "@/shared/ui/Popover";
 import { Checkbox, Flex, Tooltip, Typography } from "@/shared/ui/base";
 import { Drawer } from "@/shared/ui/Drawer";

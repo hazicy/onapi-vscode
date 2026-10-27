@@ -16,7 +16,7 @@ import { hexToRGBA } from "@/shared/utils/common";
 import Request from "./Request";
 import Response from "./Response";
 
-import { RuntimeResponse } from "@onapi/http-model/testing/types/index";
+import { RuntimeResponse } from "@onapi/domain/testing/types/index";
 
 export type HttpExecDetailProps = {
   httpExecDetail: RuntimeResponse;

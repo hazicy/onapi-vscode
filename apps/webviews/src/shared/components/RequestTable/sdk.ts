@@ -1,4 +1,4 @@
-import type { ApisBaseDataItem } from "@onapi/http-model/requests/types/base";
+import type { ApisBaseDataItem } from "@onapi/domain/requests/types/base";
 
 /** Native SDK parameters edited by the HTTP request panel. */
 export interface SdkParameter {

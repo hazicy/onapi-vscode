@@ -1,14 +1,10 @@
 import * as vscode from "vscode";
-import type { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import type { SidebarTreeNode } from "./tree-data";
 import { countFolderRequests } from "./tree-data";
 import { getApiListName } from "../requests/request-storage";
 import { getProtocolIcon, getSidebarIcon } from "./protocol-icon";
-import {
-  isHttpCollectionItem,
-  requestUrl,
-  requestMethod,
-} from "@onapi/http-model";
+import { isHttpCollectionItem, requestUrl, requestMethod } from "@onapi/domain";
 
 function configureRequestItem(
   item: vscode.TreeItem,

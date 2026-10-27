@@ -1,4 +1,4 @@
-import { DEFAULT_API_MARK_ENUM } from "@onapi/http-model/requests/constants/index";
+import { DEFAULT_API_MARK_ENUM } from "@onapi/domain/requests/constants/index";
 
 export type TreeDataFilterParams = {
   value: string;
@@ -6,7 +6,7 @@ export type TreeDataFilterParams = {
 };
 
 import type { DataNode } from "@/shared/ui/base";
-import type { TreeDataItem } from "@onapi/http-model/requests/types/api";
+import type { TreeDataItem } from "@onapi/domain/requests/types/api";
 
 /** Presentation nodes retain source metadata separately from their rendered title. */
 export type CollectionTreeNode = DataNode & { data?: TreeDataItem };

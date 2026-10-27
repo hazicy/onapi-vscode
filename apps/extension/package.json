@@ -50,7 +50,7 @@
     "@onapi/api-converter": "workspace:*",
     "@onapi/contracts": "workspace:*",
     "@onapi/core": "workspace:*",
-    "@onapi/http-model": "workspace:*",
+    "@onapi/domain": "workspace:*",
     "@onapi/runtime": "workspace:*",
     "axios": "^1.20.0",
     "curl-to-postmanv2": "^1.8.7",

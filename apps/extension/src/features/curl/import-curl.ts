@@ -1,10 +1,10 @@
 import { head, isPlainObject } from "lodash";
-import { fromCurlPostmanRequest } from "@onapi/http-model/curl/utils/postman-request";
+import { fromCurlPostmanRequest } from "@onapi/domain/curl/utils/postman-request";
 import * as vscode from "vscode";
 import curlToPostman from "curl-to-postmanv2";
-import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
-import { DEFAULT_APIS_BASE_DATA } from "@onapi/http-model/requests/constants/default";
-import { getHistoryOpensData } from "@onapi/http-model/request-utils";
+import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
+import { DEFAULT_APIS_BASE_DATA } from "@onapi/domain/requests/constants/default";
+import { getHistoryOpensData } from "@onapi/domain/request-utils";
 
 export const curlImport = (parsedValue: string) => {
   return new Promise((resolve, reject) => {

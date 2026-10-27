@@ -11,7 +11,7 @@ import { isObject } from "lodash-es";
 import ApisDiffJsonContent from "@/features/sync/components/ApisDiffJsonContent/ApisDiffJsonContent";
 import { Modal } from "@/shared/ui/Modal";
 
-import { EnvListItem } from "@onapi/http-model/environment/types/index";
+import { EnvListItem } from "@onapi/domain/environment/types/index";
 
 interface Props {
   curItem: {

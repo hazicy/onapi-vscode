@@ -12,8 +12,8 @@ import { useTableColumnSwitchConfig } from "@/shared/hooks";
 
 import useApis from "@/features/requests/store/useApis";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
-import { ApisBaseDataItem } from "@onapi/http-model/requests/types/base";
-import { WebSocketDetailsData } from "@onapi/http-model/requests/types/websocket";
+import { ApisBaseDataItem } from "@onapi/domain/requests/types/base";
+import { WebSocketDetailsData } from "@onapi/domain/requests/types/websocket";
 import {
   calcTabLineBodyHeaderNum,
   getAllParentDirectories,

@@ -1,6 +1,6 @@
 import { selectRequestIndex } from "@/features/requests/store/useApis";
 import classNames from "classnames";
-import { requestUrl, editedUrl } from "@onapi/http-model";
+import { requestUrl, editedUrl } from "@onapi/domain";
 import styles from "../../RequestWorkspace.module.css";
 import styles2 from "./UrlPanel.module.css";
 import { memo, useEffect, useMemo, useState } from "react";
@@ -20,11 +20,11 @@ import useUserConfig from "@/features/auth/store/useUserConfig";
 import {
   ApiComponentType,
   type GraphQLDetailsData,
-} from "@onapi/http-model/requests/types/graphql";
+} from "@onapi/domain/requests/types/graphql";
 import { getCollectionServerId } from "@/features/requests/utils/apis";
 import { convertToSaveFolderTree } from "@/shared/utils/common";
 
-import { AnyObject } from "@onapi/http-model/types/common";
+import { AnyObject } from "@onapi/domain/types/common";
 
 const items: MenuProps["items"] = [
   {

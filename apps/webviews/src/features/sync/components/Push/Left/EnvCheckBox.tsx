@@ -3,14 +3,14 @@ import { useTranslation } from "react-i18next";
 import { Flex } from "@/shared/ui/base";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import TreeCheckbox from "@/features/collections/components/TreeCheckbox/TreeCheckbox";
-import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
+import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 import { PushEnvData } from "../type";
 import { cloneDeep, isArray } from "lodash-es";
 import { AppIcon } from "@/shared/ui";
 import { openEnvPage } from "@/features/requests/events/env";
 import VersionComparison from "@/features/sync/components/VersionComparison";
 
-import { EnvListItem } from "@onapi/http-model/environment/types/index";
+import { EnvListItem } from "@onapi/domain/environment/types/index";
 
 type PushLeftProps = {
   pushEnvData: Partial<PushEnvData>;

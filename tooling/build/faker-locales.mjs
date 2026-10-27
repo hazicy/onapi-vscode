@@ -1,7 +1,7 @@
 import path from "node:path";
 import { createRequire } from "node:module";
 const require = createRequire(
-  new URL("../../packages/http-model/package.json", import.meta.url),
+  new URL("../../packages/domain/package.json", import.meta.url),
 );
 
 const modern = path.dirname(require.resolve("@faker-js/faker"));

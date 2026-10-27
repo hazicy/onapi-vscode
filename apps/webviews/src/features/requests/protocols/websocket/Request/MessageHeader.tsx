@@ -10,7 +10,7 @@ import { includes, size, trim } from "lodash-es";
 import Button from "@/shared/ui/Button";
 import useApis from "@/features/requests/store/useApis";
 import useApisWebSocket from "@/features/requests/store/useApis/websocket";
-import { WebSocketDetailsData } from "@onapi/http-model/requests/types/websocket";
+import { WebSocketDetailsData } from "@onapi/domain/requests/types/websocket";
 
 interface Props {
   value: any;

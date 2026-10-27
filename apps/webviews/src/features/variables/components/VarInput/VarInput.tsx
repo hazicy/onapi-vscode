@@ -171,7 +171,7 @@ export default function VarInput(props: Partial<VarInputProps>) {
     try {
       const [{ fromCurlPostmanRequest }, { convert, validate }] =
         await Promise.all([
-          import("@onapi/http-model/curl/utils/postman-request"),
+          import("@onapi/domain/curl/utils/postman-request"),
           import("curl-to-postmanv2"),
         ]);
       // Loading the converter must not overwrite edits made while it was loading.

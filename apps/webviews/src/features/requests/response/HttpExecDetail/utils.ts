@@ -1,4 +1,4 @@
-import { AnyObject } from "@onapi/http-model/types/common";
+import { AnyObject } from "@onapi/domain/types/common";
 
 export const formatObjectToArrayKeyValue = (obj: AnyObject) => {
   const list = [];

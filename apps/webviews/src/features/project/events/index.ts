@@ -1,5 +1,5 @@
-import { MIGRATE_RESULT_STATUS } from "@onapi/http-model/import/constants/migrate/index";
-import { TeamItem } from "@onapi/http-model/auth/types/index";
+import { MIGRATE_RESULT_STATUS } from "@onapi/domain/import/constants/migrate/index";
+import { TeamItem } from "@onapi/domain/auth/types/index";
 import dayjs from "dayjs";
 import { filter, find, get, isEmpty, last, map, size, sortBy } from "lodash-es";
 

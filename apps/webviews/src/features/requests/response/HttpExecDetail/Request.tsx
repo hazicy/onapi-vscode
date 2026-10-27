@@ -7,7 +7,7 @@ import LineTabs from "@/shared/components/LineTabs/LineTabs";
 import NewJsonView from "@/shared/components/NewJsonView";
 import Empty from "@/shared/ui/Empty";
 import Tooltip from "@/shared/ui/Tooltip";
-import { AnyObject } from "@onapi/http-model/types/common";
+import { AnyObject } from "@onapi/domain/types/common";
 
 import { HttpExecDetailProps } from "./HttpExecDetail";
 import { formatObjectToArrayKeyValue } from "./utils";

@@ -7,7 +7,7 @@ import { useSafeState } from "ahooks";
 import { cloneDeep, isEqual } from "lodash-es";
 
 import { Button } from "@/shared/ui";
-import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
+import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 
 import useApis from "@/features/requests/store/useApis";
 import useProjectConfig from "@/features/project/store/useProjectConfig";

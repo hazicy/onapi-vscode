@@ -6,7 +6,7 @@ import {
   APIPOST_PLATFORM,
   APIPOST_TERMINAL,
   APIPOST_VERSION,
-} from "@onapi/http-model/auth/constants/user";
+} from "@onapi/domain/auth/constants/user";
 
 type Props = UploadProps;
 

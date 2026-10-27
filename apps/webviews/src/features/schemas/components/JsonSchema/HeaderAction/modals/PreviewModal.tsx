@@ -40,7 +40,7 @@ const PreviewModal: React.FC<any> = (props) => {
       return;
     }
     const mock_rules = getProxyMockRulesList();
-    import("@onapi/http-model/mock/schema")
+    import("@onapi/domain/mock/schema")
       .then(({ default: MockSchema }) =>
         new (MockSchema as any)({ app: "onapi" }).mock(schemaData, mock_rules),
       )

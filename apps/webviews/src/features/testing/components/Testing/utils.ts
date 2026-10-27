@@ -1,8 +1,8 @@
-import { STATUS_CODE } from "@onapi/http-model/constants/common";
+import { STATUS_CODE } from "@onapi/domain/constants/common";
 import useTesting from "@/features/testing/store/useTesting";
 import { produce } from "immer";
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
-import { TestingReportList } from "@onapi/http-model/testing/types/res/index";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
+import { TestingReportList } from "@onapi/domain/testing/types/res/index";
 
 /**
  *  Calculate pass rate

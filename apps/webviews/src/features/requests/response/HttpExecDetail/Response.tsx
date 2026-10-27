@@ -1,7 +1,7 @@
 import styles from "./Response.module.css";
 import { useTranslation } from "react-i18next";
 
-import { bufferToRaw } from "@onapi/http-model/utils/response-tools";
+import { bufferToRaw } from "@onapi/domain/utils/response-tools";
 import dayjs from "dayjs";
 import { isEmpty, size } from "lodash-es";
 
@@ -9,7 +9,7 @@ import Console from "@/features/requests/response/Console/Console";
 import LineTabs from "@/shared/components/LineTabs/LineTabs";
 import Empty from "@/shared/ui/Empty";
 import Tooltip from "@/shared/ui/Tooltip";
-import { ApiSendResponseDataResponseArrCookiesItem } from "@onapi/http-model/requests/types/send";
+import { ApiSendResponseDataResponseArrCookiesItem } from "@onapi/domain/requests/types/send";
 
 import { HttpExecDetailProps } from "./HttpExecDetail";
 import BasicTable from "../../../../shared/components/BasicTable/BasicTable";

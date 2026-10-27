@@ -23,10 +23,9 @@ const { default: Table } = await load(
         jsxs: (type, props) => ({ type, props }),
       };
     if (
-      [
-        "@/shared/utils/dataTools",
-        "@onapi/http-model/utils/data-tools",
-      ].includes(id)
+      ["@/shared/utils/dataTools", "@onapi/domain/utils/data-tools"].includes(
+        id,
+      )
     )
       return { snowflakeId: () => `id-${++nextId}` };
     if (id === "@dnd-kit/sortable") return nativeDependency(id);
@@ -38,7 +37,7 @@ const { default: Table } = await load(
     if (
       [
         "@/features/requests/constants/auth",
-        "@onapi/http-model/requests/constants/auth",
+        "@onapi/domain/requests/constants/auth",
       ].includes(id)
     )
       return { AUTH_OAUTH2_SEND_IN: [] };

@@ -21,7 +21,7 @@ import { BasicTable } from "@/shared/components";
 import Tree from "@/features/collections/components/Tree/Tree";
 
 import { Button, Empty, Tooltip } from "@/shared/ui";
-import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
+import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 import useFolders from "@/features/collections/hooks/useFolders";
 import {
   APIPOST_FULL_ENV_OPTIONS,
@@ -30,9 +30,9 @@ import {
   IMPORT_TYPE_ENUM,
   ImportLocationEnum,
   SWAGGER_FULL_MODAL_OPTIONS,
-} from "@onapi/http-model/settings/constants/settings";
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
-import { EnvList } from "@onapi/http-model/environment/types/index";
+} from "@onapi/domain/settings/constants/settings";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
+import { EnvList } from "@onapi/domain/environment/types/index";
 import { IDataModel } from "@/features/schemas/types";
 import { arrayToTreeObject } from "@/shared/utils/common";
 

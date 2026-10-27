@@ -1,5 +1,5 @@
-import { getSubstring } from "@onapi/http-model/request-utils";
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
+import { getSubstring } from "@onapi/domain/request-utils";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { has } from "lodash";
 import {
   completionApis,

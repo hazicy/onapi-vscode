@@ -11,7 +11,7 @@ import { CodeEditor } from "@/shared/components";
 import VarInsertPop from "@/features/variables/components/VarInsertPop/VarInsertPop";
 
 import { Button, AppIcon } from "@/shared/ui";
-import { ApisBaseRequestBody } from "@onapi/http-model/requests/types/request";
+import { ApisBaseRequestBody } from "@onapi/domain/requests/types/request";
 
 import VisualizationContext from "./visualizationContext";
 

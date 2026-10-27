@@ -21,11 +21,11 @@ import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
 
 import useProjectConfig from "@/features/project/store/useProjectConfig";
-import type { EnvironmentScope as EnvListItem } from "@onapi/http-model";
+import type { EnvironmentScope as EnvListItem } from "@onapi/domain";
 type EnvList = EnvListItem[];
 import { openUrl } from "@/shared/utils/open";
 
-import { DEFAULT_DATA_ITEM } from "@onapi/http-model/environment";
+import { DEFAULT_DATA_ITEM } from "@onapi/domain/environment";
 import ValueInput from "../ValueInput";
 
 import { IEnvDataItem } from "./types";

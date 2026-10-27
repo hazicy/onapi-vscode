@@ -12,7 +12,7 @@ import GhostCollapse from "@/shared/ui/GhostCollapse";
 import {
   AUTH_ENUM,
   JWT_ALGORITHM_OPTIONS,
-} from "@onapi/http-model/requests/constants/auth";
+} from "@onapi/domain/requests/constants/auth";
 
 import CodeEditor from "./CodeEditor";
 import PrivateCom from "./PrivateCom";

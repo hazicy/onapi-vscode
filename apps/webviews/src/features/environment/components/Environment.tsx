@@ -4,7 +4,7 @@ import { Button } from "@/shared/ui/base";
 import { AppIcon } from "@/shared/ui";
 import { useTranslation } from "react-i18next";
 
-import { ENV_LOCAL_ITEM, ENV_MANAGE_ENUM } from "@onapi/http-model/environment";
+import { ENV_LOCAL_ITEM, ENV_MANAGE_ENUM } from "@onapi/domain/environment";
 import CookieManage from "./CookieManage/CookieManage";
 import EnvManage from "./EnvManage/EnvManage";
 import ParamsManage from "./ParamsManage";
@@ -12,7 +12,7 @@ import VariableManage from "./VariableManage";
 import { head } from "lodash-es";
 import Menus from "./Menus";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
 
 interface Props {
   open: boolean;

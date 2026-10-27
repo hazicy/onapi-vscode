@@ -1,4 +1,4 @@
-import type { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import { getCollectionChildIds } from "../collections/collection-tree";
 
 /** Keep the selected folder hierarchy, excluding unsupported requests. */

@@ -8,10 +8,10 @@ import cn from "classnames";
 
 import { isArray } from "lodash-es";
 import { Empty } from "@/shared/ui";
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import ApisColorPrefixIcon from "@/shared/ui/ApisColorPrefixIcon";
 import { getBaseIconOfTargetType } from "@/shared/utils/common";
-import { formatTimeToDateTimeLong } from "@onapi/http-model/utils/time";
+import { formatTimeToDateTimeLong } from "@onapi/domain/utils/time";
 import { useMemo } from "react";
 
 const TabsPanel = (props: TabsProps) => {

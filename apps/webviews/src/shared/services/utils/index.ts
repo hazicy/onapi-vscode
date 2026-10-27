@@ -13,7 +13,7 @@ import {
   APIPOST_PLATFORM,
   APIPOST_TERMINAL,
   APIPOST_VERSION,
-} from "@onapi/http-model/auth/constants/user";
+} from "@onapi/domain/auth/constants/user";
 
 import useUiServices from "@/shared/state/ui-services";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";

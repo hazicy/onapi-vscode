@@ -6,7 +6,7 @@ import { Flex, Segmented, SegmentedProps, message } from "@/shared/ui/base";
 
 import { useMemoizedFn, useSafeState } from "ahooks";
 import { importParameters, exportParameters } from "./convert";
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { hasIn, includes, isArray, isString } from "lodash-es";
 
 import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";

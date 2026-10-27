@@ -16,7 +16,7 @@ import useProjectSetting from "@/features/project/store/useProjectSetting";
 import {
   FuncListRenderItem,
   InnerFuncListItem,
-} from "@onapi/http-model/requests/types/variable";
+} from "@onapi/domain/requests/types/variable";
 
 interface Props {
   open: boolean;

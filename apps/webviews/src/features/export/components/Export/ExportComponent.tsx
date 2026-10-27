@@ -11,7 +11,7 @@ import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
 import Radio from "@/shared/ui/Radio";
 import Tooltip from "@/shared/ui/Tooltip";
-import { EXPORT_TYPE_LIST } from "@onapi/http-model/settings/constants/settings";
+import { EXPORT_TYPE_LIST } from "@onapi/domain/settings/constants/settings";
 
 interface Props {
   onClick?: ({ exportType, version }: { [k: string]: string }) => Promise<void>;

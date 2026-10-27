@@ -3,7 +3,7 @@ import { memo, useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AutoComplete, UploadProps, message } from "@/shared/ui/base";
-import { REQUEST_CONTENT_TYPE } from "@onapi/http-model/requests/constants/index";
+import { REQUEST_CONTENT_TYPE } from "@onapi/domain/requests/constants/index";
 
 import { includes, isEqual } from "lodash-es";
 import classNames from "classnames";
@@ -16,7 +16,7 @@ import { ItemProps } from "../types";
 
 import VarInsertPop from "@/features/variables/components/VarInsertPop/VarInsertPop";
 import { VAR_OPTIONS_KEY } from "@/features/variables/constants/variable";
-import { InsertAction } from "@onapi/http-model/requests/types/variable";
+import { InsertAction } from "@onapi/domain/requests/types/variable";
 
 const MAX_SIZE = 5 * 1024 * 1024;
 

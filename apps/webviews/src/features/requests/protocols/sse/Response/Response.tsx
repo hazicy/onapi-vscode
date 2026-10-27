@@ -10,7 +10,7 @@ import useApis from "@/features/requests/store/useApis";
 import {
   ApiComponentType,
   ApiDetailsData,
-} from "@onapi/http-model/requests/types/api";
+} from "@onapi/domain/requests/types/api";
 
 import Realtime from "./components/Realtime";
 

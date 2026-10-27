@@ -5,7 +5,7 @@ import { Dropdown, MenuProps } from "@/shared/ui/base";
 
 import { isNumber } from "lodash-es";
 
-import { TreeDataItem } from "@onapi/http-model/requests/types/api";
+import { TreeDataItem } from "@onapi/domain/requests/types/api";
 
 type Props = Partial<
   TreeDataItem & {

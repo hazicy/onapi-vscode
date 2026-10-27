@@ -37,7 +37,7 @@
     "@microlink/react-json-view": "^1.31.42",
     "@onapi/api-converter": "workspace:*",
     "@onapi/contracts": "workspace:*",
-    "@onapi/http-model": "workspace:*",
+    "@onapi/domain": "workspace:*",
     "@prettier/plugin-xml": "^3.4.2",
     "@tanstack/react-table": "^9.3.1",
     "ahooks": "^3.10.0",

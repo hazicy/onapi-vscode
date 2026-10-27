@@ -1,9 +1,9 @@
 import * as vscode from "vscode";
-import { createDefaultHttpConfig } from "@onapi/http-model";
+import { createDefaultHttpConfig } from "@onapi/domain";
 import { getApiList } from "../requests/request-storage";
 import { getCurrentProjectConfig } from "../../platform/storage/project-config";
 import { getUserConfig } from "../../app/user-config";
-import { EXPORT_TYPE_ENUM } from "@onapi/http-model/settings/constants/settings";
+import { EXPORT_TYPE_ENUM } from "@onapi/domain/settings/constants/settings";
 import { exportMethod } from "@onapi/api-converter/export";
 import { showConverterWarnings } from "../import/converter-warnings";
 import { getExportData as getExportApiData } from "../sharing/share-data";

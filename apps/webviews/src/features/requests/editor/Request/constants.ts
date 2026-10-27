@@ -2,8 +2,8 @@ import i18next from "i18next";
 
 import { SOCKET_ASSERT_TYPES } from "@/features/requests/assertions/Assert/constants";
 import { SOCKET_PICK_VARS_TYPES } from "@/features/requests/variables/PickVars/constants";
-import { APIS_TASK_TYPES_ENUM } from "@onapi/http-model/requests/constants/index";
-import { CustomNumberBooleanType } from "@onapi/http-model/types/common";
+import { APIS_TASK_TYPES_ENUM } from "@onapi/domain/requests/constants/index";
+import { CustomNumberBooleanType } from "@onapi/domain/types/common";
 
 export const PRE_TASK_NAME_MAP = {
   [APIS_TASK_TYPES_ENUM.CUSTOM_SCRIPT]: i18next.t("supplement.custom_script"),

@@ -15,8 +15,8 @@ import { concat, isEqual, map } from "lodash-es";
 
 import AppIcon from "@/shared/ui/AppIcon";
 import Tooltip from "@/shared/ui/Tooltip";
-import { REQUEST_HEADER } from "@onapi/http-model/requests/constants/index";
-import { FIELD_TYPES, STATUS_CODE } from "@onapi/http-model/constants/common";
+import { REQUEST_HEADER } from "@onapi/domain/requests/constants/index";
+import { FIELD_TYPES, STATUS_CODE } from "@onapi/domain/constants/common";
 
 import Context from "../../context";
 import { ItemProps } from "../../types";

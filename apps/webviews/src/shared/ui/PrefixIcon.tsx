@@ -4,7 +4,7 @@ import { FC, memo, useMemo } from "react";
 import cn from "classnames";
 
 import AppIcon from "@/shared/ui/AppIcon";
-import { REQUEST_METHOD_MAP } from "@onapi/http-model/requests/constants/index";
+import { REQUEST_METHOD_MAP } from "@onapi/domain/requests/constants/index";
 
 import { isString } from "lodash-es";
 

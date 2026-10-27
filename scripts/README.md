@@ -48,7 +48,7 @@ started by F5. `pnpm dev` runs the same supervisor directly in a terminal.
 
 The extension initializes i18next without React. The browser initializes the
 React plugin separately, using the same English and Simplified Chinese resources
-from `@onapi/http-model`. Webviews receive the selected language through HTML.
+from `@onapi/domain`. Webviews receive the selected language through HTML.
 
 Supported build language values are `auto`, `en` and `zh-cn`. Restart watchers
 after changing the configuration. Run `node scripts/check-localization.mjs` to

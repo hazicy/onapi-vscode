@@ -1,8 +1,8 @@
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import useUserConfig from "@/features/auth/store/useUserConfig";
-import { ImportConfig } from "@onapi/http-model/project/types/export";
+import { ImportConfig } from "@onapi/domain/project/types/export";
 import { getSubstring } from "@/shared/utils/common";
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import {
   cloneDeep,
   has,
@@ -31,7 +31,7 @@ import {
   completionSwaggerApis,
   completionSwaggerEnv,
 } from "@onapi/api-converter/formats/swagger-export";
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
 export const getExportData = (apiData: ApiDetailsData, rest: any = {}) => {
   const { currentProject } = useUserConfig.getState();

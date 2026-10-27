@@ -3,7 +3,7 @@ import { produce } from "immer";
 
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import { TableColumnSwitchConfig } from "@/shared/components/RequestTable/types";
-import { SysConfig } from "@onapi/http-model/settings/types/settings";
+import { SysConfig } from "@onapi/domain/settings/types/settings";
 
 type ColumnSwitchConfig = Pick<
   SysConfig,

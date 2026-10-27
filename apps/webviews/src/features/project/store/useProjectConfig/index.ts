@@ -1,16 +1,16 @@
-import { createDefaultHttpConfig } from "@onapi/http-model";
+import { createDefaultHttpConfig } from "@onapi/domain";
 import {
   INIT_DOMAIN_INFO,
   INIT_ENV_LIST,
   INIT_SERVER_LIST,
-} from "@onapi/http-model/project/constants/project";
+} from "@onapi/domain/project/constants/project";
 import { create } from "@/shared/state/store";
-import { EnvList, ServerItem } from "@onapi/http-model/environment/types/index";
-import { SocketGlobalParams } from "@onapi/http-model/project/types/index";
-import { DomainInfoProps } from "@onapi/http-model/project/types/cookie";
+import { EnvList, ServerItem } from "@onapi/domain/environment/types/index";
+import { SocketGlobalParams } from "@onapi/domain/project/types/index";
+import { DomainInfoProps } from "@onapi/domain/project/types/cookie";
 
 type State = {
-  http: import("@onapi/http-model").HttpProjectConfig;
+  http: import("@onapi/domain").HttpProjectConfig;
   globalParams: Partial<SocketGlobalParams>;
   globalParamsTabKey: string;
   /** Socket environment/server settings; HTTP scopes live only in http. */
@@ -31,7 +31,7 @@ type Action = {
   updateGlobalParams: (p: State["globalParams"]) => void;
   updateGlobalParamsTabKey: (p: State["globalParamsTabKey"]) => void;
   updateHttpEnvironments: (
-    p: import("@onapi/http-model").EnvironmentScope[],
+    p: import("@onapi/domain").EnvironmentScope[],
   ) => void;
   updateServerList: (p: State["serverList"]) => void;
   updateEnvOpen: (p: State["envOpen"]) => void;

@@ -5,7 +5,7 @@ import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { PopoverProps } from "@/shared/ui/base";
 
 import { Popover } from "@/shared/ui";
-import { VARIABLE_LIST_CONTENT_KEY } from "@onapi/http-model/constants/common";
+import { VARIABLE_LIST_CONTENT_KEY } from "@onapi/domain/constants/common";
 import {
   MOCK_TABS_KEY,
   VARIABLE_TABS_VALUE,
@@ -16,7 +16,7 @@ import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import {
   FuncListRenderItem,
   InsertAction,
-} from "@onapi/http-model/requests/types/variable";
+} from "@onapi/domain/requests/types/variable";
 
 import VarList from "./components/VarList";
 const VarContent = lazy(() => import("./components/VarContent"));
@@ -127,7 +127,7 @@ const Index = ({
 
   const fixedRefresh = async () => {
     try {
-      const { mockExp } = await import("@onapi/http-model/mock/expressions");
+      const { mockExp } = await import("@onapi/domain/mock/expressions");
       const data = await mockExp("{{@ai()}}", {}, language);
       if (data) {
         setValue(data);

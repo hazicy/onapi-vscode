@@ -85,8 +85,7 @@ export async function createVariableReplacer(options: WebSocketRuntimeOptions) {
       let result = variables[key];
       if (!Object.prototype.hasOwnProperty.call(variables, key)) {
         try {
-          const { mockExp } =
-            await import("@onapi/http-model/mock/expressions");
+          const { mockExp } = await import("@onapi/domain/mock/expressions");
           result = mockExp(
             expression,
             variables,

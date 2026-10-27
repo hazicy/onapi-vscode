@@ -22,7 +22,7 @@ import { isEmpty, map } from "lodash-es";
 import OrderNumber from "@/shared/components/SortableCollapse/OrderNumber";
 import Collapse from "@/shared/ui/Collapse/Collapse";
 import AppIcon from "@/shared/ui/AppIcon";
-import { STATUS_CODE } from "@onapi/http-model/constants/common";
+import { STATUS_CODE } from "@onapi/domain/constants/common";
 import useTheme from "@/shared/hooks/useTheme";
 
 import Arrow from "./Arrow";

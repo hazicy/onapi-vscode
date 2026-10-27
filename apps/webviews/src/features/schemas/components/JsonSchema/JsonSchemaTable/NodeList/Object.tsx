@@ -5,7 +5,7 @@ import { message } from "@/shared/ui/base";
 
 import type { DragEndEvent } from "@dnd-kit/core";
 import { useMemoizedFn } from "ahooks";
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { produce } from "immer";
 import {
   cloneDeep,

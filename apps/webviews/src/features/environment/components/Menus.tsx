@@ -23,9 +23,9 @@ import {
   ENV_MANAGE_ENUM,
   MENU_ITEMS,
   MENU_ITEMS_KEY,
-} from "@onapi/http-model/environment";
+} from "@onapi/domain/environment";
 
-import type { EnvironmentScope as EnvListItem } from "@onapi/http-model";
+import type { EnvironmentScope as EnvListItem } from "@onapi/domain";
 
 interface Props {
   selectedKeys: string[];

@@ -9,13 +9,13 @@ import { find, head, includes, isArray, last, map } from "lodash-es";
 
 import { SegmentedTabs } from "@/shared/components";
 
-import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
+import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 
 import ContentItemWrap from "./ContentItemWrap";
 import { APIS_CONTENT_MAP } from "./constants";
 
-import { ApiComponentType } from "@onapi/http-model/requests/types/api";
+import { ApiComponentType } from "@onapi/domain/requests/types/api";
 import ToolBar from "./ToolBar";
 
 const FolderEditor: FC<ApiComponentType> = ({ apisData }) => {

@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 import { Flex, Input, Popconfirm } from "@/shared/ui/base";
 
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import cn from "classnames";
 import {
   differenceWith,

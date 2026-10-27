@@ -19,7 +19,7 @@ import {
   IMPORT_TYPE_ENUM,
   IMPORT_TYPE_LIST,
   ImportLocationEnum,
-} from "@onapi/http-model/settings/constants/settings";
+} from "@onapi/domain/settings/constants/settings";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import { isString } from "lodash-es";
 

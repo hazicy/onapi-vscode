@@ -11,8 +11,8 @@ import { ColumnsType } from "@/shared/components/BasicTable/types";
 import Button from "@/shared/ui/Button";
 import Empty from "@/shared/ui/Empty";
 import Tooltip from "@/shared/ui/Tooltip";
-import { TestingReportList } from "@onapi/http-model/testing/types/res/index";
-import { formatTimeToDateTimeLong } from "@onapi/http-model/utils/time";
+import { TestingReportList } from "@onapi/domain/testing/types/res/index";
+import { formatTimeToDateTimeLong } from "@onapi/domain/utils/time";
 
 import Result from "./Result";
 

@@ -1,10 +1,7 @@
 // Host-only parameter preparation for socket transports.
-import {
-  AnyObject,
-  CustomNumberBooleanType,
-} from "@onapi/http-model/types/common";
-import { ProjectConfigType } from "@onapi/http-model/project/types/index";
-import { SysConfig } from "@onapi/http-model/settings/types/settings";
+import { AnyObject, CustomNumberBooleanType } from "@onapi/domain/types/common";
+import { ProjectConfigType } from "@onapi/domain/project/types/index";
+import { SysConfig } from "@onapi/domain/settings/types/settings";
 
 export type PrepareSocketOptions = (params: {
   envId?: string;
@@ -24,7 +21,7 @@ export interface SocketHostOptions {
   globals?: Globals;
   project?: Project;
   cookies?: Cookies;
-  collection?: import("@onapi/http-model/request-utils").SocketCollectionItem[];
+  collection?: import("@onapi/domain/request-utils").SocketCollectionItem[];
   system_configs?: SystemConfigs;
   database_configs?: DatabaseConfigs;
   [key: string]: any;

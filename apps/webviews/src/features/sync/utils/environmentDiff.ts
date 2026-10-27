@@ -2,7 +2,7 @@ import { cloneDeep } from "lodash-es";
 import type {
   EnvListItem,
   ServerItem,
-} from "@onapi/http-model/environment/types/index";
+} from "@onapi/domain/environment/types/index";
 
 const indexServices = (services: ServerItem[]) => {
   const result = new Map<string, ServerItem>();

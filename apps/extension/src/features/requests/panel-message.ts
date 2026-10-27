@@ -1,6 +1,6 @@
-import type { HttpRequestItem } from "@onapi/http-model";
-import type { ApiDetailsData } from "@onapi/http-model/requests/types/api";
-import type { ShareInfoData } from "@onapi/http-model/sharing/types/share";
+import type { HttpRequestItem } from "@onapi/domain";
+import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
+import type { ShareInfoData } from "@onapi/domain/sharing/types/share";
 import type {
   connectWebSocketSession,
   sendWebSocketMessage,

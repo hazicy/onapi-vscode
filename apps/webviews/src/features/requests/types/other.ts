@@ -1,8 +1,8 @@
 import { Hoonapi } from "@/shared/ui/base";
 
-import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
+import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
 export type ApisItemActionType = {
   apisData: ApiDetailsData;

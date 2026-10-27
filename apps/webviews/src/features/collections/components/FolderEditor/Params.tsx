@@ -2,7 +2,7 @@ import styles from "./Params.module.css";
 import { FC } from "react";
 
 import FolderParamsSettings from "@/features/collections/components/FolderSettings/ParamsSettings";
-import { FolderComponentType } from "@onapi/http-model/requests/types/folder";
+import { FolderComponentType } from "@onapi/domain/requests/types/folder";
 
 const Params: FC<FolderComponentType> = ({ apisData, onApisDataChange }) => {
   return (

@@ -10,7 +10,7 @@ The package manager version is pinned in the root `package.json`.
 | ------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `apps/extension`         | VS Code activation, panels, native trees, storage, Worker lifecycle and VSIX manifest                 |
 | `apps/webviews`          | React multi-entry application, stores, UI components and browser tests                                |
-| `packages/http-model`    | Native request/config models, shared protocol definitions, pure request utilities and Mock generation |
+| `packages/domain`        | Native request/config models, shared protocol definitions, pure request utilities and Mock generation |
 | `packages/contracts`     | Serializable Worker commands and execution events shared by host and UI                               |
 | `packages/runtime`       | HTTP Worker, WebSocket and Socket.IO protocol execution; no VS Code or UI dependency                  |
 | `packages/api-converter` | External import/export formats and collection conversion boundaries                                   |
@@ -35,10 +35,12 @@ requires obsolete exceptions to be removed. Feature stores are imported directly
 from their owner, rather than re-exported by `app/store`. Generic Zustand helpers
 and UI services live in `shared/state`; application state remains in `app/store`.
 
-## Model and contract boundaries
+## Domain and contract boundaries
 
-`http-model` owns persisted request and configuration data, defaults, and pure
-model operations. `contracts` owns serializable execution commands and events
+`domain` owns shared product data models, defaults, and pure business-data
+operations, including request protocols, projects, environments, users and
+settings. It contains no UI state, storage implementation or protocol execution.
+`contracts` owns serializable execution commands and events
 between the host, Worker, and Webview. Contracts may reference model types;
 models must not depend on contracts, Core, runtime, or either application.
 `pnpm check:boundaries` enforces this dependency direction.
@@ -49,7 +51,7 @@ components. Host-only socket parameter preparation lives in
 `apps/extension/src/features/requests/execution/`, outside both shared
 packages. A type being used during execution does not make it a wire contract.
 
-The model package still includes shared application configuration and Mock
+The domain package still includes shared application configuration and Mock
 utilities used by multiple consumers. These are existing responsibilities, not
 an invitation to add unrelated business features. New feature-specific code
 belongs with its owner; extract another package only when consumers justify it.
@@ -109,9 +111,9 @@ apps/extension/src/
 ```
 
 Webviews retains `app/`, `features/` and `shared/`; see its
-[source conventions](../apps/webviews/src/README.md). HTTP Model exposes domain
-paths directly, such as `@onapi/http-model/requests/types/api`,
-`@onapi/http-model/environment/types/index` and `@onapi/http-model/mock/schema`.
+[source conventions](../apps/webviews/src/README.md). Domain exposes domain
+paths directly, such as `@onapi/domain/requests/types/api`,
+`@onapi/domain/environment/types/index` and `@onapi/domain/mock/schema`.
 It has no extra `features/` or `shared/` directory layer. API Converter groups
 format implementations under `formats/`, application model adaptation under
 `adapters/`, and the import/export facade in `export.ts`.
@@ -183,7 +185,7 @@ pnpm typecheck
 ```
 
 F5 uses `apps/extension` as `extensionDevelopmentPath`. Per-workspace checks can
-also be run with `pnpm --dir packages/http-model typecheck`, for example.
+also be run with `pnpm --dir packages/domain typecheck`, for example.
 Development uses the same package exports as production; there are no aliases
 that redirect library imports into another package's private source tree.
 

@@ -9,7 +9,7 @@ import useApis from "@/features/requests/store/useApis";
 import {
   ApiComponentType,
   GraphQLDetailsData,
-} from "@onapi/http-model/requests/types/graphql";
+} from "@onapi/domain/requests/types/graphql";
 
 const Response = memo((props: ApiComponentType) => {
   const { apisData, onApisDataChange } = props;

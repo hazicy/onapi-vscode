@@ -12,16 +12,16 @@ import {
 import { getCurrentProjectConfig } from "../../platform/storage/project-config";
 import { copyAsCurl } from "../requests/commands";
 import * as vscode from "vscode";
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { cloneDeep } from "lodash";
 import { getApiListName } from "../requests/request-storage";
 import { storageChanged } from "../../platform/storage/events";
 import type { SidebarTreeNode } from "./tree-data";
 import { SidebarTreeProvider } from "./tree-provider";
 import { handleMessage } from "./sidebar-handler";
-import { APIS_BASE_DEFAULT_DATA } from "@onapi/http-model/requests/constants/common";
-import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
-import type { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import { APIS_BASE_DEFAULT_DATA } from "@onapi/domain/requests/constants/common";
+import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
+import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
 export function registerSidebarTree(context: vscode.ExtensionContext) {
   const zh = vscode.env.language.startsWith("zh");

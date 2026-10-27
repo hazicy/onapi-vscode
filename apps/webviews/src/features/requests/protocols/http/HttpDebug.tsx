@@ -3,7 +3,7 @@ import { FC, lazy, useMemo, useState } from "react";
 import { useSafeState } from "ahooks";
 import { Flex } from "@/shared/ui/base";
 import { produce } from "immer";
-import { DirectionType } from "@onapi/http-model/types/common";
+import { DirectionType } from "@onapi/domain/types/common";
 import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
 import SuspenseContent from "@/shared/components/SuspenseContent";
 
@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 import {
   ApiComponentType,
   ApiDetailsData,
-} from "@onapi/http-model/requests/types/api";
+} from "@onapi/domain/requests/types/api";
 import { genUrlByQuery } from "@/features/requests/utils/apis";
 import { Button } from "@/shared/ui";
 const GenerateCodeDrawer = lazy(

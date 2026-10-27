@@ -16,7 +16,7 @@ import {
   HIDE_TOOLS_COMPARE_TYPES,
   HIDE_VALUE_COMPARE_TYPES,
   SELECT_MODE_COMPARE_TYPES,
-} from "@onapi/http-model/constants/common";
+} from "@onapi/domain/constants/common";
 import useTheme from "@/shared/hooks/useTheme";
 import { getCompareTypeTip } from "@/shared/utils/common";
 

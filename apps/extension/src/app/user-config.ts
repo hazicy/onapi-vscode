@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
-import { DEFAULT_PROJECT } from "@onapi/http-model/project/constants/project";
-import { DEFAULT_TEAM } from "@onapi/http-model/project/constants/team";
-import { Project, TeamItem } from "@onapi/http-model/auth/types/index";
+import { DEFAULT_PROJECT } from "@onapi/domain/project/constants/project";
+import { DEFAULT_TEAM } from "@onapi/domain/project/constants/team";
+import { Project, TeamItem } from "@onapi/domain/auth/types/index";
 
 export const getUserConfig = (
   context: vscode.ExtensionContext,

@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-import { FilterDataType } from "@onapi/http-model/requests/types/graphql";
+import { FilterDataType } from "@onapi/domain/requests/types/graphql";
 
 type Props = {
   filterData: FilterDataType;

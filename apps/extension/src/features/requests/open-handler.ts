@@ -1,4 +1,4 @@
-import { requestDefinition } from "@onapi/http-model";
+import { requestDefinition } from "@onapi/domain";
 import type { RequestPanelMessage } from "./panel-message";
 import { fetchGraphQLSchema } from "./graphql-schema";
 import { handlePanelAction } from "../../platform/webviews/panel-actions";
@@ -27,7 +27,7 @@ import {
   getProjectShareData,
   setProjectShareData,
 } from "../sharing/share-data";
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import {
   prepareWebSocketSessionOptions,
   connectWebSocketSession,

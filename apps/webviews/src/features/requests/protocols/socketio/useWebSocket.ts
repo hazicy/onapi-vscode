@@ -18,7 +18,7 @@ import useApis from "@/features/requests/store/useApis";
 import useUserConfig from "@/features/auth/store/useUserConfig";
 import { useStorage } from "@/app/store";
 import { produce } from "immer";
-import { AuthOauth2 } from "@onapi/http-model/requests/types/auth";
+import { AuthOauth2 } from "@onapi/domain/requests/types/auth";
 
 const useWebSocket = () => {
   const { t } = useTranslation();

@@ -17,7 +17,7 @@ import {
   IMPORT_TYPE_ENUM,
   IMPORT_TYPE_MAP,
   ImportLocationEnum,
-} from "@onapi/http-model/settings/constants/settings";
+} from "@onapi/domain/settings/constants/settings";
 import { useSafeState } from "ahooks";
 import { parseSafeBash } from "@/features/curl/utils/curl";
 import ImportApiPreview from "../ImportApiPreview";

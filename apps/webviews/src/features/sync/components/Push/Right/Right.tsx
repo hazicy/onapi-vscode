@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 import { Button, Flex, Select } from "@/shared/ui/base";
 import useUserConfig from "@/features/auth/store/useUserConfig";
-import { MIGRATE_RESULT_STATUS } from "@onapi/http-model/import/constants/migrate/index";
+import { MIGRATE_RESULT_STATUS } from "@onapi/domain/import/constants/migrate/index";
 import { getTeamAndProjectByProjectId } from "@/features/project/events";
 import ApiConflict from "./ApiConflict";
 import { PushApiData, PushEnvData } from "../type";

@@ -1,5 +1,5 @@
-import type { HttpRequestBody } from "@onapi/http-model";
-import type { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import type { HttpRequestBody } from "@onapi/domain";
+import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import type { RequestTabsItemProps } from "../types";
 export type RequestBodyProps = RequestTabsItemProps & {
   apiData?: ApiDetailsData;

@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import load from "./helpers/loadTypeScript.mjs";
 import { nativeDependency } from "./helpers/loadTypeScript.mjs";
 const versions = await load(
-  "packages/http-model/src/sync/utils/api-versions.ts",
+  "packages/domain/src/sync/utils/api-versions.ts",
   (id) => nativeDependency(id),
 );
 const environmentDiff = await load(
@@ -107,7 +107,7 @@ async function fixture({
       if (
         [
           "@/features/sync/utils/apiVersions",
-          "@onapi/http-model/sync/utils/api-versions",
+          "@onapi/domain/sync/utils/api-versions",
         ].includes(id)
       )
         return versions;

@@ -1,4 +1,4 @@
-import type { SysConfig } from "@onapi/http-model/settings/types/settings";
+import type { SysConfig } from "@onapi/domain/settings/types/settings";
 import type { WebSocketRuntimeOptions } from "@onapi/runtime/websocket/options";
 
 /** Apply the shared proxy and certificate settings to either socket protocol. */

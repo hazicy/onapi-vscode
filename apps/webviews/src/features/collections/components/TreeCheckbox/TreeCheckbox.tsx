@@ -11,7 +11,7 @@ import { TreeDataFilterParams } from "@/features/collections/components/Tree/typ
 import {
   APIS_TARGET_TYPE_ENUM,
   DEFAULT_API_MARK_ENUM,
-} from "@onapi/http-model/requests/constants/index";
+} from "@onapi/domain/requests/constants/index";
 
 import Search from "./components/Search";
 import AllCheck from "./components/AllCheck";

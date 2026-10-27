@@ -1,10 +1,10 @@
-import { requestUrl, requestMethod } from "@onapi/http-model";
+import { requestUrl, requestMethod } from "@onapi/domain";
 import styles from "./All.module.css";
 import { size } from "lodash-es";
 
 import Empty from "@/shared/ui/Empty";
 
-import { EventItem } from "@onapi/http-model/testing/types/index";
+import { EventItem } from "@onapi/domain/testing/types/index";
 import EventItemComponent from "./EventItem";
 
 type CommonTestingResultProps = {

@@ -35,8 +35,8 @@ import {
   getOpenApi,
   getProjectShareData,
 } from "../sharing/share-data";
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import { getStorageFilePath } from "../../platform/storage";
 
 const persistApiList = async (

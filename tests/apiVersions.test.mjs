@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import load from "./helpers/loadTypeScript.mjs";
 import { nativeDependency } from "./helpers/loadTypeScript.mjs";
 const { findApiConflicts, applyApiVersions } = await load(
-  "packages/http-model/src/sync/utils/api-versions.ts",
+  "packages/domain/src/sync/utils/api-versions.ts",
   (id) => nativeDependency(id),
 );
 const api = (id, version = 1, type = "api") => ({

@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next";
 import { isPlainObject, isUndefined } from "lodash-es";
 
 import Empty from "@/shared/ui/Empty";
-import { ApiSendingData } from "@onapi/http-model/requests/types/send";
-import { parseStreamToBody } from "@onapi/http-model/utils/parse";
+import { ApiSendingData } from "@onapi/domain/requests/types/send";
+import { parseStreamToBody } from "@onapi/domain/utils/parse";
 
 interface Props {
   data?: ApiSendingData["response"];

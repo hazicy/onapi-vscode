@@ -50,8 +50,8 @@ import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 import { Button, Empty, AppIcon } from "@/shared/ui";
 import useApis from "@/features/requests/store/useApis";
 
-import { FilterDataType } from "@onapi/http-model/requests/types/graphql";
-import { AnyObject } from "@onapi/http-model/types/common";
+import { FilterDataType } from "@onapi/domain/requests/types/graphql";
+import { AnyObject } from "@onapi/domain/types/common";
 import { graphql2json } from "@/features/requests/utils/graphql/graphql2json";
 import {
   createArguments,
@@ -74,7 +74,7 @@ const panelProps = {
 };
 
 interface Props {
-  data: import("@onapi/http-model").HttpRequestBody & { mode: "graphql" };
+  data: import("@onapi/domain").HttpRequestBody & { mode: "graphql" };
   onChange: (value: Props["data"]) => void;
 }
 

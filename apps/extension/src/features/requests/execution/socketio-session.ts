@@ -2,16 +2,16 @@ import { globalConfig } from "../../../app/config";
 import { SocketIoAdapter } from "@onapi/runtime/socketio/adapter";
 import { applySocketSettings } from "./socket-settings";
 import * as vscode from "vscode";
-import { SocketIoDetailsData } from "@onapi/http-model/requests/types/socketio";
+import { SocketIoDetailsData } from "@onapi/domain/requests/types/socketio";
 import {
   createTargetIdMap,
   getSocketCollection,
-} from "@onapi/http-model/request-utils";
-import { SysConfig } from "@onapi/http-model/settings/types/settings";
+} from "@onapi/domain/request-utils";
+import { SysConfig } from "@onapi/domain/settings/types/settings";
 import { prepareSocketOptions } from "./prepare-socket-options";
 import { getApiList } from "../request-storage";
 import { getCurrentProjectConfig } from "../../../platform/storage/project-config";
-import { ProjectConfigType } from "@onapi/http-model/project/types/index";
+import { ProjectConfigType } from "@onapi/domain/project/types/index";
 import { find, isEqual } from "lodash";
 import { randomUUID } from "node:crypto";
 import { executionService } from "../../../platform/execution/service";

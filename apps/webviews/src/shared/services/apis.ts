@@ -1,6 +1,6 @@
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import { get, post } from "./utils";
-import { ApisBaseData } from "@onapi/http-model/requests/types/base";
+import { ApisBaseData } from "@onapi/domain/requests/types/base";
 
 /**
  * API brief info list

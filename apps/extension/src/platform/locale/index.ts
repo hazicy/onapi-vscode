@@ -1,8 +1,8 @@
 import i18n from "i18next";
 import { env } from "vscode";
-import en from "@onapi/http-model/locale/en_US.json";
-import cn from "@onapi/http-model/locale/zh_CN.json";
-import { resolveLanguage } from "@onapi/http-model/locale/language";
+import en from "@onapi/domain/locale/en_US.json";
+import cn from "@onapi/domain/locale/zh_CN.json";
+import { resolveLanguage } from "@onapi/domain/locale/language";
 const selected =
   typeof __ONAPI_LANGUAGE__ === "undefined" ? "auto" : __ONAPI_LANGUAGE__;
 export const language = resolveLanguage(

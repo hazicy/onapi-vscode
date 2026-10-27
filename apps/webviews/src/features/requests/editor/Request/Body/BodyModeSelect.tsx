@@ -1,8 +1,8 @@
 import { Select } from "@/shared/ui/base";
 import { Icon } from "@iconify/react";
 import chevronDown from "@iconify-icons/lucide/chevron-down";
-import { REQUEST_RAW_MODE_LIST } from "@onapi/http-model/requests/constants/index";
-import type { RequestBodyContentType } from "@onapi/http-model/requests/types/request";
+import { REQUEST_RAW_MODE_LIST } from "@onapi/domain/requests/constants/index";
+import type { RequestBodyContentType } from "@onapi/domain/requests/types/request";
 import { type RequestBodyProps } from "./types";
 import styles from "./BodyModeSelect.module.css";
 

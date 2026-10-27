@@ -33,8 +33,7 @@ const Index = () => {
     }
     const mock_rules = getProxyMockRulesList();
     try {
-      const { default: MockSchema } =
-        await import("@onapi/http-model/mock/schema");
+      const { default: MockSchema } = await import("@onapi/domain/mock/schema");
       const mockData = await new (MockSchema as any)({ app: "onapi" }).mock(
         schemaData,
         mock_rules,

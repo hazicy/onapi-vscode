@@ -10,7 +10,7 @@ import { useDebounceFn, useMemoizedFn, useSafeState } from "ahooks";
 import { includes, isEqual, isFunction, map, reduce } from "lodash-es";
 
 import AppIcon from "@/shared/ui/AppIcon";
-import { TreeDataItem as ApiTreeDataItem } from "@onapi/http-model/requests/types/api";
+import { TreeDataItem as ApiTreeDataItem } from "@onapi/domain/requests/types/api";
 
 import ItemIcon from "./components/ItemIcon";
 import ItemTitle from "./components/ItemTitle";

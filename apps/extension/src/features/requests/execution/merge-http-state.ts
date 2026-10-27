@@ -3,7 +3,7 @@ import type {
   EnvironmentScope,
   HttpProjectConfig,
   SerializedCookieJar,
-} from "@onapi/http-model";
+} from "@onapi/domain";
 
 export interface RuntimeState {
   environment?: EnvironmentScope;

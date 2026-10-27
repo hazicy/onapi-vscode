@@ -9,7 +9,7 @@ import { isArray } from "lodash-es";
 
 import { CheckCircleFilled, CloseCircleFilled } from "@/shared/ui/base/Icons";
 
-import { ApiSendingData } from "@onapi/http-model/requests/types/send";
+import { ApiSendingData } from "@onapi/domain/requests/types/send";
 
 export type HttpAssertion = import("@onapi/contracts").ExecutionAssertion;
 interface ListProps {

@@ -20,7 +20,7 @@ import { useSchemaContext } from "../context";
 import LinkModal from "../modals/Link/Link";
 import ObjectList from "../NodeList/Object";
 
-import { AnyObject } from "@onapi/http-model/types/common";
+import { AnyObject } from "@onapi/domain/types/common";
 
 type Props = {
   deepIndex: number;

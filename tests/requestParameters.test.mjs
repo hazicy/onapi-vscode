@@ -9,10 +9,9 @@ const exportsObject = await load(
   (id) => {
     if (id === "lodash-es" || id === "url-parse") return nativeDependency(id);
     if (
-      [
-        "@/shared/utils/dataTools",
-        "@onapi/http-model/utils/data-tools",
-      ].includes(id)
+      ["@/shared/utils/dataTools", "@onapi/domain/utils/data-tools"].includes(
+        id,
+      )
     )
       return { snowflakeId: () => `new-${++nextId}` };
     if (id.endsWith("/constants/common"))

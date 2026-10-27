@@ -11,7 +11,7 @@ import {
   values,
 } from "lodash-es";
 
-import { TreeDataItem } from "@onapi/http-model/requests/types/api";
+import { TreeDataItem } from "@onapi/domain/requests/types/api";
 
 import { TreeDataFilterParams } from "../types";
 

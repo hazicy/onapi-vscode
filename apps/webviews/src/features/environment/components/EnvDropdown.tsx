@@ -21,7 +21,7 @@ import AppIcon from "@/shared/ui/AppIcon";
 import Tooltip from "@/shared/ui/Tooltip";
 import { getProjectConfig, openEnvPage } from "@/features/requests/events/env";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
-import type { EnvironmentScope as EnvListItem } from "@onapi/http-model";
+import type { EnvironmentScope as EnvListItem } from "@onapi/domain";
 
 type EnvDropdownProps = {
   value: string;

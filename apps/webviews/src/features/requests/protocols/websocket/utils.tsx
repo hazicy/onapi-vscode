@@ -1,4 +1,4 @@
-import { completionHttpProtocol as completeHttpProtocol } from "@onapi/http-model/utils/data-tools";
+import { completionHttpProtocol as completeHttpProtocol } from "@onapi/domain/utils/data-tools";
 import { isPlainObject, isString } from "lodash-es";
 
 import useProjectConfig from "@/features/project/store/useProjectConfig";

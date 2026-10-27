@@ -10,7 +10,7 @@ import {
   MockInfo,
   MockItem,
   FunctionItem,
-} from "@onapi/http-model/project/types/index";
+} from "@onapi/domain/project/types/index";
 
 type State = {
   markList: MarkItem[]; // interface status list

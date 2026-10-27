@@ -26,7 +26,7 @@ import {
   AUTH_OAUTH2_GRANT_TYPE,
   AUTH_OAUTH2_GRANT_TYPE_MAP,
   AUTH_OAUTH2_LOCATION,
-} from "@onapi/http-model/requests/constants/auth";
+} from "@onapi/domain/requests/constants/auth";
 import useApis from "@/features/requests/store/useApis";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import useUserConfig from "@/features/auth/store/useUserConfig";
@@ -34,7 +34,7 @@ import { useStorage } from "@/app/store";
 import {
   AuthOauth2,
   RequestParamsItem,
-} from "@onapi/http-model/requests/types/auth";
+} from "@onapi/domain/requests/types/auth";
 import { openUrl } from "@/shared/utils/open";
 
 import {

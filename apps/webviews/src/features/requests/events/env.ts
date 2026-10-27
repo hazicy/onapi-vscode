@@ -3,7 +3,7 @@ import useProjectConfig from "@/features/project/store/useProjectConfig";
 import { find } from "lodash-es";
 
 export const saveEnvironments = (
-  environments: import("@onapi/http-model").EnvironmentScope[],
+  environments: import("@onapi/domain").EnvironmentScope[],
 ) => {
   const state = useProjectConfig.getState();
   state.updateHttpEnvironments(environments);

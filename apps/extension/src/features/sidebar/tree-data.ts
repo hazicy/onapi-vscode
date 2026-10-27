@@ -1,10 +1,6 @@
-import type { ApiDetailsData } from "@onapi/http-model/requests/types/api";
-import {
-  isHttpCollectionItem,
-  requestUrl,
-  requestMethod,
-} from "@onapi/http-model";
-import type { TestingReportList } from "@onapi/http-model/testing/types/res/index";
+import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
+import { isHttpCollectionItem, requestUrl, requestMethod } from "@onapi/domain";
+import type { TestingReportList } from "@onapi/domain/testing/types/res/index";
 import type { RequestHistoryEntry } from "../requests/request-history";
 
 export type SidebarTreeSection = "requests" | "tests" | "history";

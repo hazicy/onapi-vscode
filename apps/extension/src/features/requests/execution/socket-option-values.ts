@@ -1,7 +1,4 @@
-import {
-  EnvListItem,
-  ServerItem,
-} from "@onapi/http-model/environment/types/index";
+import { EnvListItem, ServerItem } from "@onapi/domain/environment/types/index";
 import {
   cloneDeep,
   concat,
@@ -22,10 +19,10 @@ import {
   values,
 } from "lodash";
 import { Cookies, Env } from "./socket-option-types";
-import { DomainInfoProps } from "@onapi/http-model/project/types/cookie";
-import { SysConfig } from "@onapi/http-model/settings/types/settings";
-import { getCollectionServerId } from "@onapi/http-model/request-utils";
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import { DomainInfoProps } from "@onapi/domain/project/types/cookie";
+import { SysConfig } from "@onapi/domain/settings/types/settings";
+import { getCollectionServerId } from "@onapi/domain/request-utils";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
 // Get project related information
 export const getProjectOptions = (

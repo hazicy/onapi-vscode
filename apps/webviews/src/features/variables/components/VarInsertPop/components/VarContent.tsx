@@ -33,7 +33,7 @@ import {
   encryptString,
   getFakerObject,
   mockExp,
-} from "@onapi/http-model/mock/expressions";
+} from "@onapi/domain/mock/expressions";
 import {
   cloneDeep,
   concat,
@@ -55,7 +55,7 @@ import {
 } from "lodash-es";
 
 import { Button, Empty, AppIcon, Input, Popover, Tooltip } from "@/shared/ui";
-import { MOCK_LANGUAGE_MAP } from "@onapi/http-model/settings/constants/settings";
+import { MOCK_LANGUAGE_MAP } from "@onapi/domain/settings/constants/settings";
 import { SYSTEM_VARS } from "@/shared/constants/system";
 import {
   ASSIGNMENT_VALUE_KEY,
@@ -77,7 +77,7 @@ import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import {
   FuncListRenderItem,
   InsertAction,
-} from "@onapi/http-model/requests/types/variable";
+} from "@onapi/domain/requests/types/variable";
 import { copyStringToClipboard } from "@/shared/utils/common";
 import { getGlobals } from "@/features/requests/utils/send-utils";
 import { transFuncName } from "@/features/variables/utils/variable";

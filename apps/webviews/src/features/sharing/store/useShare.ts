@@ -1,7 +1,4 @@
-import {
-  DocPageData,
-  ShareInfoData,
-} from "@onapi/http-model/sharing/types/share";
+import { DocPageData, ShareInfoData } from "@onapi/domain/sharing/types/share";
 import { create } from "zustand";
 
 type State = {

@@ -1,11 +1,11 @@
 import { isEqual } from "lodash-es";
-import { requestDefinition } from "@onapi/http-model";
+import { requestDefinition } from "@onapi/domain";
 import type { HttpExecutionState } from "@/features/requests/execution/http-state";
 import type {
   ApiDetailsData,
   ApisData,
-} from "@onapi/http-model/requests/types/api";
-import { DEFAULT_REQUEST_SYSTEM_HEADERS } from "@onapi/http-model/requests/constants/request";
+} from "@onapi/domain/requests/types/api";
+import { DEFAULT_REQUEST_SYSTEM_HEADERS } from "@onapi/domain/requests/constants/request";
 import { create, devtools } from "@/shared/state/store";
 
 type State = {

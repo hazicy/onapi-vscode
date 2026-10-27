@@ -1,18 +1,15 @@
-import {
-  getUpwardFolderId,
-  getSubstring,
-} from "@onapi/http-model/request-utils";
+import { getUpwardFolderId, getSubstring } from "@onapi/domain/request-utils";
 import {
   COLLECTION_TIPS,
   ICONS_MAP,
   REGULAR_TIPS,
   VARIABLE_TIPS,
-} from "@onapi/http-model/constants/common";
+} from "@onapi/domain/constants/common";
 import {
   array2Tree,
   getUrlQueryArray,
   isJson,
-} from "@onapi/http-model/utils/data-tools";
+} from "@onapi/domain/utils/data-tools";
 import i18next from "i18next";
 import { divide, format, round } from "mathjs/number";
 import FileSaver from "file-saver";
@@ -30,11 +27,11 @@ import {
   trim,
 } from "lodash-es";
 import { ComponentType } from "react";
-import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
+import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 import {
   ApisBaseData,
   ApisBaseDataItem,
-} from "@onapi/http-model/requests/types/base";
+} from "@onapi/domain/requests/types/base";
 /**
  * Convert hex color to RGBA color string
  * @param hex - Hex color value
@@ -587,7 +584,4 @@ export const convertResponseBytes = (bytes: number) => {
   };
 };
 
-export {
-  getUpwardFolderId,
-  getSubstring,
-} from "@onapi/http-model/request-utils";
+export { getUpwardFolderId, getSubstring } from "@onapi/domain/request-utils";

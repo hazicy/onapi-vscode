@@ -1,11 +1,11 @@
 import { useMemo, useRef } from "react";
 import type { DragEndEvent } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { Checkbox, Flex, Select } from "@/shared/ui/base";
 import { BasicTable } from "@/shared/components";
 import VarInput from "@/features/variables/components/VarInput/VarInput";
-import { AUTH_OAUTH2_SEND_IN } from "@onapi/http-model/requests/constants/auth";
+import { AUTH_OAUTH2_SEND_IN } from "@onapi/domain/requests/constants/auth";
 
 export type DataSourceItem = {
   key: string;

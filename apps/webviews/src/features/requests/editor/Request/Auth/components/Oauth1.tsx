@@ -12,7 +12,7 @@ import {
   AUTH_ENUM,
   AUTH_OAUTH_LOCATION,
   OAUTH1_METHODS_OPTIONS,
-} from "@onapi/http-model/requests/constants/auth";
+} from "@onapi/domain/requests/constants/auth";
 
 import PrivateCom from "./PrivateCom";
 

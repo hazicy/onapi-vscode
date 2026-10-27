@@ -1,14 +1,14 @@
 import i18next from "i18next";
 import { cloneDeep, isArray } from "lodash";
-import { DEFAULT_AUTH } from "@onapi/http-model/requests/constants/auth";
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
-import { getSubstring } from "@onapi/http-model/request-utils";
-import { genUrlByQuery } from "@onapi/http-model/request-utils";
+import { DEFAULT_AUTH } from "@onapi/domain/requests/constants/auth";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
+import { getSubstring } from "@onapi/domain/request-utils";
+import { genUrlByQuery } from "@onapi/domain/request-utils";
 import {
   DEFAULT_API_RESPONSE,
   ERROR_RESPONSE,
   SUCCESS_RESPONSE,
-} from "@onapi/http-model/requests/constants/response";
+} from "@onapi/domain/requests/constants/response";
 
 const appendSwaggerApis = (
   res: any,

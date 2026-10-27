@@ -22,7 +22,7 @@ import { useGlobal } from "@/app/store";
 import { HotkeysProvider } from "react-hotkeys-hook";
 import useApisHotkeys from "@/features/requests/hooks/useApisHotkeys";
 import useShare from "@/features/sharing/store/useShare";
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import useWebSocket from "@/features/requests/protocols/websocket/useWebSocket";
 import useSocketIo from "@/features/requests/protocols/socketio/useWebSocket";
 import useGraphQLQuery from "@/features/requests/graphql/GraphQLQuery/useGraphQLQuery";

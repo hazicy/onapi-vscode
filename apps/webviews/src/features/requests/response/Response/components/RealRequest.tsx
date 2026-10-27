@@ -1,6 +1,6 @@
 import type { HttpExecutionState } from "@/features/requests/execution/http-state";
 import { sdkRequestView } from "@/features/requests/utils/executionView";
-import { requestUrl } from "@onapi/http-model";
+import { requestUrl } from "@onapi/domain";
 import styles from "./RealRequest.module.css";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -13,9 +13,9 @@ import { includes, isEqual } from "lodash-es";
 import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 import SegmentedTabs from "@/shared/components/SegmentedTabs";
 import ApisTypeTag from "@/shared/ui/ApisTypeTag";
-import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
-import { ApiTypeMethod } from "@onapi/http-model/requests/types/base";
-import { ApiSendingData } from "@onapi/http-model/requests/types/send";
+import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
+import { ApiTypeMethod } from "@onapi/domain/requests/types/base";
+import { ApiSendingData } from "@onapi/domain/requests/types/send";
 
 import CommonTable from "./CommonTable";
 

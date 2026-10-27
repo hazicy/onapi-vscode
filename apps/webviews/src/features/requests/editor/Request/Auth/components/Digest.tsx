@@ -10,7 +10,7 @@ import GhostCollapse from "@/shared/ui/GhostCollapse";
 import {
   AUTH_ENUM,
   DIGEST_ALGORITHM_OPTIONS,
-} from "@onapi/http-model/requests/constants/auth";
+} from "@onapi/domain/requests/constants/auth";
 
 const options = map(DIGEST_ALGORITHM_OPTIONS, (item) => ({
   label: item,

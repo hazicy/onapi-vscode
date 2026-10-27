@@ -1,4 +1,4 @@
-import type { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
 type CollectionItem = Pick<ApiDetailsData, "id" | "parentId" | "kind" | "sort">;
 

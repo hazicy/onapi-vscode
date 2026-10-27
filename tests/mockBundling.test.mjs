@@ -10,9 +10,9 @@ import { fakerLocalesEsbuild } from "../tooling/build/faker-locales.mjs";
 await fs.mkdir("test-results", { recursive: true });
 const result = await build({
   stdin: {
-    contents: `export * from './packages/http-model/src/mock/expressions.js';
-export {generateIdCard,generateBankCard} from './packages/http-model/src/mock/cards.ts';
-export {default as MockSchema} from './packages/http-model/src/mock/schema.ts';
+    contents: `export * from './packages/domain/src/mock/expressions.js';
+export {generateIdCard,generateBankCard} from './packages/domain/src/mock/cards.ts';
+export {default as MockSchema} from './packages/domain/src/mock/schema.ts';
 export {generateMockBody} from './apps/webviews/src/features/requests/utils/generateMockBody';
 export {createVariableReplacer} from './packages/runtime/src/websocket/options';`,
     resolveDir: process.cwd(),

@@ -3,7 +3,7 @@ import React from "react";
 import { entries, isArray, isPlainObject } from "lodash-es";
 
 import BasicTable from "@/shared/components/BasicTable/BasicTable";
-import { AnyObject } from "@onapi/http-model/types/common";
+import { AnyObject } from "@onapi/domain/types/common";
 
 interface Props {
   value: any[] | AnyObject;

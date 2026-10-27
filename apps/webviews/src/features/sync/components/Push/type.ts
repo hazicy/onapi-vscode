@@ -1,4 +1,4 @@
-import { EnvListItem } from "@onapi/http-model/environment/types/index";
+import { EnvListItem } from "@onapi/domain/environment/types/index";
 
 export type PushEnvData = {
   checkedKeys: React.Key[];

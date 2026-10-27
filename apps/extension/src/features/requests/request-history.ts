@@ -1,13 +1,13 @@
 import type * as vscode from "vscode";
-import { requestDefinition } from "@onapi/http-model";
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
+import { requestDefinition } from "@onapi/domain";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { cloneDeep } from "lodash";
 import {
   getDataFromGlobalStorage,
   updateDataInGlobalStorage,
 } from "../../platform/storage";
 import { getApiListName } from "./request-storage";
-import type { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
 type HistoricalRequest = Pick<ApiDetailsData, "id" | "name" | "parentId"> & {
   kind: string;

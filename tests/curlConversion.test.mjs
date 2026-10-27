@@ -7,7 +7,7 @@ import sdk from "postman-collection";
 const bundle = await build({
   stdin: {
     contents:
-      'export * from "./packages/http-model/src/curl/utils/postman-request"; export * from "./apps/webviews/src/shared/components/ParameterConversion/convert";',
+      'export * from "./packages/domain/src/curl/utils/postman-request"; export * from "./apps/webviews/src/shared/components/ParameterConversion/convert";',
     resolveDir: process.cwd(),
   },
   bundle: true,

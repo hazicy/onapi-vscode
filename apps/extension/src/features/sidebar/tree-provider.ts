@@ -1,11 +1,7 @@
 import { getStorageError } from "../../platform/storage";
 import * as vscode from "vscode";
-import {
-  isHttpCollectionItem,
-  requestUrl,
-  requestMethod,
-} from "@onapi/http-model";
-import type { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import { isHttpCollectionItem, requestUrl, requestMethod } from "@onapi/domain";
+import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import { getApiList } from "../requests/request-storage";
 import { getProjectReportList } from "../testing/report-storage";
 import { getRequestHistory } from "../requests/request-history";

@@ -7,7 +7,7 @@ import { cloneDeep, keys } from "lodash-es";
 import Collapse from "@/shared/ui/Collapse/Collapse";
 import Empty from "@/shared/ui/Empty";
 import AppIcon from "@/shared/ui/AppIcon";
-import { DomainInfoProps } from "@onapi/http-model/project/types/cookie";
+import { DomainInfoProps } from "@onapi/domain/project/types/cookie";
 
 import { ICookie } from "../types";
 import CookieTab from "./CookieTab";

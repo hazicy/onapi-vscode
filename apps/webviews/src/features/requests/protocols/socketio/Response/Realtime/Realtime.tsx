@@ -1,4 +1,4 @@
-import type { SocketIoDetailsData } from "@onapi/http-model/requests/types/socketio";
+import type { SocketIoDetailsData } from "@onapi/domain/requests/types/socketio";
 import styles from "../../SocketIoDebug.module.css";
 import React, { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Tag } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import { bufferToRaw } from "@onapi/http-model/utils/response-tools";
+import { bufferToRaw } from "@onapi/domain/utils/response-tools";
 import {
   includes,
   isArray,
@@ -27,7 +27,7 @@ import { Tooltip } from "@/shared/ui";
 import Empty from "@/shared/ui/Empty";
 import useApis from "@/features/requests/store/useApis";
 import useWebSocketStore from "@/features/requests/store/useApis/websocket";
-import { MessageItem } from "@onapi/http-model/requests/types/socketio";
+import { MessageItem } from "@onapi/domain/requests/types/socketio";
 import { hexToRGBA } from "@/shared/utils/common";
 
 import useWebSocket from "../../useWebSocket";

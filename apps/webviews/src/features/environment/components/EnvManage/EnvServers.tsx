@@ -13,13 +13,13 @@ import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
 import { Modal } from "@/shared/ui/Modal";
 
-import { EnvListItem } from "@onapi/http-model/environment/types/index";
+import { EnvListItem } from "@onapi/domain/environment/types/index";
 
 import ItemMenu from "./ItemMenu";
 import ServerPop from "./ServerPop";
 
 import useProjectConfig from "@/features/project/store/useProjectConfig";
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { saveProjectConfig } from "@/features/requests/events/env";
 
 interface Props {

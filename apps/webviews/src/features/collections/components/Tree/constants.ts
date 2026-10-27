@@ -1,4 +1,4 @@
-import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
+import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 
 export const DEFAULT_NO_DRAG_INCLUDES_KEYS = [
   "tree-top-node-wrap",

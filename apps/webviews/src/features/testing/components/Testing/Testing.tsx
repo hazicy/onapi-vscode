@@ -7,7 +7,7 @@ import { produce } from "immer";
 import useTesting from "@/features/testing/store/useTesting";
 import ReportListHeader from "./ReportListHeader";
 import ReportList from "./ReportList/ReportList";
-import { STATUS_CODE } from "@onapi/http-model/constants/common";
+import { STATUS_CODE } from "@onapi/domain/constants/common";
 import { message } from "@/shared/ui/base";
 
 const Testing = () => {

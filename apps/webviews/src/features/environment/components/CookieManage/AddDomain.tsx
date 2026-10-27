@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { Input, message } from "@/shared/ui/base";
 
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { produce } from "immer";
 import { cloneDeep, isArray, isObject, isString } from "lodash-es";
 

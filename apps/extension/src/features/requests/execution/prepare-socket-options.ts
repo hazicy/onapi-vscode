@@ -1,6 +1,6 @@
 import { cloneDeep, find, isEqual, keys, reduce } from "lodash";
 import { PrepareSocketOptions, SocketHostOptions } from "./socket-option-types";
-import { DEFAULT_SOCKET_GLOBAL_PARAMS } from "@onapi/http-model/requests/constants/request";
+import { DEFAULT_SOCKET_GLOBAL_PARAMS } from "@onapi/domain/requests/constants/request";
 import {
   getCookiesOptions,
   getEnvOptions,

@@ -13,9 +13,9 @@ import {
   AUTH_ENUM,
   AUTH_INHERIT_OPTIONS,
   AUTH_OPTIONS,
-} from "@onapi/http-model/requests/constants/auth";
-import type { HttpRequest } from "@onapi/http-model";
-import { ChangeFuncType } from "@onapi/http-model/types/common";
+} from "@onapi/domain/requests/constants/auth";
+import type { HttpRequest } from "@onapi/domain";
+import { ChangeFuncType } from "@onapi/domain/types/common";
 
 import {
   Asap,
@@ -34,7 +34,7 @@ import {
 
 import { updateAuthValues } from "./authState";
 
-import { AuthOauth2 } from "@onapi/http-model/requests/types/auth";
+import { AuthOauth2 } from "@onapi/domain/requests/types/auth";
 
 type Props = {
   isSystem?: boolean;

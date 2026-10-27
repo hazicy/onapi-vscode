@@ -30,24 +30,23 @@ const loadConverter = async (
         },
       };
     if (
-      [
-        "@/shared/utils/dataTools",
-        "@onapi/http-model/utils/data-tools",
-      ].includes(id)
+      ["@/shared/utils/dataTools", "@onapi/domain/utils/data-tools"].includes(
+        id,
+      )
     )
       return { snowflakeId: () => `id-${++nextId}` };
     if (id === "i18next") return { t: (key) => key };
     if (
       [
         "@/features/requests/constants",
-        "@onapi/http-model/requests/constants/index",
+        "@onapi/domain/requests/constants/index",
       ].includes(id)
     )
       return { APIS_TARGET_TYPE_ENUM: types };
     if (
       [
         "@/features/requests/constants/request",
-        "@onapi/http-model/requests/constants/request",
+        "@onapi/domain/requests/constants/request",
       ].includes(id)
     )
       return { DEFAULT_WEBSOCKET_MESSAGE: { type: "text", message: "" } };

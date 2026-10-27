@@ -2,7 +2,7 @@ import { NavigateFunction } from "react-router-dom";
 
 import { create } from "zustand";
 
-import { CustomNumberBooleanType } from "@onapi/http-model/types/common";
+import { CustomNumberBooleanType } from "@onapi/domain/types/common";
 
 type State = {
   /** collaboration websocket returned client id */

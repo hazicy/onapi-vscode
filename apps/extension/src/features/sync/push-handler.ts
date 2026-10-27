@@ -7,7 +7,7 @@ import {
 } from "../requests/request-storage";
 import { getCurrentProjectConfig } from "../../platform/storage/project-config";
 import { globalConfig } from "../../app/config";
-import { applyApiVersions } from "@onapi/http-model/sync/utils/api-versions";
+import { applyApiVersions } from "@onapi/domain/sync/utils/api-versions";
 
 type PushSource = { panel: vscode.WebviewPanel; apiListName: string };
 

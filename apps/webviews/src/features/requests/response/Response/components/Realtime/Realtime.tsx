@@ -1,5 +1,5 @@
 import type { HttpExecutionState } from "@/features/requests/execution/http-state";
-import { responseText } from "@onapi/http-model";
+import { responseText } from "@onapi/domain";
 import styles from "./Realtime.module.css";
 import { FC, memo, useContext, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,9 +12,9 @@ import ResponseResult from "@/features/requests/response/ResponseResult/Response
 import ResponseAssert from "@/features/requests/assertions/ResponseAssert/ResponseAssert";
 import ErrorContext from "@/features/requests/response/Response/ErrorContext";
 import Error from "@/features/requests/response/Response/components/Error";
-import { STATUS_CODE } from "@onapi/http-model/constants/common";
+import { STATUS_CODE } from "@onapi/domain/constants/common";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
-import { DirectionType } from "@onapi/http-model/types/common";
+import { DirectionType } from "@onapi/domain/types/common";
 
 const panelProps = {
   defaultSize: 50,

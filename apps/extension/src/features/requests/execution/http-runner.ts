@@ -10,7 +10,7 @@ import {
   type HttpRequestItem,
   type HttpProjectConfig,
   type PostmanCollection,
-} from "@onapi/http-model";
+} from "@onapi/domain";
 import {
   getCurrentProjectConfig,
   getProjectWorkspace,

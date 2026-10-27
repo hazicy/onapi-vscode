@@ -10,14 +10,14 @@ import { DirectionContext } from "@/shared/contexts";
 import {
   ApiComponentType,
   GraphQLDetailsData,
-} from "@onapi/http-model/requests/types/graphql";
-import { DirectionType } from "@onapi/http-model/types/common";
+} from "@onapi/domain/requests/types/graphql";
+import { DirectionType } from "@onapi/domain/types/common";
 import { importDelay } from "@/shared/utils/common";
 
 import UrlPanel from "./UrlPanel";
 
 import ToolBar from "../http/ToolBar";
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import { Flex } from "@/shared/ui/base";
 import { Button } from "@/shared/ui";
 import useApis from "@/features/requests/store/useApis";

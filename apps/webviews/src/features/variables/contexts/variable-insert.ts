@@ -7,7 +7,7 @@ import {
 import {
   FuncListRenderItem,
   InsertAction,
-} from "@onapi/http-model/requests/types/variable";
+} from "@onapi/domain/requests/types/variable";
 
 const VariableInsertContext = createContext<{
   optionKey: VAR_OPTIONS_KEY;

@@ -4,7 +4,7 @@ import { gzipSync, deflateSync } from "node:zlib";
 import load, { nativeDependency } from "./helpers/loadTypeScript.mjs";
 
 const tools = await load(
-  "packages/http-model/src/utils/response-tools.ts",
+  "packages/domain/src/utils/response-tools.ts",
   nativeDependency,
   {
     TextEncoder,
@@ -41,11 +41,11 @@ test("XML detection recognizes documents and rejects plain values", () => {
 });
 
 const parse = await load(
-  "packages/http-model/src/utils/parse.ts",
+  "packages/domain/src/utils/parse.ts",
   async (id) =>
     [
       "@/shared/utils/responseTools",
-      "@onapi/http-model/utils/response-tools",
+      "@onapi/domain/utils/response-tools",
     ].includes(id)
       ? tools
       : nativeDependency(id),

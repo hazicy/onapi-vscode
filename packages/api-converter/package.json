@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@onapi/http-model": "workspace:*",
+    "@onapi/domain": "workspace:*",
     "i18next": "^26.5.10",
     "lodash": "^4.18.1"
   },

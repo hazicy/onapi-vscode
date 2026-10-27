@@ -5,8 +5,8 @@ import {
   getDataFromGlobalStorage,
   setDataToGlobalStorage,
 } from "./index";
-import type { ProjectConfigType } from "@onapi/http-model/project/types/index";
-import { DEFAULT_PROJECT_CONFIG } from "@onapi/http-model/project/constants/project";
+import type { ProjectConfigType } from "@onapi/domain/project/types/index";
+import { DEFAULT_PROJECT_CONFIG } from "@onapi/domain/project/constants/project";
 import { globalConfig } from "../../app/config";
 
 export interface ProjectWorkspace {

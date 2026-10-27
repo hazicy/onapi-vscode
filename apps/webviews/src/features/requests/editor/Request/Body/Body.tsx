@@ -9,7 +9,7 @@ import BodyModeSelect from "./BodyModeSelect";
 import {
   REQUEST_BODY_MODE_ENUM,
   REQUEST_RAW_MODE_LIST,
-} from "@onapi/http-model/requests/constants/index";
+} from "@onapi/domain/requests/constants/index";
 
 import { RequestBodyProps } from "./types";
 

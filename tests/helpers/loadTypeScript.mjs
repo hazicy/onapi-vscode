@@ -4,7 +4,7 @@ const webviewRequire = createRequire(
   new URL("../../apps/webviews/package.json", import.meta.url),
 );
 const modelRequire = createRequire(
-  new URL("../../packages/http-model/package.json", import.meta.url),
+  new URL("../../packages/domain/package.json", import.meta.url),
 );
 import vm from "node:vm";
 import { transform } from "esbuild";
@@ -75,9 +75,8 @@ export default async function loadTypeScript(
     const nonempty = (candidate) =>
       candidate && Object.keys(candidate).length > 0;
     let alias;
-    if (id.startsWith("@onapi/http-model/"))
-      alias =
-        "@/" + id.slice("@onapi/http-model/".length).replace(/\/index$/, "");
+    if (id.startsWith("@onapi/domain/"))
+      alias = "@/" + id.slice("@onapi/domain/".length).replace(/\/index$/, "");
     else if (id.startsWith(".")) {
       const resolved = fileURLToPath(new URL(id, module.identifier));
       const marker = "/apps/webviews/src/";
@@ -93,22 +92,17 @@ export default async function loadTypeScript(
       }
     }
     if (
-      id.startsWith("@onapi/http-model") &&
+      id.startsWith("@onapi/domain") &&
       (!nonempty(value) ||
         [...(requested.get(id) || [])]
           .filter((name) => name !== "default")
           .some((name) => !(name in Object(value))))
     ) {
       const subpath =
-        id === "@onapi/http-model"
-          ? "index"
-          : id.slice("@onapi/http-model/".length);
+        id === "@onapi/domain" ? "index" : id.slice("@onapi/domain/".length);
       value = await loadTypeScript(
         fileURLToPath(
-          new URL(
-            `../../packages/http-model/src/${subpath}.ts`,
-            import.meta.url,
-          ),
+          new URL(`../../packages/domain/src/${subpath}.ts`, import.meta.url),
         ),
         nativeDependency,
         globals,

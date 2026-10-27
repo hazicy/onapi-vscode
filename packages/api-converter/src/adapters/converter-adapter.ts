@@ -3,7 +3,7 @@ import {
   toPostmanCollection,
   createDefaultHttpConfig,
   fromPostmanCollection,
-} from "@onapi/http-model";
+} from "@onapi/domain";
 
 export function nativeCollection(data: any) {
   const settings = data.http || createDefaultHttpConfig();

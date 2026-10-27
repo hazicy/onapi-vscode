@@ -1,4 +1,4 @@
-import { requestDefinition } from "@onapi/http-model";
+import { requestDefinition } from "@onapi/domain";
 import * as vscode from "vscode";
 import { isDeepStrictEqual } from "node:util";
 import { randomUUID, createHash, createHmac } from "node:crypto";

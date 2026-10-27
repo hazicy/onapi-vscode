@@ -8,7 +8,7 @@ import { Checkbox, Input } from "@/shared/ui/base";
 import { map } from "lodash-es";
 
 import GhostCollapse from "@/shared/ui/GhostCollapse";
-import { AUTH_ENUM } from "@onapi/http-model/requests/constants/auth";
+import { AUTH_ENUM } from "@onapi/domain/requests/constants/auth";
 
 const fieldList = [
   { label: "Username", name: "username", placeholder: "Username" },

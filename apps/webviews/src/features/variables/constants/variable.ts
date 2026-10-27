@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 import i18next from "i18next";
 
-import { InnerFuncListItem } from "@onapi/http-model/requests/types/variable";
+import { InnerFuncListItem } from "@onapi/domain/requests/types/variable";
 
 const { t } = i18next;
 

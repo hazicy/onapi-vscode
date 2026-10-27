@@ -1,4 +1,4 @@
-import { responseText } from "@onapi/http-model";
+import { responseText } from "@onapi/domain";
 import ResponseResult from "@/features/requests/response/ResponseResult/ResponseResult";
 import ResponseEmpty from "@/features/requests/response/Response/components/Empty";
 import styles from "./Realtime.module.css";

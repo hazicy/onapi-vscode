@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
-import { SYS_CONFIG } from "@onapi/http-model/settings/constants/settings";
-import { SysConfig } from "@onapi/http-model/settings/types/settings";
+import { SYS_CONFIG } from "@onapi/domain/settings/constants/settings";
+import { SysConfig } from "@onapi/domain/settings/types/settings";
 
 type State = {
   systemConfig: SysConfig;

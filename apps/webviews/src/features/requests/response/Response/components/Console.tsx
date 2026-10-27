@@ -4,7 +4,7 @@ import { FC, memo } from "react";
 
 import Console from "@/features/requests/response/Console/Console";
 import useApis from "@/features/requests/store/useApis";
-import { ApiSendingData } from "@onapi/http-model/requests/types/send";
+import { ApiSendingData } from "@onapi/domain/requests/types/send";
 
 interface Props {
   sendingData?: HttpExecutionState;

@@ -2,7 +2,7 @@ import styles from "./Settings.module.css";
 import { FC } from "react";
 
 import FolderBaseSettings from "@/features/collections/components/FolderSettings/BaseSettings/BaseSettings";
-import { FolderComponentType } from "@onapi/http-model/requests/types/folder";
+import { FolderComponentType } from "@onapi/domain/requests/types/folder";
 
 const Settings: FC<FolderComponentType> = ({ apisData, onApisDataChange }) => {
   return (

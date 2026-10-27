@@ -11,11 +11,11 @@ import { cloneDeep, find, findIndex, isEqual, map } from "lodash-es";
 import LineTabs from "@/shared/components/LineTabs/LineTabs";
 import RawEditor from "@/shared/components/RawEditor/RawEditor";
 import { Input, Modal } from "@/shared/ui";
-import { DEFAULT_SOCKETIO_MESSAGE } from "@onapi/http-model/requests/constants/default";
+import { DEFAULT_SOCKETIO_MESSAGE } from "@onapi/domain/requests/constants/default";
 import {
   MessageItem,
   SocketIoDetailsData,
-} from "@onapi/http-model/requests/types/socketio";
+} from "@onapi/domain/requests/types/socketio";
 import useEditFormat from "@/shared/hooks/useEditFormat";
 
 interface Props {

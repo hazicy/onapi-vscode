@@ -8,10 +8,10 @@ import RequestPanel from "@/features/requests/editor/Request/Request";
 import {
   ApiComponentType,
   ApiDetailsData,
-} from "@onapi/http-model/requests/types/api";
-import { DirectionType } from "@onapi/http-model/types/common";
+} from "@onapi/domain/requests/types/api";
+import { DirectionType } from "@onapi/domain/types/common";
 
-import type { HttpRequest } from "@onapi/http-model";
+import type { HttpRequest } from "@onapi/domain";
 
 const Request = memo(
   (

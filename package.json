@@ -32,7 +32,7 @@
     "@noble/hashes": "^2.4.0",
     "@onapi/api-converter": "workspace:*",
     "@onapi/contracts": "workspace:*",
-    "@onapi/http-model": "workspace:*",
+    "@onapi/domain": "workspace:*",
     "@onapi/runtime": "workspace:*",
     "@onapi/webviews": "workspace:*",
     "@playwright/test": "^1.64.1",

@@ -10,7 +10,7 @@ import GhostCollapse from "@/shared/ui/GhostCollapse";
 import {
   AUTH_AWSV4_LOCATION,
   AUTH_ENUM,
-} from "@onapi/http-model/requests/constants/auth";
+} from "@onapi/domain/requests/constants/auth";
 
 const options = map(AUTH_AWSV4_LOCATION, ({ label, value }) => ({
   label,

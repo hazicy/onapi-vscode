@@ -8,8 +8,8 @@ export async function generateMockBody(input: unknown): Promise<string> {
   try {
     const value = JSON5.parse(input);
     const [{ toJsonSchema }, { default: MockSchema }] = await Promise.all([
-      import("@onapi/http-model/mock/infer-schema"),
-      import("@onapi/http-model/mock/schema"),
+      import("@onapi/domain/mock/infer-schema"),
+      import("@onapi/domain/mock/schema"),
     ]);
     const schema = toJsonSchema(value);
     const data = await new (MockSchema as any)({ lang: "en" }).mock(schema);

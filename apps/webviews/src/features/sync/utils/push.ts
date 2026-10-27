@@ -3,7 +3,7 @@ import useProjectConfig from "@/features/project/store/useProjectConfig";
 import type {
   EnvListItem,
   ServerItem,
-} from "@onapi/http-model/environment/types/index";
+} from "@onapi/domain/environment/types/index";
 import type { Key } from "react";
 import { cloneDeep } from "lodash-es";
 import { compareEnvironments, mergeServiceLists } from "./environmentDiff";

@@ -2,9 +2,9 @@ import { useMemo } from "react";
 
 import { cloneDeep, forEach, includes, some } from "lodash-es";
 
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import { TreeDataFilterParams } from "@/features/collections/types/tree";
-import { ShareInfoData } from "@onapi/http-model/sharing/types/share";
+import { ShareInfoData } from "@onapi/domain/sharing/types/share";
 
 interface Props {
   dataSource: ApiDetailsData[];

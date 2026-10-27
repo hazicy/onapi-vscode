@@ -2,7 +2,7 @@ import React from "react";
 import { Flex } from "@/shared/ui/base";
 import useApis from "@/features/requests/store/useApis";
 import TreeCheckbox from "@/features/collections/components/TreeCheckbox/TreeCheckbox";
-import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
+import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 import Conflict from "../Conflict";
 import { PushApiData } from "../type";
 import { isArray } from "lodash-es";

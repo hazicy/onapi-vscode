@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Flex } from "@/shared/ui/base";
 
 import { useMemoizedFn } from "ahooks";
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { produce } from "immer";
 import {
   cloneDeep,
@@ -25,10 +25,10 @@ import context from "@/shared/components/RawEditor/visualizationContext";
 import {
   MessageItem,
   WebSocketDetailsData,
-} from "@onapi/http-model/requests/types/websocket";
+} from "@onapi/domain/requests/types/websocket";
 
 import MessageHeader from "./MessageHeader";
-import { DEFAULT_WEBSOCKET_MESSAGE } from "@onapi/http-model/requests/constants/request";
+import { DEFAULT_WEBSOCKET_MESSAGE } from "@onapi/domain/requests/constants/request";
 import ListSideBar from "@/shared/components/ListSideBar/ListSideBar";
 
 interface Props {

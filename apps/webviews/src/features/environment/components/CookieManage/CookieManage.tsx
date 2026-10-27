@@ -1,4 +1,4 @@
-import type { SerializedCookie as Cookie } from "@onapi/http-model";
+import type { SerializedCookie as Cookie } from "@onapi/domain";
 import { useEffect, useState } from "react";
 import { Flex, Input, Checkbox, message } from "@/shared/ui/base";
 import Table from "@/shared/components/BasicTable/BasicTable";

@@ -2,14 +2,14 @@ import ResponseNetwork from "./ResponseNetwork";
 import { timingSegments } from "../utils/response-metrics";
 import { responseDownload } from "../utils/response-download";
 import { sdkResponseView } from "@/features/requests/utils/executionView";
-import { responseText } from "@onapi/http-model";
+import { responseText } from "@onapi/domain";
 import styles from "./ResponseSize.module.css";
 import React, { memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Col, Divider, Flex, Row } from "@/shared/ui/base";
 
-import { bufferToRaw } from "@onapi/http-model/utils/response-tools";
+import { bufferToRaw } from "@onapi/domain/utils/response-tools";
 import classNames from "classnames";
 import {
   add,
@@ -38,13 +38,13 @@ import {
   HTTPS_TIME_ARRAY,
   HTTP_TIME_ARRAY,
   RESPONSE_CODE_DESC_MAP,
-} from "@onapi/http-model/requests/constants/response";
+} from "@onapi/domain/requests/constants/response";
 import useTheme from "@/shared/hooks/useTheme";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import {
   ApiSendResponseDataProxy,
   ApiSendingData,
-} from "@onapi/http-model/requests/types/send";
+} from "@onapi/domain/requests/types/send";
 import {
   convertResponseBytes,
   convertResponseTime,

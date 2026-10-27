@@ -22,7 +22,7 @@
   "dependencies": {
     "@onapi/contracts": "workspace:*",
     "@onapi/core": "workspace:*",
-    "@onapi/http-model": "workspace:*",
+    "@onapi/domain": "workspace:*",
     "@postman/tough-cookie": "4.1.3-postman.1",
     "file-type": "^22.2.0",
     "https-proxy-agent": "^9.1.0",

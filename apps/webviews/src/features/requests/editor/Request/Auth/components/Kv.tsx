@@ -9,7 +9,7 @@ import VarInput from "@/features/variables/components/VarInput/VarInput";
 import {
   AUTH_APIKEY_LOCATION,
   AUTH_ENUM,
-} from "@onapi/http-model/requests/constants/auth";
+} from "@onapi/domain/requests/constants/auth";
 
 const Kv = () => {
   const { t } = useTranslation();

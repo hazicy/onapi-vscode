@@ -1,4 +1,4 @@
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import {
   cloneDeep,
   isArray,

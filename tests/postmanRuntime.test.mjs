@@ -17,7 +17,7 @@ before(async () => {
   const require = createRequire(import.meta.url);
   runtime = require("../test-results/native-runtime/postman.cjs");
   await build({
-    entryPoints: ["packages/http-model/src/index.ts"],
+    entryPoints: ["packages/domain/src/index.ts"],
     outfile: "test-results/native-model.cjs",
     bundle: true,
     platform: "node",

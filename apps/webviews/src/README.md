@@ -1,7 +1,7 @@
 # Webview source layout
 
 Browser code is organized by product feature. Shared request definitions and
-configuration types live in `@onapi/http-model`; cross-process events live in
+configuration types live in `@onapi/domain`; cross-process events live in
 `@onapi/contracts`. See [workspace ownership](../../../docs/monorepo.md).
 
 ```text

@@ -1,7 +1,7 @@
-import { ApisBaseDataItem } from "@onapi/http-model/requests/types/base";
-import { RequestBodyContentType } from "@onapi/http-model/requests/types/request";
-import { CustomNumberBooleanType } from "@onapi/http-model/types/common";
-import { GlobalParamsHeaderItem } from "@onapi/http-model/project/types/index";
+import { ApisBaseDataItem } from "@onapi/domain/requests/types/base";
+import { RequestBodyContentType } from "@onapi/domain/requests/types/request";
+import { CustomNumberBooleanType } from "@onapi/domain/types/common";
+import { GlobalParamsHeaderItem } from "@onapi/domain/project/types/index";
 
 export type Item = {
   description: string;

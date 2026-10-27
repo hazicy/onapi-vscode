@@ -6,7 +6,7 @@ import {
   editedUrl,
   type HttpRequest,
   requestUrl,
-} from "@onapi/http-model";
+} from "@onapi/domain";
 import styles from "./Request.module.css";
 import type { TabPaneProps } from "@/shared/ui/base";
 import React, { type FC, lazy, type ReactNode, useMemo, useState } from "react";
@@ -58,7 +58,7 @@ const Request: FC<RequestProps> = ({
     rows: SdkParameter[] | undefined,
     update: (rows: EditedSdkParameter[]) => void,
     tabType: HttpParameterTableProps["tabType"],
-    bodyMode?: import("@onapi/http-model/requests/types/request").RequestBodyContentType,
+    bodyMode?: import("@onapi/domain/requests/types/request").RequestBodyContentType,
   ) => (
     <HttpParameterTable
       dataSource={rows || []}

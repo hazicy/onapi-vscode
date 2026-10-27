@@ -4,10 +4,7 @@ import {
   toSwaggerImport,
   nativeCollection,
 } from "@onapi/api-converter/adapters/converter-adapter";
-import {
-  fromPostmanCollection,
-  createDefaultHttpConfig,
-} from "@onapi/http-model";
+import { fromPostmanCollection, createDefaultHttpConfig } from "@onapi/domain";
 import type { Result, Warning } from "@onapi/api-converter";
 
 export const throwResult = (

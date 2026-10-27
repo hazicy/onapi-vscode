@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { DragEndEvent } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { useMemoizedFn } from "ahooks";
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { produce } from "immer";
 import { cloneDeep, isArray } from "lodash-es";
 

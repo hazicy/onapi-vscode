@@ -12,8 +12,8 @@ import { isEqual } from "lodash-es";
 import { Popover, Tooltip } from "@/shared/ui";
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
-import { STATUS_CODE } from "@onapi/http-model/constants/common";
-import { ChangeFuncType } from "@onapi/http-model/types/common";
+import { STATUS_CODE } from "@onapi/domain/constants/common";
+import { ChangeFuncType } from "@onapi/domain/types/common";
 
 import {
   PARAMETER_TYPE,

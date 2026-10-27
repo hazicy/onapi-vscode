@@ -84,12 +84,12 @@ See the [development guide](./scripts/README.md) for hot reload, localization, b
 
 ### Workspace layout
 
-| Directory        | Responsibility                                                    |
-| ---------------- | ----------------------------------------------------------------- |
-| `apps/extension` | VS Code extension host and native sidebar.                        |
-| `apps/webviews`  | Request editors and browser UI.                                   |
-| `packages`       | Shared contracts, API conversion, HTTP models, core, and runtime. |
-| `scripts`        | Development, builds, packaging, and validation.                   |
+| Directory        | Responsibility                                                      |
+| ---------------- | ------------------------------------------------------------------- |
+| `apps/extension` | VS Code extension host and native sidebar.                          |
+| `apps/webviews`  | Request editors and browser UI.                                     |
+| `packages`       | Shared contracts, API conversion, domain models, core, and runtime. |
+| `scripts`        | Development, builds, packaging, and validation.                     |
 
 See [workspace architecture](./docs/monorepo.md) for package boundaries and feature ownership.
 

@@ -1,5 +1,5 @@
 import type * as vscode from "vscode";
-import { requestUrl } from "@onapi/http-model";
+import { requestUrl } from "@onapi/domain";
 import { getCurrentRequestServer } from "./request-server";
 import { getCodeHarRequest } from "./execution/http-runner";
 import { proxyFetch2 } from "../../platform/http-client";

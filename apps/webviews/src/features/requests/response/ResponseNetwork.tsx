@@ -1,7 +1,7 @@
 import { Divider, Flex } from "@/shared/ui/base";
 import AppIcon from "@/shared/ui/AppIcon";
 import styles from "./ResponseSize.module.css";
-import type { ApiSendingData } from "@onapi/http-model/requests/types/send";
+import type { ApiSendingData } from "@onapi/domain/requests/types/send";
 
 const groups = [
   [

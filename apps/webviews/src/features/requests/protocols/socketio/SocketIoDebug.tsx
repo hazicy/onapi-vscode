@@ -14,7 +14,7 @@ import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels
 import UrlGroup from "@/features/requests/editor/UrlGroup";
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
-import { APIS_TARGET_TYPE_ENUM } from "@onapi/http-model/requests/constants/index";
+import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 import useApis from "@/features/requests/store/useApis";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import useUserConfig from "@/features/auth/store/useUserConfig";
@@ -22,15 +22,15 @@ import useApisWebSocket from "@/features/requests/store/useApis/websocket";
 import {
   SocketIoComponentType,
   SocketIoDetailsData,
-} from "@onapi/http-model/requests/types/socketio";
-import { AnyObject, DirectionType } from "@onapi/http-model/types/common";
+} from "@onapi/domain/requests/types/socketio";
+import { AnyObject, DirectionType } from "@onapi/domain/types/common";
 import { genQueryByUrl } from "@/features/requests/utils/apis";
 import { convertToSaveFolderTree, importDelay } from "@/shared/utils/common";
 
 import useWebSocket from "./useWebSocket";
 
 import ToolBar from "../http/ToolBar";
-import { ApiDetailsData } from "@onapi/http-model/requests/types/api";
+import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import { produce } from "immer";
 
 const Request = lazy(() => importDelay(import("./Request/Request")));

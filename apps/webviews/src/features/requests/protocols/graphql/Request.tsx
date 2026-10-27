@@ -12,8 +12,8 @@ import {
   ApiComponentType,
   GraphQLChangeFuncType,
   GraphQLDetailsData,
-} from "@onapi/http-model/requests/types/graphql";
-import { DirectionType } from "@onapi/http-model/types/common";
+} from "@onapi/domain/requests/types/graphql";
+import { DirectionType } from "@onapi/domain/types/common";
 
 const Request = memo(
   (

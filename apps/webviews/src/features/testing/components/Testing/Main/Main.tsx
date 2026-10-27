@@ -17,15 +17,15 @@ import {
   EventItem,
   TestingDetailData,
   TestingSendingData,
-} from "@onapi/http-model/testing/types/index";
+} from "@onapi/domain/testing/types/index";
 import { useMemoizedFn, useSafeState } from "ahooks";
-import { Settings } from "@onapi/http-model/testing/types/common";
+import { Settings } from "@onapi/domain/testing/types/common";
 import { useTranslation } from "react-i18next";
 import { openUrl } from "@/shared/utils/open";
-import { STATUS_CODE } from "@onapi/http-model/constants/common";
+import { STATUS_CODE } from "@onapi/domain/constants/common";
 import EnvDropdown from "@/features/environment/components/EnvDropdown";
 import { produce } from "immer";
-import { ChangeFuncType } from "@onapi/http-model/types/common";
+import { ChangeFuncType } from "@onapi/domain/types/common";
 import useTesting from "@/features/testing/store/useTesting";
 import { str2testData } from "@/shared/utils/common";
 import TestingResult from "./TestingResult";

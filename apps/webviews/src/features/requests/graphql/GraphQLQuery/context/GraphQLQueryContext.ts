@@ -3,7 +3,7 @@ import { createContext } from "react";
 import {
   GraphQLChangeFuncType,
   GraphQLDetailsData,
-} from "@onapi/http-model/requests/types/graphql";
+} from "@onapi/domain/requests/types/graphql";
 
 type Props = {
   apiData: GraphQLDetailsData;

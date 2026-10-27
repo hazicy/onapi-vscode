@@ -1,4 +1,4 @@
-import { bufferToRaw } from "@onapi/http-model/utils/response-tools";
+import { bufferToRaw } from "@onapi/domain/utils/response-tools";
 
 /** Use the same decoded content in the message list, detail view and search. */
 export function getSocketContent(item: any): string {

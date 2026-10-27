@@ -20,13 +20,13 @@ const webviewLegacyEdges = new Set(
 const usedWebviewLegacyEdges = new Set();
 // Models are the bottom layer; wire contracts may depend only on those models.
 const sharedWorkspaceDependencies = {
-  "packages/http-model": new Set(),
-  "packages/contracts": new Set(["@onapi/http-model"]),
+  "packages/domain": new Set(),
+  "packages/contracts": new Set(["@onapi/domain"]),
 };
 const owners = [
   "apps/extension",
   "apps/webviews",
-  "packages/http-model",
+  "packages/domain",
   "packages/contracts",
   "packages/core",
   "packages/runtime",

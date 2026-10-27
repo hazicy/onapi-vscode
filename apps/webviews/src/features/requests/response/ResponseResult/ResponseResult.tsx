@@ -1,6 +1,6 @@
 import { sdkResponseView } from "@/features/requests/utils/executionView";
 import classNames from "classnames";
-import { responseText, responseLanguage } from "@onapi/http-model";
+import { responseText, responseLanguage } from "@onapi/domain";
 import {
   forwardRef,
   memo,
@@ -17,10 +17,10 @@ import { find, forEach, isArray, isPlainObject, map } from "lodash-es";
 
 import SegmentedTabs from "@/shared/components/SegmentedTabs";
 import AppIcon from "@/shared/ui/AppIcon";
-import { BaseResponse } from "@onapi/http-model/requests/types/response";
-import { ApiSendingData } from "@onapi/http-model/requests/types/send";
+import { BaseResponse } from "@onapi/domain/requests/types/response";
+import { ApiSendingData } from "@onapi/domain/requests/types/send";
 import { copyStringToClipboard } from "@/shared/utils/common";
-import { parseStreamToRaw } from "@onapi/http-model/utils/parse";
+import { parseStreamToRaw } from "@onapi/domain/utils/parse";
 
 import {
   RAW_ENCODE,

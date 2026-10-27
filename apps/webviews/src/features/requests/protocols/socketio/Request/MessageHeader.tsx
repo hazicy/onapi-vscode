@@ -11,7 +11,7 @@ import { filter, includes, isEqual, map, size, trim } from "lodash-es";
 import Button from "@/shared/ui/Button";
 import useApis from "@/features/requests/store/useApis";
 import useApisWebSocket from "@/features/requests/store/useApis/websocket";
-import { SocketIoDetailsData } from "@onapi/http-model/requests/types/socketio";
+import { SocketIoDetailsData } from "@onapi/domain/requests/types/socketio";
 
 interface Props {
   value: any;

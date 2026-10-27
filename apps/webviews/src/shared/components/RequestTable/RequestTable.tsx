@@ -1,4 +1,4 @@
-import { STATUS_CODE } from "@onapi/http-model/constants/common";
+import { STATUS_CODE } from "@onapi/domain/constants/common";
 import { RowKey, RowValue, RowContentType } from "./components";
 import Listen from "./components/Listen";
 import {
@@ -28,13 +28,13 @@ import {
 } from "@dnd-kit/sortable";
 import { useMemoizedFn } from "ahooks";
 
-import { snowflakeId } from "@onapi/http-model/utils/data-tools";
+import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { produce } from "immer";
 import { cloneDeep } from "lodash-es";
 
 import KeyValueRow from "./components/KeyValueRow";
-import { PARAMETER_ITEM } from "@onapi/http-model/requests/constants/request";
-import { ApisBaseDataItem } from "@onapi/http-model/requests/types/base";
+import { PARAMETER_ITEM } from "@onapi/domain/requests/constants/request";
+import { ApisBaseDataItem } from "@onapi/domain/requests/types/base";
 
 import { RequestTableProps } from "./types";
 

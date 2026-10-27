@@ -27,7 +27,7 @@ test("concurrent assembly keeps published Workers available and never exposes pa
     "apps/webviews/public/scalar.standalone.js": "scalar",
     "apps/webviews/public/scalar.LICENSE.txt": "MIT",
     "apps/webviews/public/404.html": "404",
-    "packages/http-model/src/mock/license.txt": "license",
+    "packages/domain/src/mock/license.txt": "license",
     "README.md": "readme",
     "CHANGELOG.md": "changes",
     "LICENSE.txt": "license",

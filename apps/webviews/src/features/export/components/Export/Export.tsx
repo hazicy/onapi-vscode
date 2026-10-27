@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { Typography } from "@/shared/ui/base";
 
-import { EXPORT_TYPE_ENUM } from "@onapi/http-model/settings/constants/settings";
+import { EXPORT_TYPE_ENUM } from "@onapi/domain/settings/constants/settings";
 import ExportComponent from "./ExportComponent";
 
 const { Title } = Typography;

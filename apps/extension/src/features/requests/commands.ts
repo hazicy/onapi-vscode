@@ -3,8 +3,8 @@ import { cloneDeep, forEach, isString, map } from "lodash";
 import Har2languages from "har2languages";
 import { copyTextToClipboard, showTabName } from "../../platform/host-utils";
 import { getCodeHarRequest } from "./execution/http-runner";
-import type { ApiDetailsData } from "@onapi/http-model/requests/types/api";
-import type { ProjectConfigType } from "@onapi/http-model/project/types/index";
+import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
+import type { ProjectConfigType } from "@onapi/domain/project/types/index";
 export {
   sendApi,
   sendAutoTest,

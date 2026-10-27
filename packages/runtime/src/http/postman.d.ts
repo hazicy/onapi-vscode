@@ -1,4 +1,4 @@
-import type { PostmanCollection, HttpProjectConfig } from "@onapi/http-model";
+import type { PostmanCollection, HttpProjectConfig } from "@onapi/domain";
 import type { ExecutionEvent, WorkerRunCommand } from "@onapi/contracts";
 export function run(
   collection: PostmanCollection,
