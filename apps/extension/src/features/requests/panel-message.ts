@@ -28,6 +28,12 @@ type Payloads = {
   setProjectConfig: { key: string; value: unknown };
   setSystemConfig: Record<string, unknown>;
   createShare: ShareInfoData;
+  generateCode: {
+    apiData: HttpRequestItem;
+    language?: string;
+    variant?: string;
+    requestId: string;
+  };
   getCodeHar: { apiData: HttpRequestItem };
   copyAsCurl: { apiData: HttpRequestItem };
   exportOpenApiById: { id: string };

@@ -54,6 +54,7 @@ for (const moduleDelay of [0, 250]) {
       window.vscodeData.initialData = initialMessage.data;
       window.vscode = { postMessage(message) {
         window.startupMessages.push({ action: message.action,
+          ...(message.action === "generateCode" ? { data: message.data } : {}),
           contentReady: performance.getEntriesByName('onapi:content-ready').length });
         if (message.action === 'getApiList') {
           window.dispatchEvent(new MessageEvent('message', {
@@ -101,7 +102,7 @@ for (const moduleDelay of [0, 250]) {
       "getSystemConfig",
       "getVscodeTheme",
       "getDocBaseUrl",
-      "getCodeHar",
+      "generateCode",
     ]) {
       expect(actions).not.toContain(action);
     }
@@ -170,11 +171,59 @@ for (const moduleDelay of [0, 250]) {
       .poll(() =>
         page.evaluate(() =>
           (window as any).startupMessages.some(
-            (message: any) => message.action === "getCodeHar",
+            (message: any) => message.action === "generateCode",
           ),
         ),
       )
       .toBe(true);
+    await page.evaluate(() => {
+      const request = (window as any).startupMessages.findLast(
+        (message: any) => message.action === "generateCode",
+      );
+      window.dispatchEvent(
+        new MessageEvent("message", {
+          data: {
+            action: "generatedCode",
+            data: {
+              requestId: request.data.requestId,
+              language: "curl",
+              variant: "cURL",
+              syntax: "shell",
+              code: "curl 'https://example.com/a%2Fb'",
+              languages: [
+                {
+                  key: "curl",
+                  label: "cURL",
+                  syntax_mode: "shell",
+                  variants: [{ key: "cURL" }],
+                },
+                {
+                  key: "javascript",
+                  label: "JavaScript",
+                  syntax_mode: "javascript",
+                  variants: [{ key: "Fetch" }],
+                },
+              ],
+            },
+          },
+        }),
+      );
+    });
+    await expect(page.getByText("cURL(cURL)", { exact: true })).toBeVisible();
+    await expect(
+      page.locator(".cm-content").filter({ hasText: "a%2Fb" }),
+    ).toBeVisible();
+    await page.getByText("JavaScript(Fetch)", { exact: true }).click();
+    await expect
+      .poll(() =>
+        page.evaluate(() => {
+          const request = (window as any).startupMessages.findLast(
+            (message: any) => message.action === "generateCode",
+          );
+          return [request.data.language, request.data.variant];
+        }),
+      )
+      .toEqual(["javascript", "Fetch"]);
     expect(errors).toEqual([]);
   });
 }

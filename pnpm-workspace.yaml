@@ -7,6 +7,8 @@ strictPeerDependencies: false
 allowBuilds:
   esbuild: true
   "@vscode/vsce-sign": false
+  # Published generators are self-contained; skip nested package installations.
+  postman-code-generators: false
   core-js: false
   keytar: false
 

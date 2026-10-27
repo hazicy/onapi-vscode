@@ -52,7 +52,6 @@
     "fast-xml-parser": "^5.11.2",
     "file-saver": "^2.0.5",
     "graphql": "^17.0.2",
-    "har2languages": "^0.0.5",
     "i18next": "^26.5.10",
     "immer": "^11.2.9",
     "json5": "^2.2.3",

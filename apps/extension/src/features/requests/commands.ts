@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
-import { cloneDeep, forEach, isString, map } from "lodash";
-import Har2languages from "har2languages";
+import { forEach } from "lodash";
+import { generateRequestCode } from "./code-generation";
 import { copyTextToClipboard, showTabName } from "../../platform/host-utils";
-import { getCodeHarRequest } from "./execution/http-runner";
+import { getResolvedCodeRequest } from "./execution/http-runner";
 import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import type { ProjectConfigType } from "@onapi/domain/project/types/index";
 export {
@@ -42,29 +42,9 @@ export const copyAsCurl = async (
   context: vscode.ExtensionContext,
 ) => {
   try {
-    const codeHar: any = await getCodeHarRequest(apiData, context);
-    if (isString(codeHar)) {
-      vscode.window.showErrorMessage(`${codeHar}`);
-      return;
-    }
-    const request = cloneDeep(codeHar)?.log?.entries?.[0]?.request;
-    request.url = request?.url?.split("#")[0];
-    request.headers = map(request?.headers, (it) => {
-      if (!isString(it.value)) {
-        return { ...it, value: String(it.value) };
-      }
-      return it;
-    });
-    const har2languages = new Har2languages();
-    const languagesRes: any = har2languages.convert(request, "shell", "curl");
-
-    if (languagesRes?.status === "error") {
-      vscode.window.showInformationMessage(`${languagesRes?.message}`);
-      return;
-    }
-    try {
-      languagesRes.data = decodeURIComponent(languagesRes?.data);
-      copyTextToClipboard(languagesRes.data || "");
-    } catch (error) {}
-  } catch (error) {}
+    const request = await getResolvedCodeRequest(apiData, context);
+    copyTextToClipboard(await generateRequestCode(request, "curl", "cURL"));
+  } catch (error) {
+    vscode.window.showErrorMessage(String(error));
+  }
 };

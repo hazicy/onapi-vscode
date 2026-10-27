@@ -19,6 +19,7 @@ import {
 } from "@onapi/domain/requests/types/variable";
 
 import VarList from "./components/VarList";
+import type { VarContentRef } from "./components/VarContent";
 const VarContent = lazy(() => import("./components/VarContent"));
 
 export interface Props extends PopoverProps {
@@ -64,7 +65,7 @@ const Index = ({
     VAR_OPTIONS_KEY.var,
   );
   const [value, setValue] = useState<string>("");
-  const contentRef = useRef<any>(null);
+  const contentRef = useRef<VarContentRef>(null);
   const [isEdit, setIsEdit] = useState(false);
   const [height, setHeight] = useState(200);
   const language = useSystemConfig((state) => state.systemConfig.language);
@@ -148,16 +149,15 @@ const Index = ({
       >
         <div
           id={VARIABLE_LIST_CONTENT_KEY}
+          aria-hidden={step !== 1}
+          inert={step !== 1}
           className={classNames(styles.container, step === 1 && styles.active)}
         >
           <VarList onChange={stepChange} type={tabsValue} />
         </div>
         {open && (
           <Suspense fallback={null}>
-            <VarContent
-              className={classNames(step === 2 && styles.active)}
-              ref={contentRef}
-            />
+            <VarContent ref={contentRef} />
           </Suspense>
         )}
       </div>

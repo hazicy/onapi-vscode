@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import React, { useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Input, message } from "@/shared/ui/base";
@@ -7,13 +7,8 @@ import VarMentions from "@/features/variables/components/VarMentions";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import { useMemoizedFn, useSafeState } from "ahooks";
 import cn from "classnames";
-import { find, head } from "lodash-es";
-import { useShallow } from "zustand/react/shallow";
+import { head } from "lodash-es";
 
-import {
-  genUrlByQuery,
-  getParameterDataFilterContentLength,
-} from "@/features/requests/utils/apis";
 import { parseSafeBash } from "@/features/curl/utils/curl";
 import type { CurlDataType } from "@/features/requests/types/other";
 

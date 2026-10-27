@@ -62,6 +62,7 @@ const Index = ({ value, onChange }: Props) => {
           <div className={styles.list}>
             {map(list, (item, index) => (
               <div
+                key={`${item.type}:${item.key}`}
                 className={styles.listItem}
                 onFocus={() => setIndex(index)}
                 onMouseOver={() => setIndex(index)}

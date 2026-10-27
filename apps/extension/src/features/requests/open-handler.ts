@@ -1,3 +1,8 @@
+import {
+  generateRequestCode,
+  getCodeLanguages,
+  selectCodeLanguage,
+} from "./code-generation";
 import { requestDefinition } from "@onapi/domain";
 import type { RequestPanelMessage } from "./panel-message";
 import { fetchGraphQLSchema } from "./graphql-schema";
@@ -17,6 +22,7 @@ import {
 } from "../../platform/storage/project-config";
 import {
   getCodeHarRequest,
+  getResolvedCodeRequest,
   sendApi,
   stopWorker,
 } from "./execution/http-runner";
@@ -204,6 +210,40 @@ export const handelOpenMessage = async (
       createShare(data, context);
       break;
 
+    case "generateCode": {
+      try {
+        const languages = getCodeLanguages();
+        const selection = selectCodeLanguage(data.language, data.variant);
+        const request = await getResolvedCodeRequest(
+          data.apiData,
+          context,
+          message.option,
+        );
+        const code = await generateRequestCode(
+          request,
+          selection.language,
+          selection.variant,
+        );
+        panel.webview.postMessage({
+          action: "generatedCode",
+          data: {
+            requestId: data.requestId,
+            code,
+            languages,
+            ...selection,
+          },
+        });
+      } catch (error) {
+        panel.webview.postMessage({
+          action: "generatedCode",
+          data: {
+            requestId: data.requestId,
+            error: String(error),
+          },
+        });
+      }
+      break;
+    }
     case "getCodeHar":
       const codeHar = await getCodeHarRequest(
         data.apiData,
@@ -213,15 +253,21 @@ export const handelOpenMessage = async (
       // Send HAR request results back to Webview
       panel.webview.postMessage({ action: "setCodeHar", data: codeHar });
       break;
-    case "copyAsCurl":
-      const har = await getCodeHarRequest(
-        data.apiData,
-        context,
-        message?.option,
-      );
-      // Send HAR request results back to Webview
-      panel.webview.postMessage({ action: "copyAsCurl", data: har });
+    case "copyAsCurl": {
+      try {
+        const request = await getResolvedCodeRequest(
+          data.apiData,
+          context,
+          message.option,
+        );
+        await vscode.env.clipboard.writeText(
+          await generateRequestCode(request, "curl", "cURL"),
+        );
+      } catch (error) {
+        vscode.window.showErrorMessage(String(error));
+      }
       break;
+    }
     case "ws_connect":
       await recordRequestHistory(context, data.target);
       data.option = await prepareWebSocketSessionOptions(data, context);

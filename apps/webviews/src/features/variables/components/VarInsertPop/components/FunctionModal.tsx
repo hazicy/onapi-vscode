@@ -1,5 +1,5 @@
 import styles from "./FunctionModal.module.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Flex, Select } from "@/shared/ui/base";
@@ -19,48 +19,26 @@ import {
 } from "@onapi/domain/requests/types/variable";
 
 interface Props {
-  open: boolean;
-  value?: Record<string, any>;
-  editFn?: { func_name: string; func_desc?: string; paras?: any };
+  editFn: FuncListRenderItem;
   onCancel: (v?: FuncListRenderItem) => void;
 }
 
-const defaultFnItem = {
-  func_name: "",
-  func_desc: "",
-  paras: {},
-};
-
-const Index = ({
-  open,
-  onCancel,
-  value: originValue = {},
-  editFn = defaultFnItem,
-}: Props) => {
-  useEffect(() => {
-    if (open) {
-      setValue({
-        ...FUNCTION_DEFAULT_VALUE,
-        ...originValue,
-        ...(editFn?.paras || {}),
-      });
-      setSelectFunc(editFn);
-    }
-  }, [open]);
+// The owner mounts one dialog per edit session; cancellation discards this draft.
+const FunctionModal = ({ onCancel, editFn }: Props) => {
   const { t } = useTranslation();
-  const [value, setValue] = useState<Record<string, any>>({});
-  const [selectFunc, setSelectFunc] = useState<{
-    func_name: string;
-    func_desc?: string;
-    paras?: Record<string, any>;
-  }>(defaultFnItem);
+  const [value, setValue] = useState<Record<string, any>>(() => ({
+    ...FUNCTION_DEFAULT_VALUE,
+    ...editFn.paras,
+  }));
+  const [selectFunc, setSelectFunc] =
+    useState<Pick<FuncListRenderItem, "func_name" | "func_desc">>(editFn);
   const functionList = useProjectSetting((state) => state.functionList);
 
   const onChange = (obj: Record<string, any>) => {
-    setValue({
-      ...value,
+    setValue((previous) => ({
+      ...previous,
       ...obj,
-    });
+    }));
   };
 
   const funcRender = ({
@@ -69,7 +47,8 @@ const Index = ({
     params,
   }: InnerFuncListItem) => {
     if (params) {
-      return params.map((item) => {
+      return params.map((item, index) => {
+        const key = item.key || `${funcStr}:${index}`;
         const v = item.key ? value[funcStr]?.[item.key] : value[funcStr]?.text;
         const change = (funcKey: string, data: any) => {
           if (item.key) {
@@ -91,6 +70,7 @@ const Index = ({
         if (item.type === "number") {
           return (
             <InputNumber
+              key={key}
               placeholder={item.placeholder}
               precision={0}
               size="small"
@@ -102,6 +82,7 @@ const Index = ({
         if (item.type === "option" && item.options) {
           return (
             <Select
+              key={key}
               size="small"
               style={{ width: "100%" }}
               onChange={(e) => change(funcStr, e)}
@@ -113,6 +94,7 @@ const Index = ({
         if (item.type === "string") {
           return (
             <Input
+              key={key}
               placeholder={item.placeholder}
               size="small"
               maxLength={256}
@@ -154,7 +136,7 @@ const Index = ({
   return (
     <Modal
       onCancel={() => onCancel()}
-      open={open}
+      open
       destroyOnClose
       width={600}
       title={t("var_insert.handle_fn")}
@@ -166,7 +148,7 @@ const Index = ({
             <span className={styles.tipTitle}>{t("var_insert.custom_fn")}</span>
             {functionList.map((item) => {
               return (
-                <Tooltip title={item?.func_desc}>
+                <Tooltip key={item.func_id} title={item?.func_desc}>
                   <div
                     key={item.func_id}
                     onClick={() =>
@@ -197,7 +179,7 @@ const Index = ({
           <span className={styles.tipTitle}>{t("var_insert.inner_fn")}</span>
           {INNER_FUNC_LIST.map((item) => {
             return (
-              <Tooltip title={item?.description}>
+              <Tooltip key={item.function} title={item?.description}>
                 <div
                   key={item.function}
                   onClick={() =>
@@ -229,4 +211,4 @@ const Index = ({
   );
 };
 
-export default Index;
+export default FunctionModal;

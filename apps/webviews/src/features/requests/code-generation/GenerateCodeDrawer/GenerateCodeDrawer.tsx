@@ -1,21 +1,11 @@
 import styles2 from "./GenerateCodeDrawer.module.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Flex, Spin, message } from "@/shared/ui/base";
 
 import { useDebounceFn, useSafeState } from "ahooks";
 import classNames from "classnames";
-import Har2languages from "har2languages";
-import {
-  cloneDeep,
-  isArray,
-  isEmpty,
-  isObject,
-  isString,
-  map,
-} from "lodash-es";
-
 import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 import Button from "@/shared/ui/Button";
 import Drawer from "@/shared/ui/Drawer";
@@ -31,15 +21,18 @@ interface Props {
   value: any;
   onClose: () => void;
 }
-const har2languages = new Har2languages();
+interface CodeLanguage {
+  key: string;
+  label: string;
+  syntax_mode: string;
+  variants: { key: string }[];
+}
 const GenerateCodeDrawer: React.FC<Props> = (props) => {
   const { t } = useTranslation();
   const { value, onClose } = props || {};
 
-  const apiCodeHar = useApis((store) => store.apiCodeHar);
   const currentServerId = useApis((state) => state.currentServerId);
 
-  const systemConfig = useSystemConfig((store) => store.systemConfig);
   const updateSystemConfig = useSystemConfig(
     (store) => store.updateSystemConfig,
   );
@@ -47,125 +40,84 @@ const GenerateCodeDrawer: React.FC<Props> = (props) => {
     (store) => store.systemConfig?.generate_code_mode,
   );
 
-  const [menuKey, setMenuKey] = useSafeState<string>("shell.curl");
+  const [languages, setLanguages] = useSafeState<CodeLanguage[]>([]);
+  const pendingRequest = useRef("");
+  const [menuKey, setMenuKey] = useSafeState<string>("curl.cURL");
   const [codeText, setCodeText] = useSafeState<string>("");
   const [editorLanguage, setEditorLanguage] =
     useSafeState<string>("javascript");
   const [genLoading, setGenLoading] = useSafeState<boolean>(false);
 
   const { varReplace } = useVarReplaces();
-  const generateMenuDom =
-    isObject(har2languages.languages) &&
-    Object.keys(har2languages.languages).map((language) => {
-      if (isArray(har2languages.languages[language])) {
-        return har2languages.languages[language].map((subclass: string) => (
-          <div
-            className={classNames(styles2.menuItem, {
-              [styles2.active]: `${language}.${subclass}` === menuKey,
-            })}
-            key={`${language}.${subclass}`}
-            onClick={() => {
-              menuClick(language, subclass);
-            }}
-          >
-            <AppIcon
-              icon={language === "shell" ? "terminal" : "file-code"}
-              className={styles2.languagesIcon}
-            />
-            {`${language}(${subclass})`}
-          </div>
-        ));
-      }
-      return "";
-    });
+  const generateMenuDom = languages.flatMap((language) =>
+    language.variants.map(({ key: variant }) => (
+      <div
+        className={classNames(styles2.menuItem, {
+          [styles2.active]: `${language.key}.${variant}` === menuKey,
+        })}
+        key={`${language.key}.${variant}`}
+        onClick={() => menuClick(language.key, variant)}
+      >
+        <AppIcon
+          icon={
+            ["shell", "curl"].includes(language.key) ? "terminal" : "file-code"
+          }
+          className={styles2.languagesIcon}
+        />
+        {`${language.label}(${variant})`}
+      </div>
+    )),
+  );
 
-  useEffect(() => {
-    getCodeHar();
-  }, []);
-
-  useEffect(() => {
-    if (apiCodeHar && !isEmpty(apiCodeHar)) {
-      let language = "shell";
-      let subclass = "curl";
-      if (isArray(generate_code_mode) && generate_code_mode.length > 1) {
-        language = generate_code_mode[0];
-        subclass = generate_code_mode[1];
-      }
-      menuClick(language, subclass, "");
-      setGenLoading(false);
-    }
-  }, [apiCodeHar]);
-
-  const getCodeHar = async () => {
+  const requestCode = (language?: string, variant?: string) => {
+    const requestId = crypto.randomUUID();
+    pendingRequest.current = requestId;
     setGenLoading(true);
-
-    try {
-      window?.vscode.postMessage({
-        action: "getCodeHar",
-        data: {
-          apiData: value,
-        },
-        option: {
-          server_id: currentServerId,
-        },
-      });
-    } catch (err: any) {
-      catchError(err, t("supplement.generate_err"));
-    } finally {
-    }
+    setCodeText("");
+    window.vscode.postMessage({
+      action: "generateCode",
+      data: { apiData: value, language, variant, requestId },
+      option: { server_id: currentServerId },
+    });
   };
 
-  const { run: menuClick } = useDebounceFn(
-    async (language: string, subclass: string, code?: any) => {
-      try {
-        const request = cloneDeep(code || apiCodeHar)?.log?.entries?.[0]
-          ?.request;
-        request.url = request?.url?.split("#")[0];
-        request.headers = map(request?.headers, (it) => {
-          if (!isString(it.value)) {
-            return { ...it, value: String(it.value) };
-          }
-          return it;
-        });
-
-        const languagesRes: any = har2languages.convert(
-          request,
-          language,
-          subclass,
-        );
-
-        if (languagesRes?.status === "error") {
-          message.error(`${languagesRes?.message}`);
-          return;
-        }
-        try {
-          languagesRes.data = decodeURIComponent(languagesRes?.data);
-          languagesRes.data = varReplace(languagesRes.data);
-        } catch (error) {}
-
-        setCodeText(languagesRes.data || "");
-        setMenuKey(`${language}.${subclass}`);
-        setEditorLanguage(
-          isString(language) && language === "node" ? "javascript" : language,
-        );
-        // Record selected code type
-        window?.vscode.postMessage({
-          action: "setSystemConfig",
-          data: { generate_code_mode: [language, subclass] },
-        });
-
-        updateSystemConfig({
-          ...systemConfig,
-          generate_code_mode: [language, subclass],
-        });
-      } catch (err) {
-        catchError(err, t("supplement.generate_err"));
+  useEffect(() => {
+    const receive = (event: MessageEvent) => {
+      const { action, data } = event.data || {};
+      if (
+        action !== "generatedCode" ||
+        data?.requestId !== pendingRequest.current
+      ) {
+        return;
       }
-    },
-    {
-      wait: 200,
-    },
-  );
+      setGenLoading(false);
+      if (data.error) {
+        catchError(data.error, t("supplement.generate_err"));
+        return;
+      }
+      setLanguages(data.languages);
+      setCodeText(varReplace(data.code));
+      setMenuKey(`${data.language}.${data.variant}`);
+      setEditorLanguage(data.syntax);
+      const mode: [string, string] = [data.language, data.variant];
+      window.vscode.postMessage({
+        action: "setSystemConfig",
+        data: { generate_code_mode: mode },
+      });
+      updateSystemConfig({
+        ...useSystemConfig.getState().systemConfig,
+        generate_code_mode: mode,
+      });
+    };
+    window.addEventListener("message", receive);
+    requestCode(generate_code_mode?.[0], generate_code_mode?.[1]);
+    return () => {
+      window.removeEventListener("message", receive);
+      pendingRequest.current = "";
+    };
+  }, []);
+
+  const { run: menuClick } = useDebounceFn(requestCode, { wait: 200 });
 
   return (
     <Drawer

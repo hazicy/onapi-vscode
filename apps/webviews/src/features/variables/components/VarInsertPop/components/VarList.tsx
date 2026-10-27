@@ -1,5 +1,7 @@
 import styles from "../VarInsertPop.module.css";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { variableLabels } from "./variable-labels";
 
 import { Flex } from "@/shared/ui/base";
 
@@ -20,6 +22,7 @@ interface Props {
 }
 
 const Index = ({ type, onChange }: Props) => {
+  const { t } = useTranslation();
   const iconRender = (key: VAR_OPTIONS_KEY, icon: string) => {
     if (key === VAR_OPTIONS_KEY.ai_value) {
       return <img width={16} src={AiDescIcon} />;
@@ -36,19 +39,32 @@ const Index = ({ type, onChange }: Props) => {
 
   return (
     <Flex vertical className={styles.optionsList}>
-      {list.map(({ label, desc, key, icon }) => {
+      {list.map(({ key, icon }) => {
         return (
           <div
             key={key}
+            role="button"
+            tabIndex={0}
+            aria-label={t(variableLabels[key].title)}
             onClick={() => onChange({ key })}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                onChange({ key });
+              }
+            }}
             className={styles.listItem}
           >
             <div className={classNames(styles.iconContent, styles[key] ?? key)}>
               {iconRender(key, icon)}
             </div>
             <Flex flex={1} gap={4} vertical>
-              <span className={styles.label}>{label}</span>
-              <span className={styles.desc}>{desc}</span>
+              <span className={styles.label}>
+                {t(variableLabels[key].title)}
+              </span>
+              <span className={styles.desc}>
+                {t(variableLabels[key].description)}
+              </span>
             </Flex>
             <AppIcon rotate={-90} icon="chevron-down" className={styles.icon} />
           </div>

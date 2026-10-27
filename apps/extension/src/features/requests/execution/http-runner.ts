@@ -185,7 +185,7 @@ export const sendAutoTest = (
 ) => runCollection(data.collection, data.options || {}, context, emit);
 
 // HAR is an export format. The input here is already a native SDK Request.
-export async function getCodeHarRequest(
+export async function getResolvedCodeRequest(
   data: Pick<HttpRequestItem, "request">,
   context: vscode.ExtensionContext,
   _options?: unknown,
@@ -209,6 +209,15 @@ export async function getCodeHarRequest(
   const request = new sdk.Request(
     sdk.Property.replaceSubstitutionsIn(data.request, variables, false),
   );
+  return request;
+}
+
+export async function getCodeHarRequest(
+  data: Pick<HttpRequestItem, "request">,
+  context: vscode.ExtensionContext,
+  options?: unknown,
+) {
+  const request = await getResolvedCodeRequest(data, context, options);
   const body = request.body;
   const graphql = body?.mode === "graphql" ? body.graphql : undefined;
   return {
