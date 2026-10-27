@@ -4,6 +4,10 @@ packages:
 
 strictPeerDependencies: false
 
+overrides:
+  mime-db: 1.54.0
+  iconv-lite: 0.7.3
+
 allowBuilds:
   esbuild: true
   "@vscode/vsce-sign": false
