@@ -1,10 +1,10 @@
-import { forwardRef } from "./forwardRef";
+import { forwardRef } from "react";
 import React from "react";
 import clsx from "clsx";
-import type { UIProps } from "./types";
+import type { FlexProps } from "./types";
 import flexStyles from "./Flex.module.css";
 
-export const Flex = forwardRef<HTMLDivElement, UIProps>(
+export const Flex = forwardRef<HTMLDivElement, FlexProps>(
   (
     {
       vertical,

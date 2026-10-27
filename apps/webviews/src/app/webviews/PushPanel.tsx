@@ -94,11 +94,7 @@ function PushPanel() {
         <ThemeProvider theme={customTheme}>
           <GlobalThemeStyle />
           <GlobalStyle />
-          <Skeleton
-            active
-            paragraph={{ rows: 15, width: "100%" }}
-            loading={lodaing}
-          >
+          <Skeleton active paragraph={{ rows: 15 }} loading={lodaing}>
             <Push />
           </Skeleton>
         </ThemeProvider>

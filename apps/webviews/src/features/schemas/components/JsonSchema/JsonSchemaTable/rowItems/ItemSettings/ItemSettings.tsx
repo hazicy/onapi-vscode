@@ -147,12 +147,7 @@ const ItemSettings = (props: any, ref: any) => {
       triggerClassName={styles.selectTrigger}
     >
       {ITEM_TYPES.map((d: string) => (
-        <Select.Option
-          value={d}
-          key={d}
-          className={styles.select}
-          triggerClassName={styles.selectTrigger}
-        >
+        <Select.Option value={d} key={d} className={styles.select}>
           <span className={styles[d] ?? d}>{toLower(d)}</span>
         </Select.Option>
       ))}
@@ -253,7 +248,6 @@ const ItemSettings = (props: any, ref: any) => {
           </div>
         }
         onConfirm={handleSaveChanges}
-        icon={null}
         okText={t("common.schema.advanced_settings.confirm")}
         cancelText={t("common.schema.advanced_settings.cancel")}
       >

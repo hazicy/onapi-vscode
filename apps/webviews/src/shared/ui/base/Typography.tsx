@@ -1,11 +1,11 @@
-import { forwardRef } from "./forwardRef";
+import { forwardRef } from "react";
 import React from "react";
 import clsx from "clsx";
-import type { UIProps } from "./types";
+import type { TypographyProps } from "./types";
 import typographyStyles from "./Typography.module.css";
 import { Tag } from "./Tag";
 
-const Text = forwardRef<HTMLElement, UIProps>(
+const Text = forwardRef<HTMLSpanElement, TypographyProps>(
   (
     {
       children,
@@ -28,7 +28,7 @@ const Text = forwardRef<HTMLElement, UIProps>(
     return (
       <Tag
         {...props}
-        ref={ref as any}
+        ref={ref}
         title={
           typeof ellipsis === "object" && ellipsis.tooltip
             ? String(children)
@@ -48,18 +48,24 @@ const Text = forwardRef<HTMLElement, UIProps>(
 );
 
 export const Typography = Object.assign(
-  ({ children, ...props }: UIProps) => <div {...props}>{children}</div>,
+  ({ children, ...props }: TypographyProps) => <div {...props}>{children}</div>,
   {
     Text,
-    Paragraph: forwardRef<HTMLParagraphElement, UIProps>((props, ref) => (
-      <p {...props} ref={ref}>
-        <Text {...props} />
-      </p>
-    )),
-    Title: ({ level = 1, ...props }: UIProps) =>
+    Paragraph: forwardRef<HTMLParagraphElement, TypographyProps>(
+      (props, ref) => (
+        <p {...props} ref={ref}>
+          <Text {...props} />
+        </p>
+      ),
+    ),
+    Title: ({
+      level = 1,
+      ...props
+    }: TypographyProps & { level?: 1 | 2 | 3 | 4 | 5 }) =>
       React.createElement(`h${level}`, props),
-    Link: forwardRef<HTMLAnchorElement, UIProps>((props, ref) => (
-      <a {...props} ref={ref} />
-    )),
+    Link: forwardRef<
+      HTMLAnchorElement,
+      React.AnchorHTMLAttributes<HTMLAnchorElement>
+    >((props, ref) => <a {...props} ref={ref} />),
   },
 );

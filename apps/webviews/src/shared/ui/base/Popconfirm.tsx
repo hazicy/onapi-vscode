@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { UIProps } from "./types";
+import type { PopconfirmProps } from "./types";
 import popconfirmStyles from "./Popconfirm.module.css";
 import { Button } from "./Button";
 
@@ -20,7 +20,7 @@ export function Popconfirm({
   onOpenChange,
   disabled,
   ...props
-}: UIProps) {
+}: PopconfirmProps) {
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const change = (v: boolean) => {

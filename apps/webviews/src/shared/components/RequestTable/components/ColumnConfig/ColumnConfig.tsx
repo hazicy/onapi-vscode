@@ -74,7 +74,6 @@ const ColumnConfig: FC<Props> = memo(
           <Popover
             placement="bottomLeft"
             trigger={["click"]}
-            arrow={false}
             overlayInnerStyle={{ padding: "8px 12px", width: 228 }}
             open={popoverOpen}
             onOpenChange={(open) => setPopoverOpen(open)}

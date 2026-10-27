@@ -24,7 +24,6 @@ const FlowResponse = (props: Props) => {
   return (
     <div className={styles.container}>
       <List
-        size="small"
         dataSource={data}
         renderItem={(item: any) => (
           <List.Item

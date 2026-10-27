@@ -122,8 +122,6 @@ const TitleRender = memo((props: DataNode | any) => {
             }
           >
             <Badge
-              size="small"
-              offset={[-2, 0]}
               count={count}
               countClassName={styles.badgeCount}
               className={styles.badge}

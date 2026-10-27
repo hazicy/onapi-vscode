@@ -95,7 +95,6 @@ const TabsPanel = (props: TabsProps) => {
   return (
     <div className={styles.tabs}>
       <Tabs
-        tabBarGutter={6}
         destroyInactiveTabPane
         tabBarExtraContent={tabExtraContent}
         items={tabsItems}

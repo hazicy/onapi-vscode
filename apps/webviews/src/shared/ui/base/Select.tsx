@@ -1,4 +1,5 @@
-import { forwardRef } from "./forwardRef";
+import { get } from "lodash-es";
+import { forwardRef } from "react";
 import React, { useState } from "react";
 import clsx from "clsx";
 import type { UIProps } from "./types";
@@ -85,7 +86,6 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
       tokenSeparators,
       autoClearSearchValue,
       loading,
-      getPopupContainer,
       ...props
     },
     ref,
@@ -93,7 +93,9 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
     const [search, setSearch] = useState("");
     const [internal, setInternal] = useState(defaultValue);
     const multiple = mode === "multiple" || mode === "tags";
-    const options: Option[] = useMemo(
+    const options: (Option & {
+      _group?: { key: string; label: React.ReactNode };
+    })[] = useMemo(
       () =>
         rawOptions.length
           ? rawOptions
@@ -107,8 +109,8 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
               )
               .map((o) => ({
                 ...o,
-                value: o[fieldNames?.value || "value"],
-                label: o[fieldNames?.label || "label"],
+                value: get(o, fieldNames?.value || "value"),
+                label: get(o, fieldNames?.label || "label"),
               }))
           : React.Children.toArray(children)
               .filter(React.isValidElement)
@@ -146,7 +148,7 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
         : options.filter((o) =>
             typeof filterOption === "function"
               ? filterOption(search, o)
-              : text(o[optionFilterProp])
+              : text(get(o, optionFilterProp))
                   .toLowerCase()
                   .includes(search.toLowerCase()),
           );
@@ -333,7 +335,9 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
               placeholder={
                 selectedOptions && !multiple
                   ? text(selectedOptions.label)
-                  : placeholder
+                  : typeof placeholder === "string"
+                    ? placeholder
+                    : undefined
               }
               className={clsx(
                 selectStyles.input,
@@ -425,5 +429,8 @@ export const Select = Object.assign(
   SelectControl as unknown as <V = any, O extends Option = Option>(
     props: SelectProps<V, O> & React.RefAttributes<HTMLInputElement>,
   ) => React.ReactElement,
-  { Option: (_props: UIProps) => null, OptGroup: (_props: UIProps) => null },
+  {
+    Option: (_props: Option) => null,
+    OptGroup: (_props: UIProps & { label?: React.ReactNode }) => null,
+  },
 );

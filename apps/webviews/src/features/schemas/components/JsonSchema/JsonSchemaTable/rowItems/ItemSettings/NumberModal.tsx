@@ -37,14 +37,14 @@ const NumberModal = (props: any) => {
             <Switch
               size="small"
               onChange={() => handleUpdateRequired(isRequired)}
-              value={isRequired}
+              checked={isRequired}
             />
           </Flex>
           <Flex align="center" gap={8}>
             {t("common.schema.advanced_settings.null")}
             <Switch
               size="small"
-              value={empty}
+              checked={empty}
               onChange={handleChangeAllowNull}
             />
           </Flex>
@@ -65,7 +65,6 @@ const NumberModal = (props: any) => {
             <div className={styles.caseValue}>
               <InputNumber
                 style={{ width: "100%" }}
-                size="small"
                 min={-Infinity}
                 value={isNumber(value?.default) ? value?.default : 0}
                 onChange={onChange.bind(null, "default")}
@@ -81,7 +80,6 @@ const NumberModal = (props: any) => {
             </div>
             <div className={styles.caseValue}>
               <InputNumber
-                size="small"
                 style={{ width: "100%" }}
                 min={0}
                 value={isNumber(value?.minimum) ? value?.minimum : undefined}
@@ -108,7 +106,6 @@ const NumberModal = (props: any) => {
             </div>
             <div className={styles.caseValue}>
               <InputNumber
-                size="small"
                 min={0}
                 style={{ width: "100%" }}
                 value={isNumber(value?.maximum) ? value?.maximum : undefined}
@@ -175,7 +172,6 @@ const NumberModal = (props: any) => {
           </div>
           <div className={styles.caseValue}>
             <Input.TextArea
-              size="small"
               autoSize={{ minRows: 3, maxRows: 3 }}
               value={value?.enumDesc}
               onChange={(e) => {

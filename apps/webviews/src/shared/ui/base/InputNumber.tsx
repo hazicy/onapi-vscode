@@ -1,5 +1,5 @@
 import inputNumberStyles from "./InputNumber.module.css";
-import { forwardRef } from "./forwardRef";
+import { forwardRef } from "react";
 import { NumberField } from "@base-ui/react/number-field";
 import clsx from "clsx";
 import type { InputNumberProps } from "./types";

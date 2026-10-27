@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import type { UIProps } from "./types";
+import type { EmptyProps } from "./types";
 import emptyStyles from "./Empty.module.css";
 
 export function Empty({
@@ -12,7 +12,7 @@ export function Empty({
   children,
   className,
   style,
-}: UIProps) {
+}: EmptyProps) {
   return (
     <div className={clsx(emptyStyles.empty, className)} style={style}>
       {image && <div className={imageClassName}>{image}</div>}

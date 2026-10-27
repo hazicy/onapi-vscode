@@ -1,5 +1,5 @@
 import React from "react";
-import type { UIProps } from "./types";
+import type { DOMProps } from "./types";
 
 export const List = Object.assign(
   <T,>({
@@ -9,7 +9,9 @@ export const List = Object.assign(
     footer,
     children,
     ...props
-  }: UIProps & {
+  }: DOMProps & {
+    header?: React.ReactNode;
+    footer?: React.ReactNode;
     dataSource?: T[];
     renderItem?: (item: T, index: number) => React.ReactNode;
   }) => (
@@ -26,5 +28,7 @@ export const List = Object.assign(
       {footer}
     </div>
   ),
-  { Item: ({ children, ...props }: UIProps) => <li {...props}>{children}</li> },
+  {
+    Item: ({ children, ...props }: DOMProps) => <li {...props}>{children}</li>,
+  },
 );

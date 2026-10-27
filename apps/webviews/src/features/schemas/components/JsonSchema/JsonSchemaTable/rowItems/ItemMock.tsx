@@ -88,7 +88,6 @@ const ItemMock: React.FC<Props> = (props) => {
     <div style={{ ...currentLayout, width: "100%" }}>
       <div className={clsx(styles.container, {})}>
         <AutoComplete
-          size="small"
           filterOption
           style={{ width: "100%" }}
           className={styles.mockAutoVars}

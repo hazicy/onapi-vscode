@@ -47,9 +47,6 @@ const Header = (props: Props) => {
             outlinedClassName={styles.inputOutlined}
           />
           <Select
-            getPopupContainer={(triggerNode: HTMLElement) =>
-              triggerNode.parentNode as HTMLElement
-            }
             value={filterType}
             onChange={setFilterType}
             size="small"
@@ -58,31 +55,13 @@ const Header = (props: Props) => {
             triggerClassName={styles.selectTrigger}
             className={styles.select}
           >
-            <Select.Option
-              value="all"
-              optionClassName={styles.selectItem}
-              popupClassName={styles.selectDropdown}
-              triggerClassName={styles.selectTrigger}
-              className={styles.select}
-            >
+            <Select.Option value="all" className={styles.select}>
               {t("ws.response.all_message")}
             </Select.Option>
-            <Select.Option
-              value="send"
-              optionClassName={styles.selectItem}
-              popupClassName={styles.selectDropdown}
-              triggerClassName={styles.selectTrigger}
-              className={styles.select}
-            >
+            <Select.Option value="send" className={styles.select}>
               {t("ws.response.sent")}
             </Select.Option>
-            <Select.Option
-              value="message"
-              optionClassName={styles.selectItem}
-              popupClassName={styles.selectDropdown}
-              triggerClassName={styles.selectTrigger}
-              className={styles.select}
-            >
+            <Select.Option value="message" className={styles.select}>
               {t("ws.response.received")}
             </Select.Option>
           </Select>

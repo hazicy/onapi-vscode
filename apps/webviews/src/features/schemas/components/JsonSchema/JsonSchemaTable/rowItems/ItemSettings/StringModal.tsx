@@ -38,14 +38,14 @@ const StringModal = (props: any) => {
             <Switch
               size="small"
               onChange={() => handleUpdateRequired(isRequired)}
-              value={isRequired}
+              checked={isRequired}
             />
           </Flex>
           <Flex align="center" gap={8}>
             {t("common.schema.advanced_settings.null")}
             <Switch
               size="small"
-              value={empty}
+              checked={empty}
               onChange={handleChangeAllowNull}
             />
           </Flex>
@@ -104,7 +104,6 @@ const StringModal = (props: any) => {
               </div>
               <div className={styles.caseValue}>
                 <InputNumber
-                  size="small"
                   min={0}
                   value={isNumber(value?.minLength) ? value?.minLength : 0}
                   onChange={onChange.bind(null, "minLength")}
@@ -119,7 +118,6 @@ const StringModal = (props: any) => {
               </div>
               <div className={styles.caseValue}>
                 <InputNumber
-                  size="small"
                   min={0}
                   value={isNumber(value?.maxLength) ? value?.maxLength : 0}
                   onChange={onChange.bind(null, "maxLength")}
@@ -179,14 +177,12 @@ const StringModal = (props: any) => {
             />
           </div>
         </div>
-
         <div className={styles.itemLine}>
           <div className={styles.caseTitle}>
             {t("common.schema.advanced_settings.remarks")}
           </div>
           <div className={styles.caseValue}>
             <TextArea
-              size="small"
               autoSize={{ minRows: 3, maxRows: 3 }}
               value={value?.enumDesc}
               onChange={(e) => {

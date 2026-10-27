@@ -1,9 +1,9 @@
 import clsx from "clsx";
-import type { UIProps } from "./types";
+import type { SkeletonProps } from "./types";
 import skeletonStyles from "./Skeleton.module.css";
 
 export const Skeleton = Object.assign(
-  ({ loading = true, children, paragraph, active, ...props }: UIProps) =>
+  ({ loading = true, children, paragraph, active, ...props }: SkeletonProps) =>
     loading ? (
       <div
         {...props}
@@ -18,14 +18,14 @@ export const Skeleton = Object.assign(
       children
     ),
   {
-    Input: ({ style, ...props }: UIProps) => (
+    Input: ({ style, ...props }: SkeletonProps) => (
       <span
         {...props}
         className={clsx(props.className, skeletonStyles.skeleton)}
         style={{ width: 120, height: 30, ...style }}
       />
     ),
-    Button: ({ style, ...props }: UIProps) => (
+    Button: ({ style, ...props }: SkeletonProps) => (
       <span
         {...props}
         className={clsx(props.className, skeletonStyles.skeleton)}

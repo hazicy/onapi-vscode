@@ -30,14 +30,14 @@ const ArrayModal = (props: any) => {
             <Switch
               size="small"
               onChange={() => handleUpdateRequired(isRequired)}
-              value={isRequired}
+              checked={isRequired}
             />
           </Flex>
           <Flex align="center" gap={8}>
             {t("common.schema.advanced_settings.null")}
             <Switch
               size="small"
-              value={empty}
+              checked={empty}
               onChange={handleChangeAllowNull}
             />
           </Flex>
@@ -65,7 +65,6 @@ const ArrayModal = (props: any) => {
             </div>
             <div className={styles.caseValue}>
               <InputNumber
-                size="small"
                 min={0}
                 value={isNumber(value?.minItems) ? value?.minItems : 0}
                 onChange={onChange.bind(null, "minItems")}
@@ -82,7 +81,6 @@ const ArrayModal = (props: any) => {
             <div className={styles.caseValue}>
               <InputNumber
                 min={0}
-                size="small"
                 value={isNumber(value?.maxItems) ? value?.maxItems : 0}
                 onChange={onChange.bind(null, "maxItems")}
                 className={styles.inputNumber}

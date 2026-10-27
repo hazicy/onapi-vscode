@@ -281,7 +281,6 @@ export default function VariableValueEditor({
           }}
           open={treeOpen}
           onDropdownVisibleChange={(v) => setTreeOpen(v)}
-          triggerClassName={styles.selectTrigger}
           className={styles.select}
         />
       );
@@ -374,7 +373,6 @@ export default function VariableValueEditor({
                   format: e,
                 })
               }
-              popupMatchSelectWidth={320}
               options={dateFormatOptions}
               triggerClassName={styles.selectTrigger}
               className={styles.select}
@@ -403,8 +401,6 @@ export default function VariableValueEditor({
                 })
               }
               style={{ width: 100 }}
-              placement="bottomRight"
-              popupMatchSelectWidth={320}
               options={timeZoneOptions}
               triggerClassName={styles.selectTrigger}
               className={styles.select}

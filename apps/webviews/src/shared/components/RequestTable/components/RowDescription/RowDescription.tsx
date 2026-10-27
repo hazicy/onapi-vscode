@@ -94,7 +94,6 @@ export const RowDescription: FC<Props> = memo((props) => {
             lineHeight: "26px",
           }}
           placeholder={""}
-          variant="borderless"
           value={curValue}
           onInput={handlerInput}
           onFocus={handlerInput}

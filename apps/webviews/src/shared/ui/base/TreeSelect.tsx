@@ -1,6 +1,6 @@
 import treeSelectStyles from "./TreeSelect.module.css";
 import { useId, useMemo, useState } from "react";
-import { forwardRef } from "./forwardRef";
+import { forwardRef } from "react";
 import { Popover } from "@base-ui/react/popover";
 import clsx from "clsx";
 import { Tree } from "./Tree";

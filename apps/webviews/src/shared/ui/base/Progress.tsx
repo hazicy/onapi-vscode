@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import type { UIProps } from "./types";
+import type { ProgressProps } from "./types";
 import progressStyles from "./Progress.module.css";
 
 export function Progress({
@@ -9,7 +9,7 @@ export function Progress({
   format,
   className,
   style,
-}: UIProps) {
+}: ProgressProps) {
   return (
     <div className={clsx(progressStyles.progress, className)} style={style}>
       <progress value={percent} max={100} aria-label={status ?? "Progress"} />

@@ -27,14 +27,14 @@ const StringModal = (props: any) => {
             <Switch
               size="small"
               onChange={() => handleUpdateRequired(isRequired)}
-              value={isRequired}
+              checked={isRequired}
             />
           </Flex>
           <Flex align="center" gap={8}>
             {t("common.schema.advanced_settings.null")}
             <Switch
               size="small"
-              value={empty}
+              checked={empty}
               onChange={handleChangeAllowNull}
             />
           </Flex>

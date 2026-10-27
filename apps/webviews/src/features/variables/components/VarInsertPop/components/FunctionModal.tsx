@@ -73,7 +73,6 @@ const FunctionModal = ({ onCancel, editFn }: Props) => {
               key={key}
               placeholder={item.placeholder}
               precision={0}
-              size="small"
               onChange={(e) => change(funcStr, e)}
               value={v}
             />

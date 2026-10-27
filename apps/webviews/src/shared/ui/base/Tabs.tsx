@@ -32,6 +32,13 @@ export function Tabs({
 }: TabsProps) {
   const [selected, setSelected] = useState(defaultActiveKey ?? items[0]?.key);
   const current = activeKey ?? selected;
+  const extra =
+    tabBarExtraContent &&
+    !React.isValidElement(tabBarExtraContent) &&
+    typeof tabBarExtraContent === "object" &&
+    ("left" in tabBarExtraContent || "right" in tabBarExtraContent)
+      ? tabBarExtraContent
+      : { right: tabBarExtraContent as React.ReactNode };
   return (
     <BaseTabs.Root
       {...props}
@@ -48,11 +55,7 @@ export function Tabs({
       )}
     >
       <div className={clsx(tabsStyles.nav, navClassName)}>
-        {tabBarExtraContent &&
-        !React.isValidElement(tabBarExtraContent) &&
-        typeof tabBarExtraContent === "object"
-          ? tabBarExtraContent.left
-          : null}
+        {extra.left}
         <div className={clsx(tabsStyles.navWrap, navWrapClassName)}>
           <BaseTabs.List className={clsx(tabsStyles.tabList, tabListClassName)}>
             {items.map((item) => (
@@ -90,11 +93,7 @@ export function Tabs({
             ))}
           </BaseTabs.List>
         </div>
-        {tabBarExtraContent &&
-        !React.isValidElement(tabBarExtraContent) &&
-        typeof tabBarExtraContent === "object"
-          ? tabBarExtraContent.right
-          : tabBarExtraContent}
+        {extra.right}
       </div>
       <div className={clsx(tabsStyles.contentHolder, contentClassName)}>
         <div className={clsx(tabsStyles.content, panelsClassName)}>

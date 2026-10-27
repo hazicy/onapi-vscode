@@ -48,7 +48,6 @@ const ServerSelect: FC<Props> = ({ value, onChange }) => {
     <Select
       value={selectValue}
       onChange={handleChange}
-      optionLabelProp="label"
       className={styles.select}
     >
       <Select.OptGroup

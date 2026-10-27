@@ -1,7 +1,7 @@
 import type { Key, ReactNode, ReactElement } from "react";
 import type { DataNode, TreeProps } from "./types";
 
-export type TreeNode = DataNode & {
+export type TreeNode = Omit<DataNode, "children" | "id"> & {
   id: string;
   pos: string;
   parentId: string;

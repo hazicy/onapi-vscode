@@ -106,7 +106,10 @@ export function Table<T extends object = Record<string, unknown>>({
         sortDescFirst: false,
         sortFn:
           typeof col.sorter === "function"
-            ? (a, b) => col.sorter(a.original, b.original)
+            ? (
+                (sorter) => (a: { original: T }, b: { original: T }) =>
+                  sorter(a.original, b.original)
+              )(col.sorter)
             : (a, b, id) =>
                 String(a.getValue(id) ?? "").localeCompare(
                   String(b.getValue(id) ?? ""),

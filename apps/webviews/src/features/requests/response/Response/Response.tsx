@@ -224,7 +224,7 @@ const Response: FC<Props> = memo((props) => {
       ) as React.ReactNode,
     }));
 
-    const mergeItems = concat([], _originItems, extra);
+    const mergeItems = [..._originItems, ...(extra ?? [])];
     const finalItems =
       size(includesTabs) > 0
         ? compact(

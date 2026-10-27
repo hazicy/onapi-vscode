@@ -175,13 +175,7 @@ const RowKey: FC<Props> = memo((props) => {
             className={styles.select}
           >
             {map(finalFieldType, (item) => (
-              <Select.Option
-                value={item}
-                key={item}
-                arrowClassName={styles.selectArrow}
-                triggerClassName={styles.selectTrigger}
-                className={styles.select}
-              >
+              <Select.Option value={item} key={item} className={styles.select}>
                 <span
                   className={clsx(
                     styles.selectFieldTypeOptionItem,

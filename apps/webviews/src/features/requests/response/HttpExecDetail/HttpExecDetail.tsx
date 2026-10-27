@@ -56,7 +56,6 @@ const HttpExecDetail = ({ httpExecDetail }: HttpExecDetailProps) => {
               message={
                 errorMessage ? `${item.name}: ${errorMessage}` : item.name
               }
-              banner
               messageClassName={styles.alertMessage}
             />
           );

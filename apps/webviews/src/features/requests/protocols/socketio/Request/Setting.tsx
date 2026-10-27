@@ -59,20 +59,10 @@ const Setting = (props: Props) => {
           triggerClassName={styles.selectTrigger}
           className={styles.select}
         >
-          <Select.Option
-            value="v3"
-            arrowClassName={styles.selectArrow}
-            triggerClassName={styles.selectTrigger}
-            className={styles.select}
-          >
+          <Select.Option value="v3" className={styles.select}>
             v3
           </Select.Option>
-          <Select.Option
-            value="v4"
-            arrowClassName={styles.selectArrow}
-            triggerClassName={styles.selectTrigger}
-            className={styles.select}
-          >
+          <Select.Option value="v4" className={styles.select}>
             v4
           </Select.Option>
         </Select>
@@ -102,7 +92,6 @@ const Setting = (props: Props) => {
         <InputNumber
           readOnly={readOnly}
           controls={false}
-          addonAfter="ms"
           value={value?.shake_hands_timeout}
           onChange={(val) => handleConfig("shake_hands_timeout", val)}
           className={styles.inputNumber}

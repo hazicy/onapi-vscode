@@ -140,10 +140,8 @@ const SchemaTree = (
             title: "name",
             children: "children",
           }}
-          blockNode
           expandedKeys={expandedKeys}
           onExpand={(e) => setExpandedKeys(e)}
-          showLine
           switcherIcon={<AppIcon icon="chevron-down" />}
           treeData={filterTreeData}
           titleRender={titleRender}

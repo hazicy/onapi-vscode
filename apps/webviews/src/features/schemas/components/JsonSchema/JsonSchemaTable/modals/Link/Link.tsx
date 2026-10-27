@@ -147,11 +147,9 @@ const LinkPanel: React.FC<Props> = (props) => {
           </div>
         ) : (
           <Tree
-            virtual
             height={360}
             showIcon={false}
             treeData={treeData}
-            blockNode
             expandedKeys={expandedKeys}
             onExpand={(expandedKeys: any) => setExpandedKeys(expandedKeys)}
             className={styles.treePanel}

@@ -224,10 +224,6 @@ const Index = ({
                     onChange={(value: string) =>
                       onOptionsChange({ ...options, chooseFolder: value })
                     }
-
-                    getPopupContainer={(triggerNode: HTMLElement) =>
-                      triggerNode.parentNode as HTMLElement
-                    }
                     showSearch
                     filterTreeNode={(input, treeNode) => {
                       return treeNode?.name?.includes(input);
@@ -242,8 +238,6 @@ const Index = ({
                     }}
                     dropdownStyle={{ maxHeight: 400, overflow: "auto" }}
                     treeData={apisFolders}
-                    triggerClassName={styles2.selectTrigger}
-                    outlinedClassName={styles2.selectOutlined}
                   />
                 </Flex>
               </Flex>
@@ -372,7 +366,6 @@ const Index = ({
                 }}
               />
             </Flex>
-
             {importLocation === ImportLocationEnum.append &&
               fileType === IMPORT_TYPE_ENUM.ONAPI && (
                 <Flex

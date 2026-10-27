@@ -120,7 +120,6 @@ const WsDebug: FC<WebSocketComponentType> = ({
     <div className={styles.saveDropDown}>
       <Tree
         height={250}
-        blockNode
         autoExpandParent
         defaultExpandAll
         onSelect={(keys: React.Key[]) => {
@@ -218,9 +217,6 @@ const WsDebug: FC<WebSocketComponentType> = ({
               className={styles.flex}
             >
               <Dropdown.Button
-                getPopupContainer={(triggerNode) =>
-                  triggerNode.parentNode as HTMLElement
-                }
                 placement="bottomRight"
                 open={open}
                 onOpenChange={(open) => setOpen(open)}

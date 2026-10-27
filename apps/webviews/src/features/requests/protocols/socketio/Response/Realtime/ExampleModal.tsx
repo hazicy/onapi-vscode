@@ -214,49 +214,19 @@ const Index = forwardRef((props: Props, ref) => {
               triggerClassName={styles.selectTrigger}
               className={styles.select}
             >
-              <Select.Option
-                value="text"
-                optionClassName={styles.selectItem}
-                popupClassName={styles.selectDropdown}
-                triggerClassName={styles.selectTrigger}
-                className={styles.select}
-              >
+              <Select.Option value="text" className={styles.select}>
                 Text
               </Select.Option>
-              <Select.Option
-                value="json"
-                optionClassName={styles.selectItem}
-                popupClassName={styles.selectDropdown}
-                triggerClassName={styles.selectTrigger}
-                className={styles.select}
-              >
+              <Select.Option value="json" className={styles.select}>
                 JSON
               </Select.Option>
-              <Select.Option
-                value="xml"
-                optionClassName={styles.selectItem}
-                popupClassName={styles.selectDropdown}
-                triggerClassName={styles.selectTrigger}
-                className={styles.select}
-              >
+              <Select.Option value="xml" className={styles.select}>
                 XML
               </Select.Option>
-              <Select.Option
-                value="html"
-                optionClassName={styles.selectItem}
-                popupClassName={styles.selectDropdown}
-                triggerClassName={styles.selectTrigger}
-                className={styles.select}
-              >
+              <Select.Option value="html" className={styles.select}>
                 HTML
               </Select.Option>
-              <Select.Option
-                value="binary"
-                optionClassName={styles.selectItem}
-                popupClassName={styles.selectDropdown}
-                triggerClassName={styles.selectTrigger}
-                className={styles.select}
-              >
+              <Select.Option value="binary" className={styles.select}>
                 Binary
               </Select.Option>
             </Select>
@@ -271,22 +241,10 @@ const Index = forwardRef((props: Props, ref) => {
                 triggerClassName={styles.selectTrigger}
                 className={styles.select}
               >
-                <Select.Option
-                  value="base64"
-                  optionClassName={styles.selectItem}
-                  popupClassName={styles.selectDropdown}
-                  triggerClassName={styles.selectTrigger}
-                  className={styles.select}
-                >
+                <Select.Option value="base64" className={styles.select}>
                   Base64
                 </Select.Option>
-                <Select.Option
-                  value="hexadecimal"
-                  optionClassName={styles.selectItem}
-                  popupClassName={styles.selectDropdown}
-                  triggerClassName={styles.selectTrigger}
-                  className={styles.select}
-                >
+                <Select.Option value="hexadecimal" className={styles.select}>
                   Hexadecimal
                 </Select.Option>
               </Select>

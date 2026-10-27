@@ -1,5 +1,5 @@
 import inputStyles from "./Input.module.css";
-import { forwardRef } from "./forwardRef";
+import { forwardRef } from "react";
 import { useImperativeHandle, useRef } from "react";
 import { Input as BaseInput } from "@base-ui/react/input";
 import clsx from "clsx";
@@ -20,7 +20,11 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     <textarea
       {...props}
       ref={ref}
-      rows={props.rows ?? autoSize?.minRows ?? 2}
+      rows={
+        props.rows ??
+        (typeof autoSize === "object" ? autoSize.minRows : undefined) ??
+        2
+      }
       className={clsx(
         inputStyles.input,
         inputClassName,

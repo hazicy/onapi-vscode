@@ -407,10 +407,11 @@ const TreeControl = forwardRef<TreeHandle, TreeProps>(function TreeControl(
             typeof switcherIcon === "function"
               ? switcherIcon(info)
               : switcherIcon;
+          const iconRenderer = node.icon ?? icon;
           const nodeIcon =
-            typeof (node.icon ?? icon) === "function"
-              ? (node.icon ?? icon)(info)
-              : (node.icon ?? icon);
+            typeof iconRenderer === "function"
+              ? iconRenderer(info)
+              : iconRenderer;
           return (
             <div
               {...itemProps}

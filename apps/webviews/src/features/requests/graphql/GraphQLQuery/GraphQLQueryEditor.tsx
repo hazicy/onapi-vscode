@@ -645,7 +645,6 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
                 </Flex>
                 <Flex flex={1} style={{ height: 0 }}>
                   <Spin
-                    wrapperClassName={"schema-loading"}
                     spinning={schemaLoading}
                     contentClassName={styles.spinContainer}
                   >
@@ -683,7 +682,6 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
           rightPanel={
             <SuspenseContent>
               <Spin
-                wrapperClassName={"schema-loading"}
                 spinning={schemaLoading}
                 contentClassName={styles.spinContainer}
               >

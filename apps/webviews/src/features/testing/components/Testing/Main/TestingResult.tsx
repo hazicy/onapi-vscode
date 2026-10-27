@@ -170,7 +170,7 @@ const TestingResult = ({
           </Flex>
         </Typography.Text>
         {isEmpty(testingSendingData?.complete) && (
-          <Progress percent={percent} strokeColor={themeToken.colorSuccess} />
+          <Progress percent={percent} />
         )}
       </Flex>
       {!isEmpty(testingSendingData?.complete) && (

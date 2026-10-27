@@ -1,9 +1,9 @@
-import { forwardRef } from "./forwardRef";
+import { forwardRef } from "react";
 import clsx from "clsx";
-import type { UIProps } from "./types";
+import type { TagProps } from "./types";
 import tagStyles from "./Tag.module.css";
 
-export const Tag = forwardRef<HTMLSpanElement, UIProps>(
+export const Tag = forwardRef<HTMLSpanElement, TagProps>(
   (
     {
       children,

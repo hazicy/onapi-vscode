@@ -112,11 +112,7 @@ function ImportDataPanel() {
         <ThemeProvider theme={customTheme}>
           <GlobalThemeStyle />
           <GlobalStyle />
-          <Skeleton
-            active
-            paragraph={{ rows: 15, width: "100%" }}
-            loading={lodaing}
-          >
+          <Skeleton active paragraph={{ rows: 15 }} loading={lodaing}>
             <ImportData />
           </Skeleton>
         </ThemeProvider>

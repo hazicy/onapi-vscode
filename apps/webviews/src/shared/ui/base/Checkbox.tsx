@@ -1,9 +1,9 @@
 import checkboxStyles from "./Checkbox.module.css";
-import { forwardRef } from "./forwardRef";
+import { forwardRef } from "react";
 import { useState } from "react";
 import { Checkbox as BaseCheckbox } from "@base-ui/react/checkbox";
 import clsx from "clsx";
-import type { CheckboxProps, UIProps } from "./types";
+import type { CheckboxProps, CheckboxGroupProps } from "./types";
 import { eventFor } from "./controlEvents";
 
 const CheckboxControl = forwardRef<HTMLElement, CheckboxProps>(
@@ -49,7 +49,7 @@ function CheckboxGroup({
   onChange,
   children,
   ...props
-}: UIProps) {
+}: CheckboxGroupProps) {
   const [internal, set] = useState(defaultValue);
   const selected = value ?? internal;
   return (

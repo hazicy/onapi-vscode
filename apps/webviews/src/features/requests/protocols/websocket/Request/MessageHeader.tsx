@@ -60,44 +60,19 @@ const MessageHeader = (props: Props) => {
           triggerClassName={styles.selectTrigger}
           className={styles.select}
         >
-          <Select.Option
-            value="text"
-            arrowClassName={styles.selectArrow}
-            triggerClassName={styles.selectTrigger}
-            className={styles.select}
-          >
+          <Select.Option value="text" className={styles.select}>
             Text
           </Select.Option>
-          <Select.Option
-            value="json"
-            arrowClassName={styles.selectArrow}
-            triggerClassName={styles.selectTrigger}
-            className={styles.select}
-          >
+          <Select.Option value="json" className={styles.select}>
             JSON
           </Select.Option>
-          <Select.Option
-            value="xml"
-            arrowClassName={styles.selectArrow}
-            triggerClassName={styles.selectTrigger}
-            className={styles.select}
-          >
+          <Select.Option value="xml" className={styles.select}>
             XML
           </Select.Option>
-          <Select.Option
-            value="html"
-            arrowClassName={styles.selectArrow}
-            triggerClassName={styles.selectTrigger}
-            className={styles.select}
-          >
+          <Select.Option value="html" className={styles.select}>
             HTML
           </Select.Option>
-          <Select.Option
-            value="binary"
-            arrowClassName={styles.selectArrow}
-            triggerClassName={styles.selectTrigger}
-            className={styles.select}
-          >
+          <Select.Option value="binary" className={styles.select}>
             Binary
           </Select.Option>
         </Select>
@@ -111,20 +86,10 @@ const MessageHeader = (props: Props) => {
             triggerClassName={styles.selectTrigger}
             className={styles.select}
           >
-            <Select.Option
-              value="base64"
-              arrowClassName={styles.selectArrow}
-              triggerClassName={styles.selectTrigger}
-              className={styles.select}
-            >
+            <Select.Option value="base64" className={styles.select}>
               Base64
             </Select.Option>
-            <Select.Option
-              value="hexadecimal"
-              arrowClassName={styles.selectArrow}
-              triggerClassName={styles.selectTrigger}
-              className={styles.select}
-            >
+            <Select.Option value="hexadecimal" className={styles.select}>
               Hexadecimal
             </Select.Option>
           </Select>

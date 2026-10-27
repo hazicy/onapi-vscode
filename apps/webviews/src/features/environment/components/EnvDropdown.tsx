@@ -163,7 +163,6 @@ const EnvDropdown: React.FC<EnvDropdownProps> = ({
             key: id,
             label: dropdownMenuRender({ id, name, isLocal }),
           })),
-          selectable: true,
           onClick: onEnvClick,
           selectedKeys: [value],
         }}

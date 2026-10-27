@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import type { UIProps } from "./types";
+import type { BadgeProps } from "./types";
 import badgeStyles from "./Badge.module.css";
 
 export const Badge = ({
@@ -14,7 +14,7 @@ export const Badge = ({
   overflowCount = 99,
   className,
   style,
-}: UIProps) => (
+}: BadgeProps) => (
   <span className={clsx(badgeStyles.badge, className)} style={style}>
     {children}
     {status ? (

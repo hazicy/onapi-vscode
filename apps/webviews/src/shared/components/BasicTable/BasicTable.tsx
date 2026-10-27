@@ -22,10 +22,10 @@ const BasicTable = <DataSource extends AnyObject>(
     [themeToken, props.cellPadding],
   );
 
-  const { dragEnable } = props;
+  const { dragEnable, onDragEnd, ...restProps } = props;
 
   const tableProps = {
-    ...props,
+    ...restProps,
     rowClassName: clsx(props.rootClassName, {}),
     pagination: props.pagination ?? false,
     locale: { emptyText: <Empty style={{ height: 160 }} /> },
@@ -34,7 +34,7 @@ const BasicTable = <DataSource extends AnyObject>(
   return (
     <ConfigProvider theme={theme}>
       {dragEnable ? (
-        <DragTable<DataSource> {...tableProps} />
+        <DragTable<DataSource> {...tableProps} onDragEnd={onDragEnd} />
       ) : (
         <Table<DataSource> {...tableProps} />
       )}

@@ -252,8 +252,13 @@ const SortableItem = <SortItem extends AnyObject>({
           activeKey={activeKey}
           bordered
           items={items as any}
-          collapsible={showArrow ? "header" : "icon"}
-          onChange={(activeKey) => onChange(activeKey)}
+          onChange={(activeKey) =>
+            onChange(
+              Array.isArray(activeKey)
+                ? activeKey.map(String)
+                : String(activeKey),
+            )
+          }
         />
       </div>
     </div>

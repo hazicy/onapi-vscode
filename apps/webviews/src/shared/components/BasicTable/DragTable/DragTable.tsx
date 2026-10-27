@@ -42,7 +42,8 @@ const DragTable = <DataSource extends AnyObject>(
     width: 30,
   });
 
-  const tableProps = { ...props, columns: nextColumns };
+  const { onDragEnd: dragCallback, ...restProps } = props;
+  const tableProps = { ...restProps, columns: nextColumns };
   const firstKey = dragFirstDisabled ? head(dataSource)?.[rowKey as any] : "";
   const lastKey = dragLastDisabled ? last(dataSource)?.[rowKey as any] : "";
 

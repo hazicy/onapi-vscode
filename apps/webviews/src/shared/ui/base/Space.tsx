@@ -1,10 +1,10 @@
-import { forwardRef } from "./forwardRef";
+import { forwardRef } from "react";
 import React from "react";
-import type { UIProps } from "./types";
+import type { SpaceProps } from "./types";
 import { Flex } from "./Flex";
 
 export const Space = Object.assign(
-  forwardRef<HTMLDivElement, UIProps>(
+  forwardRef<HTMLDivElement, SpaceProps>(
     ({ size = 8, direction, split, children, ...props }, ref) => (
       <Flex
         {...props}

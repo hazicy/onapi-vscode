@@ -156,7 +156,10 @@ const UrlGroup = (props: UrlGroupProps) => {
     return uri;
   };
 
-  const optionRender: SelectProps["optionRender"] = (option) => {
+  const optionRender: SelectProps<
+    string,
+    { label: string; value: string; uri: string }
+  >["optionRender"] = (option) => {
     return (
       <div className={styles.optionsItem}>
         <span className={styles.label}>{option?.data?.label}</span>
@@ -229,18 +232,7 @@ const UrlGroup = (props: UrlGroupProps) => {
             {Array.from(
               new Set(METHODS_MAP[type].concat(customMethodList)),
             ).map((item: string) => (
-              <Select.Option
-                key={item}
-                value={item}
-                optionContentClassName={styles.selectItemOptionContent}
-                listClassName={styles.selectItemList}
-                optionClassName={styles.selectItem}
-                valueClassName={styles.selectSelectionItem}
-                searchClassName={styles.selectSelectionSearch}
-                triggerClassName={styles.selectTrigger}
-                className={styles.select}
-                arrowClassName={styles.selectArrow}
-              >
+              <Select.Option key={item} value={item} className={styles.select}>
                 {item}
               </Select.Option>
             ))}
@@ -291,7 +283,6 @@ const UrlGroup = (props: UrlGroupProps) => {
                           icon="chevron-down"
                         />
                       }
-                      popupMatchSelectWidth={450}
                       className={clsx(
                         [
                           styles.rightSelect,
@@ -375,7 +366,6 @@ const UrlGroup = (props: UrlGroupProps) => {
               icon="chevron-down"
             />
           }
-          popupMatchSelectWidth={false}
           className={clsx(
             [styles.rightSelect, styles.rightSelectHttp].join(" "),
             styles.select,
@@ -394,14 +384,7 @@ const UrlGroup = (props: UrlGroupProps) => {
             <Select.Option
               key={item.value}
               value={item.value}
-              optionContentClassName={styles.selectItemOptionContent}
-              listClassName={styles.selectItemList}
-              optionClassName={styles.selectItem}
-              valueClassName={styles.selectSelectionItem}
-              searchClassName={styles.selectSelectionSearch}
-              triggerClassName={styles.selectTrigger}
               className={styles.select}
-              arrowClassName={styles.selectArrow}
             >
               {item.label}
               {item.value === "http/2" && (

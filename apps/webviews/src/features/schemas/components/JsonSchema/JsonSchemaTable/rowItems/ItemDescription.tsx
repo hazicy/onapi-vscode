@@ -146,8 +146,6 @@ const ItemMock: React.FC<Props> = (props) => {
               height: 32,
               lineHeight: "26px",
             }}
-            variant="borderless"
-            size="small"
             onInput={handlerInput}
             onFocus={handlerInput}
             onBlur={handlerBlur}

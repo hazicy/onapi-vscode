@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import type { UIProps } from "./types";
+import type { DividerProps } from "./types";
 import dividerStyles from "./Divider.module.css";
 import { Separator } from "@base-ui/react/separator";
 
@@ -11,7 +11,7 @@ export const Divider = ({
   className,
   style,
   ...props
-}: UIProps) =>
+}: DividerProps) =>
   children ? (
     <div className={clsx(dividerStyles.divider, className)} style={style}>
       <span />

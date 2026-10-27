@@ -117,9 +117,6 @@ const InputEdit = (props: Props) => {
       )}
 
       <Dropdown
-        getPopupContainer={(triggerNode: HTMLElement) =>
-          triggerNode.parentNode as HTMLElement
-        }
         menu={{
           items: Items,
           onClick: (node) => {

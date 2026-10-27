@@ -1,5 +1,5 @@
 import switchStyles from "./Switch.module.css";
-import { forwardRef } from "./forwardRef";
+import { forwardRef } from "react";
 import { Switch as BaseSwitch } from "@base-ui/react/switch";
 import clsx from "clsx";
 import type { SwitchProps } from "./types";

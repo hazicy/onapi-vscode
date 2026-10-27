@@ -97,7 +97,7 @@ function MenuItems({
             }}
           >
             {item?.icon}
-            {item?.label ?? item?.children}
+            {item?.label}
           </BaseMenu.Item>
         ),
       )}
@@ -192,7 +192,11 @@ Dropdown.Button = ({
   size,
   icon,
   ...props
-}: DropdownProps) => (
+}: DropdownProps &
+  Pick<
+    import("./types").ButtonProps,
+    "type" | "size" | "loading" | "icon"
+  >) => (
   <div className={clsx(dropdownStyles.splitButton, className)} style={style}>
     <Button
       type={type}

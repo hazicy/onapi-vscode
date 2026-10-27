@@ -1,4 +1,4 @@
-import { forwardRef } from "@/shared/ui/base/forwardRef";
+import { forwardRef } from "react";
 import type { CollectionTreeNode } from "./types";
 import styles from "./Tree.module.css";
 import React, { memo, useEffect, useMemo, useRef } from "react";

@@ -88,11 +88,7 @@ function ShareListPanel() {
             <GlobalThemeStyle />
             <GlobalStyle />
             <ErrorBoundary>
-              <Skeleton
-                active
-                paragraph={{ rows: 15, width: "100%" }}
-                loading={lodaing}
-              >
+              <Skeleton active paragraph={{ rows: 15 }} loading={lodaing}>
                 <ShareList />
               </Skeleton>
             </ErrorBoundary>

@@ -41,7 +41,6 @@ const Index = (props: Props) => {
             lineHeight: "24px",
           }}
           placeholder={""}
-          variant="borderless"
           value={value || ""}
           onInput={handlerInput}
           onFocus={handlerInput}

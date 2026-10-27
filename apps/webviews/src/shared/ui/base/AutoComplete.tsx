@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import clsx from "clsx";
-import type { UIProps } from "./types";
+import type { AutoCompleteProps } from "./types";
 import autoCompleteStyles from "./AutoComplete.module.css";
 import { Autocomplete as Combobox } from "@base-ui/react/autocomplete";
 import { Icon } from "@iconify/react";
@@ -24,7 +24,7 @@ export function AutoComplete({
   triggerClassName,
   filterOption,
   ...props
-}: UIProps) {
+}: AutoCompleteProps) {
   const [input, setInput] = useState(defaultValue ?? "");
   const [popupOpen, setPopupOpen] = useState(false);
   const arrowRef = useRef<HTMLButtonElement>(null);

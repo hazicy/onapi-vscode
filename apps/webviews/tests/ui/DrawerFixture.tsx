@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { ConfigProvider, Select } from "@/shared/ui/base";
 import CustomDrawer, { Drawer } from "@/shared/ui/Drawer";
-import { getPopupContainer } from "@/shared/utils/popupContainer";
 
 export default function DrawerFixture() {
   const query = new URLSearchParams(location.search);
@@ -12,7 +11,7 @@ export default function DrawerFixture() {
   const [selected, setSelected] = useState("");
   const Component = query.has("named") ? Drawer : CustomDrawer;
   return (
-    <ConfigProvider getPopupContainer={getPopupContainer}>
+    <ConfigProvider>
       <button onClick={() => setOpen(true)}>Open drawer</button>
       <output aria-label="Close count">{closes}</output>
       <output aria-label="Transition complete">{complete}</output>

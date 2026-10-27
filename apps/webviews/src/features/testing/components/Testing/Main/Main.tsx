@@ -154,9 +154,6 @@ const Main = ({
               <InputNumber
                 disabled={sendingOrOver}
                 min={0}
-                addonAfter={t(
-                  "test.steps_page.test_condition_modal.interval_time",
-                )}
                 value={testingConfig.interval_time}
                 onChange={(value) =>
                   handleSettingChange("interval_time", value || 0)

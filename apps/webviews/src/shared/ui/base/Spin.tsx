@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import type { UIProps } from "./types";
+import type { SpinProps } from "./types";
 import spinStyles from "./Spin.module.css";
 
 export function Spin({
@@ -11,7 +11,7 @@ export function Spin({
   className,
   style,
   size,
-}: UIProps) {
+}: SpinProps) {
   return (
     <div className={clsx(spinStyles.host, className)} style={style}>
       {spinning && (

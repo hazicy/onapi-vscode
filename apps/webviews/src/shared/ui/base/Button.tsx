@@ -1,5 +1,5 @@
 import buttonStyles from "./Button.module.css";
-import { forwardRef } from "./forwardRef";
+import { forwardRef } from "react";
 import { Button as BaseButton } from "@base-ui/react/button";
 import clsx from "clsx";
 import type { ButtonProps } from "./types";

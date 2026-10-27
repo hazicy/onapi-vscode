@@ -85,7 +85,7 @@ const ResizableTable = <DataSource extends AnyObject>(
           ...col,
           onHeaderCell: (column: TableColumnsType<DataSource>[number]) => ({
             width: col.key === SORT_KEY ? undefined : column.width,
-            onResize: handleResize(index) as React.ReactEventHandler<any>,
+            onResize: handleResize(index),
             key: column.key,
           }),
         }),
@@ -93,7 +93,8 @@ const ResizableTable = <DataSource extends AnyObject>(
     [resizableColumns, handleResize],
   );
 
-  const tableProps = { ...props, columns: mergedColumns };
+  const { onDragEnd, ...restProps } = props;
+  const tableProps = { ...restProps, columns: mergedColumns };
 
   return (
     <BaseTable<DataSource>

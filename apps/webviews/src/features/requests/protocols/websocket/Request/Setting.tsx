@@ -47,7 +47,6 @@ const Setting = (props: Props) => {
         <InputNumber
           readOnly={readOnly}
           controls={false}
-          addonAfter="ms"
           value={value?.shake_hands_timeout}
           onChange={(val) => handleConfig("shake_hands_timeout", val)}
           className={styles.inputNumber}

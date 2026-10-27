@@ -115,7 +115,7 @@ export type BasicTableProps<DataSource> = {
   onDragEnd?: (event: DragEndEvent) => void;
   /**cell padding */
   cellPadding?: number;
-} & TableProps<DataSource>;
+} & Omit<TableProps<DataSource>, "onDragEnd">;
 
 export type AnyObject = Record<string, any>;
 

@@ -1,4 +1,4 @@
-import type { UIProps } from "./types";
+import type { DatePickerProps } from "./types";
 
 export const DatePicker = ({
   value,
@@ -6,14 +6,14 @@ export const DatePicker = ({
   format,
   showTime,
   ...props
-}: UIProps) => (
+}: DatePickerProps) => (
   <input
     {...props}
     type={showTime ? "datetime-local" : "date"}
     value={
-      value?.format?.(showTime ? "YYYY-MM-DDTHH:mm" : "YYYY-MM-DD") ??
-      value ??
-      ""
+      (typeof value === "object"
+        ? value?.format(showTime ? "YYYY-MM-DDTHH:mm" : "YYYY-MM-DD")
+        : value) ?? ""
     }
     onChange={async (e) => {
       const dayjs = (await import("dayjs")).default;

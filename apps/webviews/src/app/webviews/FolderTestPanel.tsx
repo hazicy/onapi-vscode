@@ -152,7 +152,7 @@ function FolderTestPanel() {
           <GlobalStyle />
           <Skeleton
             active
-            paragraph={{ rows: 15, width: "100%" }}
+            paragraph={{ rows: 15 }}
             loading={!isString(testingName) || !testingName}
           >
             <Testing />

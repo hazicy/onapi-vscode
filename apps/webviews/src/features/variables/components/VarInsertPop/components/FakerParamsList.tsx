@@ -76,7 +76,6 @@ const Index = ({
           value={timeVal}
           showTime
           onChange={(e) => handleChange(key, dayjs(e).format())}
-          size="small"
         />
       );
     }
@@ -86,7 +85,6 @@ const Index = ({
       const min = params?.[key]?.min || 0;
       return (
         <InputNumber
-          size="small"
           onChange={(e) => handleChange(key, e)}
           value={value}
           min={min}
@@ -151,7 +149,6 @@ const Index = ({
       return (
         <Flex vertical gap={2}>
           <InputNumber
-            size="small"
             onChange={(e) => coordinatesChange(0, key, e ?? latitude)}
             value={latitude}
             min={-180}
@@ -161,7 +158,6 @@ const Index = ({
             controls={false}
           />
           <InputNumber
-            size="small"
             onChange={(e) => coordinatesChange(1, key, e ?? longitude)}
             value={longitude}
             min={-180}

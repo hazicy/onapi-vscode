@@ -1,5 +1,5 @@
 import radioStyles from "./Radio.module.css";
-import { forwardRef } from "./forwardRef";
+import { forwardRef } from "react";
 import { createContext, useContext } from "react";
 import { Radio as BaseRadio } from "@base-ui/react/radio";
 import { RadioGroup } from "@base-ui/react/radio-group";

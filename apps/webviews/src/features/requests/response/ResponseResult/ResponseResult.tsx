@@ -194,7 +194,6 @@ const ResponseResult = forwardRef((props: Props, ref) => {
                 label,
                 value: ext,
               }))}
-              popupMatchSelectWidth={false}
               value={rawType || "json"}
               onChange={(newVal: string) => {
                 if (newVal === "auto") {
@@ -216,7 +215,6 @@ const ResponseResult = forwardRef((props: Props, ref) => {
                 label: key,
                 value: RAW_ENCODE[key],
               }))}
-              popupMatchSelectWidth={false}
               value={rawEncode || "utf8"}
               onChange={(newVal: string) => setRawEncode(newVal)}
               className={styles.select}

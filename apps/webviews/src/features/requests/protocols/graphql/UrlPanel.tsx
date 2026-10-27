@@ -139,7 +139,6 @@ const Index = memo((props: ApiComponentType) => {
     <div className={styles.saveDropDown}>
       <Tree
         height={250}
-        blockNode
         autoExpandParent
         defaultExpandAll
         onSelect={(keys: React.Key[]) => {
@@ -195,9 +194,6 @@ const Index = memo((props: ApiComponentType) => {
       />
       <Flex style={{ marginLeft: "4px" }} gap={12} className={styles2.flex}>
         <Dropdown.Button
-          getPopupContainer={(triggerNode) =>
-            triggerNode.parentNode as HTMLElement
-          }
           placement="bottomRight"
           type="default"
           size="small"
