@@ -15,7 +15,7 @@ export function scopeValues(
         entry.key || "",
         typeof entry.value === "string"
           ? entry.value
-          : entry.value == null
+          : entry.value === null
             ? ""
             : JSON.stringify(entry.value),
       ]),

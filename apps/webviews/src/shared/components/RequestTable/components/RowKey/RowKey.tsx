@@ -67,7 +67,7 @@ const RowKey: FC<Props> = memo((props) => {
   };
 
   const handleChangeNotNull = () => {
-    handleChange?.("not_null", rowData.not_null == 1 ? -1 : 1);
+    handleChange?.("not_null", rowData.not_null === 1 ? -1 : 1);
   };
 
   const handleVarInputChange = (val: string) => {
@@ -96,7 +96,7 @@ const RowKey: FC<Props> = memo((props) => {
         style={{ pointerEvents: "visible" }}
         className={clsx({
           [styles.required]: true,
-          [styles.checked]: rowData?.not_null == 1,
+          [styles.checked]: rowData?.not_null === 1,
         })}
       >
         <Tooltip title={t("supplement.required")} placement="top">

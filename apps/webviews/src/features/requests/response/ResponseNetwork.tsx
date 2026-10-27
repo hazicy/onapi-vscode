@@ -29,7 +29,7 @@ export default function ResponseNetwork({
     .map((group) =>
       group.filter(([key]) => {
         const value = network?.[key];
-        return value != null && value !== "" && value !== "undefined";
+        return value !== null && value !== "" && value !== "undefined";
       }),
     )
     .filter((group) => group.length);

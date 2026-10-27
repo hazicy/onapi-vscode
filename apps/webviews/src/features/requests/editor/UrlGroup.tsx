@@ -139,7 +139,8 @@ const UrlGroup = (props: UrlGroupProps) => {
         return defaultServerId;
       }
       return (
-        currentEnv.server_list.find((i) => i?.server_id == "1")?.server_id || ""
+        currentEnv.server_list.find((i) => i?.server_id === "1")?.server_id ||
+        ""
       );
     }
     return "";

@@ -98,7 +98,7 @@ const request = ({
     })
     .catch((err) => {
       // Pre-embed force refresh frontend capability for server
-      if (err.code == 302) {
+      if (err.code === 302) {
         window.location.href = err.msg;
         return Promise.reject("");
       }

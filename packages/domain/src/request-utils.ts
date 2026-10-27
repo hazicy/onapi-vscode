@@ -235,7 +235,11 @@ export const createTargetIdMap = (
         if (!parentItem) {
           break;
         }
-        if (parentItem.server_id && parentItem.server_id != "0" && !server_id) {
+        if (
+          parentItem.server_id &&
+          parentItem.server_id !== "0" &&
+          !server_id
+        ) {
           server_id = parentItem.server_id;
         }
         if (!parents.some((parent: any) => parent.id === parentItem.id)) {

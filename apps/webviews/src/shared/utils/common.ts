@@ -217,7 +217,7 @@ export const calcTabLineBodyHeaderNum = function (params: any) {
 
   if (isArray(params)) {
     countNum = countBy(params, function (item) {
-      return item.key != "" ? 1 : 0;
+      return item.key !== "" ? 1 : 0;
     })[1];
   } else if (isObject(params as any)) {
     switch (params?.mode) {
@@ -227,7 +227,7 @@ export const calcTabLineBodyHeaderNum = function (params: any) {
       case "urlencoded":
       case "form-data":
         countNum = countBy(params?.parameter, function (item) {
-          return item.key != "" ? 1 : 0;
+          return item.key !== "" ? 1 : 0;
         })[1];
         break;
       default:
@@ -244,7 +244,7 @@ export const calcTabLineBodyNum = function (params: any) {
 
   if (isArray(params)) {
     countNum = countBy(params, function (item) {
-      return item.key != "" ? 1 : 0;
+      return item.key !== "" ? 1 : 0;
     })[1];
   } else if (isObject(params as any)) {
     switch (params?.mode) {
@@ -254,7 +254,7 @@ export const calcTabLineBodyNum = function (params: any) {
       case "urlencoded":
       case "form-data":
         countNum = countBy(params?.parameter, function (item) {
-          return item.key != "" ? 1 : 0;
+          return item.key !== "" ? 1 : 0;
         })[1];
         break;
       default:

@@ -211,7 +211,7 @@ export const createBatchApi = (
       if (!item?.response && item?.kind === "api") {
         item["response"] = cloneDeep(DEFAULT_API_RESPONSE);
       }
-      if (!item?.parentId || item?.parentId == "0") {
+      if (!item?.parentId || item?.parentId === "0") {
         item.parentId = folder_id || "0";
       }
       item.version = 1;
@@ -278,7 +278,7 @@ export const onapiParamsToOpenApiParams = (
       name: item.key,
       in: inType,
       description: item?.description || "",
-      required: item.is_checked == 1,
+      required: item.is_checked === 1,
       example: item?.value || "",
       schema: {
         type:
@@ -356,7 +356,7 @@ export const OnapiRequestBodyToopenApiRequestBody = (
     },
   };
   const mode = CONTENT_TYPES?.[body.mode];
-  if (mode == "none") {
+  if (mode === "none") {
     return newContent;
   }
   if (["form-data", "urlencoded"].includes(mode)) {
