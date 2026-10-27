@@ -22,8 +22,7 @@ import { Flex } from "@/shared/ui/base";
 import { Button } from "@/shared/ui";
 import useApis from "@/features/requests/store/useApis";
 const GenerateCodeDrawer = lazy(
-  () =>
-    import("@/features/requests/code-generation/GenerateCodeDrawer/GenerateCodeDrawer"),
+  () => import("@/features/requests/code-generation/GenerateCodeDrawer"),
 );
 const Request = lazy(() => importDelay(import("./Request")));
 const Response = lazy(() => importDelay(import("./Response")));

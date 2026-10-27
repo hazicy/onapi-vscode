@@ -8,7 +8,6 @@ import { DirectionType } from "@onapi/domain/types/common";
 import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
 import SuspenseContent from "@/shared/components/SuspenseContent";
 
-import { isEqual } from "lodash-es";
 import useApis from "@/features/requests/store/useApis";
 import Request from "@/features/requests/editor/Request/Request";
 import Response from "./Response";
@@ -19,14 +18,12 @@ import {
   ApiComponentType,
   ApiDetailsData,
 } from "@onapi/domain/requests/types/api";
-import { genUrlByQuery } from "@/features/requests/utils/apis";
 import { Button } from "@/shared/ui";
-const GenerateCodeDrawer = lazy(
-  () =>
-    import("@/features/requests/code-generation/GenerateCodeDrawer/GenerateCodeDrawer"),
-);
 import context from "@/shared/components/RawEditor/visualizationContext";
 import { openEnvPage } from "@/features/requests/events/env";
+const GenerateCodeDrawer = lazy(
+  () => import("@/features/requests/code-generation/GenerateCodeDrawer"),
+);
 
 interface ContentProps {
   value?: ApiDetailsData;

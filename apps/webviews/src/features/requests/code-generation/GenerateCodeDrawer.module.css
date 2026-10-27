@@ -43,8 +43,7 @@
   white-space: pre-wrap;
   overflow-x: auto;
 }
-.container {
-}
+
 .languagesIcon {
   margin-right: 8px;
   font-size: var(--font-size-16);
