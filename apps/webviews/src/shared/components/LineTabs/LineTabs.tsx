@@ -45,24 +45,15 @@ const LineTabs: FC<Props> = ({ items, wrapStyle, ...resetProps }) => {
         items={finalItems}
         {...resetProps}
         animated={false}
-        panelClassName={clsx(
-          styles.tabsTabpane,
-          resetProps.panelClassName,
-        )}
-        panelsClassName={clsx(
-          styles.tabsContent,
-          resetProps.panelsClassName,
-        )}
+        panelClassName={clsx(styles.tabsTabpane, resetProps.panelClassName)}
+        panelsClassName={clsx(styles.tabsContent, resetProps.panelsClassName)}
         contentClassName={clsx(
           styles.tabsContentHolder,
           resetProps.contentClassName,
         )}
         className={clsx(styles.tabs, resetProps.className)}
         tabClassName={clsx(styles.tabsTab, resetProps.tabClassName)}
-        navWrapClassName={clsx(
-          styles.tabsNavWrap,
-          resetProps.navWrapClassName,
-        )}
+        navWrapClassName={clsx(styles.tabsNavWrap, resetProps.navWrapClassName)}
       />
     </div>
   );

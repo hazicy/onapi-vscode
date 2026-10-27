@@ -76,7 +76,11 @@ const PrefixIcon: FC<Props> = memo(
         {(computed?.icon && (
           <div
             style={style}
-            className={clsx(styles.container, computed?.className, wrapClassName)}
+            className={clsx(
+              styles.container,
+              computed?.className,
+              wrapClassName,
+            )}
           >
             {renderIcon(computed?.icon)}
           </div>

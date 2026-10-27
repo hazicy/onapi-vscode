@@ -1,11 +1,6 @@
 import type { ExecutionContext, ProtocolAdapter } from "@onapi/core";
 import type { SocketIoResult } from "@onapi/contracts";
-import {
-  SocketClient,
-  SocketIoConnectionError,
-  type SocketEvent,
-  type SocketIoTarget,
-} from "./client";
+import type { SocketClient, SocketEvent, SocketIoTarget } from "./client";
 import type { WebSocketRuntimeOptions } from "../websocket/options";
 
 export interface SocketIoExecutionRequest {
@@ -16,8 +11,10 @@ export class SocketIoAdapter implements ProtocolAdapter<SocketIoExecutionRequest
   readonly protocol = "socketio" as const;
   private client?: SocketClient;
   private context?: ExecutionContext;
+  private cancelled = false;
 
   cancel() {
+    this.cancelled = true;
     this.client?.disconnect();
   }
   send(data: {
@@ -45,6 +42,10 @@ export class SocketIoAdapter implements ProtocolAdapter<SocketIoExecutionRequest
   }
 
   async execute(request: SocketIoExecutionRequest, context: ExecutionContext) {
+    const { SocketClient, SocketIoConnectionError } = await import("./client");
+    if (this.cancelled) {
+      return;
+    }
     this.context = context;
     const publish = (result: SocketIoResult) =>
       context.publish({

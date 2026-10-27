@@ -1,6 +1,6 @@
 import type { ExecutionContext, ProtocolAdapter } from "@onapi/core";
 import type { WebSocketResult } from "@onapi/contracts";
-import { WSClient, WebSocketConnectionError } from "./client";
+import type { WSClient } from "./client";
 import type { WebSocketRuntimeOptions, WebSocketTarget } from "./options";
 
 export interface WebSocketExecutionRequest {
@@ -11,8 +11,10 @@ export interface WebSocketExecutionRequest {
 export class WebSocketAdapter implements ProtocolAdapter<WebSocketExecutionRequest> {
   readonly protocol = "websocket" as const;
   private client?: WSClient;
+  private cancelled = false;
 
   cancel() {
+    this.cancelled = true;
     this.client?.close();
   }
   send(data: { msg?: unknown; type?: string }) {
@@ -20,6 +22,10 @@ export class WebSocketAdapter implements ProtocolAdapter<WebSocketExecutionReque
   }
 
   async execute(request: WebSocketExecutionRequest, context: ExecutionContext) {
+    const { WSClient, WebSocketConnectionError } = await import("./client");
+    if (this.cancelled) {
+      return;
+    }
     const publish = (result: WebSocketResult) =>
       context.publish({
         protocol: this.protocol,

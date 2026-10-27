@@ -1,4 +1,7 @@
-import { getEnvListService, getServiceList } from "@/features/sync/services/project";
+import {
+  getEnvListService,
+  getServiceList,
+} from "@/features/sync/services/project";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import type {
   EnvListItem,

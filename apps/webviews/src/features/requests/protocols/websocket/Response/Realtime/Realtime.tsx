@@ -133,10 +133,7 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
           onChange(newValue);
         },
       }}
-      itemClassName={clsx(
-        styles.dropdownMenuItem,
-        styles.dropdownMenuSubmenu,
-      )}
+      itemClassName={clsx(styles.dropdownMenuItem, styles.dropdownMenuSubmenu)}
       overlayClassName={styles.dropdownMenu}
     >
       <Tooltip title={t("api.response_labels.save_response")}>

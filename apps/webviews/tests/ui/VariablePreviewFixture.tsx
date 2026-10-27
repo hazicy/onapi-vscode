@@ -54,10 +54,15 @@ export default function VariablePreviewFixture() {
     const request = pending.current.findIndex(
       (request) => request.value === value,
     );
-    if (request < 0) throw new Error(`No pending preview: ${value}`);
+    if (request < 0) {
+      throw new Error(`No pending preview: ${value}`);
+    }
     const [preview] = pending.current.splice(request, 1);
-    if (fail) preview.reject();
-    else preview.resolve(`${value}:result`);
+    if (fail) {
+      preview.reject();
+    } else {
+      preview.resolve(`${value}:result`);
+    }
   };
   return (
     <main>

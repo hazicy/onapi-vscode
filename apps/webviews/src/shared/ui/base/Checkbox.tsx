@@ -21,7 +21,9 @@ const CheckboxControl = forwardRef<HTMLElement, CheckboxProps>(
     },
     ref,
   ) => (
-    <label className={clsx(checkboxStyles.checkLabel, className, rootClassName)}>
+    <label
+      className={clsx(checkboxStyles.checkLabel, className, rootClassName)}
+    >
       <BaseCheckbox.Root
         {...props}
         ref={ref}

@@ -32,7 +32,10 @@ const ResponseEmpty = ({
         className={styles.responseEmptyWrap}
         description={description || t("api.run.response_tip")}
         image={<AppIcon icon="onapi" className={styles.iconEmptyWrap} />}
-        descriptionClassName={clsx(descriptionClassName, styles.emptyDescription)}
+        descriptionClassName={clsx(
+          descriptionClassName,
+          styles.emptyDescription,
+        )}
         imageClassName={styles.emptyImage}
       />
     </div>

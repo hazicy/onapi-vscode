@@ -95,9 +95,7 @@ const SegmentedTabs: FC<Props> = forwardRef(
 
     return (
       <Flex vertical className={clsx(styles.container, wrapClassName)}>
-        <header
-          className={clsx(styles.segmentedTabsHeader, headerClassName)}
-        >
+        <header className={clsx(styles.segmentedTabsHeader, headerClassName)}>
           <Flex align="center" style={{ width: "100%" }}>
             <Segmented
               options={options}
@@ -107,10 +105,7 @@ const SegmentedTabs: FC<Props> = forwardRef(
             />
             {tabBarExtraContent && (
               <div
-                className={clsx(
-                  styles.tabBarExtraContentWrap,
-                  extraClassName,
-                )}
+                className={clsx(styles.tabBarExtraContentWrap, extraClassName)}
                 style={{
                   marginInlineStart: "auto",
                   flex: "0 0 auto",
@@ -122,9 +117,7 @@ const SegmentedTabs: FC<Props> = forwardRef(
             )}
           </Flex>
         </header>
-        <main
-          className={clsx(styles.segmentedTabsContent, contentClassName)}
-        >
+        <main className={clsx(styles.segmentedTabsContent, contentClassName)}>
           {map(
             options,
             (item) =>

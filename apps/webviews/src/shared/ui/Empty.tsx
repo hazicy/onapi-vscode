@@ -28,10 +28,7 @@ const Empty: FC<Props> = ({
   const link = resetProps.link || "";
 
   return (
-    <div
-      style={wrapStyle}
-      className={clsx(styles.container, wrapClassName)}
-    >
+    <div style={wrapStyle} className={clsx(styles.container, wrapClassName)}>
       <AntEmpty
         {...resetProps}
         image={image}

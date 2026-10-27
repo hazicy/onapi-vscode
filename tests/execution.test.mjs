@@ -46,6 +46,23 @@ before(async () => {
   modules = createRequire(import.meta.url)("../test-results/execution.cjs");
 });
 
+test("socket adapters cancelled during lazy loading do not start a connection", async () => {
+  for (const Adapter of [modules.WebSocketAdapter, modules.SocketIoAdapter]) {
+    const adapter = new Adapter();
+    // An empty request would fail if execution continued into client construction.
+    const pending = adapter.execute(
+      {},
+      {
+        publish() {
+          assert.fail("cancelled adapter must not publish");
+        },
+      },
+    );
+    adapter.cancel();
+    await pending;
+  }
+});
+
 test("core emits ordered lifecycles, isolates observers, and ignores late events", async () => {
   const errors = [],
     events = [];

@@ -27,10 +27,7 @@ const List: React.FC<ListProps> = ({ asserts }) => {
               <span
                 key={index}
                 data-passed={!item.error && !item.skipped}
-                className={clsx(
-                  styles.responseAssertItem,
-                  styles.contentItem,
-                )}
+                className={clsx(styles.responseAssertItem, styles.contentItem)}
               >
                 <Space>
                   {!item.error && !item.skipped ? (

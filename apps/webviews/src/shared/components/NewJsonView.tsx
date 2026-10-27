@@ -76,10 +76,7 @@ const NewJsonView: FC<Props> = ({ value, wrapStyle, wrapClassName }) => {
   };
 
   return (
-    <div
-      style={wrapStyle}
-      className={clsx(styles.container, wrapClassName)}
-    >
+    <div style={wrapStyle} className={clsx(styles.container, wrapClassName)}>
       {jsonView.isJson ? (
         <ReactJson
           src={jsonView.view}
