@@ -1,16 +1,15 @@
-import styles from "./ExportComponent.module.css";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import styles from "./ExportComponent.module.css";
 
 import { Flex, message } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
 import clsx from "clsx";
 
-import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
+import Button from "@/shared/ui/Button";
 import Radio from "@/shared/ui/Radio";
-import Tooltip from "@/shared/ui/Tooltip";
 import { EXPORT_TYPE_LIST } from "@onapi/domain/settings/constants/settings";
 
 interface Props {
