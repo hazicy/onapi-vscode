@@ -234,8 +234,8 @@ importers:
         specifier: ^1.4.11
         version: 1.4.11
       '@types/vscode':
-        specifier: ^1.140.0
-        version: 1.140.0
+        specifier: 1.101.0
+        version: 1.101.0
       '@types/ws':
         specifier: ^8.18.2
         version: 8.18.2
@@ -376,8 +376,8 @@ importers:
         specifier: ^1.4.11
         version: 1.4.11
       '@types/vscode':
-        specifier: ^1.140.0
-        version: 1.140.0
+        specifier: 1.101.0
+        version: 1.101.0
       '@types/ws':
         specifier: ^8.18.2
         version: 8.18.2
@@ -2112,8 +2112,8 @@ packages:
   '@types/url-parse@1.4.11':
     resolution: {integrity: sha512-FKvKIqRaykZtd4n47LbK/W/5fhQQ1X7cxxzG9A48h0BGN+S04NH7ervcCjM8tyR0lyGru83FAHSmw2ObgKoESg==}
 
-  '@types/vscode@1.140.0':
-    resolution: {integrity: sha512-KAB5RBZIgnUhpp4mKsVJPPHLOQKu6WtGy2xpfWjaajEXO4xIIC+UESAXLiQ9ewx6QD1uBmvC/S8BJzkbvv4bRA==}
+  '@types/vscode@1.101.0':
+    resolution: {integrity: sha512-ZWf0IWa+NGegdW3iU42AcDTFHWW7fApLdkdnBqwYEtHVIBGbTu0ZNQKP/kX3Ds/uMJXIMQNAojHR4vexCEEz5Q==}
 
   '@types/ws@8.18.2':
     resolution: {integrity: sha512-67MQl+fpWKVTT1NYdnmo3U4sc/xPo/zQBncVnI74qmQa0z/b+1g6iYqNmGCPbxO+zz2aklb08a0oHfegiVd0/w==}
@@ -6176,7 +6176,7 @@ snapshots:
 
   '@types/url-parse@1.4.11': {}
 
-  '@types/vscode@1.140.0': {}
+  '@types/vscode@1.101.0': {}
 
   '@types/ws@8.18.2':
     dependencies:
