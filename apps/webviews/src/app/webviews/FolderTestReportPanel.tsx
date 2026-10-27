@@ -1,3 +1,4 @@
+import SharedComponentsProvider from "@/app/providers/SharedComponentsProvider";
 import { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { App as BaseApp, Spin } from "@/shared/ui/base";
@@ -69,15 +70,17 @@ function FolderTestPanel() {
   }, [testingSendingData]);
 
   return (
-    <BaseApp>
-      <ThemeProvider theme={customTheme}>
-        <GlobalThemeStyle />
-        <GlobalStyle />
-        <Spin tip={t("common.loading")} spinning={!Boolean(reportDetails)}>
-          {reportDetails && <ReportDetails reportDetails={reportDetails} />}
-        </Spin>
-      </ThemeProvider>
-    </BaseApp>
+    <SharedComponentsProvider>
+      <BaseApp>
+        <ThemeProvider theme={customTheme}>
+          <GlobalThemeStyle />
+          <GlobalStyle />
+          <Spin tip={t("common.loading")} spinning={!Boolean(reportDetails)}>
+            {reportDetails && <ReportDetails reportDetails={reportDetails} />}
+          </Spin>
+        </ThemeProvider>
+      </BaseApp>
+    </SharedComponentsProvider>
   );
 }
 

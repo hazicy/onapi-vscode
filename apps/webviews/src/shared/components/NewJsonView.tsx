@@ -5,7 +5,7 @@ import ReactJson from "@microlink/react-json-view";
 
 import { isPlainObject, isString } from "lodash-es";
 
-import useSystemConfig from "@/features/settings/store/useSystemConfig";
+import { useEditorPreferences } from "@/shared/contexts/editor-preferences";
 import { copyStringToClipboard } from "@/shared/utils/common";
 import JSON5 from "json5";
 
@@ -24,7 +24,7 @@ interface Props {
 }
 
 const NewJsonView: FC<Props> = ({ value, wrapStyle, wrapClassName }) => {
-  const { bg_color } = useSystemConfig((state) => state.systemConfig);
+  const { lightJsonTheme } = useEditorPreferences();
 
   const jsonView = useMemo(() => {
     let result = {
@@ -85,9 +85,7 @@ const NewJsonView: FC<Props> = ({ value, wrapStyle, wrapClassName }) => {
           src={jsonView.view}
           enableClipboard={handleCopyClipboard}
           name={false}
-          theme={
-            ["white", "orange"].includes(bg_color) ? "rjv-default" : "eighties"
-          }
+          theme={lightJsonTheme ? "rjv-default" : "eighties"}
           indentWidth={2}
           style={reactJsonStyle}
           displayDataTypes={false}

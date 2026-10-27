@@ -1,3 +1,4 @@
+import SharedComponentsProvider from "@/app/providers/SharedComponentsProvider";
 import { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { App as BaseApp, Skeleton } from "@/shared/ui/base";
@@ -87,21 +88,23 @@ function EnvironmentPanel() {
   }, []);
 
   return (
-    <BaseApp>
-      <ThemeProvider theme={customTheme}>
-        <GlobalThemeStyle />
-        <GlobalStyle />
-        <ErrorBoundary>
-          <Skeleton
-            active
-            paragraph={{ rows: 15, width: "100%" }}
-            loading={lodaing}
-          >
-            <Environment key={environmentKey} open={true} />
-          </Skeleton>
-        </ErrorBoundary>
-      </ThemeProvider>
-    </BaseApp>
+    <SharedComponentsProvider>
+      <BaseApp>
+        <ThemeProvider theme={customTheme}>
+          <GlobalThemeStyle />
+          <GlobalStyle />
+          <ErrorBoundary>
+            <Skeleton
+              active
+              paragraph={{ rows: 15, width: "100%" }}
+              loading={lodaing}
+            >
+              <Environment key={environmentKey} open={true} />
+            </Skeleton>
+          </ErrorBoundary>
+        </ThemeProvider>
+      </BaseApp>
+    </SharedComponentsProvider>
   );
 }
 

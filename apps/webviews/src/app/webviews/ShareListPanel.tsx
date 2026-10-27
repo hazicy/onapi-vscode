@@ -1,3 +1,4 @@
+import SharedComponentsProvider from "@/app/providers/SharedComponentsProvider";
 import { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { App as BaseApp, Skeleton } from "@/shared/ui/base";
@@ -80,23 +81,25 @@ function ShareListPanel() {
   }, []);
 
   return (
-    <BaseApp>
-      <HotkeysProvider initiallyActiveScopes={["global"]}>
-        <ThemeProvider theme={customTheme}>
-          <GlobalThemeStyle />
-          <GlobalStyle />
-          <ErrorBoundary>
-            <Skeleton
-              active
-              paragraph={{ rows: 15, width: "100%" }}
-              loading={lodaing}
-            >
-              <ShareList />
-            </Skeleton>
-          </ErrorBoundary>
-        </ThemeProvider>
-      </HotkeysProvider>
-    </BaseApp>
+    <SharedComponentsProvider>
+      <BaseApp>
+        <HotkeysProvider initiallyActiveScopes={["global"]}>
+          <ThemeProvider theme={customTheme}>
+            <GlobalThemeStyle />
+            <GlobalStyle />
+            <ErrorBoundary>
+              <Skeleton
+                active
+                paragraph={{ rows: 15, width: "100%" }}
+                loading={lodaing}
+              >
+                <ShareList />
+              </Skeleton>
+            </ErrorBoundary>
+          </ThemeProvider>
+        </HotkeysProvider>
+      </BaseApp>
+    </SharedComponentsProvider>
   );
 }
 ReactDOM.createRoot(document.getElementById("root")!).render(

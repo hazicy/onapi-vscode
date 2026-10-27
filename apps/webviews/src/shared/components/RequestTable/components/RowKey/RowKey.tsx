@@ -21,7 +21,7 @@ import { FIELD_TYPES, STATUS_CODE } from "@onapi/domain/constants/common";
 import Context from "../../context";
 import { ItemProps } from "../../types";
 
-import VarInput from "@/features/variables/components/VarInput/VarInput";
+import { useVariableControls } from "@/shared/contexts/variable-controls";
 
 type Props = ItemProps & {
   showAiDescription?: boolean;
@@ -47,6 +47,7 @@ const RowKey: FC<Props> = memo((props) => {
   const { t } = useTranslation();
 
   const { envId } = useContext(Context);
+  const { Input: VariableInput } = useVariableControls();
 
   const finalFieldType = useMemo(() => {
     if (isEqual(tabType, "body") && isEqual(bodyMode, "form-data")) {
@@ -135,7 +136,7 @@ const RowKey: FC<Props> = memo((props) => {
       )}
       {!isEqual(tabType, "header") ? (
         <div className={styles.rowDescription}>
-          <VarInput
+          <VariableInput
             wrapClassName={styles.keyInput}
             envId={envId}
             value={rowData?.key || ""}

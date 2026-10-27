@@ -1,4 +1,6 @@
 import ResizeFixture from "./ResizeFixture";
+import SharedComponentsProvider from "@/app/providers/SharedComponentsProvider";
+import SharedComponentsFixture from "./SharedComponentsFixture";
 import BodyFixture from "./BodyFixture";
 import AutocompleteFixture from "./AutocompleteFixture";
 import VariableInsertFixture from "./VariableInsertFixture";
@@ -76,27 +78,31 @@ function Fixture() {
 }
 
 createRoot(document.getElementById("root")!).render(
-  new URLSearchParams(location.search).has("resize") ? (
-    <ResizeFixture />
-  ) : new URLSearchParams(location.search).has("body") ? (
-    <BodyFixture />
-  ) : new URLSearchParams(location.search).has("autocomplete") ? (
-    <AutocompleteFixture />
-  ) : new URLSearchParams(location.search).has("variableInsert") ? (
-    <VariableInsertFixture />
-  ) : new URLSearchParams(location.search).has("data") ? (
-    <DataFixture />
-  ) : new URLSearchParams(location.search).has("filters") ? (
-    <FiltersFixture />
-  ) : new URLSearchParams(location.search).has("auth") ? (
-    <AuthFixture />
-  ) : new URLSearchParams(location.search).has("theme") ? (
-    <ThemeFixture />
-  ) : new URLSearchParams(location.search).has("base") ? (
-    <BaseFixture />
-  ) : new URLSearchParams(location.search).has("drawer") ? (
-    <DrawerFixture />
-  ) : (
-    <Fixture />
-  ),
+  <SharedComponentsProvider>
+    {new URLSearchParams(location.search).has("sharedComponents") ? (
+      <SharedComponentsFixture />
+    ) : new URLSearchParams(location.search).has("resize") ? (
+      <ResizeFixture />
+    ) : new URLSearchParams(location.search).has("body") ? (
+      <BodyFixture />
+    ) : new URLSearchParams(location.search).has("autocomplete") ? (
+      <AutocompleteFixture />
+    ) : new URLSearchParams(location.search).has("variableInsert") ? (
+      <VariableInsertFixture />
+    ) : new URLSearchParams(location.search).has("data") ? (
+      <DataFixture />
+    ) : new URLSearchParams(location.search).has("filters") ? (
+      <FiltersFixture />
+    ) : new URLSearchParams(location.search).has("auth") ? (
+      <AuthFixture />
+    ) : new URLSearchParams(location.search).has("theme") ? (
+      <ThemeFixture />
+    ) : new URLSearchParams(location.search).has("base") ? (
+      <BaseFixture />
+    ) : new URLSearchParams(location.search).has("drawer") ? (
+      <DrawerFixture />
+    ) : (
+      <Fixture />
+    )}
+  </SharedComponentsProvider>,
 );

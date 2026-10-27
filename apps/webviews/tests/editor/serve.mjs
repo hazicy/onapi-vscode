@@ -35,10 +35,6 @@ async function main() {
         fileURLToPath(new URL(".", import.meta.url)),
         "system-config.ts",
       ),
-      "@/shared/utils/global": path.join(
-        fileURLToPath(new URL(".", import.meta.url)),
-        "global.ts",
-      ),
     },
     define: { "process.env.NODE_ENV": '"development"' },
   });

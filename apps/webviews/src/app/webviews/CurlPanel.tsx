@@ -1,3 +1,4 @@
+import SharedComponentsProvider from "@/app/providers/SharedComponentsProvider";
 import { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { App as BaseApp } from "@/shared/ui/base";
@@ -53,13 +54,15 @@ function CurlPanel() {
   }, []);
 
   return (
-    <BaseApp>
-      <ThemeProvider theme={customTheme}>
-        <GlobalThemeStyle />
-        <GlobalStyle />
-        <Curl />
-      </ThemeProvider>
-    </BaseApp>
+    <SharedComponentsProvider>
+      <BaseApp>
+        <ThemeProvider theme={customTheme}>
+          <GlobalThemeStyle />
+          <GlobalStyle />
+          <Curl />
+        </ThemeProvider>
+      </BaseApp>
+    </SharedComponentsProvider>
   );
 }
 

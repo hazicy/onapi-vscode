@@ -90,6 +90,15 @@ src/
   [boundary exceptions](../../../tooling/webview-boundary-exceptions.json);
   remove an exception when its dependency is removed. The check rejects stale
   exceptions as well as new dependencies.
+- Shared editors and parameter tables consume narrow contexts from
+  `shared/contexts`: editor preferences and variable lookup, variable controls,
+  and inherited system headers. `app/providers/SharedComponentsProvider.tsx`
+  connects these interfaces to feature stores and persistence in each Webview.
+  Keep business implementations and protocol-specific save messages in that
+  application composition layer. Standalone consumers can supply their own
+  context values; without a provider, editors use default preferences and
+  parameter inputs remain plain text. Column preference persistence belongs to
+  `features/settings/hooks/useTableColumnSwitchConfig.ts`.
 - Use `@/features/...`, `@/shared/...` and `@/app/...` for cross-directory imports.
   Relative imports are suitable within a component or feature.
 - Import Lodash utilities as named exports from `lodash-es` in browser code;

@@ -8,7 +8,7 @@ import { concat, forEach, isEqual, keys, reverse } from "lodash-es";
 import LineTabs from "@/shared/components/LineTabs/LineTabs";
 import context from "@/shared/components/RawEditor/visualizationContext";
 import RequestTable from "@/shared/components/RequestTable/RequestTable";
-import { useTableColumnSwitchConfig } from "@/shared/hooks";
+import useTableColumnSwitchConfig from "@/features/settings/hooks/useTableColumnSwitchConfig";
 
 import useApis from "@/features/requests/store/useApis";
 import useProjectConfig from "@/features/project/store/useProjectConfig";

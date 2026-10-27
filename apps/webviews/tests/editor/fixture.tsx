@@ -10,12 +10,15 @@ import { formatDocument } from "../../src/shared/components/CodeEditor/format";
 import { jsonDiagnostics } from "../../src/shared/components/CodeEditor/jsonDiagnostics";
 import { loadLanguage } from "../../src/shared/components/CodeEditor/languages";
 import { EditorState } from "@codemirror/state";
-import { setTheme } from "./store";
+import { setTheme, useGlobal } from "./store";
+import { getEditorVariable } from "./global";
+import { EditorPreferencesContext } from "../../src/shared/contexts/editor-preferences";
 import { EditFormat } from "../../src/shared/utils/editFormat";
 import useEditFormat from "../../src/shared/hooks/useEditFormat";
 import type { EditorTestApi } from "./api";
 
 function Fixture() {
+  const theme = useGlobal((state) => state.vscodeTheme);
   const [props, setProps] = useState<Props>({
     value: "",
     language: "text",
@@ -58,7 +61,15 @@ function Fixture() {
         .doc.length,
   } satisfies EditorTestApi;
   return (
-    <>
+    <EditorPreferencesContext.Provider
+      value={{
+        theme,
+        fontSize: 14,
+        fontFamily: "monospace",
+        lightJsonTheme: false,
+        resolveVariable: getEditorVariable,
+      }}
+    >
       <div className="code-editor-host" style={{ height: 280, width: 700 }}>
         {mounted && (
           <CodeEditor
@@ -78,7 +89,7 @@ function Fixture() {
       >
         {formattedResponse.value}
       </output>
-    </>
+    </EditorPreferencesContext.Provider>
   );
 }
 

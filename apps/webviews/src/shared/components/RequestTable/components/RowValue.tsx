@@ -7,16 +7,12 @@ import { REQUEST_CONTENT_TYPE } from "@onapi/domain/requests/constants/index";
 
 import { includes, isEqual } from "lodash-es";
 import classNames from "classnames";
-import VarInput from "@/features/variables/components/VarInput/VarInput";
+import { useVariableControls } from "@/shared/contexts/variable-controls";
 import { Button, AppIcon, Upload } from "@/shared/ui";
 import { fileTodataUrl } from "@/shared/utils/file";
 
 import Context from "../context";
 import { ItemProps } from "../types";
-
-import VarInsertPop from "@/features/variables/components/VarInsertPop/VarInsertPop";
-import { VAR_OPTIONS_KEY } from "@/features/variables/constants/variable";
-import { InsertAction } from "@onapi/domain/requests/types/variable";
 
 const MAX_SIZE = 5 * 1024 * 1024;
 
@@ -34,6 +30,7 @@ const RowValue = memo((props: ItemProps) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const { envId, fileValue } = useContext(Context);
+  const { Input: VariableInput, Insert } = useVariableControls();
 
   const handleChange = (key: string, newVal: string | number) => {
     const newRowData = {
@@ -82,44 +79,26 @@ const RowValue = memo((props: ItemProps) => {
 
   const valueChange = (
     str: string,
-    operation: VAR_OPTIONS_KEY,
-    action: InsertAction,
+    target: "value" | "description",
+    append: boolean,
   ) => {
-    if (action === InsertAction.insert) {
-      if ([VAR_OPTIONS_KEY.desc, VAR_OPTIONS_KEY.ai_desc].includes(operation)) {
-        const desc = rowData?.description || "";
-        handleChange?.("description", `${desc}${str}`);
-      } else {
-        const value = rowData?.value || "";
-        handleChange?.("value", `${value}${str}`);
-      }
-    } else {
-      if ([VAR_OPTIONS_KEY.desc, VAR_OPTIONS_KEY.ai_desc].includes(operation)) {
-        handleChange?.("description", str);
-      } else {
-        handleChange?.("value", str);
-      }
-    }
+    handleChange(target, append ? `${rowData[target] || ""}${str}` : str);
     setOpen(false);
   };
 
-  const suffix = valueSuffix ? (
-    <VarInsertPop
-      placement="right"
-      onChange={valueChange}
-      setOpen={setOpen}
-      open={open}
-    >
-      <AppIcon
-        className={classNames(
-          styles.insertIcon,
-          { [styles.active]: open },
-          styles.icon,
-        )}
-        icon="variable"
-      />
-    </VarInsertPop>
-  ) : undefined;
+  const suffix =
+    valueSuffix && Insert ? (
+      <Insert onChange={valueChange} setOpen={setOpen} open={open}>
+        <AppIcon
+          className={classNames(
+            styles.insertIcon,
+            { [styles.active]: open },
+            styles.icon,
+          )}
+          icon="variable"
+        />
+      </Insert>
+    ) : undefined;
 
   return (
     <div className={styles.container}>
@@ -141,7 +120,7 @@ const RowValue = memo((props: ItemProps) => {
           {suffix}
         </>
       ) : fileValue === "path" && rowData?.field_type === "File" ? (
-        <VarInput
+        <VariableInput
           value={rowData.value || ""}
           onChange={(src) => onChange?.(rowIndex, { ...rowData, value: src })}
           placeholder="File path"
@@ -171,7 +150,7 @@ const RowValue = memo((props: ItemProps) => {
           )}
         </>
       ) : (
-        <VarInput
+        <VariableInput
           suffix={suffix}
           placeholder="value"
           envId={envId}

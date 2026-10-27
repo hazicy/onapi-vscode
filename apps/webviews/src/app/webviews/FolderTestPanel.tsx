@@ -1,3 +1,4 @@
+import SharedComponentsProvider from "@/app/providers/SharedComponentsProvider";
 import { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { App as BaseApp, Skeleton } from "@/shared/ui/base";
@@ -144,19 +145,21 @@ function FolderTestPanel() {
   }, [testingSendingData]);
 
   return (
-    <BaseApp>
-      <ThemeProvider theme={customTheme}>
-        <GlobalThemeStyle />
-        <GlobalStyle />
-        <Skeleton
-          active
-          paragraph={{ rows: 15, width: "100%" }}
-          loading={!isString(testingName) || !testingName}
-        >
-          <Testing />
-        </Skeleton>
-      </ThemeProvider>
-    </BaseApp>
+    <SharedComponentsProvider>
+      <BaseApp>
+        <ThemeProvider theme={customTheme}>
+          <GlobalThemeStyle />
+          <GlobalStyle />
+          <Skeleton
+            active
+            paragraph={{ rows: 15, width: "100%" }}
+            loading={!isString(testingName) || !testingName}
+          >
+            <Testing />
+          </Skeleton>
+        </ThemeProvider>
+      </BaseApp>
+    </SharedComponentsProvider>
   );
 }
 

@@ -1,3 +1,4 @@
+import SharedComponentsProvider from "@/app/providers/SharedComponentsProvider";
 import { PROTOCOL_EXECUTION_EVENT } from "@onapi/contracts";
 import { createExecutionConsumer } from "@/features/requests/execution/consume-event";
 import { reduceHttpExecutionEvent } from "@/features/requests/execution/http-state";
@@ -159,17 +160,19 @@ function TagPanel() {
   }, []);
 
   return (
-    <BaseApp>
-      <ThemeProvider theme={customTheme}>
-        <GlobalThemeStyle />
-        <GlobalStyle />
-        <ErrorBoundary>
-          <Suspense fallback={null}>
-            <RequestWorkspace />
-          </Suspense>
-        </ErrorBoundary>
-      </ThemeProvider>
-    </BaseApp>
+    <SharedComponentsProvider>
+      <BaseApp>
+        <ThemeProvider theme={customTheme}>
+          <GlobalThemeStyle />
+          <GlobalStyle />
+          <ErrorBoundary>
+            <Suspense fallback={null}>
+              <RequestWorkspace />
+            </Suspense>
+          </ErrorBoundary>
+        </ThemeProvider>
+      </BaseApp>
+    </SharedComponentsProvider>
   );
 }
 

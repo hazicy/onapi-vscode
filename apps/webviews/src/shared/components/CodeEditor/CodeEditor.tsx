@@ -1,5 +1,4 @@
 import styles from "./CodeEditor.module.css";
-import classNames from "classnames";
 import {
   forwardRef,
   memo,
@@ -44,9 +43,7 @@ import {
 } from "@codemirror/autocomplete";
 import { highlightSelectionMatches, searchKeymap } from "@codemirror/search";
 import { lintGutter, lintKeymap, linter } from "@codemirror/lint";
-import useSystemConfig from "@/features/settings/store/useSystemConfig";
-import { useGlobal } from "@/app/store";
-import { getEditorVariable } from "@/shared/utils/global";
+import { useEditorPreferences } from "@/shared/contexts/editor-preferences";
 import { scriptCompletions } from "./completion";
 import { formatDocument } from "./format";
 import { jsonDiagnostics } from "./jsonDiagnostics";
@@ -95,10 +92,8 @@ const CodeEditor = forwardRef<CodeEditorRef, Props>((props, ref) => {
     () => ({ language: new Compartment(), config: new Compartment() }),
     [],
   );
-  const vscodeTheme = useGlobal((state) => state.vscodeTheme);
-  const { font_size, font_family } = useSystemConfig(
-    (state) => state.systemConfig,
-  );
+  const { theme, fontSize, fontFamily, resolveVariable } =
+    useEditorPreferences();
 
   const formatEditor = async (automatic = false) => {
     const view = viewRef.current;
@@ -260,11 +255,7 @@ const CodeEditor = forwardRef<CodeEditorRef, Props>((props, ref) => {
         "aria-label": "Code editor",
       }),
       EditorState.tabSize.of(2),
-      editorTheme(
-        isDarkTheme(vscodeTheme || ""),
-        typeof font_size === "number" ? font_size : 14,
-        font_family || "monospace",
-      ),
+      editorTheme(isDarkTheme(theme), fontSize, fontFamily),
     ];
     if (options?.wordWrap !== "off") {
       config.push(EditorView.lineWrapping);
@@ -275,7 +266,7 @@ const CodeEditor = forwardRef<CodeEditorRef, Props>((props, ref) => {
     if (!readOnly) {
       config.push(highlightActiveLine());
     }
-    if (options?.hover?.enabled) {
+    if (options?.hover?.enabled && resolveVariable) {
       config.push(
         hoverTooltip(
           async (editor, pos) => {
@@ -286,7 +277,7 @@ const CodeEditor = forwardRef<CodeEditorRef, Props>((props, ref) => {
               if (pos < from || pos > to) {
                 continue;
               }
-              const content = await getEditorVariable(match[0]);
+              const content = await resolveVariable(match[0]);
               if (!content) {
                 return null;
               }
@@ -310,7 +301,15 @@ const CodeEditor = forwardRef<CodeEditorRef, Props>((props, ref) => {
       );
     }
     view.dispatch({ effects: compartments.config.reconfigure(config) });
-  }, [readOnly, options, vscodeTheme, font_size, font_family, compartments]);
+  }, [
+    readOnly,
+    options,
+    theme,
+    fontSize,
+    fontFamily,
+    resolveVariable,
+    compartments,
+  ]);
 
   useEffect(() => {
     if (onMountAutoFormat) {

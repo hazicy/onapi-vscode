@@ -1,6 +1,6 @@
 import { HttpParameterTable } from "@/shared/components/RequestTable/RequestTable";
 import type { RequestBodyProps } from "../types";
-import { useTableColumnSwitchConfig } from "@/shared/hooks";
+import useTableColumnSwitchConfig from "@/features/settings/hooks/useTableColumnSwitchConfig";
 
 export default function Urlencoded(props: RequestBodyProps) {
   const { columnSwitchConfig, onColumnSwitchConfig } =

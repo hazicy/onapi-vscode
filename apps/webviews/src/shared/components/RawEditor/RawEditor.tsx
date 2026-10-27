@@ -8,7 +8,7 @@ import { Flex } from "@/shared/ui/base";
 import { useSafeState } from "ahooks";
 
 import { CodeEditor } from "@/shared/components";
-import VarInsertPop from "@/features/variables/components/VarInsertPop/VarInsertPop";
+import { useVariableControls } from "@/shared/contexts/variable-controls";
 
 import { Button, AppIcon } from "@/shared/ui";
 import { ApisBaseRequestBody } from "@onapi/domain/requests/types/request";
@@ -38,6 +38,7 @@ const RawEditor = ({
   regularValueHeight,
 }: Props) => {
   const { t } = useTranslation();
+  const { Insert } = useVariableControls();
 
   const codeEditorRef = useRef<CodeEditorRef>(null);
 
@@ -60,10 +61,9 @@ const RawEditor = ({
         <header>
           <Flex align="center" justify="space-between" className={styles.flex}>
             <Flex gap={12} align="center" className={styles.flex}>
-              {isDebugArea ? (
+              {isDebugArea && Insert ? (
                 <Flex gap={4} className={styles.flex}>
-                  <VarInsertPop
-                    placement="right"
+                  <Insert
                     isInsertDynamic
                     onChange={valueChange}
                     open={varOpen}
@@ -78,7 +78,7 @@ const RawEditor = ({
                     >
                       {t("var_insert.dynamic_value")}
                     </Button>
-                  </VarInsertPop>
+                  </Insert>
                 </Flex>
               ) : (
                 <div />

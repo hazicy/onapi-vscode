@@ -8,7 +8,7 @@ import cn from "classnames";
 import { concat, filter, isEqual, map, size, trim } from "lodash-es";
 
 import AppIcon from "@/shared/ui/AppIcon";
-import useSystemConfig from "@/features/settings/store/useSystemConfig";
+import { useSystemHeaders } from "@/shared/contexts/system-headers";
 import { ApisBaseDataItem } from "@onapi/domain/requests/types/base";
 import { DefaultRequestSystemHeaders } from "@onapi/domain/requests/types/request";
 import { GlobalParamsHeaderItem } from "@onapi/domain/project/types/index";
@@ -29,14 +29,11 @@ type Props = Pick<
 const PublicParamsTable: FC<Props> = memo(
   ({ globalParams = [], folderParams = [], paramsType, tabType, kind }) => {
     const { t } = useTranslation();
-    const systemConfig = useSystemConfig((state) => state.systemConfig);
-    const systemRequestHeader = systemConfig?.systemRequestHeader || [];
-    const systemRequestHeaderWebSocket =
-      systemConfig?.systemRequestHeaderWebSocket || [];
-
-    const updateSystemConfig = useSystemConfig(
-      (state) => state.updateSystemConfig,
-    );
+    const {
+      http: systemRequestHeader,
+      websocket: systemRequestHeaderWebSocket,
+      onChange,
+    } = useSystemHeaders();
 
     const lastDataSource = useMemo(() => {
       let commonParameters: (GlobalParamsHeaderItem | ApisBaseDataItem)[] = [];
@@ -72,7 +69,15 @@ const PublicParamsTable: FC<Props> = memo(
         );
       }
       return filter(commonParameters, (item) => trim(item?.key) !== "") || [];
-    }, [globalParams, folderParams, paramsType, systemRequestHeader]);
+    }, [
+      globalParams,
+      folderParams,
+      paramsType,
+      tabType,
+      kind,
+      systemRequestHeader,
+      systemRequestHeaderWebSocket,
+    ]);
     const renderCheckbox = (text: number | undefined, rowData: any) => (
       <Checkbox
         onChange={(e) => {
@@ -88,22 +93,9 @@ const PublicParamsTable: FC<Props> = memo(
             },
           );
 
-          isEqual(kind, "websocket")
-            ? updateSystemConfig({
-                ...systemConfig,
-                systemRequestHeaderWebSocket: systemHeader,
-              })
-            : updateSystemConfig({
-                ...systemConfig,
-                systemRequestHeader: systemHeader,
-              });
-
-          window?.vscode.postMessage({
-            action: "setSystemConfig",
-            data: { systemRequestHeader: systemHeader },
-          });
+          onChange?.(kind === "websocket" ? "websocket" : "http", systemHeader);
         }}
-        disabled={rowData?.type !== "system"}
+        disabled={rowData?.type !== "system" || !onChange}
         checked={text === 1}
       />
     );
