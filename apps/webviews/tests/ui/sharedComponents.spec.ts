@@ -98,7 +98,10 @@ test("layout controls persist preferences and mounted panels follow external set
   const placement = async () => {
     const left = await request.boundingBox();
     const right = await response.boundingBox();
-    return right!.x > left!.x + 100 ? "horizontal" : "vertical";
+    if (!left || !right) {
+      return "pending";
+    }
+    return right.x > left.x + 100 ? "horizontal" : "vertical";
   };
   await horizontal.click();
   await expect(horizontal).toHaveAttribute("aria-pressed", "true");

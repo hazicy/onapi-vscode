@@ -90,6 +90,7 @@ export function Tabs({
             {items.map((item) => (
               <span
                 key={item.key}
+                data-with-extra={item.tabExtra ? "" : undefined}
                 aria-hidden={hiddenItems.includes(item) || undefined}
                 inert={hiddenItems.includes(item) || undefined}
                 className={clsx(

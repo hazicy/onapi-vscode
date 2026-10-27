@@ -44,7 +44,7 @@ function Content() {
         <div
           style={
             {
-              "--vscode-tab-unfocusedInactiveForeground": "rgb(10, 20, 30)",
+              "--vscode-descriptionForeground": "rgb(10, 20, 30)",
             } as CSSProperties
           }
           className={styles.container}
@@ -52,7 +52,6 @@ function Content() {
           <Empty
             description="Styled empty description"
             className={styles.empty}
-            descriptionClassName={styles.emptyDescription}
           />
         </div>
         <Empty

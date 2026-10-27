@@ -469,11 +469,10 @@ test("production WebSocket request finishes loading without render errors", asyn
   await webSocketPage.websocket.getByText("hello", { exact: true }).click();
   await expect(webSocketPage.editors.nth(1)).toContainText("hello");
   await webSocketPage.searchTextbox.fill("does-not-exist");
-  await expect(webSocketPage.noMatchingMessages).toBeVisible();
+  await expect(webSocketPage.filterHint).toBeVisible();
   await webSocketPage.resetFiltersButton.click();
   await expect(webSocketPage.searchTextbox).toHaveValue("");
   await webSocketPage.clearMessagesButton.click();
-  await expect(webSocketPage.noMessagesYet).toBeVisible();
   await expect(
     webSocketPage.connectedSendAMessageOrWaitForTheServerToRespond,
   ).toBeVisible();

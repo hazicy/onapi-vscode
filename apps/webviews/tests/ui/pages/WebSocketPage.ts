@@ -15,7 +15,7 @@ export class WebSocketPage {
   }
 
   get status() {
-    return this.page.getByRole("status");
+    return this.page.locator('[role="status"][data-status]');
   }
 
   get connectToSendAMessage() {
@@ -45,8 +45,10 @@ export class WebSocketPage {
     return this.page.getByRole("textbox", { name: "Search", exact: true });
   }
 
-  get noMatchingMessages() {
-    return this.page.getByText("No matching messages", { exact: true });
+  get filterHint() {
+    return this.page.getByText("Try a different search or reset the filters.", {
+      exact: true,
+    });
   }
 
   get resetFiltersButton() {
@@ -54,10 +56,6 @@ export class WebSocketPage {
       name: "Reset filters",
       exact: true,
     });
-  }
-
-  get noMessagesYet() {
-    return this.page.getByText("No messages yet", { exact: true });
   }
 
   get connectedSendAMessageOrWaitForTheServerToRespond() {

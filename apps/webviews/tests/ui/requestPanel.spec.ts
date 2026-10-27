@@ -102,7 +102,9 @@ test("empty, sending and failed requests have distinct states", async ({
   await expect(
     workspace.getByRole("status").filter({ hasText: "Send a request" }),
   ).toContainText("Send a request");
-  await expect(workspace.locator("kbd").last()).toHaveText("Enter");
+  await expect(
+    workspace.getByRole("tab", { name: "Response", exact: true }),
+  ).toHaveCount(0);
   await workspace.getByRole("button", { name: "Send", exact: true }).click();
   await expect(
     workspace.getByRole("button", { name: "Send", exact: true }),
@@ -132,8 +134,9 @@ test("request panel screenshots at wide and narrow widths", async ({
       "--vscode-toolbar-hoverBackground": "#ffffff16",
       "--vscode-list-hoverBackground": "#ffffff0a",
     };
-    for (const [key, value] of Object.entries(vars))
+    for (const [key, value] of Object.entries(vars)) {
       document.documentElement.style.setProperty(key, value);
+    }
     document.body.style.background = "#1e1e1e";
     document.body.style.color = "#cccccc";
   });

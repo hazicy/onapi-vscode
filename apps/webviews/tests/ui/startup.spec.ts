@@ -138,6 +138,15 @@ for (const moduleDelay of [0, 250]) {
     await expect(requestPage.pathTab).toHaveAttribute("aria-selected", "true");
     await requestPage.paramsTab.click();
     await page.waitForLoadState("networkidle");
+    await expect(requestPage.responseTab).toHaveCount(0);
+    await requestPage.sendButton.click();
+    await emitHttpEvents(page, "startup-api", [
+      { type: "start" },
+      { type: "request", response: { code: 200, body: "{}" } },
+      { type: "done", error: null },
+    ]);
+    await expect(requestPage.responseTab).toBeVisible();
+    await page.waitForLoadState("networkidle");
     const beforeConsole = scripts.length;
     await requestPage.consoleTab.click();
     await expect.poll(() => scripts.length).toBeGreaterThan(beforeConsole);
@@ -146,7 +155,11 @@ for (const moduleDelay of [0, 250]) {
     await emitHttpEvents(page, "startup-api", [
       { type: "done", error: { message: "Startup deferred response check" } },
     ]);
-    await expect(requestPage.startupDeferredResponseCheck).toBeVisible();
+    await expect(
+      page
+        .getByRole("alert")
+        .getByText("Startup deferred response check", { exact: true }),
+    ).toBeVisible();
     await emitHttpEvents(page, "startup-api", [
       { type: "start" },
       {

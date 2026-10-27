@@ -1,3 +1,4 @@
+import { emitHttpEvents } from "./protocol";
 import { expect } from "@playwright/test";
 import { test } from "./fixtures";
 import { RequestPage } from "./pages/RequestPage";
@@ -64,10 +65,13 @@ for (const platform of ["mac", "windows"] as const) {
       await url.click();
       await page.keyboard.press(`${modifier}+Enter`);
       await expect.poll(sent).toHaveLength(1);
-      await requestPage.tab.filter({ hasText: /^(?:Body|JSON|Raw)$/ }).click();
-      const editor = requestPage.codeEditorTextbox.and(
-        requestPage.contenteditableTrue,
-      );
+      await emitHttpEvents(page, "hotkey-api", [{ type: "done", error: null }]);
+      await expect(requestPage.sendButton).toBeVisible();
+      await page.getByRole("tab", { name: "JSON", exact: true }).click();
+      const editor = page
+        .getByRole("tabpanel", { name: "JSON", exact: true })
+        .getByRole("textbox", { name: "Code editor" })
+        .and(requestPage.contenteditableTrue);
       await editor.fill('{"updated":true}');
       const content = await editor.innerText();
       await page.keyboard.down(modifier);
@@ -76,6 +80,8 @@ for (const platform of ["mac", "windows"] as const) {
       await page.keyboard.up("Enter");
       await page.keyboard.up(modifier);
       await expect.poll(sent).toHaveLength(2);
+      await emitHttpEvents(page, "hotkey-api", [{ type: "done", error: null }]);
+      await expect(requestPage.sendButton).toBeVisible();
       expect((await sent())[1].data.request.body.raw).toBe(content);
       await expect(editor).toHaveText(content);
       await page.keyboard.press("Alt+s");

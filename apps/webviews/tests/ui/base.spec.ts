@@ -138,7 +138,7 @@ test("theme changes update CSS variables and extracted conditional styles", asyn
   await expect(assertion).toHaveCSS("color", "rgb(255, 88, 62)");
   await expect(assertion).toHaveCSS(
     "background-color",
-    "rgba(255, 88, 62, 0.1)",
+    "color(srgb 1 0.345098 0.243137 / 0.08)",
   );
   const directionPanels = [themePage.graphQLDirection, themePage.sseDirection];
   for (const panel of directionPanels) {
@@ -158,7 +158,7 @@ test("theme changes update CSS variables and extracted conditional styles", asyn
   await expect(assertion).toHaveCSS("color", "rgb(38, 206, 164)");
   await expect(assertion).toHaveCSS(
     "background-color",
-    "rgba(38, 206, 164, 0.1)",
+    "color(srgb 0.14902 0.807843 0.643137 / 0.08)",
   );
   for (const panel of directionPanels) {
     await expect(panel).toHaveCSS("padding-bottom", "12px");

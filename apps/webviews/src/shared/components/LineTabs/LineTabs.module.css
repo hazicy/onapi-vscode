@@ -79,3 +79,7 @@
 .selectionList > span:has(> [role="tab"][data-active]) {
   border-bottom: 0;
 }
+
+.selectionList > [data-with-extra] > [role="tab"] {
+  padding-right: 0;
+}
