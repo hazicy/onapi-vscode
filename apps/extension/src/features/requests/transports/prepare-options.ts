@@ -11,7 +11,6 @@ import { GenSendBaseOptionsType, SendBaseOptions } from "./options";
 import { DEFAULT_SOCKET_GLOBAL_PARAMS } from "@onapi/http-model/requests/constants/request";
 import * as vscode from "vscode";
 import { getCookiesOptions, getEnvOptions, getProjectOptions } from "./index";
-import path from "path";
 import { getCurrentProjectConfig } from "../../../platform/storage/project-config";
 
 export const genSendBaseOptions: GenSendBaseOptionsType = async ({
