@@ -65,7 +65,6 @@ export default function VarInput(props: Partial<VarInputProps>) {
   const currentEnvId = envId || activeEnvironment || "";
   const [envVisible, setEnvVisible] = useSafeState(false);
   const [envObj, setEnvObj] = useSafeState<EnvOptions | null>(null);
-  const [active, setActive] = useSafeState(false);
   const inputRef = useRef<InputRef>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const nativeMaxLength =
@@ -215,7 +214,6 @@ export default function VarInput(props: Partial<VarInputProps>) {
 
   const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
     if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-      setActive(false);
       onBlur?.(value);
     }
   };
@@ -232,7 +230,6 @@ export default function VarInput(props: Partial<VarInputProps>) {
     >
       <div
         className={clsx(styles.miniEditor, styles.editorShell, {})}
-        onFocus={() => setActive(true)}
       >
         {multiline ? (
           <Input.TextArea

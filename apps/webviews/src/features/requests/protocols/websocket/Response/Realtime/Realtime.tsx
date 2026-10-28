@@ -40,7 +40,7 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
   const apisActiveData = useApis((state) => state.apisActiveData);
   const apisActiveKey = apisActiveData.id;
 
-  const [mode, setMode] = useSafeState<any>("text");
+  const [, setMode] = useSafeState<any>("text");
   const [data, setData] = useSafeState<any>({});
   const [filterValue, setFilterValue] = useSafeState<string>("");
   const [filterType, setFilterType] = useSafeState<string>("all");

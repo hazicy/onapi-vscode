@@ -1,7 +1,6 @@
 import styles from "./VariableManage.module.css";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
 
 import { Flex, Input, message } from "@/shared/ui/base";
 
@@ -26,7 +25,6 @@ export const defaultDataItem: IEnvDataItem = {
 };
 const Index = () => {
   const { t } = useTranslation();
-  const { projectId: project_id } = useParams();
   const globalVars = useProjectConfig(
     (state) => state.http!.options.globals.values,
   );

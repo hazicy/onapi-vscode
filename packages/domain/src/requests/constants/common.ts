@@ -30,11 +30,3 @@ export const APIS_BASE_DEFAULT_DATA: Record<string, any> = {
   [APIS_TARGET_TYPE_ENUM.GRAPHQL]: DEFAULT_GRAPHQL_DATA,
 };
 
-const DEFAULT_COLOR_MAP = {
-  doc: "doc",
-  websocket: "ws",
-  grpc: "grpc",
-  socket_method: "socket-service",
-  socket: "socket",
-  note: "note",
-};

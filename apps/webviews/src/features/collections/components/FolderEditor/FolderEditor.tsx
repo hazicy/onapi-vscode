@@ -1,6 +1,5 @@
 import styles from "./FolderEditor.module.css";
 import { FC, FunctionComponent, memo, useMemo } from "react";
-import { useTranslation } from "react-i18next";
 
 import { SegmentedProps } from "@/shared/ui/base";
 
@@ -19,7 +18,6 @@ import { ApiComponentType } from "@onapi/domain/requests/types/api";
 import ToolBar from "./ToolBar";
 
 const FolderEditor: FC<ApiComponentType> = ({ apisData }) => {
-  const { t } = useTranslation();
   const targetType = apisData?.kind;
 
   const [tabsValue, setTabsValue] = useSafeState<string | number>();

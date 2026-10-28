@@ -1,7 +1,6 @@
 import { completionHttpProtocol as completeHttpProtocol } from "@onapi/domain/utils/data-tools";
 import { isPlainObject, isString } from "lodash-es";
 
-import useProjectConfig from "@/features/project/store/useProjectConfig";
 
 export const completionHttpProtocol = (data: any) => {
   return completeHttpProtocol(data);
@@ -34,8 +33,6 @@ export const getWebSocketSendOptions = async (
   temporaryServerId: string,
 ) => {
   try {
-    const { envDetailKeys } = useProjectConfig.getState();
-
     return {
       server_id: temporaryServerId,
     };

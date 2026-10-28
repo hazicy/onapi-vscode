@@ -177,7 +177,7 @@ const useWebSocket = () => {
     data?: unknown;
     error?: unknown;
   }) => {
-    const { code, data, error } = event;
+    const { code, data } = event;
     if (code !== 200 || !isPlainObject(data)) {
       message.error(t("common.auth.get_access_fail"));
       return;

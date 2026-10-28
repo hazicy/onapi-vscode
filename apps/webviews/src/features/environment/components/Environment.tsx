@@ -21,14 +21,12 @@ const Environment = (props: Props) => {
   const { open } = props;
   const { t } = useTranslation();
   const [selectedKeys, setSelectedKeys] = useState<any[]>([]);
-  const serverList = useProjectConfig((state) => state.serverList);
   const {
     http,
     envSettingKeys,
     globalParamsTabKey,
     establish,
     updateHttpEnvironments,
-    updateEnvOpen,
     updateEstablish,
     updateEnvSettingKeys,
   } = useProjectConfig();

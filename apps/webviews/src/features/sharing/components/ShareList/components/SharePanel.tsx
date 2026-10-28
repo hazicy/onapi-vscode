@@ -22,7 +22,7 @@ const SharePanel = (props: PanelProps) => {
   const { t } = useTranslation();
   const { searchValue, shareList } = props || {};
   const debouncedValue = useDebounce(searchValue, { wait: 250 });
-  const [modal, contextHolder] = Modal.useModal();
+  const [, contextHolder] = Modal.useModal();
 
   const [checkedList, setCheckedList] = useSafeState<any[]>([]);
 

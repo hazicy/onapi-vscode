@@ -1,7 +1,6 @@
 import styles from "./TestingResult.module.css";
 import { useMemo } from "react";
 
-import useTheme from "@/shared/hooks/useTheme";
 import { Flex, Progress, Typography } from "@/shared/ui/base";
 import {
   chunk,
@@ -30,8 +29,6 @@ const TestingResult = ({
   testingSendingData,
   testingConfig,
 }: TestingResultProps) => {
-  const { themeToken } = useTheme();
-
   const renderStatusText = useMemo(() => {
     if (testingSendingData.sendStatus === "initial") {
       return t("common.not_started");

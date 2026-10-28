@@ -22,7 +22,6 @@ import {
   getAllParentDirectories,
 } from "@/shared/utils/common";
 
-import useWebSocket from "../useWebSocket";
 import Message from "./Message";
 import Setting from "./Setting";
 
@@ -44,7 +43,6 @@ const Request: React.FC<Props> = (props) => {
   const [allParentDirectories, setAllParentDirectories] = useSafeState<{
     [k: string]: ApisBaseDataItem[];
   }>({});
-  const { updatePool } = useWebSocket();
   const { t } = useTranslation();
 
   const {

@@ -1,5 +1,4 @@
 import styles from "./ListSideBar.module.css";
-import { useTranslation } from "react-i18next";
 
 import { Button, Flex } from "@/shared/ui/base";
 
@@ -25,7 +24,6 @@ interface Props {
 }
 
 const ListSideBar = (props: Props) => {
-  const { t } = useTranslation();
   const [expand, setExpand] = useSafeState<boolean>(false);
   const {
     value,

@@ -138,7 +138,6 @@ export const handleRequestPanelCommand = async (
   panel: vscode.WebviewPanel,
   apiData: ApiDetailsData,
 ) => {
-  const { environmentWebView } = globalConfig;
   const { action, data } = message;
 
   if (await handlePanelAction(message, context, panel)) {

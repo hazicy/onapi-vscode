@@ -14,7 +14,7 @@ type ResultProps = {
 
 const Result = ({ data, open, onClose }: ResultProps) => {
   const { t } = useTranslation();
-  const [modal, contextHolder] = Modal.useModal();
+  const [, contextHolder] = Modal.useModal();
 
   const handleOnClose = () => {
     onClose();

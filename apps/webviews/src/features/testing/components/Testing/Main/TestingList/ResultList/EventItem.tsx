@@ -28,7 +28,7 @@ type EventItemProps = {
 };
 
 const EventItem = (props: EventItemProps) => {
-  const { value, errorMessage, iterationText } = props;
+  const { value, iterationText } = props;
 
   const { t } = useTranslation();
   const { themeToken } = useTheme();

@@ -9,7 +9,7 @@ import { Flex, Popconfirm, message } from "@/shared/ui/base";
 
 import type { DragEndEvent } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import { cloneDeep, findIndex, head, includes, isEqual, size } from "lodash-es";
+import { cloneDeep, findIndex, head, includes, isEqual } from "lodash-es";
 import { useShallow } from "zustand/react/shallow";
 
 import { Tooltip } from "@/shared/ui";
@@ -48,15 +48,11 @@ const Menus: FC<Props> = ({ selectedKeys, setSelectedKeys }) => {
 
   const {
     envList,
-    envDetailKeys,
     updateHttpEnvironments,
-    setActiveHttpEnvironment,
   } = useProjectConfig(
     useShallow((state) => ({
       envList: state.http!.environments,
-      envDetailKeys: state.http.activeEnvironment,
       updateHttpEnvironments: state.updateHttpEnvironments,
-      setActiveHttpEnvironment: state.setActiveHttpEnvironment,
     })),
   );
 
@@ -230,17 +226,6 @@ const Menus: FC<Props> = ({ selectedKeys, setSelectedKeys }) => {
     const activeIndex = findIndex(envList, (i) => i.id === active.id);
     const overIndex = findIndex(envList, (i) => i.id === over?.id);
     const newEnvList = arrayMove(envList || [], +activeIndex, +overIndex);
-    const newActiveIndex = findIndex(newEnvList, (i) => i.id === active.id);
-
-    // Move to the end
-    if (isEqual(size(envList) - 1, newActiveIndex)) {
-      const beforeId = newEnvList[newActiveIndex - 1].id;
-
-      handleMoveEnv(newEnvList);
-      return;
-    }
-
-    const afterId = newEnvList[newActiveIndex + 1].id;
     handleMoveEnv(newEnvList);
   };
 
