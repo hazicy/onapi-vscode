@@ -1,6 +1,7 @@
 import { FC, ReactNode, Suspense } from "react";
 
 import { Skeleton, SkeletonProps } from "@/shared/ui/base";
+import ContentReveal from "./ContentReveal";
 
 interface Props {
   children: ReactNode;
@@ -17,7 +18,11 @@ const SuspenseContent: FC<Props> = ({ skeletonProps, children }) => {
     />
   );
 
-  return <Suspense fallback={loading}>{children}</Suspense>;
+  return (
+    <Suspense fallback={loading}>
+      <ContentReveal>{children}</ContentReveal>
+    </Suspense>
+  );
 };
 
 export default SuspenseContent;

@@ -7,6 +7,7 @@ import { Empty } from "@/shared/ui";
 import { Skeleton } from "@/shared/ui/base";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import ContentReveal from "@/shared/components/ContentReveal";
 
 interface Props {
   rawHtml?: string;
@@ -49,13 +50,15 @@ const Beautify = (props: Props) => {
   }
 
   return (
-    <CodeEditor
-      readOnly
-      onMountAutoFormat={false}
-      language={mode || language}
-      value={editValue}
-      options={editorOptions}
-    />
+    <ContentReveal>
+      <CodeEditor
+        readOnly
+        onMountAutoFormat={false}
+        language={mode || language}
+        value={editValue}
+        options={editorOptions}
+      />
+    </ContentReveal>
   );
 };
 
