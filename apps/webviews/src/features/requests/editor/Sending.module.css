@@ -34,6 +34,7 @@
 .container {
   position: absolute;
   inset: 0;
+  overflow: hidden;
   z-index: 101;
   color: var(--font-content-color);
   background-color: color-mix(
@@ -47,7 +48,6 @@
 .barOnly {
   bottom: auto;
   height: 2px;
-  overflow: hidden;
   pointer-events: none;
   background: transparent;
 }
