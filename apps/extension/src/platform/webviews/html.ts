@@ -17,6 +17,12 @@ export const getHtmlForWebview = (
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>My View</title>
+      <style>
+        html, body, #root {
+          background-color: var(--vscode-editor-background, #1e1e1e);
+          color: var(--vscode-foreground, #cccccc);
+        }
+      </style>
       ${
         devServer
           ? `
