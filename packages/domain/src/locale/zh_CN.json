@@ -294,12 +294,8 @@
       "tips2": "变量当前值:当该变量在其他地方被重新定义（比如预/后执行脚本）时，该变量被定义的新值",
       "name": "环境名称",
       "url": "前置URL",
-      "add_server": "添加服务",
-      "edit_name": "修改名称",
-      "delete_server": "删除服务",
       "environment_variables": "环境变量",
-      "save": "保存",
-      "input_tip": "请输入服务名"
+      "save": "保存"
     },
     "variables_table": {
       "variables": "变量名",
@@ -578,7 +574,6 @@
     "only_own": "(仅创建者可见)",
     "public": "公开",
     "only_team": "(团队内可见)",
-    "service_not_empty": "服务名不能为空！",
     "will_online": "即将上线",
     "copy_success": "复制成功",
     "folder": "目录",

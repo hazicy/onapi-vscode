@@ -294,12 +294,8 @@
       "tips2": "Current value: The value after a script or another source overrides the initial value.",
       "name": "Environment Name",
       "url": "Base URL",
-      "add_server": "Add Server",
-      "edit_name": "Edit Name",
-      "delete_server": "Delete Server",
       "environment_variables": "Environment Variables",
-      "save": "Save",
-      "input_tip": "Please enter a server name"
+      "save": "Save"
     },
     "variables_table": {
       "variables": "Variables",
@@ -578,7 +574,6 @@
     "only_own": "(Creator view only)",
     "public": "Public",
     "only_team": "(Team visibility)",
-    "service_not_empty": "Service name cannot be empty!",
     "will_online": "Coming Soon",
     "copy_success": "Copy Success",
     "folder": "Folder",
