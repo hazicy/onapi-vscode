@@ -11,10 +11,7 @@ import { ItemProps } from "../../types";
 
 const lineHeight = 32;
 
-type Props = ItemProps & {
-  showAiDescription?: boolean;
-  showDelete?: boolean;
-};
+type Props = ItemProps;
 
 export const RowDescription: FC<Props> = memo((props) => {
   const { rowData, rowIndex, onChange, readOnly } = props;
