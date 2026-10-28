@@ -1,17 +1,15 @@
 {
-  "extends": "./tooling/tsconfig/base.json",
-  "include": [
-    "tests/**/*.ts",
-    "tests/**/*.tsx",
-    "tooling/types.d.ts",
-    "apps/webviews/lib.d.ts",
-    "apps/webviews/declare.d.ts"
-  ],
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "paths": {
-      "@/*": ["./apps/webviews/src/*"]
-    }
-  }
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowImportingTsExtensions": true
+  },
+  "files": []
 }

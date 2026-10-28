@@ -61,4 +61,4 @@ negative type examples to protect the sender interface.
 
 Zod validates this application's message protocol. Generated data is checked
 against JSON Schema using the existing `jsonschema` development dependency in
-[mockBundling.test.mjs](../tests/mockBundling.test.mjs).
+[mockBundling.test.mjs](../tests/runtime/mockBundling.test.mjs).

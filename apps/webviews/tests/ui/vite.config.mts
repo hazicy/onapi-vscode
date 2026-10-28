@@ -1,4 +1,4 @@
-import { generateScopedName } from "../../../../tooling/build/css-modules.mjs";
+import { generateScopedName } from "../../build/css-modules.mjs";
 import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";

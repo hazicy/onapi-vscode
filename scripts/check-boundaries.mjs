@@ -7,6 +7,27 @@ const builtins = new Set(
   builtinModules.flatMap((name) => [name, `node:${name}`]),
 );
 const failures = [];
+// Application and regression dependencies belong to their owning workspace.
+const rootManifest = JSON.parse(
+  fs.readFileSync(path.join(root, "package.json"), "utf8"),
+);
+const rootTools = new Set([
+  "@playwright/test",
+  "@types/node",
+  "esbuild",
+  "oxc-parser",
+  "oxfmt",
+  "oxlint",
+  "typescript",
+  "vite",
+]);
+for (const name of Object.keys({
+  ...rootManifest.dependencies,
+  ...rootManifest.devDependencies,
+})) {
+  if (!rootTools.has(name))
+    failures.push(`root: dependency ${name} must belong to a workspace`);
+}
 // Models are the bottom layer; wire contracts may depend only on those models.
 const sharedWorkspaceDependencies = {
   "packages/domain": new Set(),

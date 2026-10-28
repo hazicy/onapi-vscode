@@ -1,9 +1,12 @@
 {
-  "extends": "../../tooling/tsconfig/browser.json",
-  "include": ["src", "../../tooling/types.d.ts", "lib.d.ts", "declare.d.ts"],
+  "extends": "../../tsconfig.json",
+  "include": ["src", "lib.d.ts", "declare.d.ts"],
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["react", "react-dom"],
+    "jsx": "react-jsx"
   }
 }

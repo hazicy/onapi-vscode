@@ -1,15 +1,11 @@
 {
-  "extends": "../../../tooling/tsconfig/browser.json",
+  "extends": "../tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
     "types": ["node", "react", "react-dom"],
-    "paths": { "@/*": ["../src/*"] }
+    "paths": {
+      "@/*": ["../src/*"]
+    }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "../../../tooling/types.d.ts",
-    "../lib.d.ts",
-    "../declare.d.ts"
-  ]
+  "include": ["**/*.ts", "**/*.tsx", "../lib.d.ts", "../declare.d.ts"]
 }

@@ -42,7 +42,7 @@ const warnings = [...imported.warnings, ...exported.warnings];
 
 ```sh
 pnpm --dir packages/api-converter typecheck
-node --experimental-vm-modules --test tests/apiConverter.test.mjs tests/converterIntegration.test.mjs tests/converterLoading.test.mjs tests/swaggerImport.test.mjs
+node --experimental-vm-modules --test "tests/api-converter/*.test.mjs"
 ```
 
 测试覆盖格式往返、Postman Schema 校验、真实应用入口、认证、变量、目录、表单文件、响应示例、服务器路径、参数覆盖、循环 Schema、非法输入和按需加载。

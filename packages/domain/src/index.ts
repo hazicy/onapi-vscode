@@ -1,3 +1,5 @@
+/// <reference path="./types.d.ts" />
+
 import { parse as parseUrl } from "postman-url-encoder/parser/index.js";
 import type {
   CollectionDefinition,

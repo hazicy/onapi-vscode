@@ -1,5 +1,8 @@
 {
-  "extends": "../../tooling/tsconfig/node.json",
-  "include": ["src", "../../tooling/types.d.ts"],
-  "compilerOptions": {}
+  "extends": "../../tsconfig.json",
+  "include": ["src"],
+  "compilerOptions": {
+    "lib": ["ES2022"],
+    "types": ["node"]
+  }
 }

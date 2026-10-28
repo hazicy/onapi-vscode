@@ -1,6 +1,6 @@
 import { expect } from "@playwright/test";
 import { test } from "./fixtures";
-import { generateScopedName } from "../../../../tooling/build/css-modules.mjs";
+import { generateScopedName } from "../../build/css-modules.mjs";
 
 const requestInitialData = {
   projectConfig: {},

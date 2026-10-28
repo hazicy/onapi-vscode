@@ -1,4 +1,8 @@
 {
-  "extends": "../../tooling/tsconfig/browser.json",
-  "include": ["src", "../../tooling/types.d.ts"]
+  "extends": "../../tsconfig.json",
+  "include": ["src"],
+  "compilerOptions": {
+    "types": [],
+    "lib": ["ES2022", "DOM", "DOM.Iterable"]
+  }
 }

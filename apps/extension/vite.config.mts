@@ -1,8 +1,8 @@
 import { fileURLToPath } from "node:url";
 import { builtinModules } from "node:module";
 import { defineConfig, loadEnv } from "vite";
-import { formatterVite } from "../../tooling/build/formatter.mjs";
-import { fakerLocalesVite } from "../../tooling/build/faker-locales.mjs";
+import { formatterVite } from "./build/formatter.mjs";
+import { fakerLocalesVite } from "../../scripts/build/faker-locales.mjs";
 
 const builtins = new Set(
   builtinModules.flatMap((name) => [name, `node:${name}`]),

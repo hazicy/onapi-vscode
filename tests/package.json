@@ -1,0 +1,20 @@
+{
+  "name": "@onapi/tests",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@onapi/api-converter": "workspace:*",
+    "@onapi/contracts": "workspace:*",
+    "@onapi/domain": "workspace:*",
+    "@onapi/runtime": "workspace:*",
+    "@onapi/webviews": "workspace:*",
+    "@playwright/test": "^1.64.1",
+    "curl-to-postmanv2": "^1.8.7",
+    "esbuild": "^0.28.2",
+    "json5": "^2.2.3",
+    "jsonschema": "^1.5.0",
+    "lodash": "^4.18.1",
+    "postman-collection": "^5.3.1",
+    "socket.io": "^4.8.4"
+  }
+}

@@ -62,7 +62,7 @@ the previous Worker. Collections and request storage still use the existing
 models. This change does not introduce a protocol registry, full Session API,
 Typed RPC, GraphQL subscriptions, or parsed SSE events.
 
-Verification: `pnpm test:unit` includes `tests/execution.test.mjs`, covering the
+Verification: `pnpm test:unit` includes `tests/runtime/execution.test.mjs`, covering the
 Core lifecycle, relay/UI dispatch, actual HTTP/GraphQL/SSE Worker execution,
 assertions/scope updates, Worker failures/cancellation, WebSocket round trips,
 and Socket.IO subscriptions/acks. Existing client suites run with

@@ -9,20 +9,3 @@ declare module "*.module.css" {
 }
 
 declare module "*.css" {}
-
-declare module "pako" {
-  export function inflate(data: Uint8Array): Uint8Array;
-}
-
-declare module "postman-url-encoder/parser/index.js" {
-  export function parse(raw: string): {
-    raw: string;
-    protocol?: string;
-    host?: string[];
-    port?: string;
-    path?: string[];
-    hash?: string;
-    auth?: [string, string];
-    query?: string[];
-  };
-}

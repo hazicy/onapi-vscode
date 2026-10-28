@@ -1,6 +1,6 @@
 import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
-import { fakerLocalesEsbuild } from "../tooling/build/faker-locales.mjs";
+import { fakerLocalesEsbuild } from "./build/faker-locales.mjs";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
 
@@ -16,7 +16,7 @@ async function main() {
     entryPoints: [
       path.resolve(
         fileURLToPath(new URL(".", import.meta.url)),
-        `../apps/extension/test/${protocol}.test.ts`,
+        `../apps/extension/tests/${protocol}.test.ts`,
       ),
     ],
     outfile,

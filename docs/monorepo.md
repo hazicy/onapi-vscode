@@ -14,8 +14,7 @@ The package manager version is pinned in the root `package.json`.
 | `packages/contracts`     | Serializable Worker commands and execution events shared by host and UI                               |
 | `packages/runtime`       | HTTP Worker, WebSocket and Socket.IO protocol execution; no VS Code or UI dependency                  |
 | `packages/api-converter` | External import/export formats and collection conversion boundaries                                   |
-| `tooling`                | Shared TypeScript configurations and build plugins                                                    |
-| `tests`                  | Module regressions, cross-workspace integration and persistence tests                                 |
+| `tests`                  | Private test workspace; regressions grouped by owner and cross-workspace integration                  |
 
 Shared packages expose explicit workspace entrypoints. Source packages are
 compiled by the consuming Vite/esbuild build; they do not produce redundant
@@ -26,6 +25,12 @@ remain the native request schema, not a second custom transport representation.
 Every workspace declares its own dependencies using `workspace:*` for local
 packages. Cross-package relative imports are forbidden. The `@/` alias is local
 to Webviews. `pnpm check:boundaries` verifies these rules and dependency ownership.
+The root manifest contains shared development tools only; its tool allowlist is
+checked by the boundary checker. Test-only libraries belong to `tests/package.json`
+or the workspace containing the tests. Postman type extensions belong to Domain and are included through its public entrypoint.
+The root TypeScript configuration contains common compiler options; each workspace
+selects its own environment types. Shared build helpers live in `scripts/build`;
+application-specific build helpers remain in the owning application.
 
 Within Webviews, shared modules must not add imports from application or feature
 modules. The checker resolves both aliases and relative imports and rejects all
@@ -137,6 +142,9 @@ Existing Webview utility and test filenames can adopt these conventions as their
 modules are reorganized. Root tests currently include module regressions and
 cross-workspace integration tests; browser tests belong to Webviews and VS Code
 host tests belong to the extension.
+All test directories are named `tests`. Root regressions are grouped under
+`webviews/`, `extension/`, `domain/`, `api-converter/`, `runtime/` and `workspace/`;
+see the [test guide](../tests/README.md) for runners and dependency ownership.
 
 ## Build and package
 
@@ -201,6 +209,6 @@ The picker uses `Module.function` names so its expressions can execute unchanged
 Module regressions may provide explicit host/UI mocks through
 `tests/helpers/loadTypeScript.mjs`. Mocks must use the source import path and
 provide every imported name; the loader does not retry historical aliases or
-invent missing named exports. `tests/workspaceEntrypoints.test.mjs` additionally
+invent missing named exports. `tests/workspace/workspaceEntrypoints.test.mjs` additionally
 bundles public workspace entrypoints and variable utilities without mocks to
 verify real module wiring.

@@ -1,10 +1,20 @@
-import { fakerLocalesVite } from "../../tooling/build/faker-locales.mjs";
-import { generateScopedName } from "../../tooling/build/css-modules.mjs";
+import { fakerLocalesVite } from "../../scripts/build/faker-locales.mjs";
+import { generateScopedName } from "./build/css-modules.mjs";
 import { fileURLToPath, URL } from "node:url";
+import { createRequire } from "node:module";
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
+
+const require = createRequire(import.meta.url);
+// Injected imports also occur in shared packages, which do not own this plugin.
+const polyfillAliases = Object.fromEntries(
+  ["buffer", "global", "process"].map((name) => {
+    const id = `vite-plugin-node-polyfills/shims/${name}`;
+    return [id, require.resolve(id)];
+  }),
+);
 
 const panels = [
   "tagPanel",
@@ -37,6 +47,7 @@ export default defineConfig(({ mode, command }) => {
     clearScreen: false,
     resolve: {
       alias: {
+        ...polyfillAliases,
         "@": fileURLToPath(new URL("./src", import.meta.url)),
       },
     },
