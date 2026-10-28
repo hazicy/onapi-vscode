@@ -164,6 +164,11 @@ const ResponseResult = forwardRef((props: Props, ref) => {
       }))) ||
     [];
 
+  const encodingLabel =
+    Object.keys(RAW_ENCODE).find(
+      (label) => RAW_ENCODE[label] === (rawEncode || "utf8"),
+    ) || rawEncode;
+
   const handleOptionsChange: SegmentedProps["onChange"] = (value) => {
     setTabsValue(value);
   };
@@ -190,32 +195,36 @@ const ResponseResult = forwardRef((props: Props, ref) => {
         value={tabsValue}
         onChange={handleOptionsChange}
         wrapClassName={styles.responseResultTabsWrap}
+        tabBarStartContent={
+          <Select
+            aria-label="Response format"
+            variant="borderless"
+            suffixIcon={<AppIcon icon="chevron-down" />}
+            options={RESPONSE_TYPE.map(({ label, ext }) => ({
+              label,
+              value: ext,
+            }))}
+            value={rawType || "json"}
+            onChange={(newVal: string) => {
+              if (newVal === "auto") {
+                setRawType(
+                  nativeResponse?.header
+                    ? responseLanguage(nativeResponse)
+                    : data?.mime_type?.ext || "json",
+                );
+              } else {
+                setRawType(newVal);
+              }
+            }}
+            className={styles.select}
+            triggerClassName={styles.selectTrigger}
+          />
+        }
         tabBarExtraContent={
           <Flex
             className={clsx(styles.tabBarExtraContentWrap, styles.flex)}
-            gap={8}
+            gap={4}
           >
-            <Select
-              aria-label="Response format"
-              options={RESPONSE_TYPE.map(({ label, ext }) => ({
-                label,
-                value: ext,
-              }))}
-              value={rawType || "json"}
-              onChange={(newVal: string) => {
-                if (newVal === "auto") {
-                  setRawType(
-                    nativeResponse?.header
-                      ? responseLanguage(nativeResponse)
-                      : data?.mime_type?.ext || "json",
-                  );
-                } else {
-                  setRawType(newVal);
-                }
-              }}
-              className={styles.select}
-              triggerClassName={styles.selectTrigger}
-            />
             <Popover
               trigger="click"
               placement="bottomRight"
@@ -234,11 +243,12 @@ const ResponseResult = forwardRef((props: Props, ref) => {
             >
               <button
                 type="button"
-                className={styles.toolButton}
+                className={styles.encodingButton}
                 aria-label={t("request_panel.encoding")}
-                title={`${t("request_panel.encoding")}: ${rawEncode}`}
+                title={t("request_panel.encoding")}
               >
-                <AppIcon icon="sliders-horizontal" />
+                {encodingLabel}
+                <AppIcon icon="chevron-down" />
               </button>
             </Popover>
             <button

@@ -22,6 +22,7 @@ type Props = SegmentedProps & {
     value: string;
     children: FunctionComponent | ReactNode | any;
   }>;
+  tabBarStartContent?: ReactNode;
   tabBarExtraContent?: ReactNode;
   destroyInactiveTabs?: boolean;
   wrapClassName?: string;
@@ -37,6 +38,7 @@ const SegmentedTabs: FC<Props> = forwardRef(
       options,
       onChange,
       value,
+      tabBarStartContent,
       tabBarExtraContent,
       destroyInactiveTabs = false,
       wrapClassName,
@@ -103,6 +105,11 @@ const SegmentedTabs: FC<Props> = forwardRef(
               onChange={handleTabValueChange}
               {...resetProps}
             />
+            {tabBarStartContent && (
+              <div className={styles.tabBarStartContentWrap}>
+                {tabBarStartContent}
+              </div>
+            )}
             {tabBarExtraContent && (
               <div
                 className={clsx(styles.tabBarExtraContentWrap, extraClassName)}

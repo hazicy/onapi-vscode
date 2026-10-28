@@ -32,9 +32,8 @@
   max-width: 100%;
   overflow-x: auto;
   scrollbar-width: thin;
-  padding: 2px;
-  border: 1px solid var(--vscode-widget-border, var(--color-border));
-  border-radius: var(--vscode-cornerRadius-small, 4px);
+  padding: 0;
+  border: 0;
   background: transparent;
 }
 .container .segmented [role="tablist"] {
@@ -61,7 +60,7 @@
   min-width: 0;
 }
 .container .select {
-  min-width: 70px;
+  min-width: 0;
   height: 28px;
   min-height: 28px;
   background: transparent;
@@ -69,6 +68,28 @@
 }
 .selectTrigger {
   padding: 0 6px;
+}
+.encodingButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 28px;
+  flex-shrink: 0;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+  font-size: inherit;
+  cursor: pointer;
+}
+.encodingButton:hover {
+  background: var(--vscode-toolbar-hoverBackground);
+  color: var(--vscode-foreground);
+}
+.encodingButton:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: -1px;
 }
 .toolButton {
   display: inline-flex;
