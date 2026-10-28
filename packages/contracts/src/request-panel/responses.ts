@@ -17,6 +17,7 @@ const fetchResult = extensibleObject({
   error: z.unknown().optional(),
 });
 export const requestPanelResponseSchema = z.discriminatedUnion("action", [
+  response("documentFormatted", z.strictObject({ value: z.string() })),
   response("protocolExecutionEvent", executionEnvelopeSchema),
   response(
     "requestSaved",

@@ -21,6 +21,13 @@ const httpData = z.strictObject({ apiData: httpPanelDefinitionSchema });
 const sendFields = { ...commandFields, executionId: id };
 
 export const requestPanelCommandSchema = z.discriminatedUnion("action", [
+  command(
+    "formatDocument",
+    z.strictObject({
+      source: z.string().max(5 * 1024 * 1024),
+      language: z.string(),
+    }),
+  ),
   read("getVscodeTheme"),
   read("getApiList"),
   read("getProjectConfig"),

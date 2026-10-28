@@ -1,3 +1,4 @@
+import { registerFormatter } from "./formatter";
 import * as vscode from "vscode";
 import path from "node:path";
 import { getHtmlForWebview } from "./html";
@@ -45,6 +46,7 @@ export function createFeaturePanel(
             ),
           ),
         );
+  registerFormatter(panel, context);
   panel.webview.html = getHtmlForWebview(
     script,
     resourceBase,

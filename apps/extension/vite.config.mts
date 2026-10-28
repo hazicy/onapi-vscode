@@ -1,6 +1,7 @@
 import { fileURLToPath } from "node:url";
 import { builtinModules } from "node:module";
 import { defineConfig, loadEnv } from "vite";
+import { formatterVite } from "../../tooling/build/formatter.mjs";
 import { fakerLocalesVite } from "../../tooling/build/faker-locales.mjs";
 
 const builtins = new Set(
@@ -21,7 +22,10 @@ export default defineConfig(({ mode }) => {
         process.env.ONAPI_DEV_SERVER || env.ONAPI_DEV_SERVER || "false",
       ),
     },
-    plugins: [fakerLocalesVite()],
+    plugins: [
+      fakerLocalesVite(),
+      formatterVite(fileURLToPath(new URL(".build", import.meta.url))),
+    ],
     build: {
       ssr: true,
       target: "node22",

@@ -21,6 +21,9 @@ export async function handlePanelAction(
       ...(message.requestId ? { requestId: message.requestId } : {}),
     });
   switch (message.action) {
+    // Handled by the shared formatter listener installed at panel creation.
+    case "formatDocument":
+      return true;
     case "getProjectConfig":
       post({
         action: "setProjectConfig",

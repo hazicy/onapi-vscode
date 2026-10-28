@@ -23,7 +23,7 @@ test("response formatting preserves JSON numeric literals, comments and invalid 
   expect(json5.value).toContain("sample");
 });
 
-test("response HTML and XML use the browser Prettier parsers", async ({
+test("response HTML uses Oxfmt and XML remains unchanged", async ({
   editorPage,
 }) => {
   for (const [source, hint, mode] of [
@@ -42,7 +42,11 @@ test("response HTML and XML use the browser Prettier parsers", async ({
     const result = await editorPage.formatResponse(source, hint);
     expect(result.mode).toBe(mode);
     expect(result.value).toContain("Hello");
-    expect(result.value).toContain("\n");
+    if (mode === "xml") {
+      expect(result.value).toBe(source);
+    } else {
+      expect(result.value).toContain("\n");
+    }
   }
 });
 
@@ -50,30 +54,30 @@ test("a delayed response formatter cannot replace a newer response", async ({
   page,
   editorPage,
 }) => {
-  let release!: () => void;
-  let blocked!: () => void;
-  const gate = new Promise<void>((resolve) => {
-    release = resolve;
-  });
-  const requested = new Promise<void>((resolve) => {
-    blocked = resolve;
-  });
-  await page.route("**/babel-*.js", async (route) => {
-    blocked();
-    await gate;
-    await route.continue();
+  await page.evaluate(() => {
+    const send = window.vscode.postMessage.bind(window.vscode);
+    window.vscode.postMessage = (message: any) => {
+      if (
+        message.action === "formatDocument" &&
+        message.data.source.includes('"old"')
+      ) {
+        (window as any).releaseOldFormat = () => send(message);
+      } else {
+        send(message);
+      }
+    };
   });
   await editorPage.setResponse({
     value: '{"old":1}',
     mode: "json",
   });
-  await requested;
+  await page.waitForFunction(() => !!(window as any).releaseOldFormat);
   await editorPage.setResponse({
     value: "new response",
     mode: "text",
   });
   await expect(editorPage.formattedResponse).toHaveText("new response");
-  release();
+  await page.evaluate(() => (window as any).releaseOldFormat());
   await page.waitForLoadState("networkidle");
   await expect(editorPage.formattedResponse).toHaveText("new response");
 });

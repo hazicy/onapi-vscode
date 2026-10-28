@@ -6,6 +6,7 @@ for (const development of [false, true]) {
   test(`shared Webview setup preserves resource and bootstrap data (${development ? "development" : "packaged"})`, async () => {
     const panel = { webview: { asWebviewUri: (uri) => `webview:${uri}` } };
     const calls = [];
+    let registeredFormatter;
     const { createFeaturePanel } = await load(
       "apps/extension/src/platform/webviews/create-panel.ts",
       (id) => {
@@ -19,6 +20,12 @@ for (const development of [false, true]) {
             },
             Uri: { file: (uri) => uri },
             ViewColumn: { One: 1 },
+          };
+        if (id === "./formatter")
+          return {
+            registerFormatter: (target) => {
+              registeredFormatter = target;
+            },
           };
         if (id === "./html")
           return {
@@ -41,6 +48,7 @@ for (const development of [false, true]) {
       ),
       panel,
     );
+    assert.equal(registeredFormatter, panel);
     assert.equal(calls[0][1], "Edited request");
     assert.equal(
       calls[1][0],
