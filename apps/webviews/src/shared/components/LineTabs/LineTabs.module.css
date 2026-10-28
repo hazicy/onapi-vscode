@@ -27,7 +27,7 @@
   background: none;
   box-shadow: none;
   color: var(--vscode-descriptionForeground, var(--font-light-color));
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 400;
   line-height: inherit;
   font-variant-numeric: tabular-nums;

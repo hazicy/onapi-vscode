@@ -35,7 +35,7 @@
 }
 .itemTitle {
   & .time {
-    font-size: 10px;
+    font-size: 12px;
     flex: 1;
   }
   & .name {

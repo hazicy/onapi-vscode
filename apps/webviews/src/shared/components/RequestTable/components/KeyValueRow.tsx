@@ -56,11 +56,17 @@ const KeyValueRow = memo(function KeyValueRow({
       }}
     >
       {showCheckbox && (
-        <Checkbox
-          checked={checked}
-          disabled={readOnly || checkboxDisabled}
-          onChange={(event) => onCheckedChange?.(event.target.checked)}
-        />
+        <span
+          className={clsx(styles.checkbox, {
+            [styles.draftCheckbox]: placeholderRow,
+          })}
+        >
+          <Checkbox
+            checked={checked}
+            disabled={readOnly || checkboxDisabled}
+            onChange={(event) => onCheckedChange?.(event.target.checked)}
+          />
+        </span>
       )}
       <button
         type="button"
