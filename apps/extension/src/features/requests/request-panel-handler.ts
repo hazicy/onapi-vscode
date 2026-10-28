@@ -124,7 +124,7 @@ const saveApiData = async (
   const shareData = getProjectShareData(context);
   if (shareData?.[newData.id]) {
     shareData[newData.id].share_time = Date.now();
-    await setProjectShareData(shareData, context);
+    setProjectShareData(shareData, context);
   }
 
   if (!automatic) {
