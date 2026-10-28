@@ -228,9 +228,7 @@ export default function VarInput(props: Partial<VarInputProps>) {
         wrapClassName,
       )}
     >
-      <div
-        className={clsx(styles.miniEditor, styles.editorShell, {})}
-      >
+      <div className={clsx(styles.miniEditor, styles.editorShell, {})}>
         {multiline ? (
           <Input.TextArea
             ref={textAreaRef}

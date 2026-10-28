@@ -40,17 +40,9 @@ export interface ApiSendingData {
  * Stream response data item
  */
 
-
-
-
-
-
-
-
 /**
  * API send response data
  */
-
 
 /**
  * API send response error

@@ -46,10 +46,7 @@ const Menus: FC<Props> = ({ selectedKeys, setSelectedKeys }) => {
   const { projectId: project_id } = useParams();
   const { t } = useTranslation();
 
-  const {
-    envList,
-    updateHttpEnvironments,
-  } = useProjectConfig(
+  const { envList, updateHttpEnvironments } = useProjectConfig(
     useShallow((state) => ({
       envList: state.http!.environments,
       updateHttpEnvironments: state.updateHttpEnvironments,

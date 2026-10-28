@@ -1,12 +1,4 @@
-
-
-
-
 export const ALL_KEY = "all";
-
-
-
-
 
 /**
  * Test case type
@@ -36,5 +28,3 @@ export enum CASE_ITEM_TYPE {
 }
 
 /** Test result type */
-
-

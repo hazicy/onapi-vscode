@@ -1,7 +1,3 @@
-
-
-
-
 export const ALL_KEY = "all";
 
 export enum STATUS_CODE {
@@ -10,10 +6,6 @@ export enum STATUS_CODE {
 }
 
 export const VARIABLE_LIST_CONTENT_KEY = "variable-list-content-key";
-
-
-
-
 
 // Assume these SVG components are already React components
 export const ICONS_MAP: Record<string, any> = {
@@ -57,7 +49,6 @@ export const ICONS_MAP: Record<string, any> = {
 
 // Type to text mapping
 
-
 // Theme color mapping
 export const PRIMARY_COLOR_MAP: Record<string, string> = {
   purple: "#0e639c",
@@ -74,9 +65,7 @@ export const PRIMARY_COLOR_MAP: Record<string, string> = {
 
 // Theme list
 
-
 // Share status
-
 
 // Request methods
 export const API_METHODS: string[] = [
@@ -97,10 +86,7 @@ export const API_METHODS: string[] = [
   "VIEW",
 ];
 
-
-
 // Default tab options for new/open API
-
 
 // Request methods
 export const GRPC_METHODS: string[] = ["gRPC", "gRPC TLS"];
@@ -141,12 +127,6 @@ export const FIELD_TYPES = [
   "Null",
   "Date",
 ];
-
-
-
-
-
-
 
 // HTTP response status codes
 

@@ -75,4 +75,3 @@ export interface ExecutionEnvelope {
   timestamp: number;
   event: ProtocolEvent;
 }
-

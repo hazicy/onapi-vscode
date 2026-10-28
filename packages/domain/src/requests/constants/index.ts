@@ -2,8 +2,6 @@ import i18next from "i18next";
 import { values } from "lodash";
 import type { FunctionComponent } from "react";
 
-
-
 export enum APIS_TARGET_TYPE_ENUM {
   API = "api",
   SSE = "sse",
@@ -25,16 +23,6 @@ export enum DEFAULT_API_MARK_ENUM {
   MODIFYING = "3",
   ALL = "all",
 }
-
-
-
-
-
-
-
-
-
-
 
 export const REQUEST_METHOD_MAP: { [key: string]: string } = {
   POST: "POST",
@@ -65,8 +53,6 @@ export const PROTOCOL_OPTIONS = [
   },
 ];
 
-
-
 export enum APIS_GRPC_PROTO_TYPE_ENUM {
   PROTO = "proto",
   SERVICE = "service",
@@ -89,19 +75,7 @@ export enum REQUEST_BODY_RAW_MODE_ENUM {
   HTML = "html",
 }
 
-
-
-
-
-
-
 export const REQUEST_RAW_MODE_LIST = values(REQUEST_BODY_RAW_MODE_ENUM);
-
-
-
-
-
-
 
 // Common request headers array
 export const REQUEST_HEADER = [

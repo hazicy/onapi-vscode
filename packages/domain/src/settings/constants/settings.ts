@@ -194,7 +194,6 @@ export const IMPORT_TYPE_LIST = [
   },
 ];
 
-
 export const EXPORT_TYPE_LIST = [
   {
     key: "onapi",
@@ -218,8 +217,6 @@ export const EXPORT_TYPE_LIST = [
   },
 ];
 
-
-
 export const SWAGGER_FULL_MODAL_OPTIONS = [
   {
     value: "clear",
@@ -234,8 +231,6 @@ export const SWAGGER_FULL_MODAL_OPTIONS = [
     label: i18next.t("supplement.overwrite_same_model_no"),
   },
 ];
-
-
 
 export const APIPOST_FULL_ENV_OPTIONS = [
   {
@@ -266,12 +261,6 @@ export const EXPORT_PREVIEW_CONFIG_ITEMS = [
     key: ExportConfigEnum.env,
   },
 ];
-
-
-
-
-
-
 
 /**
  * Language type

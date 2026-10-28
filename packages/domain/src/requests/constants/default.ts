@@ -9,7 +9,10 @@ import { GrpcDetailsData } from "@onapi/domain/requests/types/grpc";
 import { SocketDetailsData } from "@onapi/domain/requests/types/socket";
 import { SocketServiceDetailsData } from "@onapi/domain/requests/types/socket-service";
 
-import { APIS_TARGET_TYPE_ENUM, DEFAULT_API_MARK_ENUM } from "@onapi/domain/requests/constants/index";
+import {
+  APIS_TARGET_TYPE_ENUM,
+  DEFAULT_API_MARK_ENUM,
+} from "@onapi/domain/requests/constants/index";
 import {
   DEFAULT_WEBSOCKET_REQUEST,
   DEFAULT_WEBSOCKET_MESSAGE,

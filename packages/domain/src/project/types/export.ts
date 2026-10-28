@@ -15,8 +15,6 @@ import {
 } from "@onapi/domain/project/types/index";
 import { TestingDetailData } from "@onapi/domain/testing/types/index";
 
-
-
 export type ApiSampleItems = {
   sample_id: string;
   type: string;
@@ -43,8 +41,6 @@ type ModelsItem = {
   schema?: any;
   sort?: number;
 };
-
-
 
 export type GlobalVars = {
   [k: string]: {

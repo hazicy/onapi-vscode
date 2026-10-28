@@ -7,9 +7,7 @@ import { Flex } from "@/shared/ui/base";
 
 import { isString } from "lodash-es";
 
-
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
-
 
 interface Props {
   html?: string;
@@ -19,7 +17,7 @@ const Visualization: React.FC<Props> = (props) => {
   const { t } = useTranslation();
   const { html } = props || {};
   const visualizingRef = useRef<any>(null);
-  
+
   const bg_color = useSystemConfig((state) => state.systemConfig.bg_color);
 
   useEffect(() => {

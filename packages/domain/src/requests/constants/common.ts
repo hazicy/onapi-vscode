@@ -14,7 +14,6 @@ import {
   DEFAULT_GRAPHQL_DATA,
 } from "@onapi/domain/requests/constants/default";
 
-
 export const APIS_BASE_DEFAULT_DATA: Record<string, any> = {
   [APIS_TARGET_TYPE_ENUM.API]: DEFAULT_API_DATA,
   [APIS_TARGET_TYPE_ENUM.SSE]: DEFAULT_SSE_DATA,
@@ -29,4 +28,3 @@ export const APIS_BASE_DEFAULT_DATA: Record<string, any> = {
   [APIS_TARGET_TYPE_ENUM.SOCKETIO]: DEFAULT_SOCKETIO_DATA,
   [APIS_TARGET_TYPE_ENUM.GRAPHQL]: DEFAULT_GRAPHQL_DATA,
 };
-

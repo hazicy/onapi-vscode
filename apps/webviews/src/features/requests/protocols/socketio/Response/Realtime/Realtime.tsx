@@ -8,14 +8,20 @@ import { Tag } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
 import { bufferToRaw } from "@onapi/domain/utils/response-tools";
-import { includes, isArray, isEqual, isObject, isString, size } from "lodash-es";
+import {
+  includes,
+  isArray,
+  isEqual,
+  isObject,
+  isString,
+  size,
+} from "lodash-es";
 
 import Sending from "@/features/requests/editor/Sending";
 
 import FlowResponse from "@/features/requests/response/FlowResponse/FlowResponse";
 import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
 import ResponseResult from "@/features/requests/response/ResponseResult/ResponseResult";
-
 
 import Empty from "@/shared/ui/Empty";
 import useApis from "@/features/requests/store/useApis";
@@ -197,8 +203,6 @@ const Realtime: React.FC<Props> = ({ id, onChange, apiScreenDirection }) => {
       filterType,
     );
   }, [websocketConnectionPool, apisActiveKey, filterValue, filterType]);
-
-  
 
   const customTipsContent = (data: any) => {
     if (isString(data?.message)) {

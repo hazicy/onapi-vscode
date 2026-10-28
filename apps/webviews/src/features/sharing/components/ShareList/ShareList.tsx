@@ -10,8 +10,6 @@ import useApis from "@/features/requests/store/useApis";
 
 import type { EditorRecord as ApiDetailsData } from "@onapi/domain/requests/record";
 
-
-
 import SharePanel from "./components/SharePanel";
 
 const SharePage = () => {
@@ -27,12 +25,6 @@ const SharePage = () => {
     },
     shareData,
   });
-
-  
-
-  
-
-  
 
   return (
     <div className={styles.container}>

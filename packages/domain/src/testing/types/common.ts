@@ -1,10 +1,7 @@
 import { STATUS_CODE } from "@onapi/domain/constants/common";
 import { CASE_ITEM_TYPE } from "@onapi/domain/testing/constants/index";
 
-
 import { ApiDetailsData } from "@onapi/domain/requests/types/api";
-
-
 
 /**Test case steps */
 export type CaseItem = {
@@ -52,8 +49,6 @@ export type Settings = {
 };
 
 // Test iteration data
-
-
 
 /**
  * Test case execution params

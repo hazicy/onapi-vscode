@@ -51,7 +51,3 @@ export const DEFAULT_DATA_ITEM: IEnvDataItem = {
   description: "",
   static: true,
 };
-
-
-
-

@@ -1,10 +1,7 @@
-
 import { EnvList, ServerItem } from "@onapi/domain/environment/types/index";
 import { DomainInfoProps } from "@onapi/domain/project/types/cookie";
 
 type MockFieldType = "string" | "number" | "boolean" | "integer";
-
-
 
 export type MarkItem = {
   mark_id?: string;

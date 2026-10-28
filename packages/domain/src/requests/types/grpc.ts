@@ -82,5 +82,3 @@ export type GrpcTreeItem = {
   response_stream?: CustomNumberBooleanType;
   children?: GrpcTreeItem[];
 };
-
-

@@ -6,8 +6,6 @@ type ItemType = {
   [key: string]: any;
 };
 
-
-
 import {
   AnyObject,
   CompareCalcSymbols,
@@ -109,10 +107,7 @@ export type TreeDataItem = Pick<
   [x: string]: any;
 };
 
-
-
 // api mark
-
 
 // AI expect condition collection item
 export interface ExpectConditionItem {

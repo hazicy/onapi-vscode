@@ -1,5 +1,3 @@
-
-
 export type ShareInfoData = {
   id: string;
   share_time: number;

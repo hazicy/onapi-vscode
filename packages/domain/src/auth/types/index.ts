@@ -1,9 +1,6 @@
-
-
 import { STATUS_CODE } from "@onapi/domain/constants/common";
 import { MIGRATE_RESULT_STATUS } from "@onapi/domain/import/constants/migrate/index";
 import { AUTHORITY } from "@onapi/domain/auth/constants/user";
-
 
 export type UserInfo = {
   /**Remaining email modification count */

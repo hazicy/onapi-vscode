@@ -1,4 +1,3 @@
-
 import { Settings } from "@onapi/domain/testing/types/common";
 
 export type TrashListRes = {

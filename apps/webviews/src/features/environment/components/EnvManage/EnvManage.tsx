@@ -42,7 +42,6 @@ const Index = (props: EnvModifyModalProps) => {
     { ...DEFAULT_DATA_ITEM },
   ]);
   const readonly = false;
-  
 
   useEffect(() => {
     const data = find(envMenus, ({ id }) => id === editEnvId) as EnvListItem;

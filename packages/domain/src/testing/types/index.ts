@@ -7,8 +7,6 @@ import { CaseItem, Settings } from "@onapi/domain/testing/types/common";
 import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import { ApiSendResponseData } from "@onapi/domain/requests/types/send";
 
-
-
 /**Test case list */
 export type TestingData = {
   /**Project ID */
@@ -59,8 +57,6 @@ export type TestingDetailData = {
   settings: Settings;
   event_list: CaseItem[];
 } & TestingData;
-
-
 
 export type EventItem = {
   event_id: string;

@@ -5,8 +5,6 @@ import isYesterday from "dayjs/plugin/isYesterday";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 
-
-
 dayjs.extend(isToday);
 dayjs.extend(isYesterday);
 dayjs.extend(duration);
@@ -61,8 +59,6 @@ export const formatTime = (time: TimeType, format: string) => {
 export const formatTimeToDateTimeLong = (time: TimeType) => {
   return dayjs(time).format(TIME_FORMAT.DT_L);
 };
-
-
 
 /**
  * Today

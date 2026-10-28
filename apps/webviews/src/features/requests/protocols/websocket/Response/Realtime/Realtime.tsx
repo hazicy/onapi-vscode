@@ -4,8 +4,6 @@ import styles from "../../WebSocketDebug.module.css";
 import React, { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-
-
 import { useSafeState } from "ahooks";
 import { isEqual, isFunction, isString, size } from "lodash-es";
 
@@ -15,12 +13,10 @@ import FlowResponse from "@/features/requests/response/FlowResponse/FlowResponse
 import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
 import ResponseResult from "@/features/requests/response/ResponseResult/ResponseResult";
 
-
 import Empty from "../Empty";
 import Button from "@/shared/ui/Button";
 import useApis from "@/features/requests/store/useApis";
 import useWebSocketStore from "@/features/requests/store/useApis/websocket";
-
 
 import useWebSocket from "../../useWebSocket";
 import Header from "./Header";
@@ -98,9 +94,7 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
       setData({});
     }
   }, [messages, setData]);
-  
 
-  
   const customTipsContent = (data: any) => {
     if (isString(data?.message)) {
       return {};

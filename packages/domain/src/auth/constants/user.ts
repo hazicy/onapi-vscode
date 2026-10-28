@@ -1,5 +1,3 @@
-
-
 export enum AUTHORITY {
   /** Read only */
   READ = 1,

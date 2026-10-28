@@ -7,18 +7,6 @@ import {
   HttpStatusCode,
 } from "@onapi/domain/types/common";
 
-
-
-
-
-
-
-
-
-
-
-
-
 // API request method
 export type ApiTypeMethod =
   | "POST"
