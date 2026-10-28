@@ -18,6 +18,7 @@ test("GraphQL edits and sends the native request body", async ({
   // The query editor and variable editor read the imported native body directly.
   const editors = requestPage.codeEditorTextbox;
   await expect(editors.first()).toContainText("before");
+  await editors.first().click();
   await editors.first().fill("query Native { after }");
   await expect
     .poll(() =>
@@ -29,6 +30,7 @@ test("GraphQL edits and sends the native request body", async ({
       ),
     )
     .toBe("query Native { after }");
+  await editors.nth(1).click();
   await editors.nth(1).fill('{"id":2}');
   await expect
     .poll(() =>

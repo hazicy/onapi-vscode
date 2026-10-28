@@ -33,7 +33,7 @@ export class RequestPage {
         contentType: "text/html",
         body: `<!doctype html><html><head><link rel="stylesheet" href="/webviews.css"></head><body><div id="root"></div><script>
       window.vscodeData=${JSON.stringify({ kind, initialData })};
-      window.messages=[];window.vscode={postMessage(message){window.messages.push(message)}};
+      window.messages=[];window.vscode={postMessage(message){window.messages.push(message);if(message.action==="formatDocument") queueMicrotask(()=>window.postMessage({action:"documentFormatted",requestId:message.requestId,data:{value:message.data.source}},"*"))}};
       window.resourceBaseUrl=location.origin;
       </script><script type="module" src="/tagPanel.js"></script></body></html>`,
       }),

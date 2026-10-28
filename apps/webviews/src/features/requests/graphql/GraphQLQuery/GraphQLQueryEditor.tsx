@@ -637,6 +637,7 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
                 <Flex flex={1} style={{ height: 0 }}>
                   <Spin
                     spinning={schemaLoading}
+                    className={styles.spinHost}
                     contentClassName={styles.spinContainer}
                   >
                     {isEmpty(treeData) ? (
@@ -674,6 +675,7 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
             <SuspenseContent>
               <Spin
                 spinning={schemaLoading}
+                className={styles.spinHost}
                 contentClassName={styles.spinContainer}
               >
                 <ResizablePanels
