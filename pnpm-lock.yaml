@@ -221,9 +221,6 @@ importers:
       curl-to-postmanv2:
         specifier: ^1.8.7
         version: 1.8.7(patch_hash=2499fd3cc94f2092facb85c9a00026e4bb3799d8342c4a4f00cf53d4ac9dd3b3)
-      dayjs:
-        specifier: ^1.11.23
-        version: 1.11.23
       express:
         specifier: ^5.3.0
         version: 5.3.0(supports-color@8.1.1)
@@ -242,9 +239,6 @@ importers:
       postman-collection:
         specifier: ^5.3.1
         version: 5.3.1
-      url-parse:
-        specifier: ^1.5.10
-        version: 1.5.10
     devDependencies:
       '@types/express':
         specifier: ^5.0.6
@@ -261,9 +255,6 @@ importers:
       '@types/react':
         specifier: ^19.3.0
         version: 19.3.0
-      '@types/url-parse':
-        specifier: ^1.4.11
-        version: 1.4.11
       '@types/vscode':
         specifier: 1.101.0
         version: 1.101.0
@@ -336,9 +327,6 @@ importers:
       '@codemirror/state':
         specifier: ^6.7.6
         version: 6.7.6
-      '@codemirror/theme-one-dark':
-        specifier: ^6.1.3
-        version: 6.1.3
       '@codemirror/view':
         specifier: ^6.43.15
         version: 6.43.15
@@ -369,9 +357,6 @@ importers:
       '@microlink/react-json-view':
         specifier: ^1.31.42
         version: 1.31.42(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
-      '@onapi/api-converter':
-        specifier: workspace:*
-        version: link:../../packages/api-converter
       '@onapi/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
@@ -960,9 +945,6 @@ packages:
 
   '@codemirror/streamparser@6.0.0':
     resolution: {integrity: sha512-JTFPF6xrfjt0mnfGPgzcLiMwYmvIyNaoizp8BYzv8FE8KrT6GBGDZ190rtt+O7Wke3gG/MFHyiY9YGNeimof4w==}
-
-  '@codemirror/theme-one-dark@6.1.3':
-    resolution: {integrity: sha512-NzBdIvEJmx6fjeremiGp3t/okrLPYT0d9orIc7AFun8oZcRk58aejkqhv6spnz4MLAevrKNPMQYXEWMg4s+sKA==}
 
   '@codemirror/view@6.43.15':
     resolution: {integrity: sha512-HHsfpqFeHyXLs983pSRe38Xajs0vFWZQ2BuX0m7Ki8w3jZ5iD8cuR3lBz2/5/X53Dhf32SBHKh6rtSTB6tKeGw==}
@@ -5156,13 +5138,6 @@ snapshots:
       '@marijn/find-cluster-break': 1.0.4
 
   '@codemirror/streamparser@6.0.0': {}
-
-  '@codemirror/theme-one-dark@6.1.3':
-    dependencies:
-      '@codemirror/language': 6.13.1
-      '@codemirror/state': 6.7.6
-      '@codemirror/view': 6.43.15
-      '@lezer/highlight': 1.2.5
 
   '@codemirror/view@6.43.15':
     dependencies:
