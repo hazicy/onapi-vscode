@@ -2,7 +2,6 @@ import * as vscode from "vscode";
 import "./platform/locale/index";
 import {
   createOpenPanel,
-  createCurlPanel,
   createImportDataPanel,
   createEnvironmentPanel,
   createFolderTestPanel,
@@ -234,13 +233,6 @@ export async function activate(context: vscode.ExtensionContext) {
         createOpenPanel(data, context, openHandledAt);
       },
     ),
-  );
-
-  // Register curl import Webview
-  context.subscriptions.push(
-    vscode.commands.registerCommand("openCurlPanel", (data) => {
-      createCurlPanel(data, context);
-    }),
   );
 
   // Register Import Data Webview

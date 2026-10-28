@@ -24,7 +24,7 @@ src/
     collections/              # Collection tree and folder settings
     environment/              # Environments, cookies and parameters
     testing/                  # Collection runs and reports
-    schemas/                  # JSON Schema editing
+    schemas/                  # Imported schema types
     import/                   # Import and migration
     export/                   # Export formats and previews
     sharing/                  # Sharing and shared documents
@@ -80,8 +80,7 @@ src/
 - Import feature stores directly from their owning feature. `app/store` exposes
   application state only; `shared/state/store` owns the reusable Zustand factory,
   and `shared/state/ui-services` owns common modal and notification services.
-- Keep variable insertion context in `features/variables/contexts` and Schema
-  conversion tools in `features/schemas/utils`, beside their owning features.
+- Keep variable insertion context in `features/variables/contexts`.
 - Shared code must not introduce dependencies on `features/` or `app/`.
   `pnpm check:boundaries` enforces this for alias and relative imports,
   re-exports, and literal dynamic imports. There are no legacy exceptions.
@@ -95,8 +94,7 @@ src/
   parameter inputs remain plain text. Column preference persistence belongs to
   `features/settings/hooks/useTableColumnSwitchConfig.ts`.
 - Application theme state is read by `features/settings/hooks/useGlobalTheme.ts`;
-  pure theme calculations remain in `shared/theme`. Schema property
-  ordering belongs to `features/schemas/utils/schema-order.ts`.
+  pure theme calculations remain in `shared/theme`.
 - Use `@/features/...`, `@/shared/...` and `@/app/...` for cross-directory imports.
   Relative imports are suitable within a component or feature.
 - Import Lodash utilities as named exports from `lodash-es` in browser code;

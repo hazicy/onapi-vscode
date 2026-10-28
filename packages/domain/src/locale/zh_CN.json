@@ -69,25 +69,11 @@
       "upload": "请上传文件",
       "content_type_tip": "自动（content-type）",
       "add_euqal": "当参数值为空时,自动添加等于号",
-      "dont_add_euqal": "当参数值为空时,不添加等于号",
-      "batch_edit": "批量编辑"
+      "dont_add_euqal": "当参数值为空时,不添加等于号"
     },
     "import_modal": {
       "title": "导入",
-      "key_value": "Key-Value格式",
-      "key_value_tip": "Key-Value格式使用英文冒号(:)分割,例如:name:张三,多条记录通过换行分割",
-      "raw_json": "Raw-Json格式",
-      "raw_json_tip": "Raw-Json格式使用标准的Json语法,例如:{\"name\":\"张三\",\"age\":12}",
-      "cancel": "取消",
-      "import": "导入",
       "import_tip": "解析并展示文件中的数据。如无数据展示，请检查文件格式，或联系客服寻求帮助。"
-    },
-    "export_modal": {
-      "title": "导出",
-      "with_desc": "带描述",
-      "key_value": "Key-Value格式",
-      "raw_json": "Raw-Json格式",
-      "copy": "复制"
     },
     "auth": {
       "unsupported_grant_type": "暂不支持此授权类型",
@@ -125,30 +111,10 @@
     },
     "pre_task": "预执行操作",
     "post_task": "后执行操作",
-    "database": {
-      "tag": "数据库",
-      "default_title": "数据库操作"
-    },
-    "script": {
-      "tag": "脚本",
-      "default_title": "自定义脚本"
-    },
     "assertion": {
       "tag": "断言",
-      "default_title": "断言",
-      "content": "断言内容",
-      "json_tip": "XML(类XML)会智能转JSON",
-      "xml_tip": "智能提取内容中的XML",
-      "status": "响应码",
-      "time": "响应时间",
-      "transient_variables": "临时变量",
-      "environment_variables": "环境变量",
-      "global_variables": "全局变量",
       "expression": {
         "title": "表达式",
-        "json_tip": "JSON Path表达式，如：$.data.info[0].name",
-        "xml_tip": "XPath 表达式，如：/date/info[1]/name",
-        "header_tip": "Header名",
         "input_value": "请输入比较值，可使用变量{{变量名}}",
         "select_value": "支持{{变量名}}，多个元素请使用回车键隔开",
         "regex_tip": "请输入正则表达式，例如/[a-z]*\\d*/"
@@ -171,16 +137,6 @@
         "nin": "不属于集合"
       }
     },
-    "set_variables": {
-      "tag": "提取变量",
-      "default_title": "提取变量",
-      "resource": "提取来源",
-      "json_tip": "XML(类XML)会智能转JSON",
-      "xml_tip": "智能提取内容中的XML",
-      "time": "响应时间",
-      "variables_tip": "变量名",
-      "variables_type": "变量类型"
-    },
     "wait": {
       "tag": "等待"
     },
@@ -197,8 +153,7 @@
     },
     "test_component": {
       "empty": "暂无测试，在后执行操作中添加测试脚本",
-      "title": "测试结果",
-      "select_num": "请选择数变量类型"
+      "title": "测试结果"
     },
     "response_indicators": {
       "size": "大小",
@@ -207,43 +162,6 @@
       "no_local": "未使用代理",
       "event": "事件",
       "use_time": "耗时"
-    },
-    "schema": {
-      "raw": "Raw编辑",
-      "view": "预览",
-      "root": "根节点",
-      "mock": "Mock变量",
-      "required": "是否必需",
-      "description": "字段描述",
-      "field_name": "字段名",
-      "no_field": "尚未添加任何字段",
-      "please_add": "请添加",
-      "add_child_node": "添加子节点",
-      "add_adjacent_node": "添加相邻节点",
-      "import_modal": {
-        "title": "导入"
-      },
-      "advanced_settings": {
-        "required": "必需",
-        "null": "是否为空",
-        "set": "基础设置",
-        "edit_code": "编辑源码",
-        "default_values": "默认值",
-        "min_value": "最小值",
-        "eq_min_value": "可等于最小值",
-        "max_value": "最大值",
-        "eq_max_value": "可等于最大值",
-        "min_length": "最小长度",
-        "max_length": "最大长度",
-        "min_item": "最小元素个数",
-        "max_item": "最大元素个数",
-        "unique_item": "元素唯一",
-        "enum_values": "枚举",
-        "remarks": "备注",
-        "cancel": "取消",
-        "confirm": "确定",
-        "copy": "复制"
-      }
     },
     "code": {
       "title": "生成代码",
@@ -302,11 +220,6 @@
       "description": "描述",
       "local_tip": "存储在本地,仅供本地调试使用,不会共享"
     }
-  },
-  "imp_models": {
-    "title": "选择数据模型",
-    "search_tip": "搜索模型名称",
-    "confirm": "确定"
   },
   "root": "根目录",
   "system_settings": {
@@ -467,8 +380,7 @@
         "loop": "循环控制",
         "wait": "等待",
         "script": "脚本",
-        "script_tag": "脚本",
-        "event_tag": "事务"
+        "script_tag": "脚本"
       }
     }
   },
@@ -560,11 +472,8 @@
     "required": "是否必填",
     "type": "类型",
     "req": "请求",
-    "var_no": "变量名，不需要带{{}}",
-    "select_if": "请选择运算符",
     "no_console": "暂无打印内容",
     "cancel": "取消",
-    "import": "导入",
     "current_value": "当前值",
     "var_value": "变量值",
     "overflow_str": "输入的内容超出字符限制",
@@ -598,26 +507,9 @@
     "res_cookie": "响应Cookies",
     "res_body": "响应Body",
     "console": "控制台",
-    "json_path_pick": "JSONPath提取工具",
-    "pick_result": "提取结果",
-    "imp": "导入",
-    "only_json_pick": "仅支持JSON格式",
-    "parse_exception": "解析异常",
     "confirm": "确定",
-    "invalid_data": "数据无效",
-    "import_invalid_data": "导入数据无效",
-    "parse_err": "解析失败",
     "edit": "编辑",
-    "disassociate": "解除关联",
     "delete": "删除",
-    "link_schema_loop": "此处循环引用了数据模型，已默认忽略",
-    "sch": "模型",
-    "no_field": "未设置字段",
-    "wont_link_more_schema": "模型不能多次引用",
-    "enum_invalid": "枚举参数无效",
-    "reallocate": "恢复关联",
-    "show_field": "显示字段",
-    "hide_field": "隐藏字段",
     "print_logs": "打印一条日志到控制台",
     "print_warn": "打印一条警告到控制台",
     "print_info": "打印一条信息到控制台",
@@ -645,29 +537,8 @@
     "builtin": "内置",
     "loadsh": "lodash库 _.{label} 方法",
     "clipboard_success": "已成功将内容复制到剪贴板",
-    "imp_tip": "请输入需要导入的内容",
-    "imp_edit_tip": "请输入需要编辑的内容",
-    "imp_success": "导入成功",
-    "imp_edit_success": "编辑成功",
-    "no_pick_result": "未提取到结果",
-    "jsonpath_exp_tip": "JSON Path表达式，如 $.data.info[0].name",
-    "xpath_tool": "XPath提取工具",
-    "xpath_exp_tip": "XPath 表达式，如 /data/info[1]/name",
-    "jsonpath_exp": "JSONPath表达式",
-    "ex_jsonpath": "例如$.data.info[0].name;$表示全部",
-    "xpath_exp": "XPath表达式",
-    "reg_exp": "正则表达式",
-    "reg_exp_tip": "/<name[^>]*>([^<]+)<Vname>，i 表示正则匹配到的第 i 个捕获，从 1 起始",
-    "header_key": "Header 名，Header key",
-    "cookie_key": "Cookie 名，Cookie key",
-    "times": "耗时",
-    "var_tmp": "临时变量",
     "var_glo": "全局变量",
     "var_env": "环境变量",
-    "custom_script": "自定义脚本",
-    "database_name": "数据库名称",
-    "var_pick": "提取变量",
-    "wait": "等待",
     "upload_ok_file": "请上传正确格式文件",
     "upload_file_large": "文件过大，请使用客户端进行调试",
     "intro_script": "了解预后执行脚本",
@@ -679,8 +550,6 @@
     "input_tip": "请输入",
     "sending": "发送中...",
     "cancel_send": "取消发送",
-    "tt_case": "用例",
-    "loop": "循环",
     "default": "默认",
     "all": "全部",
     "success": "成功",
@@ -749,7 +618,6 @@
     "refresh_fail": "刷新失败",
     "catch_err": "catch错误",
     "time_hms": "H时m分s秒",
-    "same_key": "已存在相同key",
     "listening": "监听中",
     "listen_end": "停止监听",
     "curl_tip": "导入Curl时出错：无法解析，无法识别 URL。"

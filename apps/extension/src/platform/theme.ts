@@ -7,7 +7,6 @@ export const onThemeChange = () => {
   const {
     openedPanels,
     environmentWebView,
-    curlWebView,
     openedFolderTestPanels,
     exportDataWebView,
     importDataWebView,
@@ -26,13 +25,6 @@ export const onThemeChange = () => {
   // Notify global environment page
   environmentWebView &&
     environmentWebView.webview.postMessage({
-      action: "setVscodeTheme",
-      data: currentTheme,
-    });
-
-  // Notify cURL import page
-  curlWebView &&
-    curlWebView.webview.postMessage({
       action: "setVscodeTheme",
       data: currentTheme,
     });

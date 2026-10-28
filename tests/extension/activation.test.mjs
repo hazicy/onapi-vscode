@@ -56,7 +56,6 @@ for (const failAt of ["storage", "initialization"]) {
       if (id === "./platform/webviews/panel-manager")
         return {
           createOpenPanel: unused,
-          createCurlPanel: unused,
           createImportDataPanel: unused,
           createEnvironmentPanel: unused,
           createFolderTestPanel: unused,

@@ -5,7 +5,6 @@ interface GlobalConfigType {
   openedFolderTestPanels: { [key: string]: vscode.WebviewPanel };
   openedFolderTestReportDataPanels: { [key: string]: vscode.WebviewPanel };
   environmentWebView: vscode.WebviewPanel | null;
-  curlWebView: vscode.WebviewPanel | null;
   importDataWebView: vscode.WebviewPanel | null;
   exportDataWebView: vscode.WebviewPanel | null;
   shareListWebView: vscode.WebviewPanel | null;
@@ -42,8 +41,6 @@ export const globalConfig: GlobalConfigType = {
 
   // Global parameters webview object
   environmentWebView: null,
-  // cURL import webview object
-  curlWebView: null,
   // Share list webview object
   shareListWebView: null,
 

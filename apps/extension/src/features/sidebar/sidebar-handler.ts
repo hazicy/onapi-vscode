@@ -170,9 +170,6 @@ export const handleMessage = async (
       vscode.commands.executeCommand("openTabPanel", message.data);
       break;
 
-    case "openCurlPanel":
-      vscode.commands.executeCommand("openCurlPanel");
-      break;
     case "openImportDataPanel":
       vscode.commands.executeCommand("openImportDataPanel", message.data);
       break;

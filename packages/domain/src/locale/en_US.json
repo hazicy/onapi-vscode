@@ -69,25 +69,11 @@
       "upload": "Upload File",
       "content_type_tip": "Auto",
       "add_euqal": "Auto-add '=' when parameter value is empty.",
-      "dont_add_euqal": "Don't-add '=' when parameter value is empty.",
-      "batch_edit": "Batch Edit"
+      "dont_add_euqal": "Don't-add '=' when parameter value is empty."
     },
     "import_modal": {
       "title": "Import",
-      "key_value": "Key-Value",
-      "key_value_tip": "Use colon (:) as separator, e.g., name:John. Records separated by lines.",
-      "raw_json": "Raw-Json",
-      "raw_json_tip": "Raw-Json format uses standard Json syntax, e.g.: {\"name\":\"ZhangSan\",\"age\":12}",
-      "cancel": "Cancel",
-      "import": "Import",
       "import_tip": "If no data is found, please check the file format or contact customer support for assistance."
-    },
-    "export_modal": {
-      "title": "Export",
-      "with_desc": "With Description",
-      "key_value": "Key-Value",
-      "raw_json": "Raw-Json",
-      "copy": "Copy"
     },
     "auth": {
       "unsupported_grant_type": "This grant type is not supported.",
@@ -125,30 +111,10 @@
     },
     "pre_task": "Pre-request",
     "post_task": "Post-response",
-    "database": {
-      "tag": "Database",
-      "default_title": "Database Operation"
-    },
-    "script": {
-      "tag": "Script",
-      "default_title": "Processing Script"
-    },
     "assertion": {
       "tag": "Assertion",
-      "default_title": "Assertion",
-      "content": "Target Object",
-      "json_tip": "XML (XML-like) will be converted to JSON",
-      "xml_tip": "extract XML from content",
-      "status": "Code",
-      "time": "Response time",
-      "transient_variables": "Temporary variables",
-      "environment_variables": "Environment variables",
-      "global_variables": "Global variables",
       "expression": {
         "title": "Expression",
-        "json_tip": "JSON Path expression, e.g：$.data.info[0].name",
-        "xml_tip": "XPath expression, e.g： /date/info[1]/name",
-        "header_tip": "Header Key",
         "input_value": "comparison value, you can use  {{variable_key}}",
         "select_value": "pressing enter after each one",
         "regex_tip": "Regular expression, e.g：/[a-z]*\\d*/"
@@ -171,16 +137,6 @@
         "nin": "NIn"
       }
     },
-    "set_variables": {
-      "tag": "Variables",
-      "default_title": "Extract Variables",
-      "resource": "Source",
-      "json_tip": "XML (XML-like) will be converted to JSON",
-      "xml_tip": "extract XML from content",
-      "time": "Response time",
-      "variables_tip": "Variables",
-      "variables_type": "Type"
-    },
     "wait": {
       "tag": "Wait"
     },
@@ -197,8 +153,7 @@
     },
     "test_component": {
       "empty": "No tests yet. Add tests in the post-response script.",
-      "title": "Test results",
-      "select_num": "Please select"
+      "title": "Test results"
     },
     "response_indicators": {
       "size": "Size",
@@ -207,43 +162,6 @@
       "no_local": "No Proxy",
       "event": "Event",
       "use_time": "Time"
-    },
-    "schema": {
-      "raw": "Raw Edit",
-      "view": "View",
-      "root": "Root Node",
-      "mock": "Mock Variables",
-      "required": "Required",
-      "description": "Description",
-      "field_name": "Field",
-      "no_field": "No fields",
-      "please_add": "Add",
-      "add_child_node": "Add child node",
-      "add_adjacent_node": "Add adjacent node",
-      "import_modal": {
-        "title": "Import"
-      },
-      "advanced_settings": {
-        "required": "Required",
-        "null": "Nullable",
-        "set": "Settings",
-        "edit_code": "Edit Code",
-        "default_values": "Default",
-        "min_value": "Min",
-        "eq_min_value": "Equal to Minimum Value",
-        "max_value": "Max",
-        "eq_max_value": "Equal to Maximum Value",
-        "min_length": "Min Length",
-        "max_length": "Max Length",
-        "min_item": "Min Item Count",
-        "max_item": "Max Item Count",
-        "unique_item": "Unique Items",
-        "enum_values": "Enum",
-        "remarks": "Remarks",
-        "cancel": "Cancel",
-        "confirm": "Confirm",
-        "copy": "Copy"
-      }
     },
     "code": {
       "title": "Code Snippet",
@@ -302,11 +220,6 @@
       "description": "Description",
       "local_tip": "Stored locally, used only for local debugging and not shared"
     }
-  },
-  "imp_models": {
-    "title": "Select Schema",
-    "search_tip": "Search Name",
-    "confirm": "Confirm"
   },
   "root": "Root Folder",
   "system_settings": {
@@ -467,8 +380,7 @@
         "loop": "Loop",
         "wait": "Wait",
         "script": "Script",
-        "script_tag": "Script",
-        "event_tag": "Group"
+        "script_tag": "Script"
       }
     }
   },
@@ -560,11 +472,8 @@
     "required": "Required",
     "type": "Type",
     "req": "Request",
-    "var_no": "variable,not need{{}}",
-    "select_if": "Please select",
     "no_console": "No content to print",
     "cancel": "Cancel",
-    "import": "Import",
     "current_value": "Current",
     "var_value": "Value",
     "overflow_str": "The input exceeds the character limit.",
@@ -598,26 +507,9 @@
     "res_cookie": "Cookies",
     "res_body": "Body",
     "console": "Console",
-    "json_path_pick": "JSONPath Extraction Tool",
-    "pick_result": "Result",
-    "imp": "Import",
-    "only_json_pick": " Only supports JSON format.",
-    "parse_exception": "Parsing Exception",
     "confirm": "Confirm",
-    "invalid_data": "Invalid data",
-    "import_invalid_data": "The imported data is empty or invalid.",
-    "parse_err": "Parse failed",
     "edit": "Edit",
-    "disassociate": "Disassociate",
     "delete": "Delete",
-    "link_schema_loop": "There is a circular reference to the schema here, which has been ignored by default.",
-    "sch": "Schema",
-    "no_field": "No field",
-    "wont_link_more_schema": "A Schema cannot be referenced multiple times.",
-    "enum_invalid": "Invalid enumeration parameter",
-    "reallocate": "Reassociate",
-    "show_field": "Display Field",
-    "hide_field": "Hidden Field",
     "print_logs": "Print a log entry to the console",
     "print_warn": "Print a warning message to the console",
     "print_info": "Print an info message to the console",
@@ -645,29 +537,8 @@
     "builtin": "Built-in",
     "loadsh": "lodash  _.{label} function",
     "clipboard_success": "Copy Success",
-    "imp_tip": "Please enter the content you need to import.",
-    "imp_edit_tip": "Please enter the content to be edited",
-    "imp_success": "Import Success",
-    "imp_edit_success": "Edited Success",
-    "no_pick_result": "No results were extracted.",
-    "jsonpath_exp_tip": "Expression，ex: $.data.info[0].name",
-    "xpath_tool": "XPath Extraction Tool",
-    "xpath_exp_tip": "Expression，ex: /data/info[1]/name",
-    "jsonpath_exp": "JSONPath Expression",
-    "ex_jsonpath": "ex:$.data.info[0].name; $ represents all",
-    "xpath_exp": "XPath Expression",
-    "reg_exp": "Regular expression",
-    "reg_exp_tip": "/<name[^>]*>([^<]+)<Vname>，'i' stands for the nth captured item in a regex match, starting with 1.",
-    "header_key": "Header key",
-    "cookie_key": "Cookie key",
-    "times": "Time",
-    "var_tmp": "Temporary variables",
     "var_glo": "Global variables",
     "var_env": " Environment variables",
-    "custom_script": "Script",
-    "database_name": "Database",
-    "var_pick": "Variables",
-    "wait": "Wait",
     "upload_ok_file": "Please upload a file with the correct format.",
     "upload_file_large": "The file is too large, please use the client ",
     "intro_script": "Script  Introduction",
@@ -679,8 +550,6 @@
     "input_tip": "Please enter",
     "sending": "Sending...",
     "cancel_send": "Cancel sending",
-    "tt_case": "Test Case",
-    "loop": "Loop",
     "default": "Default",
     "all": "All",
     "success": "Success",
@@ -749,7 +618,6 @@
     "refresh_fail": "Refresh failed",
     "catch_err": "catch error",
     "time_hms": "HHmmss",
-    "same_key": "The same key already exists",
     "listening": "Listening to",
     "listen_end": "Stopped listening to",
     "curl_tip": "Kesalahan saat mengimpor Curl: Tidak dapat memparsing, tidak dapat mengidentifikasi URL."

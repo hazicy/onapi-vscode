@@ -1,5 +1,3 @@
-export { createCurlPanel } from "../../features/curl/curl-panel";
-
 export { createOpenPanel } from "../../features/requests/open-panel";
 
 export { createImportDataPanel } from "../../features/import/import-data-panel";
