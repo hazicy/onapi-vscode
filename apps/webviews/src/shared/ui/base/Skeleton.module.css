@@ -17,7 +17,11 @@
   width: 4px;
   height: 4px;
   flex: 0 0 4px;
-  background: color-mix(in srgb, var(--vscode-foreground, #888) 35%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--vscode-foreground, #888) 35%,
+    transparent
+  );
   border-radius: 50%;
 }
 .active > span {

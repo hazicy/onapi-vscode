@@ -1,7 +1,10 @@
 import { test, mock } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { waitForDevServer, findDevServer } from "../../scripts/dev-readiness.mjs";
+import {
+  waitForDevServer,
+  findDevServer,
+} from "../../scripts/dev-readiness.mjs";
 
 test("F5 uses a finite startup task while the supervisor retains hot reload", async () => {
   const config = JSON.parse(await readFile(".vscode/tasks.json", "utf8"));

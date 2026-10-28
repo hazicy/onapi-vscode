@@ -1,7 +1,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import vm from "node:vm";
-import loadTypeScript, { nativeDependency } from "../helpers/loadTypeScript.mjs";
+import loadTypeScript, {
+  nativeDependency,
+} from "../helpers/loadTypeScript.mjs";
 
 test("embedded request data preserves script-like bodies without breaking the HTML", async () => {
   const { getHtmlForWebview } = await loadTypeScript(

@@ -3,7 +3,9 @@ import assert from "node:assert/strict";
 import path from "node:path";
 import fs from "node:fs/promises";
 import os from "node:os";
-import loadTypeScript, { nativeDependency } from "../helpers/loadTypeScript.mjs";
+import loadTypeScript, {
+  nativeDependency,
+} from "../helpers/loadTypeScript.mjs";
 
 async function fixture(t) {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), "json-repository-"));

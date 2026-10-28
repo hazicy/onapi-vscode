@@ -45,7 +45,10 @@ test("documentation JavaScript is served from packaged resources with an executa
   await mkdir(path.join(extensionPath, "dist"));
   await copyFile(
     fileURLToPath(
-      new URL("../../apps/webviews/public/scalar.standalone.js", import.meta.url),
+      new URL(
+        "../../apps/webviews/public/scalar.standalone.js",
+        import.meta.url,
+      ),
     ),
     path.join(extensionPath, "dist/scalar.standalone.js"),
   );
