@@ -1,16 +1,11 @@
 import { httpRequestSchema } from "@onapi/domain/requests/record";
-import { requestUrl, requestMethod } from "@onapi/domain";
 import { getCollectionServerId } from "@onapi/domain/request-utils";
-import {
-  ApisBaseDataItem,
-  TypeFiledType,
-} from "@onapi/domain/requests/types/base";
+import { ApisBaseDataItem } from "@onapi/domain/requests/types/base";
 import urlParse from "url-parse";
 import {
   isURL,
   getUrlQueryToArray,
   createUrl,
-  isJSON,
 } from "../../../shared/utils/common";
 import {
   cloneDeep,
@@ -19,34 +14,18 @@ import {
   forEach,
   isArray,
   isEqual,
-  isPlainObject,
-  isString,
   isUndefined,
   map,
 } from "lodash-es";
-import {
-  CONTENT_TYPES,
-  OPENAPI_TYPES,
-  STATUS_CODE,
-} from "@onapi/domain/constants/common";
+import { STATUS_CODE } from "@onapi/domain/constants/common";
 import { snowflakeId } from "@onapi/domain/utils/data-tools";
-import { AnyObject } from "@onapi/domain/types/common";
-import {
-  ApiDetailsData,
-  ApisData,
-  ParametersItem,
-} from "@onapi/domain/requests/types/api";
+import { ApisData } from "@onapi/domain/requests/types/api";
 import { EnvListItem } from "@onapi/domain/environment/types/index";
 import useApis from "@/features/requests/store/useApis";
 import { ApiSendResponseData } from "@onapi/domain/requests/types/send";
 import { formatTime, TIME_FORMAT } from "@onapi/domain/utils/time";
 import dayjs from "dayjs";
-import { ApisBaseRequestBody } from "@onapi/domain/requests/types/request";
 import { DEFAULT_API_RESPONSE } from "@onapi/domain/requests/constants/response";
-import { WebSocketDetailsData } from "@onapi/domain/requests/types/websocket";
-import { SocketIoDetailsData } from "@onapi/domain/requests/types/socketio";
-import { UrlGroupProps } from "@/features/requests/editor/UrlGroup";
-import { produce } from "immer";
 import { CurlDataType } from "@/features/requests/types/other";
 
 // Generate new query array based on url
@@ -245,217 +224,6 @@ export const handleResponseConsole = (
     ...item,
     time: item?.time || time,
   }));
-};
-
-export const capitalizeFirstLetter = (str: string) => {
-  if (!str) {
-    return "";
-  } // If input string is empty, return directly
-  return str.charAt(0).toUpperCase() + str.slice(1);
-};
-
-export const openApiParamsToOnapiParams = (arr: ParametersItem[]) => {
-  const newParams: ApisBaseDataItem[] = [];
-  arr.forEach((item) => {
-    newParams.push({
-      param_id: snowflakeId(),
-      is_checked: 1,
-      key: item?.name || "",
-      value: item?.example || "",
-      description: item?.description || "",
-      field_type: capitalizeFirstLetter(item.schema.type) as TypeFiledType,
-    });
-  });
-  return newParams;
-};
-
-export const onapiParamsToOpenApiParams = (
-  arr: ApisBaseDataItem[],
-  inType: "header" | "query" | "cookie",
-) => {
-  const newParams: ParametersItem[] = [];
-  arr.forEach((item) => {
-    newParams.push({
-      name: item.key,
-      in: inType,
-      description: item?.description || "",
-      required: item.is_checked === 1,
-      example: item?.value || "",
-      schema: {
-        type:
-          item.field_type === "Object"
-            ? "object"
-            : item.field_type === "Array"
-              ? "array"
-              : item.field_type === "Boolean"
-                ? "boolean"
-                : item.field_type === "Integer"
-                  ? "integer"
-                  : ["Number", "Float", "Double"].includes(
-                        item.field_type || "",
-                      )
-                    ? "number"
-                    : "string",
-      },
-    });
-  });
-  return newParams;
-};
-
-export const openApiRequestBodyToOnapiRequestBody = (content: AnyObject) => {
-  const body: ApisBaseRequestBody = {
-    mode: "none",
-    raw: "",
-    raw_parameter: [],
-    raw_schema: {},
-  };
-  const mode = Object.keys(content)[0];
-  const bodyInfo = content[mode];
-  if (OPENAPI_TYPES?.[mode]) {
-    body.mode = OPENAPI_TYPES?.[mode];
-  }
-  if (isString(bodyInfo?.example)) {
-    body.raw = bodyInfo.example;
-  }
-
-  if (
-    isPlainObject(bodyInfo.schema.properties) &&
-    ["application/x-www-form-urlencoded", "multipart/form-data"].includes(mode)
-  ) {
-    forEach(bodyInfo.schema.properties, (val, key) => {
-      body.raw_parameter.push({
-        is_checked: 1,
-        key: key,
-        value: val?.example || "",
-        description: val?.description || "",
-        field_type: capitalizeFirstLetter(
-          val?.type || "String",
-        ) as TypeFiledType,
-      });
-    });
-  }
-  if (
-    isPlainObject(bodyInfo.schema.properties) &&
-    !["application/x-www-form-urlencoded", "multipart/form-data"].includes(mode)
-  ) {
-    let newObj: any = {};
-    forEach(bodyInfo.schema.properties, (val, key) => {
-      newObj[key] = val?.format || val?.example || "";
-    });
-    body.raw = JSON.stringify(newObj, null, "\t");
-  }
-  return body;
-};
-
-export const OnapiRequestBodyToopenApiRequestBody = (
-  body: ApisBaseRequestBody,
-) => {
-  let newContent: any = {
-    type: "object",
-    properties: {
-      required: [],
-    },
-  };
-  const mode = CONTENT_TYPES?.[body.mode];
-  if (mode === "none") {
-    return newContent;
-  }
-  if (["form-data", "urlencoded"].includes(mode)) {
-    forEach(body.parameter, (item) => {
-      newContent.properties[item.key] = {
-        type: item?.field_type?.toLocaleLowerCase() || "string",
-        example: item?.value || "",
-        description: item.description || "",
-      };
-      if (item.is_checked) {
-        newContent.properties.required.push(item.key);
-      }
-    });
-  }
-  if (!["form-data", "urlencoded"].includes(mode)) {
-    if (isJSON(body.raw)) {
-      const obj = JSON.parse(body.raw);
-      forEach(obj, (val, key) => {
-        newContent.properties[key] = {
-          type: "string",
-          example: val || "",
-          description: "",
-        };
-        newContent.properties.required.push(key);
-      });
-    } else {
-      newContent.properties.example = String(body.raw);
-    }
-  }
-};
-
-export const fillInOpenApi = async (apiData: ApiDetailsData) => {
-  if (!isPlainObject(apiData?.open_api)) {
-    apiData.open_api = {
-      [requestUrl(apiData) || "/"]: {
-        [requestMethod(apiData).toLocaleLowerCase()]: {
-          summary: apiData?.name || "",
-          description: "",
-          tags: [],
-          parameters: [],
-          requestBody: {
-            content: {},
-          },
-          responses: {
-            "200": {
-              description: "Success",
-              content: {
-                "application/json": {
-                  schema: {
-                    type: "object",
-                    properties: {},
-                  },
-                  example: "",
-                },
-              },
-            },
-            "404": {
-              description: "Failure",
-              content: {
-                "application/json": {
-                  schema: {
-                    type: "object",
-                    properties: {},
-                  },
-                  example: "",
-                },
-              },
-            },
-          },
-        },
-      },
-    };
-  }
-  return apiData;
-};
-
-export const genNewWsByUrlChange = (
-  apisData: WebSocketDetailsData | SocketIoDetailsData,
-  urlData: UrlGroupProps["data"],
-): WebSocketDetailsData | SocketIoDetailsData => {
-  const result = produce(apisData, (draft) => {
-    draft.url = urlData.url || "";
-
-    if (urlData.url) {
-      if (isArray(draft?.request?.query?.parameter)) {
-        draft.request.query.parameter = genQueryByUrl(
-          `${urlData.url}`,
-          draft?.request?.query?.parameter || [],
-        );
-      }
-    } else {
-      if (draft.request.query?.parameter) {
-        draft.request.query.parameter = [];
-      }
-    }
-  });
-
-  return result;
 };
 
 export const getNewApisDataByCurlChange = <

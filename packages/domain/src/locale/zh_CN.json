@@ -62,7 +62,6 @@
     },
     "request_table": {
       "param_name": "参数名",
-      "param_value": "参数值",
       "param_desc": "描述",
       "inherited": "继承",
       "global": "全局",
@@ -465,7 +464,6 @@
     "socket_url_placeholder": "请输入以 ws:// 或 wss:// 开头的地址",
     "msg": "消息",
     "value": "参数值",
-    "desc": "参数描述",
     "required": "是否必填",
     "type": "类型",
     "req": "请求",

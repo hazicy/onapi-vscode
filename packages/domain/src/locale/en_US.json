@@ -62,7 +62,6 @@
     },
     "request_table": {
       "param_name": "Key",
-      "param_value": "Value",
       "param_desc": "Description",
       "inherited": "Inherited",
       "global": "Global",
@@ -465,7 +464,6 @@
     "socket_url_placeholder": "Enter an address that begins with ws:// or wss://",
     "msg": "Message",
     "value": "Value",
-    "desc": "Description",
     "required": "Required",
     "type": "Type",
     "req": "Request",

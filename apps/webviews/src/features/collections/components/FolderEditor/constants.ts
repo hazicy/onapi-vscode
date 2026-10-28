@@ -5,10 +5,6 @@ import i18next from "i18next";
 const FolderParamsSettings = lazy(() => import("./Params"));
 const FolderBaseSettings = lazy(() => import("./Settings"));
 
-export const GUEST_API_SAMPLE = "sample";
-export const GUEST_API_MOCK = "mock";
-export const GUEST_FOLDER_API_MANAGE = "api_manage";
-
 export const APIS_CONTENT_MAP: {
   [key: string]:
     | FunctionComponent<{ apisData: any; onApisDataChange: any }>

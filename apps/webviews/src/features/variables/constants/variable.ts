@@ -28,42 +28,6 @@ export enum VAR_OPTIONS_KEY {
   ai_desc = "aiDesc",
 }
 
-export enum PARSE_KEY {
-  fixed = "fixed",
-  fakerjs = "fakerjs",
-  variable = "variable",
-  ai = "ai",
-}
-
-export const VARIABLE_TABS_LIST = [
-  {
-    value: VARIABLE_TABS_VALUE.value,
-    label: t("common.request_table.param_value"),
-  },
-  {
-    value: VARIABLE_TABS_VALUE.desc,
-    label: t("supplement.desc"),
-  },
-];
-
-export const VARIABLE_TABS_EDIT_LIST = [
-  {
-    value: VARIABLE_TABS_VALUE.value,
-    label: t("common.request_table.param_value"),
-  },
-];
-
-export const ASSIGNMENT_VALUE_OPTIONS = [
-  {
-    value: ASSIGNMENT_VALUE_KEY.fixed,
-    label: t("var_insert.generate_value"),
-  },
-  {
-    value: ASSIGNMENT_VALUE_KEY.random,
-    label: t("var_insert.send_random"),
-  },
-];
-
 export const VAR_OPTIONS_LIST = [
   {
     label: t("var_insert.quote_var"),
@@ -93,24 +57,6 @@ export const DESC_OPTIONS_LIST = [
     icon: "list-filter",
   },
 ];
-
-export const OPTIONS_KEY_MAP = {
-  [VAR_OPTIONS_KEY.var]: t("var_insert.quote_var"),
-  [VAR_OPTIONS_KEY.mock]: t("var_insert.mock_data"),
-  [VAR_OPTIONS_KEY.fixed]: t("var_insert.fixed_value"),
-  [VAR_OPTIONS_KEY.ai_value]: t("var_insert.ai_value"),
-  [VAR_OPTIONS_KEY.desc]: t("settings.description.title"),
-  [VAR_OPTIONS_KEY.ai_desc]: t("var_insert.ai_des"),
-};
-
-export const OPTIONS_KEY_LABEL_MAP = {
-  [VAR_OPTIONS_KEY.var]: t("supplement.var_name"),
-  [VAR_OPTIONS_KEY.mock]: t("settings.mock_rules.mock_rule"),
-  [VAR_OPTIONS_KEY.fixed]: t("var_insert.fixed_value"),
-  [VAR_OPTIONS_KEY.ai_value]: t("var_insert.api_fixed_type"),
-  [VAR_OPTIONS_KEY.desc]: "",
-  [VAR_OPTIONS_KEY.ai_desc]: "",
-};
 
 export const FUNCTION_DEFAULT_VALUE = {
   substr: {
@@ -271,33 +217,6 @@ export const INNER_FUNC_LIST: InnerFuncListItem[] = [
 export const FAKER_SPLIT_CONST = ".";
 
 export const FAKERJS_BOOLEAN_OPTIONS = ["false", "true"];
-
-export const FAKERJS_COLOR_FORMAT_OPTIONS = ["css", "binary", "decimal"];
-
-export const FAKERJS_CASING_OPTIONS = ["lower", "upper", "mixed"];
-
-export const FAKERJS_EMOJI_OPTIONS = [
-  "smiley",
-  "body",
-  "person",
-  "nature",
-  "food",
-  "travel",
-  "activity",
-  "object",
-  "symbol",
-  "flag",
-];
-
-export const FAKERJS_HTTP_OPTIONS = [
-  "informational",
-  "success",
-  "clientError",
-  "serverError",
-  "redirection",
-];
-
-export const FAKERJS_PROTOCOL_OPTIONS = ["http", "https"];
 
 export const DATE_FORMAT_OPTIONS = [
   {

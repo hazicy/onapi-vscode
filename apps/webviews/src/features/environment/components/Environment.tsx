@@ -4,7 +4,7 @@ import { Button } from "@/shared/ui/base";
 import { AppIcon } from "@/shared/ui";
 import { useTranslation } from "react-i18next";
 
-import { ENV_LOCAL_ITEM, ENV_MANAGE_ENUM } from "@onapi/domain/environment";
+import { ENV_MANAGE_ENUM } from "@onapi/domain/environment";
 import CookieManage from "./CookieManage/CookieManage";
 import EnvManage from "./EnvManage/EnvManage";
 import ParamsManage from "./ParamsManage";

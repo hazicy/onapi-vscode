@@ -2,7 +2,6 @@ import { STATUS_CODE } from "@onapi/domain/constants/common";
 import useTesting from "@/features/testing/store/useTesting";
 import { produce } from "immer";
 import { snowflakeId } from "@onapi/domain/utils/data-tools";
-import { TestingReportList } from "@onapi/domain/testing/types/res/index";
 
 /**
  *  Calculate pass rate
@@ -45,14 +44,4 @@ export const saveReport = (complete: any) => {
       reportList: newTestingReportList,
     },
   });
-};
-
-export const setProjectReportList = (list: TestingReportList[]) => {
-  const { updateProjectTestingReportList, projectTestingReportList } =
-    useTesting.getState();
-
-  const newReportList = produce(projectTestingReportList, (draft) => {
-    return list;
-  });
-  updateProjectTestingReportList(newReportList);
 };
