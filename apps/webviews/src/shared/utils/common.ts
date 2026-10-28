@@ -1,10 +1,5 @@
 import { getUpwardFolderId, getSubstring } from "@onapi/domain/request-utils";
-import {
-  COLLECTION_TIPS,
-  ICONS_MAP,
-  REGULAR_TIPS,
-  VARIABLE_TIPS,
-} from "@onapi/domain/constants/common";
+import { ICONS_MAP } from "@onapi/domain/constants/common";
 import {
   array2Tree,
   getUrlQueryArray,
@@ -17,7 +12,6 @@ import {
   concat,
   countBy,
   forEach,
-  includes,
   isArray,
   isObject,
   isPlainObject,
@@ -28,10 +22,7 @@ import {
 } from "lodash-es";
 import { ComponentType } from "react";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
-import {
-  ApisBaseData,
-  ApisBaseDataItem,
-} from "@onapi/domain/requests/types/base";
+import { ApisBaseData } from "@onapi/domain/requests/types/base";
 /**
  * Convert hex color to RGBA color string
  * @param hex - Hex color value
@@ -121,25 +112,6 @@ export const copyStringToClipboard = (
     }
   }
 };
-
-export const getSize = (value: any) => {
-  if (isString(value)) {
-    return new Blob([value]).size;
-  } else if (value instanceof Blob) {
-    return value.size;
-  } else if (value instanceof ArrayBuffer) {
-    return value.byteLength;
-  } else if (isObject(value)) {
-    try {
-      return new Blob([JSON.stringify(value)]).size;
-    } catch (e) {
-      return 0;
-    }
-  }
-  return 0;
-};
-
-export const TEN_MB = 5 * 1024 * 1024;
 
 /**
  * Check if it is a valid URL
@@ -237,50 +209,6 @@ export const calcTabLineBodyHeaderNum = function (params: any) {
   }
 
   return countNum;
-};
-
-export const calcTabLineBodyNum = function (params: any) {
-  let countNum = 0;
-
-  if (isArray(params)) {
-    countNum = countBy(params, function (item) {
-      return item.key !== "" ? 1 : 0;
-    })[1];
-  } else if (isObject(params as any)) {
-    switch (params?.mode) {
-      case "none":
-        countNum = 0;
-        break;
-      case "urlencoded":
-      case "form-data":
-        countNum = countBy(params?.parameter, function (item) {
-          return item.key !== "" ? 1 : 0;
-        })[1];
-        break;
-      default:
-        countNum = 0;
-        break;
-    }
-  }
-
-  return countNum;
-};
-
-/**
- * Get compareType tip
- */
-
-export const getCompareTypeTip = (compareType: string) => {
-  if (includes(VARIABLE_TIPS, compareType)) {
-    return i18next.t("common.assertion.expression.input_value");
-  }
-  if (includes(REGULAR_TIPS, compareType)) {
-    return i18next.t("common.assertion.expression.regex_tip");
-  }
-  if (includes(COLLECTION_TIPS, compareType)) {
-    return i18next.t("common.assertion.expression.select_value");
-  }
-  return "";
 };
 
 export const download = async (data: any, name: string, type: string) => {
@@ -407,15 +335,6 @@ export const str2testData = async (_str: string) => {
   return returnList;
 };
 
-export const getSafeJSON = (text: any) => {
-  try {
-    const data = JSON.parse(text);
-    return data;
-  } catch (ex) {
-    return null;
-  }
-};
-
 export const convertVarFormat = (v: any) => {
   try {
     if (isObject(v)) {
@@ -425,29 +344,6 @@ export const convertVarFormat = (v: any) => {
   } catch (err) {
     return String(v);
   }
-};
-
-export const areKeysOneToOne = (
-  array1: Array<ApisBaseDataItem>,
-  array2: Array<ApisBaseDataItem>,
-) => {
-  // Create two Map objects to store key and value from each array
-  const map1 = new Map(array1.map((item) => [item.key, item?.value]));
-  const map2 = new Map(array2.map((item) => [item.key, item?.value]));
-
-  // Check if the two maps have the same size
-  if (map1.size !== map2.size) {
-    return false;
-  }
-
-  // Check if each key matches exactly
-  for (const [key, value] of map1) {
-    if (!map2.has(key)) {
-      return false;
-    }
-  }
-
-  return true;
 };
 
 // Conversion function Build directory tree

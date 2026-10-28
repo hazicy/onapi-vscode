@@ -114,10 +114,7 @@
     "assertion": {
       "tag": "Assertion",
       "expression": {
-        "title": "Expression",
-        "input_value": "comparison value, you can use  {{variable_key}}",
-        "select_value": "pressing enter after each one",
-        "regex_tip": "Regular expression, e.g：/[a-z]*\\d*/"
+        "title": "Expression"
       },
       "condition": {
         "eq": "Eq",

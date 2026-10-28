@@ -26,17 +26,4 @@ i18n.use(initReactI18next).init({
   },
 });
 
-export const initI18n = async () => {
-  await i18n.use(initReactI18next).init({
-    resources,
-    initAsync: false,
-    lowerCaseLng: true,
-    fallbackLng: "en",
-    lng: language,
-    interpolation: {
-      escapeValue: false, // Prevent escaping
-    },
-  });
-};
-
 export default i18n;

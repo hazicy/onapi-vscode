@@ -114,10 +114,7 @@
     "assertion": {
       "tag": "断言",
       "expression": {
-        "title": "表达式",
-        "input_value": "请输入比较值，可使用变量{{变量名}}",
-        "select_value": "支持{{变量名}}，多个元素请使用回车键隔开",
-        "regex_tip": "请输入正则表达式，例如/[a-z]*\\d*/"
+        "title": "表达式"
       },
       "condition": {
         "eq": "等于",

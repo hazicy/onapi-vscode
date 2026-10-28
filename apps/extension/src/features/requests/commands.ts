@@ -1,10 +1,8 @@
 import { postRequestPanelResponse } from "../../platform/webviews/request-panel-channel";
 import * as vscode from "vscode";
-import { forEach } from "lodash";
 import { copyTextToClipboard, showTabName } from "../../platform/host-utils";
 import { getResolvedCodeRequest } from "./execution/http-runner";
 import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
-import type { ProjectConfigType } from "@onapi/domain/project/types/index";
 export {
   sendApi,
   sendAutoTest,
@@ -26,18 +24,6 @@ export const updateOpenData = (
       data: apiData,
     });
   }
-};
-
-export const updateOpenProjectConfig = (
-  openedPanels: { [key: string]: vscode.WebviewPanel },
-  projectConfig: ProjectConfigType,
-) => {
-  forEach(openedPanels, (openedPanel) => {
-    postRequestPanelResponse(openedPanel.webview, {
-      action: "setProjectConfig",
-      data: { ...projectConfig },
-    });
-  });
 };
 
 export const copyAsCurl = async (
