@@ -35,7 +35,7 @@ OnAPI is a lightweight API client for Visual Studio Code. Organize requests in l
 
 ## Getting started
 
-OnAPI requires **VS Code 1.140 or newer**.
+OnAPI requires **VS Code 1.101 or newer**.
 
 1. Build a `.vsix` from source using the instructions below.
 2. In VS Code, open **Extensions → … → Install from VSIX…** and select the package from `artifacts/`.
