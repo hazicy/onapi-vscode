@@ -4,6 +4,7 @@ import { isJSONString } from "@/shared/utils/common";
 import useEditFormat from "@/shared/hooks/useEditFormat";
 import { isString } from "lodash-es";
 import { Empty } from "@/shared/ui";
+import { Skeleton } from "@/shared/ui/base";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -37,10 +38,14 @@ const Beautify = (props: Props) => {
       ? originData
       : JSON.stringify(originData);
   }, [rawHtml, isSSE]);
-  const { mode: language, value: editValue } = useEditFormat(source, mode);
+  const { mode: language, value: editValue, loading } = useEditFormat(source, mode);
 
   if (data?.response_size && data?.response_size / 1024 / 1024 > 10) {
     return <Empty description={t("supplement.file_big")} />;
+  }
+
+  if (loading) {
+    return <Skeleton style={{ padding: 16 }} paragraph={{ rows: 3 }} loading />;
   }
 
   return (

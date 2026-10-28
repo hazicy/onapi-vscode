@@ -19,8 +19,8 @@ export default function useEditFormat(source: string, hint?: string) {
       current = false;
     };
   }, [source, hint]);
-  // Display new responses immediately, ignoring any stale asynchronous result.
+  // Only the result for the current source and hint is ready to display.
   return formatted?.source === source && formatted.hint === hint
-    ? formatted
-    : { mode: responseFormatMode(source, hint), value: source };
+    ? { ...formatted, loading: false }
+    : { mode: responseFormatMode(source, hint), value: source, loading: true };
 }
