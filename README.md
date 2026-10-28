@@ -109,4 +109,4 @@ node scripts/generate-brand-icons.mjs
 
 Have a bug report or feature request? [Open an issue](https://github.com/hazicy/onapi-vscode/issues).
 
-Licensed under the [MIT License](./LICENSE.txt). Based on the open-source EchoAPI extension; original copyright notices are retained.
+Licensed under the [MIT License](./LICENSE.txt). Original copyright notices are retained in the applicable license files.

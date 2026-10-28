@@ -46,11 +46,14 @@ const request = ({
   showSuccessMsg = false,
   responseAll = false,
   hasCancelToken = false,
-  rewriteHost = process.env.NODE_ENV === "production"
-    ? "https://open.echoapi.com"
-    : "http://be-foreign.apipost.cc",
-  // rewriteHost = 'http://be-foreign.apipost.cc',
+  rewriteHost = "",
 }: RequestConfig) => {
+  if (!rewriteHost && !/^https?:\/\//i.test(url)) {
+    return Promise.reject(
+      new Error("Cloud sync is unavailable: no service URL configured."),
+    );
+  }
+
   // Create cancel token
   const { token, cancel } = axios.CancelToken.source();
   const { clientId, updateCancelToken } = useGlobal.getState();

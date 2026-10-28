@@ -21,7 +21,6 @@ import {
 import { useMemoizedFn, useSafeState } from "ahooks";
 import { Settings } from "@onapi/domain/testing/types/common";
 import { useTranslation } from "react-i18next";
-import { openUrl } from "@/shared/utils/open";
 import { STATUS_CODE } from "@onapi/domain/constants/common";
 import EnvDropdown from "@/features/environment/components/EnvDropdown";
 import { produce } from "immer";
@@ -164,26 +163,7 @@ const Main = ({
             <Flex flex={1} vertical gap={6}>
               <Flex gap={4}>
                 {t("test.test_data")}{" "}
-                <Tooltip
-                  title={
-                    <>
-                      {t("test_data.create_drawer.tips")}{" "}
-                      <span
-                        style={{
-                          color: "var(--color-primary)",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => {
-                          openUrl(
-                            "https://www.echoapi.com/wiki/docs/vscode/tests",
-                          );
-                        }}
-                      >
-                        {t("test_data.create_drawer.example")}
-                      </span>{" "}
-                    </>
-                  }
-                >
+                <Tooltip title={t("test_data.create_drawer.tips")}>
                   <AppIcon icon="circle-help" className={styles.icon} />
                 </Tooltip>
               </Flex>
@@ -266,14 +246,7 @@ const Main = ({
                   );
                 }}
               >
-                <Flex
-                  className={styles.switchName}
-                  gap={8}
-                  align="center"
-                  onClick={() => {
-                    openUrl("http://wiki.echoapi.com/docs/test/edit");
-                  }}
-                >
+                <Flex className={styles.switchName} gap={8} align="center">
                   {t("test.steps_page.test_condition_modal.error")}
                 </Flex>
               </Checkbox>
@@ -288,14 +261,7 @@ const Main = ({
                   );
                 }}
               >
-                <Flex
-                  className={styles.switchName}
-                  gap={8}
-                  align="center"
-                  onClick={() => {
-                    openUrl("http://wiki.echoapi.com/docs/test/edit");
-                  }}
-                >
+                <Flex className={styles.switchName} gap={8} align="center">
                   {t("test.steps_page.test_condition_modal.sandbox")}
                   <Tooltip title={t("common.test_variable_tips")}>
                     <AppIcon icon="circle-help" className={styles.icon} />

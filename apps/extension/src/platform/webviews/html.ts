@@ -7,7 +7,6 @@ export const getHtmlForWebview = (
   webviewUri: vscode.Uri | string,
   resourceBaseUrl: vscode.Uri,
   data?: any,
-  script?: Boolean,
 ) => {
   const devServer = /^http:\/\/localhost:8080\//.test(String(webviewUri));
   return `
@@ -55,7 +54,6 @@ export const getHtmlForWebview = (
       window.resourceBaseUrl = "${resourceBaseUrl}";
     </script>
       <script type="module" src="${webviewUri}"></script>
-      ${script && '<script async src="https://www.echoapi.cloud/analytics/analyticsv2.min.js"></script>'}
     </body>
     </html>
   `;

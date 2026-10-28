@@ -206,6 +206,7 @@
       "copy": "Copy"
     },
     "auth": {
+      "unsupported_grant_type": "This grant type is not supported.",
       "title": "Authorization",
       "type": "Type",
       "from_parent": "Inherit auth from parent",
@@ -268,7 +269,7 @@
       "tag": "Script",
       "default_title": "Processing Script",
       "pre_content": {
-        "execute": "/*\n\t// Reference Document：https://wiki.echoapi.com/docs/usescript/java\n\t// Execute an external Go program using pm.execute, where [2, 1, ...] represents the first, second, and subsequent input arguments. \n\tlet stdout = pm.execute(\"/Users/work/demo.go\", [2, 1])\n\t\n\t// The output returned by the Go program, stdout, is similar to the following CSV format text: \n\t\n\t// phone,nickname\n\t// 1,aa\n\t// 2,bb\n\t// 3,cc\n\t// 4,dd\n\t// 5,ece e\n\t\n\tlet arrData = csv2array(stdout); // Convert the CSV to an array using the built-in csv2array function \n\t\n\tconsole.log(arrData)\n\t\n\t_.forEach(arrData[parseInt(pm.info.iteration)], function (value, key) { // pm.info.iteration represents the current iteration number in automated testing, and it's always 0 during single API debugging \n\t \tapt.environment.set(key, value); //  Set the current iterated data to the environment variable  \n\t});\n*/",
+        "execute": "/*\n\t// // Execute an external Go program using pm.execute, where [2, 1, ...] represents the first, second, and subsequent input arguments. \n\tlet stdout = pm.execute(\"/Users/work/demo.go\", [2, 1])\n\t\n\t// The output returned by the Go program, stdout, is similar to the following CSV format text: \n\t\n\t// phone,nickname\n\t// 1,aa\n\t// 2,bb\n\t// 3,cc\n\t// 4,dd\n\t// 5,ece e\n\t\n\tlet arrData = csv2array(stdout); // Convert the CSV to an array using the built-in csv2array function \n\t\n\tconsole.log(arrData)\n\t\n\t_.forEach(arrData[parseInt(pm.info.iteration)], function (value, key) { // pm.info.iteration represents the current iteration number in automated testing, and it's always 0 during single API debugging \n\t \tapt.environment.set(key, value); //  Set the current iterated data to the environment variable  \n\t});\n*/",
         "local_file": "Read a local file and assign data to a variable",
         "run_other": "Execute PHP/Python/Go, etc.",
         "set_evariable": "Set an environment variable",
@@ -2247,7 +2248,7 @@
     "copy_command": "Copy",
     "edit": "Edit",
     "delete": "Delete",
-    "tip": "Instructions: You need to install echoapi-cli first",
+    "tip": "This feature is unavailable.",
     "detail": "documentation."
   },
   "ws": {
@@ -2484,7 +2485,7 @@
     "click_to_generate2": "to generate the command",
     "name_required": "Name is required.",
     "env_required": "Environment is required.",
-    "use_doc": "Instructions: You need to install echoapi-cli first",
+    "use_doc": "This feature is unavailable.",
     "doc": "documentation",
     "env_select_tip": "select environment",
     "api_case_select_tip": "select API cases",

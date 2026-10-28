@@ -425,4 +425,3 @@ export const SYNC_IMPORT_FAIL_KEY = "sync-import-fail-key";
 export const APIPOST_CLIENT_CLOSE_NO_PROMPT = "apipost-client-close-no-prompt";
 
 /** Client download URL */
-export const CLIENT_DOWNLOAD_URL = "https://www.echoapi.com/download";

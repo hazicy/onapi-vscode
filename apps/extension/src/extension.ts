@@ -301,7 +301,6 @@ export async function activate(context: vscode.ExtensionContext) {
         "workbench.action.openSettings",
         `@ext:${context.extension.id}`,
       );
-      // vscode.env.openExternal(vscode.Uri.parse('https://x.com/EchoApiTeam'));
     }),
   );
 }

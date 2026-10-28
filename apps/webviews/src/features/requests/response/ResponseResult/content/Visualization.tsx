@@ -7,9 +7,6 @@ import { Flex } from "@/shared/ui/base";
 
 import { isString } from "lodash-es";
 
-import Button from "@/shared/ui/Button";
-import AppIcon from "@/shared/ui/AppIcon";
-import { openUrl } from "@/shared/utils/open";
 import useGlobalTheme from "@/features/settings/hooks/useGlobalTheme";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import useTheme from "@/shared/hooks/useTheme";
@@ -101,21 +98,6 @@ const Visualization: React.FC<Props> = (props) => {
           className={clsx(styles.visualizationEmpty, styles.flex)}
         >
           {t("common.response_component.visualize_tip")}
-          <Button
-            onClick={() =>
-              openUrl("http://wiki.echoapi.com/docs/usescript/visual/")
-            }
-            mode="background"
-            icon={<AppIcon icon="book-open" />}
-            size="small"
-            type="text"
-          >
-            {t("common.response_component.visualize_doc")}
-            <AppIcon
-              icon="chevron-down"
-              style={{ transform: "rotate(-90deg)" }}
-            />
-          </Button>
         </Flex>
       )}
     </div>

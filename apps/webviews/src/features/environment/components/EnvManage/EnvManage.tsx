@@ -23,7 +23,6 @@ import AppIcon from "@/shared/ui/AppIcon";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import type { EnvironmentScope as EnvListItem } from "@onapi/domain";
 type EnvList = EnvListItem[];
-import { openUrl } from "@/shared/utils/open";
 
 import { DEFAULT_DATA_ITEM } from "@onapi/domain/environment";
 import ValueInput from "../ValueInput";
@@ -272,18 +271,7 @@ const Index = (props: EnvModifyModalProps) => {
         <Flex gap={15} vertical>
           <span> {t("global_setting.environment_detail.title")}</span>
           <div className={[undefined, undefined].join(" ")}>
-            <div>
-              {t("global_setting.environment_detail.tips")}
-              <a
-                onClick={() =>
-                  openUrl(
-                    "https://www.echoapi.com/wiki/docs/http/environment-variables",
-                  )
-                }
-              >
-                {t("global_setting.environment_detail.link")}
-              </a>
-            </div>
+            <div>{t("global_setting.environment_detail.tips")}</div>
             <div>{t("global_setting.environment_detail.tips1")}</div>
             <div>{t("global_setting.environment_detail.tips2")}</div>
           </div>

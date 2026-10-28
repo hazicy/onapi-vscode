@@ -4,8 +4,6 @@ import { useTranslation } from "react-i18next";
 
 import AppIcon from "@/shared/ui/AppIcon";
 
-import { openUrl } from "@/shared/utils/open";
-
 interface ResponseErrorProps {
   errorMessage: string;
   onClose?: (string: "none") => void;
@@ -41,13 +39,6 @@ const ResponseError: React.FC<ResponseErrorProps> = (props) => {
             {t("supplement.proxy_sys_tip")}
           </p>
         )}
-        <p className="err-desc-go-index">
-          {t("supplement.go")}&nbsp;
-          <span onClick={() => openUrl("https://www.echoapi.com/")}>
-            https://www.echoapi.com/
-          </span>
-          &nbsp;{t("supplement.proxy_sys_tip1")}
-        </p>
       </div>
     </div>
   );

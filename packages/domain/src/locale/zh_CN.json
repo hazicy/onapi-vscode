@@ -206,6 +206,7 @@
       "copy": "复制"
     },
     "auth": {
+      "unsupported_grant_type": "暂不支持此授权类型",
       "title": "认证",
       "type": "类型",
       "from_parent": "继承父级",
@@ -268,7 +269,7 @@
       "tag": "脚本",
       "default_title": "自定义脚本",
       "pre_content": {
-        "execute": "/*\n\t// 参考文档：https://wiki.echoapi.com/docs/usescript/java\n\t// 通过 pm.execute 执行外部go 程序 [2, 1, ...] 代表输入的第1个参数和第2个参数参数，以此类推...\n\tlet stdout = pm.execute(\"/Users/work/demo.go\", [2, 1])\n\t\n\t// 该go 程序返回值stdout类似下方所示的csv格式文本\n\t\n\t// phone,nickname\n\t// 1,aa\n\t// 2,bb\n\t// 3,cc\n\t// 4,dd\n\t// 5,ece e\n\t\n\tlet arrData = csv2array(stdout); // 通过内置的 csv2array 函数将 csv 转成数组\n\t\n\tconsole.log(arrData)\n\t\n\t_.forEach(arrData[parseInt(pm.info.iteration)], function (value, key) { // pm.info.iteration 代表自动化测试中正在执行第几次循环，API单接口调试时，该值一直为 0\n\t \tapt.environment.set(key, value); // 当前遍历到的数据赋给环境变量\n\t});\n*/",
+        "execute": "/*\n\t// // 通过 pm.execute 执行外部go 程序 [2, 1, ...] 代表输入的第1个参数和第2个参数参数，以此类推...\n\tlet stdout = pm.execute(\"/Users/work/demo.go\", [2, 1])\n\t\n\t// 该go 程序返回值stdout类似下方所示的csv格式文本\n\t\n\t// phone,nickname\n\t// 1,aa\n\t// 2,bb\n\t// 3,cc\n\t// 4,dd\n\t// 5,ece e\n\t\n\tlet arrData = csv2array(stdout); // 通过内置的 csv2array 函数将 csv 转成数组\n\t\n\tconsole.log(arrData)\n\t\n\t_.forEach(arrData[parseInt(pm.info.iteration)], function (value, key) { // pm.info.iteration 代表自动化测试中正在执行第几次循环，API单接口调试时，该值一直为 0\n\t \tapt.environment.set(key, value); // 当前遍历到的数据赋给环境变量\n\t});\n*/",
         "local_file": "读取本地文件并将数据赋值给变量",
         "run_other": "执行PHP/Python/Go等",
         "set_evariable": "设置一个环境变量",
@@ -2306,7 +2307,7 @@
     "copy_command": "复制命令",
     "edit": "编辑",
     "delete": "删除",
-    "tip": "使用说明: 使用该功能，需先安装echoapi-cli",
+    "tip": "此功能暂不可用",
     "detail": "详情请见文档"
   },
   "grpc": {
@@ -2486,7 +2487,7 @@
     "click_to_generate2": "按钮后自动生成命令",
     "name_required": "名称必填",
     "env_required": "环境必选",
-    "use_doc": "使用说明：使用该功能，需先安装echoapi-cli，",
+    "use_doc": "此功能暂不可用",
     "doc": "详情请见文档",
     "env_select_tip": "请选择环境",
     "api_case_select_tip": "请选择接口用例",

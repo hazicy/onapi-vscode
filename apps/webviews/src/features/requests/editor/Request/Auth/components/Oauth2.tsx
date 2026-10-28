@@ -36,7 +36,6 @@ import {
   AuthOauth2,
   RequestParamsItem,
 } from "@onapi/domain/requests/types/auth";
-import { openUrl } from "@/shared/utils/open";
 
 import {
   resolveOAuth2Parameters,
@@ -427,14 +426,7 @@ const Oauth2 = (props: Props) => {
     }
   };
 
-  const downLoadTip = (
-    <div>
-      {t("api.stress.stress_settings.test_data_tip")},
-      <a onClick={() => openUrl("https://www.echoapi.com/download")}>
-        {t("api.stress.stress_settings.test_data_tip_download")}
-      </a>
-    </div>
-  );
+  const downLoadTip = t("common.auth.unsupported_grant_type");
 
   const refreshSuffix =
     refreshToken && refreshTokenUrl ? (

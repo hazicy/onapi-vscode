@@ -51,7 +51,6 @@ export function createFeaturePanel(
     script,
     resourceBase,
     options.data ?? null,
-    options.hydrate,
   );
   return panel;
 }

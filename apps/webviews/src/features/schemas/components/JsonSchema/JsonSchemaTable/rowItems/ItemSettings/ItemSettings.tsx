@@ -16,9 +16,7 @@ import { isNumber, isObject, isUndefined, toLower } from "lodash-es";
 import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
-import Tooltip from "@/shared/ui/Tooltip";
 import { copyStringToClipboard } from "@/shared/utils/common";
-import { openUrl } from "@/shared/utils/open";
 
 import { ITEM_TYPES } from "../ItemKey/constant";
 import ItemMock from "../ItemMock";
@@ -218,19 +216,6 @@ const ItemSettings = (props: any, ref: any) => {
               )}
             </Flex>
             <Flex className={styles.sourceHelp} align="center">
-              <Flex
-                onClick={() =>
-                  openUrl(
-                    "https://www.echoapi.com/wiki/docs/schema/create#advanced-field-settings",
-                  )
-                }
-                className={styles.sourceTip}
-                gap={2}
-              >
-                <Tooltip title={t("supplement.help")}>
-                  <AppIcon icon="info" />
-                </Tooltip>
-              </Flex>
               <Button
                 style={{
                   visibility:
