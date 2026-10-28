@@ -12,7 +12,6 @@ import {
   getApiList,
   setApiList,
   updateApiList,
-  setProjectApisVersion,
   getApiListName,
 } from "../requests/request-storage";
 import {
@@ -54,17 +53,7 @@ const notifyApiListChanged = (
   apiList: ApiDetailsData[],
   context: vscode.ExtensionContext,
 ) => {
-  const { pushWebView, shareListWebView, openedFolderTestPanels } =
-    globalConfig;
-
-  if (pushWebView) {
-    pushWebView?.webview.postMessage({
-      action: "setPushPanelData",
-      data: {
-        local_api_list: apiList,
-      },
-    });
-  }
+  const { shareListWebView, openedFolderTestPanels } = globalConfig;
 
   if (shareListWebView) {
     shareListWebView?.webview.postMessage({
@@ -150,7 +139,6 @@ export const handleMessage = async (
     openedPanels,
     openedFolderTestPanels,
     openedFolderTestReportDataPanels,
-    pushWebView,
     shareListWebView,
   } = globalConfig;
 
@@ -159,8 +147,6 @@ export const handleMessage = async (
       if (!(await persistApiList(message.data, context))) {
         return false;
       }
-      // Record project API versions for later conflict comparison
-      setProjectApisVersion(context, message.data);
       // Update open data to latest
       forEach(globalConfig.openedPanels, (openedPanel, key) => {
         const openItem = message.data.find((i: any) => i?.id === key);
@@ -171,15 +157,6 @@ export const handleMessage = async (
           });
         }
       });
-
-      if (pushWebView) {
-        pushWebView?.webview.postMessage({
-          action: "setPushPanelData",
-          data: {
-            local_api_list: message.data,
-          },
-        });
-      }
 
       if (shareListWebView) {
         shareListWebView?.webview.postMessage({

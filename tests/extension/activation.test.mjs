@@ -59,7 +59,6 @@ for (const failAt of ["storage", "initialization"]) {
           createCurlPanel: unused,
           createImportDataPanel: unused,
           createEnvironmentPanel: unused,
-          createPushPanel: unused,
           createFolderTestPanel: unused,
           createfolderTestReportDataPanel: unused,
           createExportDataPanel: unused,

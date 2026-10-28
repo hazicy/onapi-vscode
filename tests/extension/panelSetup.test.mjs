@@ -44,7 +44,7 @@ for (const development of [false, true]) {
       createFeaturePanel(
         { extensionPath: "/extension" },
         { viewType: "tagPanel", title: "Request", iconName: "http.svg" },
-        { title: "Edited request", data, hydrate: true },
+        { title: "Edited request", data },
       ),
       panel,
     );
@@ -58,7 +58,7 @@ for (const development of [false, true]) {
     );
     assert.equal(calls[1][1], "webview:/extension/dist/webviews");
     assert.equal(calls[1][2], data);
-    assert.equal(calls[1][3], true);
+    assert.equal(calls[1].length, 3);
     assert.equal(panel.iconPath, "/extension/dist/images/http.svg");
   });
 }

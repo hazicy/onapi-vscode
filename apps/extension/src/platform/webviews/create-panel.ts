@@ -5,7 +5,7 @@ import { getHtmlForWebview } from "./html";
 import { LOCAL_PORT } from "../../app/config";
 
 type PanelDefinition = { viewType: string; title: string; iconName: string };
-type PanelOptions = { title?: string; data?: unknown; hydrate?: boolean };
+type PanelOptions = { title?: string; data?: unknown };
 
 /** Common Webview setup. Feature modules own reuse, messages and disposal. */
 export function createFeaturePanel(

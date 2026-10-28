@@ -36,7 +36,6 @@ async function fixture(
   });
   const editor = panel("editor");
   const config = {
-    pushWebView: panel("push"),
     shareListWebView: panel("share"),
     importDataWebView: panel("import"),
     openedPanels: { request: editor },
@@ -93,7 +92,6 @@ async function fixture(
             if (succeeds) rows = plain(list);
             return succeeds;
           },
-          setProjectApisVersion: () => calls.push(["version"]),
           getAllChildIds: tree.getCollectionChildIds,
           getTestingFolderName: (id) => id,
           deleteTestingFoldersData: (ids) => {
@@ -227,7 +225,7 @@ test("failed HTTP autosave keeps stored content and marks the editor dirty", asy
   );
 });
 for (const succeeds of [true, false]) {
-  test(`bulk list replacement handles storage result ${succeeds} before updating versions and views`, async () => {
+  test(`bulk list replacement handles storage result ${succeeds} before updating views`, async () => {
     const f = await fixture("sidbar", { succeeds });
     await f.run("setApiList", [{ id: "request", name: "Updated" }]);
     assert.equal(f.calls[0][0], "write");
@@ -239,7 +237,7 @@ for (const succeeds of [true, false]) {
     else
       assert.deepEqual(
         f.calls.map(([name]) => name),
-        ["write", "version", "editor", "push", "share"],
+        ["write", "editor", "share"],
       );
   });
   test(`folder deletion handles storage result ${succeeds} before closing tabs or deleting tests`, async () => {

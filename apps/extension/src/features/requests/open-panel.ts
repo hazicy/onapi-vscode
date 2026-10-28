@@ -42,7 +42,6 @@ export const createOpenPanel = (
   // Create and show panel
   const panel = createFeaturePanel(context, panelOptions, {
     title: showTabName(data?.name || panelOptions.title) + afterText,
-    hydrate: true,
     data: {
       startupTiming: { panelStartedAt, openHandledAt },
       kind: data?.kind,

@@ -27,7 +27,6 @@ src/
     schemas/                  # JSON Schema editing
     import/                   # Import and migration
     export/                   # Export formats and previews
-    sync/                     # Push, conflicts and version comparison
     sharing/                  # Sharing and shared documents
     project/                  # Project configuration
     auth/                     # Login and user configuration
@@ -96,8 +95,7 @@ src/
   parameter inputs remain plain text. Column preference persistence belongs to
   `features/settings/hooks/useTableColumnSwitchConfig.ts`.
 - Application theme state is read by `features/settings/hooks/useGlobalTheme.ts`;
-  pure theme calculations remain in `shared/theme`. Cloud service clients and
-  their request handling belong to `features/sync/services`. Schema property
+  pure theme calculations remain in `shared/theme`. Schema property
   ordering belongs to `features/schemas/utils/schema-order.ts`.
 - Use `@/features/...`, `@/shared/...` and `@/app/...` for cross-directory imports.
   Relative imports are suitable within a component or feature.

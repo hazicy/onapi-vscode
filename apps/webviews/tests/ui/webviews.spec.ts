@@ -56,7 +56,6 @@ const componentSelector = (name: string) => {
 for (const panel of [
   "tagPanel",
   "environmentPanel",
-  "pushPanel",
   "importDataPanel",
   "folderTestPanel",
   "folderTestReportPanel",
@@ -88,7 +87,6 @@ for (const panel of [
 for (const panel of [
   "tagPanel",
   "environmentPanel",
-  "pushPanel",
   "importDataPanel",
   "folderTestPanel",
   "folderTestReportPanel",
@@ -131,12 +129,6 @@ for (const panel of [
       send("setSystemConfig", { raw_parameter_pilot_bubble_switch: false });
       if (["shareListPanel", "importDataPanel"].includes(panel)) {
         send("setApiList", []);
-      }
-      if (panel === "pushPanel") {
-        send("setPushPanelData", {
-          local_api_list: [],
-          project_apis_version: {},
-        });
       }
       if (panel === "folderTestPanel") {
         send("setTestData", {

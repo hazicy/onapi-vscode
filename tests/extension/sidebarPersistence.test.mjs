@@ -20,7 +20,6 @@ async function fixture(writeSucceeds = true) {
     webview: { postMessage: (message) => calls.push([name, plain(message)]) },
   });
   const globalConfig = {
-    pushWebView: panel("push"),
     shareListWebView: panel("share"),
     openedPanels: {},
     openedFolderTestPanels: { "project:folder:test": panel("test") },
@@ -51,7 +50,6 @@ async function fixture(writeSucceeds = true) {
           downloadFile: unused,
           openInFileExplorer: unused,
           getAllChildIds: unused,
-          setProjectApisVersion: unused,
           setProjectConfig: unused,
           getApiList: () => structuredClone(persisted),
           getApiListName: () => "project",
@@ -105,7 +103,7 @@ test("saving a new folder persists before notifying every dependent view", async
   assert.equal(f.rows()[1].sort, 5);
   assert.deepEqual(
     f.calls.map(([name]) => name),
-    ["write", "push", "share", "test"],
+    ["write", "share", "test"],
   );
   assert.equal(f.calls.at(-1)[1].action, "postmanCollectionChanged");
   assert.equal(f.calls.at(-1)[1].data.info.name, "Collection");
@@ -228,7 +226,6 @@ test("opening a request deleted since the UI rendered safely skips both message 
             downloadFile: unused,
             openInFileExplorer: unused,
             getAllChildIds: unused,
-            setProjectApisVersion: unused,
             getApiList: () => [],
             getApiListName: unused,
             updateApiList: unused,

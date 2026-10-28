@@ -19,8 +19,8 @@ async function main() {
   const chunks = (await fs.readdir(path.join(output, "chunks")))
     .filter((name) => name.endsWith(".js"))
     .map((name) => `chunks/${name}`);
-  if (entries.length !== 8 || chunks.length === 0) {
-    throw new Error("Expected eight Webview entries and shared ESM chunks.");
+  if (entries.length !== 7 || chunks.length === 0) {
+    throw new Error("Expected seven Webview entries and shared ESM chunks.");
   }
   // Parse emitted modules independently: injected globals and vendor-local
   // bindings can collide only after code splitting, even if bundling succeeds.

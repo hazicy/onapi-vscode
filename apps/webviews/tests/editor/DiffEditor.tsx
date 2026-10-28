@@ -1,4 +1,4 @@
-import styles from "./ApisDiffJsonContent.module.css";
+import styles from "./DiffEditor.module.css";
 import { useEffect, useRef } from "react";
 import { EditorState } from "@codemirror/state";
 import { EditorView, lineNumbers } from "@codemirror/view";
@@ -7,7 +7,7 @@ import { useGlobal } from "@/app/store";
 import {
   editorTheme,
   isDarkTheme,
-} from "../../../../shared/components/CodeEditor/theme";
+} from "../../src/shared/components/CodeEditor/theme";
 
 interface Props {
   prevValue: string;

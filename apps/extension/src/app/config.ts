@@ -5,7 +5,6 @@ interface GlobalConfigType {
   openedFolderTestPanels: { [key: string]: vscode.WebviewPanel };
   openedFolderTestReportDataPanels: { [key: string]: vscode.WebviewPanel };
   environmentWebView: vscode.WebviewPanel | null;
-  pushWebView: vscode.WebviewPanel | null;
   curlWebView: vscode.WebviewPanel | null;
   importDataWebView: vscode.WebviewPanel | null;
   exportDataWebView: vscode.WebviewPanel | null;
@@ -16,7 +15,6 @@ enum PanelNameEnum {
   EXPORTDATA = "EXPORTDATA",
   IMPORTDATA = "IMPORTDATA",
   SHARELIST = "SHARELIST",
-  PUSH = "PUSH",
   ENVIRONMENT = "ENVIRONMENT",
   FOLDER_TEST_REPORT = "FOLDER_TEST_REPORT",
   FOLDER_TEST = "FOLDER_TEST",
@@ -44,8 +42,6 @@ export const globalConfig: GlobalConfigType = {
 
   // Global parameters webview object
   environmentWebView: null,
-  // Push data webview object
-  pushWebView: null,
   // cURL import webview object
   curlWebView: null,
   // Share list webview object
@@ -82,11 +78,6 @@ export const PANEL_OPTIONS: PanelOptionsType = {
     viewType: "shareListPanel",
     title: i18next.t("docs.share_modal.share_list"),
     iconName: "share_list.png",
-  },
-  [PanelNameEnum.PUSH]: {
-    viewType: "pushPanel",
-    title: i18next.t("common.push_to_onapi"),
-    iconName: "push.png",
   },
   [PanelNameEnum.ENVIRONMENT]: {
     viewType: "environmentPanel",

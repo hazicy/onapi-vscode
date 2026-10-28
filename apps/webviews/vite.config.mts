@@ -18,7 +18,6 @@ const polyfillAliases = Object.fromEntries(
 const panels = [
   "tagPanel",
   "environmentPanel",
-  "pushPanel",
   "importDataPanel",
   "folderTestPanel",
   "folderTestReportPanel",

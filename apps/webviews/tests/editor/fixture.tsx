@@ -5,7 +5,7 @@ import CodeEditor, {
   type CodeEditorRef,
   type Props,
 } from "../../src/shared/components/CodeEditor/CodeEditor";
-import DiffEditor from "../../src/features/sync/components/ApisDiffJsonContent/Edit";
+import DiffEditor from "./DiffEditor";
 import { formatDocument } from "../../src/shared/components/CodeEditor/format";
 import { jsonDiagnostics } from "../../src/shared/components/CodeEditor/jsonDiagnostics";
 import { loadLanguage } from "../../src/shared/components/CodeEditor/languages";

@@ -5,7 +5,6 @@ import {
   createCurlPanel,
   createImportDataPanel,
   createEnvironmentPanel,
-  createPushPanel,
   createFolderTestPanel,
   createfolderTestReportDataPanel,
   createExportDataPanel,
@@ -262,13 +261,6 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand("onapi.openEnv", (data) => {
       createEnvironmentPanel(data, context);
-    }),
-  );
-
-  // Register push page Webview
-  context.subscriptions.push(
-    vscode.commands.registerCommand("onapi.openPush", (data) => {
-      createPushPanel(data, context);
     }),
   );
 

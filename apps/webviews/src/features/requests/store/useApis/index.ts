@@ -11,7 +11,6 @@ type State = {
   currentSendingData?: HttpExecutionState;
   currentServerId: string;
   systemRequestHeader: typeof DEFAULT_REQUEST_SYSTEM_HEADERS;
-  localProjectApisVersion: Record<string, number>;
   apiCodeHar: unknown;
   schemaLoading: boolean;
 };
@@ -22,7 +21,6 @@ type Actions = {
   updateCurrentSendingData: (result: HttpExecutionState) => void;
   clearConsole: () => void;
   updateCurrentServerId: (id: string) => void;
-  updateLocalProjectApisVersion: (versions: Record<string, number>) => void;
   updateApiCodeHar: (har: any) => void;
   updateSchemaLoading: (loading: boolean) => void;
 };
@@ -65,7 +63,6 @@ export default create<State & Actions>()(
       currentSendingData: undefined,
       currentServerId: "",
       systemRequestHeader: DEFAULT_REQUEST_SYSTEM_HEADERS,
-      localProjectApisVersion: {},
       apiCodeHar: {},
       schemaLoading: false,
       updateApiOriginDetailsList: (items) =>
@@ -101,8 +98,6 @@ export default create<State & Actions>()(
           },
         })),
       updateCurrentServerId: (id) => set({ currentServerId: id }),
-      updateLocalProjectApisVersion: (versions) =>
-        set({ localProjectApisVersion: versions }),
       updateApiCodeHar: (har) => set({ apiCodeHar: har }),
       updateSchemaLoading: (loading) => set({ schemaLoading: loading }),
     }),
