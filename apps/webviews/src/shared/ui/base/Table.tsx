@@ -1,4 +1,5 @@
 import tableStyles from "./Table.module.css";
+import { Skeleton } from "./Skeleton";
 import React, { useMemo, useState } from "react";
 import {
   useTable,
@@ -253,7 +254,7 @@ export function Table<T extends object = Record<string, unknown>>({
         } as React.CSSProperties
       }
     >
-      {loading && <div role="status">Loading…</div>}
+      {loading && <Skeleton style={{ height: 64 }} />}
       <div
         className={tableStyles.table}
         style={{ overflow: "auto", maxHeight: scroll?.y }}

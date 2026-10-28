@@ -31,26 +31,9 @@ export const getHtmlForWebview = (
       `
           : `<link rel="stylesheet" href="${resourceBaseUrl}/webviews.css">`
       }
-      <style>
-        #loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--vscode-editor-background);
-            z-index: 1000;
-            color: var(--vscode-breadcrumb-focusForeground, var(--vscode-foreground, #FFFFFF));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
     </head>
     <body> 
-      <div id="root">
-        <div id="loading">loading...</div>
-      </div>
+      <div id="root"></div>
       <script>
       performance.mark("onapi:html-ready");
       window.isMac = ${os.platform() === "darwin" ? "true" : "false"}
