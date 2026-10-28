@@ -4,8 +4,6 @@
   "command.openEnv": "Environment",
   "command.switchWorkspace": "Workspaces: Switch or Create",
   "command.openExtenisonSettings": "Extension Settings",
-  "command.feedBack": "FeedBack",
-  "command.openHelpDoc": "Help Docs",
   "command.importData": "Import Data",
   "command.exportData": "Export Data",
   "command.tree.new": "New",

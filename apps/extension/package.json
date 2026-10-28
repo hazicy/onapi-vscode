@@ -147,18 +147,6 @@
           "order": 2
         },
         {
-          "command": "onapi.openHelpDoc",
-          "when": "view == onapiRequests",
-          "group": "@3",
-          "order": 100
-        },
-        {
-          "command": "onapi.feedBack",
-          "when": "view == onapiRequests",
-          "group": "@3",
-          "order": 200
-        },
-        {
           "command": "onapi.tree.new",
           "when": "view == onapiRequests",
           "group": "navigation@4"
@@ -303,16 +291,6 @@
       {
         "command": "onapi.openExtenisonSettings",
         "title": "%command.openExtenisonSettings%"
-      },
-      {
-        "command": "onapi.feedBack",
-        "title": "%command.feedBack%",
-        "category": "onapi"
-      },
-      {
-        "command": "onapi.openHelpDoc",
-        "title": "%command.openHelpDoc%",
-        "category": "onapi"
       },
       {
         "command": "openImportDataPanel",

@@ -293,24 +293,6 @@ export async function activate(context: vscode.ExtensionContext) {
     }),
   );
 
-  // Feedback
-  context.subscriptions.push(
-    vscode.commands.registerCommand("onapi.feedBack", (data) => {
-      vscode.env.openExternal(
-        vscode.Uri.parse("https://github.com/hazicy/onapi-vscode/issues"),
-      );
-    }),
-  );
-
-  // Help documentation
-  context.subscriptions.push(
-    vscode.commands.registerCommand("onapi.openHelpDoc", (data) => {
-      vscode.env.openExternal(
-        vscode.Uri.parse("https://www.echoapi.com/wiki/docs/start/"),
-      );
-    }),
-  );
-
   // Contact us
   context.subscriptions.push(
     vscode.commands.registerCommand("onapi.openExtenisonSettings", (data) => {

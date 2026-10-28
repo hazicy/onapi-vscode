@@ -4,8 +4,6 @@
   "command.openEnv": "环境管理",
   "command.switchWorkspace": "工作区：切换或新建",
   "command.openExtenisonSettings": "扩展设置",
-  "command.feedBack": "问题反馈",
-  "command.openHelpDoc": "帮助文档",
   "command.importData": "导入数据",
   "command.exportData": "导出数据",
   "command.tree.new": "新建",

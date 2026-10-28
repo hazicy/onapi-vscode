@@ -1901,8 +1901,6 @@
     "mock_field": "Mock Field",
     "support": "Support",
     "apipost": "onapi",
-    "questions": "Feedback",
-    "help": "Documentation",
     "collapse_sidebar": "Collapse Sidebar",
     "expand_sidebar": "Expand Sidebar"
   },
@@ -2511,7 +2509,6 @@
     "no_field": "No field",
     "wont_link_more_schema": "A Schema cannot be referenced multiple times.",
     "enum_invalid": "Invalid enumeration parameter",
-    "help": "Documentation",
     "reallocate": "Reassociate",
     "show_field": "Display Field",
     "hide_field": "Hidden Field",
