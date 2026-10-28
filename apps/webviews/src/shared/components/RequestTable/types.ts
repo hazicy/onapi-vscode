@@ -61,9 +61,3 @@ export type TableColumnSwitchConfig = {
   /**Content type toggle */
   content_type: CustomNumberBooleanType;
 };
-
-export enum PARAMETER_TYPE {
-  EXPORT,
-  IMPORT,
-  BATCH_EDIT,
-}

@@ -1,4 +1,3 @@
-import { getUpwardFolderId, getSubstring } from "@onapi/domain/request-utils";
 import { ICONS_MAP } from "@onapi/domain/constants/common";
 import {
   array2Tree,
@@ -21,8 +20,7 @@ import {
   trim,
 } from "lodash-es";
 import { ComponentType } from "react";
-import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
-import { ApisBaseData } from "@onapi/domain/requests/types/base";
+
 /**
  * Convert hex color to RGBA color string
  * @param hex - Hex color value

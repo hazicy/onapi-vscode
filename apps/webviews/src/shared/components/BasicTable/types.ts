@@ -119,8 +119,6 @@ export type BasicTableProps<DataSource> = {
 
 export type AnyObject = Record<string, any>;
 
-export type ToolbarProps<DataSource> = ToolbarConfig & TableProps<DataSource>;
-
 export enum TagType {
   Add = "add",
   REMOVE = "remove",

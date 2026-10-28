@@ -58,9 +58,6 @@ export type WorkerRunCommand = {
     environment?: HttpProjectConfig["environments"][number];
   };
 };
-export type RequestExecutionMessage = {
-  action: typeof REQUEST_EXECUTION_EVENT;
-  data: ExecutionEvent;
-};
+
 
 export * from "./execution";

@@ -8,14 +8,13 @@ import { useTranslation } from "react-i18next";
 import { Flex, SegmentedProps, Typography } from "@/shared/ui/base";
 
 import { useMemoizedFn, useSafeState } from "ahooks";
-import { includes, isEqual } from "lodash-es";
+import { isEqual } from "lodash-es";
 
 import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 import SegmentedTabs from "@/shared/components/SegmentedTabs";
 import ApisTypeTag from "@/shared/ui/ApisTypeTag";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 import { ApiTypeMethod } from "@onapi/domain/requests/types/base";
-import { ApiSendingData } from "@onapi/domain/requests/types/send";
 
 import CommonTable from "./CommonTable";
 

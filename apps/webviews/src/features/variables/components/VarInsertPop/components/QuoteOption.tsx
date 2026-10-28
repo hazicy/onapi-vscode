@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Flex } from "@/shared/ui/base";
 
 import clsx from "clsx";
-import { concat, entries, filter, find, isString, map, size } from "lodash-es";
+import { concat, entries, filter, map, size } from "lodash-es";
 
 import { Empty, Tooltip } from "@/shared/ui";
 import { SYSTEM_VARS } from "@/shared/constants/system";

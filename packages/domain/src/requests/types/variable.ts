@@ -16,15 +16,6 @@ export type FuncListRenderItem = {
   paras?: Record<string, any>;
 };
 
-export type GetParseValueParams = {
-  expression: string;
-  options: {
-    custom_script: Record<string, string>;
-    globals: Record<string, any>;
-    environment: Record<string, any>;
-  };
-};
-
 export enum InsertAction {
   replace,
   insert,

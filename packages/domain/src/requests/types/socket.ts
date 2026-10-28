@@ -15,8 +15,3 @@ export interface SocketDetailsData extends ApisBaseData {
   tags?: string[];
   description: string;
 }
-
-export type SocketComponentType = {
-  apisData: SocketDetailsData;
-  onApisDataChange: (data: SocketDetailsData) => void;
-};

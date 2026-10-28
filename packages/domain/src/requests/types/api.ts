@@ -6,24 +6,15 @@ type ItemType = {
   [key: string]: any;
 };
 
-import {
-  APIS_CREATE_ITEM_OTHER_ENUM,
-  APIS_PRESSURE_CONFIG_KEYS,
-  APIS_PRESSURE_MODE,
-  APIS_TARGET_TYPE_ENUM,
-  DEFAULT_API_MARK_ENUM,
-} from "@onapi/domain/requests/constants/index";
+
 
 import {
   AnyObject,
   CompareCalcSymbols,
   CustomNumberBooleanType,
 } from "@onapi/domain/types/common";
-import {
-  ApisBaseData,
-  ApisBaseDataItem,
-} from "@onapi/domain/requests/types/base";
-import { RequestBodyContentType } from "@onapi/domain/requests/types/request";
+import { ApisBaseData } from "@onapi/domain/requests/types/base";
+
 import { JSONSchemaObject } from "@onapi/domain/types/json-schema";
 
 export interface ApiMetadata extends ApisBaseData {
@@ -118,24 +109,10 @@ export type TreeDataItem = Pick<
   [x: string]: any;
 };
 
-export type ApisCreateListItem = ItemType &
-  Partial<{
-    key: APIS_TARGET_TYPE_ENUM | APIS_CREATE_ITEM_OTHER_ENUM;
-    icon: string;
-    label: string;
-    type: string;
-    gradientColor: string[];
-  }>;
 
-export type ApisCreateList = ApisCreateListItem[];
 
 // api mark
-export type ApiMark = {
-  value: DEFAULT_API_MARK_ENUM;
-  label: string;
-  color: string;
-  is_default: number;
-};
+
 
 // AI expect condition collection item
 export interface ExpectConditionItem {
@@ -172,16 +149,6 @@ export interface AIExpect {
 // Type used when apis content type cannot be determined
 export type ApisData = ApisBaseData & AnyObject;
 
-export type ApisDataContext<T> = {
-  apisData: T;
-  onApisDataChange: (apisData: T) => void;
-};
-
-export type MockDetails = {
-  mock_server_enable: CustomNumberBooleanType;
-  ai_expect: AIExpect;
-};
-
 type Params = {
   is_checked: CustomNumberBooleanType;
   key: string;
@@ -190,72 +157,8 @@ type Params = {
   description: string;
 };
 
-export type IsoDetails = {
-  project_id: string;
-  iso_temp_id: string;
-  name: string;
-  description: string;
-  content: Params[];
-};
-
 export type ApiComponentType = {
   apisData: ApiDetailsData;
   onApisDataChange: (data: ApisData) => void;
   type?: string;
-};
-
-export type OpenApiComponentType = {
-  apisData?: ApiDetailsData;
-  openApiData: OpenApiData;
-  onOpenApiDataChange: (data: OpenApiData) => void;
-  setPreView?: (val: any) => void;
-};
-
-export type ApiPressureData = {
-  /*Whether to use test data */
-  [APIS_PRESSURE_CONFIG_KEYS.USE_PRESSURE_DATA]: boolean;
-  /**Shared test data path */
-  [APIS_PRESSURE_CONFIG_KEYS.TEST_DATA_PATH]: string;
-  /**Concurrency count */
-  [APIS_PRESSURE_CONFIG_KEYS.CONCURRENCY]: number;
-  /**Mode */
-  [APIS_PRESSURE_CONFIG_KEYS.MODE]: APIS_PRESSURE_MODE.COUNT;
-  /**Rounds */
-  [APIS_PRESSURE_CONFIG_KEYS.COUNT]: number; // Pressure test rounds
-  /**Duration */
-  [APIS_PRESSURE_CONFIG_KEYS.DURATION]: number; // Duration
-  /**Whether logging is enabled */
-  [APIS_PRESSURE_CONFIG_KEYS.LOG_TYPE]: 1 | 0; // Enable logging
-};
-
-export type onapiResult = {
-  url?: string;
-  method?: string;
-  header: Array<ApisBaseDataItem>;
-  cookie: Array<ApisBaseDataItem>;
-  query: Array<ApisBaseDataItem>;
-  path: Array<ApisBaseDataItem>;
-  bodyParameter?: Array<ApisBaseDataItem>;
-  bodyRaw?: string;
-  bodyBinary?: {
-    file_name: string;
-    data_url: string;
-    file_path?: string;
-  } | null;
-  bodyRawSchema?: object;
-  bodyMode?: RequestBodyContentType;
-  diffArr: Array<string>;
-};
-
-export type openapiResult = {
-  parameters: ParametersItem[];
-  requestBodyContent: {
-    [content_type: string]: {
-      schema?: JSONSchemaObject;
-      example?: any;
-    };
-  };
-  method: string;
-  url: string;
-  responses: any;
 };

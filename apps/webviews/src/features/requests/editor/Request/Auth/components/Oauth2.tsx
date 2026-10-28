@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 
 import { Flex, Select, Typography, message } from "@/shared/ui/base";
 
-import { find, has, includes, isEqual, setWith } from "lodash-es";
+import { has, includes, isEqual, setWith } from "lodash-es";
 
 import { SegmentedTabs } from "@/shared/components";
 import VarInput from "@/features/variables/components/VarInput/VarInput";

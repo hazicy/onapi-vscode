@@ -1,5 +1,5 @@
 import { AnyObject } from "@onapi/domain/types/common";
-import { JSONSchemaObject } from "@onapi/domain/types/json-schema";
+
 import {
   ApisBaseData,
   ApisBaseDataItem,

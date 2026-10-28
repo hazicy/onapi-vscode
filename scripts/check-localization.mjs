@@ -47,7 +47,7 @@ async function load(
     encodeURIComponent(
       `export const env = { language: ${JSON.stringify(hostLanguage)} };`,
     );
-  const globals = `const document = { documentElement: { lang: ${JSON.stringify(htmlLanguage)} } }; const navigator = { language: ${JSON.stringify(browserLanguage)} };\n`;
+  const globals = `globalThis.document = { documentElement: { lang: ${JSON.stringify(htmlLanguage)} } }; Object.defineProperty(globalThis, "navigator", { value: { language: ${JSON.stringify(browserLanguage)} }, configurable: true });\n`;
   const source =
     globals + code.replace(/(['"])vscode\1/g, JSON.stringify(vscode));
   return (

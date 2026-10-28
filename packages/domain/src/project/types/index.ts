@@ -1,37 +1,11 @@
-import { Auth as AuthType } from "@onapi/domain/requests/types/auth";
+
 import { EnvList, ServerItem } from "@onapi/domain/environment/types/index";
 import { DomainInfoProps } from "@onapi/domain/project/types/cookie";
 
 type MockFieldType = "string" | "number" | "boolean" | "integer";
 
-export type ProjectInfoReq = {
-  project_id: string;
-  field: string;
-  value: any;
-};
 
-export type CodeStatusItem = {
-  code_id: string;
-  code_number: string;
-  code_msg: string;
-  no_save?: boolean;
-};
-export type CodeStatusReq = {
-  project_id: string;
-  code_list: CodeStatusItem[];
-};
-export type NoticeItem = {
-  hook_id?: string;
-  project_id: string;
-  name: string;
-  hook_type: string;
-  enabled?: -1 | 1;
-  sort?: number;
-  events: string[] | [];
-  events_ids?: string[];
-  server_url: string;
-  server_secret: string;
-};
+
 export type MarkItem = {
   mark_id?: string;
   project_id: string;
@@ -104,11 +78,6 @@ export type AutoImportItem = {
   env_cover_modal: string;
 };
 
-export type AutoSyncImportItem = AutoImportItem & {
-  project_id: string;
-  auto_import_id: string;
-};
-
 export type ConnectToDatabaseDBConfig = {
   host: string;
   port: number;
@@ -165,98 +134,11 @@ export type GlobalParamsCookieItem = GlobalParamsHeaderItem & {
   sort: number;
 };
 
-export type GlobalParamsAuthItem = {
-  type: string;
-  kv: {
-    key: string;
-    value: string;
-  };
-  bearer: {
-    key: string;
-  };
-  basic: {
-    username: string;
-    password: string;
-  };
-  digest: {
-    username: string;
-    password: string;
-    realm: string;
-    nonce: string;
-    algorithm: string;
-    qop: string;
-    nc: string;
-    cnonce: string;
-    opaque: string;
-  };
-  hawk: {
-    authId: string;
-    authKey: string;
-    algorithm: string;
-    user: string;
-    nonce: string;
-    extraData: string;
-    app: string;
-    delegation: string;
-    timestamp: string;
-    includePayloadHash: number;
-  };
-  awsv4: {
-    accessKey: string;
-    secretKey: string;
-    region: string;
-    service: string;
-    sessionToken: string;
-    addAuthDataToQuery: number;
-  };
-  ntlm: {
-    username: string;
-    password: string;
-    domain: string;
-    workstation: string;
-    disableRetryRequest: number;
-  };
-  edgegrid: {
-    accessToken: string;
-    clientToken: string;
-    clientSecret: string;
-    nonce: string;
-    timestamp: string;
-    baseURi: string;
-    headersToSign: string;
-  };
-  oauth1: {
-    consumerKey: string;
-    consumerSecret: string;
-    signatureMethod: string;
-    addEmptyParamsToSign: boolean;
-    includeBodyHash: boolean;
-    addParamsToHeader: number;
-    realm: string;
-    version: string;
-    nonce: string;
-    timestamp: string;
-    verifier: string;
-    callback: string;
-    tokenSecret: string;
-    token: string;
-  };
-};
-
 export type GlobalParamsScriptItem = {
   pre_script_switch: number;
   pre_script: string;
   post_script_switch: number;
   post_script: string;
-};
-
-export type GlobalParams = {
-  header: GlobalParamsHeaderItem[];
-  query: GlobalParamsTypeItem[];
-  body: GlobalParamsTypeItem[];
-  cookie: GlobalParamsCookieItem[];
-  auth: AuthType;
-  script: GlobalParamsScriptItem;
 };
 
 /** Shared parameters used only by socket transports. HTTP uses Collection inheritance. */

@@ -3,7 +3,6 @@ import styles from "./GraphQLQuery.module.css";
 import {
   forwardRef,
   useContext,
-  useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
@@ -20,7 +19,7 @@ import {
   useMount,
 } from "ahooks";
 import { ASTNode, Kind, parse, print } from "graphql";
-import { produce } from "immer";
+
 import {
   add,
   assign,
@@ -558,10 +557,6 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
       onChange(newData);
     },
   );
-
-  const getRealUrl = async () => {
-    return "";
-  };
 
   const refreshSchema = async () => {
     try {

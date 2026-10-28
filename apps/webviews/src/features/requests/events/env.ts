@@ -1,8 +1,6 @@
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 
-import { find } from "lodash-es";
-
 export const saveEnvironments = (
   environments: import("@onapi/domain").EnvironmentScope[],
 ) => {

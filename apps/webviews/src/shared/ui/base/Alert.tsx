@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import type { AlertProps } from "./types";
 import alertStyles from "./Alert.module.css";
-import { message } from "./Toast";
 
 export const Alert = ({
   message,

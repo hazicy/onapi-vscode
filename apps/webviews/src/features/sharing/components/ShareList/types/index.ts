@@ -30,7 +30,3 @@ export interface Tab extends Omit<TabPaneProps, "tab"> {
   key: string | string[];
   label: React.ReactNode;
 }
-
-export type ListsProps = {
-  activekey: string | string[];
-} & TabsProps;

@@ -3,7 +3,6 @@ import React from "react";
 import clsx from "clsx";
 import type { TypographyProps } from "./types";
 import typographyStyles from "./Typography.module.css";
-import { Tag } from "./Tag";
 
 const Text = forwardRef<HTMLSpanElement, TypographyProps>(
   (

@@ -81,16 +81,6 @@ export interface ClientCert {
   [x: string]: any & { HOST: string };
 }
 
-export interface ClientCertificatesLimit {
-  host: string;
-  port: number;
-  password: string;
-  crt: CRT;
-  key: CRT;
-  pfx: CRT;
-  HOST: string;
-}
-
 export interface CRT {
   file_url: string;
   file_base64: string;

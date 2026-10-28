@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 import { Flex, Input, message } from "@/shared/ui/base";
 
-import { cloneDeep, isPlainObject, keyBy, keys, mapValues } from "lodash-es";
+import { cloneDeep } from "lodash-es";
 
 import Table from "@/shared/components/BasicTable/BasicTable";
 import Button from "@/shared/ui/Button";

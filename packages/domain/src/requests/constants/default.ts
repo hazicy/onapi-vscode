@@ -1,31 +1,24 @@
 import i18next from "i18next";
-import { omit } from "lodash";
 
 import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import { SampleGroupsDetailsData } from "@onapi/domain/requests/types/api-sample";
 import { ApisBaseData } from "@onapi/domain/requests/types/base";
 import { DocDetailsData } from "@onapi/domain/requests/types/doc";
-import { FolderDetailsData } from "@onapi/domain/requests/types/folder";
+
 import { GrpcDetailsData } from "@onapi/domain/requests/types/grpc";
 import { SocketDetailsData } from "@onapi/domain/requests/types/socket";
 import { SocketServiceDetailsData } from "@onapi/domain/requests/types/socket-service";
-import { SSEDetailsData } from "@onapi/domain/requests/types/sse";
 
-import {
-  APIS_PRESSURE_MODE,
-  APIS_TARGET_TYPE_ENUM,
-  DEFAULT_API_MARK_ENUM,
-} from "@onapi/domain/requests/constants/index";
+import { APIS_TARGET_TYPE_ENUM, DEFAULT_API_MARK_ENUM } from "@onapi/domain/requests/constants/index";
 import {
   DEFAULT_WEBSOCKET_REQUEST,
   DEFAULT_WEBSOCKET_MESSAGE,
 } from "@onapi/domain/requests/constants/request";
 import { DEFAULT_API_RESPONSE } from "@onapi/domain/requests/constants/response";
-import { RequestBodyContentType } from "@onapi/domain/requests/types/request";
+
 import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { WebSocketDetailsData } from "@onapi/domain/requests/types/websocket";
 import { SocketIoDetailsData } from "@onapi/domain/requests/types/socketio";
-import { GraphQLDetailsData } from "@onapi/domain/requests/types/graphql";
 
 // apis base parameters
 export const DEFAULT_APIS_BASE_DATA: ApisBaseData = {
@@ -199,15 +192,6 @@ export const DEFAULT_SOCKET_DATA: SocketDetailsData = {
 };
 
 // One-click stress test default parameters
-export const DEFAULT_PRESSURE_DATA = {
-  use_pressure_data: false,
-  test_data_path: "",
-  concurrency: 1,
-  mode: APIS_PRESSURE_MODE.COUNT,
-  count: 1,
-  duration: 100,
-  log_type: 0,
-};
 
 export const INIT_DEFAULT_API_DATAS = [
   { ...DEFAULT_FOLDER_DATA, name: "Samples" },

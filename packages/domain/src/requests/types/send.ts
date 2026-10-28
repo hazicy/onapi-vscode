@@ -35,62 +35,22 @@ export interface ApiSendingData {
 /**
  * SSE API sending data
  */
-export interface ApiSendingDataSSE extends ApiSendingData {
-  /**Stream response */
-  streamResponse: ApiStreamResponseSSEItem[];
-  /**Controller for cancellation */
-  controller: AbortController;
-}
 
 /**
  * Stream response data item
  */
-export type ApiStreamResponseSSEItem = {
-  action: "message" | "complete" | "connect" | "disconnect";
-  data:
-    | string
-    | { stream: { type: string; data: Buffer[] }; size: number; time: number };
-  id: string;
-  error: string | null;
-  msg: string;
-};
 
-export type ApiStreamResponseSSEItemMessage =
-  | ApiStreamResponseSSEItemSSE
-  | ApiStreamResponseSSEItemRequest;
 
-export interface ApiStreamResponseSSEItemBase {
-  error: string | null;
-  msg: string;
-}
 
-export interface ApiStreamResponseSSEItemSSE extends ApiStreamResponseSSEItemBase {
-  action: "sse";
-  data: {
-    stream: { type: string; data: Buffer[] };
-    size: number;
-    time: number;
-  };
-}
 
-export interface ApiStreamResponseSSEItemRequest extends ApiStreamResponseSSEItemBase {
-  action: "request";
-  data: ApiSendResponse;
-}
+
+
+
 
 /**
  * API send response data
  */
-export interface ApiSendResponse {
-  data: Partial<ApiSendResponseData>;
-  error: ApiSendResponseError;
-  event_id: string;
-  iteration_id: string;
-  project_id: string;
-  id: string;
-  testing_id: string;
-  type: string;
-}
+
 
 /**
  * API send response error

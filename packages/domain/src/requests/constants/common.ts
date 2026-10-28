@@ -13,12 +13,7 @@ import {
   DEFAULT_SOCKETIO_DATA,
   DEFAULT_GRAPHQL_DATA,
 } from "@onapi/domain/requests/constants/default";
-import { STATUS_CODE } from "@onapi/domain/constants/common";
-import { ApisDataTypeMapping } from "@onapi/domain/requests/types/base";
 
-export const APIS_VIEW_DEFAULT_STATUS = {
-  is_force: STATUS_CODE.DISABLE,
-};
 
 export const APIS_BASE_DEFAULT_DATA: Record<string, any> = {
   [APIS_TARGET_TYPE_ENUM.API]: DEFAULT_API_DATA,
@@ -42,19 +37,4 @@ const DEFAULT_COLOR_MAP = {
   socket_method: "socket-service",
   socket: "socket",
   note: "note",
-};
-
-export const ColorMap = (type: any, method: any) => {
-  const maps: any = DEFAULT_COLOR_MAP;
-  if (method) {
-    maps["api"] = ["post", "delete", "get", "put", "patch"].includes(
-      method?.toLowerCase(),
-    )
-      ? method?.toLowerCase()
-      : "api-extra";
-  }
-  if (maps[type]) {
-    return maps[type];
-  }
-  return maps.doc;
 };

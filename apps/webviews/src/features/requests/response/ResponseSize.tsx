@@ -2,43 +2,20 @@ import ResponseNetwork from "./ResponseNetwork";
 import { timingSegments } from "../utils/response-metrics";
 import { responseDownload } from "../utils/response-download";
 import { sdkResponseView } from "@/features/requests/utils/executionView";
-import { responseText } from "@onapi/domain";
+
 import styles from "./ResponseSize.module.css";
 import React, { memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Col, Divider, Flex, Row } from "@/shared/ui/base";
 
-import { bufferToRaw } from "@onapi/domain/utils/response-tools";
 import clsx from "clsx";
-import {
-  add,
-  divide,
-  get,
-  has,
-  isEmpty,
-  isEqual,
-  isNil,
-  isPlainObject,
-  isString,
-  isUndefined,
-  map,
-  multiply,
-  omit,
-  some,
-  subtract,
-  sumBy,
-  values,
-} from "lodash-es";
+import { add, get, has, isEmpty, isEqual, isNil, map } from "lodash-es";
 
 import { Tooltip } from "@/shared/ui";
 import AppIcon from "@/shared/ui/AppIcon";
 import CustomPopover from "@/shared/ui/Popover";
-import {
-  HTTPS_TIME_ARRAY,
-  HTTP_TIME_ARRAY,
-  RESPONSE_CODE_DESC_MAP,
-} from "@onapi/domain/requests/constants/response";
+import { RESPONSE_CODE_DESC_MAP } from "@onapi/domain/requests/constants/response";
 import useTheme from "@/shared/hooks/useTheme";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import {

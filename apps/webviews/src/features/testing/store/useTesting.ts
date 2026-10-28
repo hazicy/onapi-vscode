@@ -1,6 +1,6 @@
 import { ADD_CASE_DEFAULT } from "@onapi/domain/testing/constants/default/index";
 import { create } from "@/shared/state/store";
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
+
 import {
   EventItem,
   TestingData,

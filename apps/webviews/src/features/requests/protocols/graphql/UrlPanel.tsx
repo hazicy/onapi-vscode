@@ -12,9 +12,8 @@ import styles2 from "./UrlPanel.module.css";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Dropdown, Flex, MenuProps, Tree } from "@/shared/ui/base";
+import { Dropdown, Flex, Tree } from "@/shared/ui/base";
 import Button from "@/shared/ui/Button";
-import i18next from "i18next";
 import { produce } from "immer";
 import { cloneDeep, head, isEqual } from "lodash-es";
 
@@ -28,17 +27,6 @@ import { getCollectionServerId } from "@/features/requests/utils/apis";
 import { convertToSaveFolderTree } from "@/shared/utils/common";
 
 import { AnyObject } from "@onapi/domain/types/common";
-
-const items: MenuProps["items"] = [
-  {
-    label: i18next.t("api.run.send_save"),
-    key: "send_and_save",
-  },
-];
-
-const menuProps = {
-  items,
-};
 
 const Index = memo((props: HttpEditorProps) => {
   const { t } = useTranslation();

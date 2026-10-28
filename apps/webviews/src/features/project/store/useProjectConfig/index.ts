@@ -1,13 +1,11 @@
 import { createDefaultHttpConfig } from "@onapi/domain";
 import {
-  INIT_DOMAIN_INFO,
   INIT_ENV_LIST,
   INIT_SERVER_LIST,
 } from "@onapi/domain/project/constants/project";
 import { create } from "@/shared/state/store";
 import { EnvList, ServerItem } from "@onapi/domain/environment/types/index";
 import { SocketGlobalParams } from "@onapi/domain/project/types/index";
-import { DomainInfoProps } from "@onapi/domain/project/types/cookie";
 
 type State = {
   http: import("@onapi/domain").HttpProjectConfig;

@@ -6,23 +6,6 @@ export type TableColumnSwitchConfig = {
 import { DefaultRequestSystemHeaders } from "@onapi/domain/requests/types/request";
 import { IMPORT_TYPE_ENUM } from "@onapi/domain/settings/constants/settings";
 
-export type TYPE_METHOD =
-  | "POST"
-  | "GET"
-  | "PUT"
-  | "PATCH"
-  | "DELETE"
-  | "COPY"
-  | "HEAD"
-  | "OPTIONS"
-  | "LINK"
-  | "UNLINK"
-  | "PURGE"
-  | "LOCK"
-  | "UNLOCK"
-  | "PROPFIND"
-  | "VIEW";
-
 export type FILE_OBJ = {
   // File name
   file_name: string;
@@ -190,14 +173,4 @@ export interface SysConfig {
 
   // Import data initial selection type
   import_data_init_type?: IMPORT_TYPE_ENUM;
-}
-
-export interface WorkSpaceType {
-  DEFAULT_PROJECT_ID: string;
-  DEFAULT_TEAM_ID: string;
-  CURRENT_PROJECT_ID: any;
-  CURRENT_TEAM_ID: string;
-  CURRENT_TARGET_ID: string;
-  CURRENT_ENV_ID: string;
-  CURRENT_USER_ID: string;
 }

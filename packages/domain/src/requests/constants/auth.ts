@@ -19,23 +19,6 @@ export enum AUTH_ENUM {
   ASAP = "asap",
 }
 
-export const DEFAULT_AUTH_MAP: any = {
-  [AUTH_ENUM.INHERIT]: "Inherit auth from parent",
-  [AUTH_ENUM.KV]: "API Key",
-  [AUTH_ENUM.BEARER]: "Bearer Token",
-  [AUTH_ENUM.BASIC]: "Basic auth",
-  [AUTH_ENUM.DIGEST]: "Digest auth",
-  [AUTH_ENUM.OAUTH1]: "OAuth 1.0",
-  [AUTH_ENUM.OAUTH2]: "OAuth 2.0",
-  [AUTH_ENUM.HAWK]: "Hawk authentication",
-  [AUTH_ENUM.AWSV4]: "AWS Signature",
-  [AUTH_ENUM.NTLM]: "NTLM Authentication",
-  [AUTH_ENUM.EDGEGRID]: "Akamai EdgeGrid",
-  [AUTH_ENUM.JWT]: "JWT Bearer",
-  [AUTH_ENUM.ASAP]: "ASAP(Atlassian)",
-  [AUTH_ENUM.NOAUTH]: "NO Auth",
-};
-
 export enum AUTH_INSERT_VALUE {
   HEADER = "header",
   QUERY = "queryParam",
@@ -219,18 +202,6 @@ export const DEFAULT_AUTH: Partial<Auth> = {
   },
 };
 
-export const digestPlaceholder = {
-  username: "Username",
-  password: "Password",
-  realm: "testrealm@example.com",
-  nonce: "Nonce",
-  algorithm: "select",
-  qop: "e.g. auth-int",
-  nc: "e.g. 000000001",
-  cnonce: "e.g. 0a4f113b",
-  opaque: "Opaque",
-};
-
 export const DIGEST_ALGORITHM_OPTIONS = [
   "MD5",
   "MD5-sess",
@@ -240,44 +211,7 @@ export const DIGEST_ALGORITHM_OPTIONS = [
   "SHA-512-256-sess",
 ];
 
-export const hawkPlaceholder = {
-  authId: "Auth Id",
-  authKey: "Auth Key",
-  algorithm: "select",
-  user: "Username",
-  nonce: "Nonce",
-  extraData: "e.g. some-app-extra-data",
-  app: "Application ID",
-  delegation: "e.g. delegated-by",
-  timestamp: "TimeStamp",
-};
-
 export const HAWK_ALGOTITH_OPTIONS = ["sha256", "sha1"];
-
-export const awsPlaceholder = {
-  accessKey: "Access Key",
-  secretKey: "Secret Key",
-  region: "e.g. us-east-1",
-  service: "e.g. s3",
-  sessionToken: "Session Token",
-};
-
-export const ntlmPlacrholder = {
-  username: "Username",
-  password: "password",
-  domain: "e.g. example.com",
-  workstation: "e.g. someone-PC",
-};
-
-export const edgegridPlaceholder = {
-  accessToken: "Access Token",
-  clientToken: "Client Token",
-  clientSecret: "Client Secret",
-  nonce: "Nonce",
-  timestamp: "Timestamp",
-  baseURi: "Base Url",
-  headersToSign: "Header To Sign",
-};
 
 export const OAUTH1_METHODS_OPTIONS = [
   "HMAC-SHA1",

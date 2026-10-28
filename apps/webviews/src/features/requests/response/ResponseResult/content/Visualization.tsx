@@ -7,9 +7,9 @@ import { Flex } from "@/shared/ui/base";
 
 import { isString } from "lodash-es";
 
-import useGlobalTheme from "@/features/settings/hooks/useGlobalTheme";
+
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
-import useTheme from "@/shared/hooks/useTheme";
+
 
 interface Props {
   html?: string;
@@ -19,8 +19,7 @@ const Visualization: React.FC<Props> = (props) => {
   const { t } = useTranslation();
   const { html } = props || {};
   const visualizingRef = useRef<any>(null);
-  const { themeToken } = useTheme();
-  const customTheme = useGlobalTheme();
+  
   const bg_color = useSystemConfig((state) => state.systemConfig.bg_color);
 
   useEffect(() => {

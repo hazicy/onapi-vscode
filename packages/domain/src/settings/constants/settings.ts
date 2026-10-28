@@ -194,30 +194,7 @@ export const IMPORT_TYPE_LIST = [
   },
 ];
 
-export const SWAGGER_INCLUDES = [
-  IMPORT_TYPE_ENUM.SWAGGER,
-  IMPORT_TYPE_ENUM.SWAGGERURL,
-];
 
-export const EXPORT_TYPE_MAP: {
-  [key: string]: { name: string; id: number; tips: string };
-} = {
-  onapi: {
-    name: "onapi",
-    id: 1,
-    tips: i18next.t("supplement.old_imp"),
-  },
-  swagger: {
-    name: "swagger",
-    id: 2,
-    tips: i18next.t("supplement.old_imp"),
-  },
-  postman: {
-    name: "Postman 2.1",
-    id: 3,
-    tips: i18next.t("supplement.old_imp"),
-  },
-};
 export const EXPORT_TYPE_LIST = [
   {
     key: "onapi",
@@ -241,28 +218,7 @@ export const EXPORT_TYPE_LIST = [
   },
 ];
 
-export const SWAGGER_FULL_API_OPTIONS = [
-  {
-    value: "clear",
-    label: i18next.t("supplement.overwrite_clear"),
-  },
-  {
-    value: "url",
-    label: i18next.t("supplement.overwrite_same_api"),
-  },
-  {
-    value: "url_and_folder",
-    label: i18next.t("supplement.overwrite_same_api_folder"),
-  },
-  {
-    value: "ignore",
-    label: i18next.t("supplement.overwrite_same_api_no"),
-  },
-  {
-    value: "both",
-    label: i18next.t("supplement.overwrite_same_api_all"),
-  },
-];
+
 
 export const SWAGGER_FULL_MODAL_OPTIONS = [
   {
@@ -279,16 +235,7 @@ export const SWAGGER_FULL_MODAL_OPTIONS = [
   },
 ];
 
-export const SWAGGER_FULL_ENV_OPTIONS = [
-  {
-    value: "none",
-    label: i18next.t("supplement.wont_imp_env"),
-  },
-  {
-    value: "both",
-    label: i18next.t("supplement.imp_add_env"),
-  },
-];
+
 
 export const APIPOST_FULL_ENV_OPTIONS = [
   {
@@ -320,38 +267,11 @@ export const EXPORT_PREVIEW_CONFIG_ITEMS = [
   },
 ];
 
-export const EXPORT_CONFIG_ITEMS = [
-  {
-    label: i18next.t("supplement.apis"),
-    key: ExportConfigEnum.request,
-  },
-  {
-    label: i18next.t("supplement.schemas"),
-    key: ExportConfigEnum.model,
-  },
-  {
-    label: i18next.t("supplement.environment"),
-    key: ExportConfigEnum.env,
-  },
-];
 
-export const EXPORT_CONFIG_NONE_ITEMS = [
-  {
-    label: i18next.t("supplement.apis") || "APIs",
-    key: ExportConfigEnum.request,
-  },
-];
 
-export const EXPORT_CONFIG_NOMODEL_ITEMS = [
-  {
-    label: i18next.t("supplement.apis"),
-    key: ExportConfigEnum.request,
-  },
-  {
-    label: i18next.t("supplement.environment"),
-    key: ExportConfigEnum.env,
-  },
-];
+
+
+
 
 /**
  * Language type

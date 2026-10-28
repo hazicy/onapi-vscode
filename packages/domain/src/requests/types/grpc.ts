@@ -1,6 +1,6 @@
 import { APIS_GRPC_PROTO_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 
-import { AnyObject, CustomNumberBooleanType } from "@onapi/domain/types/common";
+import { CustomNumberBooleanType } from "@onapi/domain/types/common";
 import {
   ApisBaseData,
   ApisBaseDataItem,
@@ -83,44 +83,4 @@ export type GrpcTreeItem = {
   children?: GrpcTreeItem[];
 };
 
-export type GrpcProtoData = {
-  [x: string]: GrpcProtoDataItem;
-};
 
-export type GrpcProtoDataItem = GrpcTreeItem & {
-  proto_id?: string;
-  service_id?: string;
-} & Partial<GrpcProtos> &
-  Partial<GrpcProtosServices> &
-  Partial<GrpcProtosServicesMethods>;
-
-export type GrpcSendingData = {
-  response?:
-    | AnyObject
-    | Array<
-        {
-          action?: string;
-          id?: string;
-        } & AnyObject
-      >;
-  metadata?: any[];
-  status?: AnyObject | string;
-  isStreamResult?: boolean;
-};
-
-export type GrpcComponentType = {
-  apisData: GrpcDetailsData;
-  onApisDataChange: (data: GrpcDetailsData) => void;
-};
-
-export type RequestMockRequestParams = {
-  proto_is_cloud?: CustomNumberBooleanType;
-  option: Partial<
-    Pick<GrpcProtos, "proto_content" | "include_dirs" | "include_files">
-  >;
-  data: Partial<{
-    url: GrpcProtos["url"];
-    service: GrpcProtosServices["service_name"];
-    method: GrpcProtosServicesMethods["name"];
-  }>;
-};

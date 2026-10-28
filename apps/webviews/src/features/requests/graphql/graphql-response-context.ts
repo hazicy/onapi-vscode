@@ -1,8 +1,6 @@
 import type { HttpEditorRecord } from "@onapi/domain/requests/record";
 import { createContext } from "react";
 
-import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
-
 type Props = {
   kind: HttpEditorRecord["kind"] | undefined;
   apiData: HttpEditorRecord | undefined;

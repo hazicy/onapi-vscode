@@ -307,7 +307,6 @@
     },
     "run": {
       "send": "Send",
-      "send_save": "Send and Save Response",
       "save": "Save",
       "close_connection": "Close",
       "auth": "Auth",

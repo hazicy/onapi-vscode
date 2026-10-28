@@ -7,17 +7,17 @@ import {
   HttpStatusCode,
 } from "@onapi/domain/types/common";
 
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
-import { SampleGroupsDetailsData } from "@onapi/domain/requests/types/api-sample";
-import { DocDetailsData } from "@onapi/domain/requests/types/doc";
-import { FolderDetailsData } from "@onapi/domain/requests/types/folder";
-import { GrpcDetailsData } from "@onapi/domain/requests/types/grpc";
-import { SocketDetailsData } from "@onapi/domain/requests/types/socket";
-import { SocketServiceDetailsData } from "@onapi/domain/requests/types/socket-service";
-import { SSEDetailsData } from "@onapi/domain/requests/types/sse";
-import { WebSocketDetailsData } from "@onapi/domain/requests/types/websocket";
-import { SocketIoDetailsData } from "@onapi/domain/requests/types/socketio";
-import { GraphQLDetailsData } from "@onapi/domain/requests/types/graphql";
+
+
+
+
+
+
+
+
+
+
+
 
 // API request method
 export type ApiTypeMethod =
@@ -142,21 +142,3 @@ export interface SchemaObj {
   raw_parameter: any[];
   raw_schema: any;
 }
-
-export type ApisDataTypeMapping = {
-  [APIS_TARGET_TYPE_ENUM.API]: ApiDetailsData;
-  [APIS_TARGET_TYPE_ENUM.SSE]: SSEDetailsData;
-  [APIS_TARGET_TYPE_ENUM.FOLDER]: FolderDetailsData;
-  [APIS_TARGET_TYPE_ENUM.DOC]: DocDetailsData;
-  [APIS_TARGET_TYPE_ENUM.GRPC]: GrpcDetailsData;
-  [APIS_TARGET_TYPE_ENUM.API_SAMPLE]: Omit<
-    ApiDetailsData,
-    "description" | "attribute_info"
-  >;
-  [APIS_TARGET_TYPE_ENUM.API_SAMPLE_GROUP]: SampleGroupsDetailsData;
-  [APIS_TARGET_TYPE_ENUM.SOCKET]: SocketServiceDetailsData;
-  [APIS_TARGET_TYPE_ENUM.SOCKET_METHOD]: SocketDetailsData;
-  [APIS_TARGET_TYPE_ENUM.WEBSOCKET]: WebSocketDetailsData;
-  [APIS_TARGET_TYPE_ENUM.SOCKETIO]: SocketIoDetailsData;
-  [APIS_TARGET_TYPE_ENUM.GRAPHQL]: GraphQLDetailsData;
-};

@@ -17,8 +17,7 @@ import { DirectionType } from "@onapi/domain/types/common";
 import { importDelay } from "@/shared/utils/common";
 import ToolBar from "../http/ToolBar";
 import Header from "./Header";
-import { isEqual } from "lodash-es";
-import { genUrlByQuery } from "@/features/requests/utils/apis";
+
 import { produce } from "immer";
 import { Button } from "@/shared/ui";
 import { Flex } from "@/shared/ui/base";

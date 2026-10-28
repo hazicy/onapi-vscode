@@ -1,23 +1,14 @@
 import {
   cloneDeep,
-  concat,
-  find,
   head,
-  indexOf,
-  isArray,
   isEqual,
   isUndefined,
   isString,
-  keys,
-  map,
-  omit,
-  reduce,
-  size,
   forEach,
   filter,
   toUpper,
 } from "lodash";
-import JSON5 from "json5";
+
 import { produce } from "immer";
 import urlParse from "url-parse";
 import type { ApiDetailsData } from "@onapi/domain/requests/types/api";

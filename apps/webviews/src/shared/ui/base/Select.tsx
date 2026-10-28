@@ -10,8 +10,6 @@ import type { SelectProps, Option } from "./types";
 import { Icon } from "@iconify/react";
 import check from "@iconify-icons/lucide/check";
 
-import { placement } from "./popupUtils";
-
 const scalar = (v: any) => (v && typeof v === "object" ? v.value : v);
 
 const text = (v: any): string =>

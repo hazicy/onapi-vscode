@@ -4,10 +4,10 @@ import styles from "../../WebSocketDebug.module.css";
 import React, { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Dropdown } from "@/shared/ui/base";
+
 
 import { useSafeState } from "ahooks";
-import { cloneDeep, isEqual, isFunction, isString, map, size } from "lodash-es";
+import { isEqual, isFunction, isString, size } from "lodash-es";
 
 import Sending from "@/features/requests/editor/Sending";
 
@@ -15,12 +15,12 @@ import FlowResponse from "@/features/requests/response/FlowResponse/FlowResponse
 import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
 import ResponseResult from "@/features/requests/response/ResponseResult/ResponseResult";
 
-import { AppIcon, Tooltip } from "@/shared/ui";
+
 import Empty from "../Empty";
 import Button from "@/shared/ui/Button";
 import useApis from "@/features/requests/store/useApis";
 import useWebSocketStore from "@/features/requests/store/useApis/websocket";
-import { MessageItem } from "@onapi/domain/requests/types/websocket";
+
 
 import useWebSocket from "../../useWebSocket";
 import Header from "./Header";
@@ -98,50 +98,9 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
       setData({});
     }
   }, [messages, setData]);
-  const DropdownItems = useMemo(() => {
-    return map(value?.message, (item: MessageItem) => ({
-      label: (
-        <div className={styles.exampleLabel}>
-          <span className={styles.name}>
-            <Tooltip title={item.name}>{item.name}</Tooltip>
-          </span>
-        </div>
-      ),
-      key: item.param_id,
-    }));
-  }, [value]);
+  
 
-  const saveSocketMessageDom = (
-    <Dropdown
-      trigger={["click"]}
-      dropdownRender={(menu) => {
-        return (
-          <div style={{ minWidth: 120 }} className={styles.exampleList}>
-            {menu}
-          </div>
-        );
-      }}
-      menu={{
-        items: DropdownItems,
-        onClick: ({ key }) => {
-          const newValue = cloneDeep(value);
-          newValue?.message.forEach((item: MessageItem) => {
-            if (item.param_id === key) {
-              item.response.raw = resultRaw;
-              item.response.mode = mode;
-            }
-          });
-          onChange(newValue);
-        },
-      }}
-      itemClassName={clsx(styles.dropdownMenuItem, styles.dropdownMenuSubmenu)}
-      overlayClassName={styles.dropdownMenu}
-    >
-      <Tooltip title={t("api.response_labels.save_response")}>
-        <AppIcon icon="save" />
-      </Tooltip>
-    </Dropdown>
-  );
+  
   const customTipsContent = (data: any) => {
     if (isString(data?.message)) {
       return {};

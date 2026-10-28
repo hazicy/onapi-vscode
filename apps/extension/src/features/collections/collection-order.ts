@@ -1,6 +1,5 @@
 import { getCollectionChildIds } from "./collection-tree";
 import { ApiDetailsData } from "@onapi/domain/requests/types/api";
-import { reduce } from "lodash";
 
 export const getAllChildIds = (
   apiList: ApiDetailsData[],

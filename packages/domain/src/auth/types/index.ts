@@ -1,17 +1,9 @@
-import { ValueOf } from "type-fest";
+
 
 import { STATUS_CODE } from "@onapi/domain/constants/common";
 import { MIGRATE_RESULT_STATUS } from "@onapi/domain/import/constants/migrate/index";
-import {
-  AUTHORITY,
-  WECHAT_TOKEN_STATUS,
-} from "@onapi/domain/auth/constants/user";
-import { SysConfig } from "@onapi/domain/settings/types/settings";
+import { AUTHORITY } from "@onapi/domain/auth/constants/user";
 
-export type EmailLoginReq = {
-  email: string;
-  password: string;
-};
 
 export type UserInfo = {
   /**Remaining email modification count */
@@ -38,26 +30,6 @@ export type UserInfo = {
   identity: string;
   /**Whether admin */
   is_admin: STATUS_CODE;
-};
-
-export type QrCodeRes = {
-  /**QR code image */
-  image: string;
-  /**QR code URL */
-  url: string;
-  /**Ticket */
-  ticket: string;
-  /**QR code expiration time */
-  expire_seconds: number;
-};
-
-export type LoginRes = {
-  /**Token */
-  token: string;
-  /**Registration status */
-  token_status: ValueOf<typeof WECHAT_TOKEN_STATUS>;
-  /**Identity */
-  identity: string;
 };
 
 export type Project = {
@@ -114,34 +86,4 @@ export type TeamItem = {
   project: Project[] | null;
   /**Version 7 upgrade to version 8, upgrade status -1 pending migration 1 normal status */
   upgrade_status: number;
-};
-export type UserSettingReq = {
-  configure: Partial<SysConfig>;
-};
-
-export type UserListReq = {
-  project_id: string;
-};
-
-export type UserListRes = {
-  /**Role */
-  role: number;
-  /**Nickname */
-  nick_name: string;
-  /**Email */
-  email: string;
-  /**Avatar */
-  portrait: string;
-  /**Whether admin */
-  is_project_admin: number;
-  /**User id */
-  uid: string;
-  /**Whether team admin */
-  is_team_admin: number;
-};
-
-export type CreateProjectReq = {
-  team_id: string;
-  name: string;
-  intro?: string;
 };

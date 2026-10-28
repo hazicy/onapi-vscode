@@ -7,22 +7,7 @@ import { CaseItem, Settings } from "@onapi/domain/testing/types/common";
 import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import { ApiSendResponseData } from "@onapi/domain/requests/types/send";
 
-export type CaseAddMenu = {
-  /**Icon */
-  icon: string;
-  /**Name */
-  name: string;
-  /**tag */
-  tag: string;
-  /**Type */
-  type: CASE_ITEM_TYPE;
-  /**Value */
-  value: number;
-  /**Color */
-  color: string;
-  /**Tooltip */
-  tip?: string;
-};
+
 
 /**Test case list */
 export type TestingData = {
@@ -75,10 +60,7 @@ export type TestingDetailData = {
   event_list: CaseItem[];
 } & TestingData;
 
-export type EventData = {
-  settings: Settings;
-  event_list: EventItem[];
-};
+
 
 export type EventItem = {
   event_id: string;
@@ -102,21 +84,10 @@ export type User = {
 /**
  * Continuous integration list
  */
-export type IntegrationItem = {
-  name: string;
-  env: string;
-  count: number;
-};
 
 /**
  * Test data list item
  */
-export type TestingDataItem = {
-  name: string;
-  created_at: string;
-  iterates_id: string;
-  data: { [env_id: string]: Array<object | string> };
-};
 
 /**
  * Test data list
@@ -129,7 +100,6 @@ export type TestingDataListItem = {
   created_at: string;
   data_list: { env_id: string; data: any[] }[];
 };
-export type TestingDataList = TestingDataListItem[];
 
 export interface TestingSendingData {
   /**Send status */

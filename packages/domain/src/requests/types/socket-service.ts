@@ -16,8 +16,3 @@ export interface SocketServiceDetailsData extends ApisBaseData {
     };
   };
 }
-
-export type SocketServiceComponentType = {
-  apisData: SocketServiceDetailsData;
-  onApisDataChange: (data: SocketServiceDetailsData) => void;
-};

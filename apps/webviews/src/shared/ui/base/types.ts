@@ -107,7 +107,7 @@ export interface TreeHandle {
 }
 export type { ThemeConfig } from "./Theme";
 export type { DrawerProps } from "../Drawer";
-export type GetProps<T> = T extends React.ComponentType<infer P> ? P : never;
+
 /** Shared presentation and accessibility props; behavior belongs to each control. */
 export interface UIProps extends React.AriaAttributes {
   children?: React.ReactNode;
@@ -728,7 +728,7 @@ export interface ModalStaticFunctions {
   warning(config: ModalFuncProps): ModalHandle;
   warn(config: ModalFuncProps): ModalHandle;
 }
-export type Hoonapi = ModalStaticFunctions;
+
 export interface MessageInstance {
   success(
     content: React.ReactNode | ToastConfig,

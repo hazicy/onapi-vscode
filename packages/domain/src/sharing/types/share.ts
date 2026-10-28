@@ -1,10 +1,4 @@
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
-export type ShareInfo = {
-  netUrl: string;
-  apiName: string;
-  apiData: ApiDetailsData | null;
-};
 
 export type ShareInfoData = {
   id: string;

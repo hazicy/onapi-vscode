@@ -1,8 +1,6 @@
 import styles from "./ParamsSettings.module.css";
 import { FC } from "react";
 
-import { useMemoizedFn } from "ahooks";
-
 import RequestGlobal from "@/features/requests/editor/RequestGlobal";
 import { FolderDetailsData } from "@onapi/domain/requests/types/folder";
 

@@ -1,29 +1,10 @@
 import { STATUS_CODE } from "@onapi/domain/constants/common";
 import { CASE_ITEM_TYPE } from "@onapi/domain/testing/constants/index";
 
-import {
-  EventData,
-  TestingDetailData,
-} from "@onapi/domain/testing/types/index";
+
 import { ApiDetailsData } from "@onapi/domain/requests/types/api";
-import { ProjectConfigType } from "@onapi/domain/project/types/index";
-import { SysConfig } from "@onapi/domain/settings/types/settings";
 
-export type CaseDataIf = {
-  var: string;
-  compare: string;
-  value: string;
-};
 
-export type CaseDataWait = {
-  sleep: number;
-};
-
-export type CaseDataBegin = {
-  name: string;
-  iterationData: any[];
-  iterates_data_id: string;
-};
 
 /**Test case steps */
 export type CaseItem = {
@@ -71,45 +52,16 @@ export type Settings = {
 };
 
 // Test iteration data
-export type IteratesData = {
-  project_id: string;
-  testing_id: string;
-  iterates_id: string;
-  name: string;
-  created_at: string;
-  data: IterateData;
-};
 
-export type IterateData = {
-  [env_id: string]: Array<object | string>;
-};
+
 
 /**
  * Test case execution params
  */
-export type RunnerTestingParams = {
-  originName?: string;
-  originSleep?: number;
-  originEnvId?: string;
-  originIterationCount?: number;
-  testingData: TestingDetailData;
-  projectConfig?: ProjectConfigType;
-  systemConfig?: SysConfig;
-};
 
 /**
  * Test case execution params
  */
-export type RunnerTestingProps = {
-  originName?: string;
-  originSleep?: number;
-  originEnvId?: string;
-  originIterationCount?: number;
-  testingData: EventData;
-  projectConfig?: ProjectConfigType;
-  systemConfig?: SysConfig;
-  originCollection?: Omit<ApiDetailsData, "response">[];
-};
 
 /**
  * Running test case

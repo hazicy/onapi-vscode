@@ -75,7 +75,4 @@ export interface ExecutionEnvelope {
   timestamp: number;
   event: ProtocolEvent;
 }
-export interface ProtocolExecutionMessage {
-  action: typeof PROTOCOL_EXECUTION_EVENT;
-  data: ExecutionEnvelope;
-}
+

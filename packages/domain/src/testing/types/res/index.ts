@@ -1,13 +1,5 @@
-import { TestingData } from "@onapi/domain/testing/types/index";
+
 import { Settings } from "@onapi/domain/testing/types/common";
-
-export type TestingListRes = {
-  list: TestingData[];
-};
-
-export type AddFolderRes = {
-  testing_id: string;
-};
 
 export type TrashListRes = {
   /**Deletion time */
@@ -78,6 +70,3 @@ export type TestingReportListRes = {
 /**
  * Test report details
  */
-export type TestingReportDetailRes = {
-  report_details: any;
-} & TestingReportListRes;

@@ -5,16 +5,9 @@ import { useTranslation } from "react-i18next";
 
 import { Flex, Input, message, Tooltip } from "@/shared/ui/base";
 
-import { useLatest, useUpdateEffect } from "ahooks";
+import { useUpdateEffect } from "ahooks";
 import { produce } from "immer";
-import {
-  cloneDeep,
-  find,
-  findIndex,
-  isNull,
-  isUndefined,
-  map,
-} from "lodash-es";
+import { cloneDeep, find, findIndex, isNull, isUndefined } from "lodash-es";
 
 import Table from "@/shared/components/BasicTable/BasicTable";
 import Button from "@/shared/ui/Button";
@@ -49,7 +42,7 @@ const Index = (props: EnvModifyModalProps) => {
     { ...DEFAULT_DATA_ITEM },
   ]);
   const readonly = false;
-  const latestEnvDataRef = useLatest(envData);
+  
 
   useEffect(() => {
     const data = find(envMenus, ({ id }) => id === editEnvId) as EnvListItem;

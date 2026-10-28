@@ -21,7 +21,7 @@ import {
 import { AppIcon, Input, Popover, Tooltip } from "@/shared/ui";
 import fakerDefinitions from "@onapi/domain/mock/faker-definitions.json";
 import { MOCK_LANGUAGE_MAP } from "@onapi/domain/settings/constants/settings";
-import { has, isEqual, map } from "lodash-es";
+import { has, map } from "lodash-es";
 import {
   ASSIGNMENT_VALUE_KEY,
   DATE_FORMAT_OPTIONS,

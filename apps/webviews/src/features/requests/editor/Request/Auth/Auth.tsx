@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { AuthContext } from "./AuthField";
 import "./style.css";
 import styles from "./Auth.module.css";
@@ -15,7 +14,6 @@ import {
   AUTH_OPTIONS,
 } from "@onapi/domain/requests/constants/auth";
 import type { HttpRequest } from "@onapi/domain";
-import { ChangeFuncType } from "@onapi/domain/types/common";
 
 import {
   Asap,

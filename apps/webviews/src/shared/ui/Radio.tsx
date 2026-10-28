@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import styles from "./Radio.module.css";
 import { Radio as BaseRadio } from "@/shared/ui/base";
 import type { RadioGroupProps, RadioProps } from "@/shared/ui/base";

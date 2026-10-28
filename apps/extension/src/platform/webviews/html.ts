@@ -1,5 +1,5 @@
 import { language } from "../locale/index";
-import { head } from "lodash";
+
 import * as vscode from "vscode";
 import os from "os";
 

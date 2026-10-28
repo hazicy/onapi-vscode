@@ -8,15 +8,7 @@ import { Tag } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
 import { bufferToRaw } from "@onapi/domain/utils/response-tools";
-import {
-  includes,
-  isArray,
-  isEqual,
-  isObject,
-  isString,
-  map,
-  size,
-} from "lodash-es";
+import { includes, isArray, isEqual, isObject, isString, size } from "lodash-es";
 
 import Sending from "@/features/requests/editor/Sending";
 
@@ -24,11 +16,11 @@ import FlowResponse from "@/features/requests/response/FlowResponse/FlowResponse
 import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
 import ResponseResult from "@/features/requests/response/ResponseResult/ResponseResult";
 
-import { Tooltip } from "@/shared/ui";
+
 import Empty from "@/shared/ui/Empty";
 import useApis from "@/features/requests/store/useApis";
 import useWebSocketStore from "@/features/requests/store/useApis/websocket";
-import { MessageItem } from "@onapi/domain/requests/types/socketio";
+
 import { hexToRGBA } from "@/shared/utils/common";
 
 import useWebSocket from "../../useWebSocket";
@@ -206,18 +198,7 @@ const Realtime: React.FC<Props> = ({ id, onChange, apiScreenDirection }) => {
     );
   }, [websocketConnectionPool, apisActiveKey, filterValue, filterType]);
 
-  const DropdownItems = useMemo(() => {
-    return map(value?.message, (item: MessageItem) => ({
-      label: (
-        <div className={styles.exampleLabel}>
-          <span className={styles.name}>
-            <Tooltip title={item.name}>{item.name}</Tooltip>
-          </span>
-        </div>
-      ),
-      key: item.param_id,
-    }));
-  }, [value]);
+  
 
   const customTipsContent = (data: any) => {
     if (isString(data?.message)) {

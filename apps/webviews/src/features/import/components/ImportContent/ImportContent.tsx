@@ -87,20 +87,6 @@ const Index = ({
     return false;
   }, []);
 
-  const importFile = async (file: any, fileType: IMPORT_TYPE_ENUM) => {
-    try {
-      const chooseFolder = options.chooseFolder;
-      window?.vscode.postMessage({
-        action: "importData",
-        data: { file, chooseFolder, fileType },
-      });
-
-      if (onCancel) {
-        onCancel();
-      }
-    } catch (err) {}
-  };
-
   const handleFileChange = async (info: UploadChangeParam) => {
     const file = info?.file?.originFileObj;
     if (info?.file.status === "removed") {

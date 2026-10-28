@@ -3,15 +3,6 @@ import dayjs from "dayjs";
 import { DEFAULT_TEAM } from "@onapi/domain/project/constants/team";
 import { ProjectConfigType } from "@onapi/domain/project/types/index";
 
-export const INIT_DOMAIN_INFO = {
-  inputDomain: "",
-  cookieText: "",
-  cookieObj: {},
-  activeId: null,
-  isShowArea: "",
-  activeItem: {},
-};
-
 export const INIT_ENV_LIST = [
   {
     env_id: "1",

@@ -1,4 +1,4 @@
-export const MIN_INPUT_LENGTH = 1; // Minimum input length
+// Minimum input length
 export const MAX_INPUT_LENGTH = 100; // Maximum input length
 
 export const MIN_INPUT_NUMBER_LENGTH = 0; // Minimum number value

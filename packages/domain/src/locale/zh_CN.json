@@ -307,7 +307,6 @@
     },
     "run": {
       "send": "发送",
-      "send_save": "发送并保存响应",
       "save": "保存",
       "close_connection": "关闭连接",
       "auth": "认证",
