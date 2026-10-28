@@ -12,8 +12,6 @@
     "download": "Download"
   },
   "common": {
-    "download_desktop_app": "Download Desktop App",
-    "performance_apis_onapi_tips": "Simulate real-world traffic from your local machine and observe the performance of your APIs on onapi’s desktop app.",
     "test_your_apis_tips": "Test how your APIs perform under load",
     "request_error": "Request Error",
     "refresh_success": "Refresh Successfully",
@@ -725,8 +723,8 @@
     "environment_detail": {
       "title": "Settings",
       "tips": "You can reference environment variables in request parameters or interface URLs using the syntax: {{ variable_name }}.",
-      "tips1": "Cloud Value: Stored in the cloud, shared and visible among project members. Used for displaying interface documentation or other external scenarios.",
-      "tips2": "Local Value: Stored locally, not visible to project members, used for local interface debugging and supports viewing historical records.",
+      "tips1": "Initial value: The default value used unless a script or another source overrides it.",
+      "tips2": "Current value: The value after a script or another source overrides the initial value.",
       "link": "View Documentation",
       "name": "Environment Name",
       "default_name": "New Environment",
@@ -901,7 +899,7 @@
       "custom_proxy": "Use custom proxy configuration",
       "system_detail": {
         "respect": "Respect HTTP_PROXY, HTTPS_PROXY, and NO_PROXY environment variables",
-        "bypass_tip": "eg：127.0.0.2,localhost,www.apipost.cn",
+        "bypass_tip": "eg：127.0.0.2,localhost,example.com",
         "auth": "Proxy auth",
         "username": "Username",
         "password": "Password",
@@ -1496,7 +1494,6 @@
       "mock_url": "Mock URL",
       "mock_table": {
         "type": "Mock Type",
-        "remote": "Cloud Mock",
         "local": "Local Mock",
         "url": "Domain",
         "local_tip": "onapi client installation required"
@@ -1646,7 +1643,6 @@
       "add_condition": "Add Condition",
       "mock_table": {
         "type": "Mock Type",
-        "remote": "Cloud Mock",
         "local": "Local Mock",
         "url": "Domain",
         "operation": "Operation",
@@ -1890,7 +1886,6 @@
     "more": "More",
     "mock_field": "Mock Field",
     "support": "Support",
-    "apipost": "onapi",
     "collapse_sidebar": "Collapse Sidebar",
     "expand_sidebar": "Expand Sidebar"
   },
@@ -2737,7 +2732,6 @@
     "project_name_required": "Project name is required",
     "add_success": "Add Success",
     "will_del_link": "This link will be deleted, and others will no longer be able to join the project through this sharing link.",
-    "invite_apipost": "Inviting you to join an onapi project.",
     "link_valid_time": "Validity",
     "link_get_people": "Person who receives the link",
     "restore": "Restore",
@@ -2753,7 +2747,6 @@
     "cors_origin": "For cross-origin limits, web access is limited to non-local APIs. To access local APIs, download the client.",
     "no_team_cur": "No Team",
     "no_project_cur": "No Project",
-    "exit_apipost": "Exit onapi",
     "exit_has_change": "You have unsaved changes. Are you sure  to exit?",
     "exit_no_save": "Exit without saving",
     "exit_save": "Save and Exit",
@@ -2866,7 +2859,6 @@
     "input_ssh_user": "Please enter the ssh username",
     "input_ssh_password": "Please enter the ssh password",
     "database_manager": "Database Manage",
-    "apipost_export": "onapi export project",
     "upload_right_file": "Please upload a file of the correct format!",
     "input_url_first1": "Please fill in the URL address first.",
     "upload_file_first": "Please upload a file first.",
@@ -2955,7 +2947,6 @@
     "catch_err": "catch error",
     "time_hms": "HHmmss",
     "new_project": "New Project",
-    "cloud_param_err": "Cloud parameter error",
     "server_busy": "Service is busy, please try again later.",
     "same_key": "The same key already exists",
     "click_download_client": "Click to download the client",

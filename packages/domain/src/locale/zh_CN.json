@@ -12,8 +12,6 @@
     "download": "下载"
   },
   "common": {
-    "download_desktop_app": "下载桌面应用程序",
-    "performance_apis_onapi_tips": "在ApiPost桌面应用中模拟真实流量，从本地机器测试并观察API性能表现",
     "test_your_apis_tips": "测试您的API在高负载情况下的运行表现",
     "request_error": "请求错误",
     "refresh_success": "刷新成功",
@@ -632,7 +630,6 @@
     "admin_center": "管理中心",
     "qa": "我的博客&问答",
     "sign_out": "退出",
-    "sign_in": "登陆到ApiPost",
     "switch_team_project": "切换到团队/项目。",
     "pull_tip": "然后点击“拉”。"
   },
@@ -901,7 +898,7 @@
       "custom_proxy": "自定义",
       "system_detail": {
         "respect": "优先使用 HTTP PROXY、HTTPS PROXY、NO PROXY 系统环境变量",
-        "bypass_tip": "以英文逗号分隔的ip或域名，例如：127.0.0.2,localhost,www.apipost.cn",
+        "bypass_tip": "以英文逗号分隔的ip或域名，例如：127.0.0.2,localhost,example.com",
         "auth": "身份验证",
         "username": "用户名",
         "password": "密码",
@@ -1498,7 +1495,6 @@
       "mock_url": "Mock地址",
       "mock_table": {
         "type": "Mock 类型",
-        "remote": "云端Mock",
         "local": "本地Mock",
         "url": "域名",
         "local_tip": "需要安装onapi客户端"
@@ -1648,7 +1644,6 @@
       "add_condition": "添加触发条件",
       "mock_table": {
         "type": "Mock 类型",
-        "remote": "云端Mock",
         "local": "本地Mock",
         "url": "临时域名",
         "operation": "操作",
@@ -1892,7 +1887,6 @@
     "more": "更多",
     "mock_field": "内置Mock字段变量",
     "support": "联系客服",
-    "apipost": "onapi官网",
     "collapse_sidebar": "精简模式",
     "expand_sidebar": "普通模式"
   },
@@ -2739,7 +2733,6 @@
     "project_name_required": "项目名称必填",
     "add_success": "添加成功",
     "will_del_link": "将会删除该链接，其他人将无法通过该分享链接加入项目",
-    "invite_apipost": "邀请您加入onapi项目",
     "link_valid_time": "链接有效期",
     "link_get_people": "获得链接的人为",
     "restore": "恢复",
@@ -2755,7 +2748,6 @@
     "cors_origin": "由于浏览器跨域限制，网页版只支持访问非本地接口，如需访问本地 API，建议下载客户端",
     "no_team_cur": "当前无团队",
     "no_project_cur": "当前团队无项目",
-    "exit_apipost": "退出onapi",
     "exit_has_change": "有修改内容未保存，确定退出？",
     "exit_no_save": "不保存直接退出",
     "exit_save": "保存并退出",
@@ -2868,7 +2860,6 @@
     "input_ssh_user": "请输入ssh用户名",
     "input_ssh_password": "请输入ssh密码",
     "database_manager": "数据库管理",
-    "apipost_export": "onapi导出项目",
     "upload_right_file": "请上传正确格式的文件",
     "input_url_first1": "请先填写url地址",
     "upload_file_first": "请先上传文件",
@@ -2957,7 +2948,6 @@
     "catch_err": "catch错误",
     "time_hms": "H时m分s秒",
     "new_project": "新建项目",
-    "cloud_param_err": "云端参数错误",
     "server_busy": "服务繁忙，请稍后重试",
     "same_key": "已存在相同key",
     "click_download_client": "点击下载客户端",

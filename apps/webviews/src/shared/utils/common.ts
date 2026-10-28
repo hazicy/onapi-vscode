@@ -184,13 +184,13 @@ export const createUrl = (_url: any): any => {
   const origin = protocol + host;
 
   // Remaining part
-  _url = `https://www.apipost.cn${_url.substring(origin.length)}`;
+  _url = `https://example.invalid${_url.substring(origin.length)}`;
 
   let urls = {};
   try {
     urls = new URL(_url);
   } catch {
-    const http_url = `https://www.apipost.cn${_url.substring(origin.length)}`;
+    const http_url = `https://example.invalid${_url.substring(origin.length)}`;
     const a = document.createElement("a");
     a.href = http_url;
     urls = {

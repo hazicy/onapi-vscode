@@ -422,6 +422,5 @@ export const SYNC_IMPORT_SUCCESS_KEY = "sync-import-success-key";
 export const SYNC_IMPORT_FAIL_KEY = "sync-import-fail-key";
 
 /** Client close without prompt */
-export const APIPOST_CLIENT_CLOSE_NO_PROMPT = "apipost-client-close-no-prompt";
 
 /** Client download URL */
