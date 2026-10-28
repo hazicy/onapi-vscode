@@ -70,11 +70,7 @@
       "content_type_tip": "Auto",
       "add_euqal": "Auto-add '=' when parameter value is empty.",
       "dont_add_euqal": "Don't-add '=' when parameter value is empty.",
-      "batch_edit": "Batch Edit",
-      "display_column": "Display Column",
-      "display_column_tips": "Effective globally after setting",
-      "display_column_param_type": "Parameter Type / Required",
-      "display_column_param_desc": "Parameter Description"
+      "batch_edit": "Batch Edit"
     },
     "import_modal": {
       "title": "Import",

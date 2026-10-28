@@ -70,11 +70,7 @@
       "content_type_tip": "自动（content-type）",
       "add_euqal": "当参数值为空时,自动添加等于号",
       "dont_add_euqal": "当参数值为空时,不添加等于号",
-      "batch_edit": "批量编辑",
-      "display_column": "展示列",
-      "display_column_tips": "设置后全局生效",
-      "display_column_param_type": "参数类型/必填",
-      "display_column_param_desc": "参数描述"
+      "batch_edit": "批量编辑"
     },
     "import_modal": {
       "title": "导入",
