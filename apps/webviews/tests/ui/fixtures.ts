@@ -6,7 +6,6 @@ import { AutocompletePage } from "./pages/AutocompletePage";
 import { BaseComponentsPage } from "./pages/BaseComponentsPage";
 import { BodyPage } from "./pages/BodyPage";
 import { DataPage } from "./pages/DataPage";
-import { DescriptionPage } from "./pages/DescriptionPage";
 import { DrawerPage } from "./pages/DrawerPage";
 import { FiltersPage } from "./pages/FiltersPage";
 import { ResizePage } from "./pages/ResizePage";
@@ -24,7 +23,6 @@ type Pages = {
   basePage: BaseComponentsPage;
   bodyPage: BodyPage;
   dataPage: DataPage;
-  descriptionPage: DescriptionPage;
   drawerPage: DrawerPage;
   filtersPage: FiltersPage;
   resizePage: ResizePage;
@@ -56,9 +54,6 @@ export const test = base.extend<Pages>({
   },
   dataPage: async ({ page }, use) => {
     await use(new DataPage(page));
-  },
-  descriptionPage: async ({ page }, use) => {
-    await use(new DescriptionPage(page));
   },
   drawerPage: async ({ page }, use) => {
     await use(new DrawerPage(page));
