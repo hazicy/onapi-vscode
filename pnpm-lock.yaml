@@ -230,15 +230,15 @@ importers:
       lodash:
         specifier: ^4.18.1
         version: 4.18.1
-      oxfmt:
-        specifier: 0.74.0
-        version: 0.74.0
       postman-code-generators:
         specifier: ^2.1.1
         version: 2.1.1
       postman-collection:
         specifier: ^5.3.1
         version: 5.3.1
+      prettier:
+        specifier: ^3.9.10
+        version: 3.9.10
     devDependencies:
       '@types/express':
         specifier: ^5.0.6
@@ -3802,6 +3802,11 @@ packages:
   powershell-utils@0.2.1:
     resolution: {integrity: sha512-C+y9x90UElAddDZmV4qOx9W53B61PO7cIqWz2dQsWlwswuq4mr8NEwytdGKboYbQlGZ3awrkTeNvcZiZNHnQ8A==}
     engines: {node: '>=20'}
+
+  prettier@3.9.10:
+    resolution: {integrity: sha512-skGHTH1Yb9QvaTC4hWnRTzEYtCpApF0UMBPz+t/0ZPzP8ihefo/btKd+QA7pUE0fEwA1SbS/NmhyEcstdXOIdA==}
+    engines: {node: '>=14'}
+    hasBin: true
 
   process-nextick-args@2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}
@@ -7769,6 +7774,8 @@ snapshots:
       punycode: 2.3.1
 
   powershell-utils@0.2.1: {}
+
+  prettier@3.9.10: {}
 
   process-nextick-args@2.0.1: {}
 

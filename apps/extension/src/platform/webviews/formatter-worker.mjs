@@ -1,9 +1,9 @@
 import { parentPort } from "node:worker_threads";
-import { format } from "oxfmt";
+import { format } from "prettier";
 
-const extensions = {
-  javascript: "js",
-  typescript: "ts",
+const parsers = {
+  javascript: "babel",
+  typescript: "typescript",
   json: "jsonc",
   json5: "json5",
   html: "html",
@@ -14,15 +14,13 @@ const extensions = {
 
 parentPort.on("message", async ({ requestId, source, language }) => {
   let value = source;
-  const extension = Object.hasOwn(extensions, language) && extensions[language];
-  if (extension && Buffer.byteLength(source) <= 5 * 1024 * 1024) {
+  const parser = Object.hasOwn(parsers, language) && parsers[language];
+  if (parser && Buffer.byteLength(source) <= 5 * 1024 * 1024) {
     try {
-      const result = await format(`document.${extension}`, source, {
+      value = await format(source, {
+        parser,
         embeddedLanguageFormatting: "off",
       });
-      if (!result.errors.length) {
-        value = result.code;
-      }
     } catch {
       // Unsupported or invalid input stays intact.
     }

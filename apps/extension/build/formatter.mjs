@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL("../../../", import.meta.url));
 
-// Preserve Oxfmt's dynamic imports and native bindings instead of bundling them.
+// Preserve Prettier's lazy parser loading in the packaged worker.
 export async function buildFormatter(outdir) {
   const destination = path.join(outdir, "formatter");
   const copied = new Set();
@@ -41,7 +41,7 @@ export async function buildFormatter(outdir) {
     }
   }
   await mkdir(destination, { recursive: true });
-  await copyPackage("oxfmt", path.join(root, "apps/extension/package.json"));
+  await copyPackage("prettier", path.join(root, "apps/extension/package.json"));
   await cp(
     path.join(
       root,

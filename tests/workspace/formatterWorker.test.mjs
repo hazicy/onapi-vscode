@@ -6,7 +6,7 @@ import path from "node:path";
 import { Worker } from "node:worker_threads";
 import { buildFormatter } from "../../apps/extension/build/formatter.mjs";
 
-test("packaged Oxfmt worker preserves data and correlates concurrent requests", async () => {
+test("packaged Prettier worker preserves data and correlates concurrent requests", async () => {
   const directory = await mkdtemp(path.join(os.tmpdir(), "onapi-format-test-"));
   let worker;
   try {
@@ -17,6 +17,11 @@ test("packaged Oxfmt worker preserves data and correlates concurrent requests", 
       ["html", "<html><body><div>Hello</div></body></html>", "html"],
       ["invalid", '{"a":', "json"],
       ["xml", "<root><item/></root>", "xml"],
+      ["javascript", "const x={a:1}", "javascript"],
+      ["typescript", "const x:number=1", "typescript"],
+      ["css", "body{color:red}", "css"],
+      ["graphql", "query{user{id}}", "graphql"],
+      ["yaml", "items: [one,two]", "yaml"],
       ["json5", "{name:'sample',items:[1,2,],}", "json5"],
     ];
     const results = await new Promise((resolve, reject) => {
@@ -43,6 +48,10 @@ test("packaged Oxfmt worker preserves data and correlates concurrent requests", 
     assert.match(results.get("json"), /\/\*keep\*\//);
     assert.match(results.get("html"), /\n/);
     assert.match(results.get("json5"), /sample/);
+    assert.match(results.get("javascript"), /const x = \{ a: 1 \};/);
+    assert.match(results.get("typescript"), /const x: number = 1;/);
+    for (const language of ["css", "graphql", "yaml"])
+      assert.match(results.get(language), /\n/);
     for (const [id, source] of cases.filter(([id]) =>
       ["invalid", "xml"].includes(id),
     ))
