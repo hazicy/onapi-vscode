@@ -1,3 +1,4 @@
+import type { TestingReportList } from "@onapi/contracts";
 import { expect } from "@playwright/test";
 import { test } from "./fixtures";
 import { generateScopedName } from "../../build/css-modules.mjs";
@@ -26,6 +27,41 @@ const requestInitialData = {
     response: [],
   },
 };
+
+const nativeReport = {
+  report_id: "test-report",
+  report_name: "Report",
+  startedAt: 1700000000000,
+  finishedAt: 1700000000100,
+  environmentName: "Local",
+  eventAllCount: 1,
+  testingConfig: {
+    env_id: "",
+    enable_request: -1,
+    execute_count: 1,
+    interval_time: 0,
+    ignore_error: 1,
+    enable_sandbox: -1,
+    iteration_data: [],
+    iterates_data_list: [],
+    iterates_data_id: "0",
+  },
+  events: [
+    {
+      type: "request",
+      cursor: { iteration: 0, position: 0 },
+      request: { method: "GET", url: "https://example.com/report-request" },
+      response: { code: 200, header: [], responseTime: 100 },
+    },
+    {
+      type: "assertion",
+      cursor: { iteration: 0, position: 0 },
+      assertions: [{ assertion: "Response is OK" }],
+    },
+    { type: "item", cursor: { iteration: 0, position: 0 } },
+    { type: "done" },
+  ],
+} satisfies TestingReportList;
 
 const componentClasses: Record<string, [string, string]> = {
   spinContent: ["shared/ui/base/Spin.module.css", "content"],
@@ -110,48 +146,53 @@ for (const panel of [
     );
     await page.goto("http://127.0.0.1:4180/loaded.html");
     await expect(webviewsPage.rootChildren).not.toHaveCount(0);
-    await page.evaluate((panel) => {
-      const send = (action: string, data: unknown) =>
-        window.postMessage({ action, data }, "*");
-      send("setUserConfig", {
-        currentProject: {
-          project_id: "-1",
-          team_id: "",
-          name: "Local Project",
-          authority: 3,
-          role: 1,
-          is_describe_library: 1,
-        },
-        currentTeam: { team_id: "-1", name: "Local Team" },
-        userInfo: {},
-      });
-      send("setProjectConfig", {});
-      send("setSystemConfig", { raw_parameter_pilot_bubble_switch: false });
-      if (["shareListPanel", "importDataPanel"].includes(panel)) {
-        send("setApiList", []);
-      }
-      if (panel === "folderTestPanel") {
-        send("setTestData", {
-          testingName: "Test Folder",
-          eventList: [],
-          reportList: [],
-          isInit: true,
+    await page.evaluate(
+      ({ panel, report }) => {
+        const send = (action: string, data: unknown) =>
+          window.postMessage({ action, data }, "*");
+        send("setUserConfig", {
+          currentProject: {
+            project_id: "-1",
+            team_id: "",
+            name: "Local Project",
+            authority: 3,
+            role: 1,
+            is_describe_library: 1,
+          },
+          currentTeam: { team_id: "-1", name: "Local Team" },
+          userInfo: {},
         });
-      }
-      if (panel === "folderTestReportPanel") {
-        send("setReportDetails", {
-          folderName: "Report",
-          requestList: [],
-          complete: {},
-          testingConfig: { name: "Report", runTimes: 1 },
-          eventAllCount: 0,
-        });
-      }
-    }, panel);
+        send("setProjectConfig", {});
+        send("setSystemConfig", { raw_parameter_pilot_bubble_switch: false });
+        if (["shareListPanel", "importDataPanel"].includes(panel)) {
+          send("setApiList", []);
+        }
+        if (panel === "folderTestPanel") {
+          send("setTestData", {
+            testingName: "Test Folder",
+            eventList: [],
+            reportList: [],
+            isInit: true,
+          });
+        }
+        if (panel === "folderTestReportPanel") {
+          send("setReportDetails", report);
+        }
+      },
+      { panel, report: nativeReport },
+    );
     if (panel === "folderTestReportPanel") {
       await expect(
         page.locator(`#root ${componentSelector("spinContent")}`).first(),
       ).toHaveAttribute("aria-busy", "false");
+      await expect(
+        page
+          .getByRole("tabpanel", { name: /^All/ })
+          .getByText("GET https://example.com/report-request", {
+            exact: true,
+          }),
+      ).toBeVisible();
+      await expect(page.getByText("100.00%", { exact: true })).toHaveCount(2);
     } else {
       await expect(
         page.locator(`#root ${componentSelector("skeleton")}`),
