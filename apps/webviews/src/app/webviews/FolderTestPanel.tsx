@@ -1,5 +1,5 @@
 import SharedComponentsProvider from "@/app/providers/SharedComponentsProvider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { App as BaseApp, Skeleton } from "@/shared/ui/base";
 import useGlobalTheme from "@/features/settings/hooks/useGlobalTheme";
@@ -17,7 +17,6 @@ import { useGlobal } from "@/app/store";
 import useTesting from "@/features/testing/store/useTesting";
 import { produce } from "immer";
 import { saveReport } from "@/features/testing/components/Testing/utils";
-import { isString } from "lodash-es";
 
 function FolderTestPanel() {
   const customTheme = useGlobalTheme();
@@ -37,28 +36,8 @@ function FolderTestPanel() {
   const updateShowReportList = useTesting(
     (store) => store?.updateShowReportList,
   );
-  const testingName = useTesting((store) => store?.testingName);
+  const [loaded, setLoaded] = useState(false);
   const updateVscodeTheme = useGlobal((store) => store.updateVscodeTheme);
-
-  useEffect(() => {
-    // First time get test data
-    window?.vscode.postMessage({
-      action: "getTestData",
-    });
-
-    window?.vscode.postMessage({
-      action: "getProjectConfig",
-    });
-
-    // Get global configuration
-    window?.vscode.postMessage({
-      action: "getSystemConfig",
-    });
-
-    window?.vscode.postMessage({
-      action: "getVscodeTheme",
-    });
-  }, []);
 
   useEffect(() => {
     const messageHandler = async (event: { data: any }) => {
@@ -82,7 +61,8 @@ function FolderTestPanel() {
           // Set report list
           reportList && updateTestingReportList(reportList);
           // Set test name
-          testingName && updateTestingName(testingName || "Test Folder");
+          updateTestingName(testingName || message.data.name || "Test Folder");
+          setLoaded(true);
 
           // Initialize page
           if (isInit) {
@@ -144,17 +124,33 @@ function FolderTestPanel() {
     };
   }, [testingSendingData]);
 
+  useEffect(() => {
+    // First time get test data
+    window?.vscode.postMessage({
+      action: "getTestData",
+    });
+
+    window?.vscode.postMessage({
+      action: "getProjectConfig",
+    });
+
+    // Get global configuration
+    window?.vscode.postMessage({
+      action: "getSystemConfig",
+    });
+
+    window?.vscode.postMessage({
+      action: "getVscodeTheme",
+    });
+  }, []);
+
   return (
     <SharedComponentsProvider>
       <BaseApp>
         <ThemeProvider theme={customTheme}>
           <GlobalThemeStyle />
           <GlobalStyle />
-          <Skeleton
-            active
-            paragraph={{ rows: 15 }}
-            loading={!isString(testingName) || !testingName}
-          >
+          <Skeleton active paragraph={{ rows: 15 }} loading={!loaded}>
             <Testing />
           </Skeleton>
         </ThemeProvider>

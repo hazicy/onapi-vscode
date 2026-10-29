@@ -21,7 +21,8 @@ export async function handelFolderTestMessage(
       panel.webview.postMessage({
         action: "setTestData",
         data: {
-          name: folder.name,
+          testingName: folder.name || "Test Folder",
+          isInit: message.action === "getTestData",
           collection: getExecutionCollection(context),
           options: {
             ...saved.options,
