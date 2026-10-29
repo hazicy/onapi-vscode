@@ -2,7 +2,7 @@ import { createFeaturePanel } from "../../platform/webviews/create-panel";
 import { globalConfig, PANEL_OPTIONS } from "../../app/config";
 import * as vscode from "vscode";
 import { showTabName } from "../../platform/host-utils";
-import { TestingReportList } from "@onapi/domain/testing/types/res/index";
+import type { TestingReportList } from "@onapi/contracts";
 import { handelFolderTestReportDataMessage } from "./folder-test-report-handler";
 
 export const createfolderTestReportDataPanel = (

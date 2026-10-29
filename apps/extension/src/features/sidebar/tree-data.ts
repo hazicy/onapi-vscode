@@ -1,6 +1,6 @@
 import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import { isHttpCollectionItem, requestUrl, requestMethod } from "@onapi/domain";
-import type { TestingReportList } from "@onapi/domain/testing/types/res/index";
+import type { TestingReportList } from "@onapi/contracts";
 import type { RequestHistoryEntry } from "../requests/request-history";
 
 export type SidebarTreeSection = "requests" | "tests" | "history";

@@ -1,3 +1,4 @@
+import type { TestingSendingData } from "@onapi/contracts";
 import styles from "./Main.module.css";
 import { useMemo } from "react";
 
@@ -16,7 +17,6 @@ import { Button, AppIcon, Upload } from "@/shared/ui";
 import {
   EventItem,
   TestingDetailData,
-  TestingSendingData,
 } from "@onapi/domain/testing/types/index";
 import { useMemoizedFn, useSafeState } from "ahooks";
 import { Settings } from "@onapi/domain/testing/types/common";
@@ -34,7 +34,7 @@ import { forEach, isArray } from "lodash-es";
 import clsx from "clsx";
 
 type MainProps = {
-  testingSendingData: Partial<TestingSendingData>;
+  testingSendingData: TestingSendingData;
   testingConfig: Settings;
   eventList: EventItem[];
   eventAllCount: number;
@@ -299,14 +299,14 @@ const Main = ({
   };
   const testingListLoading = useMemo(() => {
     if (
-      isArray(testingSendingData.requestList) &&
-      testingSendingData.requestList.length <= 0 &&
-      ["sendOver", "sending"].includes(testingSendingData?.sendStatus || "")
+      isArray(testingSendingData.events) &&
+      testingSendingData.events.length <= 0 &&
+      testingSendingData?.sendStatus === "sending"
     ) {
       return true;
     }
     return false;
-  }, [testingSendingData.requestList, testingSendingData?.sendStatus]);
+  }, [testingSendingData.events, testingSendingData?.sendStatus]);
 
   return (
     <div className={styles.container}>
@@ -331,11 +331,7 @@ const Main = ({
       ) ? (
         <Skeleton active loading={testingListLoading}>
           <div className={styles.resultList}>
-            <TestingList
-              testingConfig={testingConfig}
-              eventAllCount={eventAllCount}
-              list={testingSendingData.requestList || []}
-            />
+            <TestingList events={testingSendingData.events} />
           </div>
         </Skeleton>
       ) : (

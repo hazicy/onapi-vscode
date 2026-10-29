@@ -97,15 +97,6 @@ export type TestingDataListItem = {
   data_list: { env_id: string; data: any[] }[];
 };
 
-export interface TestingSendingData {
-  /**Send status */
-  sendStatus: "initial" | "sending" | "sendError" | "sendOver";
-  /**Send result */
-  requestList: any[];
-  /**Completion info */
-  complete: any;
-}
-
 export type RuntimeResponse = Pick<
   ApiSendResponseData,
   "console" | "request" | "response" | "assertions"

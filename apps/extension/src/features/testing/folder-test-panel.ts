@@ -1,10 +1,10 @@
 import { getCurrentProjectConfig } from "../../platform/storage/project-config";
-import { getExecutionCollection } from "../requests/execution/http-runner";
 import { createFeaturePanel } from "../../platform/webviews/create-panel";
 import { stopWorker } from "../requests/execution/http-runner";
 import { globalConfig, PANEL_OPTIONS } from "../../app/config";
 import * as vscode from "vscode";
-import { getTestingFolderData, getTestingFolderName } from "./report-storage";
+import { getFolderTestPageData } from "./folder-test-data";
+import { getTestingFolderName } from "./report-storage";
 import { showTabName } from "../../platform/host-utils";
 import { handelFolderTestMessage } from "./folder-test-handler";
 import { ApiDetailsData } from "@onapi/domain/requests/types/api";
@@ -34,12 +34,7 @@ export const createFolderTestPanel = (
         isInit: true,
         showReportList: openHistoryReport,
         testingName: data.name, // Test name
-        collection: getExecutionCollection(context),
-        options: {
-          entrypoint: { execute: data.id, lookupStrategy: "idOrName" },
-        },
-        reportList: [], // Report list
-        ...(getTestingFolderData(data.id, context) || {}),
+        ...getFolderTestPageData(data.id, context),
       },
     });
 

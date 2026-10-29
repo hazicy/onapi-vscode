@@ -28,7 +28,6 @@ function FolderTestPanel() {
     (state) => state.updateProjectConfig,
   );
   const updateEventList = useTesting((store) => store?.updateEventList);
-  const testingSendingData = useTesting((store) => store?.testingSendingData);
   const updateTestingSendingData = useTesting(
     (store) => store?.updateTestingSendingData,
   );
@@ -42,6 +41,7 @@ function FolderTestPanel() {
   useEffect(() => {
     const messageHandler = async (event: { data: any }) => {
       const message = event.data; // The JSON data our extension sent
+      const { testingSendingData } = useTesting.getState();
 
       switch (message.action) {
         case "setTestData":
@@ -61,7 +61,7 @@ function FolderTestPanel() {
           // Set report list
           reportList && updateTestingReportList(reportList);
           // Set test name
-          updateTestingName(testingName || message.data.name || "Test Folder");
+          updateTestingName(testingName || "Test Folder");
           setLoaded(true);
 
           // Initialize page
@@ -69,9 +69,10 @@ function FolderTestPanel() {
             const newTestingSendingData = produce(
               testingSendingData,
               (draft: any) => {
-                draft.requestList = [];
+                draft.events = [];
                 draft.sendStatus = "initial";
-                draft.complete = {};
+                delete draft.startedAt;
+                delete draft.finishedAt;
               },
             );
             updateTestingSendingData(newTestingSendingData);
@@ -79,31 +80,28 @@ function FolderTestPanel() {
 
           updateShowReportList(Boolean(showReportList));
           break;
-        case "sendEventList":
-          const result = message.data;
-          if (result.action === "request") {
-            const newTestingSendingData = produce(
-              testingSendingData,
-              (draft: any) => {
-                draft.requestList.push(result.data);
-              },
-            );
-            updateTestingSendingData(newTestingSendingData);
+        case "folderTestStarted":
+          updateTestingSendingData({
+            ...testingSendingData,
+            environmentName: message.data.environmentName,
+          });
+          break;
+        case "folderTestEvent": {
+          if (testingSendingData.sendStatus !== "sending") {
+            break;
           }
-          if (result.action === "complete") {
-            const newTestingSendingData = produce(
-              testingSendingData,
-              (draft) => {
-                draft.sendStatus = "sendOver";
-                draft.complete = result.data;
-              },
-            );
-            updateTestingSendingData(newTestingSendingData);
-
-            // Save test report
-            saveReport(result.data);
+          const done = message.data.type === "done";
+          updateTestingSendingData({
+            ...testingSendingData,
+            events: [...testingSendingData.events, message.data],
+            sendStatus: done ? "sendOver" : "sending",
+            ...(done ? { finishedAt: Date.now() } : {}),
+          });
+          if (done) {
+            saveReport();
           }
           break;
+        }
         case "setProjectConfig":
           updateProjectConfig({ ...message.data });
           break;
@@ -122,7 +120,7 @@ function FolderTestPanel() {
     return () => {
       window.removeEventListener("message", messageHandler);
     };
-  }, [testingSendingData]);
+  }, []);
 
   useEffect(() => {
     // First time get test data

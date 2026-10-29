@@ -60,3 +60,5 @@ export type WorkerRunCommand = {
 };
 
 export * from "./execution";
+
+export * from "./testing";

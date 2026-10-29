@@ -1,3 +1,4 @@
+import type { TestingSendingData, TestingReportList } from "@onapi/contracts";
 import { ADD_CASE_DEFAULT } from "@onapi/domain/testing/constants/default/index";
 import { create } from "@/shared/state/store";
 
@@ -6,16 +7,12 @@ import {
   TestingData,
   TestingDataListItem,
   TestingDetailData,
-  TestingSendingData,
 } from "@onapi/domain/testing/types/index";
 import {
   RunnerTestingItem,
   Settings,
 } from "@onapi/domain/testing/types/common";
-import {
-  TestingReportList,
-  TestingReportListRes,
-} from "@onapi/domain/testing/types/res/index";
+import { TestingReportListRes } from "@onapi/domain/testing/types/res/index";
 
 type State = {
   // raw base data flat list
@@ -26,7 +23,7 @@ type State = {
   testingDetailsData: { [x: string]: TestingDetailData };
 
   // test run result data
-  testingSendingData: Partial<TestingSendingData>;
+  testingSendingData: TestingSendingData;
 
   // test report list
   testingReportList: TestingReportList[];
@@ -148,7 +145,7 @@ const useTesting = create<State & Action>()((set) => ({
   testingReportData: {},
   projectTestingReportList: [],
   runnerTestingList: [],
-  testingSendingData: {},
+  testingSendingData: { sendStatus: "initial", events: [] },
   saveLoading: false,
   treeLoading: true,
   detailLoading: false,

@@ -1,5 +1,3 @@
-import { Settings } from "@onapi/domain/testing/types/common";
-
 export type TrashListRes = {
   /**Deletion time */
   deleted_at: string;
@@ -32,15 +30,6 @@ export type TrashListRes = {
     uid: string;
   };
   children?: TrashListRes[];
-};
-
-export type TestingReportList = {
-  report_id: string;
-  complete: any;
-  requestList: any[];
-  eventAllCount: number;
-  report_name: string;
-  testingConfig: Settings;
 };
 
 /**

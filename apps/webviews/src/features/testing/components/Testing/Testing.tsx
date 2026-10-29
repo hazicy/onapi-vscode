@@ -46,8 +46,8 @@ const Testing = () => {
         // Set sending status
         updateTestingSendingData({
           sendStatus: "sending",
-          complete: {},
-          requestList: [],
+          events: [],
+          startedAt: Date.now(),
         });
 
         window?.vscode.postMessage({
@@ -73,8 +73,9 @@ const Testing = () => {
         // Clear results and return to initial state
         const overTestingSendingData = produce(testingSendingData, (draft) => {
           draft.sendStatus = "initial";
-          draft.complete = {};
-          draft.requestList = [];
+          draft.events = [];
+          delete draft.startedAt;
+          delete draft.finishedAt;
         });
         updateTestingSendingData(overTestingSendingData);
 
@@ -104,8 +105,8 @@ const Testing = () => {
         // Set sending status
         updateTestingSendingData({
           sendStatus: "sending",
-          complete: {},
-          requestList: [],
+          events: [],
+          startedAt: Date.now(),
         });
 
         window?.vscode.postMessage({

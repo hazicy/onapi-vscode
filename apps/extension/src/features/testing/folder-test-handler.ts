@@ -1,10 +1,9 @@
-import { getExecutionCollection } from "../requests/execution/http-runner";
-import { relayExecutionEvent } from "../../platform/execution/webview-relay";
 import * as vscode from "vscode";
-import { runCollection, stopWorker } from "../requests/execution/http-runner";
+import { stopWorker } from "../requests/execution/http-runner";
 import { getCurrentProjectConfig } from "../../platform/storage/project-config";
-import { getApiListName } from "../requests/request-storage";
-import { getTestingFolderData, setTestingFolderData } from "./report-storage";
+import { getFolderTestPageData } from "./folder-test-data";
+import { runFolderTest } from "./folder-test-runner";
+import { setTestingFolderData } from "./report-storage";
 import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
 export async function handelFolderTestMessage(
@@ -14,7 +13,6 @@ export async function handelFolderTestMessage(
   folder: ApiDetailsData,
   openHistoryReport: boolean,
 ) {
-  const saved = getTestingFolderData(folder.id, context) || {};
   switch (message.action) {
     case "getTestData":
     case "refreshEventList":
@@ -23,65 +21,26 @@ export async function handelFolderTestMessage(
         data: {
           testingName: folder.name || "Test Folder",
           isInit: message.action === "getTestData",
-          collection: getExecutionCollection(context),
-          options: {
-            ...saved.options,
-            entrypoint: {
-              execute: folder.id,
-              lookupStrategy: "idOrName",
-            },
-          },
-          reportList: saved.reportList || [],
+          ...getFolderTestPageData(folder.id, context),
           showReportList: openHistoryReport,
         },
       });
       break;
-    case "runPostmanCollection": {
-      const workspace = getApiListName(context);
-      const events: any[] = [];
-      const startedAt = Date.now();
-      try {
-        await runCollection(
-          message.data.collection,
-          message.data.options,
-          context,
-          (event) => {
-            if ("native" in event.event) {
-              events.push(event.event.native);
-            }
-            relayExecutionEvent(panel.webview, event);
-          },
-          panel,
-        );
-        if (getApiListName(context) !== workspace) {
-          return;
-        }
-        const latest = getTestingFolderData(folder.id, context) || {};
-        const report = {
-          report_id: crypto.randomUUID(),
-          report_name: folder.name,
-          startedAt,
-          finishedAt: Date.now(),
-          events,
-        };
-        const reportList = [report, ...(latest.reportList || [])];
-        const persisted = await setTestingFolderData(
-          folder.id,
-          { ...latest, options: message.data.options, reportList },
-          context,
-        );
-        if (!persisted) {
-          throw new Error("Failed to save test report");
-        }
-        panel.webview.postMessage({
-          action: "postmanReports",
-          data: reportList,
-        });
-      } catch (error: any) {
-        console.error(error); // The execution service already published the failure.
-      }
+    case "saveFolderTestData":
+      await setTestingFolderData(
+        folder.id,
+        {
+          ...(message.data.config ? { config: message.data.config } : {}),
+          ...(Array.isArray(message.data.reportList)
+            ? { reportList: message.data.reportList }
+            : {}),
+        },
+        context,
+      );
       break;
-    }
+    case "sendEventList":
+      await runFolderTest(folder.id, message.data, context, panel);
+      break;
     case "stopSendEventList":
       stopWorker(panel);
       break;

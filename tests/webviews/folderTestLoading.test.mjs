@@ -10,17 +10,21 @@ test("folder test bootstrap delivers its name and initializes run state", async 
       if (id === "vscode") return {};
       if (id.endsWith("/http-runner"))
         return {
-          getExecutionCollection: () => ({ item: [] }),
-          runCollection() {},
           stopWorker() {},
         };
-      if (id.endsWith("/webview-relay")) return { relayExecutionEvent() {} };
       if (id.endsWith("/project-config"))
         return { getCurrentProjectConfig() {} };
-      if (id.endsWith("/request-storage")) return { getApiListName() {} };
+      if (id === "./folder-test-data")
+        return {
+          getFolderTestPageData: () => ({
+            eventList: [],
+            config: {},
+            reportList: [],
+          }),
+        };
+      if (id === "./folder-test-runner") return { runFolderTest() {} };
       if (id === "./report-storage")
         return {
-          getTestingFolderData: () => ({}),
           setTestingFolderData() {},
         };
       throw new Error(id);
@@ -51,17 +55,14 @@ test("folder test bootstrap delivers its name and initializes run state", async 
   assert.equal(messages.at(-1).data.isInit, false);
 });
 
-for (const payload of [
-  { testingName: "API tests" },
-  { name: "Legacy tests" },
-  {},
-]) {
+for (const payload of [{ testingName: "API tests" }, {}]) {
   test(`folder test receives immediate bootstrap responses (${JSON.stringify(payload)})`, async () => {
     const effects = [];
     let listener;
     let loaded = false;
     let name;
     let initialized;
+    let saved = 0;
     const state = {
       testingSendingData: {},
       updateTestingName: (value) => {
@@ -69,10 +70,12 @@ for (const payload of [
       },
       updateTestingSendingData: (value) => {
         initialized = value;
+        state.testingSendingData = value;
       },
       updateShowReportList() {},
     };
     const store = (selector) => selector(state);
+    store.getState = () => state;
     await load(
       "apps/webviews/src/app/webviews/FolderTestPanel.tsx",
       (id) => {
@@ -110,7 +113,12 @@ for (const payload of [
               return draft;
             },
           };
-        if (id.endsWith("/utils")) return { saveReport() {} };
+        if (id.endsWith("/utils"))
+          return {
+            saveReport() {
+              saved++;
+            },
+          };
         if (id === "@/shared/ui/base") return { App() {}, Skeleton() {} };
         if (id.endsWith("/Theme")) return { ThemeProvider() {} };
         return { default() {} };
@@ -140,7 +148,31 @@ for (const payload of [
     );
     for (const effect of effects) effect();
     assert.equal(loaded, true);
-    assert.equal(name, payload.testingName || payload.name || "Test Folder");
+    assert.equal(name, payload.testingName || "Test Folder");
     assert.equal(initialized.sendStatus, "initial");
+    state.testingSendingData = {
+      sendStatus: "sending",
+      events: [],
+      startedAt: 1,
+    };
+    const request = {
+      type: "request",
+      cursor: { iteration: 0, position: 0 },
+      request: { method: "GET", url: "https://example.com" },
+    };
+    const assertion = { type: "assertion", assertions: [{ assertion: "OK" }] };
+    for (const event of [request, assertion, { type: "done" }]) {
+      await listener({ data: { action: "folderTestEvent", data: event } });
+    }
+    assert.equal(initialized.events.length, 3);
+    assert.equal(initialized.events[0], request);
+    assert.equal(initialized.events[1], assertion);
+    assert.equal(initialized.sendStatus, "sendOver");
+    assert.equal(typeof initialized.finishedAt, "number");
+    assert.equal(saved, 1);
+    await listener({
+      data: { action: "folderTestEvent", data: { type: "done" } },
+    });
+    assert.equal(saved, 1);
   });
 }

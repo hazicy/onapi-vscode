@@ -14,7 +14,7 @@ import GlobalStyle from "../../shared/theme/globalStyle";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import useTesting from "@/features/testing/store/useTesting";
-import { TestingReportList } from "@onapi/domain/testing/types/res/index";
+import type { TestingReportList } from "@onapi/contracts";
 import { useTranslation } from "react-i18next";
 
 function FolderTestPanel() {

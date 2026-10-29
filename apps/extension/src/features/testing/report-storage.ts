@@ -1,4 +1,5 @@
 import { forEach, isArray, isPlainObject } from "lodash";
+import type { TestingReportList } from "@onapi/contracts";
 import * as vscode from "vscode";
 import {
   getDataFromGlobalStorage,
@@ -88,7 +89,9 @@ export const getProjectReportList = (context: vscode.ExtensionContext) => {
     if (isPlainObject(projectTestData)) {
       forEach(projectTestData, (_val, key) => {
         if (isArray(projectTestData[key]?.reportList)) {
-          reslut = reslut.concat(projectTestData[key].reportList);
+          reslut = reslut.concat(
+            getNativeTestReports(projectTestData[key].reportList),
+          );
         }
       });
     }
@@ -130,3 +133,18 @@ export const deleteTestingFoldersData = async (
     },
   );
 };
+
+export function getNativeTestReports(value: unknown): TestingReportList[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value.filter(
+    (report) =>
+      report &&
+      Array.isArray(report.events) &&
+      typeof report.startedAt === "number" &&
+      typeof report.finishedAt === "number" &&
+      report.testingConfig &&
+      typeof report.eventAllCount === "number",
+  );
+}

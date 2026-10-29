@@ -1,6 +1,6 @@
 import styles from "./ReportDetails.module.css";
 
-import { TestingReportList } from "@onapi/domain/testing/types/res/index";
+import type { TestingReportList } from "@onapi/contracts";
 import TestingMain from "@/features/testing/components/Testing/Main/Main";
 
 type ReportDetailsProps = {
@@ -14,8 +14,10 @@ const ReportDetails = ({ reportDetails }: ReportDetailsProps) => {
         is_report={true}
         testingSendingData={{
           sendStatus: "sendOver",
-          requestList: reportDetails?.requestList || [],
-          complete: reportDetails?.complete || {},
+          events: reportDetails.events,
+          startedAt: reportDetails.startedAt,
+          finishedAt: reportDetails.finishedAt,
+          environmentName: reportDetails.environmentName,
         }}
         testingConfig={reportDetails.testingConfig}
         eventList={[]}

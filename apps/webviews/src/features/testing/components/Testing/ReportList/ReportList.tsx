@@ -11,13 +11,13 @@ import { ColumnsType } from "@/shared/components/BasicTable/types";
 import Button from "@/shared/ui/Button";
 import Empty from "@/shared/ui/Empty";
 import Tooltip from "@/shared/ui/Tooltip";
-import { TestingReportList } from "@onapi/domain/testing/types/res/index";
+import type { TestingReportList } from "@onapi/contracts";
 import { formatTimeToDateTimeLong } from "@onapi/domain/utils/time";
 
 import Result from "./Result";
 
 import useTesting from "@/features/testing/store/useTesting";
-import { getPercent } from "../utils";
+import { nativeStatistics } from "@/features/testing/utils/native-results";
 import { produce } from "immer";
 
 const Report = () => {
@@ -60,36 +60,34 @@ const Report = () => {
         width: 100,
         title: t("report_list.environment"),
         ellipsis: true,
-        dataIndex: "complete",
-        render: (value) => renderItem(value.env_name),
+        dataIndex: "environmentName",
+        render: (value) => renderItem(value),
       },
       {
         width: 100,
         title: t("report_list.pass_rate"),
-        dataIndex: "complete",
-        render: (value) =>
-          renderItem(getPercent(value.http.success, value.http)),
+        dataIndex: "events",
+        render: (value) => renderItem(nativeStatistics(value).requestRate),
       },
       {
         width: 100,
         title: t("report_list.assertion_rate"),
-        dataIndex: "complete",
-        render: (value) =>
-          renderItem(getPercent(value.assert.success, value.assert)),
+        dataIndex: "events",
+        render: (value) => renderItem(nativeStatistics(value).assertionRate),
       },
       {
         width: 160,
         title: t("report_list.start_time"),
-        dataIndex: "complete",
+        dataIndex: "startedAt",
         render: (value) =>
-          value ? renderItem(formatTimeToDateTimeLong(value.start_at)) : "",
+          value ? renderItem(formatTimeToDateTimeLong(value)) : "",
       },
       {
         width: 160,
         title: t("report_list.end_time"),
-        dataIndex: "complete",
+        dataIndex: "finishedAt",
         render: (value) =>
-          value ? renderItem(formatTimeToDateTimeLong(value.end_at)) : "",
+          value ? renderItem(formatTimeToDateTimeLong(value)) : "",
       },
       {
         width: 140,
@@ -148,9 +146,7 @@ const Report = () => {
   const dataSource = useMemo(() => {
     if (isArray(testingReportList) && testingReportList.length > 0) {
       const newData = cloneDeep(testingReportList);
-      return newData.sort(
-        (a, b) => b?.complete?.start_at - a?.complete?.start_at,
-      );
+      return newData.sort((a, b) => b.startedAt - a.startedAt);
     }
     return [];
   }, [testingReportList]);

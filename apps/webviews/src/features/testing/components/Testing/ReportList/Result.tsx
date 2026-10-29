@@ -1,3 +1,4 @@
+import type { TestingReportList } from "@onapi/contracts";
 import { useTranslation } from "react-i18next";
 import Drawer from "@/shared/ui/Drawer";
 import { Modal } from "@/shared/ui/Modal";
@@ -5,7 +6,7 @@ import TestingMain from "../Main/Main";
 
 type ResultProps = {
   /** Report data to open */
-  data: any;
+  data: TestingReportList;
   /** Whether the drawer is open */
   open: boolean;
   /** Close event handler */
@@ -24,7 +25,7 @@ const Result = ({ data, open, onClose }: ResultProps) => {
     <>
       <Drawer
         destroyOnClose
-        title={data?.folderName || t("report_detail.title")}
+        title={data.report_name || t("report_detail.title")}
         open={open}
         onClose={() => handleOnClose()}
       >
@@ -32,8 +33,10 @@ const Result = ({ data, open, onClose }: ResultProps) => {
           is_report={true}
           testingSendingData={{
             sendStatus: "sendOver",
-            requestList: data?.requestList || [],
-            complete: data?.complete || {},
+            events: data.events,
+            startedAt: data.startedAt,
+            finishedAt: data.finishedAt,
+            environmentName: data.environmentName,
           }}
           testingConfig={data.testingConfig}
           eventList={[]}
