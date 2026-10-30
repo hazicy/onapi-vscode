@@ -1,4 +1,19 @@
 {
+  "interaction": {
+    "importFailed": "Import failed",
+    "importing": "Importing…",
+    "exportFailed": "Export failed",
+    "export_preparing": "Preparing export…",
+    "export_choosingLocation": "Choose a location in the save dialog…",
+    "export_saving": "Saving file…",
+    "export_complete": "Export complete",
+    "export_cancelled": "Save cancelled. Your export options have been kept.",
+    "export_error": "Export failed",
+    "environment": "Environment",
+    "noEnvironment": "No environment",
+    "environmentMissing": "Environment unavailable",
+    "environmentMissingHint": "The selected environment no longer exists. No environment variables will be applied. Select another environment."
+  },
   "base": {
     "drawer": "Drawer",
     "close": "Close",

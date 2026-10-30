@@ -16,7 +16,7 @@ import { IMPORT_TYPE_ENUM } from "@onapi/domain/settings/constants/settings";
 import { fromPostmanCollection, createDefaultHttpConfig } from "@onapi/domain";
 
 export async function handelImportDataMessage(
-  message: { action: string; data: any },
+  message: { action: string; data: any; requestId?: string },
   context: vscode.ExtensionContext,
   _data: any,
 ) {
@@ -76,73 +76,100 @@ export async function handelImportDataMessage(
         const data = { models: [], envs: [], ...result.data };
         panel?.webview.postMessage({
           action: "setImportData",
+          requestId: message.requestId,
           type: data.apis?.length ? "select_apis" : "select_envs",
           data,
         });
       } catch (error: any) {
-        vscode.window.showErrorMessage(error.message);
+        panel?.webview.postMessage({
+          action: "importError",
+          requestId: message.requestId,
+          data: error.message || String(error),
+        });
       }
       break;
     }
     case "importData": {
-      const {
-        newApis = [],
-        newEnvs = [],
-        chooseFolder = "0",
-        http,
-      } = message.data;
-      const rows = getApiList(context);
-      if (
-        chooseFolder !== "0" &&
-        !rows.some((row) => row.id === chooseFolder)
-      ) {
-        vscode.window.showErrorMessage(
-          "The selected directory has been deleted",
-        );
+      try {
+        const {
+          newApis = [],
+          newEnvs = [],
+          chooseFolder = "0",
+          http,
+        } = message.data;
+        const rows = getApiList(context);
+        if (
+          chooseFolder !== "0" &&
+          !rows.some((row) => row.id === chooseFolder)
+        ) {
+          throw new Error(
+            "The selected directory has been deleted. Choose another directory and retry.",
+          );
+        }
+        const config = getCurrentProjectConfig(context);
+        const settings = config.http || createDefaultHttpConfig();
+        const imported = structuredClone(newApis);
+        // The imported root is a native folder, preserving its auth, scripts and variables.
+        if (http?.collection && imported.length) {
+          const root = http.collection;
+          const id = crypto.randomUUID();
+          imported.forEach((row: any) => {
+            if (!row.parentId || row.parentId === "0") {
+              row.parentId = id;
+            }
+          });
+          imported.unshift({
+            id,
+            kind: "folder",
+            parentId: chooseFolder,
+            name: root.info?.name || "Imported collection",
+            auth: root.auth,
+            event: root.event,
+            variable: root.variable,
+          });
+        } else {
+          imported.forEach((row: any) => {
+            if (!row.parentId || row.parentId === "0") {
+              row.parentId = chooseFolder;
+            }
+          });
+        }
+        const saved = {
+          ...settings,
+          environments: [
+            ...settings.environments.filter(
+              (scope) =>
+                !newEnvs.some(
+                  (env: any) => (env.id || env.env_id) === scope.id,
+                ),
+            ),
+            ...newEnvs,
+          ],
+        };
+        if (!(await setProjectConfig(context, { ...config, http: saved }))) {
+          throw new Error(
+            "Failed to save imported environments. Please retry.",
+          );
+        }
+        if (
+          !(await updateApiList(context, (latest) => [...latest, ...imported]))
+        ) {
+          throw new Error("Failed to save imported requests. Please retry.");
+        }
+        vscode.window.showInformationMessage("Import Successful");
+        panel?.webview.postMessage({
+          action: "importComplete",
+          requestId: message.requestId,
+        });
+        panel?.dispose();
+      } catch (error) {
+        panel?.webview.postMessage({
+          action: "importError",
+          requestId: message.requestId,
+          data: error instanceof Error ? error.message : String(error),
+        });
         return false;
       }
-      const config = getCurrentProjectConfig(context);
-      const settings = config.http || createDefaultHttpConfig();
-      const imported = structuredClone(newApis);
-      // The imported root is a native folder, preserving its auth, scripts and variables.
-      if (http?.collection && imported.length) {
-        const root = http.collection;
-        const id = crypto.randomUUID();
-        imported.forEach((row: any) => {
-          if (!row.parentId || row.parentId === "0") {
-            row.parentId = id;
-          }
-        });
-        imported.unshift({
-          id,
-          kind: "folder",
-          parentId: chooseFolder,
-          name: root.info?.name || "Imported collection",
-          auth: root.auth,
-          event: root.event,
-          variable: root.variable,
-        });
-      } else {
-        imported.forEach((row: any) => {
-          if (!row.parentId || row.parentId === "0") {
-            row.parentId = chooseFolder;
-          }
-        });
-      }
-      const saved = {
-        ...settings,
-        environments: [...settings.environments, ...newEnvs],
-      };
-      if (!(await setProjectConfig(context, { ...config, http: saved }))) {
-        return false;
-      }
-      if (
-        !(await updateApiList(context, (latest) => [...latest, ...imported]))
-      ) {
-        return false;
-      }
-      vscode.window.showInformationMessage("Import Successful");
-      panel?.dispose();
       break;
     }
     case "importPostmanCollection":

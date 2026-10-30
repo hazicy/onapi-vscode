@@ -1,7 +1,7 @@
 import type { ImportOptions } from "./ImportContent/options";
 import styles2 from "./ImportApiPreview.module.css";
 import { Modal } from "@/shared/ui/base";
-import { Spin } from "@/shared/ui/base";
+import { Alert, Spin } from "@/shared/ui/base";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -42,6 +42,7 @@ interface Props {
   open: boolean;
   onCancel: () => void;
   loading: boolean;
+  error?: string;
   data: {
     apis: ApiDetailsData[];
     models: IDataModel[];
@@ -65,6 +66,7 @@ const Index = ({
   onCancel,
   data,
   loading,
+  error,
   onProjectImport,
   importLocation,
   fileType,
@@ -463,6 +465,8 @@ const Index = ({
       destroyOnClose
       title={t("common.api_tab.preview")}
       onCancel={onCancel}
+      closable={!loading}
+      keyboard={!loading}
       styles={{
         body: {
           minHeight: 505,
@@ -474,22 +478,37 @@ const Index = ({
             {t("common.import_modal.import_tip")}
           </Typography.Text>
           <Button
-            disabled={loading}
+            loading={loading}
+            aria-label={t(
+              loading
+                ? "interaction.importing"
+                : "settings.synchronize.import_now_tip_confirm",
+            )}
+            aria-busy={loading}
             onClick={() => onProjectImport()}
             type="primary"
           >
-            {t("settings.synchronize.import_now_tip_confirm")}
+            {t(
+              loading
+                ? "interaction.importing"
+                : "settings.synchronize.import_now_tip_confirm",
+            )}
           </Button>
         </Flex>
       }
       open={open}
       className={styles2.container}
     >
-      {loading ? (
-        <Spin spinning className={styles2.loading} />
-      ) : (
-        <Tabs items={items} />
+      {error && (
+        <Alert
+          type="error"
+          message={t("interaction.importFailed")}
+          description={error}
+        />
       )}
+      <Spin spinning={loading} tip={t("interaction.importing")}>
+        <Tabs items={items} />
+      </Spin>
     </Modal>
   );
 };

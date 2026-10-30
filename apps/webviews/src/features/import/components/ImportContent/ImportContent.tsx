@@ -1,11 +1,11 @@
 import styles from "./ImportContent.module.css";
 import clsx from "clsx";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 import useTheme from "@/shared/hooks/useTheme";
 
-import { Flex, Input, Switch, Upload, message } from "@/shared/ui/base";
+import { Alert, Flex, Input, Switch, Upload } from "@/shared/ui/base";
 import type { RcFile, UploadChangeParam } from "@/shared/ui/base";
 
 import JSON5 from "json5";
@@ -76,82 +76,141 @@ const Index = ({
     return "application/json";
   }, [fileType]);
 
-  const handleBeforeUpload = useCallback((file: File) => {
-    if (!(file?.type === "application/json" || file?.type === "")) {
-      message.error(t("supplement.upload_right_file"));
-      return false;
-    }
-    setImportLoading && setImportLoading(true);
-    // Return false directly to prevent auto upload (only used as selector)
-    return false;
-  }, []);
+  const [error, setError] = useState("");
+  const pendingPreview = useRef("");
+  const pendingImport = useRef("");
 
-  const handleFileChange = async (info: UploadChangeParam) => {
-    const file = info?.file?.originFileObj;
-    if (info?.file.status === "removed") {
-      setPreviewData({ apis: [], models: [], envs: [] });
-    } else if (file) {
-      const reader = new FileReader();
-      reader.onerror = async () => {
-        setImportLoading && setImportLoading(false);
-        // Force reset after processing file
-        setUploadKey(Date.now());
-      };
-      reader.onload = async () => {
-        const text = String(reader.result) || "";
-        await completePreviewData(file?.name, text);
-        setImportLoading && setImportLoading(false);
-        // Force reset after processing file
-        setUploadKey(Date.now());
-      };
-      setImportLoading && setImportLoading(true);
-
-      if ("text" in file) {
-        try {
-          const content = await file.text(); // Native async API
-          setTimeout(async () => {
-            await completePreviewData(file?.name, content);
-            setImportLoading && setImportLoading(false);
-            // Force reset after processing file
-            setUploadKey(Date.now());
-          }, 100);
-        } catch (error) {}
-      } else {
-        reader.readAsText(file);
-      }
-    }
+  const fail = (error: unknown) => {
+    setError(error instanceof Error ? error.message : String(error));
+    setPreviewLoading(false);
+    setImportLoading?.(false);
   };
 
-  const completePreviewData = async (_fileName: string, text: string) => {
-    try {
-      setPreviewLoading(true);
-      const formData = options;
+  useEffect(() => {
+    setError("");
+    setPreviewLoading(false);
+    setImportLoading?.(false);
+    const receive = ({ data: response }: MessageEvent) => {
+      if (!response?.requestId) {
+        return;
+      }
+      if (response.requestId === pendingPreview.current) {
+        if (response.action === "setImportData") {
+          const data = response.data;
+          data.envs = (data.envs || []).map((env: any) => ({
+            ...env,
+            env_id: env.env_id || env.id,
+          }));
+          setPreviewData(data);
+          setPreviewSelectData({
+            apis:
+              response.type === "select_envs"
+                ? []
+                : (data.apis || []).map((api: any) => api.id),
+            models:
+              response.type === "select_envs"
+                ? []
+                : (data.models || []).map((model: any) => model.model_id),
+            envs:
+              response.type === "select_envs"
+                ? data.envs.map((env: any) => env.env_id)
+                : [],
+          });
+          setPreview(true);
+          setPreviewLoading(false);
+          setImportLoading?.(false);
+          pendingPreview.current = "";
+        } else if (response.action === "importError") {
+          fail(response.data);
+          pendingPreview.current = "";
+        }
+      } else if (response.requestId === pendingImport.current) {
+        if (response.action === "importComplete") {
+          pendingImport.current = "";
+          setPreviewLoading(false);
+          setImportLoading?.(false);
+          setPreview(false);
+          onCancel?.();
+        } else if (response.action === "importError") {
+          pendingImport.current = "";
+          fail(response.data);
+        }
+      }
+    };
+    window.addEventListener("message", receive);
+    return () => {
+      window.removeEventListener("message", receive);
+      pendingPreview.current = "";
+      pendingImport.current = "";
+    };
+  }, [fileType]);
 
-      window?.vscode.postMessage({
-        action: "getImportData",
-        data: { json: JSON5.parse(text), fileType, formData },
-      });
-    } catch (err) {
-      setPreviewLoading(false);
+  const requestPreview = (json: unknown, requestId = crypto.randomUUID()) => {
+    pendingPreview.current = requestId;
+    setError("");
+    setPreviewLoading(true);
+    setImportLoading?.(true);
+    window.vscode.postMessage({
+      action: "getImportData",
+      requestId,
+      data: { json, fileType, formData: options },
+    });
+  };
+
+  const handleBeforeUpload = (file: File) => {
+    if (file.type && file.type !== "application/json") {
+      fail(new Error(t("supplement.upload_right_file")));
+    }
+    return false;
+  };
+
+  const handleFileChange = async (info: UploadChangeParam) => {
+    const file = info.file?.originFileObj;
+    if (info.file?.status === "removed") {
+      setPreviewData({ apis: [], models: [], envs: [] });
+      return;
+    }
+    if (!file || (file.type && file.type !== "application/json")) {
+      return;
+    }
+    const requestId = crypto.randomUUID();
+    pendingPreview.current = requestId;
+    setError("");
+    setImportLoading?.(true);
+    try {
+      const text = await file.text();
+      if (pendingPreview.current !== requestId) {
+        return;
+      }
+      requestPreview(JSON5.parse(text), requestId);
+    } catch (error) {
+      if (pendingPreview.current === requestId) {
+        pendingPreview.current = "";
+        fail(error);
+      }
+    } finally {
+      setUploadKey(Date.now());
     }
   };
 
   const curlImportData = () => {
-    if (fileType === IMPORT_TYPE_ENUM.CURL) {
-      try {
-        const parsedValue = parseSafeBash(value);
-
-        window?.vscode.postMessage({
-          action: "curlImport",
-          data: parsedValue,
-        });
-      } catch (error) {}
-      return;
+    try {
+      setError("");
+      window.vscode.postMessage({
+        action: "curlImport",
+        data: parseSafeBash(value),
+      });
+    } catch (error) {
+      fail(error);
     }
   };
 
   const projectImport2 = async () => {
+    if (pendingImport.current) {
+      return;
+    }
     try {
+      setError("");
       setPreviewLoading(true);
       // Filter unchecked data before importing
       const importData = cloneDeep(previewData);
@@ -171,8 +230,11 @@ const Index = ({
         previewSelectData.envs.includes(i.env_id),
       );
       const { chooseFolder } = options;
+      const requestId = crypto.randomUUID();
+      pendingImport.current = requestId;
       window?.vscode.postMessage({
         action: "importData",
+        requestId,
         data: {
           http: importData.http,
           newApis: importData.apis,
@@ -181,45 +243,44 @@ const Index = ({
           fileType,
         },
       });
-
-      if (onCancel) {
-        onCancel();
-      }
-
-      setPreview(false);
-    } catch (error) {}
-    setPreviewLoading(false);
+    } catch (error) {
+      pendingImport.current = "";
+      fail(error);
+    }
   };
 
   const previewSwaggerUrlData = async () => {
+    if (!swaggerUrl) {
+      fail(new Error(t("supplement.input_url_first1")));
+      return;
+    }
+    const requestId = crypto.randomUUID();
+    pendingPreview.current = requestId;
+    setError("");
+    setImportLoading?.(true);
     try {
-      setPreviewLoading(true);
-      if (fileType === IMPORT_TYPE_ENUM.SWAGGERURL) {
-        if (!swaggerUrl) {
-          setPreviewLoading(false);
-          return message.info(t("supplement.input_url_first1"));
-        }
-        try {
-          let text;
-          const result = await axios.get(swaggerUrl);
-          text = result?.data || {};
-          const formData = options;
-          window?.vscode.postMessage({
-            action: "getImportData",
-            data: { json: text, fileType, formData },
-          });
-        } catch (err: any) {
-          message.error(t("supplement.upload_right_file"));
-          setPreviewLoading(false);
-        }
+      const result = await axios.get(swaggerUrl);
+      if (pendingPreview.current !== requestId) {
+        return;
       }
+      requestPreview(result.data, requestId);
     } catch (error) {
-      setPreviewLoading(false);
+      if (pendingPreview.current === requestId) {
+        pendingPreview.current = "";
+        fail(error);
+      }
     }
   };
 
   return (
     <>
+      {error && !preview && (
+        <Alert
+          type="error"
+          message={t("interaction.importFailed")}
+          description={error}
+        />
+      )}
       {fileType === IMPORT_TYPE_ENUM.CURL && (
         <Flex flex={1} style={{ minHeight: 0 }}>
           <CodeEditor
@@ -353,8 +414,13 @@ const Index = ({
                 options={options}
                 onOptionsChange={setOptions}
                 loading={previewLoading}
+                error={error}
                 open={preview}
-                onCancel={() => setPreview(false)}
+                onCancel={() => {
+                  if (!pendingImport.current) {
+                    setPreview(false);
+                  }
+                }}
                 onProjectImport={projectImport2}
                 data={previewData}
                 importLocation={importLocation}

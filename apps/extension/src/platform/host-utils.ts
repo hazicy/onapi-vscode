@@ -5,32 +5,36 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 
-export const downloadFile = async (fileName: string, fileText: string) => {
-  // Get user home directory and download path
-  const userHome = os.homedir();
-  const downloadPath = path.join(userHome, "Downloads");
-  const options = {
+export const saveTextFile = async (
+  fileName: string,
+  fileText: string,
+  onWrite?: () => void,
+): Promise<string | undefined> => {
+  const downloadPath = path.join(os.homedir(), "Downloads");
+  const uri = await vscode.window.showSaveDialog({
     defaultUri: vscode.Uri.file(path.join(downloadPath, fileName)),
-    filters: {
-      "Text files": ["json"],
-      "All files": ["*"],
-    },
-  };
-
-  const uri = await vscode.window.showSaveDialog(options);
-  if (uri) {
-    const data = fileText;
-    try {
-      fs.writeFileSync(uri.fsPath, data);
-      vscode.window.showInformationMessage(
-        "Export Successful！🎉: " + uri.fsPath,
-      );
-      return true;
-    } catch (error: any) {
-      vscode.window.showErrorMessage("Export failed: " + error?.message);
-    }
+    filters: { "Text files": ["json"], "All files": ["*"] },
+  });
+  if (!uri) {
+    return undefined;
   }
-  return false;
+  onWrite?.();
+  fs.writeFileSync(uri.fsPath, fileText);
+  return uri.fsPath;
+};
+
+export const downloadFile = async (fileName: string, fileText: string) => {
+  try {
+    const savedPath = await saveTextFile(fileName, fileText);
+    if (!savedPath) {
+      return false;
+    }
+    vscode.window.showInformationMessage("Export Successful！🎉: " + savedPath);
+    return true;
+  } catch (error: any) {
+    vscode.window.showErrorMessage("Export failed: " + error?.message);
+    return false;
+  }
 };
 
 export const copyTextToClipboard = (text: string) => {

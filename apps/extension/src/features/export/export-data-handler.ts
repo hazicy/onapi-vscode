@@ -1,11 +1,11 @@
 import * as vscode from "vscode";
 import { globalConfig } from "../../app/config";
-import { downloadFile } from "../../platform/host-utils";
+import { saveTextFile } from "../../platform/host-utils";
 import { isString } from "lodash";
 import { getExportData } from "./export-data";
 
 export const handelExportDataMessage = async (
-  message: { action: string; data: any },
+  message: { action: string; data: any; requestId?: string },
   context: vscode.ExtensionContext,
   data: any,
 ) => {
@@ -21,18 +21,39 @@ export const handelExportDataMessage = async (
         data: systemConfig,
       });
       break;
-    case "exportProjectData":
+    case "exportProjectData": {
+      const report = (stage: string, error?: string) =>
+        exportDataWebView?.webview.postMessage({
+          action: "exportStatus",
+          requestId: message.requestId,
+          data: { stage, ...(error ? { error } : {}) },
+        });
       try {
+        report("preparing");
         const exportData = await getExportData(message.data, context);
-        if (exportData.fileName.length > 0) {
-          const downLoadSuccess = await downloadFile(
-            exportData.fileName,
-            exportData.fileText,
-          );
-          downLoadSuccess && exportDataWebView?.dispose();
+        if (!exportData.fileName) {
+          throw new Error("Unsupported export format");
         }
-      } catch (error) {}
+        report("choosingLocation");
+        const savedPath = await saveTextFile(
+          exportData.fileName,
+          exportData.fileText,
+          () => report("saving"),
+        );
+        if (!savedPath) {
+          report("cancelled");
+          break;
+        }
+        report("complete");
+        vscode.window.showInformationMessage(
+          "Export Successful！🎉: " + savedPath,
+        );
+        exportDataWebView?.dispose();
+      } catch (error) {
+        report("error", error instanceof Error ? error.message : String(error));
+      }
       break;
+    }
     case "getVscodeTheme":
       const vscodeTheme = vscode.workspace
         .getConfiguration("workbench")

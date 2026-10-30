@@ -17,7 +17,6 @@ import useUserConfig from "@/features/auth/store/useUserConfig";
 import { useGlobal } from "@/app/store";
 
 import { isArray } from "lodash-es";
-import useImportData from "@/features/import/store/useImportData";
 
 function ImportDataPanel() {
   const customTheme = useGlobalTheme();
@@ -26,12 +25,6 @@ function ImportDataPanel() {
     (store) => store.updateApiOriginDetailsList,
   );
   const updateVscodeTheme = useGlobal((store) => store.updateVscodeTheme);
-  const {
-    updatePreview: setPreview,
-    updatePreviewLoading: setPreviewLoading,
-    updatePreviewData: setPreviewData,
-    updatePreviewSelectData: setPreviewSelectData,
-  } = useImportData((store) => store);
   const [lodaing, setLodaing] = useState(true);
   useEffect(() => {
     window?.vscode.postMessage({
@@ -76,27 +69,6 @@ function ImportDataPanel() {
           break;
         case "setVscodeTheme":
           updateVscodeTheme(message.data);
-          break;
-        case "setImportData":
-          setPreviewData(message.data);
-
-          if (message.type === "select_envs") {
-            setPreviewSelectData({
-              apis: [],
-              models: [],
-              envs: (message.data?.envs || []).map((i: any) => i?.env_id),
-            });
-          } else {
-            setPreviewSelectData({
-              apis: (message.data?.apis || []).map((i: any) => i?.id),
-              models: (message.data?.models || []).map((i: any) => i?.model_id),
-              envs: [],
-            });
-          }
-
-          setPreview(true);
-
-          setPreviewLoading(false);
           break;
       }
     };

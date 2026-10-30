@@ -9,12 +9,11 @@ import {
   Flex,
   Input,
   MenuProps,
-  Skeleton,
 } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
 import clsx from "clsx";
-import { get, map } from "lodash-es";
+import { map } from "lodash-es";
 
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
@@ -39,7 +38,6 @@ const EnvDropdown: React.FC<EnvDropdownProps> = ({
 }: EnvDropdownProps) => {
   const { t } = useTranslation();
   const [open, setOpen] = useSafeState<boolean>(false);
-  const [loading, setLoading] = useSafeState<boolean>(false);
   const [filterValue, setFilterValue] = useSafeState<string>("");
   const envList = useProjectConfig((state) => state.http!.environments);
   const updateEstablish = useProjectConfig((state) => state.updateEstablish);
@@ -47,7 +45,7 @@ const EnvDropdown: React.FC<EnvDropdownProps> = ({
     (state) => state.updateEnvSettingKeys,
   );
   const envDetails = useMemo(() => {
-    return envList?.find((e) => e.id === value) || get(envList, "[0]");
+    return envList.find((e) => e.id === value);
   }, [envList, value]);
 
   const filterList = useMemo(() => {
@@ -74,9 +72,7 @@ const EnvDropdown: React.FC<EnvDropdownProps> = ({
       getProjectConfig();
     }
     setOpen(open);
-    if (open) {
-      setLoading(false);
-    } else {
+    if (!open) {
       setFilterValue("");
     }
   };
@@ -84,37 +80,26 @@ const EnvDropdown: React.FC<EnvDropdownProps> = ({
   const dropdownRender: DropdownProps["dropdownRender"] = (menu) => {
     return (
       <div className={styles.envDropdownRender}>
-        {loading ? (
-          <Skeleton
-            style={{ padding: "0 16px" }}
-            active
-            paragraph={{ rows: 10 }}
-            loading
-          />
-        ) : (
-          <>
-            <Input
-              className={styles.envPopoverInput}
-              placeholder={t("supplement.env_input_tip")}
-              prefix={<AppIcon icon="search" className={styles.icon} />}
-              value={filterValue}
-              onChange={(event) => setFilterValue(event.target.value)}
-            />
-            {menu}
-            <Divider style={{ margin: "8px 0" }} />
-            <Flex style={{ padding: "4px 0" }}>
-              <Button
-                onClick={envCreate}
-                icon={<AppIcon icon="circle-plus" className={styles.icon} />}
-                type="link"
-                size="small"
-                className={styles.addEnvBtn}
-              >
-                {t("supplement.env_create")}
-              </Button>
-            </Flex>
-          </>
-        )}
+        <Input
+          className={styles.envPopoverInput}
+          placeholder={t("supplement.env_input_tip")}
+          prefix={<AppIcon icon="search" className={styles.icon} />}
+          value={filterValue}
+          onChange={(event) => setFilterValue(event.target.value)}
+        />
+        {menu}
+        <Divider style={{ margin: "8px 0" }} />
+        <Flex style={{ padding: "4px 0" }}>
+          <Button
+            onClick={envCreate}
+            icon={<AppIcon icon="circle-plus" className={styles.icon} />}
+            type="link"
+            size="small"
+            className={styles.addEnvBtn}
+          >
+            {t("supplement.env_create")}
+          </Button>
+        </Flex>
       </div>
     );
   };
@@ -159,12 +144,15 @@ const EnvDropdown: React.FC<EnvDropdownProps> = ({
       <Dropdown
         disabled={envDisabled}
         menu={{
-          items: map(filterList, ({ id, name, isLocal }) => ({
-            key: id,
-            label: dropdownMenuRender({ id, name, isLocal }),
-          })),
+          items: [
+            { key: "", label: t("interaction.noEnvironment") },
+            ...map(filterList, ({ id, name, isLocal }) => ({
+              key: id,
+              label: dropdownMenuRender({ id, name, isLocal }),
+            })),
+          ],
           onClick: onEnvClick,
-          selectedKeys: [value],
+          selectedKeys: envDetails ? [envDetails.id] : value ? [] : [""],
         }}
         onOpenChange={onOpenChange}
         open={open}
@@ -175,6 +163,7 @@ const EnvDropdown: React.FC<EnvDropdownProps> = ({
         overlayClassName={styles.dropdownMenu}
       >
         <Flex
+          aria-label={t("interaction.environment")}
           id="tour-version-once"
           style={{ height: "100%", width: "100%" }}
           gap={4}
@@ -192,16 +181,34 @@ const EnvDropdown: React.FC<EnvDropdownProps> = ({
                 setOpen(false);
                 // Open environment page
                 openEnvPage({
-                  id: value,
+                  id: envDetails?.id,
                 });
-                updateEnvSettingKeys(value);
+                if (envDetails) {
+                  updateEnvSettingKeys(envDetails.id);
+                }
               }}
               style={{ fontSize: 12, color: "var(--icon-color)" }}
               icon="settings"
             />
             <span className={styles.title}>
-              <Tooltip title={envDetails?.name}>
-                <i className={styles.name}>{envDetails?.name}</i>
+              <Tooltip
+                title={
+                  envDetails?.name ||
+                  t(
+                    value
+                      ? "interaction.environmentMissingHint"
+                      : "interaction.noEnvironment",
+                  )
+                }
+              >
+                <i className={styles.name}>
+                  {envDetails?.name ||
+                    t(
+                      value
+                        ? "interaction.environmentMissing"
+                        : "interaction.noEnvironment",
+                    )}
+                </i>
               </Tooltip>
             </span>
           </Flex>

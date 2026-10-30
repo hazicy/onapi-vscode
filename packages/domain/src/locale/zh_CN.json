@@ -1,4 +1,19 @@
 {
+  "interaction": {
+    "importFailed": "导入失败",
+    "importing": "正在导入…",
+    "exportFailed": "导出失败",
+    "export_preparing": "正在准备导出…",
+    "export_choosingLocation": "请在保存对话框中选择位置…",
+    "export_saving": "正在保存文件…",
+    "export_complete": "导出完成",
+    "export_cancelled": "已取消保存，导出选项已保留。",
+    "export_error": "导出失败",
+    "environment": "环境",
+    "noEnvironment": "不使用环境",
+    "environmentMissing": "环境已失效",
+    "environmentMissingHint": "当前环境已不存在，不会应用该环境的变量。请选择其他环境。"
+  },
   "base": {
     "drawer": "抽屉",
     "close": "关闭",

@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import styles from "./ExportComponent.module.css";
 
-import { Flex, message } from "@/shared/ui/base";
+import { Alert, Flex } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
 import clsx from "clsx";
@@ -13,35 +13,39 @@ import Radio from "@/shared/ui/Radio";
 import { EXPORT_TYPE_LIST } from "@onapi/domain/settings/constants/settings";
 
 interface Props {
-  onClick?: ({ exportType, version }: { [k: string]: string }) => Promise<void>;
+  onClick?: ({ exportType, version }: { [k: string]: string }) => void;
+  loading?: boolean;
+  status?: string;
+  error?: string;
 }
 const Export = (props: Props) => {
-  const { onClick } = props || {};
+  const { onClick, loading = false, status, error } = props;
   const { t } = useTranslation();
 
-  const [loading, setLoading] = useSafeState<boolean>(false);
   const [exportType, setExportType] = useSafeState<string>("onapi");
   const [version, setVersion] = useSafeState<string>("3.0");
 
-  const exportHandle = async () => {
-    try {
-      setLoading(true);
-      await onClick?.({ exportType, version });
-    } catch (err: any) {
-      message.error(err?.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div className={styles.container}>
+      {error ? (
+        <Alert
+          type="error"
+          message={t("interaction.exportFailed")}
+          description={error}
+        />
+      ) : (
+        status && <Alert type="info" message={status} />
+      )}
       <div className={styles.importProjectItem}>
         <div className={styles.importProjectItemTitle}>
           {t("settings.export_project.data_format")}
         </div>
         <div className={styles.importProjectItemContent}>
-          <Radio.Group value={exportType} className={styles.radioGroup}>
+          <Radio.Group
+            disabled={loading}
+            value={exportType}
+            className={styles.radioGroup}
+          >
             {EXPORT_TYPE_LIST.map((item) => (
               <React.Fragment key={item.key}>
                 <div
@@ -79,6 +83,7 @@ const Export = (props: Props) => {
           </div>
           <div className={styles.importProjectItemContent}>
             <Radio.Group
+              disabled={loading}
               value={version}
               onChange={(e) => setVersion(e?.target?.value)}
               className={clsx(styles.marginBottom20, styles.radioGroup)}
@@ -106,8 +111,9 @@ const Export = (props: Props) => {
       <Flex justify="end">
         <Button
           loading={loading}
-          // disabled
-          onClick={exportHandle}
+          aria-label={t("settings.export_project.export")}
+          aria-busy={loading}
+          onClick={() => onClick?.({ exportType, version })}
           type="primary"
           className={styles.importExportNow}
         >

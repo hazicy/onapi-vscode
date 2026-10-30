@@ -443,3 +443,58 @@ test("editor success and saved baseline wait for the actual asynchronous commit"
   );
   assert.equal(f.calls.at(-1)[0], "success");
 });
+
+test("preview import failures are returned to the panel instead of leaving it loading", async () => {
+  const f = await fixture("importData");
+  await f.run("getImportData", { json: {}, fileType: "unsupported" });
+  assert.equal(f.calls.at(-1)[1].action, "importError");
+  assert.match(f.calls.at(-1)[1].data, /Unsupported import format/);
+});
+
+for (const failure of ["environment", "requests"]) {
+  test(`preview import retains the panel when saving ${failure} fails`, async () => {
+    const f = await fixture("importData", {
+      environmentSucceeds: failure !== "environment",
+      succeeds: failure !== "requests",
+    });
+    await f.run("importData", {
+      newApis: [{ id: "imported", kind: "api", parentId: "0" }],
+    });
+    assert.equal(f.calls.at(-1)[1].action, "importError");
+    assert.match(f.calls.at(-1)[1].data, /Failed to save imported/);
+    assert.equal(
+      f.calls.some(([name]) => name === "dispose" || name === "success"),
+      false,
+    );
+    assert.equal(
+      f.rows().some((row) => row.id === "imported"),
+      false,
+    );
+  });
+}
+
+test("preview import acknowledges and closes only after the request write finishes", async () => {
+  let release;
+  const gate = new Promise((resolve) => {
+    release = resolve;
+  });
+  let started;
+  const writing = new Promise((resolve) => {
+    started = resolve;
+  });
+  const f = await fixture("importData", { writeGate: gate, onWrite: started });
+  const save = f.run("importData", {
+    newApis: [{ id: "imported", kind: "api", parentId: "0" }],
+  });
+  await writing;
+  assert.equal(
+    f.calls.some(
+      ([name]) => name === "dispose" || name === "success" || name === "import",
+    ),
+    false,
+  );
+  release();
+  await save;
+  assert.equal(f.calls.at(-2)[1].action, "importComplete");
+  assert.deepEqual(f.calls.at(-1), ["dispose", "import"]);
+});
