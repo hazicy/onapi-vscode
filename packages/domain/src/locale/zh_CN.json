@@ -1,5 +1,9 @@
 {
   "interaction": {
+    "environmentSaved": "环境已保存",
+    "variablesSaved": "全局变量已保存",
+    "parametersSaved": "全局参数已保存",
+    "cookiesSaved": "Cookie 已保存",
     "importFailed": "导入失败",
     "importing": "正在导入…",
     "exportFailed": "导出失败",
@@ -495,7 +499,7 @@
     "public": "公开",
     "only_team": "(团队内可见)",
     "will_online": "即将上线",
-    "copy_success": "复制成功",
+    "copy_success": "已复制",
     "folder": "目录",
     "select_folder_tip": "请选择目录",
     "save": "保存",
@@ -547,7 +551,7 @@
     "get_uuid4": "获取一个uuid.v4()字符串",
     "builtin": "内置",
     "loadsh": "lodash库 _.{label} 方法",
-    "clipboard_success": "已成功将内容复制到剪贴板",
+    "clipboard_success": "已复制到剪贴板",
     "var_glo": "全局变量",
     "var_env": "环境变量",
     "upload_ok_file": "请上传正确格式文件",

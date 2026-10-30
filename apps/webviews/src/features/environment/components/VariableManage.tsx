@@ -143,7 +143,7 @@ const Index = () => {
       );
       updateHttpGlobals(values);
       saveProjectConfig("http", useProjectConfig.getState().http);
-      message.success("Success");
+      message.success(t("interaction.variablesSaved"));
     } catch (err) {
       /* empty */
     }

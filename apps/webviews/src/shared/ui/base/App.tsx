@@ -8,7 +8,7 @@ import { Toast, toastManager, message, notification } from "./Toast";
 
 export const App = Object.assign(
   ({ children, className, style }: UIProps) => (
-    <BaseToast.Provider toastManager={toastManager}>
+    <BaseToast.Provider toastManager={toastManager} limit={3}>
       <div className={clsx(appStyles.app, className)} style={style}>
         {children}
       </div>

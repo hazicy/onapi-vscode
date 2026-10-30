@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { SerializedCookie as Cookie } from "@onapi/domain";
 import { useEffect, useState } from "react";
 import { Flex, Input, Checkbox, message } from "@/shared/ui/base";
@@ -15,6 +16,7 @@ const emptyCookie = (): Cookie => ({
 });
 
 export default function CookieManage() {
+  const { t } = useTranslation();
   const jar = useProjectConfig(
     (state) => state.http!.options.requester?.cookieJar,
   );
@@ -101,7 +103,7 @@ export default function CookieManage() {
     };
     state.updateProjectConfig({ http } as any);
     saveProjectConfig("http", http);
-    message.success("Success");
+    message.success(t("interaction.cookiesSaved"));
   };
   return (
     <div className={styles.container}>

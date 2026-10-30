@@ -222,7 +222,7 @@ const Index = (props: EnvModifyModalProps) => {
         updateHttpEnvironments(list);
         // changeKey([res.id]);
         saveEnvironments(list);
-        message.success("Success");
+        message.success(t("interaction.environmentSaved"));
         return;
       }
       const newList = envMenus.map((e) => {
@@ -232,7 +232,7 @@ const Index = (props: EnvModifyModalProps) => {
         return e;
       });
       saveEnvironments(newList);
-      message.success("Success");
+      message.success(t("interaction.environmentSaved"));
       // await updateEnvRequest({ ...params, project_id: project_id || '' });
       updateEnv({ ...params }, false);
     } catch (err) {

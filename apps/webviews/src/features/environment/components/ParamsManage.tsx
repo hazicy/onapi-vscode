@@ -20,7 +20,7 @@ const Index: FC<{ defaultTabKey?: string }> = ({
   const onOk = () => {
     try {
       saveProjectConfig("http", http);
-      message.success("Success");
+      message.success(t("interaction.parametersSaved"));
     } catch (err) {
       /* empty */
     }

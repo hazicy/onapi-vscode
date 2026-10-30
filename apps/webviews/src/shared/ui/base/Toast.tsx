@@ -1,4 +1,20 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
+import { Icon } from "@iconify/react";
+import circleCheck from "@iconify-icons/lucide/circle-check";
+import circleAlert from "@iconify-icons/lucide/circle-alert";
+import triangleAlert from "@iconify-icons/lucide/triangle-alert";
+import info from "@iconify-icons/lucide/info";
+import loaderCircle from "@iconify-icons/lucide/loader-circle";
+import x from "@iconify-icons/lucide/x";
+
+const statusIcons: Record<string, typeof info> = {
+  success: circleCheck,
+  error: circleAlert,
+  warning: triangleAlert,
+  info,
+  loading: loaderCircle,
+};
 import toastStyles from "./Toast.module.css";
 import type { MessageInstance, NotificationInstance } from "./types";
 
@@ -11,7 +27,7 @@ const toastKeys = new Map<React.Key, string>();
 function showToast(
   type: string,
   body: any,
-  duration = 3,
+  duration = type === "error" || type === "warning" ? 6 : 3,
   onClose?: () => void,
 ) {
   const config =
@@ -53,7 +69,11 @@ export const message: MessageInstance = {
   loading: (b, d = 0, c) => showToast("loading", b, d, c),
   open: (c) => showToast(c.type ?? "info", c),
   destroy: (key) => {
-    toastManager.close(key === undefined ? undefined : toastKeys.get(key));
+    const id = key === undefined ? undefined : toastKeys.get(key);
+    if (key !== undefined && id === undefined) {
+      return;
+    }
+    toastManager.close(id);
     if (key === undefined) {
       toastKeys.clear();
     } else {
@@ -83,6 +103,7 @@ export const notification: NotificationInstance = {
 
 export function Toast() {
   const { toasts } = BaseToast.useToastManager();
+  const { t } = useTranslation();
   return (
     <BaseToast.Portal>
       <BaseToast.Viewport className={toastStyles.viewport}>
@@ -92,11 +113,23 @@ export function Toast() {
             toast={toast}
             className={toastStyles.toast}
           >
-            <BaseToast.Content>
-              <BaseToast.Title />
-              <BaseToast.Description />
+            <Icon
+              icon={statusIcons[toast.type ?? "info"] ?? info}
+              className={toastStyles.icon}
+              aria-hidden="true"
+            />
+            <BaseToast.Content className={toastStyles.content}>
+              <BaseToast.Title className={toastStyles.title} />
+              {toast.description && (
+                <BaseToast.Description className={toastStyles.description} />
+              )}
             </BaseToast.Content>
-            <BaseToast.Close aria-label="Close">×</BaseToast.Close>
+            <BaseToast.Close
+              className={toastStyles.close}
+              aria-label={t("base.close")}
+            >
+              <Icon icon={x} aria-hidden="true" />
+            </BaseToast.Close>
           </BaseToast.Root>
         ))}
       </BaseToast.Viewport>

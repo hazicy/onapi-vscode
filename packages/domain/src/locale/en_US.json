@@ -1,5 +1,9 @@
 {
   "interaction": {
+    "environmentSaved": "Environment saved",
+    "variablesSaved": "Global variables saved",
+    "parametersSaved": "Global parameters saved",
+    "cookiesSaved": "Cookies saved",
     "importFailed": "Import failed",
     "importing": "Importing…",
     "exportFailed": "Export failed",

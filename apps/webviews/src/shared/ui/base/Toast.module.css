@@ -1,31 +1,107 @@
 .viewport {
   position: fixed;
-  top: 16px;
-  right: 16px;
+  top: 48px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 2000;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
-  max-width: calc(100vw - 32px);
+  width: max-content;
+  max-width: calc(100vw - 24px);
+  pointer-events: none;
 }
 .toast {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  min-width: 200px;
-  padding: 12px 16px;
-  border: 1px solid var(--color-border, #ddd);
+  gap: 8px;
+  box-sizing: border-box;
+  max-width: min(420px, calc(100vw - 24px));
+  padding: 9px 12px;
+  border: 1px solid
+    var(--vscode-notifications-border, var(--color-border, #ddd));
   border-radius: var(--vscode-cornerRadius-medium, 6px);
-  background: var(--color-bg-right, #fff);
-  color: var(--font-content-color, #222);
-  box-shadow: 0 4px 16px #0003;
+  background: var(
+    --vscode-notifications-background,
+    var(--color-bg-right, #fff)
+  );
+  color: var(
+    --vscode-notifications-foreground,
+    var(--font-content-color, #222)
+  );
+  box-shadow: 0 2px 8px var(--vscode-widget-shadow, #0003);
+  font-family: var(--vscode-font-family, sans-serif);
+  font-size: var(--vscode-font-size, 13px);
+  line-height: 1.5;
+  pointer-events: auto;
 }
-.toast > button {
+.content {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.title {
+  margin: 0;
+  font: inherit;
+}
+.description {
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+.icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  color: var(--vscode-notificationsInfoIcon-foreground, #3794ff);
+}
+.toast[data-type="success"] .icon {
+  color: var(--vscode-testing-iconPassed, #388a34);
+}
+.toast[data-type="error"] .icon {
+  color: var(--vscode-notificationsErrorIcon-foreground, #f14c4c);
+}
+.toast[data-type="warning"] .icon {
+  color: var(--vscode-notificationsWarningIcon-foreground, #bf8803);
+}
+.toast[data-type="loading"] .icon {
+  animation: spin 1s linear infinite;
+}
+.close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  padding: 2px;
   border: 0;
+  border-radius: 3px;
   background: none;
   color: inherit;
+  cursor: pointer;
+}
+.close:hover {
+  background: var(--vscode-toolbar-hoverBackground, #8882);
+}
+.close:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder, #1677ff);
+  outline-offset: 2px;
 }
 .toast[data-ending-style],
 .toast[data-limited] {
   display: none;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast[data-type="loading"] .icon {
+    animation: none;
+  }
 }

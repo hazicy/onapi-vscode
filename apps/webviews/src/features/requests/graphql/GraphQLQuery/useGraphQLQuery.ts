@@ -245,21 +245,19 @@ const useGraphQLQuery = () => {
       useApis.getState();
     const { code, data, error } = result;
     if (code !== 200 || error) {
-      message.error(
-        code === 200 ? error : "Refresh failed, GraphQL Schema not retrieved.",
-      );
+      message.error(t("graphql.refresh_fail"));
       updateSchemaLoading(false);
       return;
     }
 
     if (data?.errors) {
-      message.error(`GraphQL Errors: ${JSON.stringify(data.errors)}`);
+      message.error(t("graphql.refresh_fail"));
       updateSchemaLoading(false);
       return;
     }
 
     if (!data?.data?.__schema?.types) {
-      message.error("Invalid GraphQL introspection response");
+      message.error(t("graphql.refresh_fail"));
       updateSchemaLoading(false);
       return;
     }
