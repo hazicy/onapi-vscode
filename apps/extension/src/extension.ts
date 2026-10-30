@@ -258,8 +258,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
   // Share list page
   context.subscriptions.push(
-    vscode.commands.registerCommand("onapi.shareList", (data) => {
-      createShareListPanel(data, context);
+    vscode.commands.registerCommand("onapi.shareList", () => {
+      createShareListPanel(context);
     }),
   );
 
@@ -279,7 +279,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
   // Contact us
   context.subscriptions.push(
-    vscode.commands.registerCommand("onapi.openExtenisonSettings", (data) => {
+    vscode.commands.registerCommand("onapi.openExtenisonSettings", () => {
       // Jump directly to plugin settings page
       vscode.commands.executeCommand(
         "workbench.action.openSettings",

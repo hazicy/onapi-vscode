@@ -212,7 +212,7 @@ export const updatePageDocBaseUrl = (docBaseUrl: string) => {
     data: docBaseUrl,
   });
   // Notify open tabs
-  forEach(globalConfig.openedPanels, (openedPanel, key) => {
+  forEach(globalConfig.openedPanels, (openedPanel) => {
     openedPanel.webview.postMessage({
       action: "setDocBaseUrl",
       data: docBaseUrl,

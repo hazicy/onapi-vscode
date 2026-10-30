@@ -1,5 +1,5 @@
 import styles from "./FolderEditor.module.css";
-import { FC, FunctionComponent, memo, useMemo } from "react";
+import { FC, memo, useMemo } from "react";
 
 import { SegmentedProps } from "@/shared/ui/base";
 
@@ -21,18 +21,6 @@ const FolderEditor: FC<ApiComponentType> = ({ apisData }) => {
   const targetType = apisData?.kind;
 
   const [tabsValue, setTabsValue] = useSafeState<string | number>();
-
-  const updateTabsValue = async (
-    targetTabs: {
-      value: string;
-      label: string;
-      children: FunctionComponent<{ apisData: any; onApisDataChange: any }>;
-    }[],
-    newTabsValue: string,
-  ) => {
-    let value = newTabsValue;
-    setTabsValue(value);
-  };
 
   const result = useMemo(() => {
     const targetTabs = APIS_CONTENT_MAP[`${targetType}`];
@@ -68,7 +56,7 @@ const FolderEditor: FC<ApiComponentType> = ({ apisData }) => {
           newTabsValue = last(targetTabs)?.value || "";
         }
       }
-      updateTabsValue(targetTabs, newTabsValue);
+      setTabsValue(newTabsValue);
     }
 
     return targetTabs;
@@ -94,7 +82,7 @@ const FolderEditor: FC<ApiComponentType> = ({ apisData }) => {
   );
 
   const handleOptionsChange: SegmentedProps["onChange"] = useMemoizedFn(
-    async (value) => {
+    (value) => {
       setTabsValue(value);
     },
   );

@@ -1,7 +1,4 @@
-import type {
-  HttpEditorProps,
-  HttpEditorRecord,
-} from "@onapi/domain/requests/record";
+import type { HttpEditorProps } from "@onapi/domain/requests/record";
 import styles from "./GraphQLDebug.module.css";
 import { FC, lazy, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

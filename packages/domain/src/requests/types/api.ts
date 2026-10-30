@@ -1,11 +1,3 @@
-type ItemType = {
-  key?: string | number;
-  label?: import("react").ReactNode;
-  type?: string;
-  children?: ItemType[] | null;
-  [key: string]: any;
-};
-
 import {
   AnyObject,
   CompareCalcSymbols,
@@ -143,14 +135,6 @@ export interface AIExpect {
 
 // Type used when apis content type cannot be determined
 export type ApisData = ApisBaseData & AnyObject;
-
-type Params = {
-  is_checked: CustomNumberBooleanType;
-  key: string;
-  definition: string;
-  value: string;
-  description: string;
-};
 
 export type ApiComponentType = {
   apisData: ApiDetailsData;

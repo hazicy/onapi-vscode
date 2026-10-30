@@ -69,7 +69,7 @@ export const createOpenPanel = (
   panel.webview.onDidReceiveMessage(async (message: unknown) => {
     await receiveRequestPanelCommand(
       message,
-      (validated) => handleRequestPanelCommand(validated, context, panel, data),
+      (validated) => handleRequestPanelCommand(validated, context, panel),
       async (error) => {
         const source =
           message && typeof message === "object"

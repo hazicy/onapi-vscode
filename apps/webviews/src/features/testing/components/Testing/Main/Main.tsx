@@ -112,8 +112,6 @@ const Main = ({
       reader.onload = async function () {
         const dataArr = await csvToJson(reader?.result);
         if (isArray(dataArr)) {
-          let value = "";
-          value = option?.file?.name;
           const newRowData = {
             file_name: option?.file?.name,
             iteration_data: dataArr,

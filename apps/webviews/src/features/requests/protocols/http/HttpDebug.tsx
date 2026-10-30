@@ -4,11 +4,9 @@ import type {
 } from "@onapi/domain/requests/record";
 import styles from "./HttpDebug.module.css";
 import { FC, lazy, useMemo, useState } from "react";
-import { useSafeState } from "ahooks";
 import { Dropdown, Flex } from "@/shared/ui/base";
 import AppIcon from "@/shared/ui/AppIcon";
 import { produce } from "immer";
-import { DirectionType } from "@onapi/domain/types/common";
 import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
 import SuspenseContent from "@/shared/components/SuspenseContent";
 
@@ -26,11 +24,6 @@ const GenerateCodeDrawer = lazy(
   () => import("@/features/requests/code-generation/GenerateCodeDrawer"),
 );
 
-interface ContentProps {
-  value?: HttpEditorRecord;
-  curApiSendingData?: any;
-}
-
 const panelProps = {
   defaultSize: 50,
   minSize: 5,
@@ -40,18 +33,12 @@ const panelProps = {
 
 const ApiDebug: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
   const { t } = useTranslation();
-  const [apiScreenDirection, setApiScreenDirection] =
-    useSafeState<DirectionType>("horizontal");
   const updateApiCodeHar = useApis((store) => store.updateApiCodeHar);
   const [openGenerateCode, setOpenGenerateCode] = useState<boolean>(false);
 
   const [requestTabActiveKey, setRequestTabActiveKey] =
     useState<string>("Params");
   const { Provider } = context;
-  const handleDirectionChange = (direction: DirectionType) => {
-    // setApiScreenDirection(direction);
-  };
-
   const onRequestDataChange = (val: HttpEditorRecord["request"]) => {
     onApisDataChange(
       produce(apisData, (draft) => {
@@ -145,7 +132,7 @@ const ApiDebug: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
           showDirectionBtn
           panelGroupProps={{
             autoSaveId: "api_debug_container_resize_save_id",
-            direction: apiScreenDirection,
+            direction: "horizontal",
           }}
           leftPanelProps={{
             ...panelProps,
@@ -169,7 +156,7 @@ const ApiDebug: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
                       activeKey: requestTabActiveKey,
                       onChange: (key: string) => setRequestTabActiveKey(key),
                     }}
-                    direction={apiScreenDirection}
+                    direction="horizontal"
                     requestData={apisData?.request}
                     apiData={apisData}
                     onRequestDataChange={onRequestDataChange}
@@ -188,7 +175,6 @@ const ApiDebug: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
               />
             </SuspenseContent>
           }
-          onDirectionChange={handleDirectionChange}
         />
       </main>
       {openGenerateCode && (

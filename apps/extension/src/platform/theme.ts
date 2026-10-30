@@ -16,7 +16,7 @@ export const onThemeChange = () => {
     .get("colorTheme");
 
   // Notify tabs
-  forEach(openedPanels, (openedPanel, key) => {
+  forEach(openedPanels, (openedPanel) => {
     openedPanel.webview.postMessage({
       action: "setVscodeTheme",
       data: currentTheme,
@@ -30,7 +30,7 @@ export const onThemeChange = () => {
     });
 
   // Notify open run folder
-  forEach(openedFolderTestPanels, (openedPanel, key) => {
+  forEach(openedFolderTestPanels, (openedPanel) => {
     openedPanel.webview.postMessage({
       action: "setVscodeTheme",
       data: currentTheme,
@@ -62,7 +62,7 @@ export const onFontSizeChange = (context: vscode.ExtensionContext) => {
     context.globalState.update("systemConfig", default_system_config);
 
     // Notify all tab pages
-    forEach(globalConfig, (panel: any, key) => {
+    forEach(globalConfig, (panel: any) => {
       // Multi-tab
       if (isPlainObject(panel)) {
         forEach(panel, (openPanel) => {

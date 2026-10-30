@@ -42,7 +42,7 @@ const useWebSocket = () => {
     }
 
     // WebSocket connection preprocessing
-    const options = await getWebSocketSendOptions(target, temporaryServerId);
+    const options = await getWebSocketSendOptions(temporaryServerId);
     const requestId = crypto.randomUUID();
     useWebSocketStore.getState().startConnection(target.id, requestId);
 

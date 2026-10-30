@@ -45,7 +45,6 @@ const Index = ({
   options,
   setOptions,
   importLocation,
-  uploadFile,
   swaggerUrl,
   setSwaggerUrl,
   fileType,

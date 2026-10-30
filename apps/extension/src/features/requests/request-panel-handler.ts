@@ -136,7 +136,6 @@ export const handleRequestPanelCommand = async (
   message: RequestPanelCommand,
   context: vscode.ExtensionContext,
   panel: vscode.WebviewPanel,
-  apiData: ApiDetailsData,
 ) => {
   const { action, data } = message;
 
@@ -235,7 +234,7 @@ export const handleRequestPanelCommand = async (
       await context.globalState.update("systemConfig", default_system_config);
 
       // Notify other open tabs
-      forEach(globalConfig.openedPanels, (openedPanel, key) => {
+      forEach(globalConfig.openedPanels, (openedPanel) => {
         postRequestPanelResponse(openedPanel.webview, {
           action: "setSystemConfig",
           data: default_system_config || {},

@@ -82,7 +82,7 @@ export const handelEnvMessage = async (
       context.globalState.update("systemConfig", default_system_config);
 
       // Notify other open tabs
-      forEach(globalConfig.openedPanels, (openedPanel, key) => {
+      forEach(globalConfig.openedPanels, (openedPanel) => {
         openedPanel.webview.postMessage({
           action: "setSystemConfig",
           data: default_system_config || {},

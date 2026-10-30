@@ -8,8 +8,6 @@ import useDocsData from "./hooks/useDocsData";
 import useShare from "@/features/sharing/store/useShare";
 import useApis from "@/features/requests/store/useApis";
 
-import type { EditorRecord as ApiDetailsData } from "@onapi/domain/requests/record";
-
 import SharePanel from "./components/SharePanel";
 
 const SharePage = () => {

@@ -100,7 +100,7 @@ export const createDocsApp = (context: vscode.ExtensionContext) => {
 
   app.get(
     "/api-docs/images/logo_icon.png",
-    async (req: Request, res: Response) => {
+    async (_req: Request, res: Response) => {
       res.sendFile(
         path.join(context.extensionPath, "dist", "images", "logo_icon.png"),
       );
@@ -121,10 +121,9 @@ export const startDocsServer = (
     // Server started successfully (record the port number)
     setApiDocsBaseUrl(context, `http://${ipv4}:${port}/api-docs`, reStart);
   });
-  server.on("error", (err: any) => {
+  server.on("error", () => {
     if (port < MAX_PORT) {
       startDocsServer(context, port + 1, reStart); // Recursively try next port
-    } else {
     }
   });
 };

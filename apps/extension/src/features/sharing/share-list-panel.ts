@@ -5,10 +5,7 @@ import { getApiList } from "../requests/request-storage";
 import { handelPushMessage } from "./share-list-handler";
 import { getProjectShareData } from "./share-data";
 
-export const createShareListPanel = (
-  data: any,
-  context: vscode.ExtensionContext,
-) => {
+export const createShareListPanel = (context: vscode.ExtensionContext) => {
   let { shareListWebView } = globalConfig;
 
   const panelOptions = PANEL_OPTIONS.SHARELIST;

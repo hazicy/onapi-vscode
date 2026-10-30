@@ -14,7 +14,6 @@ import urlParse from "url-parse";
 import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import type { ApisBaseDataItem } from "@onapi/domain/requests/types/base";
 import type { ServerItem } from "@onapi/domain/environment/types/index";
-import type { SysConfig } from "@onapi/domain/settings/types/settings";
 import type { CustomNumberBooleanType } from "@onapi/domain/types/common";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 import { STATUS_CODE } from "@onapi/domain/constants/common";
