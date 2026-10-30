@@ -1,0 +1,70 @@
+.modal {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: min(640px, calc(100dvh - 32px));
+  overflow: hidden;
+}
+
+.header {
+  flex-shrink: 0;
+  padding: 16px 44px 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.toolbar {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.languageSelect {
+  width: 180px;
+}
+
+.librarySelect {
+  width: 200px;
+}
+
+.copyButton {
+  margin-left: auto;
+}
+
+.editor {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.editorContent {
+  height: 100%;
+}
+
+@media (max-width: 600px) {
+  .languageSelect,
+  .librarySelect {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+  }
+
+  .copyButton {
+    margin-left: 0;
+  }
+}

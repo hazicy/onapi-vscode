@@ -1,6 +1,6 @@
 import type { HttpEditorProps } from "@onapi/domain/requests/record";
 import styles from "./GraphQLDebug.module.css";
-import { FC, lazy, useMemo, useState } from "react";
+import { FC, lazy, Suspense, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { ResizablePanels, SuspenseContent } from "@/shared/components";
@@ -19,8 +19,8 @@ import ToolBar from "../http/ToolBar";
 import { Flex } from "@/shared/ui/base";
 import { Button } from "@/shared/ui";
 import useApis from "@/features/requests/store/useApis";
-const GenerateCodeDrawer = lazy(
-  () => import("@/features/requests/code-generation/GenerateCodeDrawer"),
+const GenerateCodeModal = lazy(
+  () => import("@/features/requests/code-generation/GenerateCodeModal"),
 );
 const Request = lazy(() => importDelay(import("./Request")));
 const Response = lazy(() => importDelay(import("./Response")));
@@ -127,12 +127,12 @@ const Index: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
           </DirectionContext.Provider>
         </main>
         {openGenerateCode && (
-          <SuspenseContent>
-            <GenerateCodeDrawer
+          <Suspense fallback={null}>
+            <GenerateCodeModal
               value={apisData}
               onClose={() => setOpenGenerateCode(false)}
             />
-          </SuspenseContent>
+          </Suspense>
         )}
       </Flex>
     </>

@@ -161,7 +161,9 @@
     },
     "code": {
       "title": "Code Snippet",
-      "copy": "Copy Code"
+      "copy": "Copy Code",
+      "language": "Language",
+      "library": "Library"
     },
     "tab_operation": {
       "close_all": "Close all tabs",

@@ -50,11 +50,6 @@ export async function assembleExtension({
         path.join(output, name),
       );
     }
-    await mkdir(path.join(output, "licenses"), { recursive: true });
-    await cp(
-      path.join(workspaceRoot, "packages/domain/src/mock/LICENSE.txt"),
-      path.join(output, "licenses/mock-engines.txt"),
-    );
     for (const file of ["README.md", "CHANGELOG.md", "LICENSE.txt"]) {
       await cp(
         path.join(workspaceRoot, file),

@@ -3,7 +3,7 @@ import type {
   HttpEditorRecord,
 } from "@onapi/domain/requests/record";
 import styles from "./HttpDebug.module.css";
-import { FC, lazy, useMemo, useState } from "react";
+import { FC, lazy, Suspense, useMemo, useState } from "react";
 import { Dropdown, Flex } from "@/shared/ui/base";
 import AppIcon from "@/shared/ui/AppIcon";
 import { produce } from "immer";
@@ -20,8 +20,8 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/shared/ui";
 import context from "@/shared/components/RawEditor/visualizationContext";
 import { openEnvPage } from "@/features/requests/events/env";
-const GenerateCodeDrawer = lazy(
-  () => import("@/features/requests/code-generation/GenerateCodeDrawer"),
+const GenerateCodeModal = lazy(
+  () => import("@/features/requests/code-generation/GenerateCodeModal"),
 );
 
 const panelProps = {
@@ -178,12 +178,12 @@ const ApiDebug: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
         />
       </main>
       {openGenerateCode && (
-        <SuspenseContent>
-          <GenerateCodeDrawer
+        <Suspense fallback={null}>
+          <GenerateCodeModal
             value={apisData}
             onClose={() => setOpenGenerateCode(false)}
           />
-        </SuspenseContent>
+        </Suspense>
       )}
     </>
   );

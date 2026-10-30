@@ -161,7 +161,9 @@
     },
     "code": {
       "title": "生成代码",
-      "copy": "复制代码"
+      "copy": "复制代码",
+      "language": "语言",
+      "library": "客户端库"
     },
     "tab_operation": {
       "close_all": "关闭所有标签",
