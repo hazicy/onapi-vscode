@@ -57,6 +57,13 @@ export function editorTheme(
     ),
     EditorView.theme(
       {
+        ".cm-request-variable": {
+          color: "var(--vscode-textLink-foreground, #3794ff)",
+          backgroundColor:
+            "color-mix(in srgb, var(--vscode-textLink-foreground, #3794ff) 18%, transparent)",
+          borderRadius: "3px",
+          boxShadow: "inset 0 -1px var(--vscode-textLink-foreground, #3794ff)",
+        },
         "&": {
           height: "100%",
           fontSize: `${fontSize}px`,

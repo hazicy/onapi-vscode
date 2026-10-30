@@ -1,5 +1,11 @@
 {
   "interaction": {
+    "configuredValue": "当前配置值",
+    "collectionScope": "集合",
+    "systemScope": "系统",
+    "variableUndefined": "未定义",
+    "variableEmpty": "空字符串",
+    "variableDynamic": "发送请求时生成",
     "environmentSaved": "环境已保存",
     "variablesSaved": "全局变量已保存",
     "parametersSaved": "全局参数已保存",

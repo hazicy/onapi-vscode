@@ -236,8 +236,8 @@ export async function getResolvedCodeRequest(
   );
   const variables = [
     env?.values || [],
-    settings.options.globals.values || [],
     settings.collection.variable || [],
+    settings.options.globals.values || [],
   ].map(
     (values) =>
       new sdk.VariableList(

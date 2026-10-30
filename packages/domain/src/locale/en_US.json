@@ -1,5 +1,11 @@
 {
   "interaction": {
+    "configuredValue": "Configured value",
+    "collectionScope": "Collection",
+    "systemScope": "System",
+    "variableUndefined": "Undefined",
+    "variableEmpty": "Empty string",
+    "variableDynamic": "Generated when the request is sent",
     "environmentSaved": "Environment saved",
     "variablesSaved": "Global variables saved",
     "parametersSaved": "Global parameters saved",

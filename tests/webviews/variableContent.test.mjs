@@ -135,16 +135,34 @@ test("description insertion uses raw text and other modes insert the generated e
 });
 
 test("previews respect variable scope precedence and include only selected custom functions", async () => {
-  const globals = Object.freeze({ token: "global", shared: "global-only" });
-  const environment = Object.freeze({ token: "environment" });
+  const { configuredVariableValues, variableValueText } = await load(
+    "packages/domain/src/variables/context.ts",
+    nativeDependency,
+  );
+  const context = new Map([
+    [
+      "token",
+      {
+        name: "token",
+        value: "environment",
+        scope: "environment",
+        kind: "value",
+      },
+    ],
+    [
+      "shared",
+      { name: "shared", value: "global-only", scope: "global", kind: "value" },
+    ],
+    ["$token", { name: "$token", scope: "system", kind: "dynamic" }],
+    ["empty", { name: "empty", value: "", scope: "collection", kind: "value" }],
+    ["zero", { name: "zero", value: 0, scope: "collection", kind: "value" }],
+  ]);
   const calls = [];
   const { evaluateVariablePreview } = await load(
     base + "variable-preview.ts",
     (id) => {
-      if (id === "@/shared/constants/system")
-        return { SYSTEM_VARS: { token: "system" } };
-      if (id === "@/features/requests/utils/send-utils")
-        return { getGlobals: async () => globals };
+      if (id === "@onapi/domain/variables/context")
+        return { configuredVariableValues, variableValueText };
       if (id === "@onapi/domain/mock/expressions")
         return {
           mockExp: (...args) => {
@@ -160,7 +178,9 @@ test("previews respect variable scope precedence and include only selected custo
     value: "token",
     expression: "{{token}}",
     functions: [],
-    environment,
+    context,
+    emptyTip: "empty string",
+    dynamicTip: "generated at execution",
     functionSources: {},
     language: "en",
     undefinedTip: "undefined",
@@ -178,7 +198,20 @@ test("previews respect variable scope precedence and include only selected custo
   );
   assert.equal(calls[0][1].token, "environment");
   assert.equal(calls[0][1].shared, "global-only");
-  assert.equal(calls[0][1].$token, "system");
+  assert.equal(Object.hasOwn(calls[0][1], "$token"), false);
   assert.deepEqual(calls[0][3], { fn_selected: "return text;" });
-  assert.deepEqual(globals, { token: "global", shared: "global-only" });
+  assert.equal(context.get("token").value, "environment");
+  assert.equal(
+    await evaluateVariablePreview({ ...input, value: "empty" }),
+    "empty string",
+  );
+  assert.equal(await evaluateVariablePreview({ ...input, value: "zero" }), "0");
+  assert.equal(
+    await evaluateVariablePreview({ ...input, value: "$token" }),
+    "generated at execution",
+  );
+  assert.equal(
+    await evaluateVariablePreview({ ...input, value: "missing" }),
+    "undefined",
+  );
 });

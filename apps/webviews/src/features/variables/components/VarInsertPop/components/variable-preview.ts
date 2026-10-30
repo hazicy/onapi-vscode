@@ -1,7 +1,9 @@
-import { mapKeys, merge } from "lodash-es";
 import { mockExp } from "@onapi/domain/mock/expressions";
-import { SYSTEM_VARS } from "@/shared/constants/system";
-import { getGlobals } from "@/features/requests/utils/send-utils";
+import {
+  configuredVariableValues,
+  variableValueText,
+  type VariableContext,
+} from "@onapi/domain/variables/context";
 import {
   ASSIGNMENT_VALUE_KEY,
   VAR_OPTIONS_KEY,
@@ -13,7 +15,9 @@ export interface PreviewInput {
   value: string;
   expression: string;
   functions: FuncListRenderItem[];
-  environment: Record<string, unknown>;
+  context: VariableContext;
+  emptyTip: string;
+  dynamicTip: string;
   functionSources: Record<string, string>;
   language: string;
   undefinedTip: string;
@@ -40,7 +44,7 @@ export async function evaluateVariablePreview(
     option,
     value,
     expression,
-    environment,
+    context,
     functions,
     functionSources,
     language,
@@ -48,19 +52,18 @@ export async function evaluateVariablePreview(
   if (usesPlainPreview(input) && option !== VAR_OPTIONS_KEY.var) {
     return value;
   }
-  // Scope precedence is system < globals < active environment. Use a fresh object.
-  const variables: Record<string, unknown> = merge(
-    {},
-    mapKeys(SYSTEM_VARS, (_value, key) => `$${key}`),
-    await getGlobals(),
-    environment,
-  );
-  if (usesPlainPreview(input)) {
-    const resolved = variables[value];
-    return typeof resolved === "string"
-      ? resolved || input.undefinedTip
-      : JSON.stringify(resolved) || "";
+  const variable = context.get(value);
+  if (option === VAR_OPTIONS_KEY.var && variable?.kind === "dynamic") {
+    return input.dynamicTip;
   }
+  if (usesPlainPreview(input)) {
+    if (!variable) {
+      return input.undefinedTip;
+    }
+    const text = variableValueText(variable.value);
+    return text === "" ? input.emptyTip : text;
+  }
+  const variables = configuredVariableValues(context);
   const scripts = Object.fromEntries(
     functions
       .filter(

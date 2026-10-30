@@ -85,8 +85,8 @@ export function requestDecoration(
   const variables = native
     ? Object.fromEntries(
         [
-          ...(settings.collection.variable || []),
           ...(settings.options.globals.values || []),
+          ...(settings.collection.variable || []),
           ...(env?.values || []),
         ]
           .filter((entry: any) => entry.enabled !== false && !entry.disabled)

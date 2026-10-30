@@ -7,8 +7,17 @@
   height: 244px;
   border-radius: var(--border-radius);
   text-align: left;
-  background: var(--popover-select-bg-color);
-  box-shadow: 0 4px 8px -4px #101801;
+  background: var(
+    --vscode-editorSuggestWidget-background,
+    var(--color-bg-right)
+  );
+  color: var(
+    --vscode-editorSuggestWidget-foreground,
+    var(--font-content-color)
+  );
+  border: 1px solid
+    var(--vscode-editorSuggestWidget-border, var(--color-border));
+  box-shadow: 0 4px 8px var(--vscode-widget-shadow, #0003);
 }
 .container {
   font-size: var(--font-size-12);
@@ -22,7 +31,10 @@
     transform: translateY(-50%) rotate(45deg);
     width: 8px;
     height: 8px;
-    background-color: var(--popover-select-bg-color);
+    background-color: var(
+      --vscode-editorSuggestWidget-background,
+      var(--color-bg-right)
+    );
     content: "";
   }
   & .relatedEnvVars .envVarsList {
@@ -49,7 +61,10 @@
 }
 .container .relatedEnvVars .envVarsDesc .varName,
 .container .relatedEnvVars .envVarsDesc .varValue {
-  color: var(--font-light-color);
+  color: var(
+    --vscode-editorSuggestWidget-foreground,
+    var(--font-content-color)
+  );
   word-break: break-word;
 }
 .container {
@@ -72,12 +87,19 @@
     border-radius: var(--border-radius);
     line-height: 12px;
     text-align: center;
-    background: #3a86ff;
+    background: var(--vscode-badge-background, #3a86ff);
   }
 }
 .container .relatedEnvVars .envVarsDefault:hover,
 .container .relatedEnvVars .envVarsDefault.active {
-  background: var(--popover-select-bg-hover-color);
+  background: var(
+    --vscode-editorSuggestWidget-selectedBackground,
+    var(--popover-select-bg-hover-color)
+  );
+  color: var(
+    --vscode-editorSuggestWidget-selectedForeground,
+    var(--font-content-color)
+  );
 }
 .container .relatedEnvVars .envVarsDefault:hover .defaultIcon,
 .container .relatedEnvVars .envVarsDefault.active .defaultIcon {
@@ -101,10 +123,10 @@
     border-radius: var(--border-radius);
     line-height: 18px;
     text-align: center;
-    color: #fff;
-    background: #3a86ff;
+    color: var(--vscode-badge-foreground, #fff);
+    background: var(--vscode-badge-background, #3a86ff);
   }
   & .relatedEnvVars .envVarsDefault .defaultType.e {
-    background: #3cc071;
+    background: var(--vscode-badge-background, #3cc071);
   }
 }

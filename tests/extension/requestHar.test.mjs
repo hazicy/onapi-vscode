@@ -133,3 +133,29 @@ for (const type of ["jwt", "asap"]) {
     assert.equal(request.auth.parameters().one("secret").value, "resolved");
   });
 }
+
+for (const activeEnvironment of ["env", "missing"]) {
+  test(`code generation follows Postman scope precedence (${activeEnvironment})`, async () => {
+    const request = await getResolvedCodeRequest(
+      { request: { method: "GET", url: "https://example.com/{{scope}}" } },
+      {
+        config: {
+          http: {
+            activeEnvironment,
+            collection: { variable: [{ key: "scope", value: "collection" }] },
+            environments: [
+              { id: "env", values: [{ key: "scope", value: "environment" }] },
+            ],
+            options: {
+              globals: { values: [{ key: "scope", value: "global" }] },
+            },
+          },
+        },
+      },
+    );
+    assert.equal(
+      request.url.toString(),
+      `https://example.com/${activeEnvironment === "env" ? "environment" : "collection"}`,
+    );
+  });
+}

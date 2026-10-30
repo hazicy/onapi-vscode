@@ -16,6 +16,9 @@ import {
 } from "@codemirror/state";
 import {
   EditorView,
+  Decoration,
+  MatchDecorator,
+  ViewPlugin,
   drawSelection,
   highlightActiveLine,
   highlightActiveLineGutter,
@@ -266,6 +269,26 @@ const CodeEditor = forwardRef<CodeEditorRef, Props>((props, ref) => {
     if (!readOnly) {
       config.push(highlightActiveLine());
     }
+    if (resolveVariable && !readOnly) {
+      const matcher = new MatchDecorator({
+        regexp: /\{\{[^{}\n]+\}\}/g,
+        decoration: Decoration.mark({ class: "cm-request-variable" }),
+      });
+      config.push(
+        ViewPlugin.fromClass(
+          class {
+            decorations;
+            constructor(view: EditorView) {
+              this.decorations = matcher.createDeco(view);
+            }
+            update(update: import("@codemirror/view").ViewUpdate) {
+              this.decorations = matcher.updateDeco(update, this.decorations);
+            }
+          },
+          { decorations: (plugin) => plugin.decorations },
+        ),
+      );
+    }
     if (options?.hover?.enabled && resolveVariable) {
       config.push(
         hoverTooltip(
@@ -289,7 +312,7 @@ const CodeEditor = forwardRef<CodeEditorRef, Props>((props, ref) => {
                   const dom = document.createElement("div");
                   dom.style.cssText =
                     "padding:6px 10px;white-space:pre-wrap;overflow-wrap:anywhere";
-                  dom.textContent = content.replace(/\*\*/g, "");
+                  dom.textContent = content;
                   return { dom };
                 },
               };

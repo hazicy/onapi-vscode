@@ -1,3 +1,4 @@
+import VariableInputFixture from "./VariableInputFixture";
 import RequestPanelFixture from "./RequestPanelFixture";
 import RequestScriptsFixture from "./RequestScriptsFixture";
 import ResizeFixture from "./ResizeFixture";
@@ -17,7 +18,9 @@ import ThemeFixture from "./ThemeFixture";
 
 createRoot(document.getElementById("root")!).render(
   <SharedComponentsProvider>
-    {new URLSearchParams(location.search).has("requestPanel") ? (
+    {new URLSearchParams(location.search).has("variableInput") ? (
+      <VariableInputFixture />
+    ) : new URLSearchParams(location.search).has("requestPanel") ? (
       <RequestPanelFixture />
     ) : new URLSearchParams(location.search).has("requestScripts") ? (
       <RequestScriptsFixture />

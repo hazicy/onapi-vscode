@@ -38,14 +38,108 @@
   }
 }
 .container {
-  &.hasBorder .miniEditor {
+  &.hasBorder .editorShell {
     padding: 6.6px 11px;
     border-radius: var(--border-radius);
     border: 1px solid var(--color-table-border);
     line-height: 1.4;
     transition: all 0.3s;
   }
-  &.hasBorder .miniEditor:hover {
+  &.hasBorder .editorShell:hover {
     border: 1px solid var(--color-primary);
   }
+}
+
+.fieldShell {
+  position: relative;
+  flex: 1;
+  width: 0;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.highlights {
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  overflow: hidden;
+  white-space: pre;
+  pointer-events: none;
+  font: inherit;
+  line-height: inherit;
+}
+.variable {
+  border-radius: 3px;
+  background: color-mix(
+    in srgb,
+    var(--vscode-textLink-foreground, #3794ff) 18%,
+    transparent
+  );
+  color: var(--vscode-textLink-foreground, #3794ff);
+  box-shadow: inset 0 -1px var(--vscode-textLink-foreground, #3794ff);
+}
+.undefinedVariable {
+  color: var(--vscode-errorForeground, #f14c4c);
+}
+.variable.undefinedVariable {
+  background: color-mix(
+    in srgb,
+    var(--vscode-errorForeground, #f14c4c) 15%,
+    transparent
+  );
+  box-shadow: inset 0 -1px var(--vscode-errorForeground, #f14c4c);
+}
+.editorShell .highlighted .editorField {
+  position: relative;
+  color: transparent;
+  caret-color: var(--vscode-input-foreground, var(--font-content-color, #222));
+}
+.multiline .highlights {
+  inset: 0;
+  transform: none;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+.variablePreview {
+  width: min(320px, calc(100vw - 48px));
+  font-family: var(--vscode-font-family, system-ui, sans-serif);
+  font-weight: 400;
+  max-height: 280px;
+  overflow: auto;
+  font-size: var(--vscode-font-size, 13px);
+  line-height: 1.5;
+}
+.previewHeading {
+  margin-bottom: 8px;
+  color: var(--vscode-descriptionForeground, #888);
+  font-size: 12px;
+}
+.previewRow {
+  display: grid;
+  grid-template-columns: minmax(80px, 1fr) minmax(0, 2fr);
+  gap: 12px;
+}
+.previewRow + .previewRow {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid
+    var(--vscode-editorHoverWidget-border, var(--color-border));
+}
+.previewRow code {
+  display: block;
+  color: var(--vscode-textLink-foreground, #3794ff);
+  overflow-wrap: anywhere;
+}
+.previewRow code.undefinedVariable {
+  color: var(--vscode-errorForeground, #f14c4c);
+}
+.previewValue {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.editorShell .highlighted .editorField::selection {
+  color: var(--vscode-input-foreground, var(--font-content-color, #222));
+  background: var(--vscode-editor-selectionBackground, #add6ff);
 }

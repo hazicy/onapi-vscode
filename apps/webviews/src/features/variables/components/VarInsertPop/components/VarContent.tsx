@@ -14,10 +14,7 @@ import { Flex } from "@/shared/ui/base";
 import { AppIcon, Empty } from "@/shared/ui";
 import VariableInsertContext from "@/features/variables/contexts/variable-insert";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
-import {
-  selectActiveEnvironment,
-  scopeValues,
-} from "@/features/project/store/useProjectConfig/selectors";
+import { variableContext } from "../../../utils/variable-display";
 import useProjectSetting from "@/features/project/store/useProjectSetting";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import { createVariableDraft, variableDraftReducer } from "./variable-draft";
@@ -104,11 +101,8 @@ const VarContent = forwardRef<VarContentRef, { className?: string }>(
       });
     }, [propsValue, originMockTabsKey]);
 
-    const environment = useProjectConfig(selectActiveEnvironment);
-    const environmentMap = useMemo(
-      () => scopeValues(environment),
-      [environment],
-    );
+    const http = useProjectConfig((state) => state.http);
+    const context = useMemo(() => variableContext(http), [http]);
     const functionList = useProjectSetting((state) => state.functionList);
     const functionSources = useMemo(
       () =>
@@ -134,7 +128,9 @@ const VarContent = forwardRef<VarContentRef, { className?: string }>(
           value: draft.value,
           expression,
           functions: draft.functions,
-          environment: environmentMap,
+          context,
+          emptyTip: t("interaction.variableEmpty"),
+          dynamicTip: t("interaction.variableDynamic"),
           functionSources,
           language,
           undefinedTip,
@@ -144,7 +140,8 @@ const VarContent = forwardRef<VarContentRef, { className?: string }>(
         draft.value,
         draft.functions,
         expression,
-        environmentMap,
+        context,
+        t,
         functionSources,
         language,
         undefinedTip,

@@ -8,20 +8,17 @@
   max-height: min(480px, var(--available-height, 480px));
   padding: 4px;
   overflow: auto;
-  border: 1px solid var(--color-border, #ddd);
+  border: 1px solid var(--vscode-editorWidget-border, var(--color-border, #ddd));
   border-radius: var(--vscode-cornerRadius-medium, 6px);
-  background: var(--popover-select-bg-color, var(--color-bg-right, #fff));
-  color: var(--font-content-color, #222);
-  box-shadow: 0 4px 16px #0003;
+  background: var(
+    --vscode-editorWidget-background,
+    var(--color-bg-right, #fff)
+  );
+  color: var(--vscode-editorWidget-foreground, var(--font-content-color, #222));
+  box-shadow: 0 4px 16px var(--vscode-widget-shadow, #0003);
   outline: none;
 }
 .popup[hidden],
 .popup[data-closed] {
   display: none;
-}
-
-.popup {
-  box-shadow:
-    rgba(255, 255, 255, 0.72) 0px 0px 1px,
-    rgba(0, 0, 0, 0.1) 0px 16px 24px -8px;
 }

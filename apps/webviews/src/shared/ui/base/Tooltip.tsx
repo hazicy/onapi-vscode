@@ -23,12 +23,11 @@ export function Tooltip({
   trigger,
   ...rest
 }: TooltipProps) {
-  if (title === undefined || title === null || title === "") {
-    return children;
-  }
+  const hasTitle = title !== undefined && title !== null && title !== "";
   return (
     <BaseTooltip.Provider>
       <BaseTooltip.Root
+        disabled={!hasTitle}
         open={open}
         defaultOpen={defaultOpen}
         onOpenChange={onOpenChange}

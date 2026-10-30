@@ -1,4 +1,3 @@
-import { selectActiveEnvironment } from "@/features/project/store/useProjectConfig/selectors";
 import styles from "./QuoteOption.module.css";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -6,10 +5,13 @@ import { useTranslation } from "react-i18next";
 import { Flex } from "@/shared/ui/base";
 
 import clsx from "clsx";
-import { concat, entries, filter, map, size } from "lodash-es";
 
 import { Empty, Tooltip } from "@/shared/ui";
-import { SYSTEM_VARS } from "@/shared/constants/system";
+import {
+  variableContext,
+  variableDisplayText,
+  variableScopeLabel,
+} from "../../../utils/variable-display";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 
 interface Props {
@@ -17,97 +19,76 @@ interface Props {
   onChange: (v: string) => void;
 }
 
-enum ListType {
-  env,
-  global,
-  inner,
-}
-
 const Index = ({ value, onChange }: Props) => {
   const { t } = useTranslation();
-  const globalVars = useProjectConfig(
-    (state) => state.http.options.globals.values,
-  );
-  const environment = useProjectConfig(selectActiveEnvironment);
+  const http = useProjectConfig((state) => state.http);
   const [index, setIndex] = useState(0);
-
-  const list = useMemo(() => {
-    const displayValues = (values: typeof globalVars, type: ListType) =>
-      (values || [])
-        .filter((item) => !item.disabled)
-        .map((item) => ({
-          key: item.key || "",
-          value:
-            typeof item.value === "string"
-              ? item.value
-              : JSON.stringify(item.value),
-          type,
-        }));
-    const envVarList = displayValues(environment?.values, ListType.env);
-    const globalVarList = displayValues(globalVars, ListType.global);
-    const systemVarList = map(entries(SYSTEM_VARS), ([key, value]) => ({
-      key: `$${key}`,
-      value,
-      type: ListType.inner,
-    }));
-    return filter(concat(envVarList, globalVarList, systemVarList), (item) =>
-      (item?.key as string)?.toLowerCase().includes(value?.toLowerCase() || ""),
-    );
-  }, [value, globalVars, environment]);
+  const list = useMemo(
+    () =>
+      [...variableContext(http).values()].filter((item) =>
+        item.name.toLowerCase().includes(value.toLowerCase()),
+      ),
+    [http, value],
+  );
+  const current = list[index] ?? list[0];
 
   return (
     <div className={styles.container}>
-      {size(list) ? (
+      {list.length ? (
         <>
           <div className={styles.list}>
-            {map(list, (item, index) => (
+            {list.map((item, index) => (
               <div
-                key={`${item.type}:${item.key}`}
+                key={item.name}
                 className={styles.listItem}
                 onFocus={() => setIndex(index)}
                 onMouseOver={() => setIndex(index)}
                 onMouseDown={() => {
-                  onChange(item.key);
+                  onChange(item.name);
                   setIndex(index);
                 }}
               >
                 <div
                   className={clsx(styles.listItemIcon, {
-                    [styles.e]: item?.type === ListType.env,
-                    [styles.g]: item?.type === ListType.global,
+                    [styles.e]: item.scope === "environment",
+                    [styles.g]: item.scope === "global",
                   })}
                 >
-                  {item?.type === ListType.env ? "E" : "G"}
+                  {item.scope === "environment"
+                    ? "E"
+                    : item.scope === "collection"
+                      ? "C"
+                      : item.scope === "system"
+                        ? "S"
+                        : "G"}
                 </div>
                 <div className={styles.listItemKey}>
-                  <Tooltip title={item.key}>{item.key}</Tooltip>
+                  <Tooltip title={item.name}>{item.name}</Tooltip>
                 </div>
               </div>
             ))}
           </div>
           <div className={styles.content}>
-            {list[index] && (
+            {current && (
               <>
                 <Flex gap={4} vertical>
                   <span className={styles.label}>
                     {t("supplement.var_name")}
                   </span>
-                  <span className={styles.value}>{list[index]?.key || ""}</span>
+                  <span className={styles.value}>{current.name}</span>
                 </Flex>
                 <Flex gap={4} vertical>
                   <span className={styles.label}>
-                    {t("supplement.var_value")}
+                    {t("interaction.configuredValue")}
                   </span>
                   <span className={styles.value}>
-                    {list[index]?.value || ""}
+                    {variableDisplayText(current, t)}
                   </span>
                 </Flex>
                 <Flex gap={4} vertical>
                   <span className={styles.label}>{t("supplement.scope")}</span>
                   <span className={styles.value}>
-                    {list[index]?.type === ListType.env
-                      ? t("supplement.var_env")
-                      : t("supplement.var_glo")}
+                    {variableScopeLabel(current.scope, t)}
                   </span>
                 </Flex>
               </>

@@ -9,7 +9,16 @@
   max-width: 320px;
   padding: 6px 8px;
   border-radius: var(--vscode-cornerRadius-small, 4px);
-  background: var(--font-title-color, #222);
-  color: var(--color-bg-right, #fff);
+  background: var(
+    --vscode-editorHoverWidget-background,
+    var(--color-bg-right, #fff)
+  );
+  color: var(
+    --vscode-editorHoverWidget-foreground,
+    var(--font-content-color, #222)
+  );
+  border: 1px solid
+    var(--vscode-editorHoverWidget-border, var(--color-border, #ddd));
+  box-shadow: 0 2px 8px var(--vscode-widget-shadow, #0003);
   overflow-wrap: anywhere;
 }

@@ -1,11 +1,11 @@
-import React, { useRef } from "react";
+import React, { useId, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Input, message } from "@/shared/ui/base";
+import { Input, Tooltip, message } from "@/shared/ui/base";
 import type { InputRef } from "@/shared/ui/base";
 import VarMentions from "@/features/variables/components/VarMentions";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
-import { useMemoizedFn, useSafeState } from "ahooks";
+import { useSafeState } from "ahooks";
 import clsx from "clsx";
 import { head } from "lodash-es";
 
@@ -14,6 +14,11 @@ import type { CurlDataType } from "@/features/requests/types/other";
 
 import styles from "./VarInput.module.css";
 import { getElementTextOffset } from "./util";
+import {
+  variableContext,
+  variableDisplay,
+  variableDisplayText,
+} from "../../utils/variable-display";
 
 interface VarInputProps {
   envId?: string;
@@ -36,9 +41,8 @@ interface VarInputProps {
 }
 
 type EnvOptions = {
-  offset?: Partial<React.CSSProperties>;
-  secondLastChar?: number;
-  text?: string;
+  offset: Pick<React.CSSProperties, "left" | "top">;
+  insertionIndex: number;
 };
 
 export default function VarInput(props: Partial<VarInputProps>) {
@@ -59,12 +63,70 @@ export default function VarInput(props: Partial<VarInputProps>) {
     disabledReturn,
   } = props;
   const { t } = useTranslation();
-  const activeEnvironment = useProjectConfig(
-    (state) => state.http.activeEnvironment,
+  const http = useProjectConfig((state) => state.http);
+  const currentEnvId = envId || http.activeEnvironment || "";
+  const values = useMemo(
+    () => variableContext(http, currentEnvId),
+    [http, currentEnvId],
   );
-  const currentEnvId = envId || activeEnvironment || "";
-  const [envVisible, setEnvVisible] = useSafeState(false);
-  const [envObj, setEnvObj] = useSafeState<EnvOptions | null>(null);
+  const matches = [...value.matchAll(/\{\{([^{}\n]+)\}\}/g)];
+  const names = [...new Set(matches.map((match) => match[1]))];
+  const [scroll, setScroll] = useSafeState({ left: 0, top: 0 });
+  const syncScroll = (
+    event: React.UIEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setScroll({
+      left: event.currentTarget.scrollLeft,
+      top: event.currentTarget.scrollTop,
+    });
+  };
+  const previewId = useId();
+  const preview = names.length ? (
+    <div id={previewId} role="tooltip" className={styles.variablePreview}>
+      <div className={styles.previewHeading}>
+        {t("interaction.configuredValue")}
+      </div>
+      {names.map((name) => {
+        const variable = variableDisplay(name, values);
+        return (
+          <div key={name} className={styles.previewRow}>
+            <code
+              className={
+                variable.kind === "undefined"
+                  ? styles.undefinedVariable
+                  : undefined
+              }
+            >
+              {`{{${name}}}`}
+            </code>
+            <div className={styles.previewValue}>
+              {variableDisplayText(variable, t)}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  ) : undefined;
+  const highlighted = [];
+  let previousEnd = 0;
+  for (const match of matches) {
+    highlighted.push(value.slice(previousEnd, match.index));
+    highlighted.push(
+      <mark
+        key={match.index}
+        className={clsx(styles.variable, {
+          [styles.undefinedVariable]:
+            variableDisplay(match[1], values).kind === "undefined",
+        })}
+      >
+        {match[0]}
+      </mark>,
+    );
+    previousEnd = match.index! + match[0].length;
+  }
+  highlighted.push(value.slice(previousEnd), "\u200b");
+  const [completion, setCompletion] = useSafeState<EnvOptions | null>(null);
+  const envVisible = completion !== null;
   const inputRef = useRef<InputRef>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const nativeMaxLength =
@@ -72,58 +134,40 @@ export default function VarInput(props: Partial<VarInputProps>) {
   const editorElement = () =>
     multiline ? textAreaRef.current : inputRef.current?.input || null;
 
-  const handleInput = useMemoizedFn(
-    (
-      text: string,
-      charIndex: number,
-      element: HTMLInputElement | HTMLTextAreaElement,
-    ) => {
-      if (envVisible || text.substring(charIndex - 2, charIndex) !== "{{") {
-        setEnvVisible(false);
-        return;
-      }
-      const position = getElementTextOffset(element, charIndex);
-      setEnvObj({
-        offset: { left: position.left, top: position.top },
-        secondLastChar: charIndex - 2,
-        text,
-      });
-      setEnvVisible(true);
-    },
-  );
-
-  const insertText = useMemoizedFn((text: string, index?: number) => {
+  const insertVariable = (name: string) => {
     const element = editorElement();
-    if (!element || readOnly) {
+    if (!element || !completion || readOnly) {
       return;
     }
-    const start = index ?? element.selectionStart ?? element.value.length;
-    const end = index === undefined ? (element.selectionEnd ?? start) : start;
-    const nextValue = `${element.value.slice(0, start)}${text}${element.value.slice(end)}`;
-    if (nextValue.length > (maxLength ?? 2048)) {
+    const text = `${name}}}`;
+    const start = completion.insertionIndex;
+    const nextValue = `${element.value.slice(0, start)}${text}${element.value.slice(start)}`;
+    if (nextValue.length > maxLength) {
       return;
     }
     onChange?.(nextValue);
     requestAnimationFrame(() => {
       const current = editorElement();
-      if (!current) {
-        return;
-      }
-      current.focus();
-      current.setSelectionRange(start + text.length, start + text.length);
+      current?.focus();
+      current?.setSelectionRange(start + text.length, start + text.length);
     });
-  });
+  };
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const element = event.currentTarget;
     onChange?.(element.value);
-    handleInput(
-      element.value,
-      element.selectionStart ?? element.value.length,
-      element,
-    );
+    const index = element.selectionStart ?? element.value.length;
+    if (envVisible || element.value.slice(index - 2, index) !== "{{") {
+      setCompletion(null);
+      return;
+    }
+    const position = getElementTextOffset(element, index);
+    setCompletion({
+      offset: { left: position.left, top: position.top },
+      insertionIndex: index,
+    });
   };
 
   const handlePaste = async (
@@ -134,8 +178,7 @@ export default function VarInput(props: Partial<VarInputProps>) {
     const selectionStart = element.selectionStart ?? element.value.length;
     const selectionEnd = element.selectionEnd ?? selectionStart;
     const available =
-      (maxLength ?? 2048) -
-      (element.value.length - (selectionEnd - selectionStart));
+      maxLength - (element.value.length - (selectionEnd - selectionStart));
     if (text.length > available) {
       event.preventDefault();
       message.destroy();
@@ -208,7 +251,7 @@ export default function VarInput(props: Partial<VarInputProps>) {
       event.preventDefault();
     }
     if (event.key === "Escape" && envVisible) {
-      setEnvVisible(false);
+      setCompletion(null);
     }
   };
 
@@ -216,6 +259,18 @@ export default function VarInput(props: Partial<VarInputProps>) {
     if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
       onBlur?.(value);
     }
+  };
+
+  const fieldProps = {
+    className: styles.editorField,
+    value,
+    placeholder,
+    "aria-describedby": names.length ? previewId : undefined,
+    readOnly,
+    maxLength: nativeMaxLength,
+    onChange: handleChange,
+    onScroll: syncScroll,
+    onPaste: handlePaste,
   };
 
   return (
@@ -228,42 +283,42 @@ export default function VarInput(props: Partial<VarInputProps>) {
         wrapClassName,
       )}
     >
-      <div className={clsx(styles.miniEditor, styles.editorShell, {})}>
-        {multiline ? (
-          <Input.TextArea
-            ref={textAreaRef}
-            className={styles.editorField}
-            value={value}
-            placeholder={placeholder}
-            readOnly={readOnly}
-            maxLength={nativeMaxLength}
-            rows={1}
-            onChange={handleChange}
-            onPaste={handlePaste}
-          />
-        ) : (
-          <Input
-            ref={inputRef}
-            bordered={false}
-            className={styles.editorField}
-            value={value}
-            placeholder={placeholder}
-            readOnly={readOnly}
-            maxLength={nativeMaxLength}
-            onChange={handleChange}
-            onPaste={handlePaste}
-          />
-        )}
+      <div className={styles.editorShell}>
+        <Tooltip
+          title={envVisible ? undefined : preview}
+          placement="bottomLeft"
+        >
+          <div
+            className={clsx(styles.fieldShell, {
+              [styles.highlighted]: matches.length > 0,
+              [styles.multiline]: multiline,
+            })}
+          >
+            {matches.length > 0 && (
+              <div className={styles.highlights} aria-hidden="true">
+                <div
+                  style={{
+                    transform: `translate(${-scroll.left}px, ${-scroll.top}px)`,
+                  }}
+                >
+                  {highlighted}
+                </div>
+              </div>
+            )}
+            {multiline ? (
+              <Input.TextArea {...fieldProps} ref={textAreaRef} rows={1} />
+            ) : (
+              <Input {...fieldProps} ref={inputRef} bordered={false} />
+            )}
+          </div>
+        </Tooltip>
         {suffix}
       </div>
-      {envVisible && (
+      {completion && (
         <VarMentions
-          onSelect={(val: string) =>
-            insertText(`${val}}}`, (envObj?.secondLastChar || 0) + 2)
-          }
-          onCancel={() => setTimeout(() => setEnvVisible(false), 100)}
-          envVisible={envVisible}
-          offset={envObj?.offset}
+          onSelect={insertVariable}
+          onCancel={() => setTimeout(() => setCompletion(null), 100)}
+          offset={completion.offset}
           env_id={currentEnvId}
         />
       )}
