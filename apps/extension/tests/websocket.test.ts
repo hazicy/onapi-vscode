@@ -408,9 +408,9 @@ test("placeholder replacement preserves literal values, legacy mock variables an
     await replace("{{a.b}} {{name}} {{unknown}}"),
     "$& Bob {{unknown}}",
   );
-  assert.equal(await replace("{{name|upper}}"), "BOB");
-  assert.match(await replace("{{$fakerjs.internet.email}}"), /@/);
-  assert.match(await replace("{{$fakerjs.string.uuid}}"), /^[\da-f-]{36}$/i);
+  assert.equal(await replace("{{name|upcase}}"), "BOB");
+  assert.match(await replace("{{'internet.email' | faker}}"), /@/);
+  assert.match(await replace("{{'string.uuid' | faker}}"), /^[\da-f-]{36}$/i);
   assert.equal(await replace("{{$email}}"), "{{$email}}");
 });
 

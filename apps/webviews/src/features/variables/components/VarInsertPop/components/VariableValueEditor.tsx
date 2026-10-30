@@ -209,7 +209,7 @@ export default function VariableValueEditor({
       );
     }
     if (props?.value) {
-      const prefix = "$fakerjs.";
+      const prefix = "faker: ";
       return (
         <Flex className={styles.treeValue}>
           <span className={styles.value}>

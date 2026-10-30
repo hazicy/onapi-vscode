@@ -8,7 +8,6 @@
     ".": "./src/index.ts",
     "./*.json": "./src/*.json",
     "./*": "./src/*.ts",
-    "./mock/expressions": "./src/mock/expressions.js",
     "./mock/*.json": "./src/mock/*.json"
   },
   "scripts": {
@@ -26,6 +25,7 @@
     "js-base64": "^3.9.4",
     "json-schema-faker": "0.6.3",
     "json5": "^2.2.3",
+    "liquidjs": "^10.30.0",
     "lodash": "^4.18.1",
     "minimatch": "^10.2.6",
     "pako": "^3.0.2",

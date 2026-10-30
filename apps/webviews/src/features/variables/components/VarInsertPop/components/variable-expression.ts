@@ -1,10 +1,12 @@
 import {
-  ASSIGNMENT_VALUE_KEY,
   FAKERJS_FORMAT_LIST,
   VAR_OPTIONS_KEY,
 } from "@/features/variables/constants/variable";
-import { encryptString } from "@onapi/domain/mock/expressions";
-import { transFuncName, transKey } from "@/features/variables/utils/variable";
+import {
+  liquidLiteral,
+  transFuncName,
+  transKey,
+} from "@/features/variables/utils/variable";
 import type { VariableDraft } from "./variable-draft";
 
 export const isDescriptionOption = (option: VAR_OPTIONS_KEY) =>
@@ -20,29 +22,17 @@ export function buildVariableExpression(
 ): string {
   const { value, functions, parameters, dateFormat } = draft;
   const fakerParameters = parameters
-    .flatMap((item) => {
-      // Preserve the existing omission of empty/false/zero Faker arguments.
-      if (!item.value) {
-        return [];
-      }
-      const value = Array.isArray(item.value)
-        ? `[${item.value.join(",")}]`
-        : String(item.value);
-      return [`${transKey(item.key)}=${encryptString(value)}`];
-    })
-    .join(",");
+    .filter((item) => item.value !== undefined && item.value !== "")
+    .map((item) => `${transKey(item.key)}: ${liquidLiteral(item.value)}`)
+    .join(", ");
   const format = hasDateFormat(option, value)
-    ? `|format(${dateFormat.format},${dateFormat.utc})`
+    ? `|format: ${liquidLiteral(dateFormat.format)}, ${liquidLiteral(dateFormat.utc)}`
     : "";
   let source = value;
   if (option === VAR_OPTIONS_KEY.fixed || option === VAR_OPTIONS_KEY.ai_value) {
-    source =
-      option === VAR_OPTIONS_KEY.ai_value &&
-      value === ASSIGNMENT_VALUE_KEY.random
-        ? "@ai()"
-        : `'${value}'`;
+    source = liquidLiteral(value);
   } else if (option === VAR_OPTIONS_KEY.mock) {
-    source = `$fakerjs.${value}${fakerParameters ? `(${fakerParameters})` : ""}`;
+    source = `${liquidLiteral(value)}|faker${fakerParameters ? `: ${fakerParameters}` : ""}`;
   }
   const pipeline = functions
     .map((fn) => transFuncName(fn.func_name, fn.paras))

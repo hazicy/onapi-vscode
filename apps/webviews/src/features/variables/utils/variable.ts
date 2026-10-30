@@ -1,35 +1,46 @@
 import { includes } from "lodash-es";
 
-export const transFuncName = (originName: string, value: any) => {
-  try {
-    let name = originName;
-    const v = value[originName];
-    switch (originName) {
-      case "substr":
-        name = `substr(${v?.start || 0}${v?.length ? `,${v?.length}` : ""})`;
-        break;
-      case "sha":
-        name = `${v?.text}`;
-        break;
-      case "concat":
-        name = v?.text ? `concat(${v?.text})` : "concat";
-        break;
-      case "lconcat":
-        name = v?.text ? `lconcat(${v?.text})` : "lconcat";
-        break;
-      case "padStart":
-        name = `padStart(${v?.length || 0}${v?.text ? `,${v?.text}` : ""})`;
-        break;
-      case "padEnd":
-        name = `padEnd(${v?.length || 0}${v?.text ? `,${v?.text}` : ""})`;
-        break;
+export const liquidLiteral = (value: unknown): string => {
+  if (typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+  if (value === null || value === undefined) {
+    return "nil";
+  }
+  const text =
+    Array.isArray(value) || typeof value === "object"
+      ? JSON.stringify(value)
+      : String(value);
+  return JSON.stringify(text);
+};
 
-      default:
-        break;
-    }
-    return name;
-  } catch (err) {
-    return originName;
+export const transFuncName = (name: string, value: any) => {
+  const args = value?.[name] || {};
+  switch (name) {
+    case "lower":
+      return "downcase";
+    case "upper":
+      return "upcase";
+    case "length":
+      return "size";
+    case "substr":
+      return `slice: ${args.start ?? 0}${args.length === null || args.length === undefined ? "" : `, ${args.length}`}`;
+    case "sha":
+      return args.text || "sha1";
+    case "concat":
+      return `append: ${liquidLiteral(args.text || "")}`;
+    case "lconcat":
+      return `prepend: ${liquidLiteral(args.text || "")}`;
+    case "padStart":
+      return `pad_start: ${args.length ?? 0}, ${liquidLiteral(args.text || " ")}`;
+    case "padEnd":
+      return `pad_end: ${args.length ?? 0}, ${liquidLiteral(args.text || " ")}`;
+    case "encodeURIComponent":
+      return "url_encode";
+    case "decodeURIComponent":
+      return "url_decode";
+    default:
+      return name;
   }
 };
 

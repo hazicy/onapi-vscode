@@ -25,7 +25,7 @@ test("fixed values preview, apply and cancel function edits, and insert the curr
   const dialog = variableInsertPage.dialog;
   await dialog.getByRole("textbox").fill("hello");
   await expect(page.getByLabel("Variable expression")).toHaveText(
-    "{{'hello'}}",
+    '{{"hello"}}',
   );
   await expect(page.getByLabel("Variable preview")).toHaveText("hello");
   await page.getByRole("button", { name: "Add processing function" }).click();
@@ -35,7 +35,7 @@ test("fixed values preview, apply and cancel function edits, and insert the curr
   await modal.getByRole("button", { name: "Confirm", exact: true }).click();
   await expect(modal).toBeHidden();
   await expect(page.getByLabel("Variable expression")).toHaveText(
-    "{{'hello'|upper}}",
+    '{{"hello"|upcase}}',
   );
   await expect(page.getByLabel("Variable preview")).toHaveText("HELLO");
   await page
@@ -44,12 +44,12 @@ test("fixed values preview, apply and cancel function edits, and insert the curr
   await modal.getByText("lower", { exact: true }).click();
   await modal.getByRole("button", { name: "Cancel", exact: true }).click();
   await expect(page.getByLabel("Variable expression")).toHaveText(
-    "{{'hello'|upper}}",
+    '{{"hello"|upcase}}',
   );
   await page.getByRole("button", { name: "Insert", exact: true }).click();
   await expect(page.getByLabel("Inserted variable")).toHaveText(
     JSON.stringify({
-      text: "{{'hello'|upper}}",
+      text: '{{"hello"|upcase}}',
       operation: "fixed",
       action: 1,
     }),
@@ -63,22 +63,22 @@ test("closing and reopening restores the source expression rather than the previ
   await variableInsertPage.open("&mode=fixed&value=source&function");
   await variableInsertPage.insertDynamicValueButton.click();
   await expect(page.getByLabel("Variable expression")).toHaveText(
-    "{{'source'|upper}}",
+    '{{"source"|upcase}}',
   );
   await variableInsertPage.dialog.getByRole("textbox").fill("unsaved");
   await expect(page.getByLabel("Variable expression")).toHaveText(
-    "{{'unsaved'|upper}}",
+    '{{"unsaved"|upcase}}',
   );
   await page.keyboard.press("Escape");
   await expect(variableInsertPage.dialog).toBeHidden();
   await variableInsertPage.insertDynamicValueButton.click();
   await expect(page.getByLabel("Variable expression")).toHaveText(
-    "{{'source'|upper}}",
+    '{{"source"|upcase}}',
   );
   await page.getByRole("button", { name: "Confirm", exact: true }).click();
   await expect(page.getByLabel("Inserted variable")).toHaveText(
     JSON.stringify({
-      text: "{{'source'|upper}}",
+      text: '{{"source"|upcase}}',
       operation: "fixed",
       action: 2,
     }),
@@ -124,7 +124,7 @@ test("Mock picker selections build executable expressions from the shared catalo
   await page.getByRole("textbox", { name: "Search tree" }).fill("alpha");
   await page.getByRole("treeitem", { name: "alpha", exact: true }).click();
   await expect(page.getByLabel("Variable expression")).toHaveText(
-    "{{$fakerjs.String.alpha}}",
+    '{{"String.alpha"|faker}}',
   );
   await expect(page.getByLabel("Variable preview")).toHaveText(/^[a-zA-Z]+$/);
 });

@@ -56,7 +56,7 @@ test("production Mock engine runs expressions and Schema rules in Chromium", asy
       properties: {
         count: {
           type: "integer",
-          mock: { mock: "{{$fakerjs.number.int(min=7,max=7)}}" },
+          mock: { mock: "{{'number.int' | faker: min: 7, max: 7}}" },
         },
         email: {
           type: "string",
@@ -71,9 +71,9 @@ test("production Mock engine runs expressions and Schema rules in Chromium", asy
       },
     });
     return {
-      hash: mockExp("{{text|md5()}}", { text: "abc" }),
-      name: mockExp("{{$fakerjs.person.firstName}}", {}, "zh-cn"),
-      id: mockExp("{{$fakerjs.string.idcard}}", {}),
+      hash: mockExp("{{text|md5}}", { text: "abc" }),
+      name: mockExp("{{'person.firstName' | faker}}", {}, "zh-cn"),
+      id: mockExp("{{'string.idcard' | faker}}", {}),
       schema,
     };
   });

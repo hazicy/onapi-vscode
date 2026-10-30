@@ -15,8 +15,6 @@ const variable = await load(
 const dependencies = (id) => {
   if (id === "@/features/variables/constants/variable") return constants;
   if (id === "@/features/variables/utils/variable") return variable;
-  if (id === "@onapi/domain/mock/expressions")
-    return { encryptString: (value) => `encoded(${value})` };
   return nativeDependency(id);
 };
 const { createVariableDraft, variableDraftReducer } = await load(
@@ -87,18 +85,18 @@ test("fixed, variable, Faker date and AI expressions share one correctly delimit
   });
   assert.equal(
     buildVariableExpression(options.var, draft),
-    "{{name|upper|substr(1,2)}}",
+    "{{name|upcase|slice: 1, 2}}",
   );
   assert.equal(
     buildVariableExpression(options.fixed, draft),
-    "{{'name'|upper|substr(1,2)}}",
+    '{{"name"|upcase|slice: 1, 2}}',
   );
   assert.equal(
     buildVariableExpression(options.ai_value, {
       ...draft,
       value: ASSIGNMENT_VALUE_KEY.random,
     }),
-    "{{@ai()|upper|substr(1,2)}}",
+    '{{"random"|upcase|slice: 1, 2}}',
   );
   const date = createVariableDraft({
     value: "date.past",
@@ -106,7 +104,7 @@ test("fixed, variable, Faker date and AI expressions share one correctly delimit
   });
   assert.equal(
     buildVariableExpression(options.mock, date),
-    "{{$fakerjs.date.past|format(YYYY-MM-DD,+08:00)}}",
+    '{{"date.past"|faker|format: "YYYY-MM-DD", "+08:00"}}',
   );
   const faker = createVariableDraft({
     value: "string.alpha",
@@ -117,7 +115,7 @@ test("fixed, variable, Faker date and AI expressions share one correctly delimit
   });
   assert.equal(
     buildVariableExpression(options.mock, faker),
-    "{{$fakerjs.string.alpha(min=encoded(3),coordinates=encoded([1,2]))}}",
+    '{{"string.alpha"|faker: min: 3, coordinates: "[1,2]"}}',
   );
 });
 

@@ -562,6 +562,9 @@ importers:
       json5:
         specifier: ^2.2.3
         version: 2.2.3
+      liquidjs:
+        specifier: ^10.30.0
+        version: 10.30.0
       lodash:
         specifier: ^4.18.1
         version: 4.18.1
@@ -2505,6 +2508,10 @@ packages:
     resolution: {integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==}
     engines: {node: '>= 0.8'}
 
+  commander@10.0.1:
+    resolution: {integrity: sha512-y4Mg2tXshplEbSGzx7amzPwKKOCGuoSRP/CjEdwwk0FOGlUbq6lKuoyDZTNZkmxHdJtp54hdfY/JUrdL7Xfdug==}
+    engines: {node: '>=14'}
+
   commander@12.1.0:
     resolution: {integrity: sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==}
     engines: {node: '>=18'}
@@ -3368,6 +3375,11 @@ packages:
   liquid-json@0.3.1:
     resolution: {integrity: sha512-wUayTU8MS827Dam6MxgD72Ui+KOSF+u/eIqpatOtjnvgJ0+mnDq33uC2M7J0tPK+upe/DpUAuK4JUU89iBoNKQ==}
     engines: {node: '>=4'}
+
+  liquidjs@10.30.0:
+    resolution: {integrity: sha512-Fw4wA+8CZsJkaeLEIlPE3AoponfjEZhj7FQvYNcAEcg7jNRik7mEMoaco382FBdrYlykVf6w4vClPNctz2OYjg==}
+    engines: {node: '>=16'}
+    hasBin: true
 
   locate-path@6.0.0:
     resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==}
@@ -6304,6 +6316,8 @@ snapshots:
     dependencies:
       delayed-stream: 1.0.0
 
+  commander@10.0.1: {}
+
   commander@12.1.0: {}
 
   commander@2.20.3: {}
@@ -7230,6 +7244,10 @@ snapshots:
   lines-and-columns@1.2.4: {}
 
   liquid-json@0.3.1: {}
+
+  liquidjs@10.30.0:
+    dependencies:
+      commander: 10.0.1
 
   locate-path@6.0.0:
     dependencies:

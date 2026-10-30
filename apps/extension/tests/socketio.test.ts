@@ -333,7 +333,7 @@ test(
     assert.equal(app.sockets.length, 2);
     first.disconnect();
     await Promise.all([
-      second.emitEvent("echo", "{{$fakerjs.internet.email}}"),
+      second.emitEvent("echo", "{{'internet.email' | faker}}"),
       second.emitEvent("echo", "second"),
     ]);
     await waitFor(() => received.length === 2 || undefined);

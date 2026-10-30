@@ -11,7 +11,7 @@ await fs.mkdir("test-results", { recursive: true });
 const result = await build({
   stdin: {
     contents: `export {default as fakerDefinitions} from './packages/domain/src/mock/faker-definitions.json';
-export * from './packages/domain/src/mock/expressions.js';
+export * from './packages/domain/src/mock/expressions.ts';
 export {generateIdCard,generateBankCard} from './packages/domain/src/mock/cards.ts';
 export {default as MockSchema} from './packages/domain/src/mock/schema.ts';
 export {generateMockBody} from './apps/webviews/src/features/requests/utils/generateMockBody';
@@ -61,45 +61,44 @@ test("expressions retain locales, parameter options, variables and unknown expre
     "unsupported",
   ])
     for (const expression of [
-      "{{$fakerjs.person.firstName}}",
-      "{{$fakerjs.internet.email}}",
+      "{{'person.firstName' | faker}}",
+      "{{'internet.email' | faker}}",
     ])
       assert.notEqual(
         api.mockExp(expression, {}, language),
         expression,
         language + expression,
       );
-  assert.equal(api.mockExp("{{$fakerjs.number.int(min=7,max=7)}}", {}), 7);
-  assert.equal(api.mockExp("{{host|upper()}}", { host: "example" }), "EXAMPLE");
+  assert.equal(api.mockExp("{{'number.int' | faker: min: 7, max: 7}}", {}), 7);
+  assert.equal(api.mockExp("{{host|upcase}}", { host: "example" }), "EXAMPLE");
   assert.equal(
     api.mockExp("{{nested.value}}", { nested: { value: false } }),
     false,
   );
   assert.equal(api.mockExp("{{missing}}", {}), "{{missing}}");
   assert.equal(
-    api.mockExp("{{$fakerjs.unknown.method}}", {}),
-    "{{$fakerjs.unknown.method}}",
+    api.mockExp("{{'unknown.method' | faker}}", {}),
+    "{{'unknown.method' | faker}}",
   );
   assert.equal(api.mockExp("ordinary text", {}), "ordinary text");
-  assert.equal(api.decryptString(api.encryptString("a,b\nc")), "a,b\nc");
 });
 
 test("hash and text pipes preserve synchronous results including Unicode", () => {
   for (const hash of ["md5", "sha1", "sha224", "sha256", "sha384", "sha512"])
     assert.equal(
-      api.mockExp(`{{text|${hash}()}}`, { text: "你好 abc" }),
+      api.mockExp(`{{text|${hash}}}`, { text: "你好 abc" }),
       createHash(hash).update("你好 abc").digest("hex"),
     );
   assert.equal(
-    api.mockExp("{{text|base64()|unbase64()}}", { text: "你好 abc" }),
+    api.mockExp("{{text|base64|unbase64}}", { text: "你好 abc" }),
     "你好 abc",
   );
   assert.equal(
-    api.mockExp("{{text|substr(1,2)|upper()|concat(!)}}", { text: "abcd" }),
+    api.mockExp("{{text|slice: 1, 2|upcase|append: '!'}}", { text: "abcd" }),
     "BC!",
   );
   assert.equal(
-    api.mockExp("{{text|format(YYYY-MM-DD,+08:00)}}", {
+    api.mockExp("{{text|format: 'YYYY-MM-DD', '+08:00'}}", {
       text: "2026-01-01T20:00:00Z",
     }),
     "2026-01-02",
@@ -108,14 +107,17 @@ test("hash and text pipes preserve synchronous results including Unicode", () =>
 
 test("custom functions do not leak between evaluations", () => {
   assert.equal(
-    api.mockExp("{{text|fn_test()}}", { text: "x" }, "en", {
+    api.mockExp("{{text|fn_test}}", { text: "x" }, "en", {
       fn_test: "return text + '!';",
     }),
     "x!",
   );
-  assert.equal(api.mockExp("{{text|fn_test()}}", { text: "x" }), "x");
   assert.equal(
-    api.mockExp("{{$function.fn_test(abc)}}", {}, "en", {
+    api.mockExp("{{text|fn_test}}", { text: "x" }),
+    "{{text|fn_test}}",
+  );
+  assert.equal(
+    api.mockExp("{{'abc'|fn_test}}", {}, "en", {
       fn_test: "return text.toUpperCase();",
     }),
     "ABC",
@@ -147,7 +149,7 @@ test("ID and bank cards preserve parameters and valid check digits", () => {
   );
   assert.match(
     api.mockExp(
-      "{{$fakerjs.string.idcard(areacode=110101,birth=19900101)}}",
+      "{{'string.idcard' | faker: areacode: 110101, birth: 19900101}}",
       {},
     ),
     /^11010119900101/,
@@ -211,7 +213,7 @@ test("Schema defaults, examples, enums and field mocks preserve precedence", asy
     await engine.mock({
       type: "integer",
       enum: [9],
-      mock: { mock: "{{$fakerjs.number.int(min=7,max=7)}}" },
+      mock: { mock: "{{'number.int' | faker: min: 7, max: 7}}" },
     }),
     9,
   );
@@ -219,7 +221,7 @@ test("Schema defaults, examples, enums and field mocks preserve precedence", asy
     await engine.mock({
       type: "integer",
       default: 1,
-      mock: { mock: "{{$fakerjs.number.int(min=7,max=7)}}" },
+      mock: { mock: "{{'number.int' | faker: min: 7, max: 7}}" },
     }),
     7,
   );
@@ -231,7 +233,7 @@ test("Schema defaults, examples, enums and field mocks preserve precedence", asy
     await engine.mock({
       type: "integer",
       format: "int32",
-      mock: { mock: "{{$fakerjs.number.int(min=7,max=7)}}" },
+      mock: { mock: "{{'number.int' | faker: min: 7, max: 7}}" },
     }),
     7,
   );
@@ -239,7 +241,7 @@ test("Schema defaults, examples, enums and field mocks preserve precedence", asy
   assert.match(
     await engine.mock({
       type: "string",
-      mock: { mock: "{{$fakerjs.internet.email}}" },
+      mock: { mock: "{{'internet.email' | faker}}" },
     }),
     /@/,
   );
@@ -267,7 +269,7 @@ test("Schema field rules support wildcards, case sensitivity, references and ove
       match_case: -1,
       match_rule: "*count",
       mock_type: 1,
-      mock: "{{$fakerjs.number.int(min=7,max=7)}}",
+      mock: "{{'number.int' | faker: min: 7, max: 7}}",
     },
   ];
   const schema = {
@@ -280,7 +282,7 @@ test("Schema field rules support wildcards, case sensitivity, references and ove
           COUNT: { type: "integer" },
           fixedCount: {
             type: "integer",
-            mock: { mock: "{{$fakerjs.number.int(min=9,max=9)}}" },
+            mock: { mock: "{{'number.int' | faker: min: 9, max: 9}}" },
           },
         },
       },
@@ -340,16 +342,15 @@ test("WebSocket replacement uses Faker expressions", async () => {
     custom_functions: { fn_test: "return text + '!';" },
   });
   assert.equal(
-    await replace("{{host|upper()}}/{{$fakerjs.number.int(min=7,max=7)}}"),
+    await replace("{{host|upcase}}/{{'number.int' | faker: min: 7, max: 7}}"),
     "EXAMPLE/7",
   );
-  assert.equal(await replace("{{$function.fn_test(hello)}}"), "hello!");
+  assert.equal(await replace("{{'hello'|fn_test}}"), "hello!");
   assert.equal(await replace("{{$randomCity}}"), "{{$randomCity}}");
   assert.equal(await replace("{{missing}}"), "{{missing}}");
 });
 
 test("Faker discovery and execution use the same definitions without a UI fallback catalog", async () => {
-  assert.deepEqual(api.getFakerObject(), api.fakerDefinitions);
   const keys = api.fakerDefinitions.map(
     (item) => `${item.module}.${item.function}`,
   );
@@ -384,4 +385,61 @@ test("WebSocket proxy bypass matches dotted domains and their subdomains", async
     options,
   );
   assert.ok(prepared.clientOptions.agent);
+});
+
+test("Liquid evaluates native filters, named Faker arguments and structured values", () => {
+  assert.equal(api.mockExp("{{ 'abc' | upcase | append: '!' }}"), "ABC!");
+  assert.equal(api.mockExp("{{ 'number.int' | faker: min: 0, max: 0 }}"), 0);
+  assert.equal(
+    api.mockExp("{{ 'datatype.boolean' | faker: probability: 0 }}"),
+    false,
+  );
+  assert.deepEqual(api.mockExp("{{ items }}", { items: [1, false] }), [
+    1,
+    false,
+  ]);
+  assert.equal(
+    api.mockExp("{{ items | join: ',' }}", { items: [1, 2] }),
+    "1,2",
+  );
+  assert.equal(api.mockExp("{{ 'a|b,c' | append: '!' }}"), "a|b,c!");
+  assert.equal(api.mockExp("{{ text | upcase }}", { text: "abc" }), "ABC");
+});
+
+test("Liquid rejects removed grammar and unknown generators without executing them", () => {
+  for (const source of [
+    "{{$fakerjs.number.int(min=7,max=7)}}",
+    "{{text|upper()}}",
+    "{{$function.fn_test(abc)}}",
+    "{{'number.int' | faker: unknown: 1}}",
+    "{{'missing.method' | faker}}",
+    "{{text | missing_filter}}",
+  ])
+    assert.equal(api.mockExp(source, { text: "abc" }), source);
+  assert.equal(
+    api.mockExp("{{ text | fn_bad }}", { text: "x" }, "en", {
+      fn_bad: "return (",
+    }),
+    "{{ text | fn_bad }}",
+  );
+});
+
+test("Faker preserves nested options and positional argument order", () => {
+  assert.match(
+    api.mockExp("{{ 'string.alpha' | faker: min: 4, max: 4 }}"),
+    /^[a-zA-Z]{4}$/,
+  );
+  assert.deepEqual(
+    api
+      .mockExp(
+        "{{ 'helpers.arrayElements' | faker: min: 2, max: 2, array: choices }}",
+        { choices: [1, 2] },
+      )
+      .sort(),
+    [1, 2],
+  );
+  assert.equal(
+    api.mockExp("{{ 'airline.airlineName' | faker }}").includes("{{"),
+    false,
+  );
 });

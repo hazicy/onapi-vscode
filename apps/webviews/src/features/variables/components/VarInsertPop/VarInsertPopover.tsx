@@ -129,8 +129,8 @@ const Index = ({
   const fixedRefresh = async () => {
     try {
       const { mockExp } = await import("@onapi/domain/mock/expressions");
-      const data = await mockExp("{{@ai()}}", {}, language);
-      if (data) {
+      const data = await mockExp("{{ 'string.uuid' | faker }}", {}, language);
+      if (typeof data === "string" && data) {
         setValue(data);
       }
     } catch (err) {}

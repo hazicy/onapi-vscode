@@ -49,7 +49,7 @@ export {buildVariableExpression} from '../apps/webviews/src/features/variables/c
     });
     assert.equal(
       api.buildVariableExpression(api.VAR_OPTIONS_KEY.mock, draft),
-      "{{$fakerjs.String.alpha(length=4)|upper}}",
+      '{{"String.alpha"|faker: length: 4|upcase}}',
     );
   } finally {
     await rm(directory, { recursive: true, force: true });
