@@ -563,100 +563,100 @@
         "id": "onapi.method.get",
         "description": "OnAPI HTTP GET icon color",
         "defaults": {
-          "light": "#21854A",
-          "dark": "#73C991",
-          "highContrast": "#73C991",
-          "highContrastLight": "#21854A"
+          "light": "#2A7C4C",
+          "dark": "#7BC193",
+          "highContrast": "#7BC193",
+          "highContrastLight": "#2A7C4C"
         }
       },
       {
         "id": "onapi.method.post",
         "description": "OnAPI HTTP POST icon color",
         "defaults": {
-          "light": "#AE8500",
-          "dark": "#E2C36B",
-          "highContrast": "#E2C36B",
-          "highContrastLight": "#AE8500"
+          "light": "#9E7D10",
+          "dark": "#D7BE76",
+          "highContrast": "#D7BE76",
+          "highContrastLight": "#9E7D10"
         }
       },
       {
         "id": "onapi.method.put",
         "description": "OnAPI HTTP PUT icon color",
         "defaults": {
-          "light": "#2455C3",
-          "dark": "#75BEFF",
-          "highContrast": "#75BEFF",
-          "highContrastLight": "#2455C3"
+          "light": "#325AB5",
+          "dark": "#81BDF3",
+          "highContrast": "#81BDF3",
+          "highContrastLight": "#325AB5"
         }
       },
       {
         "id": "onapi.method.patch",
         "description": "OnAPI HTTP PATCH icon color",
         "defaults": {
-          "light": "#7045B8",
-          "dark": "#B69BF1",
-          "highContrast": "#B69BF1",
-          "highContrastLight": "#7045B8"
+          "light": "#734FAE",
+          "dark": "#B9A3E9",
+          "highContrast": "#B9A3E9",
+          "highContrastLight": "#734FAE"
         }
       },
       {
         "id": "onapi.method.delete",
         "description": "OnAPI HTTP DELETE icon color",
         "defaults": {
-          "light": "#B52D27",
-          "dark": "#F48771",
-          "highContrast": "#F48771",
-          "highContrastLight": "#B52D27"
+          "light": "#A83934",
+          "dark": "#E88F7D",
+          "highContrast": "#E88F7D",
+          "highContrastLight": "#A83934"
         }
       },
       {
         "id": "onapi.method.head",
         "description": "OnAPI HTTP HEAD icon color",
         "defaults": {
-          "light": "#21854A",
-          "dark": "#73C991",
-          "highContrast": "#73C991",
-          "highContrastLight": "#21854A"
+          "light": "#2A7C4C",
+          "dark": "#7BC193",
+          "highContrast": "#7BC193",
+          "highContrastLight": "#2A7C4C"
         }
       },
       {
         "id": "onapi.method.options",
         "description": "OnAPI HTTP OPTIONS icon color",
         "defaults": {
-          "light": "#C3378C",
-          "dark": "#D88BCA",
-          "highContrast": "#D88BCA",
-          "highContrastLight": "#C3378C"
+          "light": "#B64489",
+          "dark": "#D192C6",
+          "highContrast": "#D192C6",
+          "highContrastLight": "#B64489"
         }
       },
       {
         "id": "onapi.protocol.websocket",
         "description": "OnAPI websocket icon color",
         "defaults": {
-          "light": "#D94A00",
-          "dark": "#FF9052",
-          "highContrast": "#FF9052",
-          "highContrastLight": "#D94A00"
+          "light": "#C55014",
+          "dark": "#EF9462",
+          "highContrast": "#EF9462",
+          "highContrastLight": "#C55014"
         }
       },
       {
         "id": "onapi.protocol.socketio",
         "description": "OnAPI socketio icon color",
         "defaults": {
-          "light": "#D94A00",
-          "dark": "#FF9052",
-          "highContrast": "#FF9052",
-          "highContrastLight": "#D94A00"
+          "light": "#C55014",
+          "dark": "#EF9462",
+          "highContrast": "#EF9462",
+          "highContrastLight": "#C55014"
         }
       },
       {
         "id": "onapi.protocol.graphql",
         "description": "OnAPI graphql icon color",
         "defaults": {
-          "light": "#C82D96",
-          "dark": "#E879C0",
-          "highContrast": "#E879C0",
-          "highContrastLight": "#C82D96"
+          "light": "#BA3B91",
+          "dark": "#DE83BD",
+          "highContrast": "#DE83BD",
+          "highContrastLight": "#BA3B91"
         }
       }
     ]

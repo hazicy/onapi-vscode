@@ -25,6 +25,9 @@
 .container.socket {
   color: var(--color-info);
 }
+.container.folder {
+  color: var(--vscode-icon-foreground, currentColor);
+}
 .container.socket,
 .container.testing,
 .container.kit {
@@ -71,7 +74,35 @@
   }
 }
 
-.container.ws,
+
+/* Protocol colors match the native sidebar and editor tab icons. */
+.container.get {
+  color: light-dark(#2a7c4c, #7bc193);
+}
+.container.post {
+  color: light-dark(#9e7d10, #d7be76);
+}
+.container.put {
+  color: light-dark(#325ab5, #81bdf3);
+}
+.container.patch {
+  color: light-dark(#734fae, #b9a3e9);
+}
+.container.delete {
+  color: light-dark(#a83934, #e88f7d);
+}
+.container.head {
+  color: light-dark(#2a7c4c, #7bc193);
+}
+.container.options {
+  color: light-dark(#b64489, #d192c6);
+}
+.container.ws {
+  color: light-dark(#c55014, #ef9462);
+}
 .container.socketio {
-  color: light-dark(#d94a00, #ff9052);
+  color: light-dark(#c55014, #ef9462);
+}
+.container.gql {
+  color: light-dark(#ba3b91, #de83bd);
 }
