@@ -20,8 +20,5 @@ export const node = (children: React.ReactNode) =>
     ? children
     : React.createElement("span", null, children);
 
-export const native = (children: React.ReactNode) =>
-  React.isValidElement(children) && children.type === "button";
-
 export const content = (value: any) =>
   typeof value === "function" ? value() : value;

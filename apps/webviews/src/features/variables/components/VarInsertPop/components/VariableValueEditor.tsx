@@ -230,6 +230,7 @@ export default function VariableValueEditor({
     if (optionKey === VAR_OPTIONS_KEY.var) {
       return (
         <Popover
+          nativeButton={false}
           overlayInnerStyle={{ padding: 8 }}
           content={
             <QuoteOption

@@ -4,13 +4,13 @@ import { Popover as BasePopover } from "@base-ui/react/popover";
 import type { PopoverProps } from "./types";
 import { placement } from "./popupUtils";
 import { node } from "./popupUtils";
-import { native } from "./popupUtils";
 import { content } from "./popupUtils";
 
 export function Popover({
   title,
   content: body,
   children,
+  nativeButton = true,
   placement: position = "top",
   trigger = "hover",
   open,
@@ -35,7 +35,7 @@ export function Popover({
     >
       <BasePopover.Trigger
         render={node(children)}
-        nativeButton={native(children)}
+        nativeButton={nativeButton}
         openOnHover={hover}
         delay={mouseEnterDelay * 1000}
         closeDelay={mouseLeaveDelay * 1000}

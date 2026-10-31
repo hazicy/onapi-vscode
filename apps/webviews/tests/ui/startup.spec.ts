@@ -155,11 +155,19 @@ for (const moduleDelay of [0, 250]) {
     await emitHttpEvents(page, "startup-api", [
       { type: "done", error: { message: "Startup deferred response check" } },
     ]);
-    await expect(
-      page
-        .getByRole("alert")
-        .getByText("Startup deferred response check", { exact: true }),
-    ).toBeVisible();
+    const failure = page.getByRole("alert");
+    const details = failure.getByRole("button", {
+      name: "Error details",
+      exact: true,
+    });
+    const errorMessage = failure.getByText("Startup deferred response check", {
+      exact: true,
+    });
+    await expect(details).toHaveAttribute("aria-expanded", "false");
+    await expect(errorMessage).toBeHidden();
+    await details.click();
+    await expect(details).toHaveAttribute("aria-expanded", "true");
+    await expect(errorMessage).toBeVisible();
     await emitHttpEvents(page, "startup-api", [
       { type: "start" },
       {
@@ -197,6 +205,7 @@ for (const moduleDelay of [0, 250]) {
         new MessageEvent("message", {
           data: {
             action: "generatedCode",
+            requestId: request.requestId,
             data: {
               requestId: request.data.requestId,
               language: "curl",
@@ -222,11 +231,23 @@ for (const moduleDelay of [0, 250]) {
         }),
       );
     });
-    await expect(page.getByText("cURL(cURL)", { exact: true })).toBeVisible();
+    const codeModal = page.getByRole("dialog", {
+      name: "Code Snippet",
+      exact: true,
+    });
+    const language = codeModal.getByRole("combobox", {
+      name: "Language",
+      exact: true,
+    });
+    await expect(language).toContainText("cURL");
+    await expect(
+      codeModal.getByRole("combobox", { name: "Library", exact: true }),
+    ).toContainText("cURL");
     await expect(
       page.locator(".cm-content").filter({ hasText: "a%2Fb" }),
     ).toBeVisible();
-    await page.getByText("JavaScript(Fetch)", { exact: true }).click();
+    await language.click();
+    await page.getByRole("option", { name: "JavaScript", exact: true }).click();
     await expect
       .poll(() =>
         page.evaluate(() => {

@@ -59,6 +59,7 @@ const InputEdit = (props: Props) => {
         key: "delete",
         label: (
           <Popconfirm
+            nativeButton={false}
             title={t("supplement.delete")}
             description={t("supplement.del_this_param")}
             onConfirm={(e) => {
@@ -117,6 +118,7 @@ const InputEdit = (props: Props) => {
       )}
 
       <Dropdown
+        nativeButton={false}
         menu={{
           items: Items,
           onClick: (node) => {

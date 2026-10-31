@@ -16,28 +16,6 @@
   min-width: 0;
   max-width: 220px;
 }
-.presets button,
-.detail header button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  min-height: 28px;
-  padding: 4px 6px;
-  border: 0;
-  background: transparent;
-  color: var(--vscode-descriptionForeground, var(--font-light-color));
-  font: inherit;
-  cursor: pointer;
-}
-.presets button:hover,
-.detail header button:hover {
-  color: var(--vscode-foreground, var(--font-content-color));
-}
-.presets button:focus-visible,
-.detail header button:focus-visible {
-  outline: 1px solid var(--vscode-focusBorder);
-}
 .timelineShell {
   container-type: inline-size;
   height: 100%;

@@ -4,6 +4,12 @@ for (const protocol of ["websocket", "socketio"]) {
   test(`${protocol}: compose, send, inspect and return at narrow widths`, async ({
     page,
   }, testInfo) => {
+    const errors: string[] = [];
+    page.on("console", (message) => {
+      if (message.type() === "error") {
+        errors.push(message.text());
+      }
+    });
     await page.goto(`/?socketWorkspace=${protocol}`);
     const workspace = page.getByRole("region", {
       name: "Socket workspace",
@@ -89,6 +95,7 @@ for (const protocol of ["websocket", "socketio"]) {
     await workspace.screenshot({
       path: testInfo.outputPath(`${protocol}-wide.png`),
     });
+    expect(errors).toEqual([]);
   });
 }
 
@@ -195,3 +202,54 @@ test("socketio: empty timeline distinguishes connection and filter states", asyn
     workspace.getByText("server reply", { exact: true }),
   ).toBeVisible();
 });
+
+for (const protocol of ["websocket", "socketio"]) {
+  test(`${protocol}: button hover preserves theme foreground and disabled appearance`, async ({
+    page,
+  }) => {
+    await page.goto(`/?socketWorkspace=${protocol}`);
+    const workspace = page.getByRole("region", {
+      name: "Socket workspace",
+      exact: true,
+    });
+    await workspace.evaluate((element) => {
+      const theme = {
+        "--vscode-button-background": "#234567",
+        "--vscode-button-hoverBackground": "#345678",
+        "--vscode-button-foreground": "#f1f2f3",
+        "--color-primary": "#aa00aa",
+        "--vscode-descriptionForeground": "#999999",
+        "--vscode-foreground": "#dddddd",
+      };
+      for (const [key, value] of Object.entries(theme)) {
+        (element as HTMLElement).style.setProperty(key, value);
+      }
+    });
+    const connect = workspace.getByRole("button", {
+      name: "Connect",
+      exact: true,
+    });
+    await expect(connect).toHaveCSS("background-color", "rgb(35, 69, 103)");
+    await connect.hover();
+    await expect(connect).toHaveCSS("color", "rgb(241, 242, 243)");
+    await expect(connect).toHaveCSS("background-color", "rgb(52, 86, 120)");
+    const send = workspace.getByRole("button", { name: "Send", exact: true });
+    await expect(send).toBeDisabled();
+    await send.hover();
+    await expect(send).toHaveCSS("color", "rgb(241, 242, 243)");
+    await expect(send).toHaveCSS("background-color", "rgb(35, 69, 103)");
+    await page
+      .getByRole("button", { name: "Connected fixture", exact: true })
+      .click();
+    await send.hover();
+    await expect(send).toHaveCSS("color", "rgb(241, 242, 243)");
+    await expect(send).toHaveCSS("background-color", "rgb(52, 86, 120)");
+    const rename = workspace.getByRole("button", {
+      name: "Rename message",
+      exact: true,
+    });
+    await rename.hover();
+    await expect(rename).toHaveCSS("color", "rgb(221, 221, 221)");
+    await expect(rename).toHaveCSS("text-decoration-line", "none");
+  });
+}

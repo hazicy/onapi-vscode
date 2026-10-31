@@ -142,6 +142,7 @@ const EnvDropdown: React.FC<EnvDropdownProps> = ({
       )}
     >
       <Dropdown
+        nativeButton={false}
         disabled={envDisabled}
         menu={{
           items: [

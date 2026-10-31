@@ -18,7 +18,7 @@
 .button:has(.icon) {
   padding: 4px 8px;
 }
-.button:hover {
+.button:hover:not(:disabled) {
   color: var(--color-primary, #1677ff);
   border-color: var(--color-primary, #1677ff);
 }
@@ -41,7 +41,15 @@
   cursor: not-allowed;
 }
 .button-primary {
-  background: var(--color-primary, #1677ff);
+  background: var(--vscode-button-background, var(--color-primary, #1677ff));
+  color: var(--vscode-button-foreground, #fff);
+  border-color: transparent;
+}
+.button-primary:hover:not(:disabled) {
+  background: var(
+    --vscode-button-hoverBackground,
+    var(--vscode-button-background, var(--color-primary, #1677ff))
+  );
   color: var(--vscode-button-foreground, #fff);
   border-color: transparent;
 }

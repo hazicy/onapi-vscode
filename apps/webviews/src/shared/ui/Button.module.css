@@ -100,3 +100,22 @@
     text-decoration: underline;
   }
 }
+
+.container.type-text.mode-icon {
+  min-height: 28px;
+  padding: 4px 6px;
+  border: 0;
+  background: transparent;
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+  font: inherit;
+}
+.container.type-text.mode-icon:hover:not(:disabled) {
+  color: var(--vscode-foreground, var(--font-content-color));
+  background: var(--vscode-toolbar-hoverBackground, transparent);
+  text-decoration: none;
+}
+.container.type-text.mode-icon:disabled {
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+  background: transparent;
+  text-decoration: none;
+}

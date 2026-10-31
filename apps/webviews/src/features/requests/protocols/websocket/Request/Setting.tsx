@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import styles from "./Request.module.css";
 import { useTranslation } from "react-i18next";
 
@@ -72,7 +73,7 @@ const Setting = (props: Props) => {
     <div className={styles.container}>
       <Flex style={{ marginLeft: 8 }} vertical gap={12}>
         {map(SETTING_MAP_LIST, (it) => (
-          <>
+          <Fragment key={it.key}>
             {
               <Flex key={it.key} gap={12} align="center">
                 <Flex flex={1} vertical>
@@ -89,7 +90,7 @@ const Setting = (props: Props) => {
                 </Flex>
               </Flex>
             }
-          </>
+          </Fragment>
         ))}
       </Flex>
     </div>

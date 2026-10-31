@@ -8,7 +8,6 @@ import { Button } from "./Button";
 
 import { placement } from "./popupUtils";
 import { node } from "./popupUtils";
-import { native } from "./popupUtils";
 
 function MenuItems({
   itemClassName,
@@ -107,6 +106,7 @@ function MenuItems({
 
 export function Dropdown({
   children,
+  nativeButton = true,
   menu,
   open,
   defaultOpen,
@@ -160,7 +160,7 @@ export function Dropdown({
         <BaseMenu.Trigger
           {...rest}
           render={node(children)}
-          nativeButton={native(children)}
+          nativeButton={nativeButton}
           openOnHover={trigger.includes("hover")}
         />
       )}

@@ -100,6 +100,7 @@ const TitleRender = memo((props: DataNode | any) => {
       <Flex align="center" gap={8}>
         {!isEmpty(args) && !readOnly && (
           <Popover
+            nativeButton={false}
             open={filterOpen}
             onOpenChange={(open) => {
               setFilterOpen(open);

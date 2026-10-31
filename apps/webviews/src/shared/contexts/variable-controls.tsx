@@ -20,6 +20,7 @@ export interface VariableInputProps {
 }
 
 export interface VariableInsertProps {
+  nativeButton?: boolean;
   children: ReactNode;
   open: boolean;
   setOpen: (open: boolean) => void;

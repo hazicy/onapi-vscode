@@ -131,6 +131,8 @@ export type DOMProps<T extends HTMLElement = HTMLElement> = UIProps &
 type Size = "small" | "middle" | "large";
 type PopupRenderer = (content: React.ReactNode) => React.ReactNode;
 interface PopupProps extends DOMProps {
+  /** Set when a custom trigger renders a native button. */
+  nativeButton?: boolean;
   title?: React.ReactNode | (() => React.ReactNode);
   open?: boolean;
   defaultOpen?: boolean;
@@ -361,6 +363,7 @@ export type PopoverProps = TooltipProps & {
   content?: React.ReactNode | (() => React.ReactNode);
 };
 export type DropdownProps = DOMProps & {
+  nativeButton?: boolean;
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean, info: { source: "menu" | "trigger" }) => void;

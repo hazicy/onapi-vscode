@@ -8,6 +8,7 @@ export default function VarInsertPop(props: Props) {
   const [activated, setActivated] = useState(props.open);
   const trigger = (
     <Popover
+      nativeButton={props.nativeButton}
       open={props.open}
       placement={props.placement}
       trigger="click"

@@ -88,7 +88,12 @@ const RowValue = memo((props: ItemProps) => {
 
   const suffix =
     valueSuffix && Insert ? (
-      <Insert onChange={valueChange} setOpen={setOpen} open={open}>
+      <Insert
+        nativeButton={false}
+        onChange={valueChange}
+        setOpen={setOpen}
+        open={open}
+      >
         <AppIcon
           className={clsx(
             styles.insertIcon,

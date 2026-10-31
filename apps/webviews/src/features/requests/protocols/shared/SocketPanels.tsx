@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Input, Popconfirm, Select } from "@/shared/ui/base";
+import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
 import styles from "./SocketPanels.module.css";
 
@@ -77,8 +78,9 @@ export function MessagePresets({
           onChange={(event) => setDraftName(event.target.value)}
         />
       )}
-      <button
-        type="button"
+      <Button
+        type="text"
+        mode="icon"
         disabled={!items.length}
         onClick={() => {
           if (renaming) {
@@ -92,9 +94,10 @@ export function MessagePresets({
         title={t("ws.layout.rename_message")}
       >
         <AppIcon icon="pencil" />
-      </button>
-      <button
-        type="button"
+      </Button>
+      <Button
+        type="text"
+        mode="icon"
         onClick={() => {
           onAdd();
           setDraftName("");
@@ -104,7 +107,7 @@ export function MessagePresets({
         title={t("ws.layout.add_message")}
       >
         <AppIcon icon="plus" />
-      </button>
+      </Button>
       <Popconfirm
         title={t("ws.layout.delete_message")}
         description={t("ws.layout.delete_confirm")}
@@ -125,14 +128,15 @@ export function MessagePresets({
           setRenaming(false);
         }}
       >
-        <button
-          type="button"
+        <Button
+          type="text"
+          mode="icon"
           disabled={!items.length}
           aria-label={t("ws.layout.delete_message")}
           title={t("ws.layout.delete_message")}
         >
           <AppIcon icon="trash-2" />
-        </button>
+        </Button>
       </Popconfirm>
     </div>
   );
@@ -160,10 +164,10 @@ export function SocketTimeline({
             aria-label={t("ws.layout.message_detail")}
           >
             <header>
-              <button type="button" onClick={onClose}>
+              <Button type="text" mode="icon" onClick={onClose}>
                 <AppIcon icon="arrow-left" />
                 {t("ws.layout.back_messages")}
-              </button>
+              </Button>
             </header>
             <div className={styles.detailContent}>{detail}</div>
           </section>

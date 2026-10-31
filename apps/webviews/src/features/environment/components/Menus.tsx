@@ -127,6 +127,7 @@ const Menus: FC<Props> = ({ selectedKeys, setSelectedKeys }) => {
               )}
               {!includes(["1", "2"], id) && (
                 <Popconfirm
+                  nativeButton={false}
                   title={t("supplement.confirm_del1")}
                   onConfirm={() => {
                     if (isLocal) {
