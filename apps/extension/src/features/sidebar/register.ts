@@ -365,19 +365,35 @@ export function registerSidebarTree(context: vscode.ExtensionContext) {
       const type =
         targetType && types.includes(targetType as APIS_TARGET_TYPE_ENUM)
           ? { type: targetType }
-          : await vscode.window.showQuickPick(
-              types.map((type) => ({
-                label:
-                  type === "folder"
-                    ? zh
-                      ? "目录"
-                      : "Folder"
-                    : type.toUpperCase(),
-                type,
-              })),
+          : await vscode.window.showQuickPick<
+              vscode.QuickPickItem & { type?: string }
+            >(
+              [
+                {
+                  label: "$(onapi-http) HTTP",
+                  type: APIS_TARGET_TYPE_ENUM.API,
+                },
+                {
+                  label: "$(onapi-graphql) GraphQL",
+                  type: APIS_TARGET_TYPE_ENUM.GRAPHQL,
+                },
+                {
+                  label: "$(onapi-websocket) WebSocket",
+                  type: APIS_TARGET_TYPE_ENUM.WEBSOCKET,
+                },
+                {
+                  label: "$(onapi-socketio) Socket.IO",
+                  type: APIS_TARGET_TYPE_ENUM.SOCKETIO,
+                },
+                { label: "", kind: vscode.QuickPickItemKind.Separator },
+                {
+                  label: `$(onapi-folder) ${zh ? "目录" : "Folder"}`,
+                  type: APIS_TARGET_TYPE_ENUM.FOLDER,
+                },
+              ],
               { title: zh ? "新建" : "New" },
             );
-      if (!type) {
+      if (!type?.type) {
         return;
       }
       const name = await vscode.window.showInputBox({

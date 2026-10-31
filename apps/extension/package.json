@@ -253,7 +253,7 @@
         {
           "command": "onapi.tree.new.folder",
           "when": "view == onapiRequests && viewItem == onapiFolder",
-          "group": "0_new@5"
+          "group": "0_new_folder@0"
         },
         {
           "command": "onapi.tree.runTests",
