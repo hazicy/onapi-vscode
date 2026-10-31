@@ -8,13 +8,13 @@ import {
   type MethodDefinition,
 } from "@grpc/proto-loader";
 import type {
-  GrpcConfig,
+  GrpcCallConfig,
   GrpcMethod,
   GrpcProtoFile,
-  GrpcServiceDefinition,
+  GrpcSchemaDescription,
 } from "@onapi/domain/requests/grpc";
 
-const options = (config: GrpcConfig) => ({
+const options = (config: Pick<GrpcCallConfig, "includeDefaults">) => ({
   keepCase: true,
   longs: String,
   enums: String,
@@ -28,7 +28,7 @@ export interface LoadedGrpcSchema {
 }
 export async function loadProtoSchema(
   files: GrpcProtoFile[],
-  config: GrpcConfig,
+  config: Pick<GrpcCallConfig, "includeDefaults">,
 ): Promise<LoadedGrpcSchema> {
   if (!files.length) {
     throw new Error("Import a .proto file or use server reflection first");
@@ -73,7 +73,7 @@ export async function loadProtoSchema(
 }
 export function loadDescriptorSchema(
   base64: string,
-  config: GrpcConfig,
+  config: Pick<GrpcCallConfig, "includeDefaults">,
 ): LoadedGrpcSchema {
   const buffer = Buffer.from(base64, "base64");
   const Root = protobuf.Root as typeof protobuf.Root & {
@@ -122,7 +122,7 @@ function example(
 export function describeSchema(
   schema: LoadedGrpcSchema,
   descriptorSet?: string,
-): GrpcServiceDefinition {
+): GrpcSchemaDescription {
   const methods: GrpcMethod[] = [];
   for (const [service, entry] of Object.entries(schema.definition)) {
     if ("format" in entry) {

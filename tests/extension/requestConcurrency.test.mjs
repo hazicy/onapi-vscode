@@ -1,3 +1,4 @@
+import { owners } from "../helpers/executionOwners.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import load, { nativeDependency } from "../helpers/loadTypeScript.mjs";
@@ -75,6 +76,7 @@ async function fixture() {
   const runner = await load(
     "apps/extension/src/features/requests/execution/http-runner.ts",
     (id) => {
+      if (id.endsWith("/execution/owners")) return owners;
       if (id === "./merge-http-state") return merge;
       if (id === "@onapi/runtime/http/adapter") return { HttpAdapter };
       if (id === "../../../platform/execution/service")

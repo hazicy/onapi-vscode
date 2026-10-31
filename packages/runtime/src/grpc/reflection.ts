@@ -1,7 +1,7 @@
 import protobuf from "protobufjs";
 import descriptor from "protobufjs/ext/descriptor/index.js";
 import { status, type ServiceError } from "@grpc/grpc-js";
-import type { GrpcConfig } from "@onapi/domain/requests/grpc";
+import type { GrpcCallConfig } from "@onapi/domain/requests/grpc";
 import { createGrpcClient, requestMetadata } from "./connection";
 
 // Standard reflection wire messages; both v1 and v1alpha share this encoding.
@@ -21,7 +21,7 @@ interface ReflectionResponse {
 }
 export async function reflectDescriptors(
   address: string,
-  config: GrpcConfig,
+  config: GrpcCallConfig,
   signal: AbortSignal,
 ): Promise<string> {
   const client = createGrpcClient(address, config);

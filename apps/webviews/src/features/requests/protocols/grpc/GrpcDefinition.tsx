@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { GrpcConfig } from "@onapi/domain/requests/grpc";
+import type { GrpcConfig, GrpcProtoFile } from "@onapi/domain/requests/grpc";
 import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 import type { GrpcConfigChange, GrpcController } from "./useGrpc";
 import styles from "./GrpcDebug.module.css";
@@ -14,9 +14,12 @@ export function GrpcDefinition({
   controller: GrpcController;
 }) {
   const [selectedFile, setSelectedFile] = useState("");
-  const file =
-    config.files.find((file) => file.name === selectedFile) ?? config.files[0];
-  const reset = { methods: [], method: "", descriptorSet: undefined };
+  const definition = config.definition;
+  const files = definition.source === "proto" ? definition.files : [];
+  const file = files.find((file) => file.name === selectedFile) ?? files[0];
+  const updateFiles = (files: GrpcProtoFile[]) =>
+    update({ definition: { source: "proto", files }, method: "" });
+  const methods = controller.methods;
   return (
     <div className={styles.definition}>
       <div className={styles.sectionTitle}>
@@ -38,23 +41,25 @@ export function GrpcDefinition({
       </div>
       <div className={styles.sourceOptions}>
         <button
-          aria-pressed={config.source === "reflection"}
+          aria-pressed={definition.source === "reflection"}
           disabled={controller.busy}
-          onClick={() => update({ source: "reflection", ...reset })}
+          onClick={() =>
+            update({ definition: { source: "reflection" }, method: "" })
+          }
         >
           <strong>Server reflection</strong>
           <span>Discover services directly from the server</span>
         </button>
         <button
-          aria-pressed={config.source === "proto"}
+          aria-pressed={definition.source === "proto"}
           disabled={controller.busy}
-          onClick={() => update({ source: "proto", ...reset })}
+          onClick={() => updateFiles([])}
         >
           <strong>Protobuf files</strong>
           <span>Import a .proto file and its dependencies</span>
         </button>
       </div>
-      {config.source === "reflection" ? (
+      {definition.source === "reflection" ? (
         <div className={styles.hint}>
           Enter the server address and select <strong>Load services</strong>. If
           the server does not support reflection, import its .proto definition.
@@ -79,20 +84,17 @@ export function GrpcDefinition({
               onClick={() => {
                 let name = "service.proto";
                 let suffix = 1;
-                while (config.files.some((file) => file.name === name)) {
+                while (files.some((file) => file.name === name)) {
                   name = `service-${suffix++}.proto`;
                 }
-                update({
-                  files: [
-                    ...config.files,
-                    {
-                      name,
-                      content:
-                        'syntax = "proto3";\npackage example;\n\nmessage Request { string name = 1; }\nmessage Reply { string message = 1; }\nservice Greeter { rpc SayHello(Request) returns (Reply); }\n',
-                    },
-                  ],
-                  ...reset,
-                });
+                updateFiles([
+                  ...files,
+                  {
+                    name,
+                    content:
+                      'syntax = "proto3";\npackage example;\n\nmessage Request { string name = 1; }\nmessage Reply { string message = 1; }\nservice Greeter { rpc SayHello(Request) returns (Reply); }\n',
+                  },
+                ]);
                 setSelectedFile(name);
               }}
             >
@@ -101,12 +103,7 @@ export function GrpcDefinition({
             <button
               disabled={!file || controller.busy}
               onClick={() =>
-                update({
-                  files: config.files.filter(
-                    (item) => item.name !== file?.name,
-                  ),
-                  ...reset,
-                })
+                updateFiles(files.filter((item) => item.name !== file?.name))
               }
             >
               Remove file
@@ -116,7 +113,7 @@ export function GrpcDefinition({
           {file ? (
             <>
               <div className={styles.fileTabs}>
-                {config.files.map((item) => (
+                {files.map((item) => (
                   <button
                     key={item.name}
                     aria-pressed={file.name === item.name}
@@ -137,12 +134,11 @@ export function GrpcDefinition({
                   onMountAutoFormat={false}
                   readOnly={controller.busy || controller.importing}
                   onChange={(content) =>
-                    update({
-                      files: config.files.map((item) =>
+                    updateFiles(
+                      files.map((item) =>
                         item.name === file.name ? { ...item, content } : item,
                       ),
-                      ...reset,
-                    })
+                    )
                   }
                 />
               </div>
@@ -155,11 +151,11 @@ export function GrpcDefinition({
           )}
         </>
       )}
-      {config.methods.length > 0 && (
+      {methods.length > 0 && (
         <div className={styles.loaded}>
           <strong>
-            {new Set(config.methods.map((method) => method.service)).size}{" "}
-            services · {config.methods.length} methods loaded
+            {new Set(methods.map((method) => method.service)).size} services ·{" "}
+            {methods.length} methods loaded
           </strong>
           <span>
             Select a method in the request bar to compose its message.

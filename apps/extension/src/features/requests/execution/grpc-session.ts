@@ -1,3 +1,6 @@
+import { grpcEditorRecordSchema } from "@onapi/domain/requests/record";
+import { createRequestExecutionContext } from "./execution-context";
+import { executionScopeFor } from "../../../platform/execution/owners";
 import * as vscode from "vscode";
 import { GrpcAdapter } from "@onapi/runtime/grpc/adapter";
 import type { RequestPanelCommand } from "@onapi/contracts/request-panel";
@@ -8,32 +11,14 @@ import { prepareProtocolRequest } from "./prepare-protocol-request";
 import { recordRequestHistory } from "../request-history";
 import type { RequestDocument } from "../request-document";
 
-type Run = { targetId: string; adapter: GrpcAdapter };
-type Session = { disposed: boolean; runs: Map<string, Run> };
-const sessions = new WeakMap<vscode.WebviewPanel, Session>();
-function session(panel: vscode.WebviewPanel) {
-  let state = sessions.get(panel);
-  if (!state) {
-    state = { disposed: false, runs: new Map() };
-    sessions.set(panel, state);
-    panel.onDidDispose(() => {
-      state!.disposed = true;
-      for (const { adapter } of state!.runs.values()) {
-        adapter.cancel();
-      }
-      state!.runs.clear();
-    });
-  }
-  return state;
-}
 export async function handleGrpcCommand(
   message: RequestPanelCommand,
   context: vscode.ExtensionContext,
   panel: vscode.WebviewPanel,
   document: RequestDocument,
 ) {
-  const state = session(panel);
-  if (state.disposed) {
+  const scope = executionScopeFor(panel, context);
+  if (scope.disposed) {
     return;
   }
   switch (message.action) {
@@ -56,7 +41,7 @@ export async function handleGrpcCommand(
         : message.data.directory
           ? await importProtoDirectory(paths[0].fsPath)
           : await importProtoFiles(paths.map((uri) => uri.fsPath));
-      if (!state.disposed) {
+      if (!scope.disposed) {
         postRequestPanelResponse(panel.webview, {
           action: "grpcImported",
           requestId: message.requestId,
@@ -66,23 +51,29 @@ export async function handleGrpcCommand(
       return;
     }
     case "grpc_cancel":
-      state.runs.get(message.data.executionId)?.adapter.cancel();
+      void scope.find(message.data.executionId)?.cancel();
       return;
     case "grpc_write": {
       const prepared = prepareProtocolRequest(message, context, "").message;
       if (prepared.action !== "grpc_write") {
         return;
       }
-      const run = state.runs.get(message.data.executionId);
+      const run = scope.find(message.data.executionId);
       if (!run || run.targetId !== message.data.id) {
+        throw new Error("The gRPC call is no longer active");
+      }
+      if (!(run.adapter instanceof GrpcAdapter)) {
         throw new Error("The gRPC call is no longer active");
       }
       run.adapter.write(prepared.data.message);
       return;
     }
     case "grpc_end": {
-      const run = state.runs.get(message.data.executionId);
+      const run = scope.find(message.data.executionId);
       if (!run) {
+        throw new Error("The gRPC call is no longer active");
+      }
+      if (!(run.adapter instanceof GrpcAdapter)) {
         throw new Error("The gRPC call is no longer active");
       }
       run.adapter.end();
@@ -90,49 +81,41 @@ export async function handleGrpcCommand(
     }
     case "grpc_invoke":
     case "grpc_discover": {
-      const prepared = prepareProtocolRequest(message, context, "").message;
-      if (
-        prepared.action !== "grpc_invoke" &&
-        prepared.action !== "grpc_discover"
-      ) {
-        return;
+      const record = grpcEditorRecordSchema.parse(document.draft);
+      if (record.id !== message.data.id) {
+        throw new Error("Request identity does not match this editor");
       }
-      for (const run of state.runs.values()) {
-        if (run.targetId === message.data.id) {
-          run.adapter.cancel();
-        }
-      }
+      const snapshot = createRequestExecutionContext(context, record.id);
+      const { definition, ...config } = snapshot.resolve(record.grpc);
       const adapter = new GrpcAdapter(
         message.action === "grpc_discover" ? "discover" : "invoke",
       );
-      state.runs.set(message.requestId, { targetId: message.data.id, adapter });
-      const current = () =>
-        !state.disposed &&
-        state.runs.get(message.requestId)?.adapter === adapter;
+      const run = scope.reserve(
+        `grpc:${record.id}`,
+        message.requestId,
+        record.id,
+        adapter,
+      );
       try {
         if (message.action === "grpc_invoke") {
           await recordRequestHistory(context, document.draft);
         }
-        if (!current()) {
-          return;
-        }
-        await executionService
-          .execute(adapter, prepared.data, {
-            sessionId: message.requestId,
-            targetId: message.data.id,
-            observer: (event) => {
-              if (current()) {
-                relayExecutionEvent(panel.webview, event);
-              }
+        await run
+          .execute(
+            executionService,
+            adapter,
+            {
+              url: snapshot.resolve(record.url ?? ""),
+              config,
+              definition,
+              refresh:
+                message.action === "grpc_discover" && message.data.refresh,
             },
-          })
-          .catch(() => {
-            /* The core publishes SDK failures and the terminal lifecycle. */
-          });
+            (event) => relayExecutionEvent(panel.webview, event),
+          )
+          .catch(() => {});
       } finally {
-        if (state.runs.get(message.requestId)?.adapter === adapter) {
-          state.runs.delete(message.requestId);
-        }
+        run.finish();
       }
     }
   }

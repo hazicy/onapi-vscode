@@ -22,9 +22,7 @@ export default function GrpcDebug({
   apisData: record,
   onApisDataChange: change,
 }: Props) {
-  const [tab, setTab] = useState(
-    record.grpc.methods.length ? "message" : "definition",
-  );
+  const [tab, setTab] = useState(record.grpc.method ? "message" : "definition");
   const controller = useGrpc(record, change);
   const editor = useRef<CodeEditorRef>(null);
   const config = record.grpc;
@@ -32,7 +30,9 @@ export default function GrpcDebug({
     config.tls.enabled || /^(?:grpcs|https):\/\//i.test(record.url ?? "");
   const update: GrpcConfigChange = (patch) =>
     change({ ...record, grpc: { ...config, ...patch } });
-  const method = config.methods.find((method) => method.path === config.method);
+  const method = controller.methods.find(
+    (method) => method.path === config.method,
+  );
   const methodType = method
     ? method.requestStream
       ? method.responseStream
@@ -67,11 +67,10 @@ export default function GrpcDebug({
                 ...record,
                 url: e.target.value,
                 grpc:
-                  config.source === "reflection"
+                  config.definition.source === "reflection"
                     ? {
                         ...config,
-                        descriptorSet: undefined,
-                        methods: [],
+                        definition: { source: "reflection" },
                         method: "",
                       }
                     : config,
@@ -92,7 +91,10 @@ export default function GrpcDebug({
                 grpc: {
                   ...config,
                   tls: { ...config.tls, enabled: !secure },
-                  descriptorSet: undefined,
+                  definition:
+                    config.definition.source === "reflection"
+                      ? { source: "reflection" }
+                      : config.definition,
                 },
               })
             }
@@ -108,7 +110,7 @@ export default function GrpcDebug({
             TLS
           </button>
         </div>
-        {config.methods.length ? (
+        {controller.methods.length ? (
           <select
             aria-label="gRPC method"
             className={styles.methodSelect}
@@ -116,22 +118,22 @@ export default function GrpcDebug({
             disabled={controller.busy}
             onChange={(e) => update({ method: e.target.value })}
           >
-            {[...new Set(config.methods.map((method) => method.service))].map(
-              (service) => (
-                <optgroup key={service} label={service}>
-                  {config.methods
-                    .filter((method) => method.service === service)
-                    .map((method) => (
-                      <option key={method.path} value={method.path}>
-                        {method.service}/{method.name}
-                        {method.requestStream || method.responseStream
-                          ? " ↔"
-                          : ""}
-                      </option>
-                    ))}
-                </optgroup>
-              ),
-            )}
+            {[
+              ...new Set(controller.methods.map((method) => method.service)),
+            ].map((service) => (
+              <optgroup key={service} label={service}>
+                {controller.methods
+                  .filter((method) => method.service === service)
+                  .map((method) => (
+                    <option key={method.path} value={method.path}>
+                      {method.service}/{method.name}
+                      {method.requestStream || method.responseStream
+                        ? " ↔"
+                        : ""}
+                    </option>
+                  ))}
+              </optgroup>
+            ))}
           </select>
         ) : (
           <button

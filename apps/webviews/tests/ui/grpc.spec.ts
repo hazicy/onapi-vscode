@@ -218,7 +218,9 @@ test("gRPC imports proto definitions and preserves unfinished editor content on 
   await editor.fill('syntax = "proto3";\nmessage Unfinished {');
   await page.getByRole("button", { name: "Save", exact: true }).click();
   const saved = await page.evaluate(() => (window as any).grpcMessages.at(-1));
-  expect(saved.data.grpc.files[0].content).toContain("message Unfinished {");
+  expect(saved.data.grpc.definition.files[0].content).toContain(
+    "message Unfinished {",
+  );
 });
 test("gRPC invalid JSON fails locally and narrow layouts remain usable", async ({
   page,
@@ -239,4 +241,35 @@ test("gRPC invalid JSON fails locally and narrow layouts remain usable", async (
       () => document.documentElement.scrollWidth <= window.innerWidth,
     ),
   ).toBe(true);
+});
+
+test("gRPC reopens source snapshots without persisting derived schemas or sending them in call commands", async ({
+  page,
+}) => {
+  await page.goto("/?grpc&saved");
+  await page.waitForFunction(() =>
+    (window as any).grpcMessages?.some(
+      (message: any) => message.action === "grpc_discover",
+    ),
+  );
+  const described = await page.evaluate(() =>
+    (window as any).grpcMessages.at(-1),
+  );
+  expect(described.data).toEqual({ id: "grpc-fixture", refresh: false });
+  await emit(page, "schema.loaded", {
+    value: { methods: [method("SayHello")] },
+  });
+  await emit(page, "execution.completed", { failed: false });
+  await expect(page.getByLabel("gRPC method")).toBeVisible();
+  await page.getByRole("button", { name: "Native save", exact: true }).click();
+  const saved = await page.evaluate(
+    () => (window as any).grpcMessages.at(-1).data,
+  );
+  expect(saved.grpc.definition.source).toBe("proto");
+  expect(saved.grpc.definition.files).toHaveLength(1);
+  expect(saved.grpc.methods).toBeUndefined();
+  await page.getByRole("button", { name: "Invoke", exact: true }).click();
+  expect(
+    await page.evaluate(() => (window as any).grpcMessages.at(-1).data),
+  ).toEqual({ id: "grpc-fixture" });
 });

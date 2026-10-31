@@ -1,3 +1,4 @@
+import { owners } from "../helpers/executionOwners.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import load, { nativeDependency } from "../helpers/loadTypeScript.mjs";
@@ -312,6 +313,7 @@ test("host connection replacement and disposal cancel adapters and suppress obso
   const { handleAiMcpCommand } = await load(
     "apps/extension/src/features/requests/execution/ai-mcp-session.ts",
     (id) => {
+      if (id.endsWith("/execution/owners")) return owners;
       if (id === "@onapi/runtime/ai/adapter") return { AiAdapter: class {} };
       if (id === "@onapi/runtime/mcp/adapter")
         return { McpAdapter: Connection, McpRequestAdapter: class {} };
@@ -371,4 +373,42 @@ test("MCP cancellation settles even when a transport never finishes starting", a
   await pending;
   assert.equal(f.clients[0].closed, true);
   assert.equal(events.at(-1).event.type, "session.closed");
+});
+
+test("gRPC wire calls contain only identity and saved definitions reject derived method lists", async () => {
+  const { requestPanelCommandSchema } = await load(
+    "packages/contracts/src/request-panel/commands.ts",
+    nativeDependency,
+  );
+  const { grpcConfigSchema } = await load(
+    "packages/domain/src/requests/grpc.ts",
+    nativeDependency,
+  );
+  assert.equal(
+    requestPanelCommandSchema.safeParse({
+      action: "grpc_invoke",
+      requestId: "run",
+      data: { id: "grpc" },
+    }).success,
+    true,
+  );
+  assert.equal(
+    requestPanelCommandSchema.safeParse({
+      action: "grpc_invoke",
+      requestId: "run",
+      data: { id: "grpc", config: {} },
+    }).success,
+    false,
+  );
+  assert.equal(
+    grpcConfigSchema.safeParse({
+      definition: { source: "reflection" },
+      methods: [],
+    }).success,
+    false,
+  );
+  assert.equal(
+    grpcConfigSchema.safeParse({ source: "reflection", files: [] }).success,
+    false,
+  );
 });

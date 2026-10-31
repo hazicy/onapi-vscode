@@ -1,3 +1,4 @@
+import { owners } from "../helpers/executionOwners.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import load, { nativeDependency } from "../helpers/loadTypeScript.mjs";
@@ -237,6 +238,7 @@ test("the actual host receiver rejects invalid messages and correlates asynchron
   const { resolveRequestEditor } = await load(
     "apps/extension/src/features/requests/request-editor.ts",
     (id) => {
+      if (id.endsWith("/execution/owners")) return owners;
       if (id.endsWith("/storage"))
         return { getDataFromGlobalStorage: () => [] };
       if (id.endsWith("/request-panel-channel")) return boundary;

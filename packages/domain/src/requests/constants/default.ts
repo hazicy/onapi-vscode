@@ -6,7 +6,7 @@ import { SampleGroupsDetailsData } from "@onapi/domain/requests/types/api-sample
 import { ApisBaseData } from "@onapi/domain/requests/types/base";
 import { DocDetailsData } from "@onapi/domain/requests/types/doc";
 
-import { GrpcDetailsData } from "@onapi/domain/requests/types/grpc";
+import type { GrpcEditorRecord } from "../record";
 import { SocketDetailsData } from "@onapi/domain/requests/types/socket";
 import { SocketServiceDetailsData } from "@onapi/domain/requests/types/socket-service";
 
@@ -88,16 +88,12 @@ export const DEFAULT_WEBSOCKET_DATA: WebSocketDetailsData = {
 };
 
 // grpc default request parameters
-export const DEFAULT_GRPC_DATA: GrpcDetailsData = {
+export const DEFAULT_GRPC_DATA: GrpcEditorRecord = {
   ...DEFAULT_APIS_BASE_DATA,
   name: i18next.t("grpc.new_grpc.title"),
   kind: APIS_TARGET_TYPE_ENUM.GRPC,
   description: "",
   grpc: grpcConfigSchema.parse({}),
-  protos: [],
-  request: {
-    description: "",
-  },
 };
 
 // api sample default parameters

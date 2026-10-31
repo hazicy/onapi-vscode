@@ -1,66 +1,25 @@
 import type * as vscode from "vscode";
 import type { RequestPanelCommand } from "@onapi/contracts/request-panel";
-import {
-  configuredVariableValues,
-  createVariableContext,
-} from "@onapi/domain/variables/context";
-import { resolveVariables } from "@onapi/domain/variables/resolve";
-import { getCurrentProjectConfig } from "../../../platform/storage/project-config";
-import { applySocketSettings } from "./socket-settings";
-import { getApiList } from "../request-storage";
-import type { SysConfig } from "@onapi/domain/settings/types/settings";
+import { createRequestExecutionContext } from "./execution-context";
 
 type Executable = Extract<
   RequestPanelCommand,
-  {
-    action:
-      | "ai_send"
-      | "mcp_connect"
-      | "mcp_request"
-      | "grpc_discover"
-      | "grpc_invoke"
-      | "grpc_write";
-  }
+  { action: "ai_send" | "mcp_connect" | "mcp_request" | "grpc_write" }
 >;
 export function prepareProtocolRequest(
   message: Executable,
   context: vscode.ExtensionContext,
   systemProxy: string,
 ) {
-  const project = getCurrentProjectConfig(context);
-  const http = project.http;
-  const variables: Record<string, unknown> = http
-    ? configuredVariableValues(createVariableContext(http))
-    : {};
-  // Collection folders override collection/global values; environment remains highest priority.
-  const records = getApiList(context);
-  let current = records.find((record) => record.id === message.data.id);
-  const parents = [];
-  const seen = new Set<string>();
-  while (current && !seen.has(current.id)) {
-    seen.add(current.id);
-    parents.unshift(current);
-    current = records.find((record) => record.id === current!.parentId);
-  }
-  for (const parent of parents) {
-    if (!Array.isArray(parent.variable)) {
-      continue;
-    }
-    for (const entry of parent.variable) {
-      if (entry.key && !entry.disabled) {
-        variables[entry.key] = entry.value;
-      }
-    }
-  }
-  const env = http?.environments.find(
-    (env) => env.id === http.activeEnvironment,
+  const snapshot = createRequestExecutionContext(
+    context,
+    message.data.id,
+    systemProxy,
   );
-  for (const entry of env?.values ?? []) {
-    if (entry.key && !entry.disabled) {
-      variables[entry.key] = entry.value;
-    }
-  }
-  const resolved = resolveVariables(message, variables);
+  const resolved = {
+    ...message,
+    data: { ...snapshot.resolve(message.data), id: message.data.id },
+  } as Executable;
   if (
     resolved.action === "ai_send" ||
     (resolved.action === "mcp_connect" &&
@@ -81,13 +40,5 @@ export function prepareProtocolRequest(
   ) {
     throw new Error("MCP command is required");
   }
-  const settings = context.globalState.get<SysConfig>("systemConfig") ?? {};
-  const options = applySocketSettings({}, settings, systemProxy);
-  return {
-    message: resolved,
-    network: {
-      systemProxy: options.systemProxy,
-      system_configs: { proxy: options.system_configs?.proxy },
-    },
-  };
+  return { message: resolved, network: snapshot.network };
 }

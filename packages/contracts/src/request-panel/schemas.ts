@@ -1,5 +1,5 @@
 import {
-  grpcServiceDefinitionSchema,
+  grpcSchemaDescriptionSchema,
   grpcStatusSchema,
 } from "@onapi/domain/requests/grpc";
 import * as z from "zod";
@@ -80,7 +80,7 @@ export const executionEnvelopeSchema = z.strictObject({
     z.strictObject({
       protocol: z.literal("grpc"),
       type: z.literal("schema.loaded"),
-      value: grpcServiceDefinitionSchema,
+      value: grpcSchemaDescriptionSchema,
     }),
     z.strictObject({
       protocol: z.literal("grpc"),

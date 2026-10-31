@@ -1,5 +1,5 @@
 import type {
-  GrpcServiceDefinition,
+  GrpcSchemaDescription,
   GrpcStatus,
 } from "@onapi/domain/requests/grpc";
 import type { ExecutionEvent, ExecutionError } from "./index";
@@ -73,7 +73,7 @@ export type McpProtocolEvent =
   | { protocol: "mcp"; type: "connection.closed" }
   | { protocol: "mcp"; type: "response.received"; value: unknown };
 export type GrpcProtocolEvent =
-  | { protocol: "grpc"; type: "schema.loaded"; value: GrpcServiceDefinition }
+  | { protocol: "grpc"; type: "schema.loaded"; value: GrpcSchemaDescription }
   | {
       protocol: "grpc";
       type: "call.started";

@@ -1,6 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { GrpcEditorRecord } from "@onapi/domain/requests/record";
-import type { GrpcStatus, GrpcConfig } from "@onapi/domain/requests/grpc";
+import type {
+  GrpcStatus,
+  GrpcConfig,
+  GrpcMethod,
+} from "@onapi/domain/requests/grpc";
 import {
   readRequestPanelResponse,
   sendRequestPanelMessage,
@@ -29,6 +33,16 @@ export function useGrpc(
   const latest = useRef({ record, change });
   latest.current = { record, change };
   const importId = useRef("");
+  const schemaOwner = useMemo(
+    () => JSON.stringify([record.url, record.grpc.definition]),
+    [record.url, record.grpc.definition],
+  );
+  const requestedOwner = useRef("");
+  const [schema, setSchema] = useState<{
+    owner: string;
+    methods: GrpcMethod[];
+  }>();
+  const methods = schema?.owner === schemaOwner ? schema.methods : [];
   const execution = useProtocolExecution(record.id, (envelope) => {
     const event = envelope.event;
     if (event.protocol !== "grpc") {
@@ -37,20 +51,39 @@ export function useGrpc(
     switch (event.type) {
       case "schema.loaded": {
         const current = latest.current;
+        if (
+          requestedOwner.current !==
+          JSON.stringify([current.record.url, current.record.grpc.definition])
+        ) {
+          break;
+        }
         const methods = event.value.methods;
-        current.change({
-          ...current.record,
-          grpc: {
-            ...current.record.grpc,
-            methods,
-            descriptorSet: event.value.descriptorSet,
-            method: methods.some(
-              (method) => method.path === current.record.grpc.method,
-            )
-              ? current.record.grpc.method
-              : (methods[0]?.path ?? ""),
-          },
+        const definition =
+          current.record.grpc.definition.source === "reflection"
+            ? {
+                source: "reflection" as const,
+                descriptorSet: event.value.descriptorSet,
+              }
+            : current.record.grpc.definition;
+        setSchema({
+          owner: JSON.stringify([current.record.url, definition]),
+          methods,
         });
+        const method = methods.some(
+          (method) => method.path === current.record.grpc.method,
+        )
+          ? current.record.grpc.method
+          : (methods[0]?.path ?? "");
+        if (
+          method !== current.record.grpc.method ||
+          JSON.stringify(definition) !==
+            JSON.stringify(current.record.grpc.definition)
+        ) {
+          current.change({
+            ...current.record,
+            grpc: { ...current.record.grpc, definition, method },
+          });
+        }
         break;
       }
       case "call.started":
@@ -105,10 +138,7 @@ export function useGrpc(
           ...current.record,
           grpc: {
             ...current.record.grpc,
-            source: "proto",
-            files: response.data.files,
-            methods: [],
-            descriptorSet: undefined,
+            definition: { source: "proto", files: response.data.files },
             method: "",
           },
         });
@@ -127,12 +157,18 @@ export function useGrpc(
     window.addEventListener("message", listener);
     return () => window.removeEventListener("message", listener);
   }, [record.id, execution.setError]);
-  const start = (action: "grpc_discover" | "grpc_invoke") =>
+  const start = (action: "grpc_discover" | "grpc_invoke", refresh = false) =>
     execution.start((requestId) => {
-      if (record.grpc.source === "reflection" && !record.url?.trim()) {
+      if (
+        record.grpc.definition.source === "reflection" &&
+        !record.url?.trim()
+      ) {
         throw new Error("Enter a server address to use reflection");
       }
-      if (record.grpc.source === "proto" && !record.grpc.files.length) {
+      if (
+        record.grpc.definition.source === "proto" &&
+        !record.grpc.definition.files.length
+      ) {
         throw new Error("Import a .proto file in Service definition first");
       }
       if (action === "grpc_invoke") {
@@ -156,14 +192,24 @@ export function useGrpc(
         setCancelled(false);
       }
       setPhase(action === "grpc_discover" ? "discover" : "invoke");
-      return {
-        action,
-        requestId,
-        data: { id: record.id, url: record.url ?? "", config: record.grpc },
-      };
+      requestedOwner.current = schemaOwner;
+      return action === "grpc_discover"
+        ? { action, requestId, data: { id: record.id, refresh } }
+        : { action, requestId, data: { id: record.id } };
     });
+  useEffect(() => {
+    const definition = record.grpc.definition;
+    if (
+      record.grpc.method &&
+      ((definition.source === "proto" && definition.files.length) ||
+        (definition.source === "reflection" && definition.descriptorSet))
+    ) {
+      start("grpc_discover");
+    }
+  }, [record.id]);
   return {
     ...execution,
+    methods,
     messages,
     receivedCount,
     totalMessages,
@@ -173,7 +219,7 @@ export function useGrpc(
     importing,
     cancelled,
     phase,
-    discover: () => start("grpc_discover"),
+    discover: () => start("grpc_discover", true),
     invoke: () => start("grpc_invoke"),
     cancel: () =>
       sendRequestPanelMessage({

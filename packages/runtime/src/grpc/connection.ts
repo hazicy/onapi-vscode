@@ -4,9 +4,9 @@ import {
   credentials,
   type ClientOptions,
 } from "@grpc/grpc-js";
-import type { GrpcConfig } from "@onapi/domain/requests/grpc";
+import type { GrpcCallConfig } from "@onapi/domain/requests/grpc";
 
-export function grpcTarget(address: string, config: GrpcConfig) {
+export function grpcTarget(address: string, config: GrpcCallConfig) {
   const value = address.trim();
   if (!value) {
     throw new Error("Server address is required");
@@ -31,7 +31,7 @@ export function grpcTarget(address: string, config: GrpcConfig) {
     secure: config.tls.enabled || scheme === "grpcs" || scheme === "https",
   };
 }
-export function createGrpcClient(address: string, config: GrpcConfig) {
+export function createGrpcClient(address: string, config: GrpcCallConfig) {
   const { target, secure } = grpcTarget(address, config);
   const pem = (value: string) => (value ? Buffer.from(value) : undefined);
   if (!!config.tls.privateKey !== !!config.tls.clientCertificate) {
@@ -55,7 +55,7 @@ export function createGrpcClient(address: string, config: GrpcConfig) {
   }
   return new Client(target, channelCredentials, options);
 }
-export function requestMetadata(config: GrpcConfig) {
+export function requestMetadata(config: GrpcCallConfig) {
   const metadata = new Metadata();
   for (const row of config.metadata) {
     if (!row.enabled || !row.key.trim()) {

@@ -1,4 +1,3 @@
-import type { HttpProjectConfig } from "../index";
 import type { VariableDefinition } from "postman-collection";
 
 export type VariableScope = "system" | "global" | "collection" | "environment";
@@ -12,11 +11,15 @@ export interface VariableEntry {
 }
 export type VariableContext = Map<string, VariableEntry>;
 
-/** Static configuration only. Runtime local/data scopes and scripts are resolved by Postman. */
+export interface VariableSources {
+  globals?: readonly VariableDefinition[];
+  collection?: readonly VariableDefinition[];
+  environment?: readonly VariableDefinition[];
+}
+/** Variables have the same priority regardless of the protocol that consumes them. */
 export function createVariableContext(
-  http: HttpProjectConfig,
+  sources: VariableSources,
   dynamicNames: readonly string[] = [],
-  environmentId = http.activeEnvironment,
 ): VariableContext {
   const context: VariableContext = new Map(
     dynamicNames.map((name) => [
@@ -29,13 +32,10 @@ export function createVariableContext(
       },
     ]),
   );
-  const scopes: [VariableScope, VariableDefinition[] | undefined][] = [
-    ["global", http.options.globals.values],
-    ["collection", http.collection.variable],
-    [
-      "environment",
-      http.environments.find((scope) => scope.id === environmentId)?.values,
-    ],
+  const scopes: [VariableScope, readonly VariableDefinition[] | undefined][] = [
+    ["global", sources.globals],
+    ["collection", sources.collection],
+    ["environment", sources.environment],
   ];
   for (const [scope, variables] of scopes) {
     for (const variable of variables || []) {

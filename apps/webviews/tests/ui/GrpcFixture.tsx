@@ -9,6 +9,21 @@ export default function GrpcFixture() {
     name: "gRPC request",
     kind: "grpc",
     url: "localhost:50051",
+    grpc: new URLSearchParams(location.search).has("saved")
+      ? {
+          definition: {
+            source: "proto",
+            files: [
+              {
+                name: "hello.proto",
+                content:
+                  'syntax = "proto3"; package example; message Request { string name = 1; } message Reply { string message = 1; } service Greeter { rpc SayHello(Request) returns(Reply); }',
+              },
+            ],
+          },
+          method: "/example.Greeter/SayHello",
+        }
+      : {},
   });
   const [record, setRecord] = useState(initial);
   const [saved, setSaved] = useState(initial);

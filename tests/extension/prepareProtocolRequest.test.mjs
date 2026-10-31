@@ -17,12 +17,13 @@ const http = {
   ],
   activeEnvironment: "dev",
 };
-const socket = await load(
-  "apps/extension/src/features/requests/execution/socket-settings.ts",
+const network = await load(
+  "apps/extension/src/platform/execution/network-settings.ts",
   nativeDependency,
+  { URL },
 );
-const { prepareProtocolRequest } = await load(
-  "apps/extension/src/features/requests/execution/prepare-protocol-request.ts",
+const executionContext = await load(
+  "apps/extension/src/features/requests/execution/execution-context.ts",
   (id) => {
     if (id.endsWith("/project-config"))
       return { getCurrentProjectConfig: () => ({ http }) };
@@ -40,9 +41,16 @@ const { prepareProtocolRequest } = await load(
           { id: "ai", parentId: "folder" },
         ],
       };
-    if (id === "./socket-settings") return socket;
+
+    if (id.endsWith("/network-settings")) return network;
     return nativeDependency(id);
   },
+  { URL },
+);
+const { prepareProtocolRequest } = await load(
+  "apps/extension/src/features/requests/execution/prepare-protocol-request.ts",
+  (id) =>
+    id === "./execution-context" ? executionContext : nativeDependency(id),
   { URL },
 );
 
@@ -142,7 +150,9 @@ test("gRPC endpoints, metadata and streaming messages resolve environment variab
       },
     },
   };
-  const prepared = prepareProtocolRequest(invoke, context, "").message;
+  const prepared = executionContext
+    .createRequestExecutionContext(context, "ai")
+    .resolve(invoke);
   assert.equal(prepared.data.url, "local.test:50051");
   assert.equal(prepared.data.config.message, '{"name":"environment-model"}');
   assert.equal(

@@ -1,3 +1,4 @@
+import { executionScopeFor } from "../../../platform/execution/owners";
 import { globalConfig } from "../../../app/config";
 import {
   SocketIoAdapter,
@@ -19,9 +20,12 @@ import { randomUUID } from "node:crypto";
 import { executionService } from "../../../platform/execution/service";
 import { relayExecutionEvent } from "../../../platform/execution/webview-relay";
 
-const sessions = new Map<string, SocketIoAdapter>();
+const scopeForTarget = (id: string) => {
+  const panel = globalConfig.openedPanels[id];
+  return panel && executionScopeFor(panel);
+};
 export const disconnectSocketIoSession = (targetId: string) => {
-  sessions.get(targetId)?.cancel();
+  void scopeForTarget(targetId)?.get(`socketio:${targetId}`)?.cancel();
 };
 export const connectSocketIoSession = async (
   data: SocketIoExecutionRequest,
@@ -30,27 +34,22 @@ export const connectSocketIoSession = async (
   if (!id) {
     return;
   }
-  sessions.get(id)?.cancel();
-  const adapter = new SocketIoAdapter();
-  sessions.set(id, adapter);
-  try {
-    await executionService.execute(adapter, data, {
-      sessionId: randomUUID(),
-      targetId: id,
-      observer: (event) => {
-        const panel = globalConfig.openedPanels[id];
-        if (sessions.get(id) === adapter && panel) {
-          relayExecutionEvent(panel.webview, event);
-        }
-      },
-    });
-  } catch (error) {
-    console.error(error);
-  } finally {
-    if (sessions.get(id) === adapter) {
-      sessions.delete(id);
-    }
+  const panel = globalConfig.openedPanels[id];
+  if (!panel) {
+    return;
   }
+  const adapter = new SocketIoAdapter();
+  const run = executionScopeFor(panel).reserve(
+    `socketio:${id}`,
+    randomUUID(),
+    id,
+    adapter,
+  );
+  await run
+    .execute(executionService, adapter, data, (event) =>
+      relayExecutionEvent(panel.webview, event),
+    )
+    .catch(() => {});
 };
 export const sendSocketIoMessage = async (data: {
   id: string;
@@ -60,7 +59,9 @@ export const sendSocketIoMessage = async (data: {
   type?: string;
 }) => {
   try {
-    await sessions.get(data.id)?.send(data);
+    await scopeForTarget(data.id)
+      ?.adapter(`socketio:${data.id}`, SocketIoAdapter)
+      ?.send(data);
   } catch {
     /* Adapter publishes send errors. */
   }
@@ -70,7 +71,9 @@ export const updateSocketIoSubscriptions = async (data: {
   parameter: any[];
 }) => {
   if (data.parameter) {
-    sessions.get(data.id)?.updateEvent(data.parameter);
+    scopeForTarget(data.id)
+      ?.adapter(`socketio:${data.id}`, SocketIoAdapter)
+      ?.updateEvent(data.parameter);
   }
 };
 

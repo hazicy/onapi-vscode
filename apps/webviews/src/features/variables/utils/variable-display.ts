@@ -13,9 +13,14 @@ export function variableContext(
   environmentId?: string,
 ) {
   return createVariableContext(
-    http,
+    {
+      globals: http.options.globals.values,
+      collection: http.collection.variable,
+      environment: http.environments.find(
+        (env) => env.id === (environmentId ?? http.activeEnvironment),
+      )?.values,
+    },
     Object.keys(SYSTEM_VARS).map((name) => `$${name}`),
-    environmentId,
   );
 }
 

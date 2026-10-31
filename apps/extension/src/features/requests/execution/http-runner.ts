@@ -1,3 +1,7 @@
+import {
+  executionScopeFor,
+  disposeExecutionOwner,
+} from "../../../platform/execution/owners";
 import { mergeHttpState } from "./merge-http-state";
 import { HttpAdapter } from "@onapi/runtime/http/adapter";
 import type { ExecutionEnvelope, WorkerRunCommand } from "@onapi/contracts";
@@ -20,49 +24,19 @@ import {
 import { getApiList, getApiListName } from "../request-storage";
 import { setRequestResult } from "../request-status";
 
-const executions = new Map<
-  object,
-  {
-    executionId: string;
-    adapter?: HttpAdapter;
-    cancelled: boolean;
-    context: vscode.ExtensionContext;
-  }
->();
-const registeredContexts = new WeakSet<vscode.ExtensionContext>();
-
 export function stopWorker(owner: object, executionId?: string) {
-  const execution = executions.get(owner);
-  if (execution && (!executionId || execution.executionId === executionId)) {
-    execution.cancelled = true;
-    execution.adapter?.cancel();
-    executions.delete(owner);
+  const execution = executionScopeFor(owner).get("http");
+  if (execution && (!executionId || execution.sessionId === executionId)) {
+    void execution.cancel();
+    execution.finish();
   }
 }
-
-function registerContext(context: vscode.ExtensionContext) {
-  if (!registeredContexts.has(context)) {
-    registeredContexts.add(context);
-    context.subscriptions.push({
-      dispose() {
-        for (const [owner, session] of executions) {
-          if (session.context === context) {
-            stopWorker(owner);
-          }
-        }
-      },
-    });
-  }
-}
-
 export function reserveHttpExecution(
   owner: object,
   executionId: string,
   context: vscode.ExtensionContext,
 ) {
-  stopWorker(owner);
-  registerContext(context);
-  executions.set(owner, { executionId, cancelled: false, context });
+  executionScopeFor(owner, context).reserve("http", executionId);
 }
 
 export function getHttpProjectConfig(
@@ -104,16 +78,21 @@ export function runCollection(
   options: Partial<WorkerRunCommand["options"]>,
   context: vscode.ExtensionContext,
   emit: (event: ExecutionEnvelope) => void,
-  owner: object = {},
+  owner?: object,
   executionId?: string,
 ) {
-  if (executionId && executions.get(owner)?.executionId !== executionId) {
+  const ephemeral = !owner;
+  owner ??= {};
+  if (
+    executionId &&
+    executionScopeFor(owner).get("http")?.sessionId !== executionId
+  ) {
     return Promise.resolve();
   }
   if (!executionId) {
     stopWorker(owner);
   }
-  registerContext(context);
+
   const statusWorkspace = getApiListName(context);
   const workspace = getProjectWorkspace(context);
   const settings =
@@ -134,60 +113,55 @@ export function runCollection(
   const execution = new HttpAdapter(
     new URL("./runtime/worker.js", import.meta.url),
   );
-  const session = {
-    executionId: executionId || randomUUID(),
-    adapter: execution,
-    cancelled: false,
-    context,
-  };
-  executions.set(owner, session);
+  const scope = executionScopeFor(owner, context);
+  const session = executionId
+    ? scope.get("http")!
+    : scope.reserve("http", randomUUID());
+  session.targetId = options?.entrypoint?.execute;
   let persistedState: Promise<boolean> = Promise.resolve(true);
-  return executionService
+  return session
     .execute(
+      executionService,
       execution,
       { collection, options: executionOptions },
-      {
-        sessionId: session.executionId,
-        targetId: options?.entrypoint?.execute,
-        observer: (envelope) => {
-          emit(envelope);
-          const payload = envelope.event;
-          if (!("native" in payload)) {
-            return;
-          }
-          const event = payload.native;
-          if (event.type === "request" && !session.cancelled) {
-            setRequestResult(
-              statusWorkspace,
-              (event.item as any)?.id,
-              event.response,
-              event.error,
-            );
-          }
-          if (
-            event.type === "done" &&
-            !executionOptions.sandbox &&
-            !event.error &&
-            !session.cancelled
-          ) {
-            const config = getProjectConfig(context, workspace);
-            const next = mergeHttpState(
-              before,
-              event,
-              config.http || createDefaultHttpConfig(),
-            );
-            persistedState = saveProjectConfig(context, workspace, {
-              ...config,
-              http: next,
-            });
-          }
-        },
+      (envelope) => {
+        emit(envelope);
+        const payload = envelope.event;
+        if (!("native" in payload)) {
+          return;
+        }
+        const event = payload.native;
+        if (event.type === "request" && !session.cancelled) {
+          setRequestResult(
+            statusWorkspace,
+            (event.item as any)?.id,
+            event.response,
+            event.error,
+          );
+        }
+        if (
+          event.type === "done" &&
+          !executionOptions.sandbox &&
+          !event.error &&
+          !session.cancelled
+        ) {
+          const config = getProjectConfig(context, workspace);
+          const next = mergeHttpState(
+            before,
+            event,
+            config.http || createDefaultHttpConfig(),
+          );
+          persistedState = saveProjectConfig(context, workspace, {
+            ...config,
+            http: next,
+          });
+        }
       },
     )
     .finally(async () => {
       await persistedState;
-      if (executions.get(owner) === session) {
-        executions.delete(owner);
+      if (ephemeral) {
+        await disposeExecutionOwner(owner!);
       }
     });
 }
@@ -200,7 +174,7 @@ export const sendApi = (
 ) => {
   if (
     executionId &&
-    (!owner || executions.get(owner)?.executionId !== executionId)
+    (!owner || executionScopeFor(owner).get("http")?.sessionId !== executionId)
   ) {
     return Promise.resolve();
   }

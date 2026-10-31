@@ -1,3 +1,4 @@
+import { executionScopeFor } from "../../platform/execution/owners";
 import type { RequestDocument } from "./request-document";
 import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import { getDataFromGlobalStorage } from "../../platform/storage";
@@ -6,9 +7,6 @@ import { openCustomEditor } from "../../platform/webviews/custom-editor";
 import { postRequestPanelResponse } from "../../platform/webviews/request-panel-channel";
 import { receiveRequestPanelCommand } from "../../platform/webviews/request-panel-channel";
 import { setupFeatureWebview } from "../../platform/webviews/create-panel";
-import { stopWorker } from "./execution/http-runner";
-import { disconnectWebSocketSession } from "./execution/websocket-session";
-import { disconnectSocketIoSession } from "./execution/socketio-session";
 import { getApiListName } from "./request-storage";
 import { getProtocolIcon } from "../sidebar/protocol-icon";
 import { globalConfig, PANEL_OPTIONS } from "../../app/config";
@@ -53,6 +51,7 @@ export const resolveRequestEditor = (
   openHandledAt = Date.now(),
   resourceKey = document.draft.id,
 ) => {
+  executionScopeFor(panel, context);
   const data = document.draft;
   bindRequestDocument(document, panel);
   const panelStartedAt = Date.now();
@@ -144,12 +143,9 @@ export const resolveRequestEditor = (
   panel.onDidDispose(
     () => {
       // When the panel is closed, cancel any future updates to the webview content
-      stopWorker(panel);
       if (openedPanels[resourceKey] === panel) {
         delete openedPanels[resourceKey];
       }
-      disconnectWebSocketSession(data.id);
-      disconnectSocketIoSession(data.id);
     },
     null,
     context.subscriptions,

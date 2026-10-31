@@ -40,12 +40,6 @@ export const PROTOCOL_OPTIONS = [
   },
 ];
 
-export enum APIS_GRPC_PROTO_TYPE_ENUM {
-  PROTO = "proto",
-  SERVICE = "service",
-  METHOD = "method",
-}
-
 export enum REQUEST_BODY_MODE_ENUM {
   NONE = "none",
   FORM_DATA = "form-data",

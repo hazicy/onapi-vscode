@@ -28,7 +28,14 @@ test("static variable precedence agrees with Postman SDK and retains source meta
     activeEnvironment: "env",
   };
   for (const environmentId of ["env", "missing"]) {
-    const context = createVariableContext(http, ["$timestamp"], environmentId);
+    const context = createVariableContext(
+      {
+        globals: global,
+        collection,
+        environment: environmentId === "env" ? env : [],
+      },
+      ["$timestamp"],
+    );
     const scopes = [environmentId === "env" ? env : [], collection, global].map(
       (values) => new sdk.VariableList({}, values),
     );
@@ -69,7 +76,14 @@ test("disabled narrower scopes fall back and explicit values can override dynami
     ],
     activeEnvironment: "env",
   };
-  const context = createVariableContext(http, ["$timestamp"]);
+  const context = createVariableContext(
+    {
+      globals: http.options.globals.values,
+      collection: http.collection.variable,
+      environment: http.environments[0].values,
+    },
+    ["$timestamp"],
+  );
   assert.equal(context.get("host").value, "collection");
   assert.equal(context.get("$timestamp").value, false);
   assert.equal(context.get("$timestamp").kind, "value");

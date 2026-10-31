@@ -31,54 +31,65 @@ export const grpcMethodSchema = z.object({
     }),
   ),
 });
-export const grpcServiceDefinitionSchema = z.object({
+export const grpcSchemaDescriptionSchema = z.object({
   methods: z.array(grpcMethodSchema),
   descriptorSet: z.string().optional(),
 });
-export const grpcConfigSchema = z
-  .object({
-    source: z.enum(["reflection", "proto"]).default("reflection"),
-    files: z.array(grpcProtoFileSchema).max(100).default([]),
+export const grpcDefinitionSchema = z.discriminatedUnion("source", [
+  z.strictObject({
+    source: z.literal("proto"),
+    files: z.array(grpcProtoFileSchema).max(100),
+  }),
+  z.strictObject({
+    source: z.literal("reflection"),
     descriptorSet: z
       .string()
       .max(16 * 1024 * 1024)
       .optional(),
-    methods: z.array(grpcMethodSchema).default([]),
-    method: z.string().default(""),
-    message: z
-      .string()
-      .max(2 * 1024 * 1024)
-      .default("{}"),
-    metadata: grpcMetadataSchema.default([]),
-    auth: z
-      .object({
-        type: z.enum(["none", "bearer", "basic", "apikey"]).default("none"),
-        token: z.string().default(""),
-        username: z.string().default(""),
-        password: z.string().default(""),
-        key: z.string().default("x-api-key"),
-        value: z.string().default(""),
-      })
-      .prefault({}),
-    tls: z
-      .object({
-        enabled: z.boolean().default(false),
-        rootCertificates: z.string().default(""),
-        clientCertificate: z.string().default(""),
-        privateKey: z.string().default(""),
-        serverName: z.string().default(""),
-      })
-      .prefault({}),
-    deadlineMs: z.number().int().min(0).max(2147483647).default(30_000),
-    maxReceiveMessageBytes: z
-      .number()
-      .int()
-      .min(0)
-      .max(2147483647)
-      .default(4 * 1024 * 1024),
-    includeDefaults: z.boolean().default(true),
+  }),
+]);
+export const grpcCallConfigSchema = z.strictObject({
+  method: z.string().default(""),
+  message: z
+    .string()
+    .max(2 * 1024 * 1024)
+    .default("{}"),
+  metadata: grpcMetadataSchema.default([]),
+  auth: z
+    .object({
+      type: z.enum(["none", "bearer", "basic", "apikey"]).default("none"),
+      token: z.string().default(""),
+      username: z.string().default(""),
+      password: z.string().default(""),
+      key: z.string().default("x-api-key"),
+      value: z.string().default(""),
+    })
+    .prefault({}),
+  tls: z
+    .object({
+      enabled: z.boolean().default(false),
+      rootCertificates: z.string().default(""),
+      clientCertificate: z.string().default(""),
+      privateKey: z.string().default(""),
+      serverName: z.string().default(""),
+    })
+    .prefault({}),
+  deadlineMs: z.number().int().min(0).max(2147483647).default(30_000),
+  maxReceiveMessageBytes: z
+    .number()
+    .int()
+    .min(0)
+    .max(2147483647)
+    .default(4 * 1024 * 1024),
+  includeDefaults: z.boolean().default(true),
+});
+export const grpcConfigSchema = grpcCallConfigSchema
+  .extend({
+    definition: grpcDefinitionSchema.prefault({ source: "reflection" }),
   })
   .prefault({});
+export type GrpcCallConfig = z.infer<typeof grpcCallConfigSchema>;
+export type GrpcDefinition = z.infer<typeof grpcDefinitionSchema>;
 export const grpcStatusSchema = z.object({
   code: z.number().int(),
   name: z.string(),
@@ -89,5 +100,5 @@ export const grpcStatusSchema = z.object({
 export type GrpcConfig = z.infer<typeof grpcConfigSchema>;
 export type GrpcProtoFile = z.infer<typeof grpcProtoFileSchema>;
 export type GrpcMethod = z.infer<typeof grpcMethodSchema>;
-export type GrpcServiceDefinition = z.infer<typeof grpcServiceDefinitionSchema>;
+export type GrpcSchemaDescription = z.infer<typeof grpcSchemaDescriptionSchema>;
 export type GrpcStatus = z.infer<typeof grpcStatusSchema>;

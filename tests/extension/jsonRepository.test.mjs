@@ -711,8 +711,10 @@ test("gRPC definitions, unfinished messages and credentials survive disk persist
     kind: "grpc",
     url: "localhost:50051",
     grpc: grpcConfigSchema.parse({
-      source: "proto",
-      files: [{ name: "service.proto", content: 'syntax = "proto3";' }],
+      definition: {
+        source: "proto",
+        files: [{ name: "service.proto", content: 'syntax = "proto3";' }],
+      },
       message: '{"unfinished',
       metadata: [
         { key: "authorization", value: "PRIVATE_GRPC_METADATA", enabled: true },

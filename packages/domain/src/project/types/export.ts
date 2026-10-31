@@ -2,7 +2,7 @@ import type {
   OnapiDocument,
   OnapiGlobalParams,
 } from "@onapi/domain/import/types/onapi";
-import { GrpcProtos } from "@onapi/domain/requests/types/grpc";
+import type { GrpcConfig } from "@onapi/domain/requests/grpc";
 import { WebSocketConfig } from "@onapi/domain/requests/types/websocket";
 import { SocketIoConfig } from "@onapi/domain/requests/types/socketio";
 import { EnvListItem } from "@onapi/domain/environment/types/index";
@@ -53,7 +53,7 @@ export type GlobalVars = {
 export type ImportApis = OnapiDocument & {
   message?: any;
   config?: WebSocketConfig | SocketIoConfig;
-  protos: GrpcProtos[];
+  grpc?: GrpcConfig;
   server_id: string;
 };
 

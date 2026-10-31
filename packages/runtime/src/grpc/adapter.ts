@@ -1,3 +1,4 @@
+import { grpcSchemaCache, type GrpcSchemaCache } from "./cache";
 import {
   status,
   type Client,
@@ -8,7 +9,10 @@ import {
   type StatusObject,
 } from "@grpc/grpc-js";
 import type { ProtocolAdapter, ExecutionContext } from "@onapi/core";
-import type { GrpcConfig } from "@onapi/domain/requests/grpc";
+import type {
+  GrpcCallConfig,
+  GrpcDefinition,
+} from "@onapi/domain/requests/grpc";
 import {
   createGrpcClient,
   metadataValues,
@@ -16,8 +20,6 @@ import {
 } from "./connection";
 import {
   describeSchema,
-  loadDescriptorSchema,
-  loadProtoSchema,
   lookupMethod,
   validateMessage,
   type LoadedGrpcSchema,
@@ -31,7 +33,9 @@ type Call =
   | ClientDuplexStream<object, object>;
 export interface GrpcExecutionRequest {
   url: string;
-  config: GrpcConfig;
+  config: GrpcCallConfig;
+  definition: GrpcDefinition;
+  refresh?: boolean;
 }
 
 /** One adapter owns one invocation, including discovery, transport and writable stream. */
@@ -44,7 +48,10 @@ export class GrpcAdapter implements ProtocolAdapter<GrpcExecutionRequest> {
   private context?: ExecutionContext;
   private method = "";
   private writable = false;
-  constructor(private readonly mode: "discover" | "invoke") {}
+  constructor(
+    private readonly mode: "discover" | "invoke",
+    private readonly cache: GrpcSchemaCache = grpcSchemaCache,
+  ) {}
   cancel() {
     this.controller.abort();
     this.call?.cancel();
@@ -81,25 +88,32 @@ export class GrpcAdapter implements ProtocolAdapter<GrpcExecutionRequest> {
     try {
       this.controller.signal.throwIfAborted();
       const config = request.config;
-      const descriptorSet =
-        config.source === "reflection"
-          ? this.mode === "discover" || !config.descriptorSet
-            ? await reflectDescriptors(
-                request.url,
-                config,
-                this.controller.signal,
-              )
-            : config.descriptorSet
-          : undefined;
+      let definition = request.definition;
+      if (
+        definition.source === "reflection" &&
+        (request.refresh || !definition.descriptorSet)
+      ) {
+        definition = {
+          source: "reflection",
+          descriptorSet: await reflectDescriptors(
+            request.url,
+            config,
+            this.controller.signal,
+          ),
+        };
+      }
       this.controller.signal.throwIfAborted();
-      const schema = (this.schema = descriptorSet
-        ? loadDescriptorSchema(descriptorSet, config)
-        : await loadProtoSchema(config.files, config));
+      const schema = (this.schema = await this.cache.load(definition, config));
       if (this.mode === "discover") {
         context.publish({
           protocol: this.protocol,
           type: "schema.loaded",
-          value: describeSchema(schema, descriptorSet),
+          value: describeSchema(
+            schema,
+            definition.source === "reflection"
+              ? definition.descriptorSet
+              : undefined,
+          ),
         });
         return;
       }

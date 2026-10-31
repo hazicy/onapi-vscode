@@ -47,13 +47,15 @@ OnAPI requires **VS Code 1.101 or newer**.
 
 ### gRPC requests
 
-Select **New → gRPC** in the sidebar. Enter a server address such as `localhost:50051`, then open **Service definition**. Use **Server reflection → Load services**, or import a `.proto` file/folder and load its services. Local imports are bundled with the saved request; reflection supports both v1 and v1alpha. You can also edit proto sources directly.
+Select **New → gRPC** in the sidebar. Enter a server address such as `localhost:50051`, then open **Service definition**. Use **Server reflection → Load services**, or import a `.proto` file/folder and load its services. Local imports are bundled with the saved request; reflection supports both v1 and v1alpha. Saved service definitions reopen from their source snapshot, and parsed schemas are reused through a bounded cache. You can also edit proto sources directly.
 
 Select a method, open **Message**, and use **Use example message** to generate a payload. Configure **Metadata**, **Authorization**, and **Settings** as needed, then select **Invoke**. Unary, server streaming, client streaming, and bidirectional streaming calls share a sent/received message timeline. For client streams, the initial message is sent when invoking; use **Send message** for additional messages and **End streaming** to finish sending while still receiving the server response. **Cancel** closes the call.
 
 Responses include gRPC status codes, elapsed time, response metadata, and trailers. Settings include deadlines (0 means no call deadline), response size limits, default fields, custom root CAs, server name override, and client certificate/key pairs for mutual TLS. `grpcs://` and `https://` endpoints enable TLS; bare addresses use the TLS toggle. Collection/environment variables are resolved before execution. Native save, undo, redo, and revert preserve message text and service definitions, including unfinished JSON/proto edits.
 
 The editor follows Postman's gRPC request workflow. gRPC scripts, OAuth flows, and grpcurl import/export are not implemented. gRPC uses its HTTP/2 transport; application HTTP proxy settings are currently only shared by HTTP, socket, AI, and MCP paths.
+
+See [execution architecture](docs/architecture/execution.md) for resource ownership, execution context, and service-definition caching.
 
 ### AI and MCP requests
 

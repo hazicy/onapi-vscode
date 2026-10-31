@@ -15,7 +15,7 @@ let modules, server, address, files;
 before(async () => {
   await build({
     stdin: {
-      contents: `export { GrpcAdapter } from './packages/runtime/src/grpc/adapter.ts'; export { importProtoFiles, importProtoDirectory } from './packages/runtime/src/grpc/import.ts'; export { ExecutionService } from './packages/core/src/index.ts'; export { grpcConfigSchema } from './packages/domain/src/requests/grpc.ts'; export { requestPanelResponseSchema } from './packages/contracts/src/request-panel/index.ts';`,
+      contents: `export { GrpcAdapter } from './packages/runtime/src/grpc/adapter.ts'; export { GrpcSchemaCache } from './packages/runtime/src/grpc/cache.ts'; export { importProtoFiles, importProtoDirectory } from './packages/runtime/src/grpc/import.ts'; export { ExecutionService } from './packages/core/src/index.ts'; export { grpcConfigSchema } from './packages/domain/src/requests/grpc.ts'; export { requestPanelResponseSchema } from './packages/contracts/src/request-panel/index.ts';`,
       resolveDir: process.cwd(),
       loader: "ts",
     },
@@ -92,12 +92,15 @@ before(async () => {
 after(() => server?.forceShutdown());
 const config = (patch) =>
   modules.grpcConfigSchema.parse({
-    source: "proto",
-    files,
+    definition: { source: "proto", files },
     method: "/onapi.test.Echo/Unary",
     message: '{"name":"World","value":"9223372036854775807","payload":"AQI="}',
     ...patch,
   });
+function executionRequest(patch) {
+  const { definition, ...settings } = config(patch);
+  return { config: settings, definition };
+}
 function execute(method, patch = {}, mode = "invoke") {
   const adapter = new modules.GrpcAdapter(mode);
   const events = [];
@@ -109,7 +112,7 @@ function execute(method, patch = {}, mode = "invoke") {
     adapter,
     {
       url: address,
-      config: config({ method: `/onapi.test.Echo/${method}`, ...patch }),
+      ...executionRequest({ method: `/onapi.test.Echo/${method}`, ...patch }),
     },
     {
       sessionId: `grpc-${method}`,
@@ -248,7 +251,7 @@ test("gRPC cancellation and deadlines settle active calls", async () => {
 test("gRPC reflection discovers a real server and cached descriptors can invoke methods", async () => {
   const discovery = execute(
     "Unary",
-    { source: "reflection", files: [] },
+    { definition: { source: "reflection" } },
     "discover",
   );
   await discovery.result;
@@ -257,9 +260,7 @@ test("gRPC reflection discovers a real server and cached descriptors can invoke 
   ).value;
   assert.ok(schema.descriptorSet);
   const run = execute("Unary", {
-    source: "reflection",
-    files: [],
-    descriptorSet: schema.descriptorSet,
+    definition: { source: "reflection", descriptorSet: schema.descriptorSet },
   });
   await run.result;
   assert.equal(
@@ -283,7 +284,11 @@ test("gRPC local imports include dependencies and reload from saved sources", as
     path.join(directory, "service.proto"),
   ]);
   assert.equal(imported.length, 2);
-  const run = execute("Unary", { files: imported }, "discover");
+  const run = execute(
+    "Unary",
+    { definition: { source: "proto", files: imported } },
+    "discover",
+  );
   await run.result;
   assert.equal(
     run.events.find((event) => event.type === "schema.loaded").value.methods[0]
@@ -337,7 +342,7 @@ test("gRPC TLS and mutual TLS validate certificates and exchange real messages",
       new modules.GrpcAdapter("invoke"),
       {
         url: `grpcs://127.0.0.1:${port}`,
-        config: config({
+        ...executionRequest({
           tls: {
             rootCertificates: cert.toString(),
             ...(mutual
@@ -369,7 +374,12 @@ test("gRPC resolves built-in Google protobuf imports", async () => {
     'syntax="proto3"; package known; import "google/protobuf/empty.proto"; service Health { rpc Check(google.protobuf.Empty) returns(google.protobuf.Empty); }';
   const run = execute(
     "Unary",
-    { files: [{ name: "health.proto", content }] },
+    {
+      definition: {
+        source: "proto",
+        files: [{ name: "health.proto", content }],
+      },
+    },
     "discover",
   );
   await run.result;
@@ -406,7 +416,7 @@ test("gRPC reflection falls back to v1alpha when v1 is not implemented", async (
     new modules.GrpcAdapter("discover"),
     {
       url: `127.0.0.1:${port}`,
-      config: config({ source: "reflection", files: [] }),
+      ...executionRequest({ definition: { source: "reflection" } }),
     },
     {
       sessionId: "legacy-reflection",
@@ -417,4 +427,42 @@ test("gRPC reflection falls back to v1alpha when v1 is not implemented", async (
     events.find((event) => event.type === "schema.loaded").value.methods.length,
     6,
   );
+});
+
+test("gRPC schema cache deduplicates concurrent parses, isolates codec options and bounds retained schemas", async () => {
+  const cache = new modules.GrpcSchemaCache(2);
+  const definition = { source: "proto", files };
+  const first = cache.load(definition, { includeDefaults: true });
+  const second = cache.load(structuredClone(definition), {
+    includeDefaults: true,
+  });
+  assert.equal(first, second);
+  assert.equal(await first, await second);
+  const otherOptions = await cache.load(definition, { includeDefaults: false });
+  assert.notEqual(otherOptions, await first);
+  const changed = {
+    source: "proto",
+    files: [
+      {
+        name: "other.proto",
+        content: files[0].content.replace("onapi.test", "other.test"),
+      },
+    ],
+  };
+  await cache.load(changed, { includeDefaults: true });
+  assert.equal(cache.size, 2);
+  assert.notEqual(
+    await cache.load(definition, { includeDefaults: true }),
+    await first,
+  );
+  await assert.rejects(
+    cache.load(
+      {
+        source: "proto",
+        files: [{ name: "invalid.proto", content: "invalid proto" }],
+      },
+      { includeDefaults: true },
+    ),
+  );
+  assert.ok(cache.size <= 2);
 });

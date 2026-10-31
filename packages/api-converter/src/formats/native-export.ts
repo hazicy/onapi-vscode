@@ -22,12 +22,7 @@ import {
   ApisBaseDataItem,
   ExpectItem,
 } from "@onapi/domain/requests/types/base";
-import {
-  GrpcProtos,
-  GrpcProtosServices,
-  GrpcProtosServicesMethods,
-  IncludesInfo,
-} from "@onapi/domain/requests/types/grpc";
+import { grpcConfigSchema } from "@onapi/domain/requests/grpc";
 import {
   ApisBaseRequestBody,
   SocketRequestBody,
@@ -675,123 +670,6 @@ export const completionSocketMethodRequest = (
   };
 };
 
-export const completionGrpcProtosServicesMethodsRequest = (
-  request: GrpcProtosServicesMethods["request"],
-) => {
-  const message = isArray(request?.message)
-    ? request?.message?.map(({ name, raw = "", raw_parameter }) => ({
-        param_id: snowflakeId(),
-        name,
-        raw,
-        raw_parameter: completionBodyRawParameter(raw_parameter),
-      }))
-    : [];
-  const metadata = isArray(request?.metadata?.parameter)
-    ? completionBodyRawParameter(request?.metadata?.parameter)
-    : [];
-  return {
-    message,
-    metadata: {
-      parameter: metadata,
-    },
-  };
-};
-
-export const completionGrpcProtosServicesMethods = (
-  methods: GrpcProtosServices["methods"],
-  modelsMap: { [key: string]: string },
-) => {
-  if (isArray(methods)) {
-    return methods?.map(
-      ({
-        name,
-        reconnect_num = 0,
-        url,
-        request,
-        response,
-        request_stream = -1,
-        response_stream = -1,
-        tls = -1,
-        ssl = -1,
-      }) => ({
-        grpc_method_id: snowflakeId(),
-        name,
-        reconnect_num,
-        request: completionGrpcProtosServicesMethodsRequest(request),
-        response: {
-          example: completionExample(response?.example, modelsMap),
-        },
-        request_stream,
-        response_stream,
-        ssl,
-        tls,
-        url,
-      }),
-    );
-  }
-  return [];
-};
-
-export const completionGrpcProtosServices = (
-  services: GrpcProtos["services"],
-  modelsMap: { [key: string]: string },
-) => {
-  if (isArray(services)) {
-    return services?.map(({ service_name, methods }) => ({
-      service_id: snowflakeId(),
-      service_name,
-      methods: completionGrpcProtosServicesMethods(methods, modelsMap),
-    }));
-  }
-  return [];
-};
-
-export const completionGrpcProtosFiles = (include_files: IncludesInfo[]) => {
-  if (isArray(include_files)) {
-    return include_files?.map(({ name = "", path = "", proto = "" }) => ({
-      name,
-      path,
-      proto,
-    }));
-  }
-  return [];
-};
-
-export const completionGrpcProtos = (
-  protos: GrpcProtos[],
-  modelsMap: { [key: string]: string },
-) => {
-  if (isArray(protos)) {
-    return protos?.map(
-      ({
-        proto_content,
-        proto_name,
-        proto_path,
-        url,
-        services,
-        include_files,
-        include_dirs,
-        proto_is_cloud = 1,
-      }) => ({
-        include_dirs: completionGrpcProtosFiles(
-          include_dirs as unknown as IncludesInfo[],
-        ),
-        include_files: completionGrpcProtosFiles(
-          include_files as unknown as IncludesInfo[],
-        ),
-        proto_content,
-        proto_id: snowflakeId(),
-        proto_is_cloud,
-        proto_name,
-        proto_path,
-        url,
-        services: completionGrpcProtosServices(services, modelsMap),
-      }),
-    );
-  }
-  return [];
-};
-
 export const completionGraphqlRequestBody = (
   body: OnapiGraphQLRequest["body"],
   modelsMap: { [key: string]: string },
@@ -872,7 +750,7 @@ export const completionApis = (
           attribute_info,
           tags,
           config,
-          protos,
+          grpc,
           message,
         },
       ) => {
@@ -1001,7 +879,8 @@ export const completionApis = (
           pre.push({
             ...baseApiInfo,
             mark_id,
-            protos: completionGrpcProtos(protos, modelsMap),
+            grpc: grpcConfigSchema.parse(grpc),
+            url,
             status: 1,
           });
         }
