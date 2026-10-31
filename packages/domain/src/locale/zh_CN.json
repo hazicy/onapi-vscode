@@ -1,5 +1,6 @@
 {
   "interaction": {
+    "noMatchingVariables": "没有匹配的变量",
     "configuredValue": "当前配置值",
     "collectionScope": "集合",
     "systemScope": "系统",

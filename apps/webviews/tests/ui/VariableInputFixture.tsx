@@ -14,6 +14,8 @@ state.updateHttpGlobals([
   { key: "zero", value: 0 },
   { key: "plainZero", value: 0 },
   { key: "empty", value: "" },
+  { key: "baseUrl", value: "https://base.example" },
+  { key: "basePath", value: "/api" },
 ]);
 state.updateHttpEnvironments([
   {

@@ -163,3 +163,133 @@ test("previews distinguish empty, zero and dynamic values", async ({
   await expect(tip).toContainText("Empty string");
   await expect(tip).toContainText("Generated when the request is sent");
 });
+
+for (const multiline of [false, true]) {
+  test(`variable completion filters while typing and replaces the prefix (${multiline ? "textarea" : "input"})`, async ({
+    page,
+  }) => {
+    await page.goto(`/?variableInput${multiline ? "&multiline" : ""}`);
+    const input = page.getByPlaceholder("Request value");
+    await input.fill("");
+    await input.pressSequentially("{{");
+    const list = page.getByRole("listbox");
+    await expect(list).toBeVisible();
+    await input.pressSequentially("base");
+    await expect(list).toBeVisible();
+    await expect(list.getByRole("option")).toHaveCount(2);
+    await expect(input).toBeFocused();
+    await expect(list.getByRole("option", { name: /baseUrl/ })).toBeVisible();
+    await input.press("ArrowDown");
+    await input.press("Enter");
+    await expect(input).toHaveValue("{{basePath}}");
+    await expect(list).toBeHidden();
+    await input.pressSequentially("/users");
+    await expect(input).toHaveValue("{{basePath}}/users");
+  });
+}
+
+test("empty completion results stay open and recover after backspace", async ({
+  page,
+}) => {
+  await page.goto("/?variableInput");
+  const input = page.getByPlaceholder("Request value");
+  await input.fill("");
+  await input.pressSequentially("{{baseX");
+  const list = page.getByRole("listbox");
+  await expect(list).toContainText("No matching variables");
+  await input.press("Enter");
+  await expect(input).toHaveValue("{{baseX");
+  await input.press("Backspace");
+  await expect(list.getByRole("option")).toHaveCount(2);
+  await input.press("Escape");
+  await expect(list).toBeHidden();
+  await expect(input).toBeFocused();
+});
+
+test("completion in an existing reference preserves closing braces and trailing content", async ({
+  page,
+}) => {
+  await page.goto("/?variableInput");
+  const input = page.getByPlaceholder("Request value");
+  const before = "https://example.com/{{ba";
+  await input.fill(before + "}}/users");
+  await input.evaluate((element: HTMLInputElement, index) => {
+    element.setSelectionRange(index, index);
+  }, before.length);
+  await input.pressSequentially("s");
+  const list = page.getByRole("listbox");
+  await expect(list.getByRole("option")).toHaveCount(2);
+  await input.press("Enter");
+  await expect(input).toHaveValue("https://example.com/{{baseUrl}}/users");
+  await expect(input).toBeFocused();
+});
+
+test("completion closes when focus or the caret leaves the reference", async ({
+  page,
+}) => {
+  await page.goto("/?variableInput");
+  const input = page.getByPlaceholder("Request value");
+  await input.fill("prefix/{{base");
+  const list = page.getByRole("listbox");
+  await expect(list).toBeVisible();
+  await input.press("Home");
+  await expect(list).toBeHidden();
+  await input.press("End");
+  await input.pressSequentially("U");
+  await expect(list).toBeVisible();
+  await input.press("Tab");
+  await expect(list).toBeHidden();
+});
+
+for (const multiline of [false, true]) {
+  for (const [source, expected] of [
+    ["{{basUrl", "{{baseUrl}}"],
+    ["{{bas|upper}}/users", "{{baseUrl|upper}}/users"],
+    ["{{basUrl|upper}}/users", "{{baseUrl|upper}}/users"],
+    ["{{bas}", "{{baseUrl}}"],
+  ]) {
+    test(`completion replaces only the variable name in ${source} (${multiline ? "textarea" : "input"})`, async ({
+      page,
+    }) => {
+      await page.goto(`/?variableInput${multiline ? "&multiline" : ""}`);
+      const input = page.getByPlaceholder("Request value");
+      await input.fill(source);
+      await input.evaluate((element: HTMLInputElement | HTMLTextAreaElement) =>
+        element.setSelectionRange(5, 5),
+      );
+      await input.pressSequentially("e");
+      await expect(page.getByRole("listbox").getByRole("option")).toHaveCount(
+        2,
+      );
+      await input.press("Enter");
+      await expect(input).toHaveValue(expected);
+      await expect(input).toBeFocused();
+    });
+  }
+
+  test(`pasting a variable prefix refreshes candidates and replacement range (${multiline ? "textarea" : "input"})`, async ({
+    page,
+  }) => {
+    await page.goto(`/?variableInput${multiline ? "&multiline" : ""}`);
+    const input = page.getByPlaceholder("Request value");
+    await input.fill("");
+    await input.pressSequentially("{{");
+    await input.evaluate((element) => {
+      const clipboardData = new DataTransfer();
+      clipboardData.setData("text/plain", "base");
+      element.dispatchEvent(
+        new ClipboardEvent("paste", {
+          clipboardData,
+          bubbles: true,
+          cancelable: true,
+        }),
+      );
+    });
+    await expect(input).toHaveValue("{{base");
+    await expect(page.getByRole("listbox").getByRole("option")).toHaveCount(2);
+    await input.press("Enter");
+    await expect(input).toHaveValue("{{baseUrl}}");
+    await input.pressSequentially("/users");
+    await expect(input).toHaveValue("{{baseUrl}}/users");
+  });
+}

@@ -1,5 +1,6 @@
 {
   "interaction": {
+    "noMatchingVariables": "No matching variables",
     "configuredValue": "Configured value",
     "collectionScope": "Collection",
     "systemScope": "System",

@@ -1,4 +1,4 @@
-import React, { useId, useMemo, useRef } from "react";
+import React, { useId, useLayoutEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Input, Tooltip, message } from "@/shared/ui/base";
@@ -7,13 +7,18 @@ import VarMentions from "@/features/variables/components/VarMentions";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import { useSafeState } from "ahooks";
 import clsx from "clsx";
-import { head } from "lodash-es";
+import { importPastedCurl } from "@/features/curl/utils/import-pasted-curl";
 
 import { parseSafeBash } from "@/features/curl/utils/curl";
 import type { CurlDataType } from "@/features/requests/types/other";
 
 import styles from "./VarInput.module.css";
 import { getElementTextOffset } from "./util";
+import {
+  findVariableCompletion,
+  completeVariable,
+  type VariableCompletion,
+} from "./completion";
 import {
   variableContext,
   variableDisplay,
@@ -40,9 +45,9 @@ interface VarInputProps {
   disabledReturn?: boolean;
 }
 
-type EnvOptions = {
+type EnvOptions = VariableCompletion & {
   offset: Pick<React.CSSProperties, "left" | "top">;
-  insertionIndex: number;
+  activeIndex: number;
 };
 
 export default function VarInput(props: Partial<VarInputProps>) {
@@ -127,47 +132,80 @@ export default function VarInput(props: Partial<VarInputProps>) {
   highlighted.push(value.slice(previousEnd), "\u200b");
   const [completion, setCompletion] = useSafeState<EnvOptions | null>(null);
   const envVisible = completion !== null;
+  const candidates = useMemo(
+    () =>
+      [...values.values()].filter((entry) =>
+        entry.name
+          .toLowerCase()
+          .includes(completion?.query.toLowerCase() ?? ""),
+      ),
+    [values, completion?.query],
+  );
   const inputRef = useRef<InputRef>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const pendingCaret = useRef<{
+    position: number;
+    refreshCompletion: boolean;
+  } | null>(null);
   const nativeMaxLength =
     maxLength !== undefined && maxLength <= 2147483647 ? maxLength : undefined;
   const editorElement = () =>
     multiline ? textAreaRef.current : inputRef.current?.input || null;
+
+  useLayoutEffect(() => {
+    if (pendingCaret.current === null) {
+      return;
+    }
+    const { position, refreshCompletion } = pendingCaret.current;
+    pendingCaret.current = null;
+    const element = editorElement();
+    element?.focus();
+    element?.setSelectionRange(position, position);
+    if (element && refreshCompletion) {
+      updateCompletion(element);
+    }
+  });
 
   const insertVariable = (name: string) => {
     const element = editorElement();
     if (!element || !completion || readOnly) {
       return;
     }
-    const text = `${name}}}`;
-    const start = completion.insertionIndex;
-    const nextValue = `${element.value.slice(0, start)}${text}${element.value.slice(start)}`;
-    if (nextValue.length > maxLength) {
+    const edit = completeVariable(element.value, completion, name);
+    if (edit.value.length > maxLength) {
       return;
     }
-    onChange?.(nextValue);
-    requestAnimationFrame(() => {
-      const current = editorElement();
-      current?.focus();
-      current?.setSelectionRange(start + text.length, start + text.length);
+    pendingCaret.current = { position: edit.caret, refreshCompletion: false };
+    onChange?.(edit.value);
+    setCompletion(null);
+  };
+
+  const updateCompletion = (
+    element: HTMLInputElement | HTMLTextAreaElement,
+  ) => {
+    const index = element.selectionStart ?? element.value.length;
+    const range = findVariableCompletion(
+      element.value,
+      index,
+      element.selectionEnd ?? index,
+    );
+    if (readOnly || !range) {
+      setCompletion(null);
+      return;
+    }
+    const position = getElementTextOffset(element, index);
+    setCompletion({
+      ...range,
+      offset: { left: position.left, top: position.top },
+      activeIndex: 0,
     });
   };
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    const element = event.currentTarget;
-    onChange?.(element.value);
-    const index = element.selectionStart ?? element.value.length;
-    if (envVisible || element.value.slice(index - 2, index) !== "{{") {
-      setCompletion(null);
-      return;
-    }
-    const position = getElementTextOffset(element, index);
-    setCompletion({
-      offset: { left: position.left, top: position.top },
-      insertionIndex: index,
-    });
+    onChange?.(event.currentTarget.value);
+    updateCompletion(event.currentTarget);
   };
 
   const handlePaste = async (
@@ -191,72 +229,68 @@ export default function VarInput(props: Partial<VarInputProps>) {
       event.preventDefault();
       const inserted = text.replace(/\n/g, " ");
       const nextValue = `${element.value.slice(0, selectionStart)}${inserted}${element.value.slice(selectionEnd)}`;
+      pendingCaret.current = {
+        position: selectionStart + inserted.length,
+        refreshCompletion: true,
+      };
       onChange?.(nextValue);
-      requestAnimationFrame(() => {
-        const current = editorElement();
-        current?.setSelectionRange(
-          selectionStart + inserted.length,
-          selectionStart + inserted.length,
-        );
-      });
       return;
     }
 
     event.preventDefault();
     const pastedValue = element.value;
     element.blur();
+    const isCurrent = () =>
+      element.value === pastedValue && element.isConnected;
     try {
-      const [{ fromCurlPostmanRequest }, { convert, validate }] =
-        await Promise.all([
-          import("@onapi/domain/curl/utils/postman-request"),
-          import("curl-to-postmanv2"),
-        ]);
-      // Loading the converter must not overwrite edits made while it was loading.
-      if (element.value !== pastedValue || !element.isConnected) {
-        return;
+      const request = await importPastedCurl(bashText);
+      if (isCurrent() && request) {
+        pasteCurlChange?.(request);
       }
-      const { result: isCurl = false } = validate(bashText);
-      if (!isCurl) {
+    } catch {
+      if (isCurrent()) {
         message.destroy();
         message.info(t("supplement.curl_tip"));
-        return;
       }
-      convert({ type: "string", data: bashText }, (error: any, result: any) => {
-        if (error || (result?.error && !result?.result)) {
-          message.destroy();
-          message.info(t("supplement.curl_tip"));
-          return;
-        }
-        const newApi = fromCurlPostmanRequest(head<any>(result?.output)?.data);
-        if (!newApi) {
-          return;
-        }
-        if (!newApi.request) {
-          return;
-        }
-        pasteCurlChange?.({ request: newApi.request });
-      });
-    } catch {
-      message.destroy();
-      message.info(t("supplement.curl_tip"));
     }
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.nativeEvent.isComposing) {
+      return;
+    }
+    if (
+      completion &&
+      ["ArrowUp", "ArrowDown", "Enter", "Escape"].includes(event.key)
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+      if (event.key === "Escape") {
+        setCompletion(null);
+      } else if (event.key === "Enter") {
+        const candidate = candidates[completion.activeIndex];
+        if (candidate) {
+          insertVariable(candidate.name);
+        }
+      } else {
+        const direction = event.key === "ArrowDown" ? 1 : -1;
+        const activeIndex = Math.max(
+          0,
+          Math.min(completion.activeIndex + direction, candidates.length - 1),
+        );
+        setCompletion({ ...completion, activeIndex });
+      }
+      return;
+    }
     onKeyDown?.(event, envVisible);
-    if (event.key === "Enter" && (disabledReturn || envVisible)) {
+    if (event.key === "Enter" && disabledReturn) {
       event.preventDefault();
-    }
-    if (envVisible && (event.key === "ArrowUp" || event.key === "ArrowDown")) {
-      event.preventDefault();
-    }
-    if (event.key === "Escape" && envVisible) {
-      setCompletion(null);
     }
   };
 
   const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
     if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+      setCompletion(null);
       onBlur?.(value);
     }
   };
@@ -269,6 +303,13 @@ export default function VarInput(props: Partial<VarInputProps>) {
     readOnly,
     maxLength: nativeMaxLength,
     onChange: handleChange,
+    onSelect: (
+      event: React.SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
+      if (completion) {
+        updateCompletion(event.currentTarget);
+      }
+    },
     onScroll: syncScroll,
     onPaste: handlePaste,
   };
@@ -316,10 +357,13 @@ export default function VarInput(props: Partial<VarInputProps>) {
       </div>
       {completion && (
         <VarMentions
+          items={candidates}
+          activeIndex={completion.activeIndex}
+          onActiveChange={(activeIndex) =>
+            setCompletion({ ...completion, activeIndex })
+          }
           onSelect={insertVariable}
-          onCancel={() => setTimeout(() => setCompletion(null), 100)}
           offset={completion.offset}
-          env_id={currentEnvId}
         />
       )}
     </div>

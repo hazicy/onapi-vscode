@@ -1,67 +1,35 @@
 import styles from "./VarMentions.module.css";
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import { useTranslation } from "react-i18next";
 
-import { useMemoizedFn, useSafeState } from "ahooks";
+import type { VariableEntry } from "@onapi/domain/variables/context";
 import clsx from "clsx";
 
 import {
-  variableContext,
   variableDisplayText,
   variableScopeLabel,
 } from "../utils/variable-display";
-import useProjectConfig from "@/features/project/store/useProjectConfig";
 
 interface EnvVarsProps {
   offset?: React.CSSProperties;
-  onCancel?: () => void;
+  items: VariableEntry[];
+  activeIndex: number;
+  onActiveChange: (index: number) => void;
   onSelect?: (newVal: string) => void;
-  env_id: string;
 }
 
 const EnvVar = (props: EnvVarsProps) => {
   const { t } = useTranslation();
-  const { offset, onCancel, onSelect, env_id = "-1" } = props;
-  const http = useProjectConfig((state) => state.http);
-  const [itemIndex, setItemIndex] = useSafeState(0);
+  const { offset, items, activeIndex, onActiveChange, onSelect } = props;
   const listRef = useRef<HTMLDivElement>(null);
-  const markVarsList = useMemo(
-    () => [
-      ...variableContext(
-        http,
-        env_id && env_id !== "-1" ? env_id : undefined,
-      ).values(),
-    ],
-    [http, env_id],
-  );
-  const currentItem = markVarsList[itemIndex];
+  const currentItem = items[activeIndex];
 
   useEffect(() => {
-    listRef.current?.children[itemIndex]?.scrollIntoView({ block: "nearest" });
-  }, [itemIndex]);
-
-  const select = (key: string) => {
-    onSelect?.(key);
-    setTimeout(() => onCancel?.(), 0);
-  };
-
-  const listener = useMemoizedFn((event: KeyboardEvent) => {
-    if (event.code === "ArrowDown") {
-      setItemIndex(Math.min(itemIndex + 1, markVarsList.length - 1));
-    } else if (event.code === "ArrowUp") {
-      setItemIndex(Math.max(itemIndex - 1, 0));
-    } else if (event.code === "Enter" && currentItem) {
-      select(currentItem.name);
-    }
-  });
-
-  useEffect(() => {
-    document.addEventListener("keydown", listener, true);
-    return () => {
-      document.removeEventListener("keydown", listener, true);
-    };
-  }, []);
+    listRef.current?.children[activeIndex]?.scrollIntoView({
+      block: "nearest",
+    });
+  }, [activeIndex, items]);
 
   const handleSelectMarkItem = (
     key: string,
@@ -69,25 +37,31 @@ const EnvVar = (props: EnvVarsProps) => {
   ) => {
     event.stopPropagation();
     event.preventDefault();
-    select(key);
+    onSelect?.(key);
   };
-
-  if (!currentItem) {
-    return null;
-  }
 
   return ReactDOM.createPortal(
     <div className={styles.container}>
       <div className={styles.relatedEnvVars} style={offset}>
-        <div className={styles.envVarsList} ref={listRef}>
-          {markVarsList.map((item, index) => (
+        <div
+          className={styles.envVarsList}
+          ref={listRef}
+          role="listbox"
+          aria-label={t("supplement.var_name")}
+        >
+          {!items.length && (
+            <div role="status">{t("interaction.noMatchingVariables")}</div>
+          )}
+          {items.map((item, index) => (
             <div
-              key={`${item.name} + ${index}`}
+              key={item.name}
+              role="option"
+              aria-selected={activeIndex === index}
               className={clsx(styles.envVarsDefault, {
-                [styles.active]: itemIndex === index,
+                [styles.active]: activeIndex === index,
               })}
-              onFocus={setItemIndex.bind(null, index)}
-              onMouseOver={setItemIndex.bind(null, index)}
+              onFocus={onActiveChange.bind(null, index)}
+              onMouseOver={onActiveChange.bind(null, index)}
               onMouseDown={handleSelectMarkItem.bind(null, item.name)}
             >
               <div
@@ -110,22 +84,24 @@ const EnvVar = (props: EnvVarsProps) => {
             </div>
           ))}
         </div>
-        <div className={styles.envVarsDesc}>
-          <div className="desc-title">{t("supplement.var_name")}</div>
-          <div className={styles.varName}>{currentItem.name}</div>
-          <div className="desc-title" style={{ margin: "16px 0 0 0" }}>
-            {t("interaction.configuredValue")}
+        {currentItem && (
+          <div className={styles.envVarsDesc}>
+            <div className="desc-title">{t("supplement.var_name")}</div>
+            <div className={styles.varName}>{currentItem.name}</div>
+            <div className="desc-title" style={{ margin: "16px 0 0 0" }}>
+              {t("interaction.configuredValue")}
+            </div>
+            <div className={styles.varValue}>
+              {variableDisplayText(currentItem, t)}
+            </div>
+            <div className="desc-title" style={{ margin: "16px 0 0 0" }}>
+              {t("supplement.scope")}
+            </div>
+            <div className={styles.varValue}>
+              {variableScopeLabel(currentItem.scope, t)}
+            </div>
           </div>
-          <div className={styles.varValue}>
-            {variableDisplayText(currentItem, t)}
-          </div>
-          <div className="desc-title" style={{ margin: "16px 0 0 0" }}>
-            {t("supplement.scope")}
-          </div>
-          <div className={styles.varValue}>
-            {variableScopeLabel(currentItem.scope, t)}
-          </div>
-        </div>
+        )}
       </div>
     </div>,
     document.body,
