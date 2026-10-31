@@ -107,9 +107,7 @@ export const prepareSocketIoSessionOptions = async (
     }
   }
   const options = await prepareSocketOptions({
-    scene: "http_request",
     collection: _collection,
-    databaseConfigs: {},
     projectConfig,
     systemConfig,
     curServerId: option?.server_id,

@@ -82,7 +82,6 @@ export const prepareWebSocketSessionOptions = async (
 
   const options = await prepareSocketOptions({
     envId: envDetailKeys,
-    scene: "http_request",
     collection: _collection,
     curServerId: option?.server_id,
     projectConfig,

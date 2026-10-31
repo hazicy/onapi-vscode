@@ -9,9 +9,7 @@ import {
 
 export const prepareSocketOptions: PrepareSocketOptions = async ({
   envId,
-  scene,
   collection,
-  databaseConfigs,
   projectConfig,
   systemConfig,
   curServerId,
@@ -41,9 +39,6 @@ export const prepareSocketOptions: PrepareSocketOptions = async ({
         .filter((entry: any) => !entry.disabled)
         .map((entry: any) => [entry.key, entry.value]),
     );
-
-  // Send type
-  options.scene = scene;
 
   // Global parameters
   options.globals = reduce(
@@ -131,11 +126,6 @@ export const prepareSocketOptions: PrepareSocketOptions = async ({
   // Parent directory related parameters
   if (collection) {
     options.collection = collection;
-  }
-
-  // Database connection configuration
-  if (databaseConfigs) {
-    options.database_configs = databaseConfigs;
   }
 
   return options;

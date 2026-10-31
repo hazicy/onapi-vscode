@@ -6,9 +6,7 @@ import { SysConfig } from "@onapi/domain/settings/types/settings";
 export type PrepareSocketOptions = (params: {
   envId?: string;
   targetId?: string;
-  scene: SocketHostOptions["scene"];
   collection?: SocketHostOptions["collection"];
-  databaseConfigs?: SocketHostOptions["database_configs"];
   projectConfig?: ProjectConfigType;
   systemConfig?: SysConfig;
   curServerId?: string;
@@ -16,28 +14,18 @@ export type PrepareSocketOptions = (params: {
 }) => Promise<SocketHostOptions>;
 
 export interface SocketHostOptions {
-  scene?: "http_request" | "auto_test";
   env?: Env;
   globals?: Globals;
   project?: Project;
   cookies?: Cookies;
   collection?: import("@onapi/domain/request-utils").SocketCollectionItem[];
   system_configs?: SystemConfigs;
-  database_configs?: DatabaseConfigs;
   [key: string]: any;
 }
 
 export interface Cookies {
   switch: CustomNumberBooleanType;
   data: any[];
-}
-
-export interface DatabaseConfigs {
-  [x: string]: {
-    type: string;
-    dbconfig: any;
-    ssh: any;
-  };
 }
 
 export interface Env {
