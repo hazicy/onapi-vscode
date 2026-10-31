@@ -18,6 +18,7 @@ import { getApiListName } from "../requests/request-storage";
 import { storageChanged } from "../../platform/storage/events";
 import type { SidebarTreeNode } from "./tree-data";
 import { SidebarTreeProvider } from "./tree-provider";
+import { RequestTreeDragController } from "./tree-drag";
 import { handleMessage } from "./sidebar-handler";
 import { APIS_BASE_DEFAULT_DATA } from "@onapi/domain/requests/constants/common";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
@@ -34,6 +35,11 @@ export function registerSidebarTree(context: vscode.ExtensionContext) {
   const view = vscode.window.createTreeView("onapiRequests", {
     treeDataProvider: requestsProvider,
     showCollapseAll: true,
+    canSelectMany: true,
+    dragAndDropController: new RequestTreeDragController(
+      context,
+      requestsProvider,
+    ),
   });
   const testsView = vscode.window.createTreeView("onapiTests", {
     treeDataProvider: testsProvider,

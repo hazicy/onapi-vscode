@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 test("native sidebar panels, test commands and workspace request history", async () => {
   const views = new Map();
+  const viewOptions = new Map();
   const commands = new Map();
   const writes = new Map();
   const executed = [];
@@ -57,6 +58,11 @@ test("native sidebar panels, test commands and workspace request history", async
   const mocks = {
     vscode: {
       EventEmitter,
+      DataTransferItem: class {
+        constructor(value) {
+          this.value = value;
+        }
+      },
       MarkdownString: class {
         value = "";
         appendText(value) {
@@ -93,6 +99,7 @@ test("native sidebar panels, test commands and workspace request history", async
         },
         createTreeView: (id, options) => {
           views.set(id, options.treeDataProvider);
+          viewOptions.set(id, options);
           return { dispose() {} };
         },
         showInputBox: async () => "Get user",
@@ -407,6 +414,53 @@ test("native sidebar panels, test commands and workspace request history", async
       messages.push(message);
       return true;
     };
+    const drag = viewOptions.get("onapiRequests").dragAndDropController;
+    assert.equal(viewOptions.get("onapiRequests").canSelectMany, true);
+    const transfer = new Map();
+    const token = { isCancellationRequested: false };
+    drag.handleDrag([requestNode], transfer);
+    await drag.handleDrop(folderNode, transfer, token);
+    assert.deepEqual(messages.at(-1), {
+      action: "onDrop",
+      data: {
+        ids: ["request"],
+        parentId: "folder",
+        after_id: "0",
+        before_id: "0",
+      },
+    });
+    await drag.handleDrop(undefined, transfer, token);
+    assert.equal(messages.at(-1).data.parentId, "0");
+    drag.handleDrag([folderNode], transfer);
+    const beforeInvalidDrop = messages.length;
+    await drag.handleDrop({ kind: "request", data: rows[1] }, transfer, token);
+    await drag.handleDrop(folderNode, transfer, token);
+    assert.equal(messages.length, beforeInvalidDrop);
+    drag.handleDrag([{ kind: "request", data: rows[1] }], transfer);
+    await drag.handleDrop(requestNode, transfer, token);
+    assert.equal(messages.length, beforeInvalidDrop);
+    drag.handleDrag([requestNode], transfer);
+    context.project = "two";
+    await drag.handleDrop(undefined, transfer, token);
+    context.project = "one";
+    await drag.handleDrop(undefined, transfer, {
+      isCancellationRequested: true,
+    });
+    assert.equal(messages.length, beforeInvalidDrop);
+    drag.handleDrag([folderNode, requestNode], transfer);
+    await drag.handleDrop(undefined, transfer, token);
+    assert.deepEqual(messages.at(-1).data.ids, ["folder"]);
+    const sibling = { ...rows[2], id: "sibling", parentId: "0" };
+    rows.push(sibling);
+    drag.handleDrag([requestNode], transfer);
+    await drag.handleDrop({ kind: "request", data: sibling }, transfer, token);
+    assert.deepEqual(messages.at(-1).data, {
+      ids: ["request"],
+      parentId: "0",
+      after_id: "0",
+      before_id: "sibling",
+    });
+    rows.pop();
     const originalInput = mocks.vscode.window.showInputBox;
     mocks.vscode.window.showInputBox = async () => " Renamed ";
     await commands.get("onapi.tree.rename")(requestNode);
