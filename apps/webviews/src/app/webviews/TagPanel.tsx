@@ -18,7 +18,7 @@ import RequestWorkspace, {
 } from "@/features/requests/RequestWorkspace";
 import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
-import GlobalStyle from "../../shared/theme/globalStyle";
+import "../../shared/theme/globalStyle.css";
 import useApis from "@/features/requests/store/useApis";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
@@ -221,7 +221,6 @@ function TagPanel() {
       <BaseApp>
         <ThemeProvider theme={customTheme}>
           <GlobalThemeStyle />
-          <GlobalStyle />
           <ErrorBoundary>
             <Suspense fallback={null}>
               <RequestWorkspace />

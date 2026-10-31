@@ -11,7 +11,7 @@ import "@/shared/locale";
 import ShareList from "@/features/sharing/components/ShareList/ShareList";
 import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
-import GlobalStyle from "../../shared/theme/globalStyle";
+import "../../shared/theme/globalStyle.css";
 
 import { HotkeysProvider } from "react-hotkeys-hook";
 import useShare from "@/features/sharing/store/useShare";
@@ -86,7 +86,6 @@ function ShareListPanel() {
         <HotkeysProvider initiallyActiveScopes={["global"]}>
           <ThemeProvider theme={customTheme}>
             <GlobalThemeStyle />
-            <GlobalStyle />
             <ErrorBoundary>
               <Skeleton active paragraph={{ rows: 15 }} loading={lodaing}>
                 <ShareList />

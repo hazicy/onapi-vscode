@@ -15,8 +15,6 @@ import {
   isObject,
   isPlainObject,
   isString,
-  size,
-  toUpper,
   trim,
 } from "lodash-es";
 import { ComponentType } from "react";
@@ -333,17 +331,6 @@ export const str2testData = async (_str: string) => {
   return returnList;
 };
 
-export const convertVarFormat = (v: any) => {
-  try {
-    if (isObject(v)) {
-      return JSON.stringify(v);
-    }
-    return String(v);
-  } catch (err) {
-    return String(v);
-  }
-};
-
 // Conversion function Build directory tree
 export const convertToSaveFolderTree = (data: { [k: string]: any }) => {
   const jsonData: any = {};
@@ -408,21 +395,6 @@ export const getAllParentDirectories = <T extends { parentId: string }>(
   getParent(targetId);
 
   return allParents;
-};
-
-export const isAssertPass = (assert: any) => {
-  if (isArray(assert)) {
-    if (assert.length === 0) {
-      return true;
-    } else if (size(assert.filter((i) => i?.passed)) === size(assert)) {
-      return true;
-    }
-  }
-
-  if (isString(assert) && toUpper(assert) === "OK") {
-    return true;
-  }
-  return false;
 };
 
 export const convertResponseTime = (responseTime: number | undefined) => {

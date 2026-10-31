@@ -10,7 +10,7 @@ import "@/shared/locale";
 import ReportDetails from "@/features/testing/components/Testing/ReportDetails";
 import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
-import GlobalStyle from "../../shared/theme/globalStyle";
+import "../../shared/theme/globalStyle.css";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import useTesting from "@/features/testing/store/useTesting";
@@ -74,7 +74,6 @@ function FolderTestPanel() {
       <BaseApp>
         <ThemeProvider theme={customTheme}>
           <GlobalThemeStyle />
-          <GlobalStyle />
           <Spin tip={t("common.loading")} spinning={!Boolean(reportDetails)}>
             {reportDetails && <ReportDetails reportDetails={reportDetails} />}
           </Spin>

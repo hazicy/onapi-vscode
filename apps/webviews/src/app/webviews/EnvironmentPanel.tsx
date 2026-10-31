@@ -11,7 +11,7 @@ import "@/shared/locale";
 import Environment from "@/features/environment/components/Environment";
 import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
-import GlobalStyle from "../../shared/theme/globalStyle";
+import "../../shared/theme/globalStyle.css";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import { useGlobal } from "@/app/store";
@@ -92,7 +92,6 @@ function EnvironmentPanel() {
       <BaseApp>
         <ThemeProvider theme={customTheme}>
           <GlobalThemeStyle />
-          <GlobalStyle />
           <ErrorBoundary>
             <Skeleton active paragraph={{ rows: 15 }} loading={lodaing}>
               <Environment key={environmentKey} open={true} />

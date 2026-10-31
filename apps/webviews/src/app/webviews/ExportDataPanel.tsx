@@ -10,7 +10,7 @@ import "@/shared/locale";
 import ExportData from "@/features/export/components/ExportData";
 import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
-import GlobalStyle from "../../shared/theme/globalStyle";
+import "../../shared/theme/globalStyle.css";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import { useGlobal } from "@/app/store";
 
@@ -20,10 +20,6 @@ function ExportDataPanel() {
 
   const [lodaing, setLodaing] = useState(true);
   useEffect(() => {
-    // window?.vscode.postMessage({
-    //   action: 'getApiList',
-    // });
-
     // Get global configuration
     window?.vscode.postMessage({
       action: "getSystemConfig",
@@ -63,7 +59,6 @@ function ExportDataPanel() {
       <BaseApp>
         <ThemeProvider theme={customTheme}>
           <GlobalThemeStyle />
-          <GlobalStyle />
           <Skeleton active paragraph={{ rows: 15 }} loading={lodaing}>
             <ExportData />
           </Skeleton>

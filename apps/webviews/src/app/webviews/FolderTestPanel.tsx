@@ -10,7 +10,7 @@ import "@/shared/locale";
 import Testing from "@/features/testing/components/Testing/Testing";
 import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
-import GlobalStyle from "../../shared/theme/globalStyle";
+import "../../shared/theme/globalStyle.css";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import { useGlobal } from "@/app/store";
@@ -147,7 +147,6 @@ function FolderTestPanel() {
       <BaseApp>
         <ThemeProvider theme={customTheme}>
           <GlobalThemeStyle />
-          <GlobalStyle />
           <Skeleton active paragraph={{ rows: 15 }} loading={!loaded}>
             <Testing />
           </Skeleton>

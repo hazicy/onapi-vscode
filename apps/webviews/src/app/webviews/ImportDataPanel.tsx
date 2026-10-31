@@ -10,7 +10,7 @@ import "@/shared/locale";
 import ImportData from "@/features/import/components/ImportData/ImportData";
 import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
-import GlobalStyle from "../../shared/theme/globalStyle";
+import "../../shared/theme/globalStyle.css";
 import useApis from "@/features/requests/store/useApis";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import useUserConfig from "@/features/auth/store/useUserConfig";
@@ -83,7 +83,6 @@ function ImportDataPanel() {
       <BaseApp>
         <ThemeProvider theme={customTheme}>
           <GlobalThemeStyle />
-          <GlobalStyle />
           <Skeleton active paragraph={{ rows: 15 }} loading={lodaing}>
             <ImportData />
           </Skeleton>
