@@ -38,9 +38,16 @@ export function getProtocolTreeIcon(
     return undefined;
   }
   const name = iconName(data);
+  const methodColor = name.startsWith("http-")
+    ? `onapi.method.${name.slice(5)}`
+    : undefined;
+  const protocolColor = ["websocket", "socketio", "graphql"].includes(name)
+    ? `onapi.protocol.${name}`
+    : undefined;
+  const iconColor = color || methodColor || protocolColor;
   return new vscode.ThemeIcon(
     `onapi-${name.replaceAll("_", "-")}`,
-    color ? new vscode.ThemeColor(color) : undefined,
+    iconColor ? new vscode.ThemeColor(iconColor) : undefined,
   );
 }
 

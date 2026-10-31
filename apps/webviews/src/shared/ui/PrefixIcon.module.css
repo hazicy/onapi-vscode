@@ -43,7 +43,6 @@
   }
 }
 .container.grpc,
-.container.ws,
 .container.patch {
   color: var(--color-success);
 }
@@ -70,4 +69,9 @@
   &.apiSample {
     color: #4c80ff;
   }
+}
+
+.container.ws,
+.container.socketio {
+  color: light-dark(#d94a00, #ff9052);
 }
