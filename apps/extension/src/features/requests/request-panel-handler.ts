@@ -174,11 +174,7 @@ export const handleRequestPanelCommand = async (
           await import("./code-generation");
         const languages = getCodeLanguages();
         const selection = selectCodeLanguage(data.language, data.variant);
-        const request = await getResolvedCodeRequest(
-          data.apiData,
-          context,
-          message.option,
-        );
+        const request = await getResolvedCodeRequest(data.apiData, context);
         const code = await generateRequestCode(
           request,
           selection.language,
@@ -207,11 +203,7 @@ export const handleRequestPanelCommand = async (
       break;
     }
     case "getCodeHar":
-      const codeHar = await getCodeHarRequest(
-        data.apiData,
-        context,
-        message?.option,
-      );
+      const codeHar = await getCodeHarRequest(data.apiData, context);
       // Send HAR request results back to Webview
       postRequestPanelResponse(panel.webview, {
         action: "setCodeHar",
@@ -221,11 +213,7 @@ export const handleRequestPanelCommand = async (
     case "copyAsCurl": {
       try {
         const { generateRequestCode } = await import("./code-generation");
-        const request = await getResolvedCodeRequest(
-          data.apiData,
-          context,
-          message.option,
-        );
+        const request = await getResolvedCodeRequest(data.apiData, context);
         await vscode.env.clipboard.writeText(
           await generateRequestCode(request, "curl", "cURL"),
         );

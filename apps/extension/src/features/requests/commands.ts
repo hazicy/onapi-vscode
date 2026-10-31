@@ -4,13 +4,6 @@ import * as vscode from "vscode";
 import { copyTextToClipboard, showTabName } from "../../platform/host-utils";
 import { getResolvedCodeRequest } from "./execution/http-runner";
 import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
-export {
-  sendApi,
-  sendAutoTest,
-  stopWorker,
-  getCodeHarRequest,
-} from "./execution/http-runner";
-
 export const updateOpenData = (
   openedPanels: { [key: string]: vscode.WebviewPanel },
   apiData: ApiDetailsData,

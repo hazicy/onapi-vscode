@@ -187,21 +187,10 @@ export const sendApi = (
     executionId,
   );
 };
-export const sendAutoTest = (
-  data: {
-    collection: PostmanCollection;
-    options?: Partial<WorkerRunCommand["options"]>;
-  },
-  context: vscode.ExtensionContext,
-  _environmentView: unknown,
-  emit: (event: ExecutionEnvelope) => void,
-) => runCollection(data.collection, data.options || {}, context, emit);
-
 // HAR is an export format. The input here is already a native SDK Request.
 export async function getResolvedCodeRequest(
   data: Pick<HttpRequestItem, "request">,
   context: vscode.ExtensionContext,
-  _options?: unknown,
 ) {
   const { default: sdk } = await import("postman-collection");
   const settings = getHttpProjectConfig(context);
@@ -251,9 +240,8 @@ export async function getResolvedCodeRequest(
 export async function getCodeHarRequest(
   data: Pick<HttpRequestItem, "request">,
   context: vscode.ExtensionContext,
-  options?: unknown,
 ) {
-  const request = await getResolvedCodeRequest(data, context, options);
+  const request = await getResolvedCodeRequest(data, context);
   const body = request.body;
   const graphql = body?.mode === "graphql" ? body.graphql : undefined;
   return {

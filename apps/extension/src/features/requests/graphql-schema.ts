@@ -25,9 +25,7 @@ export async function fetchGraphQLSchema(
   }
 
   // Get real URL
-  const harObj: any = await getCodeHarRequest(data?.apiData, context, {
-    server_id: data?.currentServerId,
-  });
+  const harObj: any = await getCodeHarRequest(data?.apiData, context);
   const url = harObj?.log?.entries?.[0]?.request?.url?.split("#")?.[0] || "";
   if (!url) {
     postRequestPanelResponse(panel.webview, {
