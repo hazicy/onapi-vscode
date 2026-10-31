@@ -35,7 +35,9 @@ test("HTTP methods share the same glyph selection in trees and editor tabs", () 
     "CUSTOM",
   ]) {
     const data = { kind: "api", request: { method } };
-    const name = method === "CUSTOM" ? "http" : `http-${method.toLowerCase()}`;
+    const name = ["TRACE", "CUSTOM"].includes(method)
+      ? "http"
+      : `http-${method.toLowerCase()}`;
     assert.equal(
       getProtocolTreeIcon(data, "list.errorForeground").id,
       `onapi-${name}`,

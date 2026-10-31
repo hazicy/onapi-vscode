@@ -318,15 +318,14 @@ test("native sidebar panels, test commands and workspace request history", async
       "DELETE",
       "HEAD",
       "OPTIONS",
-      "TRACE",
     ]) {
       const item = requests.getTreeItem({
         kind: "request",
         data: { ...rows[2], request: { ...rows[2].request, method } },
       });
       assert.equal(item.iconPath.id, `onapi-http-${method.toLowerCase()}`);
-      assert.equal(item.description, method);
-      assert.equal(item.tooltip.value, "/users");
+      assert.equal(item.description, "/users");
+      assert.equal(item.tooltip.value, `${method} /users`);
       assert.equal(item.tooltip.isTrusted, undefined);
     }
     assert.ok(
@@ -374,8 +373,8 @@ test("native sidebar panels, test commands and workspace request history", async
     );
     rows[2].request.url = "";
     assert.equal(
-      requests.getTreeItem({ kind: "request", data: rows[2] }).iconPath.color,
-      undefined,
+      requests.getTreeItem({ kind: "request", data: rows[2] }).iconPath.color.id,
+      "onapi.method.get",
     );
     assert.equal(decorations.provideFileDecoration(resource).badge, undefined);
     assert.equal(decorations.provideFileDecoration(resource).color, undefined);
