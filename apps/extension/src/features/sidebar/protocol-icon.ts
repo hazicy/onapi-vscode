@@ -36,9 +36,6 @@ export function getProtocolTreeIcon(
   data: IconData,
   color?: string,
 ): vscode.ThemeIcon | undefined {
-  if (data.kind === "ai" || data.kind === "mcp") {
-    return new vscode.ThemeIcon(data.kind === "ai" ? "sparkle" : "plug");
-  }
   if (!protocolIcons.has(data.kind || "")) {
     return undefined;
   }

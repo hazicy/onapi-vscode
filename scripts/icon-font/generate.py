@@ -12,7 +12,7 @@ from fontTools.pens.transformPen import TransformPen
 from fontTools.svgLib.path import parse_path
 
 root = Path(__file__).resolve().parents[2]
-names = ['http', 'graphql', 'websocket', 'socketio', 'grpc', 'folder', 'doc', 'tests', 'reports', 'history', 'http-get', 'http-delete', 'http-head', 'http-options', 'http-patch', 'http-post', 'http-put', 'http-trace']
+names = ['http', 'graphql', 'websocket', 'socketio', 'grpc', 'folder', 'doc', 'tests', 'reports', 'history', 'http-get', 'http-delete', 'http-head', 'http-options', 'http-patch', 'http-post', 'http-put', 'http-trace', 'ai', 'mcp']
 font = FontBuilder(1024, isTTF=True)
 font.font.recalcTimestamp = False
 font.font['head'].created = font.font['head'].modified = 2082844800

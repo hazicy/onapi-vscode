@@ -397,8 +397,8 @@ export function registerSidebarTree(context: vscode.ExtensionContext) {
                   label: "$(onapi-socketio) Socket.IO",
                   type: APIS_TARGET_TYPE_ENUM.SOCKETIO,
                 },
-                { label: "$(sparkle) AI", type: "ai" },
-                { label: "$(plug) MCP", type: "mcp" },
+                { label: "$(onapi-ai) AI", type: "ai" },
+                { label: "$(onapi-mcp) MCP", type: "mcp" },
                 { label: "$(onapi-grpc) gRPC", type: "grpc" },
                 { label: "", kind: vscode.QuickPickItemKind.Separator },
                 {

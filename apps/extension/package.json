@@ -396,12 +396,12 @@
       {
         "command": "onapi.tree.new.ai",
         "title": "New AI Request",
-        "icon": "$(sparkle)"
+        "icon": "$(onapi-ai)"
       },
       {
         "command": "onapi.tree.new.mcp",
         "title": "New MCP Request",
-        "icon": "$(plug)"
+        "icon": "$(onapi-mcp)"
       },
       {
         "command": "onapi.tree.new.folder",
@@ -585,6 +585,20 @@
         "default": {
           "fontPath": "./dist/images/onapi-icons.woff",
           "fontCharacter": "\\E012"
+        }
+      },
+      "onapi-ai": {
+        "description": "OnAPI ai icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E013"
+        }
+      },
+      "onapi-mcp": {
+        "description": "OnAPI mcp icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E014"
         }
       }
     },
