@@ -62,7 +62,7 @@ export const sendWebSocketMessage = async (data: {
 };
 
 export const prepareWebSocketSessionOptions = async (
-  data: { option: any; target: any },
+  data: { option?: any; target: any },
   context: vscode.ExtensionContext,
 ) => {
   const projectConfig = getCurrentProjectConfig(context) as ProjectConfigType;

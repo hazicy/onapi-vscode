@@ -14,7 +14,7 @@ test("public domain and contract entrypoints work with the real variable editor 
     const result = await build({
       stdin: {
         contents: `export {createDefaultHttpConfig, requestDefinition, requestUrl} from '@onapi/domain';
-export {REQUEST_EXECUTION_EVENT} from '@onapi/contracts';
+export {PROTOCOL_EXECUTION_EVENT} from '@onapi/contracts';
 export {VAR_OPTIONS_KEY, FAKER_SPLIT_CONST} from '../apps/webviews/src/features/variables/constants/variable';
 export {createVariableDraft} from '../apps/webviews/src/features/variables/components/VarInsertPop/components/variable-draft';
 export {buildVariableExpression} from '../apps/webviews/src/features/variables/components/VarInsertPop/components/variable-expression';`,
@@ -31,7 +31,7 @@ export {buildVariableExpression} from '../apps/webviews/src/features/variables/c
     const filename = path.join(directory, "entrypoints.mjs");
     await writeFile(filename, result.outputFiles[0].contents);
     const api = await import(pathToFileURL(filename).href);
-    assert.equal(api.REQUEST_EXECUTION_EVENT, "requestExecutionEvent");
+    assert.equal(api.PROTOCOL_EXECUTION_EVENT, "protocolExecutionEvent");
     assert.equal(api.createDefaultHttpConfig().activeEnvironment, "default");
     assert.equal(
       api.createDefaultHttpConfig().environments[0].values[0].key,

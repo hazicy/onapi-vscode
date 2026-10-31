@@ -6,7 +6,6 @@ import type {
 } from "@onapi/domain";
 import type { RequestDefinition, ResponseDefinition } from "postman-collection";
 
-export const REQUEST_EXECUTION_EVENT = "requestExecutionEvent" as const;
 export type ExecutionError = {
   name?: string;
   message: string;

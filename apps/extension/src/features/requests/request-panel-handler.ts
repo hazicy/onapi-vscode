@@ -226,10 +226,7 @@ export const handleRequestPanelCommand = async (
       await recordRequestHistory(context, data.target);
       connectWebSocketSession({
         target: data.target,
-        option: await prepareWebSocketSessionOptions(
-          { ...data, option: data.option },
-          context,
-        ),
+        option: await prepareWebSocketSessionOptions(data, context),
       });
       break;
     case "ws_disconnect":
@@ -242,10 +239,7 @@ export const handleRequestPanelCommand = async (
       await recordRequestHistory(context, data.target);
       connectSocketIoSession({
         target: data.target,
-        option: await prepareSocketIoSessionOptions(
-          { ...data, option: data.option },
-          context,
-        ),
+        option: await prepareSocketIoSessionOptions(data, context),
       });
       break;
     case "socketio_disconnect":

@@ -78,7 +78,7 @@ export const updateSocketIoSubscriptions = async (data: {
 };
 
 export const prepareSocketIoSessionOptions = async (
-  data: { option: any; target: any },
+  data: { option?: any; target: any },
   context: vscode.ExtensionContext,
 ) => {
   const projectConfig = getCurrentProjectConfig(context) as ProjectConfigType;

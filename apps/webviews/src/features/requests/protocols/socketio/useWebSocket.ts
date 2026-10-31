@@ -12,7 +12,6 @@ import {
 
 import useWebSocketStore from "@/features/requests/store/useApis/websocket";
 
-import { getWebSocketSendOptions } from "./utils";
 import { message } from "@/shared/ui/base";
 import { useTranslation } from "react-i18next";
 import useApis from "@/features/requests/store/useApis";
@@ -24,7 +23,7 @@ import { AuthOauth2 } from "@onapi/domain/requests/types/auth";
 const useWebSocket = () => {
   const { t } = useTranslation();
   const updatePool = useWebSocketStore.getState().appendConnectionResult;
-  const connectWebSocket = async (
+  const connectWebSocket = (
     ITarget: any,
     status: string,
     temporaryServerId: string,
@@ -41,8 +40,6 @@ const useWebSocket = () => {
       return false;
     }
 
-    // WebSocket connection preprocessing
-    const options = await getWebSocketSendOptions(temporaryServerId);
     const requestId = crypto.randomUUID();
     useWebSocketStore.getState().startConnection(target.id, requestId);
 
@@ -51,7 +48,7 @@ const useWebSocket = () => {
       action: "socketio_connect",
       requestId,
       data: {
-        option: options,
+        option: { server_id: temporaryServerId },
         target,
       },
     });

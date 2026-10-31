@@ -3,11 +3,9 @@ import { cloneDeep, isEqual } from "lodash-es";
 
 import useWebSocketStore from "@/features/requests/store/useApis/websocket";
 
-import { getWebSocketSendOptions } from "./utils";
-
 const useWebSocket = () => {
   const updatePool = useWebSocketStore.getState().appendConnectionResult;
-  const connectWebSocket = async (
+  const connectWebSocket = (
     ITarget: any,
     status: string,
     curServerId: string,
@@ -25,19 +23,15 @@ const useWebSocket = () => {
       return false;
     }
 
-    // WebSocket connection preprocessing
-    const options: any = await getWebSocketSendOptions();
     const requestId = crypto.randomUUID();
     useWebSocketStore.getState().startConnection(target.id, requestId);
-
-    options.server_id = curServerId;
 
     // WebSocket connection request
     sendRequestPanelMessage({
       action: "ws_connect",
       requestId,
       data: {
-        option: options,
+        option: { server_id: curServerId },
         target,
       },
     });
