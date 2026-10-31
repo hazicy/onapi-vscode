@@ -1,3 +1,4 @@
+import EnvironmentFixture from "./EnvironmentFixture";
 import VariableInputFixture from "./VariableInputFixture";
 import RequestPanelFixture from "./RequestPanelFixture";
 import RequestScriptsFixture from "./RequestScriptsFixture";
@@ -18,7 +19,9 @@ import ThemeFixture from "./ThemeFixture";
 
 createRoot(document.getElementById("root")!).render(
   <SharedComponentsProvider>
-    {new URLSearchParams(location.search).has("variableInput") ? (
+    {new URLSearchParams(location.search).has("environment") ? (
+      <EnvironmentFixture />
+    ) : new URLSearchParams(location.search).has("variableInput") ? (
       <VariableInputFixture />
     ) : new URLSearchParams(location.search).has("requestPanel") ? (
       <RequestPanelFixture />

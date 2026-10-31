@@ -215,10 +215,24 @@
   "global_setting": {
     "global_title": "Global",
     "cookie": "Cookie",
-    "global_key": "Global Param",
+    "global_key": "Shared configuration",
     "global_variables": "Global Variables",
     "environment_list": "Environment",
     "create": "New Environment",
+    "public_config": {
+      "scope": "Current project",
+      "variables": "Variables",
+      "auth": "Auth",
+      "scripts": "Scripts",
+      "pre_request": "Pre-request",
+      "post_response": "Post-response",
+      "unsaved": "Unsaved",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "save_failed": "Save failed. Try again.",
+      "navigation": "Configuration page",
+      "manage": "Manage environments"
+    },
     "key_detail": {
       "title": "Global Param",
       "tips": "Set global request parameters (effective for the current project). Supports the use of global/environment variables. Parameters will be automatically included in requests for interfaces within the current project,Global Body parameters are only effective when the format is form-data or urlencoded.",

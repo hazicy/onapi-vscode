@@ -1,0 +1,27 @@
+.scripts {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.scriptSwitch {
+  display: flex;
+  gap: 16px;
+  padding: 4px 0;
+}
+.scriptSwitch button {
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+  font: inherit;
+  cursor: pointer;
+}
+.scriptSwitch button[aria-pressed="true"] {
+  color: var(--vscode-foreground, var(--font-content-color));
+  font-weight: 600;
+}
+.scriptSwitch button:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: 3px;
+}

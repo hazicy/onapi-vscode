@@ -9,7 +9,7 @@ import { ENV_MANAGE_ENUM } from "@onapi/domain/environment";
 import { proxyFetch } from "../../platform/http-client";
 
 export const handelEnvMessage = async (
-  message: { action: string; data: any },
+  message: { action: string; data: any; requestId?: string },
   context: vscode.ExtensionContext,
   data: any,
   panel: vscode.WebviewPanel,
@@ -67,7 +67,12 @@ export const handelEnvMessage = async (
       // Local stored data collection
       let project_config: any = getCurrentProjectConfig(context);
       project_config[key] = value;
-      await setProjectConfig(context, project_config);
+      const success = await setProjectConfig(context, project_config);
+      panel.webview.postMessage({
+        action: "projectConfigSaved",
+        requestId: message.requestId,
+        success,
+      });
       break;
     case "setSystemConfig":
       // Local stored data collection

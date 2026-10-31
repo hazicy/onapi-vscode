@@ -215,10 +215,24 @@
   "global_setting": {
     "global_title": "全局",
     "cookie": "Cookie管理器",
-    "global_key": "全局参数",
+    "global_key": "公共配置",
     "global_variables": "全局变量",
     "environment_list": "环境管理",
     "create": "新建环境",
+    "public_config": {
+      "scope": "当前项目",
+      "variables": "变量",
+      "auth": "认证",
+      "scripts": "脚本",
+      "pre_request": "请求前",
+      "post_response": "响应后",
+      "unsaved": "未保存",
+      "saving": "保存中…",
+      "saved": "已保存",
+      "save_failed": "保存失败，请重试",
+      "navigation": "配置页面",
+      "manage": "管理环境"
+    },
     "key_detail": {
       "title": "全局参数",
       "tips": "设置全局请求参数（针对当前项目有效),支持使用全局/环境变量，发送请求时当前项目下接口自动携带参数，全局Body参数仅当格式为formdata、urlencode时生效",

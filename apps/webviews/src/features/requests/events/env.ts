@@ -29,7 +29,7 @@ export const copyEnv = async ({ id }: { id: string; project_id?: string }) => {
 };
 
 export const saveProjectConfig = (key: any, value: any) => {
-  sendRequestPanelMessage({
+  return sendRequestPanelMessage({
     action: "setProjectConfig",
     data: { key, value },
   });

@@ -1,6 +1,7 @@
 import styles from "./Environment.module.css";
 import { useEffect, useState } from "react";
-import { Button } from "@/shared/ui/base";
+import clsx from "clsx";
+import { Button, Select } from "@/shared/ui/base";
 import { AppIcon } from "@/shared/ui";
 import { useTranslation } from "react-i18next";
 
@@ -20,6 +21,7 @@ interface Props {
 const Environment = (props: Props) => {
   const { open } = props;
   const { t } = useTranslation();
+  const [navigationOpen, setNavigationOpen] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState<any[]>([]);
   const {
     http,
@@ -93,43 +95,86 @@ const Environment = (props: Props) => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.leftMenu}>
-        <div className={styles.envMenuTop}>
-          <Menus
-            selectedKeys={selectedKeys}
-            setSelectedKeys={setSelectedKeys}
+    <div className={styles.shell}>
+      <div className={styles.container}>
+        <div className={styles.compactNavigation}>
+          <Select
+            aria-label={t("global_setting.public_config.navigation")}
+            value={head(selectedKeys)}
+            options={[
+              {
+                value: ENV_MANAGE_ENUM.cookie,
+                label: t("global_setting.cookie"),
+              },
+              {
+                value: ENV_MANAGE_ENUM.globalParm,
+                label: t("global_setting.global_key"),
+              },
+              {
+                value: ENV_MANAGE_ENUM.globalVariable,
+                label: t("global_setting.global_variables"),
+              },
+              ...envList.map((env) => ({ value: env.id, label: env.name })),
+            ]}
+            onChange={(key) => {
+              setSelectedKeys([String(key)]);
+              setNavigationOpen(false);
+            }}
           />
+          <Button
+            aria-expanded={navigationOpen}
+            aria-controls="environment-navigation"
+            onClick={() => setNavigationOpen((open) => !open)}
+          >
+            {t("global_setting.public_config.manage")}
+          </Button>
         </div>
-        <Button
-          className={styles.envMenuNew}
-          onClick={envCreate}
-          type="dashed"
-          icon={<AppIcon icon="plus" className={styles.icon} />}
+        <div
+          id="environment-navigation"
+          className={clsx(
+            styles.leftMenu,
+            navigationOpen && styles.navigationOpen,
+          )}
         >
-          {t("global_setting.create")}
-        </Button>
-      </div>
+          <div className={styles.envMenuTop}>
+            <Menus
+              selectedKeys={selectedKeys}
+              setSelectedKeys={setSelectedKeys}
+            />
+          </div>
+          <Button
+            className={styles.envMenuNew}
+            onClick={envCreate}
+            type="dashed"
+            icon={<AppIcon icon="plus" className={styles.icon} />}
+          >
+            {t("global_setting.create")}
+          </Button>
+        </div>
 
-      <div className={styles.render}>
-        {head(selectedKeys) === ENV_MANAGE_ENUM.cookie && <CookieManage />}
-        {head(selectedKeys) === ENV_MANAGE_ENUM.globalParm && (
-          <ParamsManage defaultTabKey={globalParamsTabKey} />
-        )}
-        {head(selectedKeys) === ENV_MANAGE_ENUM.globalVariable && (
-          <VariableManage />
-        )}
-        {![
-          ENV_MANAGE_ENUM.cookie,
-          ENV_MANAGE_ENUM.globalParm,
-          ENV_MANAGE_ENUM.globalVariable,
-        ].includes(head(selectedKeys)) && (
-          <EnvManage
-            changeKey={setSelectedKeys}
-            editEnvId={head(selectedKeys)}
-            envMenus={envList}
-          />
-        )}
+        <div className={styles.render}>
+          {head(selectedKeys) === ENV_MANAGE_ENUM.cookie && <CookieManage />}
+          <div
+            className={styles.publicConfig}
+            hidden={head(selectedKeys) !== ENV_MANAGE_ENUM.globalParm}
+          >
+            <ParamsManage defaultTabKey={globalParamsTabKey} />
+          </div>
+          {head(selectedKeys) === ENV_MANAGE_ENUM.globalVariable && (
+            <VariableManage />
+          )}
+          {![
+            ENV_MANAGE_ENUM.cookie,
+            ENV_MANAGE_ENUM.globalParm,
+            ENV_MANAGE_ENUM.globalVariable,
+          ].includes(head(selectedKeys)) && (
+            <EnvManage
+              changeKey={setSelectedKeys}
+              editEnvId={head(selectedKeys)}
+              envMenus={envList}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

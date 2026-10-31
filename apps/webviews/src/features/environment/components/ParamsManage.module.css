@@ -1,14 +1,52 @@
-.paramsFlex {
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   height: 100%;
+  min-width: 0;
+  min-height: 0;
+  gap: 8px;
+  font-size: var(--vscode-font-size, 13px);
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  flex-wrap: wrap;
+  min-height: 40px;
+  flex-shrink: 0;
+}
+.heading,
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.heading h1 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--vscode-foreground, var(--font-content-color));
+}
+.scope,
+.status {
+  font-size: 12px;
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+}
+.status[role="alert"] {
+  color: var(--vscode-errorForeground, #e66);
+}
+.actions {
+  margin-inline-start: auto;
 }
 .paramsContent {
   flex: 1;
-  overflow-y: auto;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
 }
-.container {
-  width: 100%;
-  height: 100%;
-  & .paramsContent > div {
-    padding: 0;
-  }
+.paramsContent > div {
+  padding: 0;
 }

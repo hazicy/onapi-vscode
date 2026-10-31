@@ -153,21 +153,41 @@ const Menus: FC<Props> = ({ selectedKeys, setSelectedKeys }) => {
     }));
 
     return MENU_ITEMS.map(
-      ({ label, key, icon, children, type, disableDraggable }: MenuItem) => ({
-        label: <span className={styles.menuTitle}>{label}</span>,
+      ({ key, icon, children, type, disableDraggable }: MenuItem) => ({
+        label: (
+          <span className={styles.menuTitle}>
+            {t(
+              key === MENU_ITEMS_KEY.all
+                ? "global_setting.global_title"
+                : "global_setting.environment_list",
+            )}
+          </span>
+        ),
         key,
         icon: icon ? (
           <AppIcon className={clsx(icon, styles.icon)} icon={icon} />
         ) : null,
         children:
           key === MENU_ITEMS_KEY.all
-            ? children && children.map((e) => getItem(e))
+            ? children &&
+              children.map((e) =>
+                getItem({
+                  ...e,
+                  label: t(
+                    e.key === ENV_MANAGE_ENUM.cookie
+                      ? "global_setting.cookie"
+                      : e.key === ENV_MANAGE_ENUM.globalParm
+                        ? "global_setting.global_key"
+                        : "global_setting.global_variables",
+                  ),
+                }),
+              )
             : envItems.map((e) => getItem({ ...e, isEnv: true })),
         type,
         disableDraggable,
       }),
     );
-  }, [envList, selectedKeys]);
+  }, [envList, selectedKeys, t]);
 
   const delEnv = async (id: string) => {
     try {
