@@ -190,55 +190,66 @@ test("import reports parse errors and keeps the preview and selection when savin
   await expect(dialog).toBeHidden();
 });
 
-test("an unavailable environment is not displayed as the first environment", async ({
-  page,
-  requestPage,
-}) => {
-  await requestPage.open("api", {
-    method: "GET",
-    url: "https://example.com",
-    header: [],
-  });
-  await expect(requestPage.sendButton).toBeVisible();
-  await emit(page, {
-    action: "setProjectConfig",
-    data: {
-      http: {
-        collection: {
-          info: {
-            name: "Test",
-            schema:
-              "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+for (const fontFamily of [undefined, '"Courier New", monospace']) {
+  test(`an unavailable environment is not displayed as the first environment (${fontFamily ? "monospace" : "default"})`, async ({
+    page,
+    requestPage,
+  }) => {
+    await requestPage.open("api", {
+      method: "GET",
+      url: "https://example.com",
+      header: [],
+    });
+    await expect(requestPage.sendButton).toBeVisible();
+    if (fontFamily) {
+      await page.addStyleTag({
+        content: `* { font-family: ${fontFamily} !important; }`,
+      });
+    }
+
+    await emit(page, {
+      action: "setProjectConfig",
+      data: {
+        http: {
+          collection: {
+            info: {
+              name: "Test",
+              schema:
+                "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+            },
           },
+          environments: [{ id: "dev", name: "Development", values: [] }],
+          activeEnvironment: "deleted",
+          options: { globals: { values: [] } },
         },
-        environments: [{ id: "dev", name: "Development", values: [] }],
-        activeEnvironment: "deleted",
-        options: { globals: { values: [] } },
       },
-    },
+    });
+    const environment = page.getByLabel("Environment", { exact: true });
+    await expect(environment).toContainText("Environment unavailable");
+    await environment.click();
+    await page
+      .getByRole("menuitem", { name: "Development", exact: true })
+      .click();
+    expect(await latest(page, "openEnv")).toBeUndefined();
+    await expect(environment).toContainText("Development");
+    await expect
+      .poll(
+        async () =>
+          (await latest(page, "setProjectConfig"))?.data.value
+            .activeEnvironment,
+      )
+      .toBe("dev");
+    await environment.click();
+    await page
+      .getByRole("menuitem", { name: "No environment", exact: true })
+      .click();
+    await expect(environment).toContainText("No environment");
+    await expect
+      .poll(
+        async () =>
+          (await latest(page, "setProjectConfig"))?.data.value
+            .activeEnvironment,
+      )
+      .toBe("");
   });
-  const environment = page.getByLabel("Environment", { exact: true });
-  await expect(environment).toContainText("Environment unavailable");
-  await environment.click();
-  await page
-    .getByRole("menuitem", { name: "Development", exact: true })
-    .click();
-  await expect(environment).toContainText("Development");
-  await expect
-    .poll(
-      async () =>
-        (await latest(page, "setProjectConfig"))?.data.value.activeEnvironment,
-    )
-    .toBe("dev");
-  await environment.click();
-  await page
-    .getByRole("menuitem", { name: "No environment", exact: true })
-    .click();
-  await expect(environment).toContainText("No environment");
-  await expect
-    .poll(
-      async () =>
-        (await latest(page, "setProjectConfig"))?.data.value.activeEnvironment,
-    )
-    .toBe("");
-});
+}

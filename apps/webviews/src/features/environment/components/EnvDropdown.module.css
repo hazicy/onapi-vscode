@@ -120,7 +120,11 @@
   }
 }
 .envLabel {
-  max-width: 300px;
+  flex: 1;
+  min-width: 0;
+  & .operateWrap {
+    flex-shrink: 0;
+  }
   & .name {
     display: inline-block;
     overflow: hidden;
