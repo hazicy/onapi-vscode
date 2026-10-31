@@ -18,8 +18,9 @@ async function fixture({
   gate,
   succeeds = true,
   file = false,
+  record = original,
 } = {}) {
-  let rows = saved ? [structuredClone(original)] : [],
+  let rows = saved ? [structuredClone(record)] : [],
     activeWorkspace = "one";
   const calls = [],
     events = [],
@@ -74,6 +75,7 @@ async function fixture({
       return { ...storage, getApiListName: () => activeWorkspace };
     if (id.endsWith("/storage/index"))
       return {
+        getStorageError: () => undefined,
         getDataFromGlobalStorage: () => structuredClone(rows),
         setDataToGlobalStorage() {},
         updateDataInGlobalStorage: async (_, workspace, change) => {
@@ -107,7 +109,10 @@ async function fixture({
       return { getProtocolIcon: () => undefined };
     if (id.endsWith("/collection-order")) return { getMaxSort: () => 2 };
     if (id.endsWith("/storage"))
-      return { getDataFromGlobalStorage: () => structuredClone(rows) };
+      return {
+        getStorageError: () => undefined,
+        getDataFromGlobalStorage: () => structuredClone(rows),
+      };
     if (id === "../sharing/share-data")
       return {
         ...requestPanelStubs[id],
@@ -140,8 +145,8 @@ async function fixture({
     resource,
     context,
     "one",
-    original,
-    saved ? original : undefined,
+    record,
+    saved ? record : undefined,
     (event) => events.push(event),
   );
   const panel = {
@@ -153,7 +158,7 @@ async function fixture({
   if (file)
     files.set(
       resource.toString(),
-      new TextEncoder().encode(JSON.stringify(original)),
+      new TextEncoder().encode(JSON.stringify(record)),
     );
   calls.length = 0;
   const providerModule = await load(
@@ -164,7 +169,7 @@ async function fixture({
         return {
           getEditorInput: () => ({
             workspace: activeWorkspace,
-            data: original,
+            data: record,
           }),
           setEditorInput: async (_context, _uri, input) =>
             calls.push(["reference", plain(input)]),
@@ -575,3 +580,35 @@ test("backup preserves native dirtiness even when typing returns to the original
   assert.equal(restored.dirty, true);
   restored.dispose();
 });
+
+for (const kind of ["ai", "mcp"]) {
+  test(`${kind} native document preserves raw drafts through save, undo, redo and revert`, async () => {
+    const record = {
+      id: "request",
+      parentId: "folder",
+      kind,
+      name: "Protocol",
+      ...(kind === "ai"
+        ? { ai: { model: "test" } }
+        : { mcp: { transport: "stdio", command: "node", args: [] } }),
+    };
+    const f = await fixture({ record });
+    const edited = {
+      ...record,
+      draft: { headersText: '{"unfinished', argsText: '["server.js"]' },
+    };
+    f.document.edit(edited);
+    assert.equal(f.document.dirty, true);
+    const change = f.events.at(-1);
+    change.undo();
+    assert.equal(f.document.draft.draft, undefined);
+    change.redo();
+    assert.equal(f.document.draft.draft.headersText, '{"unfinished');
+    await f.document.save(token);
+    assert.equal(f.rows()[0].draft.argsText, '["server.js"]');
+    f.document.edit({ ...edited, draft: { headersText: "changed" } });
+    await f.document.revert(token);
+    assert.equal(f.document.draft.draft.headersText, '{"unfinished');
+    assert.equal(f.document.dirty, false);
+  });
+}

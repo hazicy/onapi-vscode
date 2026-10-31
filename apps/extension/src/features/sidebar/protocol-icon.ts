@@ -21,6 +21,8 @@ function iconName(data: IconData): string {
 
 const protocolIcons = new Set([
   "api",
+  "ai",
+  "mcp",
   "graphql",
   "websocket",
   "socketio",
@@ -34,6 +36,9 @@ export function getProtocolTreeIcon(
   data: IconData,
   color?: string,
 ): vscode.ThemeIcon | undefined {
+  if (data.kind === "ai" || data.kind === "mcp") {
+    return new vscode.ThemeIcon(data.kind === "ai" ? "sparkle" : "plug");
+  }
   if (!protocolIcons.has(data.kind || "")) {
     return undefined;
   }

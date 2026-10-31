@@ -59,7 +59,7 @@ const protocolType = z.enum([
   "subscriptions.updated",
   "execution.error",
 ]);
-const protocol = z.enum(["http", "websocket", "socketio"]);
+const protocol = z.enum(["http", "websocket", "socketio", "ai", "mcp"]);
 const resultFields = {
   isSuccess: z.boolean(),
   time: z.string(),
@@ -73,6 +73,41 @@ export const executionEnvelopeSchema = z.strictObject({
   sequence: z.number().int().positive(),
   timestamp: z.number().finite(),
   event: z.union([
+    z.strictObject({
+      protocol: z.literal("ai"),
+      type: z.literal("response.chunk"),
+      text: z.string(),
+    }),
+    z.strictObject({
+      protocol: z.literal("ai"),
+      type: z.literal("response.received"),
+      value: z.object({
+        usage: z.object({
+          inputTokens: z.number().optional(),
+          outputTokens: z.number().optional(),
+          totalTokens: z.number().optional(),
+        }),
+        finishReason: z.string(),
+      }),
+    }),
+    z.strictObject({
+      protocol: z.literal("mcp"),
+      type: z.literal("connection.opened"),
+      value: z.object({
+        server: z.unknown().optional(),
+        capabilities: z.unknown().optional(),
+      }),
+    }),
+    z.strictObject({
+      protocol: z.literal("mcp"),
+      type: z.literal("connection.closed"),
+    }),
+    z.strictObject({
+      protocol: z.literal("mcp"),
+      type: z.literal("response.received"),
+      value: z.unknown(),
+    }),
+    z.strictObject({ protocol, type: z.literal("execution.cancelled") }),
     z.strictObject({
       protocol: z.literal("http"),
       type: protocolType,

@@ -52,7 +52,10 @@ export const requestPanelStubs = {
   "../sidebar/protocol-icon": { getProtocolIcon: unused },
   "./request-status": { setRequestDraft: unused },
   "../../platform/storage/events": { storageChanged: { fire: unused } },
-  "../../platform/storage": { getStorageFilePath: unused },
+  "../../platform/storage": {
+    getStorageFilePath: unused,
+    getStorageError: () => undefined,
+  },
   "../curl/import-curl": { curlImport: unused },
   "@onapi/api-converter/export": { importMethod: {} },
 };

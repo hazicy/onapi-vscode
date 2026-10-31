@@ -90,6 +90,7 @@ test("native sidebar panels, test commands and workspace request history", async
           this.id = id;
         }
       },
+      QuickPickItemKind: { Separator: -1 },
       TreeItemCollapsibleState: { None: 0, Collapsed: 1, Expanded: 2 },
       env: { language: "zh-cn" },
       window: {
@@ -144,6 +145,8 @@ test("native sidebar panels, test commands and workspace request history", async
         GRAPHQL: "graphql",
         WEBSOCKET: "websocket",
         SOCKETIO: "socketio",
+        AI: "ai",
+        MCP: "mcp",
       },
     },
     dataTools: { snowflakeId: () => String(++nextId) },
@@ -278,6 +281,14 @@ test("native sidebar panels, test commands and workspace request history", async
     await commands.get("onapi.tree.new")();
     assert.equal(executed.at(-1)[1].kind, "websocket");
     assert.equal(executed.at(-1)[1].message.length, 1);
+    for (const kind of ["ai", "mcp"]) {
+      mocks.common.APIS_BASE_DEFAULT_DATA[kind] = { [kind]: { model: "test" } };
+      mocks.vscode.window.showQuickPick = async (items) =>
+        items.find((item) => item.type === kind);
+      await commands.get("onapi.tree.new")();
+      assert.equal(executed.at(-1)[1].kind, kind);
+      assert.equal(executed.at(-1)[1][kind].model, "test");
+    }
     mocks.vscode.window.showQuickPick = originalPicker;
     const requests = views.get("onapiRequests");
     const folderDescription = (data) =>
@@ -373,7 +384,8 @@ test("native sidebar panels, test commands and workspace request history", async
     );
     rows[2].request.url = "";
     assert.equal(
-      requests.getTreeItem({ kind: "request", data: rows[2] }).iconPath.color.id,
+      requests.getTreeItem({ kind: "request", data: rows[2] }).iconPath.color
+        .id,
       "onapi.method.get",
     );
     assert.equal(decorations.provideFileDecoration(resource).badge, undefined);

@@ -548,7 +548,9 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
       // editor update yet. Independent field changes must preserve each other.
       const active = useApis.getState().apisActiveData;
       const body =
-        active?.id === apiData.id ? active.request?.body || data : data;
+        active?.id === apiData.id && "request" in active
+          ? active.request?.body || data
+          : data;
       const newData = {
         ...body,
         mode: "graphql" as const,

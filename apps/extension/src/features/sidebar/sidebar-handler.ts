@@ -37,7 +37,13 @@ import {
 } from "../sharing/share-data";
 import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { ApiDetailsData } from "@onapi/domain/requests/types/api";
-import { getStorageFilePath } from "../../platform/storage";
+import { getStorageFilePath, getStorageError } from "../../platform/storage";
+const saveFailure = (context: vscode.ExtensionContext) => {
+  const reason = getStorageError(context);
+  return reason
+    ? `Failed to save requests: ${reason}`
+    : "Failed to save requests. Please try again.";
+};
 
 const persistApiList = async (
   list: ApiDetailsData[],
@@ -46,7 +52,7 @@ const persistApiList = async (
   if (await setApiList(list, context)) {
     return true;
   }
-  vscode.window.showErrorMessage("Failed to save requests. Please try again.");
+  vscode.window.showErrorMessage(saveFailure(context));
   return false;
 };
 
@@ -101,9 +107,7 @@ const saveApiListItem = async (
     return current;
   });
   if (!saved) {
-    void vscode.window.showErrorMessage(
-      "Failed to save requests. Please try again.",
-    );
+    void vscode.window.showErrorMessage(saveFailure(context));
     return false;
   }
   if (getApiListName(context) !== workspace) {
@@ -309,9 +313,7 @@ export const handleMessage = async (
           return list;
         });
         if (!saved) {
-          void vscode.window.showErrorMessage(
-            "Failed to save requests. Please try again.",
-          );
+          void vscode.window.showErrorMessage(saveFailure(context));
           return false;
         }
         if (getApiListName(context) !== projectKey) {
@@ -380,9 +382,7 @@ export const handleMessage = async (
           return apiList;
         });
         if (!saved) {
-          void vscode.window.showErrorMessage(
-            "Failed to save requests. Please try again.",
-          );
+          void vscode.window.showErrorMessage(saveFailure(context));
           return false;
         }
         if (getApiListName(context) !== workspace) {

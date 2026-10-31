@@ -7,6 +7,7 @@ import { getMaxSort } from "../collections/collection-order";
 import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import * as vscode from "vscode";
 import {
+  getStorageError,
   getDataFromGlobalStorage,
   setDataToGlobalStorage,
   updateDataInGlobalStorage,
@@ -122,7 +123,7 @@ export async function writeEditorRequest(
     throw new Error(
       missing
         ? "This request was removed from storage"
-        : "Failed to save requests",
+        : `Failed to save requests: ${getStorageError(context) || "unknown storage error"}`,
     );
   }
   return definition;

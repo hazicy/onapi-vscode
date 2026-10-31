@@ -1,3 +1,8 @@
+import {
+  requestKindSchema,
+  aiEditorRecordSchema,
+  mcpEditorRecordSchema,
+} from "@onapi/domain/requests/record";
 import { requestDefinition } from "@onapi/domain";
 import * as vscode from "vscode";
 import { isDeepStrictEqual } from "node:util";
@@ -73,21 +78,15 @@ export class JsonRepository {
           !row.id ||
           byId.has(row.id) ||
           typeof row.parentId !== "string" ||
-          ![
-            "folder",
-            "api",
-            "graphql",
-            "websocket",
-            "socketio",
-            "socket",
-            "socket_method",
-            "grpc",
-            "doc",
-            "sample_group",
-            "socket_service",
-          ].includes(row.kind)
+          !requestKindSchema.safeParse(row.kind).success
         ) {
           throw new Error("Missing or duplicate request ID, parentId or kind");
+        }
+        if (row.kind === "ai") {
+          aiEditorRecordSchema.parse(row);
+        }
+        if (row.kind === "mcp") {
+          mcpEditorRecordSchema.parse(row);
         }
         if (["api", "graphql"].includes(row.kind) && !object(row.request)) {
           throw new Error("Invalid request definition");
@@ -213,7 +212,9 @@ export class JsonRepository {
         child !== "" &&
         child !== null &&
         child !== undefined &&
-        (/auth|cookie|token|password|secret|api[-_]?key/i.test(key) ||
+        (/auth|cookie|token|password|secret|api[-_]?key|^(?:headersText|argsText)$/i.test(
+          key,
+        ) ||
           (key === "url" &&
             typeof child === "string" &&
             /[?&](?:token|api[-_]?key|password|secret)=/i.test(child)) ||

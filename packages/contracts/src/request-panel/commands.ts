@@ -1,3 +1,8 @@
+import {
+  aiConfigSchema,
+  mcpConfigSchema,
+  mcpOperationSchema,
+} from "@onapi/domain/requests/ai-mcp";
 import * as z from "zod";
 import {
   id,
@@ -15,6 +20,13 @@ const commandFields = {
 };
 const command = <A extends string, S extends z.ZodType>(action: A, data: S) =>
   z.strictObject({ action: z.literal(action), ...commandFields, data });
+const execution = <A extends string, S extends z.ZodType>(action: A, data: S) =>
+  z.strictObject({
+    action: z.literal(action),
+    ...commandFields,
+    requestId: id,
+    data,
+  });
 const read = <A extends string>(action: A) =>
   command(action, z.undefined().optional());
 const httpData = z.strictObject({ apiData: httpPanelDefinitionSchema });
@@ -28,6 +40,22 @@ export const requestPanelCommandSchema = z.discriminatedUnion("action", [
       language: z.string(),
     }),
   ),
+  execution(
+    "ai_send",
+    z.object({
+      id,
+      url: z.string(),
+      config: aiConfigSchema,
+      apiKey: z.string().optional(),
+    }),
+  ),
+  command("ai_stop", z.object({ executionId: id })),
+  execution(
+    "mcp_connect",
+    z.object({ id, url: z.string(), config: mcpConfigSchema }),
+  ),
+  command("mcp_disconnect", z.object({ id })),
+  execution("mcp_request", z.object({ id, operation: mcpOperationSchema })),
   read("getVscodeTheme"),
   read("getApiList"),
   read("getProjectConfig"),

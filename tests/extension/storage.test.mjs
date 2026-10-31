@@ -66,3 +66,17 @@ test("repository serialization and validation errors report a failed save", asyn
     false,
   );
 });
+
+test("storage preserves write failure diagnostics and clears them after a successful save", async () => {
+  const { api, context } = await fixture();
+  api.repositories.set(context, {
+    set: async () => {
+      throw new Error("Unsupported request kind: ai");
+    },
+  });
+  assert.equal(await api.setDataToGlobalStorage(context, "apiList", []), false);
+  assert.match(api.getStorageError(context), /Unsupported request kind: ai/);
+  api.repositories.set(context, { set: async () => true });
+  assert.equal(await api.setDataToGlobalStorage(context, "apiList", []), true);
+  assert.equal(api.getStorageError(context), undefined);
+});

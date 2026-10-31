@@ -23,15 +23,17 @@
 
 OnAPI is a lightweight API client for Visual Studio Code. Organize requests in local collections and use environment variables without signing in.
 
-| Capability                 | What you can do                                                                             |
-| -------------------------- | ------------------------------------------------------------------------------------------- |
-| HTTP & GraphQL             | Configure query parameters, headers, authentication, and request bodies; inspect responses. |
-| Real-time connections      | Work with WebSocket, Socket.IO, and Server-Sent Events (SSE).                               |
-| Collections & environments | Group saved requests and switch variables between environments.                             |
-| Scripts & tests            | Use Postman-compatible scripts, run collections, and check assertions.                      |
-| Import & export            | Bring in existing collections and export requests for reuse.                                |
-| API documentation          | Share saved HTTP and GraphQL requests through the local documentation service.              |
-| Editor integration         | Use a compact interface that follows your VS Code theme.                                    |
+| Capability                 | What you can do                                                                                             |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| HTTP & GraphQL             | Configure query parameters, headers, authentication, and request bodies; inspect responses.                 |
+| AI requests                | Use AI SDK with OpenAI-compatible endpoints, stream multi-turn conversations, and inspect token usage.      |
+| MCP requests               | Connect over Streamable HTTP, SSE, or stdio; discover and call tools, read resources, and retrieve prompts. |
+| Real-time connections      | Work with WebSocket, Socket.IO, and Server-Sent Events (SSE).                                               |
+| Collections & environments | Group saved requests and switch variables between environments.                                             |
+| Scripts & tests            | Use Postman-compatible scripts, run collections, and check assertions.                                      |
+| Import & export            | Bring in existing collections and export requests for reuse.                                                |
+| API documentation          | Share saved HTTP and GraphQL requests through the local documentation service.                              |
+| Editor integration         | Use a compact interface that follows your VS Code theme.                                                    |
 
 ## Getting started
 
@@ -41,6 +43,16 @@ OnAPI requires **VS Code 1.101 or newer**.
 2. In VS Code, open **Extensions → … → Install from VSIX…** and select the package from `artifacts/`.
 3. Open **onapi** in the activity bar, create a collection, and add your first request.
 4. Configure the URL, parameters, headers, or body, then send the request to inspect its response.
+
+### AI and MCP requests
+
+In the sidebar's **New** menu, select **AI** or **MCP**. Both request types can be named, organized in folders, saved, and reopened.
+
+For AI, enter an OpenAI-compatible base URL (including `/v1` where required), a model ID, and an API key under **Settings**. Configure the system prompt, temperature, and output token limit, then send messages in **Chat**. Responses stream into the conversation; **Stop** cancels the current request. Saving preserves the conversation and configuration. The dedicated API key field stays in memory for the current panel.
+
+For MCP, choose **Streamable HTTP**, **SSE**, or **stdio** under **Settings**. Enter the server URL or the local command and JSON argument array, then select **Connect**. Send `tools/list`, `resources/list`, or `prompts/list` to discover capabilities. Select a returned entry to prepare a tool call, resource read, or prompt retrieval; supply JSON arguments and send. The response panel displays the complete server result and tool input schemas. Use **Load more** when a server returns another page. Closing the editor closes its connections and cancels active AI requests. Custom headers entered in **Headers** are saved with the request. Incomplete JSON inputs remain part of the native document draft, including save, undo, and revert. AI and MCP resolve collection and environment variables at execution time, reuse the application proxy policy, and record requests in history.
+
+These editors follow Postman's request, settings, and response workflow. AI currently uses OpenAI-compatible chat completions; MCP authentication uses custom headers. OAuth flows, sampling handlers, and automatic AI-to-MCP tool orchestration are not implemented.
 
 ### Share API documentation
 

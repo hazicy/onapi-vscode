@@ -602,3 +602,98 @@ test("failed startup can recover after repairing JSON without restarting the ext
   await failed.set("apiList", records());
   assert.equal(failed.get("apiList", [])[0].id, "users");
 });
+
+for (const kind of ["ai", "mcp"]) {
+  test(`${kind} requests can be created, updated and reopened from disk`, async (t) => {
+    const f = await fixture(t);
+    const protocolData =
+      kind === "ai"
+        ? {
+            url: "https://api.openai.com/v1",
+            ai: {
+              model: "",
+              system: "",
+              messages: [],
+              temperature: 1,
+              maxOutputTokens: 2048,
+            },
+          }
+        : {
+            url: "",
+            mcp: { transport: "http", headers: {}, command: "", args: [] },
+          };
+    for (const key of ["apiList", "apiList:project"]) {
+      const folder = {
+        id: "folder",
+        parentId: "0",
+        kind: "folder",
+        name: "Collection",
+        sort: 0,
+      };
+      const root = {
+        ...protocolData,
+        id: `${kind}-root`,
+        parentId: "0",
+        kind,
+        name: "Root request",
+        sort: 1,
+      };
+      const nested = {
+        ...protocolData,
+        id: `${kind}-nested`,
+        parentId: folder.id,
+        kind,
+        name: "Nested request",
+        sort: 2,
+      };
+      const expected = [folder, root, nested];
+      assert.equal(
+        await f.repo.update(key, (rows) => [...rows, ...expected]),
+        true,
+      );
+      const second = new f.JsonRepository(f.context, () => {});
+      await second.reload();
+      assert.equal(second.error, undefined);
+      assert.deepEqual(
+        JSON.parse(JSON.stringify(second.get(key, []))),
+        expected,
+      );
+      const updated = {
+        ...nested,
+        name: "Updated request",
+        ...(kind === "ai"
+          ? {
+              ai: {
+                ...nested.ai,
+                model: "test-model",
+                messages: [{ role: "user", content: "hello" }],
+              },
+            }
+          : {
+              mcpOperation: {
+                method: "tools/call",
+                name: "echo",
+                arguments: { message: "hello" },
+              },
+            }),
+      };
+      assert.equal(
+        await second.update(key, (rows) =>
+          rows.map((row) => (row.id === nested.id ? updated : row)),
+        ),
+        true,
+      );
+      const third = new f.JsonRepository(f.context, () => {});
+      await third.reload();
+      assert.deepEqual(
+        JSON.parse(
+          JSON.stringify(
+            third.get(key, []).find((row) => row.id === nested.id),
+          ),
+        ),
+        updated,
+      );
+    }
+    assert.deepEqual(f.errors, []);
+  });
+}

@@ -265,7 +265,7 @@ const useGraphQLQuery = () => {
       const organizedSchema = new InspectSchema().organizeSchema(
         data.data.__schema,
       );
-      if (apisActiveData) {
+      if (apisActiveData.kind === "api" || apisActiveData.kind === "graphql") {
         updateApisActiveData({
           ...apisActiveData,
           graphqlSchema: organizedSchema,

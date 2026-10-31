@@ -2,19 +2,7 @@ import i18next from "i18next";
 import { values } from "lodash";
 import type { FunctionComponent } from "react";
 
-export enum APIS_TARGET_TYPE_ENUM {
-  API = "api",
-  FOLDER = "folder",
-  DOC = "doc",
-  GRPC = "grpc",
-  API_SAMPLE = "sample",
-  API_SAMPLE_GROUP = "sample_group",
-  SOCKET = "socket",
-  SOCKET_METHOD = "socket_method",
-  WEBSOCKET = "websocket",
-  SOCKETIO = "socketio",
-  GRAPHQL = "graphql",
-}
+export { APIS_TARGET_TYPE_ENUM } from "../kinds";
 
 export enum DEFAULT_API_MARK_ENUM {
   DEVELOPING = "1",

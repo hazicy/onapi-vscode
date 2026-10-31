@@ -1,7 +1,12 @@
 import type { ExecutionEvent, ExecutionError } from "./index";
 
 export const PROTOCOL_EXECUTION_EVENT = "protocolExecutionEvent" as const;
-export type ExecutionProtocol = "http" | "websocket" | "socketio";
+export type ExecutionProtocol =
+  | "http"
+  | "websocket"
+  | "socketio"
+  | "ai"
+  | "mcp";
 export type ProtocolEventType =
   | "runtime.event"
   | "response.received"
@@ -47,7 +52,25 @@ export interface SocketIoResult {
   };
 }
 
+export interface AiResponseSummary {
+  usage: { inputTokens?: number; outputTokens?: number; totalTokens?: number };
+  finishReason: string;
+}
+export type AiProtocolEvent =
+  | { protocol: "ai"; type: "response.chunk"; text: string }
+  | { protocol: "ai"; type: "response.received"; value: AiResponseSummary };
+export type McpProtocolEvent =
+  | {
+      protocol: "mcp";
+      type: "connection.opened";
+      value: { server?: unknown; capabilities?: unknown };
+    }
+  | { protocol: "mcp"; type: "connection.closed" }
+  | { protocol: "mcp"; type: "response.received"; value: unknown };
 export type ProtocolEvent =
+  | AiProtocolEvent
+  | McpProtocolEvent
+  | { protocol: ExecutionProtocol; type: "execution.cancelled" }
   | { protocol: "http"; type: ProtocolEventType; native: ExecutionEvent }
   | { protocol: "websocket"; type: ProtocolEventType; result: WebSocketResult }
   | { protocol: "socketio"; type: ProtocolEventType; result: SocketIoResult }

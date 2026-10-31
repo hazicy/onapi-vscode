@@ -9,6 +9,8 @@ import { getCurrentProjectConfig } from "../../platform/storage/project-config";
 import { isHttpCollectionItem, requestUrl, requestMethod } from "@onapi/domain";
 
 const protocolLabels: Record<string, string> = {
+  ai: "AI",
+  mcp: "MCP",
   graphql: "GraphQL",
   websocket: "WebSocket",
   socketio: "Socket.IO",
@@ -73,7 +75,9 @@ function configureRequestItem(
   const count = folder ? countFolderRequests(list(), data.id) : 0;
   const url = isHttpCollectionItem(data) ? requestUrl(data) : data.url;
   item.description = folder
-    ? (count ? `(${count})` : undefined)
+    ? count
+      ? `(${count})`
+      : undefined
     : url || undefined;
   item.iconPath = getProtocolTreeIcon(data);
   item.tooltip = folder

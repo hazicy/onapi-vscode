@@ -14,6 +14,24 @@ import {
 } from "@onapi/domain/requests/constants/default";
 
 export const APIS_BASE_DEFAULT_DATA: Record<string, any> = {
+  ai: {
+    kind: "ai",
+    name: "AI Request",
+    url: "https://api.openai.com/v1",
+    ai: {
+      model: "",
+      system: "",
+      messages: [],
+      temperature: 1,
+      maxOutputTokens: 2048,
+    },
+  },
+  mcp: {
+    kind: "mcp",
+    name: "MCP Request",
+    url: "",
+    mcp: { transport: "http", headers: {}, command: "", args: [] },
+  },
   [APIS_TARGET_TYPE_ENUM.API]: DEFAULT_API_DATA,
   [APIS_TARGET_TYPE_ENUM.FOLDER]: DEFAULT_FOLDER_DATA,
   [APIS_TARGET_TYPE_ENUM.DOC]: DEFAULT_DOC_DATA,

@@ -12,6 +12,8 @@ export const repositories = new WeakMap<
   }
 >();
 
+const writeFailures = new WeakMap<vscode.ExtensionContext, string>();
+
 const repositoryFor = (context: vscode.ExtensionContext) => {
   const repository = repositories.get(context);
   if (!repository) {
@@ -38,8 +40,16 @@ export const setDataToGlobalStorage = async (
   value: any,
 ) => {
   try {
-    return await repositoryFor(context).set(key, value);
-  } catch {
+    const saved = await repositoryFor(context).set(key, value);
+    if (saved) {
+      writeFailures.delete(context);
+    }
+    return saved;
+  } catch (error) {
+    writeFailures.set(
+      context,
+      error instanceof Error ? error.message : String(error),
+    );
     return false;
   }
 };
@@ -50,11 +60,19 @@ export const updateDataInGlobalStorage = async (
   change: (value: any) => any,
 ) => {
   try {
-    return await repositoryFor(context).update(key, change);
-  } catch {
+    const saved = await repositoryFor(context).update(key, change);
+    if (saved) {
+      writeFailures.delete(context);
+    }
+    return saved;
+  } catch (error) {
+    writeFailures.set(
+      context,
+      error instanceof Error ? error.message : String(error),
+    );
     return false;
   }
 };
 
 export const getStorageError = (context: vscode.ExtensionContext) =>
-  repositories.get(context)?.error;
+  writeFailures.get(context) ?? repositories.get(context)?.error;

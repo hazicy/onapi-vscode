@@ -408,18 +408,15 @@ const Index = ({
         const apis = filter(
           data?.apis,
           (item: ApiDetailsData) =>
-            ![
-              APIS_TARGET_TYPE_ENUM.FOLDER,
-              APIS_TARGET_TYPE_ENUM.SOCKET,
-            ].includes(item?.kind),
+            item.kind !== APIS_TARGET_TYPE_ENUM.FOLDER &&
+            item.kind !== APIS_TARGET_TYPE_ENUM.SOCKET,
         );
         const selectApis = filter(
           data?.apis,
           (item: ApiDetailsData) =>
-            ![
-              APIS_TARGET_TYPE_ENUM.FOLDER,
-              APIS_TARGET_TYPE_ENUM.SOCKET,
-            ].includes(item?.kind) && previewSelectData.apis.includes(item?.id),
+            item.kind !== APIS_TARGET_TYPE_ENUM.FOLDER &&
+            item.kind !== APIS_TARGET_TYPE_ENUM.SOCKET &&
+            previewSelectData.apis.includes(item?.id),
         );
         return apis?.length ? `${selectApis.length}/${apis.length}` : 0;
       }

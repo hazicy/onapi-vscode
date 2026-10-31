@@ -140,6 +140,9 @@ const useWebSocket = () => {
     const { updateApisActiveData, apisActiveData } = useApis.getState();
     const { oauthRefreshData, updateOauthRefreshData } = useStorage.getState();
     const { uid } = useUserConfig.getState().userInfo;
+    if (apisActiveData.kind === "ai" || apisActiveData.kind === "mcp") {
+      return;
+    }
     if (data?.access_token) {
       message.success(t("common.auth.get_access_success"));
 

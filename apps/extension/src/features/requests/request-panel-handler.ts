@@ -43,6 +43,31 @@ export const handleRequestPanelCommand = async (
   panel: vscode.WebviewPanel,
   document: RequestDocument,
 ) => {
+  if (message.action.startsWith("ai_") || message.action.startsWith("mcp_")) {
+    const { handleAiMcpCommand, initializeProtocolSession } =
+      await import("./execution/ai-mcp-session");
+    initializeProtocolSession(panel);
+    if (
+      message.action === "ai_send" ||
+      message.action === "mcp_connect" ||
+      message.action === "mcp_request"
+    ) {
+      const { prepareProtocolRequest } =
+        await import("./execution/prepare-protocol-request");
+      const prepared = prepareProtocolRequest(
+        message,
+        context,
+        vscode.workspace.getConfiguration("http").get<string>("proxy", ""),
+      );
+      if (message.action !== "mcp_request") {
+        await recordRequestHistory(context, document.draft);
+      }
+      await handleAiMcpCommand(prepared.message, panel, prepared.network);
+    } else {
+      await handleAiMcpCommand(message, panel);
+    }
+    return;
+  }
   const { action, data } = message;
 
   if (await handlePanelAction(message, context, panel)) {

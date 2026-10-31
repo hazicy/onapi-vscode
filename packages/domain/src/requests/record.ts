@@ -1,3 +1,6 @@
+import { requestKinds } from "./kinds";
+export { requestKinds } from "./kinds";
+import { aiConfigSchema, mcpConfigSchema, mcpOperationSchema } from "./ai-mcp";
 import * as z from "zod";
 import { extensibleObject } from "../schemas/object";
 
@@ -154,54 +157,71 @@ export const httpEditorRecordSchema = extensibleObject({
   graphqlSchema: z.unknown().optional(),
   search_id: z.string().optional(),
 });
+export const requestKindSchema = z.enum(requestKinds);
+const editorFields = { ...recordIdentityFields, ...metadata };
+const protocolDraftSchema = z.object({
+  headersText: z.string().optional(),
+  argsText: z.string().optional(),
+  method: z.string().optional(),
+  name: z.string().optional(),
+  argumentsText: z.string().optional(),
+});
+export const aiEditorRecordSchema = extensibleObject({
+  ...editorFields,
+  kind: z.literal("ai"),
+  ai: aiConfigSchema.default({
+    model: "",
+    system: "",
+    messages: [],
+    temperature: 1,
+    maxOutputTokens: 2048,
+    headers: {},
+  }),
+  draft: protocolDraftSchema.optional(),
+});
+export const mcpEditorRecordSchema = extensibleObject({
+  ...editorFields,
+  kind: z.literal("mcp"),
+  mcp: mcpConfigSchema.default({
+    transport: "http",
+    headers: {},
+    command: "",
+    args: [],
+  }),
+  mcpOperation: mcpOperationSchema.optional(),
+  draft: protocolDraftSchema.optional(),
+});
 export const nonHttpEditorRecordSchema = extensibleObject({
-  ...recordIdentityFields,
-  ...metadata,
-  kind: z.enum([
-    "folder",
-    "websocket",
-    "socketio",
-    "doc",
-    "grpc",
-    "sample",
-    "sample_group",
-    "socket",
-    "socket_method",
-    "socket_service",
-  ]),
+  ...editorFields,
+  kind: requestKindSchema.exclude(["api", "graphql", "ai", "mcp"]),
 });
 export const editorRecordSchema = extensibleObject({
-  ...recordIdentityFields,
-  ...metadata,
-  // Incoming mixed records carry protocol payloads; the next stage narrows
-  // HTTP payloads to their fully validated native fields.
+  ...editorFields,
+  kind: requestKindSchema,
   request: z.unknown().optional(),
   event: z.unknown().optional(),
   response: z.unknown().optional(),
   variable: z.unknown().optional(),
   graphqlSchema: z.unknown().optional(),
   search_id: z.string().optional(),
-  kind: z.enum([
-    "api",
-    "graphql",
-    "folder",
-    "websocket",
-    "socketio",
-    "doc",
-    "grpc",
-    "sample",
-    "sample_group",
-    "socket",
-    "socket_method",
-    "socket_service",
+}).pipe(
+  z.union([
+    httpEditorRecordSchema,
+    aiEditorRecordSchema,
+    mcpEditorRecordSchema,
+    nonHttpEditorRecordSchema,
   ]),
-}).pipe(z.union([httpEditorRecordSchema, nonHttpEditorRecordSchema]));
+);
 export type HttpEditorRecord = z.infer<typeof httpEditorRecordSchema>;
-// Other protocols still use their existing feature-specific data models. This
-// type promises only validated identity/metadata, with opaque extension fields.
+export type AiEditorRecord = z.infer<typeof aiEditorRecordSchema>;
+export type McpEditorRecord = z.infer<typeof mcpEditorRecordSchema>;
 export type NonHttpEditorRecord = z.infer<typeof nonHttpEditorRecordSchema> &
   Record<string, any>;
-export type EditorRecord = HttpEditorRecord | NonHttpEditorRecord;
+export type EditorRecord =
+  | HttpEditorRecord
+  | AiEditorRecord
+  | McpEditorRecord
+  | NonHttpEditorRecord;
 export type HttpEditorProps = {
   apisData: HttpEditorRecord;
   onApisDataChange: (data: HttpEditorRecord) => void;

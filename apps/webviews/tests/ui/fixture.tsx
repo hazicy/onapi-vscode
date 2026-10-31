@@ -1,3 +1,4 @@
+import AiMcpFixture from "./AiMcpFixture";
 import SocketWorkspaceFixture from "./SocketWorkspaceFixture";
 import EnvironmentFixture from "./EnvironmentFixture";
 import VariableInputFixture from "./VariableInputFixture";
@@ -20,7 +21,9 @@ import ThemeFixture from "./ThemeFixture";
 
 createRoot(document.getElementById("root")!).render(
   <SharedComponentsProvider>
-    {new URLSearchParams(location.search).has("socketWorkspace") ? (
+    {new URLSearchParams(location.search).has("aiMcp") ? (
+      <AiMcpFixture />
+    ) : new URLSearchParams(location.search).has("socketWorkspace") ? (
       <SocketWorkspaceFixture />
     ) : new URLSearchParams(location.search).has("environment") ? (
       <EnvironmentFixture />

@@ -23,7 +23,10 @@ export function consumeExecutionEvent(
       envelope.sessionId,
       envelope.sequence,
     );
-  } else if (event.protocol !== "http" && "result" in event) {
+  } else if (
+    (event.protocol === "websocket" || event.protocol === "socketio") &&
+    "result" in event
+  ) {
     const action =
       event.type === "connection.opened"
         ? "connected"
@@ -44,7 +47,10 @@ export function consumeExecutionEvent(
             : "Monaco",
       },
     });
-  } else if (event.protocol !== "http" && "error" in event) {
+  } else if (
+    (event.protocol === "websocket" || event.protocol === "socketio") &&
+    "error" in event
+  ) {
     views[event.protocol]({
       id: envelope.targetId,
       action: "error",

@@ -41,6 +41,8 @@ function preloadableProtocol<Props extends object>(
 }
 
 const protocolLoaders = {
+  ai: preloadableProtocol(() => import("./protocols/ai/AiDebug")),
+  mcp: preloadableProtocol(() => import("./protocols/mcp/McpDebug")),
   api: preloadableProtocol(() => import("./protocols/http/HttpDebug")),
   folder: preloadableProtocol(
     () => import("../collections/components/FolderEditor/FolderEditor"),
@@ -59,6 +61,8 @@ export function preloadRequestProtocol(type: string) {
   const protocol = protocolLoaders[type as keyof typeof protocolLoaders];
   return protocol?.preload();
 }
+const AiDebug = protocolLoaders.ai.Component;
+const McpDebug = protocolLoaders.mcp.Component;
 const ApiDebug = protocolLoaders.api.Component;
 const Folder = protocolLoaders.folder.Component;
 const WebSocketDebug = protocolLoaders.websocket.Component;
@@ -151,6 +155,21 @@ const RequestWorkspace: React.FC<RequestWorkspaceProps> = () => {
   };
 
   const renderContainer = () => {
+    if (apisActiveData.kind === "ai" || apisActiveData.kind === "mcp") {
+      return apisActiveData.kind === "ai" ? (
+        <AiDebug
+          key={apisActiveData.id}
+          apisData={apisActiveData}
+          onApisDataChange={onApisDataChange}
+        />
+      ) : (
+        <McpDebug
+          key={apisActiveData.id}
+          apisData={apisActiveData}
+          onApisDataChange={onApisDataChange}
+        />
+      );
+    }
     if (apisActiveData.kind === "api") {
       return (
         <ApiDebug

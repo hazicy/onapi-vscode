@@ -36,11 +36,7 @@ export class ExecutionService {
       if (event.protocol !== adapter.protocol) {
         throw new Error("Adapter emitted an event for another protocol");
       }
-      if (
-        event.type === "execution.error" ||
-        ("native" in event && event.native.error) ||
-        ("result" in event && !event.result.isSuccess)
-      ) {
+      if (event.type === "execution.error") {
         failed = true;
       }
       const envelope: ExecutionEnvelope = {

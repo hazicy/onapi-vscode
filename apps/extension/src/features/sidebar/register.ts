@@ -343,7 +343,15 @@ export function registerSidebarTree(context: vscode.ExtensionContext) {
       : undefined;
     historyView.message = view.message;
   });
-  for (const type of ["api", "graphql", "websocket", "socketio", "folder"]) {
+  for (const type of [
+    "api",
+    "graphql",
+    "websocket",
+    "socketio",
+    "ai",
+    "mcp",
+    "folder",
+  ]) {
     command(`onapi.tree.new.${type}`, (node?: SidebarTreeNode) =>
       vscode.commands.executeCommand("onapi.tree.new", node, type),
     );
@@ -355,11 +363,13 @@ export function registerSidebarTree(context: vscode.ExtensionContext) {
         node && (node.kind === "request" || node.kind === "testFolder")
           ? node.data
           : undefined;
-      const types = [
+      const types: APIS_TARGET_TYPE_ENUM[] = [
         APIS_TARGET_TYPE_ENUM.API,
         APIS_TARGET_TYPE_ENUM.GRAPHQL,
         APIS_TARGET_TYPE_ENUM.WEBSOCKET,
         APIS_TARGET_TYPE_ENUM.SOCKETIO,
+        APIS_TARGET_TYPE_ENUM.AI,
+        APIS_TARGET_TYPE_ENUM.MCP,
         APIS_TARGET_TYPE_ENUM.FOLDER,
       ];
       const type =
@@ -385,6 +395,8 @@ export function registerSidebarTree(context: vscode.ExtensionContext) {
                   label: "$(onapi-socketio) Socket.IO",
                   type: APIS_TARGET_TYPE_ENUM.SOCKETIO,
                 },
+                { label: "$(sparkle) AI", type: "ai" },
+                { label: "$(plug) MCP", type: "mcp" },
                 { label: "", kind: vscode.QuickPickItemKind.Separator },
                 {
                   label: `$(onapi-folder) ${zh ? "目录" : "Folder"}`,

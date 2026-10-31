@@ -251,6 +251,16 @@
           "group": "0_new@4"
         },
         {
+          "command": "onapi.tree.new.ai",
+          "when": "view == onapiRequests && viewItem == onapiFolder",
+          "group": "0_new_folder@0"
+        },
+        {
+          "command": "onapi.tree.new.mcp",
+          "when": "view == onapiRequests && viewItem == onapiFolder",
+          "group": "0_new_folder@0"
+        },
+        {
           "command": "onapi.tree.new.folder",
           "when": "view == onapiRequests && viewItem == onapiFolder",
           "group": "0_new_folder@0"
@@ -377,6 +387,16 @@
         "command": "onapi.tree.new.socketio",
         "title": "%command.tree.new.socketio%",
         "icon": "$(add)"
+      },
+      {
+        "command": "onapi.tree.new.ai",
+        "title": "New AI Request",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "onapi.tree.new.mcp",
+        "title": "New MCP Request",
+        "icon": "$(plug)"
       },
       {
         "command": "onapi.tree.new.folder",

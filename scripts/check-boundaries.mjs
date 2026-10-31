@@ -149,6 +149,16 @@ for (const owner of owners) {
               failures.push(
                 `${path.relative(root, filename)}: undeclared dependency ${name}`,
               );
+            if (
+              (name === "ai" ||
+                name.startsWith("@ai-sdk/") ||
+                name.startsWith("@modelcontextprotocol/")) &&
+              owner !== "packages/runtime"
+            ) {
+              failures.push(
+                `${owner}: protocol SDK ${name} must be owned by runtime adapters`,
+              );
+            }
             if (owner === "apps/webviews" && name === "@onapi/runtime")
               failures.push(`${owner}: imports Node runtime`);
             if (

@@ -176,6 +176,7 @@ test("setApiList propagates the actual storage result and selects the project ke
           return {
             updateDataInGlobalStorage: unused,
             hasStoredData: () => true,
+            getStorageError: () => undefined,
             getDataFromGlobalStorage: (_, key, fallback) => fallback || {},
             setDataToGlobalStorage: (...args) => {
               writes.push(args);
@@ -283,6 +284,7 @@ test("request storage returns unified records without reading a second collectio
         return {
           setDataToGlobalStorage: unused,
           updateDataInGlobalStorage: unused,
+          getStorageError: () => undefined,
           getDataFromGlobalStorage: (_, key) => {
             reads.push(key);
             return structuredClone(rows);

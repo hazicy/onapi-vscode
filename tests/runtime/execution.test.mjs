@@ -158,7 +158,7 @@ test("core closes failed executions and marks reported protocol failures", async
       async execute(_, context) {
         context.publish({
           protocol: "http",
-          type: "runtime.event",
+          type: "execution.error",
           native: { type: "done", error: { message: "network failure" } },
         });
       },
