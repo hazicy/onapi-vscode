@@ -39,14 +39,15 @@ test("results, dirty state, priority, clearing drafts, and workspace isolation",
   assert.match(get().tooltip, /timed out/);
   setRequestDraft("one", "r", request);
   assert.equal(get().badge, "M");
+  assert.equal(get().color, undefined);
   assert.match(get().tooltip, /timed out/);
   setRequestDraft("one", "r", { ...request, request: { url: "{{missing}}" } });
   assert.equal(get().badge, "M");
-  assert.equal(get().color, "list.warningForeground");
+  assert.equal(get().color, undefined);
   assert.match(get().tooltip, /Missing variables\n- missing\n\n/);
   setRequestDraft("one", "r", { ...request, request: { url: "" } });
   assert.equal(get().badge, "M");
-  assert.equal(get().color, "list.warningForeground");
+  assert.equal(get().color, undefined);
   assert.match(get().tooltip, /Missing URL/);
   setRequestDraft("one", "r");
   assert.equal(get().badge, undefined);
@@ -89,6 +90,7 @@ test("native validation ignores disabled entries and examples and follows variab
     options: { raw: { language: "json" } },
   };
   assert.match(get("validation", data, config).tooltip, /Invalid JSON body/);
+  assert.equal(get("validation", data, config).color, "list.errorForeground");
   delete data.request.body;
   config.http.environments[0].values[1].value = "{{unknown}}";
   assert.match(get("validation", data, config).tooltip, /unknown/);

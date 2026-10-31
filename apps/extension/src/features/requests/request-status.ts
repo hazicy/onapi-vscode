@@ -13,7 +13,7 @@ export const requestStatusChanged = new EventEmitter<{
 const text = (zh: string, en: string) =>
   env.language.startsWith("zh") ? zh : en;
 
-type Result = { badge: string; color: string; message: string };
+type Result = { message: string };
 const workspaces = new Map<
   string,
   Map<string, { draft?: ApiDetailsData; result?: Result }>
@@ -48,12 +48,6 @@ export function setRequestResult(
   const code = Number(response?.code);
   const failed = !!error || !code || code >= 400;
   entry(workspace, id).result = {
-    badge: timeout ? "T" : failed ? "!" : "✓",
-    color: timeout
-      ? "list.warningForeground"
-      : failed
-        ? "list.errorForeground"
-        : "testing.iconPassed",
     message: timeout
       ? `${text("请求超时", "Request timed out")}: ${message}`
       : failed
@@ -235,29 +229,21 @@ export function requestDecoration(
   const statuses: Result[] = [];
   if (errors.length) {
     statuses.push({
-      badge: "•",
-      color: "list.errorForeground",
       message: `${text("配置问题", "Configuration issues")}\n${[...new Set(errors)].map((error) => `- ${error}`).join("\n")}`,
     });
   }
   if (warnings.length) {
     statuses.push({
-      badge: "",
-      color: "list.warningForeground",
       message: `${text("配置未完成", "Incomplete configuration")}\n${[...new Set(warnings)].map((warning) => `- ${warning}`).join("\n")}`,
     });
   }
   if (missing.size) {
     statuses.push({
-      badge: "•",
-      color: "list.warningForeground",
       message: `${text("缺少变量", "Missing variables")}\n${[...missing].map((name) => `- ${name}`).join("\n")}`,
     });
   }
   if (state?.draft) {
     statuses.push({
-      badge: "M",
-      color: "list.warningForeground",
       message: text("有未保存的修改", "Unsaved changes"),
     });
   }
@@ -266,7 +252,7 @@ export function requestDecoration(
   }
   return {
     badge: state?.draft ? "M" : undefined,
-    color: statuses[0]?.color,
+    color: errors.length ? "list.errorForeground" : undefined,
     tooltip: [
       ...statuses.map((status) => status.message),
       state?.result

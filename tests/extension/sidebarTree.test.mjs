@@ -368,15 +368,11 @@ test("native sidebar panels, test commands and workspace request history", async
     );
     rows[2].request.url = "";
     assert.equal(
-      requests.getTreeItem({ kind: "request", data: rows[2] }).iconPath.color
-        .id,
-      "list.warningForeground",
+      requests.getTreeItem({ kind: "request", data: rows[2] }).iconPath.color,
+      undefined,
     );
     assert.equal(decorations.provideFileDecoration(resource).badge, undefined);
-    assert.equal(
-      decorations.provideFileDecoration(resource).color.id,
-      "list.warningForeground",
-    );
+    assert.equal(decorations.provideFileDecoration(resource).color, undefined);
     assert.match(
       requests.getTreeItem({ kind: "request", data: rows[2] }).tooltip.value,
       /缺少 URL/,
