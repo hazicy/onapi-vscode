@@ -1,17 +1,12 @@
+import { saveRequestDraft, updateRequestDraft } from "./request-autosave";
 import { postRequestPanelResponse } from "../../platform/webviews/request-panel-channel";
-import { requestDefinition } from "@onapi/domain";
 import type { RequestPanelCommand } from "@onapi/contracts/request-panel";
 import { fetchGraphQLSchema } from "./graphql-schema";
 import { handlePanelAction } from "../../platform/webviews/panel-actions";
 import { relayExecutionEvent } from "../../platform/execution/webview-relay";
-import { setRequestDraft } from "./request-status";
-import { getApiListName } from "./request-storage";
-import { getProtocolIcon } from "../sidebar/protocol-icon";
 import * as vscode from "vscode";
 import { recordRequestHistory } from "./request-history";
-import { showTabName } from "../../platform/host-utils";
-import { getApiList, updateApiList } from "./request-storage";
-import { getMaxSort } from "../collections/collection-order";
+import { getApiList } from "./request-storage";
 import {
   getCurrentProjectConfig,
   setProjectConfig,
@@ -23,13 +18,9 @@ import {
   stopWorker,
   reserveHttpExecution,
 } from "./execution/http-runner";
-import { globalConfig, DEFAULT_TARGET_NAME } from "../../app/config";
-import { cloneDeep, forEach, isPlainObject, trim } from "lodash";
-import {
-  createShare,
-  getProjectShareData,
-  setProjectShareData,
-} from "../sharing/share-data";
+import { globalConfig } from "../../app/config";
+import { forEach, isPlainObject } from "lodash";
+import { createShare } from "../sharing/share-data";
 import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import {
   prepareWebSocketSessionOptions,
@@ -46,92 +37,6 @@ import {
 } from "./execution/socketio-session";
 import { proxyFetch } from "../../platform/http-client";
 
-const saveRevisions = new WeakMap<vscode.WebviewPanel, number>();
-
-const saveApiData = async (
-  data: any,
-  context: vscode.ExtensionContext,
-  panel: vscode.WebviewPanel,
-  automatic = false,
-  requestId?: string,
-) => {
-  // Local stored data collection
-  const newData: ApiDetailsData = requestDefinition(cloneDeep(data));
-  const workspace = getApiListName(context);
-  const revision = (saveRevisions.get(panel) || 0) + 1;
-  saveRevisions.set(panel, revision);
-  setRequestDraft(workspace, data.id, cloneDeep(data));
-  if (data.name?.trim()) {
-    panel.title = showTabName(data.name) + " ⚈";
-  } else if (!panel.title.endsWith(" ⚈")) {
-    panel.title += " ⚈";
-  }
-  if (trim(newData?.name).length <= 0) {
-    newData.name = DEFAULT_TARGET_NAME?.[newData?.kind] || "HTTP Request";
-  }
-  const saved = await updateApiList(context, (apiList) => {
-    const index = apiList.findIndex((item) => item.id === newData.id);
-    if (index >= 0) {
-      apiList[index] = newData;
-    } else {
-      newData.sort = getMaxSort(apiList, newData.parentId);
-      apiList.push(newData);
-    }
-    return apiList;
-  });
-  if (
-    saveRevisions.get(panel) !== revision ||
-    getApiListName(context) !== workspace
-  ) {
-    return saved;
-  }
-  if (!saved) {
-    if (requestId) {
-      postRequestPanelResponse(panel.webview, {
-        action: "requestPanelError",
-        requestId,
-        data: {
-          action: automatic ? "updateApiActiveData" : "saveApiData",
-          error: {
-            code: "SAVE_FAILED",
-            message: "Failed to save requests. Please try again.",
-          },
-        },
-      });
-    }
-    vscode.window.showErrorMessage(
-      "Failed to save requests. Please try again.",
-    );
-    return false;
-  }
-  setRequestDraft(getApiListName(context), newData.id);
-  // Save and update open
-  // Automatic saves must not replace newer edits already in the Webview.
-  postRequestPanelResponse(panel.webview, {
-    action: "requestSaved",
-    ...(requestId ? { requestId } : {}),
-    data: { definition: newData, submitted: data },
-  });
-
-  // Update title
-  panel.title = showTabName(newData?.name);
-  const protocolIcon = getProtocolIcon(context, newData);
-  if (protocolIcon) {
-    panel.iconPath = protocolIcon;
-  }
-
-  // Check if share record exists, update share time if so
-  const shareData = getProjectShareData(context);
-  if (shareData?.[newData.id]) {
-    shareData[newData.id].share_time = Date.now();
-    setProjectShareData(shareData, context);
-  }
-
-  if (!automatic) {
-    vscode.window.showInformationMessage("Save Successfully！🎉");
-  }
-};
-
 export const handleRequestPanelCommand = async (
   message: RequestPanelCommand,
   context: vscode.ExtensionContext,
@@ -145,24 +50,10 @@ export const handleRequestPanelCommand = async (
 
   switch (action) {
     case "saveApiData":
-      await saveApiData(data, context, panel, false, message.requestId);
+      await saveRequestDraft(context, panel, data, message.requestId);
       break;
     case "updateApiActiveData":
-      if (["api", "sse", "graphql", "folder"].includes(data.kind)) {
-        await saveApiData(data, context, panel, true, message.requestId);
-        break;
-      }
-      setRequestDraft(
-        getApiListName(context),
-        data.id,
-        cloneDeep(data) as unknown as ApiDetailsData,
-      );
-      // Update title
-      panel.title = showTabName(data?.name) + " ⚈";
-      const activeProtocolIcon = getProtocolIcon(context, data);
-      if (activeProtocolIcon) {
-        panel.iconPath = activeProtocolIcon;
-      }
+      updateRequestDraft(context, panel, data, message.requestId);
       break;
     case "sendApi":
     case "sendSse": {

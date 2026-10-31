@@ -4,7 +4,6 @@ import { createFeaturePanel } from "../../platform/webviews/create-panel";
 import { stopWorker } from "./execution/http-runner";
 import { disconnectWebSocketSession } from "./execution/websocket-session";
 import { disconnectSocketIoSession } from "./execution/socketio-session";
-import { setRequestDraft } from "./request-status";
 import { getApiListName } from "./request-storage";
 import { getProtocolIcon } from "../sidebar/protocol-icon";
 import { globalConfig, PANEL_OPTIONS } from "../../app/config";
@@ -14,6 +13,11 @@ import { getApiList } from "./request-storage";
 import { getCurrentProjectConfig } from "../../platform/storage/project-config";
 import { showTabName } from "../../platform/host-utils";
 import { handleRequestPanelCommand } from "./request-panel-handler";
+import {
+  attachRequestAutosave,
+  closeRequestAutosave,
+  getRequestAutosaveDraft,
+} from "./request-autosave";
 import { getDocBaseUrl } from "../sharing/share-data";
 
 export const createOpenPanel = (
@@ -25,6 +29,7 @@ export const createOpenPanel = (
   const { openedPanels } = globalConfig;
 
   const statusWorkspace = getApiListName(context);
+  data = getRequestAutosaveDraft(statusWorkspace, data.id) ?? data;
   const panelOptions = PANEL_OPTIONS.OPEN;
 
   if (openedPanels[data?.id]) {
@@ -64,6 +69,7 @@ export const createOpenPanel = (
     );
 
   openedPanels[data?.id] = panel;
+  attachRequestAutosave(context, panel, data);
 
   // Receive messages from Webview
   panel.webview.onDidReceiveMessage(async (message: unknown) => {
@@ -123,7 +129,7 @@ export const createOpenPanel = (
     () => {
       // When the panel is closed, cancel any future updates to the webview content
       stopWorker(panel);
-      setRequestDraft(statusWorkspace, data.id);
+      void closeRequestAutosave(panel);
       delete openedPanels[data?.id];
       disconnectWebSocketSession(data.id);
       disconnectSocketIoSession(data.id);

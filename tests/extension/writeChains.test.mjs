@@ -17,6 +17,20 @@ async function fixture(
   } = {},
 ) {
   const calls = [];
+  const titles = [];
+  const workspaces = [];
+  const timers = new Map();
+  let clock = 0,
+    timerId = 0;
+  const advance = async (milliseconds) => {
+    clock += milliseconds;
+    for (const [id, timer] of [...timers]) {
+      if (timer.at <= clock) {
+        timers.delete(id);
+        await timer.callback();
+      }
+    }
+  };
   let rows = [
     { id: "folder", parentId: "0", kind: "folder", sort: 1 },
     {
@@ -35,6 +49,14 @@ async function fixture(
     dispose: () => calls.push(["dispose", name]),
   });
   const editor = panel("editor");
+  let title = editor.title;
+  Object.defineProperty(editor, "title", {
+    get: () => title,
+    set: (value) => {
+      title = value;
+      titles.push(value);
+    },
+  });
   const config = {
     shareListWebView: panel("share"),
     importDataWebView: panel("import"),
@@ -45,101 +67,127 @@ async function fixture(
     "apps/extension/src/features/collections/collection-tree.ts",
     () => ({}),
   );
+  let autosave;
+  const dependencies = (id) => {
+    if (id.endsWith("/request-autosave")) return autosave;
+
+    if (id === "node:timers")
+      return {
+        setTimeout: (callback, delay) => {
+          const id = ++timerId;
+          timers.set(id, { callback, at: clock + delay });
+          return id;
+        },
+        clearTimeout: (id) => timers.delete(id),
+      };
+    if (id.endsWith("/panel-actions"))
+      return { handlePanelAction: () => false };
+    if (id === "lodash") return nativeDependency(id);
+    if (id === "./request-status") return { setRequestDraft: () => {} };
+    if (id === "../sidebar/protocol-icon")
+      return { getProtocolIcon: () => undefined };
+    if (id === "../../app/config")
+      return {
+        globalConfig: config,
+        DEFAULT_TARGET_NAME: { api: "HTTP Request" },
+      };
+    if (
+      /\/(?:project-config|request-storage|report-storage|collection-order|import-curl|prepare-options|html|host-utils|user-config)$/.test(
+        id,
+      )
+    )
+      return {
+        curlImport: unused,
+        downloadFile: unused,
+        openInFileExplorer: unused,
+        deleteProjectReport: unused,
+        getCurrentProjectId: unused,
+        getApiList: () => structuredClone(rows),
+        getApiListName: () => project,
+        updateApiListForWorkspace: async (_, workspace, change) => {
+          const list = change(structuredClone(rows));
+          calls.push(["write", plain(list)]);
+          workspaces.push(workspace);
+          onWrite?.();
+          if (writeGate) await writeGate;
+          if (succeeds) rows = plain(list);
+          return succeeds;
+        },
+        updateApiList: async (_, change) => {
+          const list = change(structuredClone(rows));
+          calls.push(["write", plain(list)]);
+          onWrite?.();
+          if (writeGate) await writeGate;
+          if (succeeds) rows = plain(list);
+          return succeeds;
+        },
+        getMaxSort: (list, parent) =>
+          Math.max(
+            0,
+            ...list
+              .filter((item) => item.parentId === parent)
+              .map((item) => item.sort),
+          ) + 1,
+        setApiList: (list) => {
+          calls.push(["write", plain(list)]);
+          if (succeeds) rows = plain(list);
+          return succeeds;
+        },
+        getAllChildIds: tree.getCollectionChildIds,
+        getTestingFolderName: (id) => id,
+        deleteTestingFoldersData: (ids) => {
+          calls.push(["deleteTest", [...ids]]);
+          return cleanupSucceeds;
+        },
+        showTabName: (name) => name,
+        getCurrentProjectConfig: () => ({ envList: [], serverList: [] }),
+        setProjectConfig: () => {
+          calls.push(["writeEnv"]);
+          return environmentSucceeds;
+        },
+      };
+    if (id === "../requests/commands")
+      return {
+        updateOpenData: (_, data) => calls.push(["open", plain(data)]),
+      };
+    if (id === "../sharing/share-data")
+      return {
+        createShare: unused,
+        deleteShare: unused,
+        getOpenApi: unused,
+        setProjectShareData: unused,
+        getProjectShareData: () => {
+          calls.push(["shareRead"]);
+          return (
+            requestPanelStubs[id] ??
+            (id === "vscode" ? {} : nativeDependency(id))
+          );
+        },
+      };
+    if (id === "@/features/requests/utils/apis")
+      return { createBatchApi: (items) => items };
+    if (id === "vscode")
+      return {
+        window: {
+          showInputBox: async () => "Renamed",
+          showErrorMessage: (message) => calls.push(["error", message]),
+          showInformationMessage: async (message, options) => {
+            if (options?.modal) return confirmation ? confirmation() : "Yes";
+            calls.push(["success", message]);
+          },
+        },
+      };
+    return (
+      requestPanelStubs[id] ?? (id === "vscode" ? {} : nativeDependency(id))
+    );
+  };
+  autosave = await load(
+    "apps/extension/src/features/requests/request-autosave.ts",
+    dependencies,
+  );
   const exports = await load(
     `apps/extension/src/features/${{ open: "requests/request-panel", sidbar: "sidebar/sidebar", importData: "import/import-data" }[file]}-handler.ts`,
-    (id) => {
-      if (id.endsWith("/panel-actions"))
-        return { handlePanelAction: () => false };
-      if (id === "lodash") return nativeDependency(id);
-      if (id === "./request-status") return { setRequestDraft: () => {} };
-      if (id === "../sidebar/protocol-icon")
-        return { getProtocolIcon: () => undefined };
-      if (id === "../../app/config")
-        return {
-          globalConfig: config,
-          DEFAULT_TARGET_NAME: { api: "HTTP Request" },
-        };
-      if (
-        /\/(?:project-config|request-storage|report-storage|collection-order|import-curl|prepare-options|html|host-utils|user-config)$/.test(
-          id,
-        )
-      )
-        return {
-          curlImport: unused,
-          downloadFile: unused,
-          openInFileExplorer: unused,
-          deleteProjectReport: unused,
-          getCurrentProjectId: unused,
-          getApiList: () => structuredClone(rows),
-          getApiListName: () => project,
-          updateApiList: async (_, change) => {
-            const list = change(structuredClone(rows));
-            calls.push(["write", plain(list)]);
-            onWrite?.();
-            if (writeGate) await writeGate;
-            if (succeeds) rows = plain(list);
-            return succeeds;
-          },
-          getMaxSort: (list, parent) =>
-            Math.max(
-              0,
-              ...list
-                .filter((item) => item.parentId === parent)
-                .map((item) => item.sort),
-            ) + 1,
-          setApiList: (list) => {
-            calls.push(["write", plain(list)]);
-            if (succeeds) rows = plain(list);
-            return succeeds;
-          },
-          getAllChildIds: tree.getCollectionChildIds,
-          getTestingFolderName: (id) => id,
-          deleteTestingFoldersData: (ids) => {
-            calls.push(["deleteTest", [...ids]]);
-            return cleanupSucceeds;
-          },
-          showTabName: (name) => name,
-          getCurrentProjectConfig: () => ({ envList: [], serverList: [] }),
-          setProjectConfig: () => {
-            calls.push(["writeEnv"]);
-            return environmentSucceeds;
-          },
-        };
-      if (id === "../requests/commands")
-        return {
-          updateOpenData: (_, data) => calls.push(["open", plain(data)]),
-        };
-      if (id === "../sharing/share-data")
-        return {
-          createShare: unused,
-          deleteShare: unused,
-          getOpenApi: unused,
-          setProjectShareData: unused,
-          getProjectShareData: () => {
-            calls.push(["shareRead"]);
-            return (
-              requestPanelStubs[id] ??
-              (id === "vscode" ? {} : nativeDependency(id))
-            );
-          },
-        };
-      if (id === "@/features/requests/utils/apis")
-        return { createBatchApi: (items) => items };
-      if (id === "vscode")
-        return {
-          window: {
-            showInputBox: async () => "Renamed",
-            showErrorMessage: (message) => calls.push(["error", message]),
-            showInformationMessage: async (message, options) => {
-              if (options?.modal) return confirmation ? confirmation() : "Yes";
-              calls.push(["success", message]);
-            },
-          },
-        };
-      return (
-        requestPanelStubs[id] ?? (id === "vscode" ? {} : nativeDependency(id))
-      );
-    },
+    dependencies,
   );
   const handler =
     exports.handleMessage ||
@@ -147,6 +195,19 @@ async function fixture(
     exports.handelImportDataMessage;
   return {
     calls,
+    titles,
+    advance,
+    pendingTimers: () => timers.size,
+    close: () => autosave.closeRequestAutosave(editor),
+    shutdown: () => autosave.flushAllRequestAutosaves(),
+    discard: (ids) => autosave.discardRequestAutosaves("one", ids),
+    draft: () => autosave.getRequestAutosaveDraft("one", "request"),
+    reopen: () => autosave.attachRequestAutosave({}, editor, rows[1]),
+    workspaces,
+    edit: (data) => autosave.updateRequestDraft({}, editor, data),
+    setWriteResult: (value) => {
+      succeeds = value;
+    },
     editor,
     config,
     panel,
@@ -171,7 +232,7 @@ test("editor save failure preserves dirty title and input and sends no saved-sta
   const snapshot = structuredClone(input);
   await f.run("saveApiData", input);
   assert.deepEqual(input, snapshot);
-  assert.equal(f.editor.title, "Unsaved ⚈");
+  assert.equal(f.editor.title, "HTTP Request ⚈");
   assert.deepEqual(
     f.calls.map(([name]) => name),
     ["write", "error"],
@@ -199,6 +260,13 @@ test("HTTP edits persist the latest content without resetting the editor or show
       url,
     });
   }
+  assert.equal(f.calls.filter(([name]) => name === "write").length, 0);
+  assert.equal(f.editor.title, "Original ⚈");
+  await f.advance(599);
+  assert.equal(f.calls.filter(([name]) => name === "write").length, 0);
+  await f.advance(1);
+  assert.equal(f.calls.filter(([name]) => name === "write").length, 1);
+  assert.deepEqual(f.titles, ["Original ⚈", "Original"]);
   assert.equal(f.rows()[1].url, "https://example.com/ab");
   assert.equal(f.rows()[1].is_changed, undefined);
   assert.equal(f.editor.title, "Original");
@@ -217,6 +285,7 @@ test("failed HTTP autosave keeps stored content and marks the editor dirty", asy
     name: "Changed",
     url: "https://example.com",
   });
+  await f.advance(600);
   assert.equal(f.rows()[1].name, "Original");
   assert.equal(f.editor.title, "Changed ⚈");
   assert.deepEqual(
@@ -497,4 +566,174 @@ test("preview import acknowledges and closes only after the request write finish
   await save;
   assert.equal(f.calls.at(-2)[1].action, "importComplete");
   assert.deepEqual(f.calls.at(-1), ["dispose", "import"]);
+});
+
+for (const kind of [
+  "api",
+  "graphql",
+  "sse",
+  "websocket",
+  "socketio",
+  "folder",
+]) {
+  test(`${kind} drafts autosave after typing stops`, async () => {
+    const f = await fixture("open");
+    await f.run("updateApiActiveData", { id: "request", kind, name: "Edited" });
+    await f.advance(500);
+    await f.run("updateApiActiveData", { id: "request", kind, name: "Latest" });
+    await f.advance(599);
+    assert.equal(f.calls.filter(([name]) => name === "write").length, 0);
+    assert.equal(f.editor.title, "Latest ⚈");
+    await f.advance(1);
+    assert.equal(f.rows()[1].name, "Latest");
+    assert.equal(f.editor.title, "Latest");
+    assert.equal(f.calls.filter(([name]) => name === "write").length, 1);
+    assert.ok(!f.calls.some(([name]) => name === "success"));
+  });
+}
+
+test("manual save writes immediately and cancels the queued autosave", async () => {
+  const f = await fixture("open");
+  const draft = { id: "request", kind: "api", name: "Manual" };
+  await f.run("updateApiActiveData", draft);
+  await f.run("saveApiData", draft);
+  assert.equal(f.rows()[1].name, "Manual");
+  assert.equal(f.pendingTimers(), 0);
+  await f.advance(600);
+  assert.equal(f.calls.filter(([name]) => name === "write").length, 1);
+});
+
+test("a newer edit keeps its dirty marker when an older write finishes", async () => {
+  let release, entered;
+  const gate = new Promise((resolve) => {
+    release = resolve;
+  });
+  const started = new Promise((resolve) => {
+    entered = resolve;
+  });
+  const f = await fixture("open", { writeGate: gate, onWrite: entered });
+  await f.run("updateApiActiveData", {
+    id: "request",
+    kind: "api",
+    name: "Older",
+  });
+  const firstSave = f.advance(600);
+  await started;
+  await f.run("updateApiActiveData", {
+    id: "request",
+    kind: "api",
+    name: "Newer",
+  });
+  release();
+  await firstSave;
+  assert.equal(f.editor.title, "Newer ⚈");
+  assert.equal(f.draft().name, "Newer");
+  await f.advance(600);
+  assert.equal(f.editor.title, "Newer");
+  assert.equal(f.rows()[1].name, "Newer");
+});
+
+test("closing a panel flushes its queued draft without updating a disposed webview", async () => {
+  const f = await fixture("open");
+  await f.run("updateApiActiveData", {
+    id: "request",
+    kind: "socketio",
+    name: "Before close",
+  });
+  await f.close();
+  assert.equal(f.rows()[1].name, "Before close");
+  assert.equal(f.pendingTimers(), 0);
+  assert.ok(!f.calls.some(([name]) => name === "editor" || name === "success"));
+});
+
+test("deleting a request cancels its autosave before closing the editor", async () => {
+  const f = await fixture("open");
+  await f.run("updateApiActiveData", {
+    id: "request",
+    kind: "api",
+    name: "Deleted",
+  });
+  f.replace(f.rows().filter((row) => row.id !== "request"));
+  f.discard(["request"]);
+  await f.close();
+  await f.advance(600);
+  assert.ok(!f.rows().some((row) => row.id === "request"));
+  assert.equal(f.pendingTimers(), 0);
+});
+
+test("an existing request removed externally cannot be reinserted by close", async () => {
+  const f = await fixture("open");
+  await f.run("updateApiActiveData", {
+    id: "request",
+    kind: "api",
+    name: "Deleted",
+  });
+  f.replace(f.rows().filter((row) => row.id !== "request"));
+  await f.close();
+  assert.ok(!f.rows().some((row) => row.id === "request"));
+});
+
+test("shutdown flushes drafts still waiting for the debounce timer", async () => {
+  const f = await fixture("open");
+  await f.run("updateApiActiveData", {
+    id: "request",
+    kind: "websocket",
+    name: "At shutdown",
+  });
+  await f.shutdown();
+  assert.equal(f.rows()[1].name, "At shutdown");
+  assert.equal(f.pendingTimers(), 0);
+});
+
+test("a failed autosave retains its draft and close retries it", async () => {
+  const f = await fixture("open", { succeeds: false });
+  await f.run("updateApiActiveData", {
+    id: "request",
+    kind: "api",
+    name: "Keep me",
+  });
+  await f.advance(600);
+  assert.equal(f.draft().name, "Keep me");
+  f.setWriteResult(true);
+  await f.close();
+  assert.equal(f.rows()[1].name, "Keep me");
+  assert.equal(f.draft(), undefined);
+});
+
+test("a failed close keeps a recoverable draft for the next editor", async () => {
+  const f = await fixture("open", { succeeds: false });
+  await f.run("updateApiActiveData", {
+    id: "request",
+    kind: "api",
+    name: "Recovered",
+  });
+  await f.close();
+  assert.equal(f.draft().name, "Recovered");
+  f.setWriteResult(true);
+  f.reopen();
+  await f.advance(600);
+  assert.equal(f.rows()[1].name, "Recovered");
+});
+
+test("project changes never redirect an autosave to the newly selected project", async () => {
+  const f = await fixture("open");
+  await f.run("updateApiActiveData", {
+    id: "request",
+    kind: "api",
+    name: "Original project",
+  });
+  f.switchProject();
+  await f.advance(600);
+  assert.deepEqual(f.workspaces, ["one"]);
+  assert.equal(f.rows()[1].name, "Original project");
+});
+
+test("sidebar deletion cancels pending drafts so editor disposal cannot restore the request", async () => {
+  const f = await fixture("sidbar");
+  f.edit({ id: "request", kind: "api", name: "Delete me" });
+  await f.run("showConfirmation", { id: "request" });
+  await f.close();
+  await f.advance(600);
+  assert.ok(!f.rows().some((row) => row.id === "request"));
+  assert.equal(f.pendingTimers(), 0);
 });

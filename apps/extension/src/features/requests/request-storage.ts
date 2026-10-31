@@ -19,7 +19,13 @@ export const setApiList = (
 export const updateApiList = (
   context: vscode.ExtensionContext,
   change: (items: ApiDetailsData[]) => ApiDetailsData[],
-) => updateDataInGlobalStorage(context, getApiListName(context), change);
+) => updateApiListForWorkspace(context, getApiListName(context), change);
+
+export const updateApiListForWorkspace = (
+  context: vscode.ExtensionContext,
+  workspace: string,
+  change: (items: ApiDetailsData[]) => ApiDetailsData[],
+) => updateDataInGlobalStorage(context, workspace, change);
 
 export const getApiListName = (context: vscode.ExtensionContext) => {
   try {

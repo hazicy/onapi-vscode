@@ -240,6 +240,12 @@ test("the actual host receiver rejects invalid messages and correlates asynchron
       if (id.endsWith("/request-panel-channel")) return boundary;
       if (id.endsWith("/create-panel"))
         return { createFeaturePanel: () => panel };
+      if (id === "./request-autosave")
+        return {
+          attachRequestAutosave() {},
+          closeRequestAutosave() {},
+          getRequestAutosaveDraft: () => undefined,
+        };
       if (id === "./request-panel-handler")
         return {
           handleRequestPanelCommand: async (message) => {

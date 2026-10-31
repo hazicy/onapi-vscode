@@ -1,3 +1,4 @@
+import { discardRequestAutosaves } from "../requests/request-autosave";
 import { getExecutionCollection } from "../requests/execution/http-runner";
 import * as vscode from "vscode";
 import { storageChanged } from "../../platform/storage/events";
@@ -304,6 +305,7 @@ export const handleMessage = async (
         if (getApiListName(context) !== projectKey) {
           return;
         }
+        discardRequestAutosaves(projectKey, deletedIds);
         for (const id of deletedIds) {
           openedPanels[id]?.dispose();
           if (curData.kind === "folder") {
