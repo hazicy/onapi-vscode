@@ -16,7 +16,6 @@ import { TabPaneProps, TabsProps } from "@/shared/ui/base";
 
 import { useMemoizedFn, useSafeState, useUpdateEffect } from "ahooks";
 import { compact, isEmpty, isEqual, map, size } from "lodash-es";
-import ErrorContext from "./ErrorContext";
 
 import LineTabs from "@/shared/components/LineTabs/LineTabs";
 import SuspenseContent from "@/shared/components/SuspenseContent";
@@ -81,8 +80,6 @@ const Response: FC<Props> = memo((props) => {
   const { t } = useTranslation();
   const nativeResponse = sdkResponseView(sendingData?.result?.response);
 
-  const showError =
-    sendingData?.status === "failed" && !!sendingData.error?.message;
   const [selectedKey, setActiveKey] = useSafeState(
     tabsDefaultActiveKey || "realtime",
   );
@@ -240,58 +237,54 @@ const Response: FC<Props> = memo((props) => {
   }
 
   return (
-    <ErrorContext.Provider
-      value={{ showError, errorMsg: sendingData?.error?.message || "" }}
-    >
-      <div className={styles.container}>
-        {sendingData?.status === "sending" && showSending && (
-          <Sending
-            hasCancel={false}
-            onlySendingLoadingBar={onlySendingLoadingBar}
-          />
-        )}
-
-        {!isNotEmpty && (
-          <Empty
-            errorMessage={
-              sendingData?.status === "failed"
-                ? sendingData.error?.message || t("request_panel.failed")
-                : undefined
-            }
-            maskMode
-            descriptionClassName={styles.emptyDescription}
-          />
-        )}
-
-        <LineTabs
-          activeKey={activeKey}
-          onChange={(key) => {
-            setVisitedTabs((previous) => new Set([...previous, key]));
-            setActiveKey(key);
-          }}
-          items={tabsItems()}
-          tabBarExtraContent={
-            !isEmpty(sendingData) &&
-            showResponseSize && (
-              <Suspense fallback={null}>
-                <ResponseSize
-                  showProxy={showProxy}
-                  showDownload={showDownload && isSendDone}
-                  response={sendingData?.result?.response}
-                  request={sendingData?.result?.request}
-                />
-              </Suspense>
-            )
-          }
-          tabListClassName={tabSelection.selectionList}
-          navWrapClassName={styles.tabsNavWrap}
-          navClassName={styles.tabsNav}
-          panelsClassName={styles.tabsContent}
-          contentClassName={styles.tabsContentHolder}
-          className={clsx(styles.tabs, styles.tabsTop)}
+    <div className={styles.container}>
+      {sendingData?.status === "sending" && showSending && (
+        <Sending
+          hasCancel={false}
+          onlySendingLoadingBar={onlySendingLoadingBar}
         />
-      </div>
-    </ErrorContext.Provider>
+      )}
+
+      {!isNotEmpty && (
+        <Empty
+          errorMessage={
+            sendingData?.status === "failed"
+              ? sendingData.error?.message || t("request_panel.failed")
+              : undefined
+          }
+          maskMode
+          descriptionClassName={styles.emptyDescription}
+        />
+      )}
+
+      <LineTabs
+        activeKey={activeKey}
+        onChange={(key) => {
+          setVisitedTabs((previous) => new Set([...previous, key]));
+          setActiveKey(key);
+        }}
+        items={tabsItems()}
+        tabBarExtraContent={
+          !isEmpty(sendingData) &&
+          showResponseSize && (
+            <Suspense fallback={null}>
+              <ResponseSize
+                showProxy={showProxy}
+                showDownload={showDownload && isSendDone}
+                response={sendingData?.result?.response}
+                request={sendingData?.result?.request}
+              />
+            </Suspense>
+          )
+        }
+        tabListClassName={tabSelection.selectionList}
+        navWrapClassName={styles.tabsNavWrap}
+        navClassName={styles.tabsNav}
+        panelsClassName={styles.tabsContent}
+        contentClassName={styles.tabsContentHolder}
+        className={clsx(styles.tabs, styles.tabsTop)}
+      />
+    </div>
   );
 });
 

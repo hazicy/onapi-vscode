@@ -2,11 +2,9 @@ import { hasCompletedResponse } from "@/features/requests/execution/http-state";
 import type { HttpExecutionState } from "@/features/requests/execution/http-state";
 import { responseText } from "@onapi/domain";
 import styles from "./Realtime.module.css";
-import { memo, useContext, useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import { isEqual } from "lodash-es";
 import ResponseResult from "@/features/requests/response/ResponseResult/ResponseResult";
-import ErrorContext from "@/features/requests/response/Response/ErrorContext";
-import Error from "@/features/requests/response/Response/components/Error";
 import { STATUS_CODE } from "@onapi/domain/constants/common";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 
@@ -16,7 +14,6 @@ interface Props {
 }
 
 const Realtime = memo(({ resultIncludesTabs, sendingData }: Props) => {
-  const { showError, errorMsg } = useContext(ErrorContext);
   const responseResultRef = useRef<any>(null);
 
   useEffect(() => {
@@ -29,8 +26,8 @@ const Realtime = memo(({ resultIncludesTabs, sendingData }: Props) => {
     }
   }, [sendingData?.status, sendingData?.result]);
 
-  if (showError) {
-    return <Error errorMessage={errorMsg || ""} />;
+  if (sendingData?.status === "failed") {
+    return null;
   }
 
   return (

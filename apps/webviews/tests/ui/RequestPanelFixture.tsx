@@ -34,7 +34,11 @@ export default function RequestPanelFixture() {
         onClick={() =>
           useApis.getState().updateCurrentSendingData({
             status: "failed",
-            error: { message: "connect ECONNREFUSED example.test" },
+            error: {
+              message:
+                new URLSearchParams(location.search).get("error") ||
+                "connect ECONNREFUSED example.test",
+            },
           })
         }
       >

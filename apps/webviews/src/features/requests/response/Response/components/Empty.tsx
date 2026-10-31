@@ -33,6 +33,9 @@ const ResponseEmpty = ({
       <Empty
         role={errorMessage ? "alert" : "status"}
         variant="request"
+        className={styles.empty}
+        imageClassName={errorMessage ? styles.errorImage : undefined}
+        footerClassName={styles.details}
         image={
           errorMessage ? (
             <AppIcon

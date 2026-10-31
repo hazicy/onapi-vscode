@@ -157,3 +157,126 @@ test("request panel screenshots at wide and narrow widths", async ({
     .getByRole("region", { name: "Response tools" })
     .screenshot({ path: testInfo.outputPath("response-narrow.png") });
 });
+
+for (const narrow of [false, true]) {
+  test(`failure icon and details fit the response panel (${narrow ? "narrow" : "wide"})`, async ({
+    page,
+  }) => {
+    await page.goto(
+      "/?requestPanel&error=" +
+        encodeURIComponent(
+          "Trailers are invalid with this transfer encoding " +
+            "detail".repeat(80),
+        ),
+    );
+    if (narrow)
+      await page.getByRole("button", { name: "Narrow panel" }).click();
+    await page.getByRole("button", { name: "Fail request" }).click();
+    const alert = page
+      .getByRole("region", { name: "Request workspace" })
+      .getByRole("alert");
+    await expect(alert).toContainText("Trailers are invalid");
+    const geometry = await alert.evaluate((root) => {
+      const svg = root.querySelector("svg")!;
+      const icon = svg.parentElement!;
+      const image = icon.parentElement!;
+      const rect = svg.getBoundingClientRect();
+      const parent = image.getBoundingClientRect();
+      const bounds = root.getBoundingClientRect();
+      return {
+        top: rect.top - bounds.top,
+        width: rect.width,
+        height: rect.height,
+        imageWidth: parent.width,
+        imageHeight: parent.height,
+        left: rect.left - parent.left,
+        right: parent.right - rect.right,
+        fits: root.scrollWidth <= root.clientWidth,
+      };
+    });
+    expect(geometry.top).toBeGreaterThanOrEqual(0);
+    expect(geometry.width).toBe(32);
+    expect(geometry.height).toBe(32);
+    expect(geometry.imageWidth).toBe(32);
+    expect(geometry.imageHeight).toBe(32);
+    expect(geometry.left).toBeGreaterThanOrEqual(0);
+    expect(geometry.right).toBeGreaterThanOrEqual(0);
+    expect(geometry.fits).toBe(true);
+  });
+}
+
+for (const narrow of [false, true]) {
+  test(`failed request keeps tabs and both halves of the icon unobstructed (${narrow ? "narrow" : "wide"})`, async ({
+    page,
+  }, testInfo) => {
+    await page.evaluate(() => {
+      document.documentElement.style.setProperty("--color-bg-right", "#222");
+      document.documentElement.style.setProperty(
+        "--vscode-editor-background",
+        "#222",
+      );
+      document.documentElement.style.setProperty(
+        "--vscode-descriptionForeground",
+        "#aaa",
+      );
+      document.documentElement.style.setProperty(
+        "--vscode-errorForeground",
+        "#ff8069",
+      );
+      document.body.style.background = "#222";
+    });
+    if (narrow)
+      await page.getByRole("button", { name: "Narrow panel" }).click();
+    const loaded = page.waitForResponse(
+      (response) =>
+        response.url().includes("/components/Realtime/Realtime.tsx") &&
+        response.ok(),
+    );
+    await page.getByRole("button", { name: "Fail request" }).click();
+    const module = await loaded;
+    // Wait for the lazy module and its dependencies, then let React commit it.
+    await page.evaluate(async (url) => {
+      await import(url);
+    }, module.url());
+    await page.evaluate(
+      () =>
+        new Promise<void>((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+        ),
+    );
+    const workspace = page.getByRole("region", { name: "Request workspace" });
+    const icon = workspace.getByRole("alert").locator("svg");
+    const exposed = await icon.evaluate((svg) => {
+      const rect = svg.getBoundingClientRect();
+      return [0.25, 0.75].every((part) => {
+        const element = document.elementFromPoint(
+          rect.x + rect.width * part,
+          rect.y + rect.height / 2,
+        );
+        return !!element && (element === svg || svg.contains(element));
+      });
+    });
+    expect(exposed).toBe(true);
+    const tabs = workspace.getByRole("tablist").last();
+    await tabs
+      .getByRole("tab", { name: "Response", exact: true })
+      .click({ trial: true });
+    await workspace.screenshot({
+      path: testInfo.outputPath("failed-request.png"),
+    });
+    if (narrow) {
+      await tabs
+        .locator("..")
+        .getByRole("button", { name: "More tabs", exact: true })
+        .click();
+      await page
+        .getByRole("menuitem", { name: "Console", exact: true })
+        .click();
+    } else {
+      await tabs.getByRole("tab", { name: "Console", exact: true }).click();
+    }
+    await expect(
+      workspace.getByRole("tab", { name: "Console", exact: true }),
+    ).toHaveAttribute("aria-selected", "true");
+  });
+}
