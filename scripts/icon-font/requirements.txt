@@ -1,0 +1,2 @@
+fonttools==4.60.2
+picosvg==0.22.3

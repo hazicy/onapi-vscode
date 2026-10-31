@@ -1,4 +1,4 @@
-import { EventEmitter } from "vscode";
+import { env, EventEmitter } from "vscode";
 import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import {
   isHttpCollectionItem,
@@ -6,7 +6,13 @@ import {
   createDefaultHttpConfig,
 } from "@onapi/domain";
 
-export const requestStatusChanged = new EventEmitter<void>();
+export const requestStatusChanged = new EventEmitter<{
+  workspace: string;
+  id: string;
+}>();
+const text = (zh: string, en: string) =>
+  env.language.startsWith("zh") ? zh : en;
+
 type Result = { badge: string; color: string; message: string };
 const workspaces = new Map<
   string,
@@ -29,7 +35,7 @@ export function setRequestDraft(
   draft?: ApiDetailsData,
 ) {
   entry(workspace, id).draft = draft;
-  requestStatusChanged.fire();
+  requestStatusChanged.fire({ workspace, id });
 }
 export function setRequestResult(
   workspace: string,
@@ -49,12 +55,12 @@ export function setRequestResult(
         ? "list.errorForeground"
         : "testing.iconPassed",
     message: timeout
-      ? `请求超时 / Request timed out: ${message}`
+      ? `${text("请求超时", "Request timed out")}: ${message}`
       : failed
-        ? `请求失败 / Request failed: ${message || code || "No response"}`
-        : `请求成功 / Request succeeded: HTTP ${code}`,
+        ? `${text("请求失败", "Request failed")}: ${message || code || text("无响应", "No response")}`
+        : `${text("请求成功", "Request succeeded")}: HTTP ${code}`,
   };
-  requestStatusChanged.fire();
+  requestStatusChanged.fire({ workspace, id });
 }
 
 /** Evaluate only executable request fields; response examples and documentation are excluded. */
@@ -74,6 +80,7 @@ export function requestDecoration(
   const native = isHttpCollectionItem(data);
   const settings = config?.http || createDefaultHttpConfig();
   const errors: string[] = [];
+  const warnings: string[] = [];
   const fields: string[] = [native ? requestUrl(data) : data.url || ""];
   const env = native
     ? settings.environments.find(
@@ -112,7 +119,7 @@ export function requestDecoration(
     "";
   fields.push(base);
   if (!(native ? requestUrl(data) : data.url)?.trim() && !base.trim()) {
-    errors.push("缺少 URL / Missing URL");
+    warnings.push(text("缺少 URL", "Missing URL"));
   }
   for (const request of [
     config?.globalParams,
@@ -136,7 +143,7 @@ export function requestDecoration(
           continue;
         }
         if (!String(parameter.key || "").trim()) {
-          errors.push("参数名为空 / Empty parameter name");
+          warnings.push(text("参数名为空", "Empty parameter name"));
         }
         fields.push(
           String(parameter.key || ""),
@@ -153,7 +160,7 @@ export function requestDecoration(
           try {
             JSON.parse(body.raw);
           } catch {
-            errors.push("JSON 请求体格式错误 / Invalid JSON body");
+            errors.push(text("JSON 请求体格式错误", "Invalid JSON body"));
           }
         }
       }
@@ -181,7 +188,7 @@ export function requestDecoration(
           continue;
         } // Editor's empty placeholder row.
         if (!String(parameter.key || "").trim()) {
-          errors.push("参数名为空 / Empty parameter name");
+          warnings.push(text("参数名为空", "Empty parameter name"));
         }
         fields.push(String(parameter.key || ""), String(parameter.value ?? ""));
       }
@@ -201,7 +208,7 @@ export function requestDecoration(
       try {
         JSON.parse(request.body.raw);
       } catch {
-        errors.push("JSON 请求体格式错误 / Invalid JSON body");
+        errors.push(text("JSON 请求体格式错误", "Invalid JSON body"));
       }
     }
     if (request.auth) {
@@ -230,34 +237,45 @@ export function requestDecoration(
   const statuses: Result[] = [];
   if (errors.length) {
     statuses.push({
-      badge: "!",
+      badge: "•",
       color: "list.errorForeground",
-      message: [...new Set(errors)].join("\n"),
+      message: `${text("配置问题", "Configuration issues")}\n${[...new Set(errors)].map((error) => `- ${error}`).join("\n")}`,
+    });
+  }
+  if (warnings.length) {
+    statuses.push({
+      badge: "",
+      color: "list.warningForeground",
+      message: `${text("配置未完成", "Incomplete configuration")}\n${[...new Set(warnings)].map((warning) => `- ${warning}`).join("\n")}`,
     });
   }
   if (missing.size) {
     statuses.push({
-      badge: "E",
+      badge: "•",
       color: "list.warningForeground",
-      message: `缺少变量 / Missing variables: ${[...missing].join(", ")}`,
+      message: `${text("缺少变量", "Missing variables")}\n${[...missing].map((name) => `- ${name}`).join("\n")}`,
     });
   }
   if (state?.draft) {
     statuses.push({
       badge: "M",
       color: "list.warningForeground",
-      message: "有未保存的修改 / Unsaved changes",
+      message: text("有未保存的修改", "Unsaved changes"),
     });
   }
-  if (state?.result) {
-    statuses.push(state.result);
-  }
-  if (!statuses.length) {
+  if (!statuses.length && !state?.result) {
     return;
   }
   return {
-    badge: statuses[0].badge,
-    color: statuses[0].color,
-    tooltip: statuses.map((status) => status.message).join("\n"),
+    badge: state?.draft ? "M" : undefined,
+    color: statuses[0]?.color,
+    tooltip: [
+      ...statuses.map((status) => status.message),
+      state?.result
+        ? `${text("上次运行", "Last run")}\n${state.result.message}`
+        : undefined,
+    ]
+      .filter(Boolean)
+      .join("\n\n"),
   };
 }

@@ -3,8 +3,39 @@ import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import type { SidebarTreeNode } from "./tree-data";
 import { countFolderRequests } from "./tree-data";
 import { getApiListName } from "../requests/request-storage";
-import { getProtocolIcon, getSidebarIcon } from "./protocol-icon";
+import { getProtocolTreeIcon, getSidebarIcon } from "./protocol-icon";
+import { requestDecoration } from "../requests/request-status";
+import { getCurrentProjectConfig } from "../../platform/storage/project-config";
 import { isHttpCollectionItem, requestUrl, requestMethod } from "@onapi/domain";
+
+function requestTooltip(
+  url?: string,
+  status?: string,
+): vscode.MarkdownString | undefined {
+  if (!url && !status) {
+    return undefined;
+  }
+  const tooltip = new vscode.MarkdownString();
+  if (url) {
+    tooltip.appendText(url);
+  }
+  for (const section of status?.split("\n\n") || []) {
+    if (tooltip.value) {
+      tooltip.appendMarkdown("\n\n---\n\n");
+    }
+    const [heading, ...lines] = section.split("\n");
+    tooltip.appendMarkdown("**").appendText(heading).appendMarkdown("**");
+    for (const line of lines) {
+      tooltip.appendMarkdown("\n\n");
+      if (line.startsWith("- ")) {
+        tooltip.appendMarkdown("- ").appendText(line.slice(2));
+      } else {
+        tooltip.appendText(line);
+      }
+    }
+  }
+  return tooltip;
+}
 
 function configureRequestItem(
   item: vscode.TreeItem,
@@ -41,14 +72,10 @@ function configureRequestItem(
     ).toUpperCase();
   const count = folder ? countFolderRequests(list(), data.id) : 0;
   item.description = folder ? (count ? `(${count})` : undefined) : requestLabel;
-  item.iconPath = getProtocolIcon(context, data);
-  item.tooltip = [
-    data.name,
-    folder ? undefined : requestLabel,
-    isHttpCollectionItem(data) ? requestUrl(data) : data.url,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  item.iconPath = getProtocolTreeIcon(data);
+  item.tooltip = folder
+    ? undefined
+    : requestTooltip(isHttpCollectionItem(data) ? requestUrl(data) : data.url);
 }
 
 export class RequestTreeItem extends vscode.TreeItem {
@@ -59,6 +86,19 @@ export class RequestTreeItem extends vscode.TreeItem {
   ) {
     super("");
     configureRequestItem(this, context, list, node.data, "request");
+    if (node.data.kind !== "folder") {
+      const status = requestDecoration(
+        getApiListName(context),
+        node.data,
+        getCurrentProjectConfig(context),
+        list(),
+      );
+      this.iconPath = getProtocolTreeIcon(node.data, status?.color);
+      this.tooltip = requestTooltip(
+        isHttpCollectionItem(node.data) ? requestUrl(node.data) : node.data.url,
+        status?.tooltip,
+      );
+    }
     if (node.data.kind !== "folder") {
       this.resourceUri = vscode.Uri.from({
         scheme: "onapi-request",
@@ -171,7 +211,12 @@ export class HistoryTreeItem extends vscode.TreeItem {
     this.collapsibleState = vscode.TreeItemCollapsibleState.None;
     this.contextValue = "onapiHistory";
     this.description = new Date(node.data.sentAt).toLocaleTimeString();
-    this.tooltip = `${this.tooltip}\n${new Date(node.data.sentAt).toLocaleString()}`;
+    const tooltip = this.tooltip as vscode.MarkdownString | undefined;
+    this.tooltip = tooltip || new vscode.MarkdownString();
+    if (this.tooltip.value) {
+      this.tooltip.appendMarkdown("\n\n---\n\n");
+    }
+    this.tooltip.appendText(new Date(node.data.sentAt).toLocaleString());
     this.command = {
       command: "onapi.tree.openHistory",
       title: "Open Historical Request",

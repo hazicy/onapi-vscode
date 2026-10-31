@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import load, { nativeDependency } from "../helpers/loadTypeScript.mjs";
+const editorEnv = { language: "en" };
 const {
   requestDecoration: decorate,
   setRequestDraft,
@@ -10,6 +11,7 @@ const {
   (id) =>
     id === "vscode"
       ? {
+          env: editorEnv,
           EventEmitter: class {
             fire() {}
           },
@@ -26,21 +28,29 @@ const get = (workspace = "one", data = request, config = {}) =>
 test("results, dirty state, priority, clearing drafts, and workspace isolation", () => {
   assert.equal(get(), undefined);
   setRequestResult("one", "r", { code: 200 });
-  assert.equal(get().badge, "✓");
+  assert.equal(get().badge, undefined);
+  assert.equal(get().color, undefined);
+  assert.match(get().tooltip, /Last run\n.*succeeded/);
   setRequestResult("one", "r", { code: 404 });
-  assert.equal(get().badge, "!");
+  assert.equal(get().badge, undefined);
+  assert.match(get().tooltip, /failed/);
   setRequestResult("one", "r", undefined, { code: "ETIMEDOUT" });
-  assert.equal(get().badge, "T");
+  assert.equal(get().badge, undefined);
+  assert.match(get().tooltip, /timed out/);
   setRequestDraft("one", "r", request);
   assert.equal(get().badge, "M");
   assert.match(get().tooltip, /timed out/);
   setRequestDraft("one", "r", { ...request, request: { url: "{{missing}}" } });
-  assert.equal(get().badge, "E");
+  assert.equal(get().badge, "M");
+  assert.equal(get().color, "list.warningForeground");
+  assert.match(get().tooltip, /Missing variables\n- missing\n\n/);
   setRequestDraft("one", "r", { ...request, request: { url: "" } });
-  assert.equal(get().badge, "!");
+  assert.equal(get().badge, "M");
+  assert.equal(get().color, "list.warningForeground");
   assert.match(get().tooltip, /Missing URL/);
   setRequestDraft("one", "r");
-  assert.equal(get().badge, "T");
+  assert.equal(get().badge, undefined);
+  assert.match(get().tooltip, /timed out/);
   assert.equal(get("two"), undefined);
 });
 test("native validation ignores disabled entries and examples and follows variable scopes", () => {
@@ -109,4 +119,30 @@ test("folder traversal cannot loop and uses native collection variables", () => 
     },
   };
   assert.equal(decorate("inherited", data, config, [data, folder]), undefined);
+});
+
+test("tooltip follows the editor language without bilingual labels", () => {
+  try {
+    editorEnv.language = "zh-cn";
+    const data = { ...request, id: "localized", request: { url: "" } };
+    setRequestDraft("localized", data.id, data);
+    setRequestResult("localized", data.id, { code: 200 });
+    const zh = get("localized", data).tooltip;
+    assert.match(zh, /配置未完成\n- 缺少 URL/);
+    assert.match(zh, /有未保存的修改/);
+    assert.match(zh, /上次运行\n请求成功/);
+    assert.doesNotMatch(
+      zh,
+      /Incomplete configuration|Unsaved changes|Last run|Request succeeded/,
+    );
+    editorEnv.language = "en";
+    // New result messages use the current editor language, like a restarted host.
+    setRequestResult("localized", data.id, undefined, { code: "ETIMEDOUT" });
+    const en = get("localized", data).tooltip;
+    assert.match(en, /Incomplete configuration\n- Missing URL/);
+    assert.match(en, /Last run\nRequest timed out/);
+    assert.doesNotMatch(en, /配置|未保存|上次运行|请求超时/);
+  } finally {
+    editorEnv.language = "en";
+  }
 });

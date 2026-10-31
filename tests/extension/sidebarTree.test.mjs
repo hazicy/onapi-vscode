@@ -57,6 +57,17 @@ test("native sidebar panels, test commands and workspace request history", async
   const mocks = {
     vscode: {
       EventEmitter,
+      MarkdownString: class {
+        value = "";
+        appendText(value) {
+          this.value += value.replace(/[\\`*_{}[\]()<>#+.!-]/g, "\\$&");
+          return this;
+        }
+        appendMarkdown(value) {
+          this.value += value;
+          return this;
+        }
+      },
       Uri: { from: (parts) => parts, joinPath: (...parts) => parts.join("/") },
       TreeItem: class {
         constructor(label, collapsibleState) {
@@ -154,7 +165,7 @@ test("native sidebar panels, test commands and workspace request history", async
     const result = await build({
       stdin: {
         contents:
-          "export { registerSidebarTree } from './apps/extension/src/features/sidebar/register'; export { recordRequestHistory, getRequestHistory } from './apps/extension/src/features/requests/request-history'; export { storageChanged } from './apps/extension/src/platform/storage/events'; export { requestChildren } from './apps/extension/src/features/sidebar/tree-data';",
+          "export { registerSidebarTree } from './apps/extension/src/features/sidebar/register'; export { recordRequestHistory, getRequestHistory } from './apps/extension/src/features/requests/request-history'; export { storageChanged } from './apps/extension/src/platform/storage/events'; export { requestChildren } from './apps/extension/src/features/sidebar/tree-data'; export { setRequestResult } from './apps/extension/src/features/requests/request-status';",
         resolveDir: path.resolve(__dirname, "../.."),
       },
       bundle: true,
@@ -223,6 +234,7 @@ test("native sidebar panels, test commands and workspace request history", async
       getRequestHistory,
       storageChanged,
       requestChildren,
+      setRequestResult,
     } = bundled;
     registerSidebarTree(context);
     storageError = "Unsupported storage version: 1";
@@ -305,40 +317,30 @@ test("native sidebar panels, test commands and workspace request history", async
         kind: "request",
         data: { ...rows[2], request: { ...rows[2].request, method } },
       });
-      assert.ok(item.iconPath.dark.endsWith("/http-dark.svg"));
-      assert.ok(item.iconPath.light.endsWith("/http.svg"));
+      assert.equal(item.iconPath.id, "onapi-http");
       assert.equal(item.description, method);
-      assert.ok(item.tooltip.includes(method));
+      assert.equal(item.tooltip.value, "/users");
+      assert.equal(item.tooltip.isTrusted, undefined);
     }
     assert.ok(
-      requests
-        .getTreeItem({ kind: "request", data: rows[0] })
-        .iconPath.light.endsWith("/folder.svg"),
-    );
-    assert.ok(
-      requests
-        .getTreeItem({ kind: "request", data: rows[0] })
-        .iconPath.dark.endsWith("/folder-dark.svg"),
+      requests.getTreeItem({ kind: "request", data: rows[0] }).iconPath.id ===
+        "onapi-folder",
     );
     assert.equal(
       requests.getTreeItem({ kind: "request", data: rows[0] }).iconPath.color,
       undefined,
     );
     assert.ok(
-      requests
-        .getTreeItem({
-          kind: "request",
-          data: { ...rows[2], kind: "graphql" },
-        })
-        .iconPath.dark.endsWith("/graphql-dark.svg"),
+      requests.getTreeItem({
+        kind: "request",
+        data: { ...rows[2], kind: "graphql" },
+      }).iconPath.id === "onapi-graphql",
     );
     assert.ok(
-      requests
-        .getTreeItem({
-          kind: "request",
-          data: { ...rows[2], method: "CUSTOM" },
-        })
-        .iconPath.dark.endsWith("/http-dark.svg"),
+      requests.getTreeItem({
+        kind: "request",
+        data: { ...rows[2], method: "CUSTOM" },
+      }).iconPath.id === "onapi-http",
     );
     for (const [protocol, icon] of Object.entries({
       sse: "broadcast",
@@ -354,8 +356,7 @@ test("native sidebar panels, test commands and workspace request history", async
         kind: "request",
         data: { ...rows[2], kind: protocol },
       });
-      assert.ok(item.iconPath.dark.endsWith(`/${protocol}-dark.svg`));
-      assert.equal(item.iconPath.color, undefined);
+      assert.equal(item.iconPath.id, `onapi-${protocol.replaceAll("_", "-")}`);
     }
     const resource = requests.getTreeItem({
       kind: "request",
@@ -368,13 +369,41 @@ test("native sidebar panels, test commands and workspace request history", async
       undefined,
     );
     rows[2].request.url = "";
-    assert.equal(decorations.provideFileDecoration(resource).badge, "!");
-    assert.equal(decorations.provideFileDecoration(resource).color, undefined);
+    assert.equal(
+      requests.getTreeItem({ kind: "request", data: rows[2] }).iconPath.color
+        .id,
+      "list.warningForeground",
+    );
+    assert.equal(decorations.provideFileDecoration(resource).badge, undefined);
+    assert.equal(
+      decorations.provideFileDecoration(resource).color.id,
+      "list.warningForeground",
+    );
     assert.match(
-      decorations.provideFileDecoration(resource).tooltip,
-      /Missing URL/,
+      requests.getTreeItem({ kind: "request", data: rows[2] }).tooltip.value,
+      /缺少 URL/,
     );
     rows[2].request.url = "/users";
+    const decorationChanges = [];
+    const refreshedRequests = [];
+    requests.onDidChangeTreeData((node) =>
+      refreshedRequests.push(node?.data.id),
+    );
+    decorations.onDidChangeFileDecorations((uri) =>
+      decorationChanges.push(uri),
+    );
+    setRequestResult("apiList:one", "request", { code: 200 });
+    assert.deepEqual(decorationChanges, [resource]);
+    assert.deepEqual(refreshedRequests, ["request"]);
+    assert.equal(decorations.provideFileDecoration(resource).badge, undefined);
+    assert.equal(decorations.provideFileDecoration(resource).color, undefined);
+    assert.match(
+      requests.getTreeItem({ kind: "request", data: rows[2] }).tooltip.value,
+      /上次运行/,
+    );
+    setRequestResult("apiList:two", "request", { code: 500 });
+    assert.equal(decorationChanges.length, 1);
+    assert.deepEqual(refreshedRequests, ["request"]);
     context.project = "two";
     assert.equal(decorations.provideFileDecoration(resource), undefined);
     context.project = "one";
@@ -491,15 +520,11 @@ test("native sidebar panels, test commands and workspace request history", async
     const testFolder = tests.getChildren()[0];
     assert.equal(testFolder.kind, "testFolder");
     assert.equal(tests.getTreeItem(testFolder).description, "(1)");
-    assert.ok(
-      tests.getTreeItem(testFolder).iconPath.dark.endsWith("/tests-dark.svg"),
-    );
+    assert.ok(tests.getTreeItem(testFolder).iconPath.id === "onapi-tests");
     await commands.get("onapi.tree.runTests")(testFolder);
     assert.equal(executed.at(-1)[0], "onapi.folderTest");
     const reports = tests.getChildren().find((node) => node.kind === "reports");
-    assert.ok(
-      tests.getTreeItem(reports).iconPath.light.endsWith("/reports.svg"),
-    );
+    assert.ok(tests.getTreeItem(reports).iconPath.id === "onapi-reports");
     await commands.get("onapi.tree.openReport")(tests.getChildren(reports)[0]);
     assert.deepEqual(executed.at(-1), ["onapi.folderTestReportData", report]);
     assert.equal(history.getChildren()[0].kind, "empty");
@@ -510,9 +535,7 @@ test("native sidebar panels, test commands and workspace request history", async
     assert.equal(getRequestHistory(context)[0].request.response, undefined);
     const day = history.getChildren()[0];
     assert.equal(day.kind, "day");
-    assert.ok(
-      history.getTreeItem(day).iconPath.dark.endsWith("/history-dark.svg"),
-    );
+    assert.ok(history.getTreeItem(day).iconPath.id === "onapi-history");
     const entry = history.getChildren(day)[0];
     await commands.get("onapi.tree.openHistory")(entry);
     assert.equal(executed.at(-1)[0], "openTabPanel");

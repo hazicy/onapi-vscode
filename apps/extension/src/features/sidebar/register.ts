@@ -70,11 +70,29 @@ export function registerSidebarTree(context: vscode.ExtensionContext) {
           rows,
         );
         return status
-          ? { badge: status.badge, tooltip: status.tooltip, propagate: false }
+          ? {
+              badge: status.badge,
+              color: status.color
+                ? new vscode.ThemeColor(status.color)
+                : undefined,
+              propagate: false,
+            }
           : undefined;
       },
     }),
-    requestStatusChanged.event(() => decorationsChanged.fire(undefined)),
+    requestStatusChanged.event(({ workspace, id }) => {
+      if (workspace !== getApiListName(context)) {
+        return;
+      }
+      requestsProvider.refreshRequest(id);
+      decorationsChanged.fire(
+        vscode.Uri.from({
+          scheme: "onapi-request",
+          authority: "status",
+          path: `/${encodeURIComponent(workspace)}/${encodeURIComponent(id)}`,
+        }),
+      );
+    }),
     storageChanged.event(() => decorationsChanged.fire(undefined)),
     view,
     testsView,

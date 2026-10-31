@@ -13,7 +13,22 @@ const protocolIcons = new Set([
   "doc",
 ]);
 
-/** Shared custom SVG icons for native request trees and editor tabs. */
+/** Font-backed icons support theme colors; editor tabs still use SVG paths. */
+export function getProtocolTreeIcon(
+  data: { kind?: string },
+  color?: string,
+): vscode.ThemeIcon | undefined {
+  if (!protocolIcons.has(data.kind || "")) {
+    return undefined;
+  }
+  const name = data.kind === "api" ? "http" : data.kind!;
+  return new vscode.ThemeIcon(
+    `onapi-${name.replaceAll("_", "-")}`,
+    color ? new vscode.ThemeColor(color) : undefined,
+  );
+}
+
+/** SVG paths for editor surfaces whose icon API does not accept ThemeIcon. */
 export function getProtocolIcon(
   context: vscode.ExtensionContext,
   data: { kind?: string },
@@ -30,8 +45,8 @@ export function getProtocolIcon(
 export function getSidebarIcon(
   context: vscode.ExtensionContext,
   name: "tests" | "reports" | "history",
-): { light: vscode.Uri; dark: vscode.Uri } {
-  return iconPaths(context, name);
+): vscode.ThemeIcon {
+  return new vscode.ThemeIcon(`onapi-${name}`);
 }
 
 function iconPaths(

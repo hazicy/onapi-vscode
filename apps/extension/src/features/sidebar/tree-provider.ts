@@ -46,6 +46,12 @@ export class SidebarTreeProvider
   refresh(): void {
     this.changed.fire(undefined);
   }
+  refreshRequest(id: string): void {
+    const data = this.list().find((item) => item.id === id);
+    if (data) {
+      this.changed.fire({ kind: "request", data });
+    }
+  }
   dispose(): void {
     this.changed.dispose();
   }

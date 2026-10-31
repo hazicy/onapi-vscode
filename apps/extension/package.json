@@ -439,7 +439,100 @@
         ],
         "priority": "option"
       }
-    ]
+    ],
+    "icons": {
+      "onapi-http": {
+        "description": "OnAPI http icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E001"
+        }
+      },
+      "onapi-sse": {
+        "description": "OnAPI sse icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E002"
+        }
+      },
+      "onapi-graphql": {
+        "description": "OnAPI graphql icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E003"
+        }
+      },
+      "onapi-websocket": {
+        "description": "OnAPI websocket icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E004"
+        }
+      },
+      "onapi-socketio": {
+        "description": "OnAPI socketio icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E005"
+        }
+      },
+      "onapi-grpc": {
+        "description": "OnAPI grpc icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E006"
+        }
+      },
+      "onapi-socket": {
+        "description": "OnAPI socket icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E007"
+        }
+      },
+      "onapi-socket-method": {
+        "description": "OnAPI socket method icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E008"
+        }
+      },
+      "onapi-folder": {
+        "description": "OnAPI folder icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E009"
+        }
+      },
+      "onapi-doc": {
+        "description": "OnAPI doc icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E00A"
+        }
+      },
+      "onapi-tests": {
+        "description": "OnAPI tests icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E00B"
+        }
+      },
+      "onapi-reports": {
+        "description": "OnAPI reports icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E00C"
+        }
+      },
+      "onapi-history": {
+        "description": "OnAPI history icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E00D"
+        }
+      }
+    }
   },
   "activationEvents": [],
   "icon": "dist/images/onapi-icon.png",
