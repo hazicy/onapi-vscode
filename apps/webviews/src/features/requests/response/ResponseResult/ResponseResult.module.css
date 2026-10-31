@@ -51,7 +51,9 @@
   line-height: 18px;
 }
 .container .segmented [role="tab"][data-active] {
-  background: var(--vscode-toolbar-hoverBackground, var(--color-bg-right));
+  background: transparent;
+  color: var(--vscode-foreground, var(--font-title-color));
+  font-weight: 600;
 }
 .container .tabBarExtraContentWrap {
   display: flex;

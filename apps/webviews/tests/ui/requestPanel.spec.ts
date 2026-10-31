@@ -211,8 +211,7 @@ for (const narrow of [false, true]) {
     await expect(alert).toContainText("Trailers are invalid");
     const geometry = await alert.evaluate((root) => {
       const svg = root.querySelector("svg")!;
-      const icon = svg.parentElement!;
-      const image = icon.parentElement!;
+      const image = svg.parentElement!;
       const rect = svg.getBoundingClientRect();
       const parent = image.getBoundingClientRect();
       const bounds = root.getBoundingClientRect();
@@ -228,10 +227,10 @@ for (const narrow of [false, true]) {
       };
     });
     expect(geometry.top).toBeGreaterThanOrEqual(0);
-    expect(geometry.width).toBe(32);
-    expect(geometry.height).toBe(32);
-    expect(geometry.imageWidth).toBe(32);
-    expect(geometry.imageHeight).toBe(32);
+    expect(geometry.width).toBe(48);
+    expect(geometry.height).toBe(48);
+    expect(geometry.imageWidth).toBe(48);
+    expect(geometry.imageHeight).toBe(48);
     expect(geometry.left).toBeGreaterThanOrEqual(0);
     expect(geometry.right).toBeGreaterThanOrEqual(0);
     expect(geometry.fits).toBe(true);

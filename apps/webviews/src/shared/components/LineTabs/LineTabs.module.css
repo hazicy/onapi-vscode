@@ -45,25 +45,18 @@
   background: transparent;
   color: var(--vscode-descriptionForeground, var(--font-light-color));
   font-size: var(--vscode-font-size, 13px);
-  font-weight: 500;
+  font-weight: 400;
   line-height: 20px;
-  transition:
-    background-color 120ms ease,
-    color 120ms ease;
+  transition: color 120ms ease;
 }
 .selectionList [role="tab"]:hover {
-  background: var(--vscode-toolbar-hoverBackground, rgb(128 128 128 / 10%));
   color: var(--vscode-foreground, var(--font-title-color));
 }
 .selectionList [role="tab"][data-active] {
-  background: color-mix(
-    in srgb,
-    var(--vscode-foreground, #888) 9%,
-    transparent
-  );
+  background: transparent;
   color: var(--vscode-foreground, var(--font-title-color));
-  box-shadow: inset 0 0 0 1px
-    color-mix(in srgb, var(--vscode-foreground, #888) 6%, transparent);
+  font-weight: 600;
+  box-shadow: none;
 }
 .selectionList [role="tab"]:focus-visible {
   outline: 1px solid var(--vscode-focusBorder, var(--color-primary));

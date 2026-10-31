@@ -20,6 +20,8 @@
   gap: 20px;
 }
 .errorImage {
+  width: 48px;
+  height: 48px;
   margin-bottom: 0;
   line-height: 0;
 }
