@@ -1,3 +1,4 @@
+import tabStyles from "@/shared/components/LineTabs/LineTabs.module.css";
 import styles from "../WebSocketDebug.module.css";
 import React, { lazy } from "react";
 import { useTranslation } from "react-i18next";
@@ -32,7 +33,7 @@ const Response: React.FC = (props: any) => {
   const originItems = [
     {
       key: "realtime",
-      label: t("api.run.response_tab"),
+      label: t("ws.layout.messages"),
       children: <Realtime value={value} onChange={onChange} />,
     },
     {
@@ -106,6 +107,7 @@ const Response: React.FC = (props: any) => {
     <div className={styles.lineBar}>
       <LineTabs
         items={tabsItems()}
+        tabListClassName={tabStyles.selectionList}
         tabBarExtraContent={
           <Flex align="center" gap={12} className={styles.flex}>
             <span

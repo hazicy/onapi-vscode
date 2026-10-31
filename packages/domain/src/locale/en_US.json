@@ -444,6 +444,17 @@
     "loop_count": "Iterations"
   },
   "ws": {
+    "layout": {
+      "delete_confirm": "Delete this message template and its contents?",
+      "rename_message": "Rename message",
+      "saved_messages": "Saved messages",
+      "message_name": "Message name",
+      "add_message": "Add message",
+      "delete_message": "Delete message",
+      "message_detail": "Message detail",
+      "back_messages": "Back to messages",
+      "messages": "Messages"
+    },
     "request": {
       "connect_first": "Connect to send a message",
       "enter_message": "Enter a message to send",

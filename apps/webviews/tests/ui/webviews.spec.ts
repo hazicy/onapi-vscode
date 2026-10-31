@@ -502,6 +502,9 @@ test("production WebSocket request finishes loading without render errors", asyn
   });
   await webSocketPage.websocket.getByText("hello", { exact: true }).click();
   await expect(webSocketPage.editors.nth(1)).toContainText("hello");
+  await page
+    .getByRole("button", { name: "Back to messages", exact: true })
+    .click();
   await webSocketPage.searchTextbox.fill("does-not-exist");
   await expect(webSocketPage.filterHint).toBeVisible();
   await webSocketPage.resetFiltersButton.click();
@@ -511,8 +514,8 @@ test("production WebSocket request finishes loading without render errors", asyn
     webSocketPage.connectedSendAMessageOrWaitForTheServerToRespond,
   ).toBeVisible();
   await expect(
-    webSocketPage.selectAMessageOnTheLeftToInspectItsContent,
-  ).toBeVisible();
+    page.getByRole("region", { name: "Message detail", exact: true }),
+  ).toHaveCount(0);
   await webSocketPage.disconnectButton.click();
   await expect(webSocketPage.status).toHaveText("Disconnected");
   expect(
@@ -565,7 +568,7 @@ for (const kind of ["websocket", "socketio"] as const) {
     await page.goto("http://127.0.0.1:4180/socket-preparation.html");
     const connect = page.getByRole("button", { name: "Connect", exact: true });
     const pending = page.getByRole("button", {
-      name: kind === "websocket" ? "Cancel" : "Connecting...",
+      name: "Cancel",
       exact: true,
     });
     const lastRequestId = () =>

@@ -1,9 +1,6 @@
 import styles from "./Request.module.css";
 import clsx from "clsx";
 import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
-
-import { Flex } from "@/shared/ui/base";
 
 import { useMemoizedFn } from "ahooks";
 import { snowflakeId } from "@onapi/domain/utils/data-tools";
@@ -29,14 +26,13 @@ import {
 
 import MessageHeader from "./MessageHeader";
 import { DEFAULT_WEBSOCKET_MESSAGE } from "@onapi/domain/requests/constants/request";
-import ListSideBar from "@/shared/components/ListSideBar/ListSideBar";
+import { MessagePresets } from "../../shared/SocketPanels";
 
 interface Props {
   value: WebSocketDetailsData;
   onChange: (data: WebSocketDetailsData) => void;
 }
 const Message = (props: Props) => {
-  const { t } = useTranslation();
   const { Provider } = context;
   const { value, onChange } = props || {};
 
@@ -52,7 +48,7 @@ const Message = (props: Props) => {
       ...DEFAULT_WEBSOCKET_MESSAGE,
       param_id,
     });
-    handleMessage(newMessage);
+    onChange({ ...value, message: newMessage, active_id: param_id });
   };
   const handleSelect = (param_id: string) => {
     onChange({
@@ -93,7 +89,7 @@ const Message = (props: Props) => {
 
     set(message, index, {
       ...message[index],
-      name: item?.trim() || t("supplement.msg"),
+      name: item,
     });
     handleMessage(message);
   };
@@ -122,42 +118,41 @@ const Message = (props: Props) => {
     );
   }, [value.message, value.active_id]);
 
-  if (!curItem) {
-    return;
-  }
   return (
-    <Flex gap={12} style={{ height: "100%" }}>
-      <ListSideBar
-        handleSelect={handleSelect}
-        value={value.message as any}
-        activeId={value.active_id || head(value.message)?.param_id}
-        handleEdit={onEdit}
-        handleAdd={handleAdd}
-        handleRemove={handleRemove}
-        addText={t("ws.request.message")}
+    <div className={styles.composer}>
+      <MessagePresets
+        key={value.id}
+        items={value.message || []}
+        activeId={curItem?.param_id}
+        onSelect={handleSelect}
+        onRename={onEdit}
+        onAdd={handleAdd}
+        onRemove={handleRemove}
       />
       <Provider
         value={{
           isDebugArea: true,
         }}
       >
-        <Flex vertical gap={8} style={{ height: "100%", flex: 1, width: 0 }}>
-          <div className={clsx(styles.rawEditor, "raw-editor-wrap")}>
-            <RawEditor
-              regularValueHeight={0}
-              mode={curItem.request.mode}
+        {curItem && (
+          <div className={styles.messageBody}>
+            <MessageHeader
               value={curItem.request}
+              apisData={value}
               onChange={onChangeItemRequest}
             />
+            <div className={clsx(styles.rawEditor, "raw-editor-wrap")}>
+              <RawEditor
+                regularValueHeight={0}
+                mode={curItem.request.mode}
+                value={curItem.request}
+                onChange={onChangeItemRequest}
+              />
+            </div>
           </div>
-          <MessageHeader
-            value={curItem.request}
-            apisData={value}
-            onChange={onChangeItemRequest}
-          />
-        </Flex>
+        )}
       </Provider>
-    </Flex>
+    </div>
   );
 };
 

@@ -20,3 +20,32 @@
     background-color: #ffc700;
   }
 }
+
+.container.compact {
+  border: 0;
+  border-radius: 0;
+  font-size: var(--vscode-font-size, 13px);
+}
+.compact ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.compact li {
+  padding: 8px 6px;
+  cursor: pointer;
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+}
+.compact li:hover,
+.compact li[aria-pressed="true"] {
+  color: var(--vscode-foreground, var(--font-content-color));
+  background: var(--vscode-list-hoverBackground, transparent);
+}
+.compact li:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: -1px;
+}
+.container.compact .iconSpan {
+  background: transparent;
+  color: inherit;
+}

@@ -20,10 +20,11 @@ import {
 import Sending from "@/features/requests/editor/Sending";
 
 import FlowResponse from "@/features/requests/response/FlowResponse/FlowResponse";
-import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
+import { SocketTimeline } from "../../../shared/SocketPanels";
 import ResponseResult from "@/features/requests/response/ResponseResult/ResponseResult";
 
-import Empty from "@/shared/ui/Empty";
+import Empty from "../../../websocket/Response/Empty";
+import Button from "@/shared/ui/Button";
 import useApis from "@/features/requests/store/useApis";
 import useWebSocketStore from "@/features/requests/store/useApis/websocket";
 
@@ -37,19 +38,21 @@ import { getSendStr, handleSocketResponse, stringToColor } from "./utils";
 interface Props {
   id: string;
   onChange: (value: any) => void;
-  apiScreenDirection: any;
 }
 
-const Realtime: React.FC<Props> = ({ id, onChange, apiScreenDirection }) => {
+const Realtime: React.FC<Props> = ({ id, onChange }) => {
   const { t } = useTranslation();
   const websocketConnectionPool = useWebSocketStore(
     (state) => state.websocketConnectionPool,
   );
   const { updatePool } = useWebSocket();
-  const apisActiveKey = useApis((state) => state.apisActiveData.id);
+  const apisActiveKey = id;
   const value = useApis((state) => state.apisActiveData) as SocketIoDetailsData;
   const [mode, setMode] = useSafeState<any>("text");
   const [data, setData] = useSafeState<any>({});
+  useEffect(() => {
+    setData({});
+  }, [apisActiveKey, setData]);
   const [filterValue, setFilterValue] = useSafeState<string>("");
   const [filterType, setFilterType] = useSafeState<string>("all");
   const [isScrollAuto, setIsScrollAuto] = useSafeState<boolean>(true);
@@ -57,12 +60,6 @@ const Realtime: React.FC<Props> = ({ id, onChange, apiScreenDirection }) => {
   const resultRef = useRef<any>(null);
   const flowRef = useRef<any>(null);
   const exampleRef = useRef<any>(null);
-  const panelProps = {
-    defaultSize: 50,
-    minSize: 5,
-    collapsible: true,
-    collapsedSize: 5,
-  };
   const mapTips: any = {
     connect: "",
     disconnect: `${t("ws.response.disconnect")}`,
@@ -204,6 +201,15 @@ const Realtime: React.FC<Props> = ({ id, onChange, apiScreenDirection }) => {
     );
   }, [websocketConnectionPool, apisActiveKey, filterValue, filterType]);
 
+  const messages = websocketConnectionPool[apisActiveKey]?.socketRes;
+  const connected =
+    websocketConnectionPool[apisActiveKey]?.status === "connect";
+  const hasFilter = Boolean(filterValue.trim() || filterType !== "all");
+  useEffect(() => {
+    if (!messages?.length) {
+      setData({});
+    }
+  }, [messages, setData]);
   const customTipsContent = (data: any) => {
     if (isString(data?.message)) {
       return {};
@@ -233,25 +239,23 @@ const Realtime: React.FC<Props> = ({ id, onChange, apiScreenDirection }) => {
     }
   }, [apisActiveKey, isScrollAuto, wsTemplateStateList]);
   useEffect(() => {
-    flowRef.current?.addEventListener("scroll", () => {
+    const element = flowRef.current;
+    if (!element) {
+      return;
+    }
+    const handleScroll = () => {
       if (!lastScrollTop.current) {
-        lastScrollTop.current = {
-          [apisActiveKey]: 0,
-        };
+        lastScrollTop.current = {};
       }
-      const currentScrollTop = flowRef.current.scrollTop;
-      if (currentScrollTop < lastScrollTop.current[apisActiveKey]) {
+      const currentScrollTop = element.scrollTop;
+      if (currentScrollTop < (lastScrollTop.current[apisActiveKey] || 0)) {
         setIsScrollAuto(false);
       }
       lastScrollTop.current[apisActiveKey] = currentScrollTop;
-    });
-    const currentFlowRef = flowRef.current;
-
-    return () => {
-      // Use local variable to remove event listener
-      currentFlowRef?.removeEventListener("scroll", () => {});
     };
-  }, [apisActiveKey]);
+    element.addEventListener("scroll", handleScroll);
+    return () => element.removeEventListener("scroll", handleScroll);
+  }, [apisActiveKey, setIsScrollAuto]);
   useEffect(() => {
     if (wsTemplateStateList[size(wsTemplateStateList) - 1]?.action === "send") {
       setIsScrollAuto(true);
@@ -279,21 +283,10 @@ const Realtime: React.FC<Props> = ({ id, onChange, apiScreenDirection }) => {
         }}
       >
         {size(wsTemplateStateList) > -1 ? (
-          <ResizablePanels
-            panelGroupProps={{
-              autoSaveId: "ws_realtime_container_resize_save_id",
-              direction:
-                apiScreenDirection === "horizontal" ? "vertical" : "horizontal",
-            }}
-            leftPanelProps={{
-              ...panelProps,
-              collapseTitle: t("supplement.socket_realtime_msg"),
-            }}
-            rightPanelProps={{
-              ...panelProps,
-              collapseTitle: t("supplement.socket_realtime_content"),
-            }}
-            leftPanel={
+          <SocketTimeline
+            selected={Boolean(data?.action)}
+            onClose={() => setData({})}
+            list={
               <div className={styles.socketIoLeftPanel}>
                 <Header
                   id={apisActiveKey}
@@ -302,28 +295,47 @@ const Realtime: React.FC<Props> = ({ id, onChange, apiScreenDirection }) => {
                   setFilterType={setFilterType}
                   setFilterValue={setFilterValue}
                 />
-                <div
-                  ref={flowRef}
-                  style={{
-                    overflow: "auto",
-                    maxHeight: "calc(100% - 50px)",
-                    border: "1px solid var(--color-border)",
-                    borderRadius: "var(--border-radius)",
-                  }}
-                >
-                  <FlowResponse
-                    renderTitle={renderTitle}
-                    customTipsContent={customTipsContent}
-                    onItemClick={(item: any) => {
-                      setData(item);
-                    }}
-                    data={wsTemplateStateList}
-                  />
+                <div ref={flowRef} className={styles.messageList}>
+                  {!wsTemplateStateList.length ? (
+                    <Empty
+                      description={
+                        hasFilter
+                          ? t("ws.response.filter_hint")
+                          : connected
+                            ? t("ws.response.ready_description")
+                            : t("ws.response.empty_description")
+                      }
+                    >
+                      {hasFilter && (
+                        <Button
+                          type="text"
+                          size="small"
+                          onClick={() => {
+                            setFilterValue("");
+                            setFilterType("all");
+                          }}
+                        >
+                          {t("ws.response.reset_filters")}
+                        </Button>
+                      )}
+                    </Empty>
+                  ) : (
+                    <FlowResponse
+                      autoSelectFirst={false}
+                      compact
+                      renderTitle={renderTitle}
+                      customTipsContent={customTipsContent}
+                      onItemClick={(item: any) => {
+                        setData(item);
+                      }}
+                      data={wsTemplateStateList}
+                    />
+                  )}
                 </div>
               </div>
             }
-            rightPanel={
-              <div style={{ height: "100%", padding: 8 }}>
+            detail={
+              <div style={{ height: "100%", minHeight: 0 }}>
                 {isEqual(data?.action, "message") && (
                   <ResponseResult
                     ref={resultRef}

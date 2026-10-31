@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useDebounceFn, useSafeState } from "ahooks";
 import { concat, forEach, isEqual, keys, reverse } from "lodash-es";
 
+import tabStyles from "@/shared/components/LineTabs/LineTabs.module.css";
 import LineTabs from "@/shared/components/LineTabs/LineTabs";
 import context from "@/shared/components/RawEditor/visualizationContext";
 import RequestTable from "@/shared/components/RequestTable/RequestTable";
@@ -237,7 +238,7 @@ const Request: React.FC<Props> = (props) => {
     },
   ];
 
-  return <LineTabs items={items} />;
+  return <LineTabs items={items} tabListClassName={tabStyles.selectionList} />;
 };
 
 export default Request;

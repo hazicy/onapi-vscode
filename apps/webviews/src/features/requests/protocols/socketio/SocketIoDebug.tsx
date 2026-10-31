@@ -1,32 +1,27 @@
-import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
-import { selectRequestIndex } from "@/features/requests/store/useApis";
 import styles from "./SocketIoDebug.module.css";
 import { FC, lazy, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Dropdown, Flex, Tree } from "@/shared/ui/base";
+import { Flex } from "@/shared/ui/base";
 
-import { useMemoizedFn, useSafeState } from "ahooks";
-import { cloneDeep, find, head, isArray } from "lodash-es";
+import { useMemoizedFn } from "ahooks";
+import { find, isArray } from "lodash-es";
 
 import { SuspenseContent } from "@/shared/components";
 
 import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
 import UrlGroup from "@/features/requests/editor/UrlGroup";
 import Button from "@/shared/ui/Button";
-import AppIcon from "@/shared/ui/AppIcon";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
-import useApis from "@/features/requests/store/useApis";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
-import useUserConfig from "@/features/auth/store/useUserConfig";
 import useApisWebSocket from "@/features/requests/store/useApis/websocket";
 import {
   SocketIoComponentType,
   SocketIoDetailsData,
 } from "@onapi/domain/requests/types/socketio";
-import { AnyObject, DirectionType } from "@onapi/domain/types/common";
+import { AnyObject } from "@onapi/domain/types/common";
 import { genQueryByUrl } from "@/features/requests/utils/apis";
-import { convertToSaveFolderTree, importDelay } from "@/shared/utils/common";
+import { importDelay } from "@/shared/utils/common";
 
 import useWebSocket from "./useWebSocket";
 
@@ -37,10 +32,8 @@ import { produce } from "immer";
 const Request = lazy(() => importDelay(import("./Request/Request")));
 const Response = lazy(() => importDelay(import("./Response/Response")));
 const panelProps = {
-  defaultSize: 50,
-  minSize: 5,
-  collapsible: true,
-  collapsedSize: 5,
+  defaultSize: 44,
+  minSize: 25,
 };
 const SocketIoDebug: FC<SocketIoComponentType> = ({
   apisData,
@@ -52,13 +45,6 @@ const SocketIoDebug: FC<SocketIoComponentType> = ({
     (state) => state.websocketConnectionPool,
   );
   const [curServerId, SetCurServerId] = useState("");
-  const [apiScreenDirection, setApiScreenDirection] =
-    useSafeState<DirectionType>("vertical");
-  const apiDetailsData = useApis(selectRequestIndex);
-  const isReadonly = useUserConfig((state) => state.isReadonly);
-
-  const [saveLoading, setSaveLoading] = useSafeState(false);
-  const [open, setOpen] = useSafeState(false);
 
   const envList = useProjectConfig((state) => state.envList);
   const envDetailKeys = useProjectConfig((state) => state.envDetailKeys);
@@ -72,19 +58,6 @@ const SocketIoDebug: FC<SocketIoComponentType> = ({
       SetCurServerId(defaultServerId);
     }
   }, [envList, envDetailKeys, curServerId]);
-
-  const onSave = async () => {
-    setSaveLoading(true);
-    try {
-      sendRequestPanelMessage({
-        action: "saveApiData",
-        data: apisData,
-      });
-    } catch (err) {
-    } finally {
-      setSaveLoading(false);
-    }
-  };
 
   const handleUrlPanel = useMemoizedFn((key: string, value: string) => {
     onApisDataChange(
@@ -116,57 +89,28 @@ const SocketIoDebug: FC<SocketIoComponentType> = ({
     return websocketConnectionPool[apisData?.id]?.status;
   }, [websocketConnectionPool, apisData]);
 
-  const dropdownRender = () => (
-    <div className={styles.saveDropDown}>
-      <Tree
-        height={250}
-        autoExpandParent
-        defaultExpandAll
-        onSelect={(keys: React.Key[]) => {
-          const parentId = head(keys);
-          const result = cloneDeep(apisData);
-          sendRequestPanelMessage({
-            action: "saveApiData",
-            data: { ...result, parentId: parentId as string },
-          });
-          setOpen(false);
-        }}
-        fieldNames={{ title: "label" }}
-        treeData={convertToSaveFolderTree(apiDetailsData)}
-        titleRender={(nodeData) => {
-          return (
-            <div className={styles.dropdownTreeTitle}>{nodeData.label}</div>
-          );
-        }}
-      />
-    </div>
-  );
-  const handleDirectionChange = (direction: DirectionType) => {
-    setApiScreenDirection(direction);
-  };
   return (
     <>
       <ToolBar
-        showLayoutControl
         apisData={apisData as unknown as ApiDetailsData}
         onApisDataChange={(val) => {
           onApisDataChange(val as unknown as SocketIoDetailsData);
         }}
       />
       <div className={styles.container}>
-        <div className={styles.urlPanel} style={{ padding: "0 16px" }}>
+        <div className={styles.urlPanel}>
           <Flex
             flex={1}
             justify="space-between"
             align="center"
-            className={styles.flex}
+            className={styles.connectionRow}
           >
             <div className={styles.urlGroup}>
               <UrlGroup
                 curServerId={curServerId}
                 SetCurServerId={SetCurServerId}
                 maxLength={10240}
-                readOnly={status === "connect"}
+                readOnly={status === "connect" || status === "connecting"}
                 data={{
                   url: apisData?.url,
                 }}
@@ -176,6 +120,11 @@ const SocketIoDebug: FC<SocketIoComponentType> = ({
                 urlGroupExtraContent={
                   <Button
                     type="primary"
+                    disabled={
+                      !apisData.url?.trim() &&
+                      status !== "connect" &&
+                      status !== "connecting"
+                    }
                     size="large"
                     style={{
                       marginLeft: 4,
@@ -190,42 +139,18 @@ const SocketIoDebug: FC<SocketIoComponentType> = ({
                     {status === "connect"
                       ? t("supplement.disconnect")
                       : status === "connecting"
-                        ? t("supplement.connecting")
+                        ? t("ws.request.cancel")
                         : t("supplement.connect")}
                   </Button>
                 }
               />
             </div>
-            <Flex
-              style={{ marginLeft: "4px" }}
-              gap={12}
-              className={styles.flex}
-            >
-              <Dropdown.Button
-                placement="bottomRight"
-                open={open}
-                onOpenChange={(open) => setOpen(open)}
-                type="default"
-                size="small"
-                trigger={["click"]}
-                icon={<AppIcon icon="chevron-down" />}
-                loading={saveLoading}
-                onClick={onSave}
-                overlayStyle={{ fontSize: 14 }}
-                disabled={isReadonly}
-                destroyPopupOnHide
-                dropdownRender={dropdownRender}
-              >
-                {t("supplement.save")}
-              </Dropdown.Button>
-            </Flex>
           </Flex>
         </div>
         <ResizablePanels
-          showDirectionBtn
           panelGroupProps={{
             autoSaveId: "socketio_debug_container_resize_save_id",
-            direction: apiScreenDirection,
+            direction: "vertical",
           }}
           leftPanelProps={{
             ...panelProps,
@@ -233,13 +158,14 @@ const SocketIoDebug: FC<SocketIoComponentType> = ({
           }}
           rightPanelProps={{
             ...panelProps,
+            defaultSize: 56,
             collapseTitle: t("supplement.response_panel"),
           }}
           leftPanel={
             <SuspenseContent>
-              <div style={{ padding: "0 16px 12px 16px", height: "100%" }}>
+              <div className={styles.requestPanel}>
                 <Request
-                  readOnly={status === "connect"}
+                  readOnly={status === "connect" || status === "connecting"}
                   value={apisData}
                   onChange={handleRequest}
                 />
@@ -248,16 +174,11 @@ const SocketIoDebug: FC<SocketIoComponentType> = ({
           }
           rightPanel={
             <SuspenseContent>
-              <div style={{ padding: "0 16px", height: "100%" }}>
-                <Response
-                  apiScreenDirection={apiScreenDirection}
-                  value={apisData}
-                  onChange={handleRequest}
-                />
+              <div className={styles.responsePanel}>
+                <Response value={apisData} onChange={handleRequest} />
               </div>
             </SuspenseContent>
           }
-          onDirectionChange={handleDirectionChange}
         />
       </div>
     </>

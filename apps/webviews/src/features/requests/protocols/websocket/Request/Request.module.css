@@ -1,40 +1,55 @@
-.inputNumber {
-  width: 100%;
+.composer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  gap: 8px;
 }
-.select {
-  width: 100%;
+.messageBody {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  gap: 6px;
 }
-.settingDesc {
-  color: var(--font-light-color);
+.rawEditor {
+  flex: 1;
+  height: 0;
+  min-height: 0;
+  overflow: hidden;
 }
 .messageHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 7px;
-  & .selectTrigger {
-    font-size: 12px !important;
-  }
-  & .select .selectArrow {
-    font-size: 10px;
-  }
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin: 0;
+  padding: 0;
 }
-.rawEditor {
-  flex: 1;
-  min-height: 0;
-  height: 0;
-}
-.sendActions {
+.messageHeader > * {
+  flex-wrap: wrap;
   min-width: 0;
-  justify-content: flex-end;
 }
+
+.input,
+.inputNumber,
+.select {
+  width: 100%;
+}
+.settingDesc,
 .sendHint {
   color: var(--vscode-descriptionForeground, var(--font-light-color));
   font-size: 12px;
   line-height: 1.5;
 }
-.messageHeader {
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 4px 0;
+.sendActions {
+  min-width: 0;
+  justify-content: flex-end;
+}
+.messageHeader .selectTrigger {
+  font-size: 12px;
 }

@@ -1,4 +1,3 @@
-import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { includes, isPlainObject, isString, toString, trim } from "lodash-es";
 
 // Handle websocket data
@@ -9,7 +8,7 @@ export const handleSocketResponse = (
 ) => {
   const resArr: any[] = [];
 
-  for (const res of response || []) {
+  for (const [index, res] of (response || []).entries()) {
     if (
       isString(filterType) &&
       filterType !== "all" &&
@@ -30,7 +29,7 @@ export const handleSocketResponse = (
           }
           resArr.push({
             ...res,
-            id: res?.id || snowflakeId(),
+            id: res?.id ?? String(index),
           });
         }
         break;
@@ -44,7 +43,7 @@ export const handleSocketResponse = (
         }
         resArr.push({
           ...res,
-          id: res?.id || snowflakeId(),
+          id: res?.id ?? String(index),
         });
         break;
       case "error":
@@ -58,7 +57,7 @@ export const handleSocketResponse = (
 
         resArr.push({
           ...res,
-          id: res?.id || snowflakeId(),
+          id: res?.id ?? String(index),
         });
         break;
       case "message":
@@ -72,7 +71,7 @@ export const handleSocketResponse = (
 
         resArr.push({
           ...res,
-          id: res?.id || snowflakeId(),
+          id: res?.id ?? String(index),
         });
         break;
       case "send":
@@ -86,7 +85,7 @@ export const handleSocketResponse = (
 
         resArr.push({
           ...res,
-          id: res?.id || snowflakeId(),
+          id: res?.id ?? String(index),
         });
         break;
       case "listen":
@@ -99,7 +98,7 @@ export const handleSocketResponse = (
         }
         resArr.push({
           ...res,
-          id: res?.id || snowflakeId(),
+          id: res?.id ?? String(index),
         });
         break;
       case "listen-end":
@@ -112,7 +111,7 @@ export const handleSocketResponse = (
         }
         resArr.push({
           ...res,
-          id: res?.id || snowflakeId(),
+          id: res?.id ?? String(index),
         });
         break;
       case "send_ack":
@@ -125,7 +124,7 @@ export const handleSocketResponse = (
         }
         resArr.push({
           ...res,
-          id: res?.id || snowflakeId(),
+          id: res?.id ?? String(index),
         });
         break;
       default:

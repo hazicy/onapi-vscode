@@ -422,6 +422,17 @@
     }
   },
   "ws": {
+    "layout": {
+      "delete_confirm": "删除此消息模板及其内容？",
+      "rename_message": "重命名消息模板",
+      "saved_messages": "消息模板",
+      "message_name": "模板名称",
+      "add_message": "添加消息模板",
+      "delete_message": "删除消息模板",
+      "message_detail": "消息详情",
+      "back_messages": "返回消息列表",
+      "messages": "消息记录"
+    },
     "request": {
       "connect_first": "连接后即可发送消息",
       "enter_message": "输入消息后即可发送",

@@ -1,5 +1,3 @@
-import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
-import { selectRequestIndex } from "@/features/requests/store/useApis";
 import styles from "./WebSocketDebug.module.css";
 import { Icon } from "@iconify/react";
 import plugZap from "@iconify-icons/lucide/plug-zap";
@@ -7,28 +5,25 @@ import unplug from "@iconify-icons/lucide/unplug";
 import { FC, lazy, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Dropdown, Flex, Tree } from "@/shared/ui/base";
+import { Flex } from "@/shared/ui/base";
 
 import { useMemoizedFn, useSafeState } from "ahooks";
-import { cloneDeep, find, head, isArray } from "lodash-es";
+import { find, isArray } from "lodash-es";
 
 import { SuspenseContent } from "@/shared/components";
 
 import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
 import UrlGroup from "@/features/requests/editor/UrlGroup";
 import Button from "@/shared/ui/Button";
-import AppIcon from "@/shared/ui/AppIcon";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 import ToolBar from "../http/ToolBar";
-import useApis from "@/features/requests/store/useApis";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
-import useUserConfig from "@/features/auth/store/useUserConfig";
 import useApisWebSocket from "@/features/requests/store/useApis/websocket";
 import {
   WebSocketComponentType,
   WebSocketDetailsData,
 } from "@onapi/domain/requests/types/websocket";
-import { convertToSaveFolderTree, importDelay } from "@/shared/utils/common";
+import { importDelay } from "@/shared/utils/common";
 
 import useWebSocket from "./useWebSocket";
 
@@ -40,10 +35,8 @@ import { genQueryByUrl } from "@/features/requests/utils/apis";
 const Request = lazy(() => importDelay(import("./Request/Request")));
 const Response = lazy(() => importDelay(import("./Response/Response")));
 const panelProps = {
-  defaultSize: 50,
-  minSize: 5,
-  collapsible: true,
-  collapsedSize: 5,
+  defaultSize: 44,
+  minSize: 25,
 };
 const WsDebug: FC<WebSocketComponentType> = ({
   apisData,
@@ -55,11 +48,6 @@ const WsDebug: FC<WebSocketComponentType> = ({
     (state) => state.websocketConnectionPool,
   );
 
-  const apiDetailsData = useApis(selectRequestIndex);
-  const isReadonly = useUserConfig((state) => state.isReadonly);
-
-  const [saveLoading, setSaveLoading] = useSafeState(false);
-  const [open, setOpen] = useSafeState(false);
   const [curServerId, SetCurServerId] = useSafeState("");
   const envList = useProjectConfig((state) => state.envList);
   const envDetailKeys = useProjectConfig((state) => state.envDetailKeys);
@@ -73,19 +61,6 @@ const WsDebug: FC<WebSocketComponentType> = ({
       SetCurServerId(defaultServerId);
     }
   }, [envList, envDetailKeys, curServerId]);
-
-  const onSave = async () => {
-    setSaveLoading(true);
-    try {
-      sendRequestPanelMessage({
-        action: "saveApiData",
-        data: apisData,
-      });
-    } catch (err) {
-    } finally {
-      setSaveLoading(false);
-    }
-  };
 
   const handleUrlPanel = useMemoizedFn((key: string, value: string) => {
     onApisDataChange(
@@ -117,33 +92,6 @@ const WsDebug: FC<WebSocketComponentType> = ({
     return websocketConnectionPool?.[apisData?.id]?.status;
   }, [websocketConnectionPool, apisData]);
 
-  const dropdownRender = () => (
-    <div className={styles.saveDropDown}>
-      <Tree
-        height={250}
-        autoExpandParent
-        defaultExpandAll
-        onSelect={(keys: React.Key[]) => {
-          const parentId = head(keys);
-          const result = cloneDeep(apisData);
-
-          sendRequestPanelMessage({
-            action: "saveApiData",
-            data: { ...result, parentId: parentId as string },
-          });
-          setOpen(false);
-        }}
-        fieldNames={{ title: "label" }}
-        treeData={convertToSaveFolderTree(apiDetailsData)}
-        titleRender={(nodeData: any) => {
-          return (
-            <div className={styles.dropdownTreeTitle}>{nodeData.label}</div>
-          );
-        }}
-      />
-    </div>
-  );
-
   return (
     <>
       <ToolBar
@@ -153,12 +101,12 @@ const WsDebug: FC<WebSocketComponentType> = ({
         }}
       />
       <div className={styles.container}>
-        <div className={styles.urlPanel} style={{ padding: "0 16px" }}>
+        <div className={styles.urlPanel}>
           <Flex
             flex={1}
             justify="space-between"
             align="center"
-            className={styles.flex}
+            className={styles.connectionRow}
           >
             <div className={styles.urlGroup}>
               <UrlGroup
@@ -212,29 +160,6 @@ const WsDebug: FC<WebSocketComponentType> = ({
                 }
               />
             </div>
-            <Flex
-              style={{ marginLeft: "4px" }}
-              gap={12}
-              className={styles.flex}
-            >
-              <Dropdown.Button
-                placement="bottomRight"
-                open={open}
-                onOpenChange={(open) => setOpen(open)}
-                type="default"
-                size="small"
-                trigger={["click"]}
-                icon={<AppIcon icon="chevron-down" />}
-                loading={saveLoading}
-                onClick={onSave}
-                overlayStyle={{ fontSize: 14 }}
-                disabled={isReadonly}
-                destroyPopupOnHide
-                dropdownRender={dropdownRender}
-              >
-                {t("supplement.save")}
-              </Dropdown.Button>
-            </Flex>
           </Flex>
         </div>
         <ResizablePanels
@@ -247,11 +172,12 @@ const WsDebug: FC<WebSocketComponentType> = ({
           }}
           rightPanelProps={{
             ...panelProps,
+            defaultSize: 56,
             collapseTitle: t("supplement.response_panel"),
           }}
           leftPanel={
             <SuspenseContent>
-              <div style={{ padding: "0 16px 12px 16px", height: "100%" }}>
+              <div className={styles.requestPanel}>
                 <Request
                   readOnly={status === "connect" || status === "connecting"}
                   value={apisData}
@@ -262,7 +188,7 @@ const WsDebug: FC<WebSocketComponentType> = ({
           }
           rightPanel={
             <SuspenseContent>
-              <div style={{ padding: "0 16px", height: "100%" }}>
+              <div className={styles.responsePanel}>
                 <Response value={apisData} onChange={handleRequest} />
               </div>
             </SuspenseContent>

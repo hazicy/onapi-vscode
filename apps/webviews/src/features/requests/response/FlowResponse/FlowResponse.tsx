@@ -11,18 +11,29 @@ import { RowItemTipsConfig } from "./types";
 
 interface Props {
   data: any;
+  autoSelectFirst?: boolean;
+  compact?: boolean;
   onItemClick?: (item: any) => void;
   renderTitle?: (data: any) => React.ReactNode;
   customTipsContent?: (data: any) => RowItemTipsConfig;
 }
 const FlowResponse = (props: Props) => {
-  const { data, renderTitle, onItemClick, customTipsContent } = props || {};
+  const {
+    data,
+    renderTitle,
+    onItemClick,
+    customTipsContent,
+    autoSelectFirst = true,
+    compact = false,
+  } = props || {};
   const [active, setActive] = useSafeState<string>();
   useMount(() => {
-    onItemClick?.(data?.[0]);
+    if (autoSelectFirst) {
+      onItemClick?.(data?.[0]);
+    }
   });
   return (
-    <div className={styles.container}>
+    <div className={clsx(styles.container, compact && styles.compact)}>
       <List
         dataSource={data}
         renderItem={(item: any) => (
@@ -31,6 +42,16 @@ const FlowResponse = (props: Props) => {
             className={clsx({
               [styles.active]: active === item.id,
             })}
+            role={onItemClick ? "button" : undefined}
+            tabIndex={onItemClick ? 0 : undefined}
+            aria-pressed={onItemClick ? active === item.id : undefined}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                setActive(item.id);
+                onItemClick?.(item);
+              }
+            }}
             onClick={() => {
               setActive(item.id);
               onItemClick?.(item);

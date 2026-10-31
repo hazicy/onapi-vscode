@@ -9,7 +9,6 @@ import { useSafeState } from "ahooks";
 import { includes, size, trim } from "lodash-es";
 
 import Button from "@/shared/ui/Button";
-import useApis from "@/features/requests/store/useApis";
 import useApisWebSocket from "@/features/requests/store/useApis/websocket";
 import { WebSocketDetailsData } from "@onapi/domain/requests/types/websocket";
 
@@ -23,8 +22,8 @@ const MessageHeader = (props: Props) => {
   const websocketConnectionPool = useApisWebSocket(
     (state) => state.websocketConnectionPool,
   );
-  const apisActiveKey = useApis((state) => state.apisActiveData.id);
-  const { value, onChange } = props || {};
+  const { value, onChange, apisData } = props || {};
+  const apisActiveKey = apisData.id;
   const [binaryType, setBinaryType] = useSafeState("");
 
   useEffect(() => {

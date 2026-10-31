@@ -10,7 +10,6 @@ import { produce } from "immer";
 import { filter, includes, isEqual, map, size, trim } from "lodash-es";
 
 import Button from "@/shared/ui/Button";
-import useApis from "@/features/requests/store/useApis";
 import useApisWebSocket from "@/features/requests/store/useApis/websocket";
 import { SocketIoDetailsData } from "@onapi/domain/requests/types/socketio";
 
@@ -25,8 +24,8 @@ const MessageHeader = (props: Props) => {
   const websocketConnectionPool = useApisWebSocket(
     (state) => state.websocketConnectionPool,
   );
-  const apisActiveKey = useApis((state) => state.apisActiveData.id);
   const { value, onChange, apisData, onChangeApisData } = props || {};
+  const apisActiveKey = apisData.id;
   const [binaryType, setBinaryType] = useSafeState("");
 
   useEffect(() => {
@@ -107,7 +106,8 @@ const MessageHeader = (props: Props) => {
           Ack
         </Checkbox>
         <AutoComplete
-          style={{ width: 180, fontSize: 12, height: 26 }}
+          aria-label={t("ws.request.event_name")}
+          style={{ width: 160, minWidth: 0, fontSize: 12, height: 28 }}
           value={apisData?.msg_data || ""}
           placeholder={t("ws.request.event_name")}
           onSelect={setEventName}

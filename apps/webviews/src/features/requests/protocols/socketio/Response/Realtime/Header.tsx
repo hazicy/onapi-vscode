@@ -36,10 +36,12 @@ const Header = (props: Props) => {
           align="center"
           gap={8}
           style={{ wordBreak: "keep-all" }}
-          className={styles.flex}
+          className={styles.messageFilters}
         >
           <Input
             prefix={<AppIcon icon="search" className={styles.iconColor} />}
+            aria-label={t("ws.response.search_tip")}
+            className={styles.messageSearch}
             placeholder={t("ws.response.search_tip")}
             value={filterValue}
             onChange={(e) => setFilterValue(e?.target?.value || "")}
@@ -47,6 +49,7 @@ const Header = (props: Props) => {
             outlinedClassName={styles.inputOutlined}
           />
           <Select
+            aria-label={t("ws.response.message_type")}
             value={filterType}
             onChange={setFilterType}
             size="small"
@@ -69,6 +72,7 @@ const Header = (props: Props) => {
             style={{ height: 32, borderColor: "var(--color-table-border)" }}
             size="small"
             icon={<AppIcon icon="trash-2" />}
+            disabled={!websocketConnectionPool[id]?.socketRes?.length}
             onClick={() =>
               updateWebSocketConnectionPool({
                 ...websocketConnectionPool,

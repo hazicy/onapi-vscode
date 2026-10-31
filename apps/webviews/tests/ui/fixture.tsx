@@ -1,3 +1,4 @@
+import SocketWorkspaceFixture from "./SocketWorkspaceFixture";
 import EnvironmentFixture from "./EnvironmentFixture";
 import VariableInputFixture from "./VariableInputFixture";
 import RequestPanelFixture from "./RequestPanelFixture";
@@ -19,7 +20,9 @@ import ThemeFixture from "./ThemeFixture";
 
 createRoot(document.getElementById("root")!).render(
   <SharedComponentsProvider>
-    {new URLSearchParams(location.search).has("environment") ? (
+    {new URLSearchParams(location.search).has("socketWorkspace") ? (
+      <SocketWorkspaceFixture />
+    ) : new URLSearchParams(location.search).has("environment") ? (
       <EnvironmentFixture />
     ) : new URLSearchParams(location.search).has("variableInput") ? (
       <VariableInputFixture />

@@ -10,12 +10,11 @@ import { isEqual, isFunction, isString, size } from "lodash-es";
 import Sending from "@/features/requests/editor/Sending";
 
 import FlowResponse from "@/features/requests/response/FlowResponse/FlowResponse";
-import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
+import { SocketTimeline } from "../../../shared/SocketPanels";
 import ResponseResult from "@/features/requests/response/ResponseResult/ResponseResult";
 
 import Empty from "../Empty";
 import Button from "@/shared/ui/Button";
-import useApis from "@/features/requests/store/useApis";
 import useWebSocketStore from "@/features/requests/store/useApis/websocket";
 
 import useWebSocket from "../../useWebSocket";
@@ -33,23 +32,19 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
     (state) => state.websocketConnectionPool,
   );
   const { updatePool } = useWebSocket();
-  const apisActiveData = useApis((state) => state.apisActiveData);
-  const apisActiveKey = apisActiveData.id;
+  const apisActiveKey = value.id;
 
   const [, setMode] = useSafeState<any>("text");
   const [data, setData] = useSafeState<any>({});
+  useEffect(() => {
+    setData({});
+  }, [apisActiveKey, setData]);
   const [filterValue, setFilterValue] = useSafeState<string>("");
   const [filterType, setFilterType] = useSafeState<string>("all");
   const [isScrollAuto, setIsScrollAuto] = useSafeState<boolean>(true);
   const lastScrollTop = useRef(0);
   const flowRef = useRef<HTMLDivElement>(null);
   const resultRef = useRef<any>(null);
-  const panelProps = {
-    defaultSize: 50,
-    minSize: 5,
-    collapsible: true,
-    collapsedSize: 5,
-  };
   const mapTips: any = {
     connect: "",
     disconnect: `${t("ws.response.disconnect")}`,
@@ -168,20 +163,10 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
         }}
       >
         {size(wsTemplateStateList) > -1 ? (
-          <ResizablePanels
-            panelGroupProps={{
-              autoSaveId: "ws_realtime_container_resize_save_id",
-              direction: "horizontal",
-            }}
-            leftPanelProps={{
-              ...panelProps,
-              collapseTitle: t("supplement.socket_realtime_msg"),
-            }}
-            rightPanelProps={{
-              ...panelProps,
-              collapseTitle: t("supplement.socket_realtime_content"),
-            }}
-            leftPanel={
+          <SocketTimeline
+            selected={Boolean(data?.action)}
+            onClose={() => setData({})}
+            list={
               <div className={styles.websocketLeftPanel}>
                 <Header
                   id={apisActiveKey}
@@ -224,6 +209,8 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
                     </Empty>
                   ) : (
                     <FlowResponse
+                      autoSelectFirst={false}
+                      compact
                       renderTitle={renderTitle}
                       customTipsContent={customTipsContent}
                       onItemClick={(item: any) => {
@@ -235,8 +222,8 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
                 </div>
               </div>
             }
-            rightPanel={
-              <div style={{ height: "100%", padding: 8 }}>
+            detail={
+              <div style={{ height: "100%", minHeight: 0 }}>
                 {!data?.action && (
                   <Empty
                     title={t("ws.response.select_title")}

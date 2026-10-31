@@ -1,0 +1,92 @@
+.presets {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+  flex-shrink: 0;
+}
+.presetSelect {
+  flex: 1 1 140px;
+  min-width: 0;
+  max-width: 220px;
+}
+.messageName {
+  flex: 1 1 100px;
+  min-width: 0;
+  max-width: 220px;
+}
+.presets button,
+.detail header button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 4px 6px;
+  border: 0;
+  background: transparent;
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+  font: inherit;
+  cursor: pointer;
+}
+.presets button:hover,
+.detail header button:hover {
+  color: var(--vscode-foreground, var(--font-content-color));
+}
+.presets button:focus-visible,
+.detail header button:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder);
+}
+.timelineShell {
+  container-type: inline-size;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+.timeline {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  height: 100%;
+  min-height: 0;
+}
+.timeline[data-selected="true"] {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+.list,
+.detail {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+.detail {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--vscode-widget-border, var(--color-border));
+  padding-left: 12px;
+}
+.detail header {
+  flex-shrink: 0;
+}
+.detailContent {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+@container (max-width: 759px) {
+  .timeline[data-selected="true"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .timeline[data-selected="true"] > .list {
+    display: none;
+  }
+  .detail {
+    border: 0;
+    padding: 0;
+  }
+}
+
+.presets button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
