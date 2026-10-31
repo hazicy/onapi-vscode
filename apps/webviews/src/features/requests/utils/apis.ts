@@ -178,7 +178,7 @@ export const createBatchApi = (
     for (let index = 0; index < data.length; index++) {
       const item = cloneDeep(data[index]);
       if (
-        !["api", "folder", "websocket", "sse", "socketio", "graphql"].includes(
+        !["api", "folder", "websocket", "socketio", "graphql"].includes(
           item.kind,
         )
       ) {

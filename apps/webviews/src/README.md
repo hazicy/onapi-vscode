@@ -16,7 +16,7 @@ src/
       assertions/             # Assertion configuration and results
       scripts/                # Request scripts
       graphql/                # GraphQL query editing and contexts
-      protocols/              # HTTP, GraphQL, SSE, WebSocket and Socket.IO views
+      protocols/              # HTTP (including SSE responses), GraphQL, WebSocket and Socket.IO views
       code-generation/        # Code generation drawer
       variables/              # Request variable extraction
       execution/              # Execution events and state transitions

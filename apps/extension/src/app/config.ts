@@ -53,7 +53,6 @@ export const globalConfig: GlobalConfigType = {
 
 export const DEFAULT_TARGET_NAME: any = {
   api: "HTTP Request",
-  sse: "SSE Request",
   folder: "Folder",
   websocket: "WebSocket Client",
   socketio: "Socket.IO Client",
@@ -96,7 +95,6 @@ export const PANEL_OPTIONS: PanelOptionsType = {
     title: "New Request",
     iconName: "",
     iconObj: {
-      sse: "sse.png",
       api: "http.svg",
       websocket: "websocket.png",
       socketio: "socketio.png",

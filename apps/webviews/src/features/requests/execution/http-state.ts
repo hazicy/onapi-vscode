@@ -79,6 +79,7 @@ export function reduceHttpExecutionEvent(
     events: [...(current.events || []), event],
   };
   switch (event.type) {
+    case "responseStart":
     case "request":
       return {
         ...next,

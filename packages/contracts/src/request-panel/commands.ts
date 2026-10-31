@@ -43,11 +43,6 @@ export const requestPanelCommandSchema = z.discriminatedUnion("action", [
     ...sendFields,
     data: httpPanelDefinitionSchema,
   }),
-  z.strictObject({
-    action: z.literal("sendSse"),
-    ...sendFields,
-    data: httpPanelDefinitionSchema,
-  }),
   command("saveApiData", panelDefinitionSchema),
   command("updateApiActiveData", panelDefinitionSchema),
   command("openNewWindow", id),

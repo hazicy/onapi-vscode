@@ -58,7 +58,6 @@ function configureRequestItem(
       ? "onapiRequestHttp"
       : "onapiRequest";
   const protocolLabels: Record<string, string> = {
-    sse: "SSE",
     graphql: "GraphQL",
     websocket: "WebSocket",
     socketio: "Socket.IO",

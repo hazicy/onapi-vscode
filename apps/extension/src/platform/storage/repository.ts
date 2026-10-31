@@ -77,7 +77,6 @@ export class JsonRepository {
             "folder",
             "api",
             "graphql",
-            "sse",
             "websocket",
             "socketio",
             "socket",
@@ -90,10 +89,7 @@ export class JsonRepository {
         ) {
           throw new Error("Missing or duplicate request ID, parentId or kind");
         }
-        if (
-          ["api", "graphql", "sse"].includes(row.kind) &&
-          !object(row.request)
-        ) {
+        if (["api", "graphql"].includes(row.kind) && !object(row.request)) {
           throw new Error("Invalid request definition");
         }
         if (

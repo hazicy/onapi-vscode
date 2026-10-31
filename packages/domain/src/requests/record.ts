@@ -146,7 +146,7 @@ const metadata = {
 export const httpEditorRecordSchema = extensibleObject({
   ...recordIdentityFields,
   ...metadata,
-  kind: z.enum(["api", "graphql", "sse"]),
+  kind: z.enum(["api", "graphql"]),
   request: httpRequestSchema,
   event: z.array(httpEventSchema).optional(),
   variable: z.array(variableSchema).optional(),
@@ -184,7 +184,6 @@ export const editorRecordSchema = extensibleObject({
   kind: z.enum([
     "api",
     "graphql",
-    "sse",
     "folder",
     "websocket",
     "socketio",

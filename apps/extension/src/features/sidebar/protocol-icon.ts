@@ -2,7 +2,6 @@ import * as vscode from "vscode";
 
 const protocolIcons = new Set([
   "api",
-  "sse",
   "graphql",
   "websocket",
   "socketio",

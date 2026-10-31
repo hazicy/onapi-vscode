@@ -76,7 +76,6 @@
     "kind": {
       "project": "Project",
       "http": "HTTP",
-      "sse": "SSE",
       "websocket": "WS",
       "grpc": "gRPC",
       "tcp_client": "TCP Client",
@@ -857,5 +856,14 @@
     "failed": "Request failed",
     "error_details": "Error details",
     "more_tabs": "More tabs"
+  },
+  "event_stream": {
+    "title": "Event stream",
+    "search": "Search events",
+    "events": "Events",
+    "raw": "Raw",
+    "clear": "Clear",
+    "no_matches": "No matching events",
+    "waiting": "No events received"
   }
 }

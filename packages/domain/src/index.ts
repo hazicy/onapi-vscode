@@ -41,7 +41,7 @@ export type HttpCollectionItem = Omit<ItemDefinition, "request" | "response"> &
     variable?: VariableDefinition[];
     id: string;
     parentId: string;
-    kind: "api" | "sse" | "graphql" | "folder";
+    kind: "api" | "graphql" | "folder";
     name: string;
     sort?: number;
     project_id?: string;
@@ -82,7 +82,7 @@ export type HttpProjectConfig = {
     requester?: Record<string, unknown> & { cookieJar?: SerializedCookieJar };
   };
 };
-export const HTTP_TYPES = new Set(["api", "sse", "graphql", "folder"]);
+export const HTTP_TYPES = new Set(["api", "graphql", "folder"]);
 export const isHttpCollectionItem = (item: { kind?: string }) =>
   HTTP_TYPES.has(item.kind || "");
 export function requestUrl(item: any): string {

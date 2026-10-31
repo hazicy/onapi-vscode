@@ -4,7 +4,6 @@ import type { FunctionComponent } from "react";
 
 export enum APIS_TARGET_TYPE_ENUM {
   API = "api",
-  SSE = "sse",
   FOLDER = "folder",
   DOC = "doc",
   GRPC = "grpc",

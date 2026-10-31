@@ -33,10 +33,6 @@ export interface ApiSendingData {
 }
 
 /**
- * SSE API sending data
- */
-
-/**
  * Stream response data item
  */
 

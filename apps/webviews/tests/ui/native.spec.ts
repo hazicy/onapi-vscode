@@ -72,11 +72,11 @@ test("GraphQL edits and sends the native request body", async ({
   expect(errors).toEqual([]);
 });
 
-test("SSE displays native responseData while the request is running", async ({
+test("HTTP detects and displays SSE events while the request is running", async ({
   page,
   requestPage,
 }) => {
-  const errors = await requestPage.open("sse", {
+  const errors = await requestPage.open("api", {
     method: "GET",
     url: "https://example.com/events",
     header: [],
@@ -84,11 +84,28 @@ test("SSE displays native responseData while the request is running", async ({
   await expect(requestPage.input.first()).toBeVisible();
   await emitHttpEvents(page, "native", [
     { type: "start" },
+    {
+      type: "responseStart",
+      response: {
+        code: 200,
+        header: [{ key: "Content-Type", value: "text/event-stream" }],
+      },
+    },
     { type: "responseData", data: "data: hello\n\n" },
     { type: "responseData", data: "data: world\n\n" },
   ]);
-  await expect(requestPage.codeEditorTextbox).toContainText("data: hello");
-  await expect(requestPage.codeEditorTextbox).toContainText("data: world");
+  const stream = page.getByRole("region", { name: "Event stream" });
+  await expect(stream).toContainText("hello");
+  await expect(stream).toContainText("world");
+  await stream.getByRole("textbox", { name: "Search events" }).fill("world");
+  await expect(stream).not.toContainText("hello");
+  await expect(stream).toContainText("world");
+  await stream.getByRole("button", { name: "Clear", exact: true }).click();
+  await expect(stream).not.toContainText("world");
+  await page
+    .getByRole("button", { name: "Cancel sending", exact: true })
+    .click();
+  await expect(requestPage.sendButton).toBeVisible();
   expect(errors).toEqual([]);
 });
 

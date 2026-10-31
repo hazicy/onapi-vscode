@@ -57,8 +57,7 @@ export const handleRequestPanelCommand = async (
     case "updateApiActiveData":
       document.edit(data);
       break;
-    case "sendApi":
-    case "sendSse": {
+    case "sendApi": {
       const executionId = message.executionId;
       reserveHttpExecution(panel, executionId, context);
       let sequence = 0;

@@ -15,7 +15,7 @@ export class ThemePage {
   }
 
   get sseDirection() {
-    return this.page.getByText("SSE direction", { exact: true });
+    return this.page.getByText("Request direction", { exact: true });
   }
 
   get themeButton() {

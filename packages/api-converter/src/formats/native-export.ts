@@ -896,10 +896,7 @@ export const completionApis = (
             is_socket,
           });
         }
-        if (
-          kind === APIS_TARGET_TYPE_ENUM.API ||
-          kind === APIS_TARGET_TYPE_ENUM.SSE
-        ) {
+        if (kind === APIS_TARGET_TYPE_ENUM.API) {
           pre.push({
             ...baseApiInfo,
             method,

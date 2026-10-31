@@ -236,11 +236,6 @@
           "group": "0_new@0"
         },
         {
-          "command": "onapi.tree.new.sse",
-          "when": "view == onapiRequests && viewItem == onapiFolder",
-          "group": "0_new@1"
-        },
-        {
           "command": "onapi.tree.new.graphql",
           "when": "view == onapiRequests && viewItem == onapiFolder",
           "group": "0_new@2"
@@ -369,11 +364,6 @@
         "icon": "$(add)"
       },
       {
-        "command": "onapi.tree.new.sse",
-        "title": "%command.tree.new.sse%",
-        "icon": "$(add)"
-      },
-      {
         "command": "onapi.tree.new.graphql",
         "title": "%command.tree.new.graphql%",
         "icon": "$(add)"
@@ -446,13 +436,6 @@
         "default": {
           "fontPath": "./dist/images/onapi-icons.woff",
           "fontCharacter": "\\E001"
-        }
-      },
-      "onapi-sse": {
-        "description": "OnAPI sse icon",
-        "default": {
-          "fontPath": "./dist/images/onapi-icons.woff",
-          "fontCharacter": "\\E002"
         }
       },
       "onapi-graphql": {

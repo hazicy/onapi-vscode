@@ -35,6 +35,7 @@ const nativeEvent = extensibleObject({
     "start",
     "beforeItem",
     "request",
+    "responseStart",
     "responseData",
     "console",
     "assertion",

@@ -29,6 +29,7 @@ export type ExecutionEvent = {
     | "start"
     | "beforeItem"
     | "request"
+    | "responseStart"
     | "responseData"
     | "console"
     | "assertion"

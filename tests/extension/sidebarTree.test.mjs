@@ -134,7 +134,6 @@ test("native sidebar panels, test commands and workspace request history", async
       APIS_TARGET_TYPE_ENUM: {
         API: "api",
         FOLDER: "folder",
-        SSE: "sse",
         GRAPHQL: "graphql",
         WEBSOCKET: "websocket",
         SOCKETIO: "socketio",
@@ -343,7 +342,6 @@ test("native sidebar panels, test commands and workspace request history", async
       }).iconPath.id === "onapi-http",
     );
     for (const [protocol, icon] of Object.entries({
-      sse: "broadcast",
       graphql: "type-hierarchy",
       websocket: "debug-disconnect",
       socketio: "plug",

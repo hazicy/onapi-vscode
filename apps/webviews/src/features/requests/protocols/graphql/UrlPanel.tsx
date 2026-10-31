@@ -67,9 +67,7 @@ const Index = memo((props: HttpEditorProps) => {
   const currentData = (): GraphQLDetailsData => {
     const latest = useApis.getState().apisActiveData;
     return latest?.id === apisData.id &&
-      (latest.kind === "api" ||
-        latest.kind === "graphql" ||
-        latest.kind === "sse")
+      (latest.kind === "api" || latest.kind === "graphql")
       ? latest
       : apisData;
   };

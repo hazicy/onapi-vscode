@@ -2,6 +2,7 @@ import runtime from "postman-runtime";
 import sdk from "postman-collection";
 import { CookieJar } from "@postman/tough-cookie";
 import fs from "node:fs";
+import { StringDecoder } from "node:string_decoder";
 
 // Worker transport for the official API. No request/task/result format conversion.
 export async function run(collection, options = {}, emit = () => {}) {
@@ -45,6 +46,7 @@ export async function run(collection, options = {}, emit = () => {}) {
             }
           }
         }
+        let decoder = new StringDecoder("utf8");
         execution.start({
           start(error, cursor) {
             emit({ type: "start", error, cursor });
@@ -53,6 +55,10 @@ export async function run(collection, options = {}, emit = () => {}) {
             emit({ type: "beforeItem", error, cursor, item });
           },
           request(error, cursor, response, request, item, cookies, history) {
+            const tail = decoder.end();
+            if (tail) {
+              emit({ type: "responseData", cursor, data: tail });
+            }
             emit({
               type: "request",
               error,
@@ -64,11 +70,15 @@ export async function run(collection, options = {}, emit = () => {}) {
               history,
             });
           },
+          responseStart(error, cursor, response, request) {
+            decoder = new StringDecoder("utf8");
+            emit({ type: "responseStart", error, cursor, response, request });
+          },
           responseData(cursor, data) {
             emit({
               type: "responseData",
               cursor,
-              data: Buffer.from(data).toString("utf8"),
+              data: decoder.write(Buffer.from(data)),
             });
           },
           console(cursor, level, ...messages) {

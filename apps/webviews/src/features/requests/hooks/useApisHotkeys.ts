@@ -29,7 +29,7 @@ export default function useApisHotkeys() {
       const { apisActiveData } = useApis.getState();
       if (action === APIS_HOT_KEYS_ENUM.SEND) {
         const kind = apisActiveData.kind;
-        if (kind !== "api" && kind !== "graphql" && kind !== "sse") {
+        if (kind !== "api" && kind !== "graphql") {
           return;
         }
         const executionId = beginRequest();

@@ -7,6 +7,11 @@ import { isEqual } from "lodash-es";
 import ResponseResult from "@/features/requests/response/ResponseResult/ResponseResult";
 import { STATUS_CODE } from "@onapi/domain/constants/common";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
+import {
+  isEventStream,
+  eventStreamText,
+} from "@/features/requests/execution/event-stream";
+import EventStream from "./EventStream";
 
 interface Props {
   resultIncludesTabs?: string[];
@@ -25,6 +30,19 @@ const Realtime = memo(({ resultIncludesTabs, sendingData }: Props) => {
       responseResultRef.current?.setTabsValue("beautify");
     }
   }, [sendingData?.status, sendingData?.result]);
+
+  if (isEventStream(sendingData)) {
+    return (
+      <EventStream
+        key={sendingData?.executionId}
+        body={
+          eventStreamText(sendingData) ||
+          responseText(sendingData?.result?.response)
+        }
+        error={sendingData?.error?.message}
+      />
+    );
+  }
 
   if (sendingData?.status === "failed") {
     return null;

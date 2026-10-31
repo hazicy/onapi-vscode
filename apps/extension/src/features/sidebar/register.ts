@@ -337,14 +337,7 @@ export function registerSidebarTree(context: vscode.ExtensionContext) {
       : undefined;
     historyView.message = view.message;
   });
-  for (const type of [
-    "api",
-    "sse",
-    "graphql",
-    "websocket",
-    "socketio",
-    "folder",
-  ]) {
+  for (const type of ["api", "graphql", "websocket", "socketio", "folder"]) {
     command(`onapi.tree.new.${type}`, (node?: SidebarTreeNode) =>
       vscode.commands.executeCommand("onapi.tree.new", node, type),
     );
@@ -358,7 +351,6 @@ export function registerSidebarTree(context: vscode.ExtensionContext) {
           : undefined;
       const types = [
         APIS_TARGET_TYPE_ENUM.API,
-        APIS_TARGET_TYPE_ENUM.SSE,
         APIS_TARGET_TYPE_ENUM.GRAPHQL,
         APIS_TARGET_TYPE_ENUM.WEBSOCKET,
         APIS_TARGET_TYPE_ENUM.SOCKETIO,

@@ -47,7 +47,7 @@ test("schema traversal deep-copies its input once rather than copying each subtr
   assert.notEqual(result, input);
   assert.equal(api.cloneCount(), 1);
 });
-test("HTTP and SSE share conversion behavior while retaining their target type", async () => {
+test("HTTP conversion preserves the request target type", async () => {
   const convert = async (kind) =>
     plain(
       (await loadConverter()).completionApis(
@@ -68,10 +68,7 @@ test("HTTP and SSE share conversion behavior while retaining their target type",
       ),
     )[0];
   const http = await convert("api");
-  const sse = await convert("sse");
   assert.equal(http.kind, "api");
-  assert.equal(sse.kind, "sse");
-  assert.deepEqual({ ...http, kind: "same" }, { ...sse, kind: "same" });
   assert.equal(http.id, "new");
   assert.equal(http.parentId, "new-folder");
   assert.equal(http.request.body.raw_schema.properties.child.$ref, "new-model");

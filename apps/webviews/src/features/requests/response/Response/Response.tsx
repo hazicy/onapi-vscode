@@ -8,6 +8,7 @@ import type { HttpExecutionState } from "@/features/requests/execution/http-stat
 import { sdkResponseView } from "@/features/requests/utils/executionView";
 import clsx from "clsx";
 import { responseText } from "@onapi/domain";
+import { isEventStream } from "@/features/requests/execution/event-stream";
 import styles from "./Response.module.css";
 import { FC, lazy, memo, Suspense, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -92,6 +93,7 @@ const Response: FC<Props> = memo((props) => {
 
   const isSendDone = hasCompletedResponse(sendingData);
   const isNotEmpty =
+    isEventStream(sendingData) ||
     (sendingData?.status !== "failed" && !!sendingData?.result?.response) ||
     sendingData?.status === "sending" ||
     activeKey !== "realtime";
@@ -241,7 +243,9 @@ const Response: FC<Props> = memo((props) => {
       {sendingData?.status === "sending" && showSending && (
         <Sending
           hasCancel={false}
-          onlySendingLoadingBar={onlySendingLoadingBar}
+          onlySendingLoadingBar={
+            onlySendingLoadingBar || isEventStream(sendingData)
+          }
         />
       )}
 

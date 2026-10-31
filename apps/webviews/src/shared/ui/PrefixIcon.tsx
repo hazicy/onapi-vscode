@@ -21,7 +21,6 @@ const PrefixIcon: FC<Props> = memo(
       const typeMap: {
         [key: string]: { icon: string | React.ReactNode; className: string };
       } = {
-        sse: { icon: "SSE", className: styles.sse },
         doc: { icon: "MD", className: styles.doc },
         folder: { icon: "", className: "" },
         websocket: { icon: "WS", className: styles.ws },

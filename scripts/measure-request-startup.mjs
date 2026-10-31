@@ -55,12 +55,12 @@ function summarize(files) {
     largest: rows.sort((a, b) => b.bytes - a.bytes).slice(0, 8),
   };
 }
-// Content declares HTTP first, followed by SSE, folder, WS, Socket.IO, GraphQL.
+// Content declares HTTP first, followed by folder, WS, Socket.IO, GraphQL.
 const protocols = inputs["dist/tagPanel.js"].imports.filter(
   (item) => item.kind === "dynamic-import",
 );
-if (protocols.length !== 6)
-  throw new Error(`Expected six protocol imports, got ${protocols.length}`);
+if (protocols.length !== 5)
+  throw new Error(`Expected five protocol imports, got ${protocols.length}`);
 const entry = closure(["dist/tagPanel.js"]);
 const http = closure(["dist/tagPanel.js", protocols[0].path]);
 console.log(

@@ -41,10 +41,6 @@ export const ICONS_MAP: Record<string, any> = {
     icon: "folder-kanban",
     gradientColor: ["#9868FF", "#B49AEE"],
   },
-  sse: {
-    icon: "radio-tower",
-    gradientColor: ["#65E0FF", "#50CFEA"],
-  },
 };
 
 // Type to text mapping
@@ -98,7 +94,6 @@ export const WEBSOCKET_METHODS: string[] = ["Raw", "Socket.IO"];
 
 export const METHODS_MAP: Record<string, string[]> = {
   api: API_METHODS,
-  sse: API_METHODS,
   grpc: GRPC_METHODS,
   tcp: TCP_METHODS,
   websocket: WEBSOCKET_METHODS,

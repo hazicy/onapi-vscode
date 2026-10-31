@@ -5,7 +5,6 @@ import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "@/shared/theme/global";
 import assertionStyles from "@/features/requests/assertions/ResponseAssert/ResponseAssert.module.css";
 import graphqlStyles from "@/features/requests/protocols/graphql/Request.module.css";
-import sseStyles from "@/features/requests/protocols/sse/Request.module.css";
 
 export default function ThemeFixture() {
   const [dark, setDark] = useState(false);
@@ -42,10 +41,10 @@ export default function ThemeFixture() {
         GraphQL direction
       </div>
       <div
-        className={sseStyles.container}
+        className={graphqlStyles.container}
         data-direction={dark ? "vertical" : "horizontal"}
       >
-        SSE direction
+        Request direction
       </div>
     </ThemeProvider>
   );

@@ -138,10 +138,7 @@ function TagPanel() {
           break;
         case "requestPanelError": {
           const failure = message.data;
-          if (
-            ["sendApi", "sendSse"].includes(failure.action || "") &&
-            failure.executionId
-          ) {
+          if (failure.action === "sendApi" && failure.executionId) {
             const state = useApis.getState();
             state.updateCurrentSendingData(
               reduceHttpExecutionEvent(state.currentSendingData, {

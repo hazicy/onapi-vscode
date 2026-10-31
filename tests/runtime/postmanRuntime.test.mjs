@@ -34,6 +34,15 @@ before(async () => {
       setTimeout(() => res.end("data: done\n\n"), 10);
       return;
     }
+    if (req.url === "/stream-utf8") {
+      res.writeHead(200, {
+        "content-type": "text/event-stream; charset=utf-8",
+      });
+      const payload = Buffer.from("data: 你好\n\n");
+      res.write(payload.subarray(0, 7));
+      setTimeout(() => res.end(payload.subarray(7)), 20);
+      return;
+    }
     res.setHeader("content-type", "application/json");
     res.setHeader("set-cookie", "session=saved; Path=/; HttpOnly");
     res.end(
@@ -271,6 +280,38 @@ test("native SSE callbacks preserve stream content", async () => {
       .map((event) => event.data)
       .join(""),
     /data: hello/,
+  );
+  const start = events.findIndex((event) => event.type === "responseStart");
+  assert.ok(start >= 0);
+  assert.ok(start < events.findIndex((event) => event.type === "responseData"));
+});
+test("HTTP POST receives SSE headers and preserves UTF-8 split across chunks", async () => {
+  const events = await run(
+    collection(
+      item({
+        request: {
+          method: "POST",
+          url: `${address}/stream-utf8`,
+          body: { mode: "raw", raw: '{"stream":true}' },
+        },
+      }),
+    ),
+  );
+  const start = events.find((event) => event.type === "responseStart");
+  assert.equal(start.request.method, "POST");
+  assert.ok(
+    start.response.header.some(
+      (header) =>
+        header.key.toLowerCase() === "content-type" &&
+        header.value.startsWith("text/event-stream"),
+    ),
+  );
+  assert.equal(
+    events
+      .filter((event) => event.type === "responseData")
+      .map((event) => event.data)
+      .join(""),
+    "data: 你好\n\n",
   );
 });
 test("native collection storage projections preserve request, event, auth and variable definitions", () => {

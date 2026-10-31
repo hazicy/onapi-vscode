@@ -45,20 +45,6 @@ export const DEFAULT_API_DATA = {
   response: [],
 };
 
-// sse default parameters
-export const DEFAULT_SSE_DATA = {
-  ...DEFAULT_APIS_BASE_DATA,
-  kind: APIS_TARGET_TYPE_ENUM.SSE,
-  name: "SSE Request",
-  request: {
-    method: "GET",
-    url: "",
-    header: [{ key: "Accept", value: "text/event-stream" }],
-  },
-  event: [],
-  response: [],
-};
-
 // folder default parameters
 export const DEFAULT_FOLDER_DATA = {
   ...DEFAULT_APIS_BASE_DATA,

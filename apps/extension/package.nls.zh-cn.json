@@ -22,7 +22,6 @@
   "command.tree.folderSettings": "目录设置",
   "command.tree.folderReports": "历史测试报告",
   "command.tree.new.api": "新建 HTTP 请求",
-  "command.tree.new.sse": "新建 SSE 请求",
   "command.tree.new.graphql": "新建 GraphQL 请求",
   "command.tree.new.websocket": "新建 WebSocket 请求",
   "command.tree.new.socketio": "新建 Socket.IO 请求",

@@ -4,7 +4,6 @@ import lodash1 from "lodash";
 const types = Object.fromEntries(
   [
     "api",
-    "sse",
     "folder",
     "doc",
     "grpc",

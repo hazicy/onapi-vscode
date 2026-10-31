@@ -17,9 +17,8 @@ export async function emitHttpEvents(
   const sessionId = await page.evaluate(() => {
     const messages =
       (window as any).messages || (window as any).startupMessages || [];
-    return messages.findLast((message: any) =>
-      ["sendApi", "sendSse"].includes(message.action),
-    )?.executionId;
+    return messages.findLast((message: any) => message.action === "sendApi")
+      ?.executionId;
   });
   if (!sessionId) {
     throw new Error("Send a request before emitting its host events");

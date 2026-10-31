@@ -19,7 +19,22 @@ const base = {
   request: { method: "GET", url: "" },
 };
 
-for (const kind of ["api", "graphql", "sse"]) {
+test("SSE is a response format and no longer an editor kind or send command", () => {
+  assert.equal(
+    domain.editorRecordSchema.safeParse({ ...base, kind: "sse" }).success,
+    false,
+  );
+  assert.equal(
+    contracts.requestPanelCommandSchema.safeParse({
+      action: "sendSse",
+      executionId: "run",
+      data: base,
+    }).success,
+    false,
+  );
+});
+
+for (const kind of ["api", "graphql"]) {
   test(`${kind} domain and wire records share validated data without filling metadata defaults`, () => {
     const record = {
       ...base,

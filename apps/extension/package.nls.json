@@ -22,7 +22,6 @@
   "command.tree.folderSettings": "Folder Settings",
   "command.tree.folderReports": "Test Run History",
   "command.tree.new.api": "New HTTP Request",
-  "command.tree.new.sse": "New SSE Request",
   "command.tree.new.graphql": "New GraphQL Request",
   "command.tree.new.websocket": "New WebSocket Request",
   "command.tree.new.socketio": "New Socket.IO Request",

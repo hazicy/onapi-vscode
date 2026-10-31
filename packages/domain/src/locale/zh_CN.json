@@ -76,7 +76,6 @@
     "kind": {
       "project": "项目",
       "http": "接口",
-      "sse": "SSE",
       "websocket": "WS",
       "grpc": "gRPC",
       "tcp_client": "TCP客户端",
@@ -857,5 +856,14 @@
     "failed": "请求失败",
     "error_details": "错误详情",
     "more_tabs": "更多标签"
+  },
+  "event_stream": {
+    "title": "事件流",
+    "search": "搜索事件",
+    "events": "事件",
+    "raw": "原始内容",
+    "clear": "清空",
+    "no_matches": "没有匹配的事件",
+    "waiting": "尚未收到事件"
   }
 }

@@ -194,7 +194,7 @@ const UrlGroup = (props: UrlGroupProps) => {
       style={style}
       className={clsx(styles.container, className)}
     >
-      {["api", "sse"].includes(type) && (
+      {["api"].includes(type) && (
         <>
           <Select
             bordered={false}
@@ -243,7 +243,7 @@ const UrlGroup = (props: UrlGroupProps) => {
       )}
 
       <div className={styles.urlGroupContainer}>
-        {includes(["sse", "api", "websocket", "socketio", "graphql"], type) &&
+        {includes(["api", "websocket", "socketio", "graphql"], type) &&
           !hideServer &&
           isArray(currentEnv?.server_list) && (
             <Tooltip
@@ -329,7 +329,7 @@ const UrlGroup = (props: UrlGroupProps) => {
               </>
             </Tooltip>
           )}
-        {includes(["api", "sse", "grpc", "websocket", "socketio"], type) ? (
+        {includes(["api", "grpc", "websocket", "socketio"], type) ? (
           <VarInput
             placeholder={placeholder || t("common.enter_url_placeholder")}
             maxLength={maxLength}

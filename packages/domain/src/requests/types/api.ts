@@ -32,7 +32,7 @@ export interface ApiMetadata extends ApisBaseData {
   open_api?: OpenApiData;
 }
 
-// HTTP, GraphQL and SSE share the native Postman request and event schema.
+// HTTP and GraphQL share the native Postman request and event schema.
 export type ApiDetailsData = ApiMetadata &
   Omit<
     import("@onapi/domain").HttpRequestItem,

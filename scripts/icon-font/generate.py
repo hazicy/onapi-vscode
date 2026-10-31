@@ -46,7 +46,7 @@ manifest['contributes']['icons'] = {
     f'onapi-{name.replace("_", "-")}': {
         'description': f'OnAPI {name.replace("_", " ")} icon',
         'default': {'fontPath': './dist/images/onapi-icons.woff', 'fontCharacter': f'\\{0xE001 + i:04X}'}
-    } for i, name in enumerate(names)
+    } for i, name in enumerate(names) if name != "sse"
 }
 manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
 print(f'Generated {len(names)} glyphs: {output}')

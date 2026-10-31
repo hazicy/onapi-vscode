@@ -42,7 +42,6 @@ function preloadableProtocol<Props extends object>(
 
 const protocolLoaders = {
   api: preloadableProtocol(() => import("./protocols/http/HttpDebug")),
-  sse: preloadableProtocol(() => import("./protocols/sse/SseDebug")),
   folder: preloadableProtocol(
     () => import("../collections/components/FolderEditor/FolderEditor"),
   ),
@@ -61,7 +60,6 @@ export function preloadRequestProtocol(type: string) {
   return protocol?.preload();
 }
 const ApiDebug = protocolLoaders.api.Component;
-const SseDebug = protocolLoaders.sse.Component;
 const Folder = protocolLoaders.folder.Component;
 const WebSocketDebug = protocolLoaders.websocket.Component;
 const SocketioDebug = protocolLoaders.socketio.Component;
@@ -156,14 +154,6 @@ const RequestWorkspace: React.FC<RequestWorkspaceProps> = () => {
     if (apisActiveData.kind === "api") {
       return (
         <ApiDebug
-          apisData={apisActiveData}
-          onApisDataChange={onApisDataChange}
-        />
-      );
-    }
-    if (apisActiveData.kind === "sse") {
-      return (
-        <SseDebug
           apisData={apisActiveData}
           onApisDataChange={onApisDataChange}
         />

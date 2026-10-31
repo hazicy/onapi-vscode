@@ -70,9 +70,7 @@ export function requestDecoration(
   config: any,
   rows: ApiDetailsData[],
 ) {
-  if (
-    !["api", "graphql", "sse", "websocket", "socketio"].includes(saved.kind)
-  ) {
+  if (!["api", "graphql", "websocket", "socketio"].includes(saved.kind)) {
     return;
   }
   const state = workspaces.get(workspace)?.get(saved.id);
