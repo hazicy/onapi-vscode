@@ -8,6 +8,13 @@ import { requestDecoration } from "../requests/request-status";
 import { getCurrentProjectConfig } from "../../platform/storage/project-config";
 import { isHttpCollectionItem, requestUrl, requestMethod } from "@onapi/domain";
 
+const protocolLabels: Record<string, string> = {
+  graphql: "GraphQL",
+  websocket: "WebSocket",
+  socketio: "Socket.IO",
+  grpc: "gRPC",
+};
+
 function requestTooltip(
   url?: string,
   status?: string,
@@ -57,12 +64,6 @@ function configureRequestItem(
     : ["api", "graphql"].includes(data.kind)
       ? "onapiRequestHttp"
       : "onapiRequest";
-  const protocolLabels: Record<string, string> = {
-    graphql: "GraphQL",
-    websocket: "WebSocket",
-    socketio: "Socket.IO",
-    grpc: "gRPC",
-  };
   const requestLabel =
     protocolLabels[data.kind] ||
     String(
@@ -70,11 +71,14 @@ function configureRequestItem(
         data.kind,
     ).toUpperCase();
   const count = folder ? countFolderRequests(list(), data.id) : 0;
-  item.description = folder ? (count ? `(${count})` : undefined) : requestLabel;
+  const url = isHttpCollectionItem(data) ? requestUrl(data) : data.url;
+  item.description = folder
+    ? (count ? `(${count})` : undefined)
+    : url || undefined;
   item.iconPath = getProtocolTreeIcon(data);
   item.tooltip = folder
     ? undefined
-    : requestTooltip(isHttpCollectionItem(data) ? requestUrl(data) : data.url);
+    : requestTooltip(`${requestLabel} ${url || ""}`.trim());
 }
 
 export class RequestTreeItem extends vscode.TreeItem {
@@ -93,8 +97,15 @@ export class RequestTreeItem extends vscode.TreeItem {
         list(),
       );
       this.iconPath = getProtocolTreeIcon(node.data, status?.color);
+      const label =
+        node.data.kind === "api"
+          ? requestMethod(node.data)
+          : protocolLabels[node.data.kind] || node.data.kind.toUpperCase();
+      const url = isHttpCollectionItem(node.data)
+        ? requestUrl(node.data)
+        : node.data.url;
       this.tooltip = requestTooltip(
-        isHttpCollectionItem(node.data) ? requestUrl(node.data) : node.data.url,
+        `${label} ${url || ""}`.trim(),
         status?.tooltip,
       );
     }

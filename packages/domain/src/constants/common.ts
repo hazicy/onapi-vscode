@@ -65,21 +65,13 @@ export const PRIMARY_COLOR_MAP: Record<string, string> = {
 
 // Request methods
 export const API_METHODS: string[] = [
-  "POST",
   "GET",
+  "POST",
   "PUT",
   "PATCH",
   "DELETE",
-  "COPY",
   "HEAD",
   "OPTIONS",
-  "LINK",
-  "UNLINK",
-  "PURGE",
-  "LOCK",
-  "UNLOCK",
-  "PROPFIND",
-  "VIEW",
 ];
 
 // Default tab options for new/open API

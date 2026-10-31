@@ -311,12 +311,13 @@ test("native sidebar panels, test commands and workspace request history", async
       "DELETE",
       "HEAD",
       "OPTIONS",
+      "TRACE",
     ]) {
       const item = requests.getTreeItem({
         kind: "request",
         data: { ...rows[2], request: { ...rows[2].request, method } },
       });
-      assert.equal(item.iconPath.id, "onapi-http");
+      assert.equal(item.iconPath.id, `onapi-http-${method.toLowerCase()}`);
       assert.equal(item.description, method);
       assert.equal(item.tooltip.value, "/users");
       assert.equal(item.tooltip.isTrusted, undefined);
@@ -338,7 +339,7 @@ test("native sidebar panels, test commands and workspace request history", async
     assert.ok(
       requests.getTreeItem({
         kind: "request",
-        data: { ...rows[2], method: "CUSTOM" },
+        data: { ...rows[2], request: { ...rows[2].request, method: "CUSTOM" } },
       }).iconPath.id === "onapi-http",
     );
     for (const [protocol, icon] of Object.entries({
@@ -346,8 +347,6 @@ test("native sidebar panels, test commands and workspace request history", async
       websocket: "debug-disconnect",
       socketio: "plug",
       grpc: "server-process",
-      socket: "plug",
-      socket_method: "symbol-method",
       doc: "file-text",
     })) {
       const item = requests.getTreeItem({

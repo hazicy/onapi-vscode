@@ -466,53 +466,95 @@
           "fontCharacter": "\\E005"
         }
       },
-      "onapi-socket": {
-        "description": "OnAPI socket icon",
-        "default": {
-          "fontPath": "./dist/images/onapi-icons.woff",
-          "fontCharacter": "\\E006"
-        }
-      },
-      "onapi-socket-method": {
-        "description": "OnAPI socket method icon",
-        "default": {
-          "fontPath": "./dist/images/onapi-icons.woff",
-          "fontCharacter": "\\E007"
-        }
-      },
       "onapi-folder": {
         "description": "OnAPI folder icon",
         "default": {
           "fontPath": "./dist/images/onapi-icons.woff",
-          "fontCharacter": "\\E008"
+          "fontCharacter": "\\E006"
         }
       },
       "onapi-doc": {
         "description": "OnAPI doc icon",
         "default": {
           "fontPath": "./dist/images/onapi-icons.woff",
-          "fontCharacter": "\\E009"
+          "fontCharacter": "\\E007"
         }
       },
       "onapi-tests": {
         "description": "OnAPI tests icon",
         "default": {
           "fontPath": "./dist/images/onapi-icons.woff",
-          "fontCharacter": "\\E00A"
+          "fontCharacter": "\\E008"
         }
       },
       "onapi-reports": {
         "description": "OnAPI reports icon",
         "default": {
           "fontPath": "./dist/images/onapi-icons.woff",
-          "fontCharacter": "\\E00B"
+          "fontCharacter": "\\E009"
         }
       },
       "onapi-history": {
         "description": "OnAPI history icon",
         "default": {
           "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E00A"
+        }
+      },
+      "onapi-http-get": {
+        "description": "OnAPI http-get icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E00B"
+        }
+      },
+      "onapi-http-delete": {
+        "description": "OnAPI http-delete icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
           "fontCharacter": "\\E00C"
+        }
+      },
+      "onapi-http-head": {
+        "description": "OnAPI http-head icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E00D"
+        }
+      },
+      "onapi-http-options": {
+        "description": "OnAPI http-options icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E00E"
+        }
+      },
+      "onapi-http-patch": {
+        "description": "OnAPI http-patch icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E00F"
+        }
+      },
+      "onapi-http-post": {
+        "description": "OnAPI http-post icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E010"
+        }
+      },
+      "onapi-http-put": {
+        "description": "OnAPI http-put icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E011"
+        }
+      },
+      "onapi-http-trace": {
+        "description": "OnAPI http-trace icon",
+        "default": {
+          "fontPath": "./dist/images/onapi-icons.woff",
+          "fontCharacter": "\\E012"
         }
       }
     }

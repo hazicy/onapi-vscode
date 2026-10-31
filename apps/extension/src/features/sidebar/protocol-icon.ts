@@ -1,4 +1,23 @@
 import * as vscode from "vscode";
+import { requestMethod } from "@onapi/domain";
+
+type IconData = { kind?: string; method?: string; request?: unknown };
+const httpMethods = new Set([
+  "GET",
+  "POST",
+  "PUT",
+  "PATCH",
+  "DELETE",
+  "HEAD",
+  "OPTIONS",
+]);
+function iconName(data: IconData): string {
+  if (data.kind !== "api") {
+    return data.kind!;
+  }
+  const method = requestMethod(data).trim().toUpperCase();
+  return httpMethods.has(method) ? `http-${method.toLowerCase()}` : "http";
+}
 
 const protocolIcons = new Set([
   "api",
@@ -6,21 +25,19 @@ const protocolIcons = new Set([
   "websocket",
   "socketio",
   "grpc",
-  "socket",
-  "socket_method",
   "folder",
   "doc",
 ]);
 
 /** Font-backed icons support theme colors; editor tabs still use SVG paths. */
 export function getProtocolTreeIcon(
-  data: { kind?: string },
+  data: IconData,
   color?: string,
 ): vscode.ThemeIcon | undefined {
   if (!protocolIcons.has(data.kind || "")) {
     return undefined;
   }
-  const name = data.kind === "api" ? "http" : data.kind!;
+  const name = iconName(data);
   return new vscode.ThemeIcon(
     `onapi-${name.replaceAll("_", "-")}`,
     color ? new vscode.ThemeColor(color) : undefined,
@@ -30,13 +47,13 @@ export function getProtocolTreeIcon(
 /** SVG paths for editor surfaces whose icon API does not accept ThemeIcon. */
 export function getProtocolIcon(
   context: vscode.ExtensionContext,
-  data: { kind?: string },
+  data: IconData,
 ): { light: vscode.Uri; dark: vscode.Uri } | undefined {
   const type = data.kind || "";
   if (!protocolIcons.has(type)) {
     return undefined;
   }
-  const name = type === "api" ? "http" : type;
+  const name = iconName(data);
   return iconPaths(context, name);
 }
 
