@@ -3,10 +3,11 @@
 </p>
 <p align="center">
   <strong>Your APIs, inside VS Code.</strong><br />
-  Send requests, explore real-time connections, and test APIs without leaving your editor.
+  HTTP, GraphQL, real-time connections, gRPC, AI, and MCP — in one local workspace.
 </p>
 <p align="center">
   <a href="#getting-started">Getting started</a> ·
+  <a href="#supported-protocols">Protocols</a> ·
   <a href="#features">Features</a> ·
   <a href="#development">Development</a> ·
   <a href="https://github.com/hazicy/onapi-vscode/issues">Feedback</a>
@@ -16,25 +17,40 @@
 > **Work in progress** — OnAPI is under active development and is not yet a stable release. Features, interfaces, and storage formats may change. Bug reports and feedback are welcome.
 
 <p align="center">
-  <img src="./apps/webviews/public/images/onapi-preview.png" alt="OnAPI showcase with a simulated window and activity bar, the native VS Code request tree, and the real request editor" width="1200" />
+  <img src="./docs/assets/onapi-vscode.png" alt="OnAPI running in VS Code: seven request types in the native collection sidebar and a successful HTTP request with a JSON response" width="1200" />
 </p>
+
+<p align="center"><sub>OnAPI in VS Code: seven request types, a local demo API, and a real JSON response.</sub></p>
+
+## Supported protocols
+
+<p align="center">
+  <img src="./docs/assets/onapi-protocols.png" alt="Seven request types in one workspace: HTTP, GraphQL, gRPC, WebSocket, Socket.IO, AI, and MCP" width="1200" />
+</p>
+
+| Request type | Supported workflow                                                                                             |
+| ------------ | -------------------------------------------------------------------------------------------------------------- |
+| HTTP         | REST requests, authentication, headers, cookies, bodies, scripts, assertions, and SSE response streams.        |
+| GraphQL      | Queries and mutations, variables, schema exploration, and response inspection.                                 |
+| WebSocket    | Persistent connections with a sent/received message timeline.                                                  |
+| Socket.IO    | Event subscriptions, messages, acknowledgements, and subscription changes.                                     |
+| gRPC         | Server reflection or `.proto` imports; unary, server streaming, client streaming, and bidirectional streaming. |
+| AI           | OpenAI-compatible chat completions, streaming conversations, cancellation, and token usage.                    |
+| MCP          | Streamable HTTP, SSE, and stdio transports; tool calls, resources, and prompts.                                |
+
+SSE is supported as an HTTP response stream and an MCP transport. It uses those editors rather than a separate request type. See the [gRPC](#grpc-requests) and [AI/MCP](#ai-and-mcp-requests) guides below for setup and current limitations.
 
 ## Features
 
 OnAPI is a lightweight API client for Visual Studio Code. Organize requests in local collections and use environment variables without signing in.
 
-| Capability                 | What you can do                                                                                                                 |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| HTTP & GraphQL             | Configure query parameters, headers, authentication, and request bodies; inspect responses.                                     |
-| AI requests                | Use AI SDK with OpenAI-compatible endpoints, stream multi-turn conversations, and inspect token usage.                          |
-| MCP requests               | Connect over Streamable HTTP, SSE, or stdio; discover and call tools, read resources, and retrieve prompts.                     |
-| gRPC                       | Discover services with reflection or import .proto files; invoke unary and all streaming RPCs with TLS, metadata, and trailers. |
-| Real-time connections      | Work with WebSocket, Socket.IO, and Server-Sent Events (SSE).                                                                   |
-| Collections & environments | Group saved requests and switch variables between environments.                                                                 |
-| Scripts & tests            | Use Postman-compatible scripts, run collections, and check assertions.                                                          |
-| Import & export            | Bring in existing collections and export requests for reuse.                                                                    |
-| API documentation          | Share saved HTTP and GraphQL requests through the local documentation service.                                                  |
-| Editor integration         | Use a compact interface that follows your VS Code theme.                                                                        |
+| Capability                 | What you can do                                                                |
+| -------------------------- | ------------------------------------------------------------------------------ |
+| Collections & environments | Group saved requests and switch variables between environments.                |
+| Scripts & tests            | Use Postman-compatible scripts, run collections, and check assertions.         |
+| Import & export            | Bring in existing collections and export requests for reuse.                   |
+| API documentation          | Share saved HTTP and GraphQL requests through the local documentation service. |
+| Editor integration         | Use a compact interface that follows your VS Code theme.                       |
 
 ## Getting started
 

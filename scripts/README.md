@@ -65,7 +65,34 @@ styles in CSS Modules. Run `pnpm check:ui` to prevent reintroducing removed UI
 libraries and global styles. Embedded editors use CodeMirror 6; language parsers
 and Prettier formatters remain lazy-loaded.
 
-## README showcase image
+## README images
+
+The README uses an actual VS Code screenshot at `docs/assets/onapi-vscode.png`
+and a protocol overview at `docs/assets/onapi-protocols.png`. The overview uses
+the repository's protocol icons in a minimal seven-card layout, without footer
+annotations or corner fine print. Its layout and short labels are kept in
+`scripts/generate-protocol-overview.mjs`:
+
+```sh
+node scripts/generate-protocol-overview.mjs
+```
+
+To refresh the plugin screenshot, build the extension and launch an isolated
+development window using the command below. Populate that temporary profile with
+sample requests, open OnAPI, and send a request to a demo API. Keep all seven
+request types visible in the sidebar and resize the response pane so the result
+is readable. Then capture the workbench and native sidebar directly:
+
+```sh
+node scripts/capture-readme-screenshot.mjs --cdp http://127.0.0.1:9333
+```
+
+The capture script leaves VS Code open and saves the screenshot plus
+`docs/assets/onapi-native-sidebar.png`. Use only demo data without credentials.
+Both rendering scripts require the Playwright Chromium installation described
+above; the capture script connects to the running VS Code browser.
+
+### Composed showcase (optional)
 
 The generator is kept in `scripts/generate-readme-preview.mjs`. It renders the
 real request editor using built Webview assets and sample response data, then
