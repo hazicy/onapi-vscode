@@ -16,52 +16,86 @@
   height: calc(100% - 44px);
   background: var(--vscode-editor-background, var(--color-bg-right));
 }
-.iconEmptyWrap {
-  font-size: 32px;
-  color: var(--vscode-descriptionForeground, var(--font-light-color));
-  opacity: 0.65;
+.container .errorEmpty {
+  gap: 20px;
 }
-.hint {
-  margin: 0;
-  overflow-wrap: anywhere;
+.errorImage {
+  margin-bottom: 0;
+  line-height: 0;
+}
+.errorImage > svg {
+  width: 48px;
+  height: 48px;
   color: var(--vscode-descriptionForeground, var(--font-light-color));
-  font-size: inherit;
+}
+.errorTitle {
+  color: var(--vscode-foreground, var(--font-content-color));
+  font-size: 16px;
+  font-weight: 500;
+}
+.errorDetails {
+  text-align: left;
+}
+.errorRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.errorRow .detailsAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+  font: inherit;
+  font-size: 13px;
   line-height: 1.6;
+  cursor: pointer;
 }
-.errorIcon {
-  color: var(--vscode-errorForeground, var(--color-error));
-  opacity: 1;
+.detailsAction::after {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+}
+.detailsAction[aria-expanded="true"]::after {
+  transform: translateY(1px) rotate(225deg);
+}
+.errorRow .detailsAction:hover {
+  color: var(--vscode-textLink-foreground, var(--vscode-foreground));
+}
+.errorRow .detailsAction:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: 3px;
 }
 .errorMessage {
-  margin: 0 0 8px;
-  max-height: 140px;
+  margin: 12px 0 0;
+  padding: 0;
+  max-height: 180px;
   overflow: auto;
   overflow-wrap: anywhere;
   white-space: pre-wrap;
-  color: var(--vscode-errorForeground, var(--color-error));
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
   font-family: var(--vscode-editor-font-family, monospace);
+  font-size: 12px;
+  line-height: 1.7;
 }
 
-.errorImage {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-}
-.errorImage .errorIcon {
-  width: 32px;
-  height: 32px;
-  flex-shrink: 0;
-}
-.errorImage .errorIcon > svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  flex-shrink: 0;
-}
 .container .details {
   width: 100%;
-  max-width: 640px;
+  max-width: 480px;
   min-width: 0;
 }
 

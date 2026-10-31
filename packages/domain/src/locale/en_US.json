@@ -830,7 +830,7 @@
     "encoding": "Response encoding",
     "send_hint": "Send a request to see the response",
     "failed": "Request failed",
-    "details": "Check the URL, network connection, and request settings.",
+    "error_details": "Error details",
     "more_tabs": "More tabs"
   }
 }

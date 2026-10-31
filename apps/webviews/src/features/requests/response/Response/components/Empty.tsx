@@ -1,9 +1,9 @@
 import styles from "./Empty.module.css";
+import { useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import clsx from "clsx";
 
-import AppIcon from "@/shared/ui/AppIcon";
 import Empty from "@/shared/ui/Empty";
 
 type ResponseEmpty = {
@@ -22,6 +22,8 @@ const ResponseEmpty = ({
   errorMessage,
 }: ResponseEmpty) => {
   const { t } = useTranslation();
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const detailsId = useId();
   return (
     <div
       className={clsx(
@@ -32,28 +34,39 @@ const ResponseEmpty = ({
     >
       <Empty
         role={errorMessage ? "alert" : "status"}
-        variant="request"
-        className={styles.empty}
+        variant={errorMessage ? "error" : "request"}
+        className={clsx(styles.empty, errorMessage && styles.errorEmpty)}
         imageClassName={errorMessage ? styles.errorImage : undefined}
         footerClassName={styles.details}
-        image={
-          errorMessage ? (
-            <AppIcon
-              icon="circle-alert"
-              className={clsx(styles.iconEmptyWrap, styles.errorIcon)}
-            />
-          ) : undefined
-        }
         descriptionClassName={descriptionClassName}
         description={
-          errorMessage
-            ? t("request_panel.failed")
-            : description || t("request_panel.send_hint")
+          errorMessage ? false : description || t("request_panel.send_hint")
         }
       >
-        {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
         {errorMessage && (
-          <p className={styles.hint}>{t("request_panel.details")}</p>
+          <div className={styles.errorDetails}>
+            <div className={styles.errorRow}>
+              <span className={styles.errorTitle}>
+                {t("request_panel.failed")}
+              </span>
+              <button
+                type="button"
+                className={styles.detailsAction}
+                aria-expanded={detailsOpen}
+                aria-controls={detailsId}
+                onClick={() => setDetailsOpen((open) => !open)}
+              >
+                {t("request_panel.error_details")}
+              </button>
+            </div>
+            <pre
+              id={detailsId}
+              hidden={!detailsOpen}
+              className={styles.errorMessage}
+            >
+              {errorMessage}
+            </pre>
+          </div>
         )}
       </Empty>
     </div>

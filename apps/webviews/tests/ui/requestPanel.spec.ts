@@ -111,7 +111,40 @@ test("empty, sending and failed requests have distinct states", async ({
   ).toHaveCount(0);
   await page.getByRole("button", { name: "Fail request" }).click();
   await expect(workspace.getByRole("alert")).toContainText("Request failed");
-  await expect(workspace.getByRole("alert")).toContainText("ECONNREFUSED");
+  const alert = workspace.getByRole("alert");
+  const action = alert.getByRole("button", {
+    name: "Error details",
+    exact: true,
+  });
+  const message = alert.locator("pre");
+  await expect(action).toHaveAttribute("aria-expanded", "false");
+  await expect(message).toBeHidden();
+  const title = alert.getByText("Request failed", { exact: true });
+  const titleBox = await title.boundingBox();
+  const actionBox = await action.boundingBox();
+  expect(titleBox).not.toBeNull();
+  expect(actionBox).not.toBeNull();
+  expect(actionBox!.y - titleBox!.y - titleBox!.height).toBeCloseTo(12, 0);
+  await expect(title).toHaveCSS("font-size", "16px");
+  await expect(action).toHaveCSS("font-size", "13px");
+  const icon = alert.locator("svg");
+  await expect(icon).toHaveCSS("width", "48px");
+  await expect(icon).toHaveCSS("height", "48px");
+  const iconBox = await icon.boundingBox();
+  expect(titleBox!.y - iconBox!.y - iconBox!.height).toBeCloseTo(20, 0);
+  await expect(alert.getByRole("button")).toHaveCount(1);
+  await title.click();
+  await expect(message).toBeHidden();
+  await action.click();
+  await expect(action).toHaveAttribute("aria-expanded", "true");
+  await expect(message).toBeVisible();
+  await expect(message).toContainText("ECONNREFUSED");
+  await expect(action).toHaveCSS("border-top-width", "0px");
+  await action.click();
+  await expect(message).toBeHidden();
+  await action.focus();
+  await page.keyboard.press("Enter");
+  await expect(message).toBeVisible();
 });
 
 test("request panel screenshots at wide and narrow widths", async ({

@@ -830,7 +830,7 @@
     "encoding": "响应编码",
     "send_hint": "发送请求后，在这里查看响应",
     "failed": "请求失败",
-    "details": "请检查 URL、网络连接和请求配置。",
+    "error_details": "错误详情",
     "more_tabs": "更多标签"
   }
 }
