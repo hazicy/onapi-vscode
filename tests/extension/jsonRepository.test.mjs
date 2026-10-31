@@ -697,3 +697,45 @@ for (const kind of ["ai", "mcp"]) {
     assert.deepEqual(f.errors, []);
   });
 }
+
+test("gRPC definitions, unfinished messages and credentials survive disk persistence and restart", async (t) => {
+  const f = await fixture(t);
+  const { grpcConfigSchema } = await loadTypeScript(
+    "packages/domain/src/requests/grpc.ts",
+    nativeDependency,
+  );
+  const record = {
+    id: "grpc-request",
+    parentId: "0",
+    name: "gRPC",
+    kind: "grpc",
+    url: "localhost:50051",
+    grpc: grpcConfigSchema.parse({
+      source: "proto",
+      files: [{ name: "service.proto", content: 'syntax = "proto3";' }],
+      message: '{"unfinished',
+      metadata: [
+        { key: "authorization", value: "PRIVATE_GRPC_METADATA", enabled: true },
+      ],
+      auth: { type: "bearer", token: "PRIVATE_GRPC_TOKEN" },
+      tls: { privateKey: "PRIVATE_GRPC_KEY", clientCertificate: "fixture" },
+    }),
+  };
+  assert.equal(await f.repo.set("apiList", [record]), true);
+  const source = await fs.readFile(
+    path.join(f.root, "collections", "grpc-request.json"),
+    "utf8",
+  );
+  for (const secret of [
+    "PRIVATE_GRPC_METADATA",
+    "PRIVATE_GRPC_TOKEN",
+    "PRIVATE_GRPC_KEY",
+  ])
+    assert.equal(source.includes(secret), false);
+  const reopened = new f.JsonRepository(f.context, () => {});
+  await reopened.reload();
+  assert.deepEqual(
+    JSON.parse(JSON.stringify(reopened.get("apiList", [])))[0],
+    JSON.parse(JSON.stringify(record)),
+  );
+});

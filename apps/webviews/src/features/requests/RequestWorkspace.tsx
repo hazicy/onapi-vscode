@@ -41,6 +41,7 @@ function preloadableProtocol<Props extends object>(
 }
 
 const protocolLoaders = {
+  grpc: preloadableProtocol(() => import("./protocols/grpc/GrpcDebug")),
   ai: preloadableProtocol(() => import("./protocols/ai/AiDebug")),
   mcp: preloadableProtocol(() => import("./protocols/mcp/McpDebug")),
   api: preloadableProtocol(() => import("./protocols/http/HttpDebug")),
@@ -61,6 +62,7 @@ export function preloadRequestProtocol(type: string) {
   const protocol = protocolLoaders[type as keyof typeof protocolLoaders];
   return protocol?.preload();
 }
+const GrpcDebug = protocolLoaders.grpc.Component;
 const AiDebug = protocolLoaders.ai.Component;
 const McpDebug = protocolLoaders.mcp.Component;
 const ApiDebug = protocolLoaders.api.Component;
@@ -155,6 +157,15 @@ const RequestWorkspace: React.FC<RequestWorkspaceProps> = () => {
   };
 
   const renderContainer = () => {
+    if (apisActiveData.kind === "grpc") {
+      return (
+        <GrpcDebug
+          key={apisActiveData.id}
+          apisData={apisActiveData}
+          onApisDataChange={onApisDataChange}
+        />
+      );
+    }
     if (apisActiveData.kind === "ai" || apisActiveData.kind === "mcp") {
       return apisActiveData.kind === "ai" ? (
         <AiDebug

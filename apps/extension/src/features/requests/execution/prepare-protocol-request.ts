@@ -12,7 +12,15 @@ import type { SysConfig } from "@onapi/domain/settings/types/settings";
 
 type Executable = Extract<
   RequestPanelCommand,
-  { action: "ai_send" | "mcp_connect" | "mcp_request" }
+  {
+    action:
+      | "ai_send"
+      | "mcp_connect"
+      | "mcp_request"
+      | "grpc_discover"
+      | "grpc_invoke"
+      | "grpc_write";
+  }
 >;
 export function prepareProtocolRequest(
   message: Executable,

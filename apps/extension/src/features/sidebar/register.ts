@@ -350,6 +350,7 @@ export function registerSidebarTree(context: vscode.ExtensionContext) {
     "socketio",
     "ai",
     "mcp",
+    "grpc",
     "folder",
   ]) {
     command(`onapi.tree.new.${type}`, (node?: SidebarTreeNode) =>
@@ -370,6 +371,7 @@ export function registerSidebarTree(context: vscode.ExtensionContext) {
         APIS_TARGET_TYPE_ENUM.SOCKETIO,
         APIS_TARGET_TYPE_ENUM.AI,
         APIS_TARGET_TYPE_ENUM.MCP,
+        APIS_TARGET_TYPE_ENUM.GRPC,
         APIS_TARGET_TYPE_ENUM.FOLDER,
       ];
       const type =
@@ -397,6 +399,7 @@ export function registerSidebarTree(context: vscode.ExtensionContext) {
                 },
                 { label: "$(sparkle) AI", type: "ai" },
                 { label: "$(plug) MCP", type: "mcp" },
+                { label: "$(onapi-grpc) gRPC", type: "grpc" },
                 { label: "", kind: vscode.QuickPickItemKind.Separator },
                 {
                   label: `$(onapi-folder) ${zh ? "目录" : "Folder"}`,

@@ -152,6 +152,8 @@ for (const owner of owners) {
             if (
               (name === "ai" ||
                 name.startsWith("@ai-sdk/") ||
+                name.startsWith("@grpc/") ||
+                name === "protobufjs" ||
                 name.startsWith("@modelcontextprotocol/")) &&
               owner !== "packages/runtime"
             ) {

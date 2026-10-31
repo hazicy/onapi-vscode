@@ -126,3 +126,37 @@ test("protocol preparation validates network URLs after variable expansion and s
   );
   assert.equal(valid.message.data.config.command, "node");
 });
+
+test("gRPC endpoints, metadata and streaming messages resolve environment variables", () => {
+  const context = { globalState: { get: () => ({}) } };
+  const invoke = {
+    action: "grpc_invoke",
+    requestId: "grpc",
+    data: {
+      id: "ai",
+      url: "{{host}}:50051",
+      config: {
+        method: "/test.Echo/Unary",
+        message: '{"name":"{{model}}"}',
+        metadata: [{ key: "authorization", value: "Bearer {{token}}" }],
+      },
+    },
+  };
+  const prepared = prepareProtocolRequest(invoke, context, "").message;
+  assert.equal(prepared.data.url, "local.test:50051");
+  assert.equal(prepared.data.config.message, '{"name":"environment-model"}');
+  assert.equal(
+    prepared.data.config.metadata[0].value,
+    "Bearer environment-key",
+  );
+  const streamed = prepareProtocolRequest(
+    {
+      action: "grpc_write",
+      requestId: "write",
+      data: { id: "ai", executionId: "grpc", message: '{"name":"{{model}}"}' },
+    },
+    context,
+    "",
+  ).message;
+  assert.equal(streamed.data.message, '{"name":"environment-model"}');
+});

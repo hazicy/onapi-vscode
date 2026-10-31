@@ -7,6 +7,10 @@ export { normalizeLanguage };
 // Keep parsers for API editing formats; other code previews use plain text.
 // Language parsers are separate chunks, loaded only when an editor needs them.
 const loaders: Record<string, () => Promise<Extension>> = {
+  protobuf: () =>
+    import("@codemirror/legacy-modes/mode/protobuf").then((m) =>
+      StreamLanguage.define(m.protobuf),
+    ),
   json: () => import("@codemirror/lang-json").then((m) => m.json()),
   javascript: () =>
     import("@codemirror/lang-javascript").then((m) => m.javascript()),

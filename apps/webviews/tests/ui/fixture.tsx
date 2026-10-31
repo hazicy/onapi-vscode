@@ -1,3 +1,4 @@
+import GrpcFixture from "./GrpcFixture";
 import AiMcpFixture from "./AiMcpFixture";
 import SocketWorkspaceFixture from "./SocketWorkspaceFixture";
 import EnvironmentFixture from "./EnvironmentFixture";
@@ -21,7 +22,9 @@ import ThemeFixture from "./ThemeFixture";
 
 createRoot(document.getElementById("root")!).render(
   <SharedComponentsProvider>
-    {new URLSearchParams(location.search).has("aiMcp") ? (
+    {new URLSearchParams(location.search).has("grpc") ? (
+      <GrpcFixture />
+    ) : new URLSearchParams(location.search).has("aiMcp") ? (
       <AiMcpFixture />
     ) : new URLSearchParams(location.search).has("socketWorkspace") ? (
       <SocketWorkspaceFixture />

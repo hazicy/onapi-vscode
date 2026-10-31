@@ -8,7 +8,14 @@ import {
 
 type Command = Extract<
   RequestPanelCommandInput,
-  { action: "ai_send" | "mcp_connect" | "mcp_request" }
+  {
+    action:
+      | "ai_send"
+      | "mcp_connect"
+      | "mcp_request"
+      | "grpc_discover"
+      | "grpc_invoke";
+  }
 >;
 type Pending = { id: string; sequence: number; command: Command };
 

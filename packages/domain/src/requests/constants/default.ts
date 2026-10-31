@@ -1,3 +1,4 @@
+import { grpcConfigSchema } from "../grpc";
 import i18next from "i18next";
 
 import { ApiDetailsData } from "@onapi/domain/requests/types/api";
@@ -92,6 +93,7 @@ export const DEFAULT_GRPC_DATA: GrpcDetailsData = {
   name: i18next.t("grpc.new_grpc.title"),
   kind: APIS_TARGET_TYPE_ENUM.GRPC,
   description: "",
+  grpc: grpcConfigSchema.parse({}),
   protos: [],
   request: {
     description: "",

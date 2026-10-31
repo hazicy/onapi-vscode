@@ -1,3 +1,4 @@
+import { grpcProtoFileSchema } from "@onapi/domain/requests/grpc";
 import * as z from "zod";
 import {
   id,
@@ -17,6 +18,10 @@ const fetchResult = extensibleObject({
   error: z.unknown().optional(),
 });
 export const requestPanelResponseSchema = z.discriminatedUnion("action", [
+  response(
+    "grpcImported",
+    z.object({ id, files: z.array(grpcProtoFileSchema) }),
+  ),
   response("documentFormatted", z.strictObject({ value: z.string() })),
   response("protocolExecutionEvent", executionEnvelopeSchema),
   response(

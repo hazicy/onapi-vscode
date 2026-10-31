@@ -1,3 +1,4 @@
+import { grpcConfigSchema } from "./grpc";
 import { requestKinds } from "./kinds";
 export { requestKinds } from "./kinds";
 import { aiConfigSchema, mcpConfigSchema, mcpOperationSchema } from "./ai-mcp";
@@ -191,9 +192,14 @@ export const mcpEditorRecordSchema = extensibleObject({
   mcpOperation: mcpOperationSchema.optional(),
   draft: protocolDraftSchema.optional(),
 });
+export const grpcEditorRecordSchema = extensibleObject({
+  ...editorFields,
+  kind: z.literal("grpc"),
+  grpc: grpcConfigSchema,
+});
 export const nonHttpEditorRecordSchema = extensibleObject({
   ...editorFields,
-  kind: requestKindSchema.exclude(["api", "graphql", "ai", "mcp"]),
+  kind: requestKindSchema.exclude(["api", "graphql", "ai", "mcp", "grpc"]),
 });
 export const editorRecordSchema = extensibleObject({
   ...editorFields,
@@ -209,18 +215,21 @@ export const editorRecordSchema = extensibleObject({
     httpEditorRecordSchema,
     aiEditorRecordSchema,
     mcpEditorRecordSchema,
+    grpcEditorRecordSchema,
     nonHttpEditorRecordSchema,
   ]),
 );
 export type HttpEditorRecord = z.infer<typeof httpEditorRecordSchema>;
 export type AiEditorRecord = z.infer<typeof aiEditorRecordSchema>;
 export type McpEditorRecord = z.infer<typeof mcpEditorRecordSchema>;
+export type GrpcEditorRecord = z.infer<typeof grpcEditorRecordSchema>;
 export type NonHttpEditorRecord = z.infer<typeof nonHttpEditorRecordSchema> &
   Record<string, any>;
 export type EditorRecord =
   | HttpEditorRecord
   | AiEditorRecord
   | McpEditorRecord
+  | GrpcEditorRecord
   | NonHttpEditorRecord;
 export type HttpEditorProps = {
   apisData: HttpEditorRecord;

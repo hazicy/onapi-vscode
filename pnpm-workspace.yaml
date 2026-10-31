@@ -15,6 +15,7 @@ allowBuilds:
   # Published generators are self-contained; skip nested package installations.
   postman-code-generators: false
   core-js: false
+  protobufjs: false
   keytar: false
 
 patchedDependencies:

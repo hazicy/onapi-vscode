@@ -43,6 +43,11 @@ export const handleRequestPanelCommand = async (
   panel: vscode.WebviewPanel,
   document: RequestDocument,
 ) => {
+  if (message.action.startsWith("grpc_")) {
+    const { handleGrpcCommand } = await import("./execution/grpc-session");
+    await handleGrpcCommand(message, context, panel, document);
+    return;
+  }
   if (message.action.startsWith("ai_") || message.action.startsWith("mcp_")) {
     const { handleAiMcpCommand, initializeProtocolSession } =
       await import("./execution/ai-mcp-session");

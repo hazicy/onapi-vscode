@@ -1,3 +1,4 @@
+import { grpcConfigSchema } from "@onapi/domain/requests/grpc";
 import {
   aiConfigSchema,
   mcpConfigSchema,
@@ -33,6 +34,21 @@ const httpData = z.strictObject({ apiData: httpPanelDefinitionSchema });
 const sendFields = { ...commandFields, executionId: id };
 
 export const requestPanelCommandSchema = z.discriminatedUnion("action", [
+  execution(
+    "grpc_discover",
+    z.object({ id, url: z.string(), config: grpcConfigSchema }),
+  ),
+  execution(
+    "grpc_invoke",
+    z.object({ id, url: z.string(), config: grpcConfigSchema }),
+  ),
+  command("grpc_cancel", z.object({ executionId: id })),
+  command(
+    "grpc_write",
+    z.object({ id, executionId: id, message: z.string().max(2 * 1024 * 1024) }),
+  ),
+  command("grpc_end", z.object({ executionId: id })),
+  command("grpc_import", z.object({ id, directory: z.boolean().optional() })),
   command(
     "formatDocument",
     z.strictObject({

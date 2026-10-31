@@ -140,7 +140,11 @@ const useWebSocket = () => {
     const { updateApisActiveData, apisActiveData } = useApis.getState();
     const { oauthRefreshData, updateOauthRefreshData } = useStorage.getState();
     const { uid } = useUserConfig.getState().userInfo;
-    if (apisActiveData.kind === "ai" || apisActiveData.kind === "mcp") {
+    if (
+      apisActiveData.kind === "ai" ||
+      apisActiveData.kind === "mcp" ||
+      apisActiveData.kind === "grpc"
+    ) {
       return;
     }
     if (data?.access_token) {

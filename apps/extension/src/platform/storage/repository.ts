@@ -1,6 +1,7 @@
 import {
   requestKindSchema,
   aiEditorRecordSchema,
+  grpcEditorRecordSchema,
   mcpEditorRecordSchema,
 } from "@onapi/domain/requests/record";
 import { requestDefinition } from "@onapi/domain";
@@ -81,6 +82,9 @@ export class JsonRepository {
           !requestKindSchema.safeParse(row.kind).success
         ) {
           throw new Error("Missing or duplicate request ID, parentId or kind");
+        }
+        if (row.kind === "grpc") {
+          grpcEditorRecordSchema.parse(row);
         }
         if (row.kind === "ai") {
           aiEditorRecordSchema.parse(row);
@@ -212,7 +216,7 @@ export class JsonRepository {
         child !== "" &&
         child !== null &&
         child !== undefined &&
-        (/auth|cookie|token|password|secret|api[-_]?key|^(?:headersText|argsText)$/i.test(
+        (/auth|cookie|token|password|secret|api[-_]?key|private[-_]?key|^(?:headersText|argsText)$/i.test(
           key,
         ) ||
           (key === "url" &&

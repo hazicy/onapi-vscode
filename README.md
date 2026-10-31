@@ -23,17 +23,18 @@
 
 OnAPI is a lightweight API client for Visual Studio Code. Organize requests in local collections and use environment variables without signing in.
 
-| Capability                 | What you can do                                                                                             |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| HTTP & GraphQL             | Configure query parameters, headers, authentication, and request bodies; inspect responses.                 |
-| AI requests                | Use AI SDK with OpenAI-compatible endpoints, stream multi-turn conversations, and inspect token usage.      |
-| MCP requests               | Connect over Streamable HTTP, SSE, or stdio; discover and call tools, read resources, and retrieve prompts. |
-| Real-time connections      | Work with WebSocket, Socket.IO, and Server-Sent Events (SSE).                                               |
-| Collections & environments | Group saved requests and switch variables between environments.                                             |
-| Scripts & tests            | Use Postman-compatible scripts, run collections, and check assertions.                                      |
-| Import & export            | Bring in existing collections and export requests for reuse.                                                |
-| API documentation          | Share saved HTTP and GraphQL requests through the local documentation service.                              |
-| Editor integration         | Use a compact interface that follows your VS Code theme.                                                    |
+| Capability                 | What you can do                                                                                                                 |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| HTTP & GraphQL             | Configure query parameters, headers, authentication, and request bodies; inspect responses.                                     |
+| AI requests                | Use AI SDK with OpenAI-compatible endpoints, stream multi-turn conversations, and inspect token usage.                          |
+| MCP requests               | Connect over Streamable HTTP, SSE, or stdio; discover and call tools, read resources, and retrieve prompts.                     |
+| gRPC                       | Discover services with reflection or import .proto files; invoke unary and all streaming RPCs with TLS, metadata, and trailers. |
+| Real-time connections      | Work with WebSocket, Socket.IO, and Server-Sent Events (SSE).                                                                   |
+| Collections & environments | Group saved requests and switch variables between environments.                                                                 |
+| Scripts & tests            | Use Postman-compatible scripts, run collections, and check assertions.                                                          |
+| Import & export            | Bring in existing collections and export requests for reuse.                                                                    |
+| API documentation          | Share saved HTTP and GraphQL requests through the local documentation service.                                                  |
+| Editor integration         | Use a compact interface that follows your VS Code theme.                                                                        |
 
 ## Getting started
 
@@ -43,6 +44,16 @@ OnAPI requires **VS Code 1.101 or newer**.
 2. In VS Code, open **Extensions → … → Install from VSIX…** and select the package from `artifacts/`.
 3. Open **onapi** in the activity bar, create a collection, and add your first request.
 4. Configure the URL, parameters, headers, or body, then send the request to inspect its response.
+
+### gRPC requests
+
+Select **New → gRPC** in the sidebar. Enter a server address such as `localhost:50051`, then open **Service definition**. Use **Server reflection → Load services**, or import a `.proto` file/folder and load its services. Local imports are bundled with the saved request; reflection supports both v1 and v1alpha. You can also edit proto sources directly.
+
+Select a method, open **Message**, and use **Use example message** to generate a payload. Configure **Metadata**, **Authorization**, and **Settings** as needed, then select **Invoke**. Unary, server streaming, client streaming, and bidirectional streaming calls share a sent/received message timeline. For client streams, the initial message is sent when invoking; use **Send message** for additional messages and **End streaming** to finish sending while still receiving the server response. **Cancel** closes the call.
+
+Responses include gRPC status codes, elapsed time, response metadata, and trailers. Settings include deadlines (0 means no call deadline), response size limits, default fields, custom root CAs, server name override, and client certificate/key pairs for mutual TLS. `grpcs://` and `https://` endpoints enable TLS; bare addresses use the TLS toggle. Collection/environment variables are resolved before execution. Native save, undo, redo, and revert preserve message text and service definitions, including unfinished JSON/proto edits.
+
+The editor follows Postman's gRPC request workflow. gRPC scripts, OAuth flows, and grpcurl import/export are not implemented. gRPC uses its HTTP/2 transport; application HTTP proxy settings are currently only shared by HTTP, socket, AI, and MCP paths.
 
 ### AI and MCP requests
 

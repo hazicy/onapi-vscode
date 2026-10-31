@@ -261,6 +261,11 @@
           "group": "0_new_folder@0"
         },
         {
+          "command": "onapi.tree.new.grpc",
+          "when": "view == onapiRequests && viewItem == onapiFolder",
+          "group": "0_new_folder@0"
+        },
+        {
           "command": "onapi.tree.new.folder",
           "when": "view == onapiRequests && viewItem == onapiFolder",
           "group": "0_new_folder@0"
@@ -413,6 +418,11 @@
         "command": "onapi.tree.shareDocs",
         "title": "%command.tree.shareDocs%",
         "icon": "$(link)"
+      },
+      {
+        "command": "onapi.tree.new.grpc",
+        "title": "New gRPC Request",
+        "icon": "$(onapi-grpc)"
       }
     ],
     "customEditors": [

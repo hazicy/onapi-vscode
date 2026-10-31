@@ -15,7 +15,9 @@
     "./socketio/client": "./src/socketio/client.ts",
     "./ai/adapter": "./src/ai/adapter.ts",
     "./mcp/adapter": "./src/mcp/adapter.ts",
-    "./network/proxy": "./src/network/proxy.ts"
+    "./network/proxy": "./src/network/proxy.ts",
+    "./grpc/adapter": "./src/grpc/adapter.ts",
+    "./grpc/import": "./src/grpc/import.ts"
   },
   "scripts": {
     "build": "node build.mjs",
@@ -24,6 +26,8 @@
   },
   "dependencies": {
     "@ai-sdk/openai-compatible": "^3.0.82",
+    "@grpc/grpc-js": "^1.14.7",
+    "@grpc/proto-loader": "^0.8.1",
     "@modelcontextprotocol/sdk": "^1.32.2",
     "@onapi/contracts": "workspace:*",
     "@onapi/core": "workspace:*",
@@ -37,12 +41,14 @@
     "postman-collection": "^5.3.1",
     "postman-runtime": "^7.56.3",
     "postman-sandbox": "6.9.0",
+    "protobufjs": "^7.6.6",
     "socket.io-client": "^4.8.4",
     "undici": "^8.12.3",
     "uvm": "4.0.2",
     "ws": "^8.22.0"
   },
   "devDependencies": {
+    "@grpc/reflection": "^1.0.4",
     "@types/node": "~26.6.5",
     "@types/postman-collection": "^3.5.11",
     "@types/react": "^19.3.0",

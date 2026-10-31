@@ -1,3 +1,7 @@
+import type {
+  GrpcServiceDefinition,
+  GrpcStatus,
+} from "@onapi/domain/requests/grpc";
 import type { ExecutionEvent, ExecutionError } from "./index";
 
 export const PROTOCOL_EXECUTION_EVENT = "protocolExecutionEvent" as const;
@@ -6,7 +10,8 @@ export type ExecutionProtocol =
   | "websocket"
   | "socketio"
   | "ai"
-  | "mcp";
+  | "mcp"
+  | "grpc";
 export type ProtocolEventType =
   | "runtime.event"
   | "response.received"
@@ -67,7 +72,27 @@ export type McpProtocolEvent =
     }
   | { protocol: "mcp"; type: "connection.closed" }
   | { protocol: "mcp"; type: "response.received"; value: unknown };
+export type GrpcProtocolEvent =
+  | { protocol: "grpc"; type: "schema.loaded"; value: GrpcServiceDefinition }
+  | {
+      protocol: "grpc";
+      type: "call.started";
+      requestStream: boolean;
+      responseStream: boolean;
+    }
+  | {
+      protocol: "grpc";
+      type: "message.sent" | "message.received";
+      value: unknown;
+    }
+  | {
+      protocol: "grpc";
+      type: "metadata.received";
+      metadata: Record<string, string[]>;
+    }
+  | { protocol: "grpc"; type: "status.received"; status: GrpcStatus };
 export type ProtocolEvent =
+  | GrpcProtocolEvent
   | AiProtocolEvent
   | McpProtocolEvent
   | { protocol: ExecutionProtocol; type: "execution.cancelled" }

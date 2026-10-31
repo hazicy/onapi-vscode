@@ -1,3 +1,7 @@
+import {
+  grpcServiceDefinitionSchema,
+  grpcStatusSchema,
+} from "@onapi/domain/requests/grpc";
 import * as z from "zod";
 
 export { extensibleObject } from "@onapi/domain/schemas/object";
@@ -59,7 +63,7 @@ const protocolType = z.enum([
   "subscriptions.updated",
   "execution.error",
 ]);
-const protocol = z.enum(["http", "websocket", "socketio", "ai", "mcp"]);
+const protocol = z.enum(["http", "websocket", "socketio", "ai", "mcp", "grpc"]);
 const resultFields = {
   isSuccess: z.boolean(),
   time: z.string(),
@@ -73,6 +77,32 @@ export const executionEnvelopeSchema = z.strictObject({
   sequence: z.number().int().positive(),
   timestamp: z.number().finite(),
   event: z.union([
+    z.strictObject({
+      protocol: z.literal("grpc"),
+      type: z.literal("schema.loaded"),
+      value: grpcServiceDefinitionSchema,
+    }),
+    z.strictObject({
+      protocol: z.literal("grpc"),
+      type: z.literal("call.started"),
+      requestStream: z.boolean(),
+      responseStream: z.boolean(),
+    }),
+    z.strictObject({
+      protocol: z.literal("grpc"),
+      type: z.enum(["message.sent", "message.received"]),
+      value: z.unknown(),
+    }),
+    z.strictObject({
+      protocol: z.literal("grpc"),
+      type: z.literal("metadata.received"),
+      metadata: z.record(z.string(), z.array(z.string())),
+    }),
+    z.strictObject({
+      protocol: z.literal("grpc"),
+      type: z.literal("status.received"),
+      status: grpcStatusSchema,
+    }),
     z.strictObject({
       protocol: z.literal("ai"),
       type: z.literal("response.chunk"),

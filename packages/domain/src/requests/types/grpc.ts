@@ -9,6 +9,7 @@ import { ApisBaseRequestBody } from "@onapi/domain/requests/types/request";
 import { BaseResponse } from "@onapi/domain/requests/types/response";
 
 export interface GrpcDetailsData extends ApisBaseData {
+  grpc: import("../grpc").GrpcConfig;
   // Imported proto file collection
   protos: GrpcProtos[];
   // Description
