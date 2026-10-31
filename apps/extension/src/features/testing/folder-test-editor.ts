@@ -1,5 +1,7 @@
+import { getApiListName } from "../requests/request-storage";
+import { openCustomEditor } from "../../platform/webviews/custom-editor";
 import { getCurrentProjectConfig } from "../../platform/storage/project-config";
-import { createFeaturePanel } from "../../platform/webviews/create-panel";
+import { setupFeatureWebview } from "../../platform/webviews/create-panel";
 import { stopWorker } from "../requests/execution/http-runner";
 import { globalConfig, PANEL_OPTIONS } from "../../app/config";
 import * as vscode from "vscode";
@@ -9,7 +11,7 @@ import { showTabName } from "../../platform/host-utils";
 import { handelFolderTestMessage } from "./folder-test-handler";
 import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
-export const createFolderTestPanel = (
+export const openFolderTestEditor = (
   data: ApiDetailsData,
   context: vscode.ExtensionContext,
   option?: any,
@@ -17,8 +19,6 @@ export const createFolderTestPanel = (
   let { openedFolderTestPanels } = globalConfig;
 
   const folderName = getTestingFolderName(data.id, context);
-
-  const panelOptions = PANEL_OPTIONS.FOLDER_TEST;
 
   // Whether to open report page
   const openHistoryReport = option?.openHistoryReport || false;
@@ -41,8 +41,30 @@ export const createFolderTestPanel = (
     return;
   }
 
+  return openCustomEditor(context, "onapi.folderTest", folderName, {
+    workspace: getApiListName(context),
+    data: { id: data.id },
+    option,
+  });
+};
+
+export const resolveFolderTestEditor = (
+  data: ApiDetailsData,
+  context: vscode.ExtensionContext,
+  panel: vscode.WebviewPanel,
+  option?: any,
+) => {
+  let { openedFolderTestPanels } = globalConfig;
+
+  const folderName = getTestingFolderName(data.id, context);
+
+  const panelOptions = PANEL_OPTIONS.FOLDER_TEST;
+
+  // Whether to open report page
+  const openHistoryReport = option?.openHistoryReport || false;
+
   // Create and show panel
-  const panel = createFeaturePanel(context, panelOptions, {
+  setupFeatureWebview(context, panel, panelOptions, {
     title: showTabName(data?.name || panelOptions.title),
   });
 

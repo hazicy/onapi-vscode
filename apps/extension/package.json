@@ -404,6 +404,41 @@
         "title": "%command.tree.shareDocs%",
         "icon": "$(link)"
       }
+    ],
+    "customEditors": [
+      {
+        "viewType": "onapi.request",
+        "displayName": "Request",
+        "selector": [
+          {
+            "filenamePattern": "onapi-editor:/onapi.request/**"
+          },
+          {
+            "filenamePattern": "*.onapi.json"
+          }
+        ],
+        "priority": "default"
+      },
+      {
+        "viewType": "onapi.folderTest",
+        "displayName": "Folder Test",
+        "selector": [
+          {
+            "filenamePattern": "onapi-editor:/onapi.folderTest/**"
+          }
+        ],
+        "priority": "option"
+      },
+      {
+        "viewType": "onapi.testReport",
+        "displayName": "Test Report",
+        "selector": [
+          {
+            "filenamePattern": "onapi-editor:/onapi.testReport/**"
+          }
+        ],
+        "priority": "option"
+      }
     ]
   },
   "activationEvents": [],

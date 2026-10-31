@@ -27,3 +27,13 @@ host and socket tests in [Extension](../apps/extension/tests), and type-only
 contract assertions in [Contracts](../packages/contracts/tests). Contract
 assertions run with `pnpm --dir packages/contracts typecheck`; socket suites run
 with `pnpm test:websocket` and `pnpm test:socketio`.
+
+## Native editor lifecycle
+
+Run `pnpm compile` followed by `pnpm test:native` to test the installed extension
+inside a real VS Code extension host. Set `VSCODE_EXECUTABLE_PATH` to use an
+installed VS Code executable; otherwise the VS Code test runner downloads one.
+The runner uses a temporary profile, extension directory and workspace, so it
+does not change your settings or request data. It covers initial-content
+undo/redo, native save, reopening persisted requests, delayed auto save and the
+editor association for exported `.onapi.json` files.

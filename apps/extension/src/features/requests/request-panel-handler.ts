@@ -1,4 +1,4 @@
-import { saveRequestDraft, updateRequestDraft } from "./request-autosave";
+import type { RequestDocument } from "./request-document";
 import { postRequestPanelResponse } from "../../platform/webviews/request-panel-channel";
 import type { RequestPanelCommand } from "@onapi/contracts/request-panel";
 import { fetchGraphQLSchema } from "./graphql-schema";
@@ -41,6 +41,7 @@ export const handleRequestPanelCommand = async (
   message: RequestPanelCommand,
   context: vscode.ExtensionContext,
   panel: vscode.WebviewPanel,
+  document: RequestDocument,
 ) => {
   const { action, data } = message;
 
@@ -50,10 +51,11 @@ export const handleRequestPanelCommand = async (
 
   switch (action) {
     case "saveApiData":
-      await saveRequestDraft(context, panel, data, message.requestId);
+      document.edit(data);
+      await vscode.workspace.save(document.uri);
       break;
     case "updateApiActiveData":
-      updateRequestDraft(context, panel, data, message.requestId);
+      document.edit(data);
       break;
     case "sendApi":
     case "sendSse": {

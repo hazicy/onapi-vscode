@@ -1,17 +1,17 @@
-import { createFeaturePanel } from "../../platform/webviews/create-panel";
+import { getApiListName } from "../requests/request-storage";
+import { openCustomEditor } from "../../platform/webviews/custom-editor";
+import { setupFeatureWebview } from "../../platform/webviews/create-panel";
 import { globalConfig, PANEL_OPTIONS } from "../../app/config";
 import * as vscode from "vscode";
 import { showTabName } from "../../platform/host-utils";
 import type { TestingReportList } from "@onapi/contracts";
 import { handelFolderTestReportDataMessage } from "./folder-test-report-handler";
 
-export const createfolderTestReportDataPanel = (
+export const openTestReportEditor = (
   data: TestingReportList,
   context: vscode.ExtensionContext,
 ) => {
   let { openedFolderTestReportDataPanels } = globalConfig;
-
-  const panelOptions = PANEL_OPTIONS.FOLDER_TEST_REPORT;
 
   if (openedFolderTestReportDataPanels[data?.report_id]) {
     // Tab already exists, switch to it
@@ -21,8 +21,23 @@ export const createfolderTestReportDataPanel = (
     return;
   }
 
+  return openCustomEditor(context, "onapi.testReport", data.report_id, {
+    workspace: getApiListName(context),
+    data: { report_id: data.report_id },
+  });
+};
+
+export const resolveTestReportEditor = (
+  data: TestingReportList,
+  context: vscode.ExtensionContext,
+  panel: vscode.WebviewPanel,
+) => {
+  let { openedFolderTestReportDataPanels } = globalConfig;
+
+  const panelOptions = PANEL_OPTIONS.FOLDER_TEST_REPORT;
+
   // Create and show panel
-  const panel = createFeaturePanel(context, panelOptions, {
+  setupFeatureWebview(context, panel, panelOptions, {
     title: showTabName(data?.report_name || panelOptions.title),
   });
 

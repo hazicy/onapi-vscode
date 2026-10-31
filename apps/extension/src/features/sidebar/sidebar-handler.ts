@@ -1,4 +1,4 @@
-import { discardRequestAutosaves } from "../requests/request-autosave";
+import { discardRequestDocuments } from "../requests/request-editor";
 import { getExecutionCollection } from "../requests/execution/http-runner";
 import * as vscode from "vscode";
 import { storageChanged } from "../../platform/storage/events";
@@ -152,10 +152,7 @@ export const handleMessage = async (
       forEach(globalConfig.openedPanels, (openedPanel, key) => {
         const openItem = message.data.find((i: any) => i?.id === key);
         if (isPlainObject(openItem)) {
-          openedPanel.webview.postMessage({
-            action: "setApiData",
-            data: openItem,
-          });
+          updateOpenData(globalConfig.openedPanels, openItem);
         }
       });
 
@@ -192,6 +189,21 @@ export const handleMessage = async (
       try {
         const { team, project } = message.data;
         if (!team || !project) {
+          return;
+        }
+
+        // Native tab closing handles Save / Don’t Save / Cancel for dirty documents.
+        const requestTabs = vscode.window.tabGroups.all
+          .flatMap((group) => group.tabs)
+          .filter(
+            (tab) =>
+              tab.input instanceof vscode.TabInputCustom &&
+              tab.input.viewType.startsWith("onapi."),
+          );
+        if (
+          requestTabs.length &&
+          !(await vscode.window.tabGroups.close(requestTabs))
+        ) {
           return;
         }
 
@@ -305,7 +317,7 @@ export const handleMessage = async (
         if (getApiListName(context) !== projectKey) {
           return;
         }
-        discardRequestAutosaves(projectKey, deletedIds);
+        discardRequestDocuments(projectKey, deletedIds);
         for (const id of deletedIds) {
           openedPanels[id]?.dispose();
           if (curData.kind === "folder") {

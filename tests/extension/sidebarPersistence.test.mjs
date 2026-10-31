@@ -168,7 +168,10 @@ test("setApiList propagates the actual storage result and selects the project ke
           return { handlePanelAction: () => false };
         if (id === "lodash") return nativeDependency(id);
         if (id.endsWith("/config"))
-          return { globalConfig: { openedPanels: {} } };
+          return {
+            globalConfig: { openedPanels: {} },
+            DEFAULT_TARGET_NAME: {},
+          };
         if (id === "./index" || /\/storage(?:\/index)?$/.test(id))
           return {
             updateDataInGlobalStorage: unused,

@@ -10,6 +10,10 @@ for (const failAt of ["storage", "initialization"]) {
     const { activate, deactivate } = await load(
       "apps/extension/src/extension.ts",
       (id) => {
+        if (id === "./app/editors")
+          return { registerEditors: () => calls.push(["editors"]) };
+        if (id === "./features/requests/request-editor")
+          return { syncRequestDocuments: unused, openRequestEditor: unused };
         if (id === "vscode")
           return {
             env: { language: "en" },
@@ -44,12 +48,6 @@ for (const failAt of ["storage", "initialization"]) {
               }
             },
           };
-        if (id === "./features/requests/request-autosave")
-          return {
-            flushAllRequestAutosaves: async () => {
-              calls.push(["flush-autosave"]);
-            },
-          };
         if (id.endsWith("/register"))
           return { registerSidebarTree: () => calls.push(["views"]) };
         if (id.endsWith("/initialize"))
@@ -64,15 +62,18 @@ for (const failAt of ["storage", "initialization"]) {
             startDocsServer: () => calls.push(["docs"]),
             restartServer: unused,
           };
-        if (id === "./platform/webviews/panel-manager")
-          return {
-            createOpenPanel: unused,
-            createImportDataPanel: unused,
-            createEnvironmentPanel: unused,
-            createFolderTestPanel: unused,
-            createfolderTestReportDataPanel: unused,
-            createExportDataPanel: unused,
-          };
+        if (id.endsWith("/request-editor"))
+          return { openRequestEditor: unused };
+        if (id.endsWith("/folder-test-editor"))
+          return { openFolderTestEditor: unused };
+        if (id.endsWith("/test-report-editor"))
+          return { openTestReportEditor: unused };
+        if (id.endsWith("/import-data-panel"))
+          return { createImportDataPanel: unused };
+        if (id.endsWith("/export-data-panel"))
+          return { createExportDataPanel: unused };
+        if (id.endsWith("/environment-panel"))
+          return { createEnvironmentPanel: unused };
         if (id === "./platform/theme")
           return { onThemeChange: unused, onFontSizeChange: unused };
         if (id === "./features/sharing/share-list-panel")
@@ -96,7 +97,7 @@ for (const failAt of ["storage", "initialization"]) {
     assert.ok(commands.has("openTabPanel"));
     assert.ok(calls.some(([name]) => name === "error"));
     await deactivate();
-    assert.deepEqual(calls.slice(-2), [["flush-autosave"], ["flush-storage"]]);
+    assert.deepEqual(calls.at(-1), ["flush-storage"]);
     if (failAt === "storage")
       assert.ok(!calls.some(([name]) => name === "initialize"));
     else

@@ -234,18 +234,14 @@ test("the actual host receiver rejects invalid messages and correlates asynchron
     "apps/extension/src/platform/webviews/request-panel-channel.ts",
     nativeDependency,
   );
-  const { createOpenPanel } = await load(
-    "apps/extension/src/features/requests/open-panel.ts",
+  const { resolveRequestEditor } = await load(
+    "apps/extension/src/features/requests/request-editor.ts",
     (id) => {
+      if (id.endsWith("/storage"))
+        return { getDataFromGlobalStorage: () => [] };
       if (id.endsWith("/request-panel-channel")) return boundary;
-      if (id.endsWith("/create-panel"))
-        return { createFeaturePanel: () => panel };
-      if (id === "./request-autosave")
-        return {
-          attachRequestAutosave() {},
-          closeRequestAutosave() {},
-          getRequestAutosaveDraft: () => undefined,
-        };
+      if (id.endsWith("/create-panel")) return { setupFeatureWebview() {} };
+      if (id.endsWith("/custom-editor")) return { openCustomEditor() {} };
       if (id === "./request-panel-handler")
         return {
           handleRequestPanelCommand: async (message) => {
@@ -282,11 +278,22 @@ test("the actual host receiver rejects invalid messages and correlates asynchron
       return nativeDependency(id);
     },
   );
-  createOpenPanel(definition, {
-    extensionPath: "/extension",
-    globalState: { get: () => ({}) },
-    subscriptions: [],
-  });
+  resolveRequestEditor(
+    {
+      draft: definition,
+      dirty: false,
+      context: {},
+      workspace: "workspace",
+      uri: { scheme: "onapi-editor" },
+      onDidChange: () => ({ dispose() {} }),
+    },
+    {
+      extensionPath: "/extension",
+      globalState: { get: () => ({}) },
+      subscriptions: [],
+    },
+    panel,
+  );
   await listener({
     action: "sendApi",
     requestId: "bad",

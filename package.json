@@ -24,7 +24,8 @@
     "check:ui": "node scripts/check-ui-migration.mjs",
     "check:boundaries": "node scripts/check-boundaries.mjs",
     "check": "pnpm lint && pnpm check:boundaries && pnpm test:unit",
-    "test": "pnpm test:unit"
+    "test": "pnpm test:unit",
+    "test:native": "node scripts/test-native-editors.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",

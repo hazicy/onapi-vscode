@@ -13,7 +13,7 @@ export function createFeaturePanel(
   definition: PanelDefinition,
   options: PanelOptions = {},
 ) {
-  const { viewType, iconName } = definition;
+  const { viewType } = definition;
   const panel = vscode.window.createWebviewPanel(
     viewType,
     options.title ?? definition.title,
@@ -25,6 +25,23 @@ export function createFeaturePanel(
       enableCommandUris: true,
     },
   );
+  setupFeatureWebview(context, panel, definition, options);
+  return panel;
+}
+
+/** Configure either a utility panel or a VS Code-owned custom editor. */
+export function setupFeatureWebview(
+  context: vscode.ExtensionContext,
+  panel: vscode.WebviewPanel,
+  definition: PanelDefinition,
+  options: PanelOptions = {},
+) {
+  const { viewType, iconName } = definition;
+  panel.title = options.title ?? definition.title;
+  panel.webview.options = {
+    enableScripts: true,
+    enableCommandUris: true,
+  };
   if (iconName) {
     panel.iconPath = vscode.Uri.file(
       path.join(context.extensionPath, "dist", "images", iconName),

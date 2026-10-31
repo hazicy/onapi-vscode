@@ -1,3 +1,4 @@
+import { syncRequestDocument } from "./request-editor";
 import { postRequestPanelResponse } from "../../platform/webviews/request-panel-channel";
 import * as vscode from "vscode";
 import { copyTextToClipboard, showTabName } from "../../platform/host-utils";
@@ -15,6 +16,9 @@ export const updateOpenData = (
   apiData: ApiDetailsData,
 ) => {
   const panel = openedPanels?.[apiData?.id];
+  if (panel && syncRequestDocument(panel, apiData)) {
+    return;
+  }
   if (["api", "folder"].includes(apiData?.kind) && panel) {
     // Update title
     panel.title = showTabName(apiData?.name);

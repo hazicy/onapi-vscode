@@ -1,14 +1,15 @@
-import { flushAllRequestAutosaves } from "./features/requests/request-autosave";
+import { registerEditors } from "./app/editors";
 import * as vscode from "vscode";
 import "./platform/locale/index";
 import {
-  createOpenPanel,
-  createImportDataPanel,
-  createEnvironmentPanel,
-  createFolderTestPanel,
-  createfolderTestReportDataPanel,
-  createExportDataPanel,
-} from "./platform/webviews/panel-manager";
+  openRequestEditor,
+  syncRequestDocuments,
+} from "./features/requests/request-editor";
+import { createImportDataPanel } from "./features/import/import-data-panel";
+import { createEnvironmentPanel } from "./features/environment/environment-panel";
+import { openFolderTestEditor } from "./features/testing/folder-test-editor";
+import { openTestReportEditor } from "./features/testing/test-report-editor";
+import { createExportDataPanel } from "./features/export/export-data-panel";
 import { onThemeChange, onFontSizeChange } from "./platform/theme";
 import { initializePlugin } from "./app/initialize";
 import { restartServer, startDocsServer } from "./features/documentation";
@@ -36,6 +37,7 @@ export async function activate(context: vscode.ExtensionContext) {
     if (repository?.error) {
       return;
     }
+    syncRequestDocuments(context);
     const config = getCurrentProjectConfig(context);
     for (const panel of [
       ...Object.values(globalConfig.openedPanels || {}),
@@ -51,6 +53,7 @@ export async function activate(context: vscode.ExtensionContext) {
   await repository.start();
   // Views must register even when local data cannot be loaded.
   registerSidebarTree(context);
+  registerEditors(context);
   const recover = async () => {
     if (!repository?.error) {
       return;
@@ -231,7 +234,7 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand(
       "openTabPanel",
       (data, openHandledAt?: number) => {
-        createOpenPanel(data, context, openHandledAt);
+        return openRequestEditor(data, context, openHandledAt);
       },
     ),
   );
@@ -267,14 +270,14 @@ export async function activate(context: vscode.ExtensionContext) {
   // Folder test page
   context.subscriptions.push(
     vscode.commands.registerCommand("onapi.folderTest", (data, option) => {
-      createFolderTestPanel(data, context, option);
+      return openFolderTestEditor(data, context, option);
     }),
   );
 
   // Folder test page
   context.subscriptions.push(
     vscode.commands.registerCommand("onapi.folderTestReportData", (data) => {
-      createfolderTestReportDataPanel(data, context);
+      return openTestReportEditor(data, context);
     }),
   );
 
@@ -292,6 +295,5 @@ export async function activate(context: vscode.ExtensionContext) {
 
 // This method is called when your extension is deactivated
 export async function deactivate() {
-  await flushAllRequestAutosaves();
   await repository?.flush();
 }
