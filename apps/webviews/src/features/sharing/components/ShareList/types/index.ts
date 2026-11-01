@@ -1,4 +1,4 @@
-import type { EditorRecord as ApiDetailsData } from "@onapi/domain/requests/record";
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import type { TabPaneProps } from "@/shared/ui/base";
 
 export type PanelProps = {
@@ -9,7 +9,7 @@ export type PanelProps = {
   setPlainOptions?: (option: any) => void;
   menuType: "history" | "share";
   shareList: Array<
-    ApiDetailsData & {
+    EditorRecord & {
       share_time: number;
     }
   >;

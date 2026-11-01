@@ -1,12 +1,13 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import { syncRequestDocument } from "./request-editor";
 import { postRequestPanelResponse } from "../../platform/webviews/request-panel-channel";
 import * as vscode from "vscode";
 import { copyTextToClipboard, showTabName } from "../../platform/host-utils";
 import { getResolvedCodeRequest } from "./execution/http-runner";
-import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
+
 export const updateOpenData = (
   openedPanels: { [key: string]: vscode.WebviewPanel },
-  apiData: ApiDetailsData,
+  apiData: EditorRecord,
 ) => {
   const panel = openedPanels?.[apiData?.id];
   if (panel && syncRequestDocument(panel, apiData)) {
@@ -24,10 +25,13 @@ export const updateOpenData = (
 };
 
 export const copyAsCurl = async (
-  apiData: ApiDetailsData,
+  apiData: EditorRecord,
   context: vscode.ExtensionContext,
 ) => {
   try {
+    if (apiData.kind !== "api" && apiData.kind !== "graphql") {
+      throw new Error("Only HTTP requests can be copied as cURL");
+    }
     const { generateRequestCode } = await import("./code-generation");
     const request = await getResolvedCodeRequest(apiData, context);
     copyTextToClipboard(await generateRequestCode(request, "curl", "cURL"));

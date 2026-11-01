@@ -2,9 +2,9 @@ import styles from "./Params.module.css";
 import { FC } from "react";
 
 import FolderParamsSettings from "@/features/collections/components/FolderSettings/ParamsSettings";
-import { FolderComponentType } from "@onapi/domain/requests/types/folder";
+import { FolderEditorProps } from "@onapi/domain/requests/record";
 
-const Params: FC<FolderComponentType> = ({ apisData, onApisDataChange }) => {
+const Params: FC<FolderEditorProps> = ({ apisData, onApisDataChange }) => {
   return (
     <div className={styles.container}>
       <FolderParamsSettings value={apisData} onChange={onApisDataChange} />

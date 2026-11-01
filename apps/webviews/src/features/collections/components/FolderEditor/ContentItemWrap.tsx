@@ -1,4 +1,7 @@
-import { editorRecordSchema } from "@onapi/domain/requests/record";
+import {
+  folderEditorRecordSchema,
+  type FolderEditorRecord,
+} from "@onapi/domain/requests/record";
 import { FC, FunctionComponent, memo } from "react";
 
 import { useMemoizedFn } from "ahooks";
@@ -6,26 +9,24 @@ import { useMemoizedFn } from "ahooks";
 import { SuspenseContent } from "@/shared/components";
 
 import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
-import { ApiDetailsData, ApisData } from "@onapi/domain/requests/types/api";
 
 interface Props {
-  apisData: ApiDetailsData;
-  // onApisDataChange:(val:ApiDetailsData)=>void;
+  apisData: FolderEditorRecord;
   contentType?: string;
   activeContentType?: string | number;
   element: FunctionComponent<{
-    apisData: ApisData;
-    onApisDataChange: (param: ApiDetailsData) => void;
+    apisData: FolderEditorRecord;
+    onApisDataChange: (param: FolderEditorRecord) => void;
   }>;
 }
 
 const ContentItemWrap: FC<Props> = memo((props) => {
   const { apisData } = props;
 
-  const onApisDataChange = useMemoizedFn((data: ApiDetailsData) => {
+  const onApisDataChange = useMemoizedFn((data: FolderEditorRecord) => {
     useRequestWorkspaceStore
       .getState()
-      .setActiveRequest(editorRecordSchema.parse(data));
+      .setActiveRequest(folderEditorRecordSchema.parse(data));
   });
 
   return (

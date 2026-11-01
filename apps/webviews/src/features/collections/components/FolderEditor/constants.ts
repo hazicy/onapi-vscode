@@ -1,3 +1,4 @@
+import type { FolderEditorProps } from "@onapi/domain/requests/record";
 import { FunctionComponent, lazy } from "react";
 
 import i18next from "i18next";
@@ -7,11 +8,11 @@ const FolderBaseSettings = lazy(() => import("./Settings"));
 
 export const APIS_CONTENT_MAP: {
   [key: string]:
-    | FunctionComponent<{ apisData: any; onApisDataChange: any }>
+    | FunctionComponent<FolderEditorProps>
     | {
         value: string;
         label: string;
-        children: FunctionComponent<{ apisData: any; onApisDataChange: any }>;
+        children: FunctionComponent<FolderEditorProps>;
       }[];
 } = {
   folder: [

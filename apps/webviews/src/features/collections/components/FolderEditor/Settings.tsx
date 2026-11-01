@@ -2,9 +2,9 @@ import styles from "./Settings.module.css";
 import { FC } from "react";
 
 import FolderBaseSettings from "@/features/collections/components/FolderSettings/BaseSettings/BaseSettings";
-import { FolderComponentType } from "@onapi/domain/requests/types/folder";
+import { FolderEditorProps } from "@onapi/domain/requests/record";
 
-const Settings: FC<FolderComponentType> = ({ apisData, onApisDataChange }) => {
+const Settings: FC<FolderEditorProps> = ({ apisData, onApisDataChange }) => {
   return (
     <div className={styles.container}>
       <FolderBaseSettings value={apisData} onChange={onApisDataChange} />

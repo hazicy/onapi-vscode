@@ -1,3 +1,4 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import { useEffect, useState } from "react";
 
 import i18next from "i18next";
@@ -13,7 +14,6 @@ import {
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import { arrayToTreeObject, flatTreeItems } from "@/shared/utils/common";
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
 interface Props {
   currentTargetId?: string;
@@ -23,7 +23,7 @@ interface Props {
 export const useFolders = (props?: Props) => {
   const { currentTargetId = "", addRootFolder = true } = props || {};
 
-  const [apisFolders, setApisFolders] = useState<ApiDetailsData[]>([]);
+  const [apisFolders, setApisFolders] = useState<EditorRecord[]>([]);
   const [flatApisFolders, setFlatApisFolders] = useState<any[]>([]);
   const savedRequests = useRequestWorkspaceStore(
     (state) => state.savedRequests,

@@ -1,10 +1,10 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import { STATUS_CODE } from "@onapi/domain/constants/common";
 import {
   CASE_ITEM_TYPE,
   TESTING_TYPE,
 } from "@onapi/domain/testing/constants/index";
 import { CaseItem, Settings } from "@onapi/domain/testing/types/common";
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
 /**Test case list */
 export type TestingData = {
@@ -64,7 +64,7 @@ export type EventItem = {
   type: CASE_ITEM_TYPE;
   enabled: STATUS_CODE;
   sort: number;
-  data: ApiDetailsData;
+  data: EditorRecord;
   parent_event_id: string;
   /**Whether bidirectional sync */
   auto_sync?: boolean;

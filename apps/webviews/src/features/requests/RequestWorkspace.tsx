@@ -8,7 +8,6 @@ import { Flex } from "@/shared/ui/base";
 import React, { lazy, useEffect, useState } from "react";
 
 import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
 // Reuse the preload promise and render its resolved component synchronously.
 // React.lazy alone suspends on its first render even if import() is cached.
@@ -191,7 +190,7 @@ const RequestWorkspace: React.FC = () => {
     if (activeRequest.kind === APIS_TARGET_TYPE_ENUM.FOLDER) {
       return (
         <Folder
-          apisData={activeRequest as unknown as ApiDetailsData}
+          apisData={activeRequest}
           onApisDataChange={(value) =>
             onApisDataChange(editorRecordSchema.parse(value))
           }

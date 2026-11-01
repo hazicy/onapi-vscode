@@ -24,7 +24,6 @@ import { importDelay } from "@/shared/utils/common";
 
 import useWebSocketConnection from "./useWebSocketConnection";
 
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import { produce } from "immer";
 import { AnyObject } from "@onapi/domain/types/common";
 import { genQueryByUrl } from "@/features/requests/editor/request-parameters";
@@ -92,9 +91,9 @@ const WsDebug: FC<WebSocketComponentType> = ({
   return (
     <>
       <ToolBar
-        apisData={apisData as unknown as ApiDetailsData}
+        apisData={apisData}
         onApisDataChange={(val) => {
-          onApisDataChange(val as unknown as WebSocketDetailsData);
+          onApisDataChange(val);
         }}
       />
       <div className={styles.container}>

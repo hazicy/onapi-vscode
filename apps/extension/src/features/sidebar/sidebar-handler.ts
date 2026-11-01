@@ -1,3 +1,4 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import { discardRequestDocuments } from "../requests/request-editor";
 import { getExecutionCollection } from "../requests/execution/http-runner";
 import * as vscode from "vscode";
@@ -36,7 +37,7 @@ import {
   getProjectShareData,
 } from "../sharing/share-data";
 import { snowflakeId } from "@onapi/domain/utils/data-tools";
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
+
 import { getStorageFilePath, getStorageError } from "../../platform/storage";
 const saveFailure = (context: vscode.ExtensionContext) => {
   const reason = getStorageError(context);
@@ -46,7 +47,7 @@ const saveFailure = (context: vscode.ExtensionContext) => {
 };
 
 const persistApiList = async (
-  list: ApiDetailsData[],
+  list: EditorRecord[],
   context: vscode.ExtensionContext,
 ) => {
   if (await setApiList(list, context)) {
@@ -57,7 +58,7 @@ const persistApiList = async (
 };
 
 const notifyApiListChanged = (
-  apiList: ApiDetailsData[],
+  apiList: EditorRecord[],
   context: vscode.ExtensionContext,
 ) => {
   const { shareListWebView, openedFolderTestPanels } = globalConfig;
@@ -87,14 +88,14 @@ const notifyApiListChanged = (
 };
 
 const saveApiListItem = async (
-  data: ApiDetailsData,
+  data: EditorRecord,
   context: vscode.ExtensionContext,
 ) => {
   const { openedPanels } = globalConfig;
 
   const workspace = getApiListName(context);
   let index = -1;
-  let apiList: ApiDetailsData[] = [];
+  let apiList: EditorRecord[] = [];
   const saved = await updateApiList(context, (current) => {
     apiList = current;
     index = current.findIndex((item) => item.id === data.id);
@@ -244,9 +245,7 @@ export const handleMessage = async (
 
       break;
     case "openTagPanelById":
-      const curData = apiList.find(
-        (i: ApiDetailsData) => i?.id === message.data,
-      );
+      const curData = apiList.find((i: EditorRecord) => i?.id === message.data);
       if (!curData) {
         break;
       }
@@ -299,7 +298,7 @@ export const handleMessage = async (
           return;
         }
         const deletedIds = new Set<string>();
-        let list: ApiDetailsData[] = [];
+        let list: EditorRecord[] = [];
         const saved = await updateApiList(context, (latest) => {
           const root = latest.find((item) => item.id === curData.id);
           if (root) {
@@ -343,7 +342,7 @@ export const handleMessage = async (
       // Find all elements under the moved directory
       if (isArray(message?.data?.ids)) {
         const workspace = getApiListName(context);
-        const changedItems = new Map<string, ApiDetailsData>();
+        const changedItems = new Map<string, EditorRecord>();
         const saved = await updateApiList(context, (apiList) => {
           forEach(message.data.ids, (id) => {
             const moved = apiList.find((item) => item.id === id);
@@ -363,7 +362,7 @@ export const handleMessage = async (
               }
               const siblings = apiList
                 .filter((item) => item.parentId === parentId && item.id !== id)
-                .sort((a, b) => a.sort - b.sort);
+                .sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0));
               const goalIndex = siblings.findIndex(
                 (item) => item.id === (insertAfter ? before : after),
               );

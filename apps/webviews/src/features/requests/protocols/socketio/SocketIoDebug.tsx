@@ -26,7 +26,7 @@ import { importDelay } from "@/shared/utils/common";
 import useSocketIoConnection from "./useSocketIoConnection";
 
 import ToolBar from "../http/ToolBar";
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
+
 import { produce } from "immer";
 
 const Request = lazy(() => importDelay(import("./Request/Request")));
@@ -92,9 +92,9 @@ const SocketIoDebug: FC<SocketIoComponentType> = ({
   return (
     <>
       <ToolBar
-        apisData={apisData as unknown as ApiDetailsData}
+        apisData={apisData}
         onApisDataChange={(val) => {
-          onApisDataChange(val as unknown as SocketIoDetailsData);
+          onApisDataChange(val);
         }}
       />
       <div className={styles.container}>

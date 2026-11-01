@@ -173,3 +173,33 @@ test("all authentication types exposed by the editor retain their native attribu
     assert.deepEqual(plain(domain.editorRecordSchema.parse(record)), record);
   }
 });
+
+test("folder records keep native settings and validate them without HTTP fields", () => {
+  const folder = {
+    id: "folder",
+    parentId: "0",
+    name: "Folder",
+    kind: "folder",
+    auth: { type: "bearer", bearer: [{ key: "token", value: "secret" }] },
+    variable: [{ key: "count", value: 42 }],
+    event: [
+      {
+        listen: "prerequest",
+        script: { exec: ["pm.variables.set('x', '1')"] },
+      },
+    ],
+  };
+  assert.deepEqual(plain(domain.editorRecordSchema.parse(folder)), folder);
+  assert.equal(
+    domain.editorRecordSchema.safeParse({ ...folder, auth: { type: 42 } })
+      .success,
+    false,
+  );
+  assert.equal(
+    domain.editorRecordSchema.safeParse({
+      ...folder,
+      event: [{ listen: "test" }],
+    }).success,
+    false,
+  );
+});

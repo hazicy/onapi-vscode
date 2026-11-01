@@ -22,7 +22,7 @@ import { AppIcon } from "@/shared/ui";
 
 import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import useUserConfig from "@/features/auth/store/useUserConfig";
-import type { HttpEditorRecord as GraphQLDetailsData } from "@onapi/domain/requests/record";
+import type { HttpEditorRecord } from "@onapi/domain/requests/record";
 import { getCollectionServerId } from "@onapi/domain/request-utils";
 import { convertToSaveFolderTree } from "@/shared/utils/common";
 
@@ -74,7 +74,7 @@ const Index = memo((props: HttpEditorProps) => {
     }),
     [apisData],
   );
-  const currentData = (): GraphQLDetailsData => {
+  const currentData = (): HttpEditorRecord => {
     const latest = useRequestWorkspaceStore.getState().activeRequest;
     return latest?.id === apisData.id &&
       (latest.kind === "api" || latest.kind === "graphql")

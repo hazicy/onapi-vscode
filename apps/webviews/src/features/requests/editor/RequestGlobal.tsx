@@ -6,13 +6,12 @@ import RequestScripts from "./Request/RequestScripts";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import styles from "./RequestGlobal.module.css";
-import type {
-  ItemGroupDefinition,
-  VariableDefinition,
-} from "postman-collection";
+import type { FolderEditorRecord } from "@onapi/domain/requests/record";
 
-type CollectionSettings = ItemGroupDefinition & {
-  variable?: VariableDefinition[];
+type CollectionSettings = {
+  auth?: FolderEditorRecord["auth"];
+  event?: unknown[];
+  variable?: FolderEditorRecord["variable"];
 };
 export default function RequestGlobal<T extends CollectionSettings>({
   item,
@@ -44,7 +43,15 @@ export default function RequestGlobal<T extends CollectionSettings>({
           children: (
             <HttpParameterTable
               tabType="query"
-              dataSource={item.variable || []}
+              dataSource={(item.variable || []).map((variable) => ({
+                ...variable,
+                value:
+                  typeof variable.value === "string"
+                    ? variable.value
+                    : variable.value === null || variable.value === undefined
+                      ? ""
+                      : JSON.stringify(variable.value),
+              }))}
               onChange={(variable) => change({ ...item, variable })}
             />
           ),

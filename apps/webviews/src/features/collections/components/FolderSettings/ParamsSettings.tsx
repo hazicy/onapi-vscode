@@ -2,11 +2,11 @@ import styles from "./ParamsSettings.module.css";
 import { FC } from "react";
 
 import RequestGlobal from "@/features/requests/editor/RequestGlobal";
-import { FolderDetailsData } from "@onapi/domain/requests/types/folder";
+import { FolderEditorRecord } from "@onapi/domain/requests/record";
 
 interface Props {
-  value: FolderDetailsData;
-  onChange: (value: FolderDetailsData) => void;
+  value: FolderEditorRecord;
+  onChange: (value: FolderEditorRecord) => void;
 }
 
 const ParamsSettings: FC<Props> = ({ value, onChange }) => {

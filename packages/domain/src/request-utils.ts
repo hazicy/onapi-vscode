@@ -1,3 +1,4 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import {
   cloneDeep,
   head,
@@ -11,7 +12,7 @@ import {
 
 import { produce } from "immer";
 import urlParse from "url-parse";
-import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
+
 import type { ApisBaseDataItem } from "@onapi/domain/requests/types/base";
 import type { ServerItem } from "@onapi/domain/environment/types/index";
 import type { CustomNumberBooleanType } from "@onapi/domain/types/common";
@@ -138,7 +139,7 @@ export const getParameterDataFilterContentLength = (
 };
 /** Socket transport ancestry; HTTP requests are not converted into another schema. */
 export type SocketCollectionItem = Pick<
-  ApiDetailsData,
+  EditorRecord,
   "id" | "parentId" | "kind" | "name" | "server_id"
 > & {
   request?:
@@ -148,7 +149,7 @@ export type SocketCollectionItem = Pick<
 export const getSocketCollection = async (
   target: SocketCollectionItem,
   items: Pick<
-    ApiDetailsData,
+    EditorRecord,
     "id" | "parentId" | "kind" | "name" | "server_id"
   >[],
   temporaryServerId?: string,

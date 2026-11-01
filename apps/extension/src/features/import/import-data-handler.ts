@@ -47,12 +47,12 @@ export async function handelImportDataMessage(
             },
           };
         } else if (fileType === IMPORT_TYPE_ENUM.POSTMAN) {
-          result = await importMethod.postmanToApipost(
+          result = await importMethod.fromPostman(
             json,
             getCurrentProjectId(context),
           );
         } else if (fileType === IMPORT_TYPE_ENUM.THUNDER_CLIENT) {
-          result = await importMethod.thunderToApipost(
+          result = await importMethod.fromThunder(
             json,
             getCurrentProjectId(context),
           );
@@ -61,7 +61,7 @@ export async function handelImportDataMessage(
             fileType,
           )
         ) {
-          result = await importMethod.swaggerToApipost(json, {
+          result = await importMethod.fromOpenApi(json, {
             basePath: !!formData?.basePath,
             host: !!formData?.hostPath,
           });

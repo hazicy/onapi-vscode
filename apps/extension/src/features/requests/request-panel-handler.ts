@@ -1,3 +1,4 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import type { RequestDocument } from "./request-document";
 import { postRequestPanelResponse } from "../../platform/webviews/request-panel-channel";
 import type { RequestPanelCommand } from "@onapi/contracts/request-panel";
@@ -21,7 +22,7 @@ import {
 import { globalConfig } from "../../app/config";
 import { forEach, isPlainObject } from "lodash";
 import { createShare } from "../sharing/share-data";
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
+
 import {
   prepareWebSocketSessionOptions,
   connectWebSocketSession,
@@ -127,7 +128,7 @@ export const handleRequestPanelCommand = async (
       break;
     case "openTagPanelById":
       const curData = getApiList(context).find(
-        (i: ApiDetailsData) => i?.id === message.data,
+        (i: EditorRecord) => i?.id === message.data,
       );
       if (!curData) {
         break;

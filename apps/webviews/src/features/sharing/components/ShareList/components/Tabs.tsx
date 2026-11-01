@@ -8,7 +8,7 @@ import clsx from "clsx";
 
 import { isArray } from "lodash-es";
 import { Empty } from "@/shared/ui";
-import type { EditorRecord as ApiDetailsData } from "@onapi/domain/requests/record";
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import ApisColorPrefixIcon from "@/shared/ui/ApisColorPrefixIcon";
 import { getBaseIconOfTargetType } from "@/shared/utils/common";
 import { formatTimeToDateTimeLong } from "@onapi/domain/utils/time";
@@ -23,7 +23,7 @@ const TabsPanel = (props: TabsProps) => {
     setCheckedList,
   } = props || {};
 
-  const renderContent = (item: ApiDetailsData & { share_time: number }) => {
+  const renderContent = (item: EditorRecord & { share_time: number }) => {
     return (
       <div
         key={item.id}

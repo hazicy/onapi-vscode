@@ -1,7 +1,6 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import { STATUS_CODE } from "@onapi/domain/constants/common";
 import { CASE_ITEM_TYPE } from "@onapi/domain/testing/constants/index";
-
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
 /**Test case steps */
 export type CaseItem = {
@@ -13,7 +12,7 @@ export type CaseItem = {
   enabled: STATUS_CODE;
   sort: number;
   data: {
-    apiData?: ApiDetailsData | null;
+    apiData?: EditorRecord | null;
     [key: string]: any;
   };
   parent_event_id: string;

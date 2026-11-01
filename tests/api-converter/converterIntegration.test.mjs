@@ -63,7 +63,7 @@ const postman = () => ({
 test("real app import/export retains directory links, auth, collection variables, folder scope and defaults", async () => {
   const source = postman();
   const original = structuredClone(source);
-  const imported = await api.importMethod.postmanToApipost(source, "project");
+  const imported = await api.importMethod.fromPostman(source, "project");
   assert.equal(imported.status, "success");
   assert.deepEqual(source, original);
   const [folder, request] = imported.data.apis;
@@ -75,7 +75,7 @@ test("real app import/export retains directory links, auth, collection variables
     imported.data.http.collection.variable[0].value,
     "https://example.com",
   );
-  const exported = await api.exportMethod.apiToPostman(imported.data);
+  const exported = await api.exportMethod.toPostman(imported.data);
   assert.equal(exported.status, "success");
   assert.equal(exported.data.auth.bearer[0].value, "secret");
   const validation = validate(exported.data, postmanSchema);
@@ -86,7 +86,7 @@ test("real app import/export retains directory links, auth, collection variables
   );
 });
 test("real Swagger app adapter preserves body schemas, auth and example data through completion", async () => {
-  const result = await api.importMethod.swaggerToApipost(
+  const result = await api.importMethod.fromOpenApi(
     {
       openapi: "3.0.3",
       info: { title: "Test" },
@@ -126,17 +126,17 @@ test("real Swagger app adapter preserves body schemas, auth and example data thr
 });
 test("conversion failures keep the existing status/message contract", async () => {
   for (const r of await Promise.all([
-    api.importMethod.postmanToApipost({}, ""),
-    api.importMethod.thunderToApipost({}, ""),
-    api.importMethod.swaggerToApipost({}, null),
-    api.exportMethod.apiToSwagger({ apis: [] }, "4.0"),
+    api.importMethod.fromPostman({}, ""),
+    api.importMethod.fromThunder({}, ""),
+    api.importMethod.fromOpenApi({}, null),
+    api.exportMethod.toOpenApi({ apis: [] }, "4.0"),
   ])) {
     assert.equal(r.status, "error");
     assert.ok(r.message);
   }
 });
 test("export detects cyclic application folders instead of dropping all requests", async () => {
-  const result = await api.exportMethod.apiToPostman({
+  const result = await api.exportMethod.toPostman({
     apis: [
       { id: "a", parentId: "b", kind: "folder" },
       { id: "b", parentId: "a", kind: "folder" },
@@ -195,7 +195,7 @@ test("native import/export preserves identities, nested and empty folders, scrip
     ],
   };
   const original = structuredClone(source);
-  const imported = await api.importMethod.postmanToApipost(source, "project");
+  const imported = await api.importMethod.fromPostman(source, "project");
   assert.equal(imported.status, "success");
   assert.deepEqual(source, original);
   const rows = imported.data.apis;
@@ -214,13 +214,13 @@ test("native import/export preserves identities, nested and empty folders, scrip
     ],
   );
   const snapshot = structuredClone(imported.data);
-  const exported = await api.exportMethod.apiToPostman(imported.data);
+  const exported = await api.exportMethod.toPostman(imported.data);
   assert.equal(exported.status, "success");
   assert.deepEqual(imported.data, snapshot);
   assert.deepEqual(exported.data.item, source.item);
   exported.data.item[0].item[1].item[0].response[0].body = "edited";
   assert.equal(rows[3].response[0].body, '{"id":1}');
-  const next = await api.exportMethod.apiToPostman(imported.data);
+  const next = await api.exportMethod.toPostman(imported.data);
   assert.equal(next.data.item[0].item[1].item[0].response[0].body, '{"id":1}');
 });
 
@@ -249,7 +249,7 @@ test("OpenAPI app imports preserve examples without inserting legacy response de
     },
   };
   const snapshot = structuredClone(source);
-  const imported = await api.importMethod.swaggerToApipost(source, null);
+  const imported = await api.importMethod.fromOpenApi(source, null);
   assert.equal(imported.status, "success");
   assert.deepEqual(source, snapshot);
   const [first, second] = imported.data.apis;
@@ -265,7 +265,7 @@ test("OpenAPI app imports preserve examples without inserting legacy response de
   first.response[0].body = "edited";
   assert.deepEqual(second.request.auth, secondAuth);
   assert.equal(second.response[0].body, '{"id":1}');
-  const next = await api.importMethod.swaggerToApipost(source, null);
+  const next = await api.importMethod.fromOpenApi(source, null);
   assert.deepEqual(
     next.data.apis[0].response.map(({ code }) => code),
     [201],
@@ -291,7 +291,7 @@ test("OpenAPI app imports retain server variables in native environments without
     paths: { "/users": { get: { responses: { 200: { description: "OK" } } } } },
   };
   const snapshot = structuredClone(source);
-  const imported = await api.importMethod.swaggerToApipost(source, null);
+  const imported = await api.importMethod.fromOpenApi(source, null);
   assert.equal(imported.status, "success");
   assert.deepEqual(source, snapshot);
   const [development, empty] = imported.data.http.environments;

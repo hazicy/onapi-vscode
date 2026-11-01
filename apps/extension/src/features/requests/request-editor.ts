@@ -1,6 +1,7 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import { executionScopeFor } from "../../platform/execution/owners";
 import type { RequestDocument } from "./request-document";
-import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
+
 import { readStoredData } from "../../platform/storage";
 import { setRequestDraft } from "./request-status";
 import { openCustomEditor } from "../../platform/webviews/custom-editor";
@@ -20,7 +21,7 @@ import { handleRequestPanelCommand } from "./request-panel-handler";
 import { getDocBaseUrl } from "../sharing/share-data";
 
 export const openRequestEditor = (
-  data: ApiDetailsData,
+  data: EditorRecord,
   context: vscode.ExtensionContext,
   openHandledAt = Date.now(),
 ) => {
@@ -238,7 +239,7 @@ export function discardRequestDocuments(
 
 export function syncRequestDocument(
   panel: vscode.WebviewPanel,
-  data: ApiDetailsData,
+  data: EditorRecord,
 ) {
   const document = panels.get(panel);
   if (!document) {
@@ -249,7 +250,7 @@ export function syncRequestDocument(
 }
 
 export function syncRequestDocuments(context: vscode.ExtensionContext) {
-  const workspaces = new Map<string, ApiDetailsData[]>();
+  const workspaces = new Map<string, EditorRecord[]>();
   for (const document of documents) {
     if (
       document.context !== context ||

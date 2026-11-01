@@ -5,42 +5,71 @@ import {
   nativeCollection,
 } from "@onapi/api-converter/adapters/converter-adapter";
 import { fromPostmanCollection, createDefaultHttpConfig } from "@onapi/domain";
+import type {
+  CollectionExportInput,
+  CollectionImportResult,
+} from "./adapters/converter-adapter";
+import type { PostmanCollection } from "@onapi/domain";
 import type { Result, Warning } from "@onapi/api-converter";
 
-export const throwResult = (
-  status: "error" | "success",
-  message: string,
-  data: any = "",
-) => ({ status, message, data, warnings: [] as Warning[] });
+export type ConversionResult<T> =
+  | { status: "success"; message: string; data: T; warnings: Warning[] }
+  | { status: "error"; message: string; warnings: Warning[] };
+
+const failure = (
+  error: unknown,
+): Extract<ConversionResult<never>, { status: "error" }> => ({
+  status: "error",
+  message: String(error),
+  warnings: [],
+});
+
+function isPostmanCollection(value: unknown): value is PostmanCollection {
+  if (
+    !value ||
+    typeof value !== "object" ||
+    !("info" in value) ||
+    !("item" in value)
+  ) {
+    return false;
+  }
+  const info = value.info;
+  return (
+    !!info &&
+    typeof info === "object" &&
+    "name" in info &&
+    typeof info.name === "string" &&
+    info.name.length > 0 &&
+    Array.isArray(value.item)
+  );
+}
 const loadConverters = (() => {
   let pending: Promise<typeof import("./index")> | undefined;
   return () => (pending ??= import("./index"));
 })();
 async function convert<T>(
   run: (converters: Awaited<ReturnType<typeof loadConverters>>) => Result<T>,
-) {
+): Promise<ConversionResult<T>> {
   try {
     const result = run(await loadConverters());
     return { status: "success" as const, message: "", ...result };
   } catch (error) {
-    return throwResult("error", String(error));
+    return failure(error);
   }
 }
 export const exportMethod = {
-  apiToSwagger: (
-    data: any,
-    version: string,
-    _language?: "en" | "zh-cn" | "ja" | "zh-hant" | "id",
-  ) =>
+  toOpenApi: (data: CollectionExportInput, version: "2.0" | "3.0") =>
     convert(({ writeOpenApi, readPostman }) => {
       const source = fromApp(data, readPostman);
-      const result = writeOpenApi(source.data, version as "2.0" | "3.0");
+      const result = writeOpenApi(source.data, version);
       return {
         data: result.data,
         warnings: [...source.warnings, ...result.warnings],
       };
     }),
-  apiToPostman: async (data: any) => {
+  toPostman: async (
+    data: CollectionExportInput,
+  ): Promise<ConversionResult<PostmanCollection>> => {
     try {
       return {
         status: "success" as const,
@@ -49,14 +78,17 @@ export const exportMethod = {
         warnings: [],
       };
     } catch (error) {
-      return throwResult("error", String(error));
+      return failure(error);
     }
   },
 };
 export const importMethod = {
-  postmanToApipost: async (data: any, projectId: string) => {
+  fromPostman: async (
+    data: unknown,
+    projectId: string,
+  ): Promise<ConversionResult<CollectionImportResult>> => {
     try {
-      if (!data?.info?.name || !Array.isArray(data.item)) {
+      if (!isPostmanCollection(data)) {
         throw new Error("Invalid Postman collection");
       }
       return {
@@ -74,10 +106,10 @@ export const importMethod = {
         warnings: [],
       };
     } catch (error) {
-      return throwResult("error", String(error));
+      return failure(error);
     }
   },
-  thunderToApipost: (data: any, projectId: string) =>
+  fromThunder: (data: unknown, projectId: string) =>
     convert(({ readThunder, writePostman }) => {
       const result = readThunder(data);
       return {
@@ -85,8 +117,8 @@ export const importMethod = {
         warnings: result.warnings,
       };
     }),
-  swaggerToApipost: (
-    data: any,
+  fromOpenApi: (
+    data: unknown,
     options: { basePath: boolean; host: boolean } | null,
   ) =>
     convert(({ readOpenApi, writePostman }) => {

@@ -1,5 +1,6 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import * as vscode from "vscode";
-import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
+
 import type { SidebarTreeNode } from "./tree-data";
 
 export type SidebarCommandContext = {
@@ -8,8 +9,8 @@ export type SidebarCommandContext = {
     id: string,
     callback: (...args: Args) => unknown,
   ) => void;
-  list: () => ApiDetailsData[];
-  selectedData: (node?: SidebarTreeNode) => ApiDetailsData | undefined;
+  list: () => EditorRecord[];
+  selectedData: (node?: SidebarTreeNode) => EditorRecord | undefined;
   refresh: () => void;
   zh: boolean;
 };

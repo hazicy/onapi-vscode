@@ -24,7 +24,7 @@ const warnings = [...imported.warnings, ...exported.warnings];
 
 [统一模型](./src/model.ts) 定义集合、目录、请求、参数、请求体、认证、响应示例和环境。[格式适配器](./src/index.ts) 不依赖 VS Code、React、Mock 引擎或应用 `src`。
 
-[应用适配层](./src/adapters/converter-adapter.ts) 负责转换器集合模型与当前原生请求记录、项目 ID、HTTP 配置和环境之间的映射。Postman 原生导入导出保留集合和目录变量及脚本；其他格式通过转换器模型进入相同的记录结构。应用保留现有的按需加载和 `status/message/data` 返回协议。导入和文件导出展示转换警告。
+[应用适配层](./src/adapters/converter-adapter.ts) 负责转换器集合模型与当前原生请求记录、项目 ID、HTTP 配置和环境之间的映射。Postman 原生导入导出保留集合和目录变量及脚本；其他格式通过转换器模型进入相同的记录结构。应用入口为 `importMethod.fromPostman/fromThunder/fromOpenApi`、`exportMethod.toPostman/toOpenApi`，保留按需加载。输入格式文档为 `unknown`，导出输入为 `CollectionExportInput`；返回 `ConversionResult<T>`，成功时包含 `data`，失败时包含错误 `message`。导入和文件导出展示转换警告。
 
 ## 边界
 

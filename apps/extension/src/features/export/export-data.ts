@@ -18,6 +18,9 @@ export const getExportData = async (
   };
   const type = option?.type || "onapi";
   const version = option?.version || "3.0";
+  if (version !== "2.0" && version !== "3.0") {
+    throw new Error(`Unsupported OpenAPI version: ${version}`);
+  }
   const user_config = getUserConfig(context);
   const project_config = getCurrentProjectConfig(context);
   const apiList = getApiList(context);
@@ -42,7 +45,7 @@ export const getExportData = async (
 
   if (type === EXPORT_TYPE_ENUM.postman) {
     result.fileName = `${user_config?.currentProject?.name || ""}_onapi_postman.json`;
-    const swaggerRes = await exportMethod.apiToPostman(json);
+    const swaggerRes = await exportMethod.toPostman(json);
     if (swaggerRes.status === "success") {
       showConverterWarnings(swaggerRes.warnings);
       result.fileText = JSON.stringify(swaggerRes.data, null, "\t");
@@ -70,7 +73,7 @@ export const getExportData = async (
     return result;
   } else if (type === EXPORT_TYPE_ENUM.swagger) {
     result.fileName = `${user_config?.currentProject?.name || ""}_openapi_${3.0}.json`;
-    const res = await exportMethod.apiToSwagger(json, version, "en");
+    const res = await exportMethod.toOpenApi(json, version);
     if (res.status === "success") {
       showConverterWarnings(res.warnings);
       result.fileText = JSON.stringify(res.data, null, "\t");

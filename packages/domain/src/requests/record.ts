@@ -137,6 +137,8 @@ export const recordIdentityFields = {
 };
 const metadata = {
   url: z.string().optional(),
+  method: z.string().optional(),
+  variable: z.array(variableSchema).optional(),
   project_id: z.string().optional(),
   sort: z.number().optional(),
   status: z.number().optional(),
@@ -200,9 +202,22 @@ export const grpcEditorRecordSchema = extensibleObject({
   kind: z.literal("grpc"),
   grpc: grpcConfigSchema,
 });
+export const folderEditorRecordSchema = extensibleObject({
+  ...editorFields,
+  kind: z.literal("folder"),
+  auth: authSchema.optional(),
+  event: z.array(httpEventSchema).optional(),
+});
 export const nonHttpEditorRecordSchema = extensibleObject({
   ...editorFields,
-  kind: requestKindSchema.exclude(["api", "graphql", "ai", "mcp", "grpc"]),
+  kind: requestKindSchema.exclude([
+    "api",
+    "graphql",
+    "ai",
+    "mcp",
+    "grpc",
+    "folder",
+  ]),
 });
 export const editorRecordSchema = extensibleObject({
   ...editorFields,
@@ -219,6 +234,7 @@ export const editorRecordSchema = extensibleObject({
     aiEditorRecordSchema,
     mcpEditorRecordSchema,
     grpcEditorRecordSchema,
+    folderEditorRecordSchema,
     nonHttpEditorRecordSchema,
   ]),
 );
@@ -228,11 +244,17 @@ export type McpEditorRecord = z.infer<typeof mcpEditorRecordSchema>;
 export type GrpcEditorRecord = z.infer<typeof grpcEditorRecordSchema>;
 export type NonHttpEditorRecord = z.infer<typeof nonHttpEditorRecordSchema> &
   Record<string, any>;
+export type FolderEditorRecord = z.infer<typeof folderEditorRecordSchema>;
+export type FolderEditorProps = {
+  apisData: FolderEditorRecord;
+  onApisDataChange: (data: FolderEditorRecord) => void;
+};
 export type EditorRecord =
   | HttpEditorRecord
   | AiEditorRecord
   | McpEditorRecord
   | GrpcEditorRecord
+  | FolderEditorRecord
   | NonHttpEditorRecord;
 export type HttpEditorProps = {
   apisData: HttpEditorRecord;

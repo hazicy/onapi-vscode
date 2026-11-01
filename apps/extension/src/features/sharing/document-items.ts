@@ -1,11 +1,9 @@
-import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
+import type { EditorRecord } from "@onapi/domain/requests/record";
+
 import { getCollectionChildIds } from "../collections/collection-tree";
 
 /** Keep the selected folder hierarchy, excluding unsupported requests. */
-export function getDocumentItems(
-  items: ApiDetailsData[],
-  root: ApiDetailsData,
-) {
+export function getDocumentItems(items: EditorRecord[], root: EditorRecord) {
   const active = items;
   if (!active.some((item) => item.id === root.id)) {
     return [];

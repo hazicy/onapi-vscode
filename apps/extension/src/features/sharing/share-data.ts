@@ -1,5 +1,6 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import { forEach } from "lodash";
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
+
 import { ShareInfoData } from "@onapi/domain/sharing/types/share";
 import { exportMethod } from "@onapi/api-converter/export";
 import { isPlainObject } from "lodash";
@@ -7,8 +8,6 @@ import * as vscode from "vscode";
 import { DEFAULT_PROJECT } from "@onapi/domain/project/constants/project";
 import { getCurrentProjectConfig } from "../../platform/storage/project-config";
 import { EnvList } from "@onapi/domain/environment/types/index";
-import { AnyObject } from "@onapi/domain/types/common";
-import type { Workspace } from "@onapi/domain/project/types/workspace";
 import { globalConfig } from "../../app/config";
 
 export const createShare = async (
@@ -165,13 +164,13 @@ export const getExportData = (
 };
 
 export const getOpenApi = async (
-  apiData: ApiDetailsData,
+  apiData: EditorRecord,
   context: vscode.ExtensionContext,
 ) => {
   try {
     const json = getExportData({ apis: [apiData] }, context);
     const fileName = `onapi_${apiData.name}_openapi.json`;
-    const res = await exportMethod.apiToSwagger(json, "3.0");
+    const res = await exportMethod.toOpenApi(json, "3.0");
     if (res.status === "success") {
       return {
         fileName,
@@ -223,57 +222,4 @@ export const updatePageDocBaseUrl = (docBaseUrl: string) => {
 export const getDocBaseUrl = (context: vscode.ExtensionContext) => {
   const docBaseUrl = context.globalState.get<string>("docBaseUrl") || "";
   return docBaseUrl;
-};
-
-export const completeOpenApiData = (
-  pathsItem: AnyObject,
-  context: vscode.ExtensionContext,
-) => {
-  let user_config: any = context.globalState.get("userConfig") || {};
-  let project_config: any = getCurrentProjectConfig(context);
-  let project: Workspace = {} as Workspace;
-  if (
-    user_config?.currentProject &&
-    user_config?.currentProject?.project_id !== "-1"
-  ) {
-    project = user_config.currentProject;
-  } else {
-    project = DEFAULT_PROJECT;
-  }
-  const envList: EnvList = project_config.envList;
-  const servers = envList
-    ?.filter((item) => item?.env_id !== "2")
-    ?.map(({ env_var_list, name, server_list }) => {
-      const url =
-        server_list?.find((e) => e?.server_id === "1" || e?.is_default === 1)
-          ?.uri || "";
-      return {
-        variables: Object.keys(env_var_list || {}).reduce(
-          (pre: any, curKey) => {
-            const cur = env_var_list[curKey];
-            pre[curKey] = {
-              default: cur?.current_value || cur?.value || "",
-              description: cur?.description || "",
-            };
-            return pre;
-          },
-          {},
-        ),
-        url,
-        description: name || "",
-      };
-    });
-
-  return {
-    info: {
-      title: project?.name || "Open Api",
-      description: "",
-      version: "1.0.0",
-    },
-    openapi: "3.0.3",
-    servers,
-    paths: {
-      ...(pathsItem || {}),
-    },
-  };
 };

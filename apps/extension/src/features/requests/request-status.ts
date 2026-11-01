@@ -1,5 +1,6 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import { env, EventEmitter } from "vscode";
-import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
+
 import {
   isHttpCollectionItem,
   requestUrl,
@@ -16,7 +17,7 @@ const text = (zh: string, en: string) =>
 type Result = { message: string };
 const workspaces = new Map<
   string,
-  Map<string, { draft?: ApiDetailsData; result?: Result }>
+  Map<string, { draft?: EditorRecord; result?: Result }>
 >();
 const entry = (workspace: string, id: string) => {
   let items = workspaces.get(workspace);
@@ -32,7 +33,7 @@ const entry = (workspace: string, id: string) => {
 export function setRequestDraft(
   workspace: string,
   id: string,
-  draft?: ApiDetailsData,
+  draft?: EditorRecord,
 ) {
   entry(workspace, id).draft = draft;
   requestStatusChanged.fire({ workspace, id });
@@ -60,9 +61,9 @@ export function setRequestResult(
 /** Evaluate only executable request fields; response examples and documentation are excluded. */
 export function requestDecoration(
   workspace: string,
-  saved: ApiDetailsData,
+  saved: EditorRecord,
   config: any,
-  rows: ApiDetailsData[],
+  rows: EditorRecord[],
 ) {
   if (!["api", "graphql", "websocket", "socketio"].includes(saved.kind)) {
     return;
@@ -192,6 +193,7 @@ export function requestDecoration(
       fields.push(request.body.raw);
     }
     if (
+      "request" in data &&
       request === data.request &&
       request.body?.mode === "json" &&
       request.body.raw?.trim() &&

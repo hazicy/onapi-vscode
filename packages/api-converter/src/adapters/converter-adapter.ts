@@ -1,3 +1,20 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
+import type { HttpProjectConfig, HttpCollectionItem } from "@onapi/domain";
+
+export interface CollectionImportResult {
+  name?: string;
+  intro?: string;
+  apis: HttpCollectionItem[];
+  http: HttpProjectConfig;
+}
+
+export interface CollectionExportInput {
+  apis?: EditorRecord[];
+  http?: HttpProjectConfig;
+  project?: { name?: string };
+  name?: string;
+}
+
 import type { Collection } from "../index";
 import {
   toPostmanCollection,
@@ -5,7 +22,7 @@ import {
   fromPostmanCollection,
 } from "@onapi/domain";
 
-export function nativeCollection(data: any) {
+export function nativeCollection(data: CollectionExportInput) {
   const settings = data.http || createDefaultHttpConfig();
   return toPostmanCollection(data.apis || [], {
     ...settings.collection,
@@ -22,7 +39,7 @@ export function nativeCollection(data: any) {
 // External formats are adapted at import/export boundaries; storage and UI share
 // the same request records and do not perform these conversions.
 export function fromApp(
-  data: any,
+  data: CollectionExportInput,
   readPostman: (typeof import("../index"))["readPostman"],
 ) {
   return readPostman(nativeCollection(data));
@@ -31,7 +48,7 @@ export function toApp(
   collection: Collection,
   projectId: string,
   writePostman: (typeof import("../index"))["writePostman"],
-) {
+): CollectionImportResult {
   const native = writePostman(collection).data;
   return {
     name: collection.name,

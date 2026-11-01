@@ -9,7 +9,7 @@ import { produce } from "immer";
 
 import useFolders from "@/features/collections/hooks/useFolders";
 import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
-import { FolderDetailsData } from "@onapi/domain/requests/types/folder";
+import { FolderEditorRecord } from "@onapi/domain/requests/record";
 import { ChangeFuncType } from "@onapi/domain/types/common";
 
 import ServerSelect from "./ServerSelect";
@@ -17,8 +17,8 @@ import ServerSelect from "./ServerSelect";
 import { Empty } from "@/shared/ui";
 
 interface Props {
-  value: FolderDetailsData;
-  onChange: (value: FolderDetailsData) => void;
+  value: FolderEditorRecord;
+  onChange: (value: FolderEditorRecord) => void;
 }
 
 const BaseSettings: FC<Props> = ({ value, onChange }) => {
@@ -32,7 +32,7 @@ const BaseSettings: FC<Props> = ({ value, onChange }) => {
   const { t } = useTranslation();
   const inputRef = useRef<InputRef>(null);
 
-  const handleChange: ChangeFuncType<FolderDetailsData> = (key, newValue) => {
+  const handleChange: ChangeFuncType<FolderEditorRecord> = (key, newValue) => {
     const newApisData = produce(value, (draft) => {
       draft[key] = newValue;
     });

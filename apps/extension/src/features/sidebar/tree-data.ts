@@ -1,12 +1,13 @@
-import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
+import type { EditorRecord } from "@onapi/domain/requests/record";
+
 import { isHttpCollectionItem, requestUrl, requestMethod } from "@onapi/domain";
 import type { TestingReportList } from "@onapi/contracts";
 import type { RequestHistoryEntry } from "../requests/request-history";
 
 export type SidebarTreeSection = "requests" | "tests" | "history";
 export type SidebarTreeNode =
-  | { kind: "request"; data: ApiDetailsData }
-  | { kind: "testFolder"; data: ApiDetailsData }
+  | { kind: "request"; data: EditorRecord }
+  | { kind: "testFolder"; data: EditorRecord }
   | { kind: "reports" }
   | { kind: "report"; data: TestingReportList }
   | { kind: "day"; day: string }
@@ -20,10 +21,10 @@ export function dayKey(timestamp: number): string {
 
 /** Count descendants, excluding containers, without looping on malformed ancestry. */
 export function countFolderRequests(
-  all: ApiDetailsData[],
+  all: EditorRecord[],
   folderId: string,
 ): number {
-  const children = new Map<string, ApiDetailsData[]>();
+  const children = new Map<string, EditorRecord[]>();
   for (const item of all) {
     const parent = String(item.parentId);
     const siblings = children.get(parent) || [];
@@ -51,11 +52,11 @@ export function countFolderRequests(
 
 /** Preserve matching requests and their ancestors while keeping root ordering stable. */
 export function requestChildren(
-  all: ApiDetailsData[],
-  parent?: ApiDetailsData,
+  all: EditorRecord[],
+  parent?: EditorRecord,
   filter = "",
   foldersOnly = false,
-): ApiDetailsData[] {
+): EditorRecord[] {
   const byId = new Map(all.map((item) => [String(item.id), item]));
   const visible = new Set<string>();
   if (filter) {
@@ -67,7 +68,7 @@ export function requestChildren(
       ) {
         continue;
       }
-      let current: ApiDetailsData | undefined = item;
+      let current: EditorRecord | undefined = item;
       const visited = new Set<string>();
       while (current && !visited.has(String(current.id))) {
         const id = String(current.id);

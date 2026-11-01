@@ -1,7 +1,8 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import { getStorageError } from "../../platform/storage";
 import * as vscode from "vscode";
 import { isHttpCollectionItem, requestUrl, requestMethod } from "@onapi/domain";
-import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
+
 import { getApiList, getApiListName } from "../requests/request-storage";
 import { getProjectReportList } from "../testing/report-storage";
 import {
@@ -64,9 +65,9 @@ export class SidebarTreeProvider
     this.changed.dispose();
   }
 
-  readonly list = (): ApiDetailsData[] => getApiList(this.context);
+  readonly list = (): EditorRecord[] => getApiList(this.context);
   private readonly matches = (
-    data: Pick<ApiDetailsData, "name" | "url" | "method"> & {
+    data: Pick<EditorRecord, "name" | "url" | "method"> & {
       kind: string;
     },
   ) =>
@@ -93,7 +94,7 @@ export class SidebarTreeProvider
     }
     return this.historyCache.days;
   };
-  private readonly children = (parent?: ApiDetailsData, foldersOnly = false) =>
+  private readonly children = (parent?: EditorRecord, foldersOnly = false) =>
     requestChildren(
       this.list(),
       parent,

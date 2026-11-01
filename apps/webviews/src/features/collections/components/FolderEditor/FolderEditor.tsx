@@ -1,3 +1,4 @@
+import type { FolderEditorProps } from "@onapi/domain/requests/record";
 import styles from "./FolderEditor.module.css";
 import { FC, memo, useMemo } from "react";
 
@@ -14,10 +15,9 @@ import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import ContentItemWrap from "./ContentItemWrap";
 import { APIS_CONTENT_MAP } from "./constants";
 
-import { ApiComponentType } from "@onapi/domain/requests/types/api";
 import ToolBar from "./ToolBar";
 
-const FolderEditor: FC<ApiComponentType> = ({ apisData }) => {
+const FolderEditor: FC<FolderEditorProps> = ({ apisData }) => {
   const targetType = apisData?.kind;
 
   const [tabsValue, setTabsValue] = useSafeState<string | number>();

@@ -41,7 +41,7 @@ export interface ApisBaseData {
   // 1=Normal -1=Deleted -2 -99=Permanently deleted
   status: 1 | -1 | -2 | -99;
   // Request method
-  method?: unknown;
+  method?: string;
   // Archived
   is_exampled?: CustomNumberBooleanType;
   // API status: 1=In Development, 2=Completed, 3=Needs Modification, other=custom

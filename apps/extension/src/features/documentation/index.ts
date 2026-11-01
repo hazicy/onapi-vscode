@@ -3,7 +3,6 @@ import path from "node:path";
 import express, { Request, Response } from "express";
 import * as vscode from "vscode";
 import {
-  completeOpenApiData,
   getExportData,
   getProjectShareData,
   setApiDocsBaseUrl,
@@ -11,7 +10,7 @@ import {
 import { getApiList } from "../requests/request-storage";
 import { getLocalIPv4 } from "../../platform/host-utils";
 import { exportMethod } from "@onapi/api-converter/export";
-import { isEmpty, isPlainObject } from "lodash";
+import { isPlainObject } from "lodash";
 
 const PORT_START = 3000; // Starting port
 const MAX_PORT = 5000; // Maximum port limit
@@ -79,18 +78,7 @@ export const createDocsApp = (context: vscode.ExtensionContext) => {
       json.project = { ...json.project, name: shareApiData.name };
     }
 
-    // Prioritize using design data for display
-    if (
-      shareApiData.kind !== "folder" &&
-      isPlainObject(shareApiData?.open_api) &&
-      !isEmpty(shareApiData.open_api)
-    ) {
-      const openApi = completeOpenApiData(shareApiData.open_api, context);
-      res.json(openApi);
-      return;
-    }
-
-    const swaggerRes = await exportMethod.apiToSwagger(json, "3.0");
+    const swaggerRes = await exportMethod.toOpenApi(json, "3.0");
     if (swaggerRes.status === "success") {
       res.json(swaggerRes.data); // Return swagger.json data
     } else {

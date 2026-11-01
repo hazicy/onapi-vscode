@@ -1,12 +1,12 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import type * as vscode from "vscode";
 import { requestDefinition } from "@onapi/domain";
 import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { cloneDeep } from "lodash";
 import { readStoredData, updateStoredData } from "../../platform/storage";
 import { getApiListName } from "./request-storage";
-import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
-type HistoricalRequest = Pick<ApiDetailsData, "id" | "name" | "parentId"> & {
+type HistoricalRequest = Pick<EditorRecord, "id" | "name" | "parentId"> & {
   kind: string;
   url?: string;
   method?: string;

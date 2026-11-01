@@ -1,13 +1,14 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import type { HttpProjectConfig } from "@onapi/domain";
 import { create } from "@/shared/state/store";
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
+
 import { EnvList } from "@onapi/domain/environment/types/index";
 import { IDataModel } from "@/features/schemas/types";
 
 type State = {
   previewData: {
     http?: HttpProjectConfig;
-    apis: ApiDetailsData[];
+    apis: EditorRecord[];
     models: IDataModel[];
     envs: EnvList;
   };

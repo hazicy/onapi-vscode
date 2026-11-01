@@ -3,7 +3,7 @@ import { cloneDeep, isEqual, isPlainObject } from "lodash";
 import { requestDefinition } from "@onapi/domain";
 import { APIS_BASE_DEFAULT_DATA } from "@onapi/domain/requests/constants/common";
 import type { EditorRecord } from "@onapi/domain/requests/record";
-import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
+
 import {
   readEditorRequest,
   writeEditorRequest,
@@ -12,13 +12,13 @@ import {
 
 export interface RequestSnapshot {
   workspace: string;
-  draft: ApiDetailsData;
-  baseline?: ApiDetailsData;
+  draft: EditorRecord;
+  baseline?: EditorRecord;
   dirty: boolean;
 }
 export type RequestDocumentChange =
   | { type: "edit" | "replace" | "dispose" }
-  | { type: "save"; definition: ApiDetailsData; submitted: ApiDetailsData };
+  | { type: "save"; definition: EditorRecord; submitted: EditorRecord };
 
 /** Copy changed branches once and reuse immutable subtrees across undo entries. */
 function share(previous: any, next: any): any {
@@ -47,9 +47,9 @@ function share(previous: any, next: any): any {
 }
 
 export class RequestDocument implements vscode.CustomDocument {
-  private current: ApiDetailsData;
-  private saved?: ApiDetailsData;
-  private readonly empty: ApiDetailsData;
+  private current: EditorRecord;
+  private saved?: EditorRecord;
+  private readonly empty: EditorRecord;
   private readonly changes = new vscode.EventEmitter<RequestDocumentChange>();
   readonly onDidChange = this.changes.event;
   private version = 0;
@@ -63,8 +63,8 @@ export class RequestDocument implements vscode.CustomDocument {
     readonly uri: vscode.Uri,
     readonly context: vscode.ExtensionContext,
     readonly workspace: string,
-    data: ApiDetailsData,
-    baseline: ApiDetailsData | undefined,
+    data: EditorRecord,
+    baseline: EditorRecord | undefined,
     private readonly changed: (
       event: vscode.CustomDocumentEditEvent<RequestDocument>,
     ) => void,
@@ -82,7 +82,7 @@ export class RequestDocument implements vscode.CustomDocument {
       parentId: data.parentId,
       kind: data.kind,
       name: "",
-    } as ApiDetailsData);
+    } as EditorRecord);
     if (restoredDirty || !isEqual(this.current, this.saved ?? this.empty)) {
       this.version = this.sequence = 1;
     }
@@ -111,7 +111,7 @@ export class RequestDocument implements vscode.CustomDocument {
     }
   }
 
-  edit(data: ApiDetailsData | EditorRecord) {
+  edit(data: EditorRecord) {
     if (this.disposed || this.deleted) {
       throw new Error("Request document is closed or deleted");
     }
@@ -134,13 +134,13 @@ export class RequestDocument implements vscode.CustomDocument {
     });
   }
 
-  private apply(data: ApiDetailsData, version = this.version, notify = true) {
+  private apply(data: EditorRecord, version = this.version, notify = true) {
     this.current = data;
     this.version = version;
     this.changes.fire({ type: notify ? "replace" : "edit" });
   }
 
-  acceptStored(data: ApiDetailsData) {
+  acceptStored(data: EditorRecord) {
     if (this.dirty || this.disposed) {
       return;
     }

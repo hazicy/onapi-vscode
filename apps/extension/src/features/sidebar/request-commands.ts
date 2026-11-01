@@ -1,3 +1,4 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import * as vscode from "vscode";
 import type { SidebarTreeNode } from "./tree-data";
 import { handleMessage } from "./sidebar-handler";
@@ -8,7 +9,6 @@ import { getApiListName } from "../requests/request-storage";
 import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { APIS_BASE_DEFAULT_DATA } from "@onapi/domain/requests/constants/common";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
-import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
 export function registerRequestCommands({
   context,
@@ -217,7 +217,7 @@ export function registerRequestCommands({
         id: snowflakeId(),
         name: name.trim(),
         parentId: parent?.kind === "folder" ? parent.id : "0",
-      } as ApiDetailsData;
+      } as EditorRecord;
       const saved = await handleMessage(
         { action: "saveFolder", data },
         context,

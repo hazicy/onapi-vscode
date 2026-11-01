@@ -1,6 +1,6 @@
-import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
+import type { EditorRecord } from "@onapi/domain/requests/record";
 
-type CollectionItem = Pick<ApiDetailsData, "id" | "parentId" | "kind" | "sort">;
+type CollectionItem = Pick<EditorRecord, "id" | "parentId" | "kind" | "sort">;
 
 const indexChildren = <T extends CollectionItem>(items: T[]) => {
   const children = new Map<string, T[]>();
@@ -56,7 +56,9 @@ export const getCollectionApis = <T extends CollectionItem>(
       continue;
     }
     visited.add(id);
-    const siblings = (children.get(id) || []).sort((a, b) => a.sort - b.sort);
+    const siblings = (children.get(id) || []).sort(
+      (a, b) => (a.sort ?? 0) - (b.sort ?? 0),
+    );
     for (const item of siblings) {
       if (item.kind === "api") {
         result.push(item);

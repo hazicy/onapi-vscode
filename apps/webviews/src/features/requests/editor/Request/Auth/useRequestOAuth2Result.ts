@@ -23,7 +23,8 @@ export function useRequestOAuth2Result() {
     if (
       activeRequest.kind === "ai" ||
       activeRequest.kind === "mcp" ||
-      activeRequest.kind === "grpc"
+      activeRequest.kind === "grpc" ||
+      activeRequest.kind === "folder"
     ) {
       return;
     }

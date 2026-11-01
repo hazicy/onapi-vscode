@@ -59,3 +59,13 @@ export function checkParsedEditorRecord(value: unknown) {
   record.request = {};
   return props;
 }
+
+// Current editor records need only their identity and protocol data.
+export const minimalHttpRecord: import("@onapi/domain/requests/record").EditorRecord =
+  {
+    id: "minimal",
+    parentId: "0",
+    name: "Request",
+    kind: "api",
+    request: { url: "https://example.com", method: "GET" },
+  };

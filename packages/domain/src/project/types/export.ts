@@ -1,7 +1,5 @@
-import type {
-  OnapiDocument,
-  OnapiGlobalParams,
-} from "@onapi/domain/import/types/onapi";
+import type { EditorRecord } from "@onapi/domain/requests/record";
+import type { OnapiGlobalParams } from "@onapi/domain/import/types/onapi";
 import type { GrpcConfig } from "@onapi/domain/requests/grpc";
 import { WebSocketConfig } from "@onapi/domain/requests/types/websocket";
 import { SocketIoConfig } from "@onapi/domain/requests/types/socketio";
@@ -18,7 +16,7 @@ import { TestingDetailData } from "@onapi/domain/testing/types/index";
 export type ApiSampleItems = {
   sample_id: string;
   type: string;
-} & OnapiDocument;
+} & EditorRecord;
 
 type ExportCodesItem = {
   code_number: string;
@@ -50,7 +48,7 @@ export type GlobalVars = {
   };
 };
 
-export type ImportApis = OnapiDocument & {
+export type ImportApis = EditorRecord & {
   message?: any;
   config?: WebSocketConfig | SocketIoConfig;
   grpc?: GrpcConfig;

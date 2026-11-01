@@ -1,3 +1,4 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import { getApiListName } from "../requests/request-storage";
 import { openCustomEditor } from "../../platform/webviews/custom-editor";
 import { getCurrentProjectConfig } from "../../platform/storage/project-config";
@@ -9,10 +10,9 @@ import { getFolderTestPageData } from "./folder-test-data";
 import { getTestingFolderName } from "./report-storage";
 import { showTabName } from "../../platform/host-utils";
 import { handelFolderTestMessage } from "./folder-test-handler";
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
 export const openFolderTestEditor = (
-  data: ApiDetailsData,
+  data: EditorRecord,
   context: vscode.ExtensionContext,
   option?: any,
 ) => {
@@ -50,7 +50,7 @@ export const openFolderTestEditor = (
 };
 
 export const resolveFolderTestEditor = (
-  data: ApiDetailsData,
+  data: EditorRecord,
   context: vscode.ExtensionContext,
   panel: vscode.WebviewPanel,
   option?: any,

@@ -1,16 +1,16 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import * as vscode from "vscode";
 import { stopWorker } from "../requests/execution/http-runner";
 import { getCurrentProjectConfig } from "../../platform/storage/project-config";
 import { getFolderTestPageData } from "./folder-test-data";
 import { runFolderTest } from "./folder-test-runner";
 import { setTestingFolderData } from "./report-storage";
-import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
 export async function handelFolderTestMessage(
   message: { action: string; data: any },
   context: vscode.ExtensionContext,
   panel: vscode.WebviewPanel,
-  folder: ApiDetailsData,
+  folder: EditorRecord,
   openHistoryReport: boolean,
 ) {
   switch (message.action) {

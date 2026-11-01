@@ -26,7 +26,7 @@ test("documentation JavaScript is served from packaged resources with an executa
             (args) => ({ path: args.path, namespace: "stub" }),
           );
           builder.onLoad({ filter: /.*/, namespace: "stub" }, () => ({
-            contents: `export const completeOpenApiData = () => ({}); export const getExportData = () => ({}); export const getProjectShareData = () => ({ sample: {id: "sample"} }); export const setApiDocsBaseUrl = () => {}; export const getApiList = () => [{id: "sample", kind: "api", name: "Sample"}]; export const getLocalIPv4 = () => '127.0.0.1'; export const exportMethod = { apiToSwagger: async () => ({ status: "success", data: { openapi: "3.0.3", info: { title: "Onapi Scalar Preview", version: "1.0.0" }, paths: { "/users": { get: { summary: "List users", responses: { "200": { description: "Success" } } } } } } }) };`,
+            contents: `export const getExportData = () => ({}); export const getProjectShareData = () => ({ sample: {id: "sample"} }); export const setApiDocsBaseUrl = () => {}; export const getApiList = () => [{id: "sample", kind: "api", name: "Sample"}]; export const getLocalIPv4 = () => '127.0.0.1'; export const exportMethod = { toOpenApi: async () => ({ status: "success", data: { openapi: "3.0.3", info: { title: "Onapi Scalar Preview", version: "1.0.0" }, paths: { "/users": { get: { summary: "List users", responses: { "200": { description: "Success" } } } } } } }) };`,
           }));
         },
       },

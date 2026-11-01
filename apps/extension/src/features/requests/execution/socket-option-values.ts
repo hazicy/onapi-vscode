@@ -1,3 +1,4 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import { EnvListItem, ServerItem } from "@onapi/domain/environment/types/index";
 import {
   cloneDeep,
@@ -22,7 +23,6 @@ import { Cookies, Env } from "./socket-option-types";
 import { DomainInfoProps } from "@onapi/domain/project/types/cookie";
 import { SysConfig } from "@onapi/domain/settings/types/settings";
 import { getCollectionServerId } from "@onapi/domain/request-utils";
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
 // Get project related information
 export const getProjectOptions = (
@@ -64,7 +64,7 @@ export const getProjectOptions = (
 // Get API base URL
 export const getBaseUrl = (
   id: string,
-  apisData: Array<ApiDetailsData>,
+  apisData: Array<EditorRecord>,
   defaultServerId: string,
   envInfo?: EnvListItem,
 ): string => {

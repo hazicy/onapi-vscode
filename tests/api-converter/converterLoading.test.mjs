@@ -43,10 +43,10 @@ test("converters load on demand and concurrent calls share one module load", asy
     assert.deepEqual(calls, []);
     const input = { requests: [] };
     const results = await Promise.all([
-      api.exportMethod.apiToSwagger(input, "3.0"),
-      api.exportMethod.apiToPostman(input),
-      api.importMethod.thunderToApipost(input, ""),
-      api.importMethod.swaggerToApipost(input, null),
+      api.exportMethod.toOpenApi(input, "3.0"),
+      api.exportMethod.toPostman(input),
+      api.importMethod.fromThunder(input, ""),
+      api.importMethod.fromOpenApi(input, null),
     ]);
     assert.equal(calls.filter((v) => v === "load").length, 1);
     assert.equal(calls.filter((v) => v === "convert").length, 3);

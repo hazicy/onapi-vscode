@@ -2,14 +2,14 @@ import { useMemo } from "react";
 
 import { cloneDeep, forEach, includes, some } from "lodash-es";
 
-import type { EditorRecord as ApiDetailsData } from "@onapi/domain/requests/record";
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import { TreeDataFilterParams } from "@/features/collections/types/tree";
 import { ShareInfoData } from "@onapi/domain/sharing/types/share";
 
 interface Props {
-  dataSource: ApiDetailsData[];
+  dataSource: EditorRecord[];
   treeDataFilterParams: TreeDataFilterParams;
-  searchIncludesField?: (keyof ApiDetailsData)[];
+  searchIncludesField?: (keyof EditorRecord)[];
   shareData: { [key: string]: ShareInfoData };
 }
 
@@ -19,7 +19,7 @@ const useDocsData = (props: Props) => {
 
   // Filtered flat array
   const filteredShareList: Array<
-    ApiDetailsData & {
+    EditorRecord & {
       share_time: number;
     }
   > = useMemo(() => {
@@ -29,19 +29,19 @@ const useDocsData = (props: Props) => {
 
     const { value } = treeDataFilterParams;
     const sourceData = cloneDeep(dataSource);
-    const newList: (ApiDetailsData & {
+    const newList: (EditorRecord & {
       share_time: number;
     })[] = [];
 
     const sourceDataObj = sourceData.reduce(
-      (pre: { [key: string]: ApiDetailsData }, cur: ApiDetailsData) => {
+      (pre: { [key: string]: EditorRecord }, cur: EditorRecord) => {
         pre[cur.id] = cur;
         return pre;
       },
       {},
     );
     forEach(shareData, (data, id) => {
-      const localSourceData: ApiDetailsData = sourceDataObj?.[id];
+      const localSourceData: EditorRecord = sourceDataObj?.[id];
       if (localSourceData) {
         const searchIncludes = some(searchIncludesField, (field) =>
           includes(

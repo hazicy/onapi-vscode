@@ -1,10 +1,12 @@
 import { cloneDeep } from "lodash";
 import { requestDefinition } from "@onapi/domain";
-import { editorRecordSchema } from "@onapi/domain/requests/record";
+import {
+  editorRecordSchema,
+  type EditorRecord,
+} from "@onapi/domain/requests/record";
 import { DEFAULT_TARGET_NAME } from "../../app/config";
 import { getMaxSort } from "../collections/collection-order";
 
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import * as vscode from "vscode";
 import {
   getStorageError,
@@ -14,24 +16,24 @@ import {
 } from "../../platform/storage/index";
 export const getApiList = (
   context: vscode.ExtensionContext,
-): ApiDetailsData[] => {
+): EditorRecord[] => {
   return readStoredData(context, getApiListName(context), []);
 };
 
 export const setApiList = (
-  items: ApiDetailsData[],
+  items: EditorRecord[],
   context: vscode.ExtensionContext,
 ) => writeStoredData(context, getApiListName(context), items);
 
 export const updateApiList = (
   context: vscode.ExtensionContext,
-  change: (items: ApiDetailsData[]) => ApiDetailsData[],
+  change: (items: EditorRecord[]) => EditorRecord[],
 ) => updateApiListForWorkspace(context, getApiListName(context), change);
 
 export const updateApiListForWorkspace = (
   context: vscode.ExtensionContext,
   workspace: string,
-  change: (items: ApiDetailsData[]) => ApiDetailsData[],
+  change: (items: EditorRecord[]) => EditorRecord[],
 ) => updateStoredData(context, workspace, change);
 
 export const getApiListName = (context: vscode.ExtensionContext) => {
@@ -57,23 +59,23 @@ export async function readEditorRequest(
   uri: vscode.Uri,
   workspace: string,
   id: string,
-): Promise<ApiDetailsData | undefined> {
+): Promise<EditorRecord | undefined> {
   if (uri.scheme !== "onapi-editor") {
     return parseEditorRequest(await readEditorJson(uri));
   }
   return readStoredData(context, workspace, []).find(
-    (item: ApiDetailsData) => item.id === id,
+    (item: EditorRecord) => item.id === id,
   );
 }
 
 export const parseEditorRequest = (value: unknown) =>
-  editorRecordSchema.parse(value) as ApiDetailsData;
+  editorRecordSchema.parse(value);
 export const readEditorJson = async (uri: vscode.Uri) =>
   JSON.parse(new TextDecoder().decode(await vscode.workspace.fs.readFile(uri)));
 
 export async function writeEditorRequestFile(
   uri: vscode.Uri,
-  data: ApiDetailsData,
+  data: EditorRecord,
   token: vscode.CancellationToken,
 ) {
   if (token.isCancellationRequested) {
@@ -91,7 +93,7 @@ export async function writeEditorRequest(
   context: vscode.ExtensionContext,
   uri: vscode.Uri,
   workspace: string,
-  data: ApiDetailsData,
+  data: EditorRecord,
   exists: boolean,
   check: () => void,
   token: vscode.CancellationToken,

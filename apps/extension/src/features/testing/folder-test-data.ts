@@ -1,5 +1,4 @@
 import type * as vscode from "vscode";
-import { isHttpCollectionItem } from "@onapi/domain";
 import { STATUS_CODE } from "@onapi/domain/constants/common";
 import { CASE_ITEM_TYPE } from "@onapi/domain/testing/constants/index";
 import { ADD_CASE_DEFAULT } from "@onapi/domain/testing/constants/default/index";
@@ -25,11 +24,14 @@ export function getFolderTestEvents(
       visited.add(row.id);
       if (row.kind === "folder") {
         visit(row.id);
-      } else if (isHttpCollectionItem(row) && row.request) {
+      } else if (
+        (row.kind === "api" || row.kind === "graphql") &&
+        row.request
+      ) {
         events.push({
           event_id: row.id,
           test_id: folderId,
-          project_id: row.project_id,
+          project_id: row.project_id ?? "-1",
           parent_event_id: row.parentId,
           type: CASE_ITEM_TYPE.API,
           enabled: STATUS_CODE.ENABLE,

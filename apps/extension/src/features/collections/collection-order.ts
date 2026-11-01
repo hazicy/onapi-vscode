@@ -1,20 +1,17 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import { getCollectionChildIds } from "./collection-tree";
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
 export const getAllChildIds = (
-  apiList: ApiDetailsData[],
-  apisData: ApiDetailsData,
+  apiList: EditorRecord[],
+  apisData: EditorRecord,
 ) => getCollectionChildIds(apiList, apisData);
 
-export const getMaxSort = (
-  apiList: ApiDetailsData[],
-  parentId: string = "0",
-) => {
+export const getMaxSort = (apiList: EditorRecord[], parentId: string = "0") => {
   const childList = apiList.filter(
-    (i: ApiDetailsData) => i?.parentId === parentId,
+    (i: EditorRecord) => i?.parentId === parentId,
   );
   const maxSort = childList.reduce(
-    (max, obj) => (obj?.sort > max ? obj?.sort : max),
+    (max, obj) => Math.max(max, obj.sort ?? 0),
     0,
   );
   return maxSort + 1;

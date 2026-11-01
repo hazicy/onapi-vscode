@@ -1,3 +1,4 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import type { ImportOptions } from "./ImportContent/options";
 import styles2 from "./ImportApiPreview.module.css";
 import { Modal } from "@/shared/ui/base";
@@ -31,7 +32,7 @@ import {
   ImportLocationEnum,
   SWAGGER_FULL_MODAL_OPTIONS,
 } from "@onapi/domain/settings/constants/settings";
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
+
 import { EnvList } from "@onapi/domain/environment/types/index";
 import { IDataModel } from "@/features/schemas/types";
 import { arrayToTreeObject } from "@/shared/utils/common";
@@ -44,7 +45,7 @@ interface Props {
   loading: boolean;
   error?: string;
   data: {
-    apis: ApiDetailsData[];
+    apis: EditorRecord[];
     models: IDataModel[];
     envs: EnvList;
   };
@@ -407,13 +408,13 @@ const Index = ({
       if (key === ExportConfigEnum.request) {
         const apis = filter(
           data?.apis,
-          (item: ApiDetailsData) =>
+          (item: EditorRecord) =>
             item.kind !== APIS_TARGET_TYPE_ENUM.FOLDER &&
             item.kind !== APIS_TARGET_TYPE_ENUM.SOCKET,
         );
         const selectApis = filter(
           data?.apis,
-          (item: ApiDetailsData) =>
+          (item: EditorRecord) =>
             item.kind !== APIS_TARGET_TYPE_ENUM.FOLDER &&
             item.kind !== APIS_TARGET_TYPE_ENUM.SOCKET &&
             previewSelectData.apis.includes(item?.id),

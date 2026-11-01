@@ -1,7 +1,7 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import { grpcConfigSchema } from "../grpc";
 import i18next from "i18next";
 
-import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import { SampleGroupsDetailsData } from "@onapi/domain/requests/types/api-sample";
 import { ApisBaseData } from "@onapi/domain/requests/types/base";
 import { DocDetailsData } from "@onapi/domain/requests/types/doc";
@@ -97,10 +97,7 @@ export const DEFAULT_GRPC_DATA: GrpcEditorRecord = {
 };
 
 // api sample default parameters
-export const DEFAULT_API_SAMPLE_DATA: Omit<
-  ApiDetailsData,
-  "description" | "attribute_info"
-> = {
+export const DEFAULT_API_SAMPLE_DATA: EditorRecord = {
   ...DEFAULT_APIS_BASE_DATA,
   ai_expect_enable: -1,
   name: i18next.t("common.folder_operate.new_testcase"),

@@ -1,5 +1,6 @@
+import type { EditorRecord } from "@onapi/domain/requests/record";
 import * as vscode from "vscode";
-import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
+
 import type { SidebarTreeNode } from "./tree-data";
 import { countFolderRequests } from "./tree-data";
 import { getApiListName } from "../requests/request-storage";
@@ -49,8 +50,8 @@ function requestTooltip(
 function configureRequestItem(
   item: vscode.TreeItem,
   context: vscode.ExtensionContext,
-  list: () => ApiDetailsData[],
-  data: Pick<ApiDetailsData, "name" | "url" | "method" | "id"> & {
+  list: () => EditorRecord[],
+  data: Pick<EditorRecord, "name" | "url" | "method" | "id"> & {
     kind: string;
   },
   prefix: string,
@@ -89,7 +90,7 @@ export class RequestTreeItem extends vscode.TreeItem {
   constructor(
     node: Extract<SidebarTreeNode, { kind: "request" }>,
     context: vscode.ExtensionContext,
-    list: () => ApiDetailsData[],
+    list: () => EditorRecord[],
   ) {
     super("");
     configureRequestItem(this, context, list, node.data, "request");
@@ -134,7 +135,7 @@ export class TestFolderTreeItem extends vscode.TreeItem {
   constructor(
     node: Extract<SidebarTreeNode, { kind: "testFolder" }>,
     context: vscode.ExtensionContext,
-    list: () => ApiDetailsData[],
+    list: () => EditorRecord[],
     zh: boolean,
     hasChildren: boolean,
   ) {
@@ -223,7 +224,7 @@ export class HistoryTreeItem extends vscode.TreeItem {
   constructor(
     node: Extract<SidebarTreeNode, { kind: "history" }>,
     context: vscode.ExtensionContext,
-    list: () => ApiDetailsData[],
+    list: () => EditorRecord[],
   ) {
     super("");
     configureRequestItem(this, context, list, node.data.request, "history");
