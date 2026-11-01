@@ -2,18 +2,134 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import load, { nativeDependency } from "../helpers/loadTypeScript.mjs";
 
+const socketState = await load(
+  "apps/webviews/src/features/requests/execution/socket-state.ts",
+  () => ({}),
+);
 const { createStore } = await nativeDependency("zustand/vanilla");
 async function createSocketStore() {
   const { default: store } = await load(
     "apps/webviews/src/features/requests/store/useApis/websocket.ts",
-    () => ({
-      create: () => (initializer) => createStore(initializer),
-      devtools: (initializer) => initializer,
-    }),
+    (id) =>
+      id.includes("socket-state")
+        ? socketState
+        : {
+            create: () => (initializer) => createStore(initializer),
+            devtools: (initializer) => initializer,
+          },
   );
   return store;
 }
 const plain = (value) => JSON.parse(JSON.stringify(value));
+
+const envelope = (sessionId, sequence, event, targetId = "ws") => ({
+  protocolVersion: 1,
+  sessionId,
+  sequence,
+  targetId,
+  timestamp: 1,
+  event: { protocol: "websocket", ...event },
+});
+
+test("socket reducer rejects stale starts, duplicate events and messages after local disconnect", async () => {
+  const store = await createSocketStore();
+  const send = (session, sequence, event) =>
+    store.getState().consumeExecutionEvent(envelope(session, sequence, event));
+  store.getState().startConnection("ws", "new");
+  const pending = store.getState();
+  send("old", 1, { type: "session.started" });
+  assert.equal(store.getState(), pending);
+  send("new", 1, { type: "session.started" });
+  send("new", 2, {
+    type: "connection.opened",
+    result: {
+      type: "connection",
+      isSuccess: true,
+      data: { response: { headers: { server: "echo" } } },
+    },
+  });
+  const connected = store.getState();
+  send("new", 2, { type: "connection.opened", result: { type: "connection" } });
+  assert.equal(store.getState(), connected);
+  send("old", 99, { type: "message.received", result: { type: "message" } });
+  assert.equal(store.getState(), connected);
+  send("new", 3, {
+    type: "message.received",
+    result: { type: "message", message: "hello" },
+  });
+  assert.equal(
+    store.getState().websocketConnectionPool.ws.responseData.response.headers
+      .server,
+    "echo",
+  );
+  store.getState().appendConnectionResult("ws", "disconnect", {});
+  const closed = store.getState();
+  send("new", 4, {
+    type: "message.received",
+    result: { type: "message", message: "late" },
+  });
+  send("old", 1, { type: "session.started" });
+  assert.equal(store.getState(), closed);
+  store.getState().startConnection("ws", "retry");
+  send("retry", 1, { type: "session.started" });
+  send("retry", 2, {
+    type: "connection.opened",
+    result: { type: "connection", isSuccess: true },
+  });
+  assert.equal(store.getState().websocketConnectionPool.ws.status, "connect");
+});
+
+test("Socket.IO reducer records subscriptions and acks while send errors preserve the connection", () => {
+  const reduce = socketState.reduceSocketExecutionEvent;
+  let state;
+  let sequence = 0;
+  const send = (event) => {
+    state = reduce(
+      state,
+      envelope("io", ++sequence, { protocol: "socketio", ...event }),
+    );
+  };
+  send({ type: "session.started" });
+  send({
+    type: "connection.opened",
+    result: {
+      type: "connect",
+      isSuccess: true,
+      actualRequestParas: { url: "http://echo" },
+    },
+  });
+  send({
+    type: "subscriptions.updated",
+    subscriptions: { addedEvents: ["echo"], removedEvents: ["old"] },
+  });
+  send({
+    type: "ack.received",
+    result: { type: "send_ack", message: { event: "echo", data: [1, 2] } },
+  });
+  send({
+    type: "execution.error",
+    result: { type: "error", isSuccess: false, message: "bad send" },
+  });
+  assert.equal(state.status, "connect");
+  assert.equal(state.responseData.url, "http://echo");
+  assert.deepEqual(plain(state.socketRes.map((item) => item.action)), [
+    "connect",
+    "listen-end",
+    "listen",
+    "send_ack",
+    "error",
+  ]);
+  send({
+    type: "connection.closed",
+    result: { type: "disconnect", isSuccess: true },
+  });
+  const closed = state;
+  send({
+    type: "message.received",
+    result: { type: "message", message: "late" },
+  });
+  assert.equal(state, closed);
+});
 
 test("socket updates preserve other connections, messages and handshake metadata", async () => {
   const store = await createSocketStore();

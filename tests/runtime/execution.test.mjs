@@ -19,7 +19,8 @@ before(async () => {
       export { WebSocketAdapter } from './packages/runtime/src/websocket/adapter.ts';
       export { SocketIoAdapter } from './packages/runtime/src/socketio/adapter.ts';
       export { reduceHttpExecutionEvent } from './apps/webviews/src/features/requests/execution/http-state.ts';
-      export { createExecutionConsumer } from './apps/webviews/src/features/requests/execution/consume-event.ts';
+      export { consumeExecutionEvent } from './apps/webviews/src/features/requests/execution/consume-event.ts';
+      export { reduceSocketExecutionEvent } from './apps/webviews/src/features/requests/execution/socket-state.ts';
       export { relayExecutionEvent } from './apps/extension/src/platform/execution/webview-relay.ts';
     `,
       resolveDir: process.cwd(),
@@ -170,7 +171,7 @@ test("core closes failed executions and marks reported protocol failures", async
 });
 
 test("host relays a single channel and UI rejects replaced sessions and duplicate events", () => {
-  const consume = modules.createExecutionConsumer(),
+  const consume = modules.consumeExecutionEvent,
     received = [];
   let state = modules.reduceHttpExecutionEvent(undefined, {
     type: "begin",
@@ -239,7 +240,7 @@ test("host relays a single channel and UI rejects replaced sessions and duplicat
 });
 
 test("socket view preserves ack/subscription payloads and send-error connection semantics", () => {
-  const consume = modules.createExecutionConsumer(),
+  const consume = modules.consumeExecutionEvent,
     received = [];
   const views = {
     http() {},
@@ -276,19 +277,32 @@ test("socket view preserves ack/subscription payloads and send-error connection 
     result: { type: "error", isSuccess: false, message: "bad send" },
   });
   assert.deepEqual(
-    received.map((e) => e.action),
-    ["received", "updateEvent", "received"],
+    received.map((e) => e.event.type),
+    [
+      "session.started",
+      "ack.received",
+      "subscriptions.updated",
+      "execution.error",
+    ],
   );
-  assert.deepEqual(received[0].message.message.data, [1, 2]);
+  assert.deepEqual(received[1].event.result.message.data, [1, 2]);
 });
 
 test("socket rendering is selected by the Webview without changing wire results", () => {
-  const consume = modules.createExecutionConsumer();
+  const consume = modules.consumeExecutionEvent;
   const received = [];
+  const states = new Map();
+  const receive = (envelope) => {
+    const previous = states.get(envelope.event.protocol);
+    const next = modules.reduceSocketExecutionEvent(previous, envelope);
+    states.set(envelope.event.protocol, next);
+    if (next.socketRes.length > (previous?.socketRes.length ?? 0))
+      received.push(next.socketRes.at(-1));
+  };
   const views = {
     http() {},
-    websocket: (event) => received.push(event),
-    socketio: (event) => received.push(event),
+    websocket: receive,
+    socketio: receive,
   };
   let sequence = 0;
   const publish = (protocol, type, result) =>

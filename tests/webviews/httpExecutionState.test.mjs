@@ -4,7 +4,7 @@ import load from "../helpers/loadTypeScript.mjs";
 const { reduceHttpExecutionEvent: reduce, hasCompletedResponse } = await load(
   "apps/webviews/src/features/requests/execution/http-state.ts",
 );
-const { createExecutionConsumer } = await load(
+const { consumeExecutionEvent } = await load(
   "apps/webviews/src/features/requests/execution/consume-event.ts",
 );
 const begin = (state, executionId = "current") =>
@@ -151,7 +151,7 @@ test("script and network errors retain their cause and preserve old display data
 
 test("HTTP protocol errors reach the reducer even before session startup", () => {
   let state = begin(undefined, "failure");
-  const consume = createExecutionConsumer();
+  const consume = consumeExecutionEvent;
   const views = {
     http: (value, executionId, sequence) => {
       state = event(state, value, executionId, sequence);

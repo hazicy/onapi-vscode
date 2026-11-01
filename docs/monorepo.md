@@ -67,6 +67,13 @@ components. Host-only socket parameter preparation lives in
 `apps/extension/src/features/requests/execution/`, outside both shared
 packages. A type being used during execution does not make it a wire contract.
 
+Webview execution routing forwards socket envelopes unchanged to the socket
+store. Its pure reducer in `features/requests/execution/socket-state.ts` owns
+session correlation, sequence checks, terminal states, handshake metadata and
+timeline projection. Protocol hooks issue commands; they do not reinterpret
+incoming execution events. Reconnection starts a new pending identity while
+retaining message history and clearing the previous handshake.
+
 The domain package still includes shared application configuration and Mock
 utilities used by multiple consumers. These are existing responsibilities, not
 an invitation to add unrelated business features. New feature-specific code

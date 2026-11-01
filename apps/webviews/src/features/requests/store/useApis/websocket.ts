@@ -1,22 +1,15 @@
 import { create, devtools } from "@/shared/state/store";
 
-type ConnectionStatus = "connect" | "connecting" | "disconnect";
+import type { ExecutionEnvelope } from "@onapi/contracts";
+import {
+  reduceSocketExecutionEvent,
+  type SocketConnection,
+  type SocketTimelineEntry,
+  type ConnectionStatus,
+} from "@/features/requests/execution/socket-state";
 
-type Pool = {
-  [k: string]: {
-    status: ConnectionStatus;
-    requestId?: string;
-    socketRes: any[];
-    responseData?: any;
-  };
-};
-type State = {
-  websocketConnectionPool: Pool;
-  aborts: {
-    [k: string]: any;
-  };
-};
-
+type Pool = Record<string, SocketConnection>;
+type State = { websocketConnectionPool: Pool };
 type Action = {
   startConnection: (targetId: string, requestId?: string) => void;
   failConnection: (
@@ -27,18 +20,17 @@ type Action = {
   appendConnectionResult: (
     targetId: string,
     status: ConnectionStatus,
-    data: any,
-    responseData?: any,
+    data: SocketTimelineEntry | undefined,
+    responseData?: Record<string, unknown>,
   ) => void;
   updateWebSocketConnectionPool: (config: Pool) => void;
-  updateWebSocketaborts: (config: Pool) => void;
+  consumeExecutionEvent: (event: ExecutionEnvelope) => void;
 };
 
 const useApisWebSocket = create<State & Action>()(
   devtools(
     (set) => ({
       websocketConnectionPool: {},
-      aborts: {},
       startConnection: (targetId, requestId) =>
         set((state) => ({
           websocketConnectionPool: {
@@ -66,6 +58,7 @@ const useApisWebSocket = create<State & Action>()(
               [targetId]: {
                 ...previous,
                 status: "disconnect",
+                closed: true,
                 requestId: undefined,
                 socketRes: [
                   ...previous.socketRes,
@@ -93,7 +86,10 @@ const useApisWebSocket = create<State & Action>()(
             websocketConnectionPool: {
               ...state.websocketConnectionPool,
               [targetId]: {
+                ...previous,
                 status,
+                requestId: undefined,
+                closed: status === "disconnect",
                 socketRes: [...(previous?.socketRes || []), { ...data }],
                 responseData: {
                   ...previous?.responseData,
@@ -110,9 +106,22 @@ const useApisWebSocket = create<State & Action>()(
           websocketConnectionPool: { ...config },
         });
       },
-      updateWebSocketaborts: (config) => {
-        set({
-          aborts: { ...config },
+      consumeExecutionEvent: (envelope) => {
+        if (!envelope.targetId) {
+          return;
+        }
+        const targetId = envelope.targetId;
+        set((state) => {
+          const previous = state.websocketConnectionPool[targetId];
+          const next = reduceSocketExecutionEvent(previous, envelope);
+          return next === previous || !next
+            ? state
+            : {
+                websocketConnectionPool: {
+                  ...state.websocketConnectionPool,
+                  [targetId]: next,
+                },
+              };
         });
       },
     }),

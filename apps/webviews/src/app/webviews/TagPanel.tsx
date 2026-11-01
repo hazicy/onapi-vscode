@@ -1,9 +1,10 @@
+import useWebSocketStore from "@/features/requests/store/useApis/websocket";
 import { editorRecordSchema } from "@onapi/domain/requests/record";
 import useSocketStore from "@/features/requests/store/useApis/websocket";
 import { readRequestPanelResponse } from "@/shared/bridge/request-panel";
 import SharedComponentsProvider from "@/app/providers/SharedComponentsProvider";
 import { PROTOCOL_EXECUTION_EVENT } from "@onapi/contracts";
-import { createExecutionConsumer } from "@/features/requests/execution/consume-event";
+import { consumeExecutionEvent } from "@/features/requests/execution/consume-event";
 import { reduceHttpExecutionEvent } from "@/features/requests/execution/http-state";
 import { Suspense, useEffect } from "react";
 import { isEqual } from "lodash-es";
@@ -26,7 +27,7 @@ import { useGlobal } from "@/app/store";
 import { HotkeysProvider } from "react-hotkeys-hook";
 import useApisHotkeys from "@/features/requests/hooks/useApisHotkeys";
 import useShare from "@/features/sharing/store/useShare";
-import useWebSocket from "@/features/requests/protocols/websocket/useWebSocket";
+
 import useSocketIo from "@/features/requests/protocols/socketio/useWebSocket";
 import useGraphQLQuery from "@/features/requests/graphql/GraphQLQuery/useGraphQLQuery";
 
@@ -76,9 +77,7 @@ function TagPanel() {
 
   useApisHotkeys();
 
-  const { handelWsResult } = useWebSocket();
-
-  const { handelSocketIoResult, handleProxyFetchResult } = useSocketIo();
+  const { handleProxyFetchResult } = useSocketIo();
 
   const { handelGraphQLSchemaFetchResult } = useGraphQLQuery();
 
@@ -91,7 +90,6 @@ function TagPanel() {
         "onapi:react-mounted",
       );
     }
-    const consumeExecutionEvent = createExecutionConsumer();
     const messageHandler = async (event: { data: any }) => {
       const message = readRequestPanelResponse(event.data);
       if (!message) {
@@ -129,8 +127,8 @@ function TagPanel() {
                 }),
               );
             },
-            websocket: handelWsResult,
-            socketio: handelSocketIoResult,
+            websocket: useWebSocketStore.getState().consumeExecutionEvent,
+            socketio: useWebSocketStore.getState().consumeExecutionEvent,
           });
           break;
         case "setProjectConfig":

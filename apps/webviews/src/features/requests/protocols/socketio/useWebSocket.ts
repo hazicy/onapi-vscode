@@ -1,14 +1,5 @@
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
-import {
-  cloneDeep,
-  forEach,
-  isArray,
-  isEqual,
-  isPlainObject,
-  isString,
-  setWith,
-  trim,
-} from "lodash-es";
+import { cloneDeep, isPlainObject, isString, setWith } from "lodash-es";
 
 import useWebSocketStore from "@/features/requests/store/useApis/websocket";
 
@@ -52,85 +43,6 @@ const useWebSocket = () => {
         target,
       },
     });
-  };
-
-  const handelSocketIoResult = (event: any) => {
-    const { message, id, target } = event;
-    switch (event?.action) {
-      case "connected":
-        if (message?.isSuccess) {
-          updatePool(
-            id,
-            "connect",
-            {
-              action: "connect",
-              message,
-            },
-            message?.actualRequestParas,
-          );
-          forEach(target?.request?.event?.parameter, (item: any) => {
-            if (isEqual(item?.value, "1") && trim(item?.key) !== "") {
-              updatePool(id, "connect", {
-                action: "listen",
-                message: item?.key,
-              });
-            }
-          });
-        } else {
-          // Only write when connected
-          const websocketConnectionPool =
-            useWebSocketStore.getState().websocketConnectionPool;
-          if (websocketConnectionPool?.[id]?.status === "connect") {
-            updatePool(id, "disconnect", {
-              action: "error",
-              message: message,
-            });
-          }
-        }
-        break;
-      case "received":
-        const { type, isSuccess } = message || {};
-        if (isEqual(type, "close") || isEqual(type, "disconnect")) {
-          updatePool(id, "disconnect", {
-            action: isSuccess ? "disconnect" : "error",
-            message: message,
-          });
-          return;
-        }
-        updatePool(id, "connect", {
-          action: type,
-          message: message,
-        });
-
-        break;
-      case "error":
-        updatePool(id, "disconnect", {
-          action: "error",
-          message: message,
-        });
-
-        break;
-      case "updateEvent":
-        if (isArray(message?.removedEvents)) {
-          forEach(message.removedEvents, (k: string) => {
-            updatePool(id, "connect", {
-              action: "listen-end",
-              message: k,
-            });
-          });
-        }
-        if (isArray(message?.addedEvents)) {
-          forEach(message.addedEvents, (k: string) => {
-            updatePool(id, "connect", {
-              action: "listen",
-              message: k,
-            });
-          });
-        }
-        break;
-      default:
-        break;
-    }
   };
 
   const handleSetToken = (data: any) => {
@@ -192,7 +104,6 @@ const useWebSocket = () => {
   return {
     connectWebSocket,
     updatePool,
-    handelSocketIoResult,
     handleProxyFetchResult,
   };
 };
