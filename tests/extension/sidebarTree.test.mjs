@@ -271,15 +271,17 @@ test("native sidebar panels, test commands and workspace request history", async
       setRequestResult,
     } = bundled;
     registerSidebarTree(context);
-    const historyView = treeViews.get("onapiHistory");
-    historyView.setVisible(true);
-    assert.deepEqual(historyView.writes, [""]);
-    historyView.message = "Filter: users";
-    historyView.setVisible(false);
-    assert.equal(historyView.writes.length, 2);
-    historyView.setVisible(true);
-    assert.equal(historyView.message, "Filter: users");
-    assert.equal(historyView.writes.length, 3);
+    for (const id of ["onapiRequests", "onapiTests", "onapiHistory"]) {
+      const treeView = treeViews.get(id);
+      treeView.setVisible(true);
+      assert.deepEqual(treeView.writes, [""]);
+      treeView.message = "Filter: users";
+      treeView.setVisible(false);
+      assert.equal(treeView.writes.length, 2);
+      treeView.setVisible(true);
+      assert.equal(treeView.message, "Filter: users");
+      assert.equal(treeView.writes.length, 3);
+    }
     storageError = "Unsupported storage version: 1";
     for (const id of ["onapiRequests", "onapiTests", "onapiHistory"]) {
       const provider = views.get(id);

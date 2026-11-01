@@ -49,6 +49,18 @@ export function registerSidebarTree(context: vscode.ExtensionContext) {
     treeDataProvider: historyProvider,
     showCollapseAll: true,
   });
+  for (const treeView of [view, testsView, historyView]) {
+    context.subscriptions.push(
+      treeView.onDidChangeVisibility(({ visible }) => {
+        if (visible) {
+          // Reapply the message through the public API to lay out a newly created
+          // native list. Its initial viewport can remain 0x0 until the delayed
+          // activation update, even though the tree model already contains data.
+          treeView.message = treeView.message ?? "";
+        }
+      }),
+    );
+  }
   const decorationsChanged = new vscode.EventEmitter<
     vscode.Uri | vscode.Uri[] | undefined
   >();
