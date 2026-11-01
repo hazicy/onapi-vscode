@@ -198,6 +198,16 @@ importers:
         specifier: ^8.3.5
         version: 8.3.5(@types/node@26.6.5)(esbuild@0.28.2)(terser@5.51.2)
 
+  apps/cli:
+    dependencies:
+      '@onapi/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+    devDependencies:
+      esbuild:
+        specifier: ^0.28.2
+        version: 0.28.2
+
   apps/extension:
     dependencies:
       '@onapi/api-converter':

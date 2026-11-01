@@ -111,6 +111,15 @@ pnpm package
 
 The installable `.vsix` is written to `artifacts/`.
 
+### Command-line runner
+
+Run exported collections in a terminal or CI with the [OnAPI CLI](./apps/cli/README.md):
+
+```sh
+pnpm build:cli
+node apps/cli/dist/onapi.js run collection.json --env staging.json --reporter junit --output results.xml
+```
+
 ### Checks
 
 | Command             | Purpose                                              |

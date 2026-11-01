@@ -1,0 +1,18 @@
+{
+  "name": "@onapi/cli",
+  "version": "0.1.0",
+  "private": true,
+  "bin": {
+    "onapi": "dist/onapi.js"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "@onapi/runtime": "workspace:*"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}

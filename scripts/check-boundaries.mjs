@@ -34,6 +34,7 @@ const sharedWorkspaceDependencies = {
   "packages/contracts": new Set(["@onapi/domain"]),
 };
 const owners = [
+  "apps/cli",
   "apps/extension",
   "apps/webviews",
   "packages/domain",
@@ -134,7 +135,11 @@ for (const owner of owners) {
               ? id.split("/").slice(0, 2).join("/")
               : id.split("/")[0];
             if (builtins.has(id)) {
-              if (owner !== "apps/extension" && owner !== "packages/runtime")
+              if (
+                owner !== "apps/extension" &&
+                owner !== "apps/cli" &&
+                owner !== "packages/runtime"
+              )
                 failures.push(
                   `${path.relative(root, filename)}: Node API ${id}`,
                 );

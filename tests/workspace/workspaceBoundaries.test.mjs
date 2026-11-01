@@ -6,6 +6,7 @@ import { spawnSync } from "node:child_process";
 
 const root = path.resolve(import.meta.dirname, "../..");
 const owners = [
+  "apps/cli",
   "apps/extension",
   "apps/webviews",
   "packages/domain",
