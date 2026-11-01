@@ -1,7 +1,11 @@
 import ResponseNetwork from "./ResponseNetwork";
 import { timingSegments } from "../utils/response-metrics";
 import { responseDownload } from "../utils/response-download";
-import { sdkResponseView } from "@/features/requests/utils/executionView";
+import {
+  responseIndicators,
+  type IndicatorResponse,
+  type IndicatorRequest,
+} from "../utils/response-indicators";
 
 import styles from "./ResponseSize.module.css";
 import React, { memo, useMemo } from "react";
@@ -10,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import { Col, Divider, Flex, Row } from "@/shared/ui/base";
 
 import clsx from "clsx";
-import { add, get, has, isEmpty, isEqual, isNil, map } from "lodash-es";
+import { add, get, has, isEmpty, isEqual, map } from "lodash-es";
 
 import { Tooltip } from "@/shared/ui";
 import AppIcon from "@/shared/ui/AppIcon";
@@ -18,10 +22,6 @@ import CustomPopover from "@/shared/ui/Popover";
 import { RESPONSE_CODE_DESC_MAP } from "@onapi/domain/requests/constants/response";
 import useTheme from "@/shared/hooks/useTheme";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
-import {
-  ApiSendResponseDataProxy,
-  ApiSendingData,
-} from "@onapi/domain/requests/types/send";
 import {
   convertResponseBytes,
   convertResponseTime,
@@ -31,12 +31,8 @@ import {
 } from "@/shared/utils/common";
 
 interface ResponseSizeProps {
-  response?:
-    | ApiSendingData["response"]
-    | import("@onapi/contracts").SerializedResponse;
-  request?:
-    | ApiSendingData["request"]
-    | import("postman-collection").RequestDefinition;
+  response?: IndicatorResponse;
+  request?: IndicatorRequest;
   showProxy?: boolean;
   showIcon?: boolean;
   showDownload?: boolean;
@@ -51,58 +47,31 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
     showIcon = true,
     showProxy = true,
     showLine = true,
-  } = props || {};
+  } = props;
   const { t } = useTranslation();
   const { themeToken } = useTheme();
 
   const systemConfig = useSystemConfig((state) => state.systemConfig);
   const { proxy: systemProxy } = systemConfig || {};
 
-  const nativeResponse = sdkResponseView(sourceResponse);
-  const response =
-    sourceResponse && !("header" in sourceResponse)
-      ? (sourceResponse as ApiSendingData["response"])
-      : undefined;
-  const request =
-    sourceRequest && "headers" in sourceRequest
-      ? (sourceRequest as ApiSendingData["request"])
-      : undefined;
-  const timings = response?.timings;
-  const responseCode = sourceResponse?.code;
-  const responseSize =
-    nativeResponse?.responseSize ??
-    response?.stream?.data?.byteLength ??
-    response?.response_size ??
-    0;
+  const {
+    code: responseCode,
+    size: responseSize,
+    time: responseTime,
+    timings,
+    formatTimings,
+    formatSize,
+    network,
+    hasFormattedTimings: isNewTimings,
+    proxy,
+  } = responseIndicators(sourceResponse, sourceRequest);
   const originResponseSizeFormat = convertResponseBytes(responseSize);
-  const responseTime = nativeResponse?.responseTime ?? response?.response_time;
-  const responseProxy = response?.proxy;
-  const requestProxy = request?.proxy;
-  const formatTimings = response?.formatTimings;
-  const formatSize = response?.formatSize;
-  const network = response?.network;
-  const isNewTimings = !isNil(response?.formatTimings);
 
   const handleDownload = () => {
     const prepared = responseDownload(sourceResponse, t("supplement.res_data"));
     if (prepared) {
       download(prepared.data, prepared.name, prepared.mime);
     }
-  };
-
-  const computedProxyValue = (
-    requestProxy: ApiSendResponseDataProxy | undefined,
-    responseProxy: ApiSendResponseDataProxy | undefined,
-  ) => {
-    if (responseProxy?.href) {
-      return responseProxy?.href;
-    }
-
-    if (requestProxy?.host && requestProxy?.port) {
-      return `${requestProxy?.host}:${requestProxy?.port}`;
-    }
-
-    return t("common.response_indicators.no_local");
   };
 
   const proxyContent = (
@@ -119,7 +88,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
         <Col span={24}>
           <Flex flex={1} justify="space-between" className={styles.flex}>
             <span>{t("common.response_indicators.local")}</span>
-            <span>{computedProxyValue(requestProxy, responseProxy)}</span>
+            <span>{proxy ?? t("common.response_indicators.no_local")}</span>
           </Flex>
         </Col>
       </Row>
@@ -318,6 +287,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
             timeContentList,
             ({ key, name, lineLeftSize, lineRightSize, width, marginLeft }) => (
               <Row
+                key={key}
                 className={clsx(styles[key] ?? key, {
                   [styles.empty]: isEqual(width, 0),
                 })}
@@ -376,77 +346,28 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
             <span>{t("common.response_indicators.use_time")}</span>
           </Flex>
         </Col>
-        {!isNil(timings?.request) && (
-          <Col span={24}>
-            <Flex flex={1} justify="space-between" className={styles.flex}>
-              <span>Request</span>
-              <span className={styles.time}>{toFixed(timings.request)}ms</span>
-            </Flex>
-          </Col>
-        )}
-
-        {!isNil(timings?.socket) && (
-          <Col span={24}>
-            <Flex justify="space-between" className={styles.flex}>
-              <span>Socket</span>
-              <span className={styles.time}>{toFixed(timings.socket)}ms</span>
-            </Flex>
-          </Col>
-        )}
-        {!isNil(timings?.lookup) && (
-          <Col span={24}>
-            <Flex justify="space-between" className={styles.flex}>
-              <span>Lookup</span>
-              <span className={styles.time}>{toFixed(timings.lookup)}ms</span>
-            </Flex>
-          </Col>
-        )}
-
-        {!isNil(timings?.connect) && (
-          <Col span={24}>
-            <Flex justify="space-between" className={styles.flex}>
-              <span>Connect</span>
-              <span className={styles.time}>{toFixed(timings.connect)}ms</span>
-            </Flex>
-          </Col>
-        )}
-
-        {!isNil(timings?.secure_connect) && (
-          <Col span={24}>
-            <Flex justify="space-between" className={styles.flex}>
-              <span>SecureConnect</span>
-              <span className={styles.time}>
-                {toFixed(timings.secure_connect)}ms
-              </span>
-            </Flex>
-          </Col>
-        )}
-
-        {!isNil(timings?.response) && (
-          <Col span={24}>
-            <Flex justify="space-between" className={styles.flex}>
-              <span>Response</span>
-              <span className={styles.time}>{toFixed(timings.response)}ms</span>
-            </Flex>
-          </Col>
-        )}
-
-        {!isNil(timings?.end) && (
-          <Col span={24}>
-            <Flex justify="space-between" className={styles.flex}>
-              <span>End</span>
-              <span className={styles.time}>{toFixed(timings.end)}ms</span>
-            </Flex>
-          </Col>
-        )}
-        {!isNil(timings?.done) && (
-          <Col span={24}>
-            <Flex justify="space-between" className={styles.flex}>
-              <span>Done</span>
-              <span className={styles.time}>{toFixed(timings.done)}ms</span>
-            </Flex>
-          </Col>
-        )}
+        {(
+          [
+            ["request", "Request"],
+            ["socket", "Socket"],
+            ["lookup", "Lookup"],
+            ["connect", "Connect"],
+            ["secure_connect", "SecureConnect"],
+            ["response", "Response"],
+            ["end", "End"],
+            ["done", "Done"],
+          ] as const
+        ).map(([key, label]) => {
+          const duration = timings?.[key];
+          return duration === undefined || duration === null ? null : (
+            <Col key={key} span={24}>
+              <Flex justify="space-between" className={styles.flex}>
+                <span>{label}</span>
+                <span className={styles.time}>{toFixed(duration)}ms</span>
+              </Flex>
+            </Col>
+          );
+        })}
       </Row>
     </div>
   );

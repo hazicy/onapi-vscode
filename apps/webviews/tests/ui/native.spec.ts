@@ -390,9 +390,9 @@ test("response navigation collapses tabs instead of wrapping metadata", async ({
     { type: "done", error: null },
   ]);
   const response = page.getByRole("tab", { name: "Response", exact: true });
-  const nav = response.locator(
-    'xpath=ancestor::*[contains(@class, "_tabsNav_")]',
-  );
+  const nav = page
+    .getByRole("tablist", { name: "Response tabs", exact: true })
+    .locator("../..");
   const more = nav.getByRole("button", { name: "More tabs", exact: true });
   await expect(more).toBeVisible();
   const status = nav.getByText("200", { exact: true });
