@@ -51,6 +51,10 @@
   min-height: 0;
 }
 
+.root .nav [data-with-extra] > .button {
+  padding-right: 0;
+}
+
 .root .nav [data-with-extra] {
   border-bottom: 0;
 }

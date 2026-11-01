@@ -449,6 +449,13 @@ test("production WebSocket request finishes loading without render errors", asyn
   await webSocketPage.cancelButton.click();
   await expect(webSocketPage.status).toHaveText("Disconnected");
   await webSocketPage.connectButton.click();
+  const sessionId = await page.evaluate(
+    () =>
+      (window as any).postedMessages.findLast(
+        (message: any) => message.action === "ws_connect",
+      )?.requestId,
+  );
+  expect(sessionId).toEqual(expect.any(String));
   let sequence = 0;
   const emit = (event: Record<string, unknown>) =>
     page.evaluate(
@@ -458,7 +465,7 @@ test("production WebSocket request finishes loading without render errors", asyn
       {
         protocolVersion: 1,
         targetId: "test-ws",
-        sessionId: "ui-session",
+        sessionId,
         sequence: ++sequence,
         timestamp: Date.now(),
         event: { protocol: "websocket", ...event },
