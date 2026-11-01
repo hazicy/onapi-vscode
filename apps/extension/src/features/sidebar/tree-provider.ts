@@ -2,9 +2,12 @@ import { getStorageError } from "../../platform/storage";
 import * as vscode from "vscode";
 import { isHttpCollectionItem, requestUrl, requestMethod } from "@onapi/domain";
 import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
-import { getApiList } from "../requests/request-storage";
+import { getApiList, getApiListName } from "../requests/request-storage";
 import { getProjectReportList } from "../testing/report-storage";
-import { getRequestHistory } from "../requests/request-history";
+import {
+  getRequestHistory,
+  type RequestHistoryEntry,
+} from "../requests/request-history";
 import {
   dayKey,
   requestChildren,
@@ -30,6 +33,10 @@ export class SidebarTreeProvider
   readonly onDidChangeTreeData = this.changed.event;
   private readonly zh = vscode.env.language.startsWith("zh");
   private filter = "";
+  private historyCache?: {
+    workspace: string;
+    days: Map<string, RequestHistoryEntry[]>;
+  };
 
   constructor(
     private readonly context: vscode.ExtensionContext,
@@ -44,6 +51,7 @@ export class SidebarTreeProvider
     this.refresh();
   }
   refresh(): void {
+    this.historyCache = undefined;
     this.changed.fire(undefined);
   }
   refreshRequest(id: string): void {
@@ -65,10 +73,26 @@ export class SidebarTreeProvider
     `${data.name} ${isHttpCollectionItem(data) ? requestUrl(data) : data.url || ""} ${isHttpCollectionItem(data) ? requestMethod(data) : data.method || ""}`
       .toLowerCase()
       .includes(this.filter);
-  private readonly history = () =>
-    getRequestHistory(this.context).filter((entry) =>
-      this.matches(entry.request),
-    );
+  private readonly history = () => {
+    const workspace = getApiListName(this.context);
+    if (this.historyCache?.workspace !== workspace) {
+      const days = new Map<string, RequestHistoryEntry[]>();
+      for (const entry of getRequestHistory(this.context)) {
+        if (!this.matches(entry.request)) {
+          continue;
+        }
+        const day = dayKey(entry.sentAt);
+        const entries = days.get(day);
+        if (entries) {
+          entries.push(entry);
+        } else {
+          days.set(day, [entry]);
+        }
+      }
+      this.historyCache = { workspace, days };
+    }
+    return this.historyCache.days;
+  };
   private readonly children = (parent?: ApiDetailsData, foldersOnly = false) =>
     requestChildren(
       this.list(),
@@ -105,8 +129,8 @@ export class SidebarTreeProvider
         return new HistoryDayTreeItem(
           node,
           this.context,
-          history.filter((entry) => dayKey(entry.sentAt) === node.day).length,
-          history.length > 0 && dayKey(history[0].sentAt) === node.day,
+          history.get(node.day)?.length ?? 0,
+          history.keys().next().value === node.day,
         );
       }
       case "history":
@@ -147,9 +171,7 @@ export class SidebarTreeProvider
           { kind: "reports" },
         ];
       }
-      const days = [
-        ...new Set(this.history().map((entry) => dayKey(entry.sentAt))),
-      ];
+      const days = [...this.history().keys()];
       return days.length
         ? days.map((day) => ({ kind: "day", day }))
         : this.empty(
@@ -181,9 +203,10 @@ export class SidebarTreeProvider
           );
     }
     if (node.kind === "day") {
-      return this.history()
-        .filter((entry) => dayKey(entry.sentAt) === node.day)
-        .map((data) => ({ kind: "history", data }));
+      return (this.history().get(node.day) ?? []).map((data) => ({
+        kind: "history",
+        data,
+      }));
     }
     return [];
   }

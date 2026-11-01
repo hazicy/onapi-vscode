@@ -105,12 +105,12 @@
         {
           "id": "onapiTests",
           "name": "%view.tests%",
-          "collapsed": true
+          "visibility": "collapsed"
         },
         {
           "id": "onapiHistory",
           "name": "%view.history%",
-          "collapsed": true
+          "visibility": "collapsed"
         }
       ]
     },

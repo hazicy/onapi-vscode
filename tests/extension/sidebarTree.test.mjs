@@ -8,6 +8,7 @@ const __dirname = fileURLToPath(new URL(".", import.meta.url));
 test("native sidebar panels, test commands and workspace request history", async () => {
   const views = new Map();
   const viewOptions = new Map();
+  const treeViews = new Map();
   const commands = new Map();
   const writes = new Map();
   const executed = [];
@@ -41,6 +42,7 @@ test("native sidebar panels, test commands and workspace request history", async
   };
   let nextId = 0;
   let storageError;
+  let historyReads = 0;
   class EventEmitter {
     listeners = [];
     event = (listener) => {
@@ -101,7 +103,28 @@ test("native sidebar panels, test commands and workspace request history", async
         createTreeView: (id, options) => {
           views.set(id, options.treeDataProvider);
           viewOptions.set(id, options);
-          return { dispose() {} };
+          let visibility;
+          let message = "";
+          const treeView = {
+            writes: [],
+            get message() {
+              return message;
+            },
+            set message(value) {
+              message = value;
+              this.writes.push(value);
+            },
+            dispose() {},
+            onDidChangeVisibility(callback) {
+              visibility = callback;
+              return { dispose() {} };
+            },
+            setVisible(visible) {
+              visibility?.({ visible });
+            },
+          };
+          treeViews.set(id, treeView);
+          return treeView;
         },
         showInputBox: async () => "Get user",
         showQuickPick: async (items) => items[0],
@@ -122,8 +145,10 @@ test("native sidebar panels, test commands and workspace request history", async
     },
     db: {
       getStorageError: () => storageError,
-      getDataFromGlobalStorage: (_, key, fallback) =>
-        writes.get(key) ?? fallback,
+      getDataFromGlobalStorage: (_, key, fallback) => {
+        if (key.endsWith(":history")) historyReads++;
+        return structuredClone(writes.get(key) ?? fallback);
+      },
       setDataToGlobalStorage: async (_, key, value) => {
         writes.set(key, value);
         return true;
@@ -246,6 +271,15 @@ test("native sidebar panels, test commands and workspace request history", async
       setRequestResult,
     } = bundled;
     registerSidebarTree(context);
+    const historyView = treeViews.get("onapiHistory");
+    historyView.setVisible(true);
+    assert.deepEqual(historyView.writes, [""]);
+    historyView.message = "Filter: users";
+    historyView.setVisible(false);
+    assert.equal(historyView.writes.length, 2);
+    historyView.setVisible(true);
+    assert.equal(historyView.message, "Filter: users");
+    assert.equal(historyView.writes.length, 3);
     storageError = "Unsupported storage version: 1";
     for (const id of ["onapiRequests", "onapiTests", "onapiHistory"]) {
       const provider = views.get(id);
@@ -588,12 +622,33 @@ test("native sidebar panels, test commands and workspace request history", async
     assert.equal(history.getChildren()[0].kind, "empty");
     const sent = { ...rows[2], response: { raw: "large body" } };
     await recordRequestHistory(context, sent);
+    storageChanged.fire("apiList:one:history");
     sent.request.url = "/changed";
     assert.equal(getRequestHistory(context)[0].request.request.url, "/users");
     assert.equal(getRequestHistory(context)[0].request.response, undefined);
     const day = history.getChildren()[0];
     assert.equal(day.kind, "day");
     assert.ok(history.getTreeItem(day).iconPath.id === "onapi-history");
+    const readsAfterGrouping = historyReads;
+    history.getTreeItem(day);
+    history.getChildren(day);
+    history.getChildren();
+    assert.equal(historyReads, readsAfterGrouping);
+    assert.equal(history.getTreeItem(day).collapsibleState, 2);
+    const historyKey = "apiList:one:history";
+    const previousDay = new Date();
+    previousDay.setDate(previousDay.getDate() - 1);
+    writes.get(historyKey).push({
+      ...writes.get(historyKey)[0],
+      id: "previous-day",
+      sentAt: previousDay.getTime(),
+    });
+    storageChanged.fire(historyKey);
+    const days = history.getChildren();
+    assert.equal(days.length, 2);
+    assert.equal(history.getTreeItem(days[1]).collapsibleState, 1);
+    assert.equal(history.getTreeItem(days[1]).description, "1");
+    assert.equal(historyReads, readsAfterGrouping + 1);
     const entry = history.getChildren(day)[0];
     await commands.get("onapi.tree.openHistory")(entry);
     assert.equal(executed.at(-1)[0], "openTabPanel");
@@ -601,7 +656,9 @@ test("native sidebar panels, test commands and workspace request history", async
     assert.deepEqual(executed.at(-1)[1].response, { restored: true });
     context.project = "two";
     assert.deepEqual(getRequestHistory(context), []);
+    assert.equal(history.getChildren()[0].kind, "empty");
     context.project = "one";
+    assert.equal(history.getChildren().length, 2);
     for (let i = 0; i < 205; i++) {
       await recordRequestHistory(context, sent);
     }
