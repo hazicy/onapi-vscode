@@ -6,7 +6,7 @@ import ReactJson from "@microlink/react-json-view";
 import { isPlainObject, isString } from "lodash-es";
 
 import { useEditorPreferences } from "@/shared/contexts/editor-preferences";
-import { copyStringToClipboard } from "@/shared/utils/common";
+import { copyStringToClipboard } from "@/shared/utils/clipboard";
 import JSON5 from "json5";
 
 const reactJsonStyle = {

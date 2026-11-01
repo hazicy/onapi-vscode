@@ -25,7 +25,7 @@ import SegmentedTabs from "@/shared/components/SegmentedTabs";
 import AppIcon from "@/shared/ui/AppIcon";
 import { BaseResponse } from "@onapi/domain/requests/types/response";
 import { ApiSendingData } from "@onapi/domain/requests/types/send";
-import { copyStringToClipboard } from "@/shared/utils/common";
+import { copyStringToClipboard } from "@/shared/utils/clipboard";
 import { parseStreamToRaw } from "@onapi/domain/utils/parse";
 
 import {

@@ -49,65 +49,7 @@ export const toFixed = (number: number) => {
   return number.toFixed(2);
 };
 
-// Copy text to clipboard
-export const copyStringToClipboard = (
-  str: string,
-  onSuccess?: () => void,
-  onError?: () => void,
-) => {
-  const clipboardObj = navigator.clipboard;
-  // If Clipboard object is not supported, report error directly
-  if (clipboardObj) {
-    // Write content to clipboard
-    clipboardObj.writeText(str).then(
-      () => {
-        onSuccess && onSuccess();
-      },
-      () => {
-        try {
-          const textarea = document.createElement("textarea");
-          document.body.appendChild(textarea);
-          // Hide this input box
-          textarea.style.position = "fixed";
-          textarea.style.clip = "rect(0 0 0 0)";
-          textarea.style.top = "10px";
-          // Assign value
-          textarea.value = str;
-          // Select
-          textarea.select();
-          // Copy
-          document.execCommand("copy", true);
-          // Remove input box
-          document.body.removeChild(textarea);
-        } catch (error) {
-          onError && onError();
-        }
-      },
-    );
-  } else {
-    try {
-      const textarea = document.createElement("textarea");
-      document.body.appendChild(textarea);
-      // Hide this input box
-      textarea.style.position = "fixed";
-      textarea.style.clip = "rect(0 0 0 0)";
-      textarea.style.top = "10px";
-      // Assign value
-      textarea.value = str;
-      // Select
-      textarea.select();
-      // Copy
-      document.execCommand("copy", true);
-      // Remove input box
-      document.body.removeChild(textarea);
-      if (str) {
-        onSuccess && onSuccess();
-      }
-    } catch (error) {
-      onError && onError();
-    }
-  }
-};
+export { copyStringToClipboard } from "./clipboard";
 
 /**
  * Check if it is a valid URL

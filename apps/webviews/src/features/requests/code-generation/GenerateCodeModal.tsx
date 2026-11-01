@@ -14,7 +14,7 @@ import Button from "@/shared/ui/Button";
 import Modal from "@/shared/ui/Modal";
 import AppIcon from "@/shared/ui/AppIcon";
 import useVarReplaces from "@/features/variables/hooks/useVarReplaces";
-import { copyStringToClipboard } from "@/shared/utils/common";
+import { copyStringToClipboard } from "@/shared/utils/clipboard";
 import { catchError } from "@/shared/utils/notify";
 
 import useApis from "@/features/requests/store/useApis";

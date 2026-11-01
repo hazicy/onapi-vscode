@@ -1,3 +1,4 @@
+import { copyStringToClipboard } from "@/shared/utils/clipboard";
 import { useTranslation } from "react-i18next";
 import { Streamdown } from "streamdown";
 import { aiProviders, type AiMessage } from "@onapi/domain/requests/ai-mcp";
@@ -103,9 +104,9 @@ export default function AiConversationMessage({
                 className={styles.quiet}
                 aria-label={`${label("copy")} ${index + 1}`}
                 onClick={() =>
-                  navigator.clipboard
-                    .writeText(message.content)
-                    .catch(() => onError(label("copy_failed")))
+                  copyStringToClipboard(message.content, undefined, () =>
+                    onError(label("copy_failed")),
+                  )
                 }
               >
                 <AppIcon icon="copy" />

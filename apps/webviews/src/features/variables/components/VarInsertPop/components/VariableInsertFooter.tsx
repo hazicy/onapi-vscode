@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Flex, Spin, message } from "@/shared/ui/base";
 import { AppIcon, Button, Tooltip } from "@/shared/ui";
-import { copyStringToClipboard } from "@/shared/utils/common";
+import { copyStringToClipboard } from "@/shared/utils/clipboard";
 import { VAR_OPTIONS_KEY } from "@/features/variables/constants/variable";
 import { InsertAction } from "@onapi/domain/requests/types/variable";
 import { getInsertionValue } from "./variable-expression";

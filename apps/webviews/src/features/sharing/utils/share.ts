@@ -1,5 +1,5 @@
 import useShare from "@/features/sharing/store/useShare";
-import { copyStringToClipboard } from "../../../shared/utils/common";
+import { copyStringToClipboard } from "@/shared/utils/clipboard";
 
 // Copy share API link to clipboard
 export const copyApiDocsUrlToClipboard = (
