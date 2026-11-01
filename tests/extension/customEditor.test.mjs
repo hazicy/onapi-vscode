@@ -77,6 +77,7 @@ test("stable resources survive provider recreation and isolate workspaces", asyn
   await f.openCustomEditor(f.context, "onapi.request", input.data.id, input);
   await f.openCustomEditor(f.context, "onapi.request", input.data.id, input);
   assert.equal(f.opened[0][0], "vscode.openWith");
+  assert.equal(f.opened[0][3].preview, true);
   assert.equal(f.opened[0][1].toString(), f.opened[1][1].toString());
   assert.ok(!f.opened[0][1].toString().includes("Draft"));
   register();

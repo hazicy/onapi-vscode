@@ -112,7 +112,7 @@ export async function openCustomEditor(
   await setEditorInput(context, uri, input);
   await vscode.commands.executeCommand("vscode.openWith", uri, viewType, {
     viewColumn: vscode.ViewColumn.One,
-    preview: false,
+    preview: true,
   });
 }
 
