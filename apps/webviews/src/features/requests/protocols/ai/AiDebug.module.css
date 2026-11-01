@@ -303,7 +303,7 @@
   padding: 0;
   background: transparent;
 }
-.markdown :global([data-streamdown="table-wrapper"]) {
+.markdown [data-streamdown="table-wrapper"] {
   overflow-x: auto;
 }
 .markdown table {
