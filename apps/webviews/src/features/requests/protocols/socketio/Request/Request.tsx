@@ -1,3 +1,4 @@
+import { getSocketConnectionStatus } from "@/features/requests/execution/socket-state";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import { selectRequestIndex } from "@/features/requests/store/useApis";
 import React, { useEffect } from "react";
@@ -77,7 +78,10 @@ const Request: React.FC<Props> = (props) => {
   const handleRequest = (data: ApisBaseDataItem[], type: string) => {
     if (isEqual(type, "event")) {
       if (
-        isEqual(websocketConnectionPool?.[apisActiveKey]?.status, "connect")
+        isEqual(
+          getSocketConnectionStatus(websocketConnectionPool?.[apisActiveKey]),
+          "connect",
+        )
       ) {
         sendSocketIoEventHandle(data);
       }

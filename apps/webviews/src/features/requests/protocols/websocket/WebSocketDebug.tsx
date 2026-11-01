@@ -1,3 +1,4 @@
+import { getSocketConnectionStatus } from "@/features/requests/execution/socket-state";
 import RequestToolbar from "@/features/requests/components/RequestToolbar";
 import RequestAction from "@/features/requests/components/RequestAction";
 import styles from "./WebSocketDebug.module.css";
@@ -85,7 +86,7 @@ const WsDebug: FC<WebSocketComponentType> = ({
   });
 
   const status = useMemo(() => {
-    return websocketConnectionPool?.[apisData?.id]?.status;
+    return getSocketConnectionStatus(websocketConnectionPool?.[apisData?.id]);
   }, [websocketConnectionPool, apisData]);
 
   return (

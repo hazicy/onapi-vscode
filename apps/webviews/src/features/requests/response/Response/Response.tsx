@@ -83,7 +83,7 @@ const Response: FC<Props> = memo((props) => {
   const [selectedKey, setActiveKey] = useSafeState(
     tabsDefaultActiveKey || "realtime",
   );
-  const hasExecution = !!sendingData && sendingData.status !== "idle";
+  const hasExecution = !!sendingData?.session;
   const initialTabKey = tabsDefaultActiveKey || "realtime";
   const activeKey = hasExecution ? selectedKey : initialTabKey;
   const [visitedTabs, setVisitedTabs] = useState(
@@ -93,19 +93,23 @@ const Response: FC<Props> = memo((props) => {
   const isSendDone = hasCompletedResponse(sendingData);
   const isNotEmpty =
     isEventStream(sendingData) ||
-    (sendingData?.status !== "failed" && !!sendingData?.result?.response) ||
-    sendingData?.status === "sending" ||
+    (sendingData?.session?.status !== "failed" &&
+      !!sendingData?.result?.response) ||
+    sendingData?.session?.status === "running" ||
     activeKey !== "realtime";
 
   const handledCompletion = useRef<string | undefined>(undefined);
   useUpdateEffect(() => {
     const { systemConfig } = useSystemConfig.getState();
 
-    if (!isSendDone || handledCompletion.current === sendingData?.executionId) {
+    if (
+      !isSendDone ||
+      handledCompletion.current === sendingData?.session?.executionId
+    ) {
       return;
     }
 
-    handledCompletion.current = sendingData?.executionId;
+    handledCompletion.current = sendingData?.session?.executionId;
 
     // auto jump to realtime response tab
     if (
@@ -120,8 +124,8 @@ const Response: FC<Props> = memo((props) => {
       handleAutoSaveExampleRaw();
     }
   }, [
-    sendingData?.status,
-    sendingData?.executionId,
+    sendingData?.session?.status,
+    sendingData?.session?.executionId,
     sendAfterResponseToTabDisabled,
   ]);
 
@@ -239,7 +243,7 @@ const Response: FC<Props> = memo((props) => {
 
   return (
     <div className={styles.container}>
-      {sendingData?.status === "sending" && showSending && (
+      {sendingData?.session?.status === "running" && showSending && (
         <Sending
           hasCancel={false}
           onlySendingLoadingBar={
@@ -251,7 +255,7 @@ const Response: FC<Props> = memo((props) => {
       {!isNotEmpty && (
         <Empty
           errorMessage={
-            sendingData?.status === "failed"
+            sendingData?.session?.status === "failed"
               ? sendingData.error?.message || t("request_panel.failed")
               : undefined
           }

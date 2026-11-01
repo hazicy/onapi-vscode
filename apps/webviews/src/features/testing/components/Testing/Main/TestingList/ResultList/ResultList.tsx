@@ -66,9 +66,7 @@ export default function ResultList({ groups }: { groups: ExecutionEvent[][] }) {
             .map((event, index) => (
               <Alert key={index} type="error" message={event.error!.message} />
             ))}
-          <ResponseSize
-            response={request?.response}
-          />
+          <ResponseSize response={request?.response} />
           {assertions?.map((assertion, index) => (
             <Alert
               key={index}

@@ -45,7 +45,7 @@ export function parseEventStream(body: string): ServerSentEvent[] {
 }
 
 export function isEventStream(state?: HttpExecutionState): boolean {
-  if (state?.result?.executionId !== state?.executionId) {
+  if (state?.result?.executionId !== state?.session?.executionId) {
     return false;
   }
   return !!state?.result?.response.header?.some(

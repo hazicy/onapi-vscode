@@ -1,3 +1,4 @@
+import { receiveSessionEvent, type ExecutionSession } from "./session";
 import type {
   ExecutionEnvelope,
   SocketIoResult,
@@ -14,11 +15,7 @@ export type SocketTimelineEntry = {
   message?: unknown;
 };
 export type SocketConnection = {
-  status: ConnectionStatus;
-  requestId?: string;
-  sessionId?: string;
-  sequence?: number;
-  closed?: boolean;
+  session?: ExecutionSession;
   socketRes: SocketTimelineEntry[];
   responseData?: Record<string, unknown> & {
     response?: Record<string, unknown>;
@@ -29,45 +26,34 @@ function record(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
-/** Session correlation and protocol transitions live with the state they protect. */
+/** Reduce socket payloads after the shared session accepts the event. */
 export function reduceSocketExecutionEvent(
   current: SocketConnection | undefined,
   envelope: ExecutionEnvelope,
 ): SocketConnection | undefined {
-  const { event, sessionId, sequence } = envelope;
+  const { event } = envelope;
   if (
     envelope.protocolVersion !== 1 ||
     (event.protocol !== "websocket" && event.protocol !== "socketio")
   ) {
     return current;
   }
-  if (event.type === "session.started") {
-    if (
-      current?.closed ||
-      current?.sessionId === sessionId ||
-      (current?.requestId && current.requestId !== sessionId) ||
-      (current?.sessionId && !current.requestId)
-    ) {
-      return current;
-    }
-    return {
-      ...current,
-      status: "connecting",
-      sessionId,
-      sequence,
-      closed: false,
-      socketRes: current?.socketRes ?? [],
-    };
-  }
-  if (
-    !current ||
-    current.closed ||
-    current.sessionId !== sessionId ||
-    sequence <= (current.sequence ?? 0)
-  ) {
+  const session = receiveSessionEvent(current?.session, envelope);
+  if (!session || session === current?.session) {
     return current;
   }
-  const next = { ...current, sequence };
+  const initial: SocketConnection = current ?? { socketRes: [] };
+  const next = reduceSocketData(initial, envelope);
+  return { ...next, session };
+}
+
+/** Socket messages, subscriptions and handshake data only. */
+function reduceSocketData(
+  current: SocketConnection,
+  envelope: ExecutionEnvelope,
+): SocketConnection {
+  const { event } = envelope;
+  const next = { ...current };
   if ("result" in event) {
     const result = event.result;
     const opened = event.type === "connection.opened";
@@ -75,14 +61,6 @@ export function reduceSocketExecutionEvent(
     const failedConnection =
       (result.type === "connection" || result.type === "connect_error") &&
       !result.isSuccess;
-    next.status =
-      closed || failedConnection
-        ? "disconnect"
-        : result.type === "error"
-          ? current.status
-          : "connect";
-    next.requestId = undefined;
-    next.closed = closed || failedConnection;
     if (opened && result.isSuccess) {
       const handshake =
         event.protocol === "websocket"
@@ -131,8 +109,6 @@ export function reduceSocketExecutionEvent(
       })),
     ];
   } else if ("error" in event) {
-    next.status = "disconnect";
-    next.requestId = undefined;
     next.socketRes = [
       ...current.socketRes,
       {
@@ -144,14 +120,17 @@ export function reduceSocketExecutionEvent(
         },
       },
     ];
-  } else if (
-    event.type === "session.closed" ||
-    event.type === "execution.completed" ||
-    event.type === "execution.cancelled"
-  ) {
-    next.status = "disconnect";
-    next.requestId = undefined;
-    next.closed = true;
   }
   return next;
+}
+
+/** UI connection labels are derived, never a second lifecycle state. */
+export function getSocketConnectionStatus(
+  connection?: SocketConnection,
+): ConnectionStatus {
+  return connection?.session?.status === "running"
+    ? connection.session.opened
+      ? "connect"
+      : "connecting"
+    : "disconnect";
 }

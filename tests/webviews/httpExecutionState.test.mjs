@@ -1,8 +1,12 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import load from "../helpers/loadTypeScript.mjs";
+const sessionState = await load(
+  "apps/webviews/src/features/requests/execution/session.ts",
+);
 const { reduceHttpExecutionEvent: reduce, hasCompletedResponse } = await load(
   "apps/webviews/src/features/requests/execution/http-state.ts",
+  () => sessionState,
 );
 const { consumeExecutionEvent } = await load(
   "apps/webviews/src/features/requests/execution/consume-event.ts",
@@ -12,8 +16,8 @@ const begin = (state, executionId = "current") =>
 const event = (
   state,
   value,
-  executionId = state.executionId,
-  sequence = (state.sequence || 0) + 1,
+  executionId = state.session.executionId,
+  sequence = (state.session.sequence || 0) + 1,
 ) => reduce(state, { type: "event", executionId, sequence, event: value });
 const plain = (value) => JSON.parse(JSON.stringify(value));
 
@@ -29,7 +33,7 @@ test("a new execution preserves the display result and resets runtime data immut
   const snapshot = structuredClone(previous);
   const state = begin(previous);
   assert.equal(state.result, previous.result);
-  assert.equal(state.status, "sending");
+  assert.equal(state.session.status, "running");
   assert.equal(state.error, null);
   assert.deepEqual(plain(state.consoleList), []);
   assert.equal(hasCompletedResponse(state), false);
@@ -78,8 +82,8 @@ test("cancellation before host startup cannot reassign the old run after a retry
   ]) {
     assert.equal(event(state, value, "A"), state);
   }
-  assert.equal(state.executionId, "B");
-  assert.equal(state.status, "sending");
+  assert.equal(state.session.executionId, "B");
+  assert.equal(state.session.status, "running");
 });
 
 test("only the current execution can cancel or complete and duplicates cannot run twice", () => {
@@ -95,7 +99,7 @@ test("only the current execution can cancel or complete and duplicates cannot ru
       state,
       { type: "console", messages: ["duplicate"] },
       "current",
-      state.sequence,
+      state.session.sequence,
     ),
     state,
   );
@@ -127,7 +131,7 @@ test("completion with no response cannot save a retained result", () => {
     result: { executionId: "old", response: { code: 200 } },
   };
   const state = event(begin(old), { type: "done" });
-  assert.equal(state.status, "succeeded");
+  assert.equal(state.session.status, "succeeded");
   assert.equal(state.result, old.result);
   assert.equal(hasCompletedResponse(state), false);
 });
@@ -140,7 +144,7 @@ test("script and network errors retain their cause and preserve old display data
   const error = { message: "failed" };
   let state = event(begin(old), { type: "request", error });
   state = event(state, { type: "done", error: null });
-  assert.equal(state.status, "failed");
+  assert.equal(state.session.status, "failed");
   assert.equal(state.error, error);
   assert.equal(state.result, old.result);
   state = event(begin(state, "retry"), { type: "exception", error });
@@ -174,6 +178,6 @@ test("HTTP protocol errors reach the reducer even before session startup", () =>
     },
     views,
   );
-  assert.equal(state.status, "failed");
+  assert.equal(state.session.status, "failed");
   assert.equal(state.error.message, "preparation failed");
 });

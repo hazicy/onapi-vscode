@@ -1,3 +1,4 @@
+import { getSocketConnectionStatus } from "@/features/requests/execution/socket-state";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import styles from "./Request.module.css";
 import { useEffect } from "react";
@@ -130,7 +131,12 @@ const MessageHeader = (props: Props) => {
           disabled={
             !(
               size(trim(value?.raw)) > 0 &&
-              isEqual(websocketConnectionPool[apisActiveKey]?.status, "connect")
+              isEqual(
+                getSocketConnectionStatus(
+                  websocketConnectionPool[apisActiveKey],
+                ),
+                "connect",
+              )
             )
           }
           onClick={() => {

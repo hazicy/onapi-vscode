@@ -1,3 +1,4 @@
+import { getSocketConnectionStatus } from "@/features/requests/execution/socket-state";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import type { SocketIoDetailsData } from "@onapi/domain/requests/types/socketio";
 import styles from "../../SocketIoDebug.module.css";
@@ -203,7 +204,8 @@ const Realtime: React.FC<Props> = ({ id, onChange }) => {
 
   const messages = websocketConnectionPool[apisActiveKey]?.socketRes;
   const connected =
-    websocketConnectionPool[apisActiveKey]?.status === "connect";
+    getSocketConnectionStatus(websocketConnectionPool[apisActiveKey]) ===
+    "connect";
   const hasFilter = Boolean(filterValue.trim() || filterType !== "all");
   useEffect(() => {
     if (!messages?.length) {
@@ -264,7 +266,8 @@ const Realtime: React.FC<Props> = ({ id, onChange }) => {
 
   return (
     <>
-      {websocketConnectionPool[apisActiveKey]?.status === "connecting" && (
+      {getSocketConnectionStatus(websocketConnectionPool[apisActiveKey]) ===
+        "connecting" && (
         <Sending
           onCancel={() => {
             // Disconnect

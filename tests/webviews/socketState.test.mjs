@@ -2,24 +2,30 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import load, { nativeDependency } from "../helpers/loadTypeScript.mjs";
 
+const sessionState = await load(
+  "apps/webviews/src/features/requests/execution/session.ts",
+);
 const socketState = await load(
   "apps/webviews/src/features/requests/execution/socket-state.ts",
-  () => ({}),
+  () => sessionState,
 );
 const { createStore } = await nativeDependency("zustand/vanilla");
 async function createSocketStore() {
   const { default: store } = await load(
     "apps/webviews/src/features/requests/store/useApis/websocket.ts",
     (id) =>
-      id.includes("socket-state")
-        ? socketState
-        : {
-            create: () => (initializer) => createStore(initializer),
-            devtools: (initializer) => initializer,
-          },
+      id.endsWith("execution/session")
+        ? sessionState
+        : id.includes("socket-state")
+          ? socketState
+          : {
+              create: () => (initializer) => createStore(initializer),
+              devtools: (initializer) => initializer,
+            },
   );
   return store;
 }
+const status = socketState.getSocketConnectionStatus;
 const plain = (value) => JSON.parse(JSON.stringify(value));
 
 const envelope = (sessionId, sequence, event, targetId = "ws") => ({
@@ -76,7 +82,7 @@ test("socket reducer rejects stale starts, duplicate events and messages after l
     type: "connection.opened",
     result: { type: "connection", isSuccess: true },
   });
-  assert.equal(store.getState().websocketConnectionPool.ws.status, "connect");
+  assert.equal(status(store.getState().websocketConnectionPool.ws), "connect");
 });
 
 test("Socket.IO reducer records subscriptions and acks while send errors preserve the connection", () => {
@@ -110,7 +116,7 @@ test("Socket.IO reducer records subscriptions and acks while send errors preserv
     type: "execution.error",
     result: { type: "error", isSuccess: false, message: "bad send" },
   });
-  assert.equal(state.status, "connect");
+  assert.equal(status(state), "connect");
   assert.equal(state.responseData.url, "http://echo");
   assert.deepEqual(plain(state.socketRes.map((item) => item.action)), [
     "connect",
@@ -185,7 +191,7 @@ test("reconnecting retains history and clears obsolete handshake data only for t
   store.getState().startConnection("ws");
   const pool = store.getState().websocketConnectionPool;
   assert.deepEqual(plain(previous), snapshot);
-  assert.equal(pool.ws.status, "connecting");
+  assert.equal(status(pool.ws), "connecting");
   assert.equal(pool.ws.socketRes, previous.ws.socketRes);
   assert.equal(pool.ws.responseData, undefined);
   assert.equal(pool.socketio, previous.socketio);
@@ -194,7 +200,7 @@ test("reconnecting retains history and clears obsolete handshake data only for t
     message: "closed",
   });
   assert.equal(
-    store.getState().websocketConnectionPool.ws.status,
+    status(store.getState().websocketConnectionPool.ws),
     "disconnect",
   );
   assert.equal(store.getState().websocketConnectionPool.ws.socketRes.length, 3);
@@ -224,8 +230,8 @@ for (const targetId of ["ws", "socketio"]) {
     assert.equal(store.getState(), pending);
     failConnection(targetId, "current", { message: "Preparation failed" });
     const pool = store.getState().websocketConnectionPool;
-    assert.equal(pool[targetId].status, "disconnect");
-    assert.equal(pool[targetId].requestId, undefined);
+    assert.equal(status(pool[targetId]), "disconnect");
+    assert.equal(pool[targetId].session.status, "failed");
     assert.equal(pool[targetId].socketRes.length, 2);
     assert.equal(
       pool[targetId].socketRes[1].message.message,

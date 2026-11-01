@@ -1,3 +1,4 @@
+import { reduceSession, type ExecutionSession } from "./session";
 import type {
   ExecutionEvent,
   ExecutionError,
@@ -5,12 +6,6 @@ import type {
   SerializedResponse,
 } from "@onapi/contracts";
 
-export type HttpExecutionStatus =
-  | "idle"
-  | "sending"
-  | "succeeded"
-  | "failed"
-  | "cancelled";
 export interface HttpExecutionResult {
   executionId: string;
   response: SerializedResponse;
@@ -19,9 +14,7 @@ export interface HttpExecutionResult {
   visualizerHtml?: string | null;
 }
 export interface HttpExecutionState {
-  status: HttpExecutionStatus;
-  executionId?: string;
-  sequence?: number;
+  session?: ExecutionSession;
   result?: HttpExecutionResult;
   error?: ExecutionError | null;
   events?: ExecutionEvent[];
@@ -44,12 +37,32 @@ export function reduceHttpExecutionEvent(
   previous: HttpExecutionState | undefined,
   action: HttpExecutionAction,
 ): HttpExecutionState {
-  const current = previous || { status: "idle" };
+  const current = previous || {};
+  const event = action.type === "event" ? action.event : undefined;
+  const session = reduceSession(
+    current.session,
+    action.type === "begin"
+      ? action
+      : action.type === "cancel" || action.type === "failure"
+        ? {
+            type: "finish",
+            executionId: action.executionId,
+            status: action.type === "cancel" ? "cancelled" : "failed",
+          }
+        : {
+            type: "event",
+            executionId: action.executionId,
+            sequence: action.sequence,
+            failed: !!action.event.error,
+            terminal: action.event.type === "done" ? "succeeded" : undefined,
+          },
+  );
+  if (session === current.session) {
+    return current;
+  }
   if (action.type === "begin") {
     return {
-      status: "sending",
-      executionId: action.executionId,
-      sequence: 0,
+      session,
       result: current.result,
       error: null,
       events: [],
@@ -57,27 +70,27 @@ export function reduceHttpExecutionEvent(
       assertions: [],
     };
   }
-  if (
-    current.status !== "sending" ||
-    current.executionId !== action.executionId
-  ) {
-    return current;
-  }
   if (action.type === "failure") {
-    return { ...current, status: "failed", error: action.error };
+    return { ...current, session, error: action.error };
   }
-  if (action.type === "cancel") {
-    return { ...current, status: "cancelled" };
+  if (!event) {
+    return { ...current, session };
   }
-  if (action.sequence <= (current.sequence || 0)) {
-    return current;
-  }
-  const event = action.event;
-  const next = {
-    ...current,
-    sequence: action.sequence,
-    events: [...(current.events || []), event],
-  };
+  return reduceHttpData(
+    current,
+    { ...current, session, events: [...(current.events || []), event] },
+    event,
+    action.executionId,
+  );
+}
+
+/** HTTP payload handling has no authority over execution lifecycle. */
+function reduceHttpData(
+  current: HttpExecutionState,
+  next: HttpExecutionState,
+  event: ExecutionEvent,
+  executionId: string,
+): HttpExecutionState {
   switch (event.type) {
     case "responseStart":
     case "request":
@@ -85,7 +98,7 @@ export function reduceHttpExecutionEvent(
         ...next,
         result: event.response
           ? {
-              executionId: action.executionId,
+              executionId,
               response: event.response,
               request: event.request,
               cookies: event.cookies,
@@ -108,7 +121,8 @@ export function reduceHttpExecutionEvent(
       return { ...next, error: event.error };
     case "item":
       return event.visualizer &&
-        current.result?.executionId === current.executionId
+        current.result &&
+        current.result.executionId === current.session?.executionId
         ? {
             ...next,
             result: { ...current.result, visualizerHtml: event.visualizer },
@@ -116,7 +130,10 @@ export function reduceHttpExecutionEvent(
         : next;
     case "done": {
       const error = event.error || current.error;
-      return { ...next, status: error ? "failed" : "succeeded", error };
+      return {
+        ...next,
+        error,
+      };
     }
     default:
       return next;
@@ -124,8 +141,8 @@ export function reduceHttpExecutionEvent(
 }
 export function hasCompletedResponse(state?: HttpExecutionState): boolean {
   return (
-    state?.status === "succeeded" &&
+    state?.session?.status === "succeeded" &&
     !!state.result &&
-    state.result.executionId === state.executionId
+    state.result.executionId === state.session.executionId
   );
 }

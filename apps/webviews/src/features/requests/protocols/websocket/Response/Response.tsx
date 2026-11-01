@@ -1,3 +1,4 @@
+import { getSocketConnectionStatus } from "@/features/requests/execution/socket-state";
 import styles from "../WebSocketDebug.module.css";
 import React, { lazy } from "react";
 import { useTranslation } from "react-i18next";
@@ -96,7 +97,7 @@ const Response: React.FC = (props: any) => {
 
     return _originItems;
   });
-  const status = websocketConnectionPool[value?.id]?.status;
+  const status = getSocketConnectionStatus(websocketConnectionPool[value?.id]);
   const connectionLabel =
     status === "connect"
       ? t("ws.response.connected")

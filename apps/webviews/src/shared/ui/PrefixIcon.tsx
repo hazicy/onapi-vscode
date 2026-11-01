@@ -139,7 +139,9 @@ const PrefixIcon: FC<Props> = memo(
         const normalizedMethod = method?.trim().toUpperCase() || "";
         const isDefaultMethod = API_METHODS.includes(normalizedMethod);
         typeMap.api = {
-          icon: isDefaultMethod ? REQUEST_METHOD_MAP[normalizedMethod] : (
+          icon: isDefaultMethod ? (
+            REQUEST_METHOD_MAP[normalizedMethod]
+          ) : (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="1em"

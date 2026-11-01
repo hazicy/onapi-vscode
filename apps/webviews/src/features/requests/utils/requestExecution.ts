@@ -4,7 +4,7 @@ import useApis from "@/features/requests/store/useApis";
 
 export function beginRequest(): string | undefined {
   const { currentSendingData, updateCurrentSendingData } = useApis.getState();
-  if (currentSendingData?.status === "sending") {
+  if (currentSendingData?.session?.status === "running") {
     return undefined;
   }
   const executionId = crypto.randomUUID();
@@ -20,19 +20,19 @@ export function beginRequest(): string | undefined {
 export function cancelRequest(): void {
   const { currentSendingData, updateCurrentSendingData } = useApis.getState();
   if (
-    currentSendingData?.status !== "sending" ||
-    !currentSendingData.executionId
+    currentSendingData?.session?.status !== "running" ||
+    !currentSendingData.session.executionId
   ) {
     return;
   }
   updateCurrentSendingData(
     reduceHttpExecutionEvent(currentSendingData, {
       type: "cancel",
-      executionId: currentSendingData.executionId,
+      executionId: currentSendingData.session.executionId,
     }),
   );
   sendRequestPanelMessage({
     action: "stopSendApi",
-    executionId: currentSendingData.executionId,
+    executionId: currentSendingData.session.executionId,
   });
 }

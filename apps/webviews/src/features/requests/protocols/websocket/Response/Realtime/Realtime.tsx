@@ -1,3 +1,4 @@
+import { getSocketConnectionStatus } from "@/features/requests/execution/socket-state";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import clsx from "clsx";
 import styles from "../../WebSocketDebug.module.css";
@@ -82,7 +83,8 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
   }, [websocketConnectionPool, apisActiveKey, filterValue, filterType]);
   const messages = websocketConnectionPool[apisActiveKey]?.socketRes;
   const connected =
-    websocketConnectionPool[apisActiveKey]?.status === "connect";
+    getSocketConnectionStatus(websocketConnectionPool[apisActiveKey]) ===
+    "connect";
   const hasFilter = Boolean(filterValue || filterType !== "all");
   useEffect(() => {
     if (!messages?.length) {
@@ -143,7 +145,8 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
   }, [wsTemplateStateList]);
   return (
     <>
-      {websocketConnectionPool[apisActiveKey]?.status === "connecting" && (
+      {getSocketConnectionStatus(websocketConnectionPool[apisActiveKey]) ===
+        "connecting" && (
         <Sending
           onCancel={() => {
             // Disconnect

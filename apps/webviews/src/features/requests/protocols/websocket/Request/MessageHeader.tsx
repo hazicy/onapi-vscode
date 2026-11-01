@@ -1,3 +1,4 @@
+import { getSocketConnectionStatus } from "@/features/requests/execution/socket-state";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import styles from "./Request.module.css";
 import { useEffect } from "react";
@@ -34,7 +35,8 @@ const MessageHeader = (props: Props) => {
     }
   }, [setBinaryType, value]);
   const connected =
-    websocketConnectionPool[apisActiveKey]?.status === "connect";
+    getSocketConnectionStatus(websocketConnectionPool[apisActiveKey]) ===
+    "connect";
   const sendHint = !connected
     ? t("ws.request.connect_first")
     : !trim(value?.raw)

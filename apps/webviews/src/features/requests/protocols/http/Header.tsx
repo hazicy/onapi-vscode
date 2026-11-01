@@ -39,7 +39,7 @@ const Header: FC<HttpEditorProps> = ({ apisData, onApisDataChange, type }) => {
       }),
     );
   };
-  const isSending = isEqual(currentSendingData?.status, "sending");
+  const isSending = isEqual(currentSendingData?.session?.status, "running");
 
   const handleSend = (option?: { server_id: string }) => {
     const executionId = beginRequest();

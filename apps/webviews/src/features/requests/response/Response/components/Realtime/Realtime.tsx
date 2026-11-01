@@ -29,12 +29,12 @@ const Realtime = memo(({ resultIncludesTabs, sendingData }: Props) => {
     if (isEqual(systemConfig.send_after_auto_beautify, STATUS_CODE.ENABLE)) {
       responseResultRef.current?.setTabsValue("beautify");
     }
-  }, [sendingData?.status, sendingData?.result]);
+  }, [sendingData?.session?.status, sendingData?.result]);
 
   if (isEventStream(sendingData)) {
     return (
       <EventStream
-        key={sendingData?.executionId}
+        key={sendingData?.session?.executionId}
         body={
           eventStreamText(sendingData) ||
           responseText(sendingData?.result?.response)
@@ -44,7 +44,7 @@ const Realtime = memo(({ resultIncludesTabs, sendingData }: Props) => {
     );
   }
 
-  if (sendingData?.status === "failed") {
+  if (sendingData?.session?.status === "failed") {
     return null;
   }
 

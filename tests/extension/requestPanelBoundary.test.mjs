@@ -77,11 +77,15 @@ test("request panel awaits handlers and reports asynchronous rejection", async (
 });
 
 test("failed sends end loading without accepting stale failures or losing previous results", async () => {
+  const sessions = await load(
+    "apps/webviews/src/features/requests/execution/session.ts",
+  );
   const { reduceHttpExecutionEvent: reduce } = await load(
     "apps/webviews/src/features/requests/execution/http-state.ts",
+    () => sessions,
   );
   const result = { executionId: "previous", response: { code: 200 } };
-  const state = { status: "sending", executionId: "current", result };
+  const state = { session: sessions.beginSession("current"), result };
   const error = { message: "Invalid request" };
   assert.equal(
     reduce(state, { type: "failure", executionId: "old", error }),
@@ -92,7 +96,7 @@ test("failed sends end loading without accepting stale failures or losing previo
     executionId: "current",
     error,
   });
-  assert.equal(failed.status, "failed");
+  assert.equal(failed.session.status, "failed");
   assert.equal(failed.result, result);
   assert.equal(failed.error, error);
   const cancelled = reduce(state, { type: "cancel", executionId: "current" });

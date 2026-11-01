@@ -1,8 +1,12 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import load, { nativeDependency } from "../helpers/loadTypeScript.mjs";
+const sessionState = await load(
+  "apps/webviews/src/features/requests/execution/session.ts",
+);
 const executionState = await load(
   "apps/webviews/src/features/requests/execution/http-state.ts",
+  () => sessionState,
 );
 
 test("sending and cancelling preserve results and prevent duplicate sends", async () => {
@@ -40,16 +44,16 @@ test("sending and cancelling preserve results and prevent duplicate sends", asyn
   );
   const executionId = beginRequest();
   assert.equal(typeof executionId, "string");
-  assert.equal(state.currentSendingData.executionId, executionId);
+  assert.equal(state.currentSendingData.session.executionId, executionId);
   assert.equal(state.currentSendingData.result.response, response);
   assert.equal(state.currentSendingData.error, null);
-  assert.equal(state.currentSendingData.status, "sending");
+  assert.equal(state.currentSendingData.session.status, "running");
   const pending = state.currentSendingData;
   assert.equal(beginRequest(), undefined);
   assert.equal(state.currentSendingData, pending);
   cancelRequest();
   assert.equal(state.currentSendingData.result.response, response);
-  assert.equal(state.currentSendingData.status, "cancelled");
+  assert.equal(state.currentSendingData.session.status, "cancelled");
   assert.equal(messages.length, 1);
   assert.equal(messages[0].action, "stopSendApi");
   assert.equal(messages[0].executionId, executionId);

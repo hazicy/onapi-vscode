@@ -20,7 +20,7 @@ test("SSE frames preserve multiline data, names and IDs without dispatching part
 
 test("HTTP stream detection uses current response headers, never request kind or old result", () => {
   const state = {
-    executionId: "current",
+    session: { executionId: "current", sequence: 0, status: "running" },
     result: {
       executionId: "current",
       response: {
@@ -37,7 +37,13 @@ test("HTTP stream detection uses current response headers, never request kind or
   };
   assert.equal(isEventStream(state), true);
   assert.equal(eventStreamText(state), "data: one\n\n");
-  assert.equal(isEventStream({ ...state, executionId: "next" }), false);
+  assert.equal(
+    isEventStream({
+      ...state,
+      session: { ...state.session, executionId: "next" },
+    }),
+    false,
+  );
   state.result.response.header[0].value = "application/json";
   assert.equal(isEventStream(state), false);
   assert.equal(isEventStream(undefined), false);

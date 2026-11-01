@@ -1,3 +1,10 @@
+import {
+  beginSession,
+  acceptsSession,
+  reduceSession,
+  receiveSessionEvent,
+  type ExecutionSession,
+} from "../../execution/session";
 import { useEffect, useRef, useState } from "react";
 import type { ExecutionEnvelope } from "@onapi/contracts";
 import type { RequestPanelCommandInput } from "@onapi/contracts/request-panel";
@@ -17,28 +24,37 @@ type Command = Extract<
       | "grpc_invoke";
   }
 >;
-type Pending = { id: string; sequence: number; command: Command };
+type Pending = { session: ExecutionSession; command: Command };
 
 /** Commands and host validation failures use the same correlation identity. */
 export function useProtocolExecution(
   targetId: string,
   onEvent: (event: ExecutionEnvelope) => void,
 ) {
-  const [busy, setBusy] = useState(false);
+  const [, refresh] = useState(0);
   const [error, setError] = useState("");
   const active = useRef<Pending | undefined>(undefined);
   const connection = useRef<Pending | undefined>(undefined);
   const callback = useRef(onEvent);
   callback.current = onEvent;
   useEffect(() => {
+    refresh((revision) => revision + 1);
+    setError("");
     const listener = (event: MessageEvent) => {
       const message = readRequestPanelResponse(event.data);
       if (
         message?.action === "requestPanelError" &&
-        message.requestId === active.current?.id
+        acceptsSession(active.current?.session, message.requestId ?? "")
       ) {
         setError(message.data.error.message);
-        setBusy(false);
+        refresh((revision) => revision + 1);
+        if (active.current) {
+          active.current.session = reduceSession(active.current.session, {
+            type: "finish",
+            executionId: active.current.session.executionId,
+            status: "failed",
+          })!;
+        }
         active.current = undefined;
       }
       if (
@@ -49,52 +65,77 @@ export function useProtocolExecution(
       }
       const envelope = message.data;
       const pending =
-        envelope.sessionId === active.current?.id
+        envelope.sessionId === active.current?.session.executionId
           ? active.current
-          : envelope.sessionId === connection.current?.id
+          : envelope.sessionId === connection.current?.session.executionId
             ? connection.current
             : undefined;
-      if (!pending || envelope.sequence <= pending.sequence) {
+      const type = envelope.event.type;
+      if (!pending) {
         return;
       }
-      pending.sequence = envelope.sequence;
-      const type = envelope.event.type;
+      const session = receiveSessionEvent(pending.session, envelope);
+      if (!session || session === pending.session) {
+        return;
+      }
+      pending.session = session;
       if (type === "execution.error" && "error" in envelope.event) {
         setError(envelope.event.error.message);
       }
-      callback.current(envelope);
       if (
         type === "connection.opened" &&
         pending.command.action === "mcp_connect"
       ) {
         connection.current = pending;
         active.current = undefined;
-        setBusy(false);
+        refresh((revision) => revision + 1);
       }
-      if (type === "execution.completed" && active.current === pending) {
-        active.current = undefined;
-        setBusy(false);
+      if (session.status !== "running") {
+        if (active.current === pending) {
+          active.current = undefined;
+          refresh((revision) => revision + 1);
+        }
+        if (connection.current === pending) {
+          connection.current = undefined;
+        }
       }
-      if (type === "session.closed" && connection.current === pending) {
-        connection.current = undefined;
-      }
+      callback.current(envelope);
     };
     window.addEventListener("message", listener);
-    return () => window.removeEventListener("message", listener);
+    return () => {
+      window.removeEventListener("message", listener);
+      active.current = undefined;
+      connection.current = undefined;
+    };
   }, [targetId]);
   const start = (build: (requestId: string) => Command) => {
     try {
       const id = crypto.randomUUID();
       const command = build(id);
-      active.current = { id, sequence: 0, command };
+      active.current = { session: beginSession(id), command };
       setError("");
-      setBusy(true);
+      refresh((revision) => revision + 1);
       sendRequestPanelMessage(command);
       return id;
     } catch (e) {
+      if (active.current) {
+        active.current.session = reduceSession(active.current.session, {
+          type: "finish",
+          executionId: active.current.session.executionId,
+          status: "failed",
+        })!;
+      }
+      active.current = undefined;
+      refresh((revision) => revision + 1);
       setError(e instanceof Error ? e.message : String(e));
       return undefined;
     }
   };
-  return { busy, error, setError, start, activeId: () => active.current?.id };
+  return {
+    busy: active.current?.session.status === "running",
+    error,
+    setError,
+    start,
+    activeId: () => active.current?.session.executionId,
+  };
 }

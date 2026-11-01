@@ -56,7 +56,7 @@ const Index = memo((props: HttpEditorProps) => {
     updateCurrentServerId(tempServerId);
   }, [apiOriginDetailsList]);
 
-  const isSending = isEqual(curApiSendingData?.status, "sending");
+  const isSending = isEqual(curApiSendingData?.session?.status, "running");
 
   const urlGroupData = useMemo(
     () => ({
