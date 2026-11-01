@@ -138,6 +138,7 @@ test("native sidebar panels, test commands and workspace request history", async
       },
     },
     utils: {
+      getUserConfig: (ctx) => ({ currentProject: { name: ctx.project } }),
       getApiList: () => rows,
       getCurrentProjectConfig: () => ({}),
       getProjectReportList: () => [report],
@@ -271,6 +272,16 @@ test("native sidebar panels, test commands and workspace request history", async
       setRequestResult,
     } = bundled;
     registerSidebarTree(context);
+    assert.equal(treeViews.get("onapiRequests").description, "one");
+    context.project = "renamed workspace";
+    storageChanged.fire("userConfig");
+    assert.equal(
+      treeViews.get("onapiRequests").description,
+      "renamed workspace",
+    );
+    context.project = "one";
+    storageChanged.fire("userConfig");
+    assert.equal(treeViews.get("onapiRequests").description, "one");
     for (const id of ["onapiRequests", "onapiTests", "onapiHistory"]) {
       const treeView = treeViews.get(id);
       treeView.setVisible(true);

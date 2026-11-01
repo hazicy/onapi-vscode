@@ -5,6 +5,7 @@ import {
   getProjectShareData,
 } from "../sharing/share-data";
 import { globalConfig } from "../../app/config";
+import { getUserConfig } from "../../app/user-config";
 import {
   requestDecoration,
   requestStatusChanged,
@@ -41,6 +42,10 @@ export function registerSidebarTree(context: vscode.ExtensionContext) {
       requestsProvider,
     ),
   });
+  const updateWorkspaceDescription = () => {
+    view.description = getUserConfig(context).currentProject.name;
+  };
+  updateWorkspaceDescription();
   const testsView = vscode.window.createTreeView("onapiTests", {
     treeDataProvider: testsProvider,
     showCollapseAll: true,
@@ -117,6 +122,9 @@ export function registerSidebarTree(context: vscode.ExtensionContext) {
     historyView,
     ...providers,
     storageChanged.event((key) => {
+      if (key === "userConfig") {
+        updateWorkspaceDescription();
+      }
       if (
         key === "apiList" ||
         key.startsWith("apiList:") ||

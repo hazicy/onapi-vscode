@@ -119,44 +119,42 @@
         {
           "command": "onapi.switchWorkspace",
           "when": "view == onapiRequests",
-          "group": "1_workspace@1"
+          "group": "navigation@1"
         },
         {
           "command": "openImportDataPanel",
           "when": "view == onapiRequests",
-          "group": "1_workspace@2"
+          "group": "1_data@1"
         },
         {
           "command": "openExportDataPanel",
           "when": "view == onapiRequests",
-          "group": "1_workspace@3"
+          "group": "1_data@2"
         },
         {
           "command": "onapi.openEnv",
           "when": "view == onapiRequests",
-          "group": "@2",
-          "order": 1
+          "group": "navigation@4"
         },
         {
           "command": "onapi.openExtenisonSettings",
           "when": "view == onapiRequests",
-          "group": "@2",
-          "order": 2
+          "group": "2_workspace@2"
         },
         {
           "command": "onapi.tree.new",
           "when": "view == onapiRequests",
-          "group": "navigation@4"
+          "group": "navigation@2"
         },
         {
           "command": "onapi.tree.filter",
           "when": "view == onapiRequests",
-          "group": "navigation@5"
+          "group": "navigation@3"
         },
         {
           "command": "onapi.tree.refresh",
           "when": "view == onapiRequests",
-          "group": "2_view@1"
+          "group": "3_view@1"
         },
         {
           "command": "onapi.tree.runTests",
@@ -176,7 +174,7 @@
         {
           "command": "onapi.shareList",
           "when": "view == onapiRequests",
-          "group": "1_workspace@4"
+          "group": "2_workspace@1"
         }
       ],
       "view/item/context": [
@@ -279,6 +277,21 @@
           "command": "onapi.tree.shareDocs",
           "when": "view == onapiRequests && viewItem =~ /^(onapiFolder|onapiRequestHttp)$/",
           "group": "2_copy@2"
+        },
+        {
+          "command": "onapi.tree.clone",
+          "when": "view == onapiRequests && viewItem =~ /^onapiRequest/",
+          "group": "inline@1"
+        },
+        {
+          "command": "onapi.tree.folderSettings",
+          "when": "view == onapiRequests && viewItem == onapiFolder",
+          "group": "inline@2"
+        },
+        {
+          "command": "onapi.tree.runTests",
+          "when": "view == onapiRequests && viewItem == onapiFolder",
+          "group": "inline@3"
         }
       ]
     },
@@ -293,11 +306,13 @@
       },
       {
         "command": "onapi.openEnv",
-        "title": "%command.openEnv%"
+        "title": "%command.openEnv%",
+        "icon": "$(symbol-variable)"
       },
       {
         "command": "onapi.openExtenisonSettings",
-        "title": "%command.openExtenisonSettings%"
+        "title": "%command.openExtenisonSettings%",
+        "icon": "$(settings-gear)"
       },
       {
         "command": "openImportDataPanel",
