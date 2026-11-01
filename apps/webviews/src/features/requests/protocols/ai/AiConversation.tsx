@@ -1,6 +1,7 @@
 import RequestToolbar from "@/features/requests/components/RequestToolbar";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Streamdown } from "streamdown";
 import type { AiMessage } from "@onapi/domain/requests/ai-mcp";
 import { aiProviders } from "@onapi/domain/requests/ai-mcp";
 import AppIcon from "@/shared/ui/AppIcon";
@@ -128,7 +129,14 @@ export default function AiConversation({
       {message.reasoning && (
         <details className={styles.reasoning} open={index === undefined}>
           <summary>{label("reasoning")}</summary>
-          <pre>{message.reasoning}</pre>
+          <Streamdown
+            className={styles.markdown}
+            mode={index === undefined ? "streaming" : "static"}
+            isAnimating={busy && index === undefined}
+            controls={false}
+          >
+            {message.reasoning}
+          </Streamdown>
         </details>
       )}
       {index !== undefined && editIndex === index ? (
@@ -147,6 +155,15 @@ export default function AiConversation({
             )
           }
         />
+      ) : message.role === "assistant" ? (
+        <Streamdown
+          className={styles.markdown}
+          mode={index === undefined ? "streaming" : "static"}
+          isAnimating={busy && index === undefined}
+          controls={false}
+        >
+          {message.content}
+        </Streamdown>
       ) : (
         <pre className={styles.messageContent}>{message.content}</pre>
       )}

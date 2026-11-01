@@ -238,6 +238,95 @@
   margin: 10px 0 0;
   font-family: inherit;
 }
+.markdown {
+  margin-top: 10px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.6;
+}
+.markdown > * + * {
+  margin-top: 12px;
+}
+.markdown :is(h1, h2, h3, h4, h5, h6) {
+  margin: 16px 0 8px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.markdown h1 {
+  font-size: 1.6em;
+}
+.markdown h2 {
+  font-size: 1.4em;
+}
+.markdown h3 {
+  font-size: 1.2em;
+}
+.markdown :is(ul, ol) {
+  padding-left: 24px;
+}
+.markdown ul > li {
+  list-style: disc;
+}
+.markdown ol > li {
+  list-style: decimal;
+}
+.markdown li + li {
+  margin-top: 4px;
+}
+.markdown blockquote {
+  margin: 12px 0;
+  padding-left: 12px;
+  border-left: 3px solid var(--vscode-panel-border);
+  color: var(--vscode-descriptionForeground);
+}
+.markdown a {
+  color: var(--vscode-textLink-foreground);
+  text-decoration: underline;
+}
+.markdown code {
+  font-family: var(--vscode-editor-font-family, monospace);
+  background: var(--vscode-textCodeBlock-background);
+  border-radius: 3px;
+  padding: 2px 4px;
+}
+.markdown pre {
+  max-width: 100%;
+  overflow: auto;
+  padding: 12px;
+  background: var(--vscode-textCodeBlock-background);
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: 4px;
+  white-space: pre;
+  overflow-wrap: normal;
+}
+.markdown pre code {
+  padding: 0;
+  background: transparent;
+}
+.markdown :global([data-streamdown="table-wrapper"]) {
+  overflow-x: auto;
+}
+.markdown table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.markdown :is(th, td) {
+  border: 1px solid var(--vscode-panel-border);
+  padding: 6px 10px;
+  text-align: left;
+}
+.markdown th {
+  font-weight: 600;
+}
+.markdown img {
+  max-width: 100%;
+  height: auto;
+}
+.markdown hr {
+  border: 0;
+  border-top: 1px solid var(--vscode-panel-border);
+  margin: 16px 0;
+}
 .messageActions {
   opacity: 0;
 }

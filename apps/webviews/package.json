@@ -60,6 +60,7 @@
     "react-resizable": "^4.0.2",
     "react-resizable-panels": "^4.15.0",
     "react-router-dom": "7.18.4",
+    "streamdown": "^2.7.1",
     "url-parse": "^1.5.10",
     "zustand": "^5.0.16"
   },
