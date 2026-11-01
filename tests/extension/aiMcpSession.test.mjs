@@ -16,6 +16,8 @@ const run = (adapter, request, events) =>
     observer: (event) => events.push(event),
   });
 const config = {
+  provider: "openai",
+  openaiApi: "responses",
   model: "test",
   system: "",
   messages: [{ role: "user", content: "hello" }],
@@ -38,11 +40,18 @@ async function aiFixture(streamFactory) {
       if (id === "../network/abort") return abortHelpers;
       if (id === "../network/fetch") return network;
       if (id === "ai") return { streamText: streamFactory };
-      if (id === "@ai-sdk/openai-compatible")
-        return { createOpenAICompatible: () => (model) => model };
+      if (id === "@ai-sdk/openai")
+        return {
+          createOpenAI: () => ({
+            responses: (model) => model,
+            chat: (model) => model,
+          }),
+        };
+      if (id === "@ai-sdk/deepseek")
+        return { createDeepSeek: () => ({ chat: (model) => model }) };
       throw new Error(id);
     },
-    { AbortController, Error },
+    { AbortController, Error, performance },
   );
   return new AiAdapter();
 }

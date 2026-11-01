@@ -1,4 +1,3 @@
-import tabStyles from "@/shared/components/LineTabs/LineTabs.module.css";
 import styles from "../WebSocketDebug.module.css";
 import React, { lazy } from "react";
 import { useTranslation } from "react-i18next";
@@ -8,7 +7,8 @@ import { Flex } from "@/shared/ui/base";
 import { useMemoizedFn } from "ahooks";
 import { map } from "lodash-es";
 
-import { LineTabs, SuspenseContent } from "@/shared/components";
+import { SuspenseContent } from "@/shared/components";
+import RequestTabs from "@/features/requests/components/RequestTabs";
 
 import useApisWebSocket from "@/features/requests/store/useApis/websocket";
 
@@ -105,9 +105,10 @@ const Response: React.FC = (props: any) => {
         : t("ws.response.disconnected");
   return (
     <div className={styles.lineBar}>
-      <LineTabs
+      <RequestTabs
+        label={t("request_panel.response_tabs")}
         items={tabsItems()}
-        tabListClassName={tabStyles.selectionList}
+
         tabBarExtraContent={
           <Flex align="center" gap={12} className={styles.flex}>
             <span
@@ -120,7 +121,6 @@ const Response: React.FC = (props: any) => {
             </span>
           </Flex>
         }
-        navClassName={styles.tabsNav}
         panelsClassName={styles.tabsContent}
         className={styles.tabs}
       />

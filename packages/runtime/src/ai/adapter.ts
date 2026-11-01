@@ -1,7 +1,8 @@
 import { createNetworkClient } from "../network/fetch";
 import type { NetworkOptions } from "../network/proxy";
 import { streamText } from "ai";
-import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
+import { createOpenAI } from "@ai-sdk/openai";
+import { createDeepSeek } from "@ai-sdk/deepseek";
 import type { ExecutionContext, ProtocolAdapter } from "@onapi/core";
 import type { AiConfig } from "@onapi/domain/requests/ai-mcp";
 
@@ -30,29 +31,53 @@ export class AiAdapter implements ProtocolAdapter<AiExecutionRequest> {
       if (!config.model.trim()) {
         throw new Error("Model is required");
       }
-      const provider = createOpenAICompatible({
-        name: "onapi",
+      const settings = {
         baseURL: request.url,
-        apiKey: request.apiKey || undefined,
+        // An empty panel key must never fall back to a host environment secret.
+        apiKey: request.apiKey || "",
         headers: config.headers,
-        includeUsage: true,
         fetch: network.fetch,
-      });
+      };
+      const providerId = config.provider;
+      const model =
+        providerId === "openai"
+          ? config.openaiApi === "chat"
+            ? createOpenAI(settings).chat(config.model)
+            : createOpenAI(settings).responses(config.model)
+          : createDeepSeek(settings).chat(config.model);
+      const startedAt = performance.now();
       const result = streamText({
-        model: provider(config.model),
+        model,
+        maxRetries: 0,
+        // Errors are relayed through fullStream; avoid the SDK logging prompts.
+        onError: () => {},
+        providerOptions:
+          providerId === "deepseek" &&
+          config.thinking &&
+          config.thinking !== "auto"
+            ? { deepseek: { thinking: { type: config.thinking } } }
+            : providerId === "openai"
+              ? { openai: { store: false } }
+              : undefined,
         system: config.system || undefined,
-        messages: config.messages,
+        messages: config.messages.map(({ role, content }) => ({
+          role,
+          content,
+        })),
         temperature: config.temperature,
         maxOutputTokens: config.maxOutputTokens,
         abortSignal: this.controller.signal,
         timeout: { totalMs: 300_000, chunkMs: 60_000 },
       });
       for await (const part of result.fullStream) {
-        if (part.type === "text-delta") {
+        if (part.type === "text-delta" || part.type === "reasoning-delta") {
           context.publish({
             protocol: this.protocol,
             type: "response.chunk",
             text: part.text,
+            ...(part.type === "reasoning-delta"
+              ? { channel: "reasoning" as const }
+              : {}),
           });
         }
         if (part.type === "error") {
@@ -71,6 +96,8 @@ export class AiAdapter implements ProtocolAdapter<AiExecutionRequest> {
               totalTokens: usage.totalTokens,
             },
             finishReason: await result.finishReason,
+            durationMs: Math.round(performance.now() - startedAt),
+            model: config.model,
           },
         });
       }

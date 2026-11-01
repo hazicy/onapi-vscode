@@ -11,12 +11,7 @@
   min-width: 0;
   min-height: 0;
 }
-.tabsNav {
-  gap: 8px;
-  min-width: 0;
-  padding: 6px 0;
-  margin-bottom: 0;
-}
+
 .tabsContent,
 .tabsTabpane {
   width: 100%;

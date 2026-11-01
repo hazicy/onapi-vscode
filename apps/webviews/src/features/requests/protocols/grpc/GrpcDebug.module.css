@@ -1,4 +1,5 @@
 .workspace {
+  container-type: inline-size;
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -105,45 +106,9 @@
   color: var(--grpc-muted);
   padding: 10px;
 }
-.workspace .invoke {
-  background: var(--vscode-button-background, #126cc5);
-  color: var(--vscode-button-foreground, #fff);
-  font-weight: 600;
-  padding: 10px 22px;
-}
-.workspace .invoke:hover {
-  background: var(--vscode-button-hoverBackground, #0d5eaf);
-}
-.workspace .cancel {
-  border-color: var(--grpc-border);
-  color: var(--vscode-errorForeground, #bf3c36);
-  padding: 10px 20px;
-}
+
 .workspace .save {
   color: var(--grpc-muted);
-}
-.tabs,
-.responseTabs {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0 16px;
-  border-bottom: 1px solid var(--grpc-border);
-  overflow-x: auto;
-  flex-shrink: 0;
-}
-.tabs button,
-.responseTabs button {
-  border-radius: 0;
-  padding: 13px 0 11px;
-  border-bottom: 2px solid transparent;
-  color: var(--grpc-muted);
-  font-size: 12px;
-}
-.tabs button[aria-pressed="true"],
-.responseTabs button[aria-pressed="true"] {
-  border-bottom-color: var(--vscode-focusBorder, #126cc5);
-  color: inherit;
 }
 .methodType {
   margin-left: auto;

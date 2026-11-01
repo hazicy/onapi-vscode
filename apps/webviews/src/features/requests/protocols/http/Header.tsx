@@ -1,3 +1,5 @@
+import RequestToolbar from "@/features/requests/components/RequestToolbar";
+import RequestAction from "@/features/requests/components/RequestAction";
 import type { HttpEditorProps } from "@onapi/domain/requests/record";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import {
@@ -14,9 +16,6 @@ import { isEqual } from "lodash-es";
 import { getNewApisDataByCurlChange } from "@/features/requests/utils/apis";
 import UrlGroup from "@/features/requests/editor/UrlGroup";
 import useApis from "@/features/requests/store/useApis";
-import { Icon } from "@iconify/react";
-import sendHorizontal from "@iconify-icons/lucide/send-horizontal";
-import square from "@iconify-icons/lucide/square";
 import styles from "./Header.module.css";
 
 import { CurlDataType } from "@/features/requests/types/other";
@@ -83,7 +82,7 @@ const Header: FC<HttpEditorProps> = ({ apisData, onApisDataChange, type }) => {
   };
 
   return (
-    <div className={styles.container}>
+    <RequestToolbar className={styles.container}>
       <UrlGroup
         className={styles.urlGroupWrap}
         type={type || "api"}
@@ -101,27 +100,19 @@ const Header: FC<HttpEditorProps> = ({ apisData, onApisDataChange, type }) => {
           paddingRight: "0",
         }}
         urlGroupExtraContent={
-          <button
-            type="button"
-            className={styles.sendButton}
-            aria-label={t(
-              isSending ? "supplement.cancel_send" : "api.run.send",
-            )}
+          <RequestAction
+            label={t(isSending ? "supplement.cancel_send" : "api.run.send")}
+            stopping={isSending}
             title={
               isSending
                 ? t("supplement.cancel_send")
                 : `${t("api.run.send")} (Ctrl/Cmd+Enter)`
             }
             onClick={() => (isSending ? cancelRequest() : handleSend())}
-          >
-            <Icon icon={isSending ? square : sendHorizontal} width={18} />
-            <span className={styles.sendLabel}>
-              {t(isSending ? "supplement.cancel_send" : "api.run.send")}
-            </span>
-          </button>
+          />
         }
       />
-    </div>
+    </RequestToolbar>
   );
 };
 

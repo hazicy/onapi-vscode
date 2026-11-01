@@ -67,7 +67,7 @@ async function load(page: Page) {
   });
   await emit(page, "execution.completed", { failed: false });
   await expect(page.getByLabel("gRPC method")).toBeVisible();
-  await page.getByRole("button", { name: "Message", exact: true }).click();
+  await page.getByRole("tab", { name: "Message", exact: true }).click();
 }
 const messageEditor = (page: Page) =>
   page
@@ -103,18 +103,15 @@ test("gRPC discovers methods, generates a message, and shows response status, me
   await emit(page, "execution.completed", { failed: false });
   await expect(page.getByRole("status")).toContainText("0 OK");
   await expect(page.getByText('"Hello World"', { exact: false })).toBeVisible();
-  await page.getByRole("button", { name: "Trailers", exact: true }).click();
+  await page.getByRole("tab", { name: "Trailers", exact: true }).click();
   await expect(
     page.getByRole("cell", { name: "done", exact: true }),
   ).toBeVisible();
-  await page
-    .getByRole("button", { name: "Metadata", exact: true })
-    .last()
-    .click();
+  await page.getByRole("tab", { name: "Metadata", exact: true }).last().click();
   await expect(
     page.getByRole("cell", { name: "fixture", exact: true }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Messages", exact: true }).click();
+  await page.getByRole("tab", { name: "Messages", exact: true }).click();
   await page.screenshot({
     path: "test-results/grpc-workspace.png",
     fullPage: true,
@@ -160,11 +157,14 @@ test("gRPC metadata and TLS settings participate in native save and document rev
 }) => {
   await page.goto("/?grpc");
   await page
-    .getByRole("button", { name: "Metadata", exact: true })
+    .getByRole("tab", { name: "Metadata", exact: true })
     .first()
     .click();
   await page.getByRole("button", { name: "+ Add metadata" }).click();
   await page.getByLabel("Metadata key 1", { exact: true }).fill("x-request-id");
+  await expect(
+    page.getByRole("tab", { name: "Metadata 1", exact: true }),
+  ).toBeVisible();
   await page
     .getByLabel("Metadata value 1", { exact: true })
     .fill("{{requestId}}");

@@ -1,11 +1,10 @@
 import { httpEventSchema } from "@onapi/domain/requests/record";
-import LineTabs from "@/shared/components/LineTabs/LineTabs";
+import RequestTabs from "@/features/requests/components/RequestTabs";
 import { HttpParameterTable } from "@/shared/components/RequestTable/RequestTable";
 import RequestAuth from "./Request/Auth/Auth";
 import RequestScripts from "./Request/RequestScripts";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-import tabStyles from "@/shared/components/LineTabs/LineTabs.module.css";
 import styles from "./RequestGlobal.module.css";
 import type {
   ItemGroupDefinition,
@@ -29,7 +28,7 @@ export default function RequestGlobal<T extends CollectionSettings>({
     defaultTabKey === "postResponse" ? "test" : "prerequest",
   );
   return (
-    <LineTabs
+    <RequestTabs
       defaultActiveKey={
         defaultTabKey === "preRequest" || defaultTabKey === "postResponse"
           ? "Scripts"
@@ -37,7 +36,7 @@ export default function RequestGlobal<T extends CollectionSettings>({
             ? "Auth"
             : "Params"
       }
-      tabListClassName={tabStyles.selectionList}
+
       items={[
         {
           key: "Params",

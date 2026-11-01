@@ -608,9 +608,12 @@ importers:
 
   packages/runtime:
     dependencies:
-      '@ai-sdk/openai-compatible':
-        specifier: ^3.0.82
-        version: 3.0.82(zod@4.6.7)
+      '@ai-sdk/deepseek':
+        specifier: ^3.0.77
+        version: 3.0.77(zod@4.6.7)
+      '@ai-sdk/openai':
+        specifier: ^4.0.106
+        version: 4.0.106(zod@4.6.7)
       '@grpc/grpc-js':
         specifier: ^1.14.7
         version: 1.14.7
@@ -735,14 +738,20 @@ importers:
 
 packages:
 
+  '@ai-sdk/deepseek@3.0.77':
+    resolution: {integrity: sha512-2+YBeWe98pDCiUdBwmcJBGZLnkHtM+XEe8Fd9juaN5shxcyQUj/z5SDDfBsDCLdpnk/gocXzb4Zoj636ATgRKA==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      zod: ^3.25.76 || ^4.1.8
+
   '@ai-sdk/gateway@4.0.131':
     resolution: {integrity: sha512-3B192DqC0d4kImRqqptKl4yxBbGzZI0niJ6joVW34FrVx+iGO9zdSAFalu+N814m8ChbLaLY8MuDgqsglhOHpQ==}
     engines: {node: '>=22'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
 
-  '@ai-sdk/openai-compatible@3.0.82':
-    resolution: {integrity: sha512-wey0CbujWRkZbbrJjw/GJHyjXpt0v44PQKaTGTVGmigqnM057G7GQHDyZQQj9O0lICY5qJxzpn4wCSftT8BSQg==}
+  '@ai-sdk/openai@4.0.106':
+    resolution: {integrity: sha512-xBhSJCrgeTMZ4kCKABX8BJFtp5ZIJSS2qxvGMALA34TMyR6OVMe93cpU0mGWPFaVwPsWy2DWKb5+x7gkJ9SJ8w==}
     engines: {node: '>=22'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -4898,6 +4907,12 @@ packages:
 
 snapshots:
 
+  '@ai-sdk/deepseek@3.0.77(zod@4.6.7)':
+    dependencies:
+      '@ai-sdk/provider': 4.0.35
+      '@ai-sdk/provider-utils': 5.0.72(zod@4.6.7)
+      zod: 4.6.7
+
   '@ai-sdk/gateway@4.0.131(zod@4.6.7)':
     dependencies:
       '@ai-sdk/provider': 4.0.35
@@ -4905,7 +4920,7 @@ snapshots:
       '@vercel/oidc': 3.2.0
       zod: 4.6.7
 
-  '@ai-sdk/openai-compatible@3.0.82(zod@4.6.7)':
+  '@ai-sdk/openai@4.0.106(zod@4.6.7)':
     dependencies:
       '@ai-sdk/provider': 4.0.35
       '@ai-sdk/provider-utils': 5.0.72(zod@4.6.7)

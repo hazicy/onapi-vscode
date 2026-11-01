@@ -1,3 +1,8 @@
+import square from "@iconify-icons/lucide/square";
+import arrowUp from "@iconify-icons/lucide/arrow-up";
+import arrowDown from "@iconify-icons/lucide/arrow-down";
+import bot from "@iconify-icons/lucide/bot";
+import messageSquare from "@iconify-icons/lucide/message-square";
 import type { IconifyIcon } from "@iconify/react";
 import arrowLeft from "@iconify-icons/lucide/arrow-left";
 import arrowRight from "@iconify-icons/lucide/arrow-right";
@@ -76,6 +81,11 @@ import zap from "@iconify-icons/lucide/zap";
 
 // Bundle icon data so Webviews render without requests to the Iconify API.
 export const appIcons = {
+  square,
+  "arrow-up": arrowUp,
+  "arrow-down": arrowDown,
+  bot,
+  "message-square": messageSquare,
   "arrow-left": arrowLeft,
   "arrow-right": arrowRight,
   "book-open": bookOpen,

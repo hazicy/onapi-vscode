@@ -1,3 +1,5 @@
+import RequestToolbar from "@/features/requests/components/RequestToolbar";
+import RequestAction from "@/features/requests/components/RequestAction";
 import type { HttpEditorProps } from "@onapi/domain/requests/record";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import {
@@ -5,7 +7,6 @@ import {
   cancelRequest,
 } from "@/features/requests/utils/requestExecution";
 import { selectRequestIndex } from "@/features/requests/store/useApis";
-import clsx from "clsx";
 import { requestUrl, editedUrl } from "@onapi/domain";
 import styles from "../../RequestWorkspace.module.css";
 import styles2 from "./UrlPanel.module.css";
@@ -13,7 +14,6 @@ import { memo, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Dropdown, Flex, Tree } from "@/shared/ui/base";
-import Button from "@/shared/ui/Button";
 import { produce } from "immer";
 import { cloneDeep, head, isEqual } from "lodash-es";
 
@@ -154,7 +154,7 @@ const Index = memo((props: HttpEditorProps) => {
     </div>
   );
   return (
-    <div className={styles2.container}>
+    <RequestToolbar className={styles2.container}>
       <UrlGroup
         type="graphql"
         maxLength={10240}
@@ -167,47 +167,39 @@ const Index = memo((props: HttpEditorProps) => {
           paddingRight: "0",
         }}
         urlGroupExtraContent={
-          <Button
-            type="primary"
-            size="large"
-            style={{
-              width: "max-content",
-              borderRadius: "0 4px 4px 0",
-              marginLeft: "4px",
-            }}
-            onClick={() => {
-              if (isSending) {
-                cancelRequest();
-              } else {
-                handleSend();
-              }
-            }}
-            className={clsx(styles.button, styles2.button)}
-          >
-            {isSending ? t("supplement.cancel_send") : t("api.run.send")}
-          </Button>
+          <>
+            <Flex
+              style={{ marginLeft: "4px" }}
+              gap={12}
+              className={styles2.flex}
+            >
+              <Dropdown.Button
+                placement="bottomRight"
+                type="default"
+                size="small"
+                trigger={["click"]}
+                icon={<AppIcon icon="chevron-down" />}
+                loading={saveLoading}
+                open={open}
+                onOpenChange={(open) => setOpen(open)}
+                onClick={handleSave}
+                overlayStyle={{ fontSize: 14 }}
+                disabled={isReadonly}
+                destroyPopupOnHide
+                dropdownRender={dropdownRender}
+              >
+                {t("api.run.save")}
+              </Dropdown.Button>
+            </Flex>
+            <RequestAction
+              label={t(isSending ? "supplement.cancel_send" : "api.run.send")}
+              stopping={isSending}
+              onClick={() => (isSending ? cancelRequest() : handleSend())}
+            />
+          </>
         }
       />
-      <Flex style={{ marginLeft: "4px" }} gap={12} className={styles2.flex}>
-        <Dropdown.Button
-          placement="bottomRight"
-          type="default"
-          size="small"
-          trigger={["click"]}
-          icon={<AppIcon icon="chevron-down" />}
-          loading={saveLoading}
-          open={open}
-          onOpenChange={(open) => setOpen(open)}
-          onClick={handleSave}
-          overlayStyle={{ fontSize: 14 }}
-          disabled={isReadonly}
-          destroyPopupOnHide
-          dropdownRender={dropdownRender}
-        >
-          {t("api.run.save")}
-        </Dropdown.Button>
-      </Flex>
-    </div>
+    </RequestToolbar>
   );
 });
 

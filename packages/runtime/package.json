@@ -25,7 +25,8 @@
     "dev": "node build.mjs --watch --development"
   },
   "dependencies": {
-    "@ai-sdk/openai-compatible": "^3.0.82",
+    "@ai-sdk/deepseek": "^3.0.77",
+    "@ai-sdk/openai": "^4.0.106",
     "@grpc/grpc-js": "^1.14.7",
     "@grpc/proto-loader": "^0.8.1",
     "@modelcontextprotocol/sdk": "^1.32.2",

@@ -404,6 +404,8 @@ export type CollapseProps = DOMProps & {
   })[];
 };
 export type TabsProps = DOMProps & {
+  tabListLabel?: string;
+  overflowButtonClassName?: string;
   overflow?: boolean;
   overflowLabel?: string;
   activeKey?: string;

@@ -60,9 +60,16 @@ export interface SocketIoResult {
 export interface AiResponseSummary {
   usage: { inputTokens?: number; outputTokens?: number; totalTokens?: number };
   finishReason: string;
+  durationMs?: number;
+  model?: string;
 }
 export type AiProtocolEvent =
-  | { protocol: "ai"; type: "response.chunk"; text: string }
+  | {
+      protocol: "ai";
+      type: "response.chunk";
+      text: string;
+      channel?: "text" | "reasoning";
+    }
   | { protocol: "ai"; type: "response.received"; value: AiResponseSummary };
 export type McpProtocolEvent =
   | {

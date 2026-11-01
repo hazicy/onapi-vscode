@@ -1,4 +1,3 @@
-import tabSelection from "@/shared/components/LineTabs/LineTabs.module.css";
 import BodyModeSelect, { getBodyModeLabel } from "./Body/BodyModeSelect";
 import clsx from "clsx";
 import { HttpParameterTable } from "@/shared/components/RequestTable/RequestTable";
@@ -18,7 +17,7 @@ import type {
 import type { HttpParameterTableProps } from "@/shared/components/RequestTable/RequestTable";
 import type { RequestProps } from "./types";
 import { compact, head, map, size } from "lodash-es";
-import LineTabs from "@/shared/components/LineTabs/LineTabs";
+import RequestTabs from "@/features/requests/components/RequestTabs";
 import SuspenseContent from "@/shared/components/SuspenseContent";
 import { useTranslation } from "react-i18next";
 const RequestScripts = lazy(() => import("./RequestScripts"));
@@ -196,7 +195,7 @@ const Request: FC<RequestProps> = ({
 
   return (
     <div className={styles.container}>
-      <LineTabs
+      <RequestTabs
         items={tabsItems}
         tabBarExtraContent={tabBarExtraContent}
         defaultActiveKey={tabOptions?.defaultActiveKey || head(tabsItems)?.key}
@@ -205,8 +204,6 @@ const Request: FC<RequestProps> = ({
           setVisitedTabs((previous) => new Set([...previous, key]));
           tabOptions.onChange?.(key);
         }}
-        tabListClassName={tabSelection.selectionList}
-        navClassName={styles.tabsNav}
         panelClassName={styles.tabsTabpane}
         panelsClassName={styles.tabsContent}
         className={clsx(styles.tabs, styles.tabsTop)}

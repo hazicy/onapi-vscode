@@ -7,6 +7,8 @@ import { Dropdown } from "./Dropdown";
 import { useOverflowTabs } from "./useOverflowTabs";
 
 export function Tabs({
+  tabListLabel,
+  overflowButtonClassName,
   tabButtonClassName,
   navClassName,
   navWrapClassName,
@@ -80,6 +82,7 @@ export function Tabs({
           )}
         >
           <BaseTabs.List
+            aria-label={tabListLabel}
             ref={listRef}
             className={clsx(
               tabsStyles.tabList,
@@ -148,7 +151,7 @@ export function Tabs({
                 <button
                   ref={moreRef}
                   type="button"
-                  className={tabsStyles.moreTabs}
+                  className={clsx(tabsStyles.moreTabs, overflowButtonClassName)}
                   aria-label={overflowLabel}
                   title={overflowLabel}
                 >

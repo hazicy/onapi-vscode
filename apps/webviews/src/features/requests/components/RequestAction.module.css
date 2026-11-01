@@ -1,0 +1,47 @@
+.action[data-request-action] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 6px;
+  box-sizing: border-box;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--vscode-cornerRadius-small, 4px);
+  font: var(--vscode-font-size, 13px) var(--vscode-font-family, sans-serif);
+  white-space: nowrap;
+  cursor: pointer;
+  color: var(--vscode-button-foreground, #fff);
+  background: var(--vscode-button-background, var(--color-primary, #1677ff));
+}
+.action[data-request-action]:hover {
+  background: var(
+    --vscode-button-hoverBackground,
+    var(--color-primary, #1677ff)
+  );
+}
+.action[data-request-action]:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder, var(--color-primary));
+  outline-offset: 1px;
+}
+.action[data-request-action]:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.action > span:first-child {
+  font-size: 16px;
+}
+.label {
+  font: inherit;
+}
+@container (max-width: 520px) {
+  .action[data-request-action] {
+    width: 28px;
+    padding: 0;
+  }
+  .label {
+    display: none;
+  }
+}

@@ -107,6 +107,7 @@ export const executionEnvelopeSchema = z.strictObject({
       protocol: z.literal("ai"),
       type: z.literal("response.chunk"),
       text: z.string(),
+      channel: z.enum(["text", "reasoning"]).optional(),
     }),
     z.strictObject({
       protocol: z.literal("ai"),
@@ -118,6 +119,8 @@ export const executionEnvelopeSchema = z.strictObject({
           totalTokens: z.number().optional(),
         }),
         finishReason: z.string(),
+        durationMs: z.number().nonnegative().optional(),
+        model: z.string().optional(),
       }),
     }),
     z.strictObject({

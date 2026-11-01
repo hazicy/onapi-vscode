@@ -12,15 +12,6 @@
   & .tabs > .tabsContentHolder > .tabsContent {
     padding-bottom: 12px;
   }
-  & .tabs > .tabsNav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: nowrap;
-    gap: 4px 16px;
-    padding: 6px 0;
-    margin-bottom: 0;
-  }
 }
 .emptyDescription {
   color: var(--vscode-descriptionForeground, var(--font-light-color));

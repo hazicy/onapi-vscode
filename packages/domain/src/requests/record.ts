@@ -170,14 +170,17 @@ const protocolDraftSchema = z.object({
 export const aiEditorRecordSchema = extensibleObject({
   ...editorFields,
   kind: z.literal("ai"),
-  ai: aiConfigSchema.default({
-    model: "",
-    system: "",
-    messages: [],
-    temperature: 1,
-    maxOutputTokens: 2048,
-    headers: {},
-  }),
+  ai: aiConfigSchema.default(() =>
+    aiConfigSchema.parse({
+      provider: "openai",
+      model: "gpt-4.1-mini",
+      system: "",
+      messages: [],
+      temperature: 1,
+      maxOutputTokens: 2048,
+      headers: {},
+    }),
+  ),
   draft: protocolDraftSchema.optional(),
 });
 export const mcpEditorRecordSchema = extensibleObject({

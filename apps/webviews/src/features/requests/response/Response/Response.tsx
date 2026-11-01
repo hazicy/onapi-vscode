@@ -3,7 +3,6 @@ import {
   type HttpEditorRecord,
 } from "@onapi/domain/requests/record";
 import { hasCompletedResponse } from "@/features/requests/execution/http-state";
-import tabSelection from "@/shared/components/LineTabs/LineTabs.module.css";
 import type { HttpExecutionState } from "@/features/requests/execution/http-state";
 import { sdkResponseView } from "@/features/requests/utils/executionView";
 import clsx from "clsx";
@@ -18,7 +17,7 @@ import { TabPaneProps, TabsProps } from "@/shared/ui/base";
 import { useMemoizedFn, useSafeState, useUpdateEffect } from "ahooks";
 import { compact, isEmpty, isEqual, map, size } from "lodash-es";
 
-import LineTabs from "@/shared/components/LineTabs/LineTabs";
+import RequestTabs from "@/features/requests/components/RequestTabs";
 import SuspenseContent from "@/shared/components/SuspenseContent";
 import Sending from "@/features/requests/editor/Sending";
 
@@ -261,7 +260,8 @@ const Response: FC<Props> = memo((props) => {
         />
       )}
 
-      <LineTabs
+      <RequestTabs
+        label={t("request_panel.response_tabs")}
         activeKey={activeKey}
         onChange={(key) => {
           setVisitedTabs((previous) => new Set([...previous, key]));
@@ -281,9 +281,7 @@ const Response: FC<Props> = memo((props) => {
             </Suspense>
           )
         }
-        tabListClassName={tabSelection.selectionList}
         navWrapClassName={styles.tabsNavWrap}
-        navClassName={styles.tabsNav}
         panelsClassName={styles.tabsContent}
         contentClassName={styles.tabsContentHolder}
         className={clsx(styles.tabs, styles.tabsTop)}

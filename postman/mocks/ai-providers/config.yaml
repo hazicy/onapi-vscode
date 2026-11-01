@@ -1,0 +1,13 @@
+version: 1
+name: ai-providers
+slug: ai-providers
+protocol: http
+port: 4500
+interceptRequests: true
+origin:
+  - api.openai.com
+  - api.deepseek.com
+scenarios:
+  - name: default
+    path: ./default.cjs
+    default: true

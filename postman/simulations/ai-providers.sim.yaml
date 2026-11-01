@@ -1,0 +1,9 @@
+simulation: ai-providers
+routing: path
+mocks:
+  - name: AI providers
+    routeKey: ai
+    origin:
+      - api.openai.com
+      - api.deepseek.com
+    path: postman/mocks/ai-providers

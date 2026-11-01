@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { isObject, size } from "lodash-es";
 
 import BasicTable from "@/shared/components/BasicTable/BasicTable";
-import LineTabs from "@/shared/components/LineTabs/LineTabs";
+import RequestTabs from "@/features/requests/components/RequestTabs";
 import NewJsonView from "@/shared/components/NewJsonView";
 import Empty from "@/shared/ui/Empty";
 import Tooltip from "@/shared/ui/Tooltip";
@@ -141,7 +141,7 @@ const Request = ({ httpExecDetail }: HttpExecDetailProps) => {
       children: renderBody(),
     },
   ];
-  return <LineTabs items={items} />;
+  return <RequestTabs items={items} />;
 };
 
 export default Request;

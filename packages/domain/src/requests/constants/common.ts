@@ -19,7 +19,8 @@ export const APIS_BASE_DEFAULT_DATA: Record<string, any> = {
     name: "AI Request",
     url: "https://api.openai.com/v1",
     ai: {
-      model: "",
+      provider: "openai",
+      model: "gpt-4.1-mini",
       system: "",
       messages: [],
       temperature: 1,

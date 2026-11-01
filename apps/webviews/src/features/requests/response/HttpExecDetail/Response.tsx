@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import { isEmpty, size } from "lodash-es";
 
 import Console from "@/features/requests/response/Console/Console";
-import LineTabs from "@/shared/components/LineTabs/LineTabs";
+import RequestTabs from "@/features/requests/components/RequestTabs";
 import Empty from "@/shared/ui/Empty";
 import Tooltip from "@/shared/ui/Tooltip";
 import { ApiSendResponseDataResponseArrCookiesItem } from "@onapi/domain/requests/types/send";
@@ -228,7 +228,7 @@ const Response = ({ httpExecDetail }: HttpExecDetailProps) => {
   ];
   return (
     <div className={styles.container}>
-      <LineTabs items={items} panelClassName={styles.tabsTabpane} />
+      <RequestTabs items={items} panelClassName={styles.tabsTabpane} />
     </div>
   );
 };

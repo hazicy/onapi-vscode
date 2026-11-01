@@ -8,7 +8,7 @@ import { useMemoizedFn } from "ahooks";
 import { produce } from "immer";
 import { cloneDeep, find, findIndex, isEqual, map } from "lodash-es";
 
-import LineTabs from "@/shared/components/LineTabs/LineTabs";
+import RequestTabs from "@/features/requests/components/RequestTabs";
 import RawEditor from "@/shared/components/RawEditor/RawEditor";
 import { Input, Modal } from "@/shared/ui";
 import { DEFAULT_SOCKETIO_MESSAGE } from "@onapi/domain/requests/constants/default";
@@ -179,11 +179,10 @@ const Index = forwardRef((props: Props, ref) => {
           onChange={(event) => handleOnChange("name", event.target.value)}
           outlinedClassName={styles.inputOutlined}
         />
-        <LineTabs
+        <RequestTabs
           items={items}
           activeKey={activeKey}
           onChange={(key) => setActiveKey(key as any)}
-          navClassName={styles.tabsNav}
           panelsClassName={styles.tabsContent}
           className={styles.tabs}
         />

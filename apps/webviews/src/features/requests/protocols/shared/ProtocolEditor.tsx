@@ -1,3 +1,4 @@
+import RequestToolbar from "@/features/requests/components/RequestToolbar";
 import React from "react";
 import type {
   AiEditorRecord,
@@ -21,7 +22,7 @@ export function ProtocolEditor({
 }) {
   return (
     <section className={styles.workspace}>
-      <header className={styles.address}>
+      <RequestToolbar as="header" className={styles.address}>
         <strong>{record.kind.toUpperCase()}</strong>
         <input
           aria-label="Server URL"
@@ -34,7 +35,6 @@ export function ProtocolEditor({
               : "https://server.example/mcp"
           }
         />
-        {actions}
         <button
           onClick={() =>
             sendRequestPanelMessage({ action: "saveApiData", data: record })
@@ -42,39 +42,10 @@ export function ProtocolEditor({
         >
           保存 Save
         </button>
-      </header>
+        {actions}
+      </RequestToolbar>
       {children}
     </section>
-  );
-}
-export function ProtocolTabs({
-  active,
-  onChange,
-  requestLabel,
-  children,
-}: {
-  active: string;
-  onChange: (tab: string) => void;
-  requestLabel: string;
-  children?: React.ReactNode;
-}) {
-  return (
-    <nav className={styles.tabs} aria-label="Request tabs">
-      {[
-        ["request", requestLabel],
-        ["settings", "设置 Settings"],
-        ["headers", "Headers"],
-      ].map(([key, label]) => (
-        <button
-          key={key}
-          aria-pressed={active === key}
-          onClick={() => onChange(key)}
-        >
-          {label}
-        </button>
-      ))}
-      {children}
-    </nav>
   );
 }
 export function HeadersEditor({

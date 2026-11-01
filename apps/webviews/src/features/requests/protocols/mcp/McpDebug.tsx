@@ -1,10 +1,11 @@
+import RequestTabs from "@/features/requests/components/RequestTabs";
+import RequestAction from "@/features/requests/components/RequestAction";
 import { useState } from "react";
 import type { McpEditorRecord } from "@onapi/domain/requests/record";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import { useProtocolExecution } from "../shared/useProtocolExecution";
 import {
   ProtocolEditor,
-  ProtocolTabs,
   HeadersEditor,
   ProtocolError,
   ProtocolResponse,
@@ -111,179 +112,191 @@ export default function McpDebug({
       disabled={connected || execution.busy}
       onUrlChange={(url) => change({ ...record, url })}
       actions={
-        <button
+        <RequestAction
           disabled={disconnecting}
+          stopping={connected || execution.busy}
+          label={
+            connected || execution.busy ? "断开 Disconnect" : "连接 Connect"
+          }
           onClick={() =>
             connected || execution.busy ? disconnect() : connect()
           }
-        >
-          {connected || execution.busy ? "断开 Disconnect" : "连接 Connect"}
-        </button>
+        />
       }
     >
-      <ProtocolTabs active={tab} onChange={setTab} requestLabel="请求 Request">
-        <span role="status">
-          {execution.busy
-            ? "处理中…"
-            : connected
-              ? "● Connected"
-              : "Disconnected"}
-        </span>
-      </ProtocolTabs>
-      <ProtocolError error={execution.error} />
-      {tab === "headers" && (
-        <HeadersEditor
-          value={
-            record.draft?.headersText ??
-            JSON.stringify(record.mcp.headers, null, 2)
-          }
-          onChange={(headersText) => draft({ headersText })}
-        />
-      )}
-      {tab === "settings" && (
-        <div className={styles.settings}>
-          <label>
-            Transport
-            <select
-              disabled={connected || execution.busy}
-              value={record.mcp.transport}
-              onChange={(e) =>
-                change({
-                  ...record,
-                  mcp: {
-                    ...record.mcp,
-                    transport: e.target
-                      .value as McpEditorRecord["mcp"]["transport"],
-                  },
-                })
-              }
-            >
-              <option value="http">Streamable HTTP</option>
-              <option value="sse">SSE</option>
-              <option value="stdio">stdio</option>
-            </select>
-          </label>
-          {record.mcp.transport === "stdio" && (
-            <>
-              <label>
-                Command
-                <input
-                  disabled={connected || execution.busy}
-                  value={record.mcp.command}
-                  onChange={(e) =>
-                    change({
-                      ...record,
-                      mcp: { ...record.mcp, command: e.target.value },
-                    })
-                  }
-                  placeholder="npx"
-                />
-              </label>
-              <label>
-                Arguments (JSON array)
-                <textarea
-                  disabled={connected || execution.busy}
-                  value={
-                    record.draft?.argsText ?? JSON.stringify(record.mcp.args)
-                  }
-                  onChange={(e) => draft({ argsText: e.target.value })}
-                />
-              </label>
-              <p>连接时将在本机启动此命令。</p>
-            </>
-          )}
-        </div>
-      )}
-      {tab === "request" && (
-        <div className={styles.mcpRequest}>
-          <div className={styles.address}>
-            <select
-              aria-label="MCP method"
-              disabled={execution.busy}
-              value={input.method}
-              onChange={(e) => {
-                draft({
-                  method: e.target.value,
-                  name: "",
-                  argumentsText: "{}",
-                });
-                setEntries([]);
-                setCursor(undefined);
-              }}
-            >
-              {[
-                "tools/list",
-                "tools/call",
-                "resources/list",
-                "resources/read",
-                "prompts/list",
-                "prompts/get",
-              ].map((method) => (
-                <option key={method}>{method}</option>
-              ))}
-            </select>
-            <button
-              disabled={!connected || execution.busy}
-              onClick={() => request()}
-            >
-              发送 Send
-            </button>
+      <RequestTabs
+        activeKey={tab}
+        onChange={setTab}
+        destroyInactiveTabPane
+        items={[
+          { key: "request", label: "请求 Request" },
+          { key: "settings", label: "设置 Settings" },
+          { key: "headers", label: "Headers" },
+        ]}
+        tabBarExtraContent={
+          <span role="status">
+            {execution.busy
+              ? "处理中…"
+              : connected
+                ? "● Connected"
+                : "Disconnected"}
+          </span>
+        }
+      >
+        <ProtocolError error={execution.error} />
+        {tab === "headers" && (
+          <HeadersEditor
+            value={
+              record.draft?.headersText ??
+              JSON.stringify(record.mcp.headers, null, 2)
+            }
+            onChange={(headersText) => draft({ headersText })}
+          />
+        )}
+        {tab === "settings" && (
+          <div className={styles.settings}>
+            <label>
+              Transport
+              <select
+                disabled={connected || execution.busy}
+                value={record.mcp.transport}
+                onChange={(e) =>
+                  change({
+                    ...record,
+                    mcp: {
+                      ...record.mcp,
+                      transport: e.target
+                        .value as McpEditorRecord["mcp"]["transport"],
+                    },
+                  })
+                }
+              >
+                <option value="http">Streamable HTTP</option>
+                <option value="sse">SSE</option>
+                <option value="stdio">stdio</option>
+              </select>
+            </label>
+            {record.mcp.transport === "stdio" && (
+              <>
+                <label>
+                  Command
+                  <input
+                    disabled={connected || execution.busy}
+                    value={record.mcp.command}
+                    onChange={(e) =>
+                      change({
+                        ...record,
+                        mcp: { ...record.mcp, command: e.target.value },
+                      })
+                    }
+                    placeholder="npx"
+                  />
+                </label>
+                <label>
+                  Arguments (JSON array)
+                  <textarea
+                    disabled={connected || execution.busy}
+                    value={
+                      record.draft?.argsText ?? JSON.stringify(record.mcp.args)
+                    }
+                    onChange={(e) => draft({ argsText: e.target.value })}
+                  />
+                </label>
+                <p>连接时将在本机启动此命令。</p>
+              </>
+            )}
           </div>
-          {entries.length > 0 && (
-            <div className={styles.entries}>
-              {entries.map((entry, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    draft({
-                      method: listMethod.startsWith("tools")
-                        ? "tools/call"
-                        : listMethod.startsWith("resources")
-                          ? "resources/read"
-                          : "prompts/get",
-                      name: String(entry.name ?? entry.uri ?? ""),
-                      argumentsText: "{}",
-                    });
-                    setEntries([]);
-                    setCursor(undefined);
-                  }}
-                >
-                  {String(entry.name ?? entry.uri)}
-                  {typeof entry.description === "string" && (
-                    <small>{entry.description}</small>
-                  )}
-                </button>
-              ))}
+        )}
+        {tab === "request" && (
+          <div className={styles.mcpRequest}>
+            <div className={styles.address}>
+              <select
+                aria-label="MCP method"
+                disabled={execution.busy}
+                value={input.method}
+                onChange={(e) => {
+                  draft({
+                    method: e.target.value,
+                    name: "",
+                    argumentsText: "{}",
+                  });
+                  setEntries([]);
+                  setCursor(undefined);
+                }}
+              >
+                {[
+                  "tools/list",
+                  "tools/call",
+                  "resources/list",
+                  "resources/read",
+                  "prompts/list",
+                  "prompts/get",
+                ].map((method) => (
+                  <option key={method}>{method}</option>
+                ))}
+              </select>
+              <RequestAction
+                disabled={!connected || execution.busy}
+                onClick={() => request()}
+                label="发送 Send"
+              />
             </div>
-          )}
-          {cursor && (
-            <button
-              disabled={execution.busy || !connected}
-              onClick={() => request(cursor)}
-            >
-              加载更多 Load more
-            </button>
-          )}
-          {!input.method.endsWith("/list") && (
-            <label className={styles.field}>
-              {input.method === "resources/read" ? "Resource URI" : "Name"}
-              <input
-                value={input.name}
-                onChange={(e) => draft({ name: e.target.value })}
-              />
-            </label>
-          )}
-          {["tools/call", "prompts/get"].includes(input.method) && (
-            <label className={styles.field}>
-              Arguments (JSON)
-              <textarea
-                value={input.argumentsText}
-                onChange={(e) => draft({ argumentsText: e.target.value })}
-              />
-            </label>
-          )}
-        </div>
-      )}
+            {entries.length > 0 && (
+              <div className={styles.entries}>
+                {entries.map((entry, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      draft({
+                        method: listMethod.startsWith("tools")
+                          ? "tools/call"
+                          : listMethod.startsWith("resources")
+                            ? "resources/read"
+                            : "prompts/get",
+                        name: String(entry.name ?? entry.uri ?? ""),
+                        argumentsText: "{}",
+                      });
+                      setEntries([]);
+                      setCursor(undefined);
+                    }}
+                  >
+                    {String(entry.name ?? entry.uri)}
+                    {typeof entry.description === "string" && (
+                      <small>{entry.description}</small>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+            {cursor && (
+              <button
+                disabled={execution.busy || !connected}
+                onClick={() => request(cursor)}
+              >
+                加载更多 Load more
+              </button>
+            )}
+            {!input.method.endsWith("/list") && (
+              <label className={styles.field}>
+                {input.method === "resources/read" ? "Resource URI" : "Name"}
+                <input
+                  value={input.name}
+                  onChange={(e) => draft({ name: e.target.value })}
+                />
+              </label>
+            )}
+            {["tools/call", "prompts/get"].includes(input.method) && (
+              <label className={styles.field}>
+                Arguments (JSON)
+                <textarea
+                  value={input.argumentsText}
+                  onChange={(e) => draft({ argumentsText: e.target.value })}
+                />
+              </label>
+            )}
+          </div>
+        )}
+      </RequestTabs>
       <ProtocolResponse value={response} />
     </ProtocolEditor>
   );

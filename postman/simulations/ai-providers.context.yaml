@@ -1,0 +1,11 @@
+name: ai-providers
+assumptions:
+  - Only text conversations are covered; tools, images and files are out of scope.
+  - OpenAI uses /responses by default and /chat/completions when explicitly selected.
+  - DeepSeek uses /chat/completions and reasoning_content deltas when thinking is enabled.
+  - Dummy fixture keys are used. Authentication, rate limits and available models on real accounts remain unverified.
+sources:
+  - https://developers.openai.com/api/docs/guides/streaming-responses
+  - https://api-docs.deepseek.com/api/create-chat-completion/
+  - https://ai-sdk.dev/providers/ai-sdk-providers/openai
+  - https://ai-sdk.dev/providers/ai-sdk-providers/deepseek

@@ -1,3 +1,6 @@
+import RequestToolbar from "@/features/requests/components/RequestToolbar";
+import RequestTabs from "@/features/requests/components/RequestTabs";
+import RequestAction from "@/features/requests/components/RequestAction";
 import { useRef, useState } from "react";
 import type { GrpcEditorRecord } from "@onapi/domain/requests/record";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
@@ -54,7 +57,7 @@ export default function GrpcDebug({
   };
   return (
     <section className={styles.workspace}>
-      <header className={styles.requestBar}>
+      <RequestToolbar as="header" className={styles.requestBar}>
         <span className={styles.protocol}>gRPC</span>
         <div className={styles.address}>
           <input
@@ -144,15 +147,6 @@ export default function GrpcDebug({
             Select a method ▾
           </button>
         )}
-        {controller.busy ? (
-          <button className={styles.cancel} onClick={controller.cancel}>
-            Cancel
-          </button>
-        ) : (
-          <button className={styles.invoke} onClick={invoke}>
-            Invoke
-          </button>
-        )}
         <button
           className={styles.save}
           onClick={() =>
@@ -161,140 +155,153 @@ export default function GrpcDebug({
         >
           Save
         </button>
-      </header>
-      <nav className={styles.tabs} aria-label="gRPC request tabs">
-        {[
-          ["message", "Message"],
-          [
-            "metadata",
-            `Metadata${config.metadata.filter((row) => row.enabled && row.key).length ? ` (${config.metadata.filter((row) => row.enabled && row.key).length})` : ""}`,
-          ],
-          ["auth", "Authorization"],
-          ["definition", "Service definition"],
-          ["settings", "Settings"],
-        ].map(([key, label]) => (
-          <button
-            key={key}
-            aria-pressed={tab === key}
-            onClick={() => setTab(key)}
-          >
-            {label}
-          </button>
-        ))}
-        {methodType && <span className={styles.methodType}>{methodType}</span>}
-      </nav>
-      {controller.error && (
-        <div role="alert" className={styles.error}>
-          {controller.error}
-        </div>
-      )}
-      <div className={styles.requestContent}>
-        {tab === "message" && (
-          <>
-            <div className={styles.messageToolbar}>
-              <span>{method?.requestType ?? "Request message"}</span>
-              <div>
-                <button onClick={() => void editor.current?.formatEditor()}>
-                  Beautify
-                </button>
-                <button
-                  disabled={!method || controller.busy}
-                  onClick={() =>
-                    update({
-                      message: JSON.stringify(method!.example, null, 2),
-                    })
+        <RequestAction
+          label={controller.busy ? "Cancel" : "Invoke"}
+          stopping={controller.busy}
+          onClick={controller.busy ? controller.cancel : invoke}
+        />
+      </RequestToolbar>
+      <RequestTabs
+        activeKey={tab}
+        onChange={setTab}
+        destroyInactiveTabPane
+        label="gRPC request tabs"
+        wrapStyle={{ flex: "0 0 auto", height: "auto" }}
+        tabBarExtraContent={
+          methodType && <span className={styles.methodType}>{methodType}</span>
+        }
+        items={[
+          { key: "message", label: "Message" },
+          {
+            key: "metadata",
+            label: "Metadata",
+            countParams: {
+              dataSource: config.metadata.filter(
+                (row) => row.enabled && row.key,
+              ),
+            },
+          },
+          { key: "auth", label: "Authorization" },
+          { key: "definition", label: "Service definition" },
+          { key: "settings", label: "Settings" },
+        ]}
+      >
+        {controller.error && (
+          <div role="alert" className={styles.error}>
+            {controller.error}
+          </div>
+        )}
+        <div className={styles.requestContent}>
+          {tab === "message" && (
+            <>
+              <div className={styles.messageToolbar}>
+                <span>{method?.requestType ?? "Request message"}</span>
+                <div>
+                  <button onClick={() => void editor.current?.formatEditor()}>
+                    Beautify
+                  </button>
+                  <button
+                    disabled={!method || controller.busy}
+                    onClick={() =>
+                      update({
+                        message: JSON.stringify(method!.example, null, 2),
+                      })
+                    }
+                  >
+                    Use example message
+                  </button>
+                </div>
+              </div>
+              <div
+                className={styles.messageEditor}
+                role="group"
+                aria-label="gRPC message editor"
+                onKeyDown={(event) => {
+                  if (
+                    (event.metaKey || event.ctrlKey) &&
+                    event.key === "Enter"
+                  ) {
+                    event.preventDefault();
+                    controller.busy
+                      ? controller.writable && controller.write()
+                      : invoke();
                   }
-                >
-                  Use example message
-                </button>
+                }}
+              >
+                <CodeEditor
+                  ref={editor}
+                  value={config.message}
+                  onChange={(message) => update({ message })}
+                  language="json"
+                  onMountAutoFormat={false}
+                />
               </div>
-            </div>
-            <div
-              className={styles.messageEditor}
-              role="group"
-              aria-label="gRPC message editor"
-              onKeyDown={(event) => {
-                if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
-                  event.preventDefault();
-                  controller.busy
-                    ? controller.writable && controller.write()
-                    : invoke();
-                }
-              }}
+              {method && (
+                <details className={styles.fieldDocs}>
+                  <summary>Message fields · {method.fields.length}</summary>
+                  <table>
+                    <tbody>
+                      {method.fields.map((field) => (
+                        <tr key={field.name}>
+                          <th>{field.name}</th>
+                          <td>
+                            {field.type}
+                            {field.repeated ? "[]" : ""}
+                          </td>
+                          <td>{field.description}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </details>
+              )}
+              {controller.busy && controller.phase === "invoke" && (
+                <div className={styles.streamActions}>
+                  <span>
+                    {controller.writable
+                      ? "Stream is open · compose another message"
+                      : "Waiting for the server…"}
+                  </span>
+                  {controller.writable && (
+                    <>
+                      <button onClick={controller.write}>Send message</button>
+                      <button
+                        className={styles.secondary}
+                        onClick={controller.end}
+                      >
+                        End streaming
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
+            </>
+          )}
+          {tab !== "message" && (
+            <fieldset
+              disabled={controller.busy || controller.importing}
+              className={styles.editableSection}
             >
-              <CodeEditor
-                ref={editor}
-                value={config.message}
-                onChange={(message) => update({ message })}
-                language="json"
-                onMountAutoFormat={false}
-              />
-            </div>
-            {method && (
-              <details className={styles.fieldDocs}>
-                <summary>Message fields · {method.fields.length}</summary>
-                <table>
-                  <tbody>
-                    {method.fields.map((field) => (
-                      <tr key={field.name}>
-                        <th>{field.name}</th>
-                        <td>
-                          {field.type}
-                          {field.repeated ? "[]" : ""}
-                        </td>
-                        <td>{field.description}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </details>
-            )}
-            {controller.busy && controller.phase === "invoke" && (
-              <div className={styles.streamActions}>
-                <span>
-                  {controller.writable
-                    ? "Stream is open · compose another message"
-                    : "Waiting for the server…"}
-                </span>
-                {controller.writable && (
-                  <>
-                    <button onClick={controller.write}>Send message</button>
-                    <button
-                      className={styles.secondary}
-                      onClick={controller.end}
-                    >
-                      End streaming
-                    </button>
-                  </>
-                )}
-              </div>
-            )}
-          </>
-        )}
-        {tab !== "message" && (
-          <fieldset
-            disabled={controller.busy || controller.importing}
-            className={styles.editableSection}
-          >
-            {tab === "definition" && (
-              <GrpcDefinition
-                config={config}
-                update={update}
-                controller={controller}
-              />
-            )}
-            {tab === "metadata" && (
-              <GrpcMetadata config={config} update={update} />
-            )}
-            {tab === "auth" && (
-              <GrpcAuthorization config={config} update={update} />
-            )}
-            {tab === "settings" && (
-              <GrpcSettings config={config} update={update} />
-            )}
-          </fieldset>
-        )}
-      </div>
+              {tab === "definition" && (
+                <GrpcDefinition
+                  config={config}
+                  update={update}
+                  controller={controller}
+                />
+              )}
+              {tab === "metadata" && (
+                <GrpcMetadata config={config} update={update} />
+              )}
+              {tab === "auth" && (
+                <GrpcAuthorization config={config} update={update} />
+              )}
+              {tab === "settings" && (
+                <GrpcSettings config={config} update={update} />
+              )}
+            </fieldset>
+          )}
+        </div>
+      </RequestTabs>
       <GrpcResponse controller={controller} />
     </section>
   );

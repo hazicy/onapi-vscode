@@ -1,0 +1,77 @@
+.root {
+  font: var(--vscode-font-size, 13px) var(--vscode-font-family, sans-serif);
+  min-width: 0;
+}
+.root > .nav {
+  padding: 0 12px;
+  gap: 8px;
+  min-height: 36px;
+  border-bottom: 1px solid var(--vscode-panel-border, var(--color-border));
+}
+.root .nav .list {
+  gap: 4px;
+  min-height: 36px;
+}
+.root .nav .button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  box-sizing: border-box;
+  padding: 0 10px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+  font: var(--vscode-font-size, 13px) var(--vscode-font-family, sans-serif);
+  white-space: nowrap;
+}
+.root .nav .button:hover {
+  background: var(--vscode-toolbar-hoverBackground);
+  color: var(--vscode-foreground, var(--font-content-color));
+}
+.root .nav .button[data-active] {
+  color: var(--vscode-foreground, var(--font-content-color));
+  border-bottom-color: var(--vscode-focusBorder, var(--color-primary));
+  font-weight: 600;
+}
+.root .nav .button:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder, var(--color-primary));
+  outline-offset: -2px;
+}
+.root .nav .button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.root .panel:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.root .nav [data-with-extra] {
+  border-bottom: 0;
+}
+
+.root .nav .overflowButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  font: inherit;
+  background: transparent;
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+}
+.root .nav .overflowButton:hover {
+  background: var(--vscode-toolbar-hoverBackground);
+}
+.root .nav .overflowButton:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder, var(--color-primary));
+  outline-offset: -1px;
+}

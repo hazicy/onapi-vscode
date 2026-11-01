@@ -1,8 +1,8 @@
+import RequestToolbar from "@/features/requests/components/RequestToolbar";
+import RequestAction from "@/features/requests/components/RequestAction";
 import styles from "./SocketIoDebug.module.css";
 import { FC, lazy, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-
-import { Flex } from "@/shared/ui/base";
 
 import { useMemoizedFn } from "ahooks";
 import { find, isArray } from "lodash-es";
@@ -11,7 +11,6 @@ import { SuspenseContent } from "@/shared/components";
 
 import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
 import UrlGroup from "@/features/requests/editor/UrlGroup";
-import Button from "@/shared/ui/Button";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import useApisWebSocket from "@/features/requests/store/useApis/websocket";
@@ -99,12 +98,7 @@ const SocketIoDebug: FC<SocketIoComponentType> = ({
       />
       <div className={styles.container}>
         <div className={styles.urlPanel}>
-          <Flex
-            flex={1}
-            justify="space-between"
-            align="center"
-            className={styles.connectionRow}
-          >
+          <RequestToolbar className={styles.connectionRow}>
             <div className={styles.urlGroup}>
               <UrlGroup
                 curServerId={curServerId}
@@ -118,34 +112,28 @@ const SocketIoDebug: FC<SocketIoComponentType> = ({
                 onChange={handleUrlPanel}
                 style={{ padding: "3px", paddingRight: "0" }}
                 urlGroupExtraContent={
-                  <Button
-                    type="primary"
+                  <RequestAction
                     disabled={
                       !apisData.url?.trim() &&
                       status !== "connect" &&
                       status !== "connecting"
                     }
-                    size="large"
-                    style={{
-                      marginLeft: 4,
-                      width: "max-content",
-                      borderRadius: "0 4px 4px 0",
-                    }}
-                    onClick={() => {
-                      connectWebSocket(apisData, status, curServerId);
-                    }}
-                    className={styles.button}
-                  >
-                    {status === "connect"
-                      ? t("supplement.disconnect")
-                      : status === "connecting"
-                        ? t("ws.request.cancel")
-                        : t("supplement.connect")}
-                  </Button>
+                    stopping={status === "connect" || status === "connecting"}
+                    label={
+                      status === "connect"
+                        ? t("supplement.disconnect")
+                        : status === "connecting"
+                          ? t("ws.request.cancel")
+                          : t("supplement.connect")
+                    }
+                    onClick={() =>
+                      connectWebSocket(apisData, status, curServerId)
+                    }
+                  />
                 }
               />
             </div>
-          </Flex>
+          </RequestToolbar>
         </div>
         <ResizablePanels
           panelGroupProps={{

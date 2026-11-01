@@ -42,69 +42,74 @@ async function listen(server) {
   await once(server, "listening");
   return `http://127.0.0.1:${server.address().port}`;
 }
-test("AI SDK sends an OpenAI-compatible chat request and consumes real SSE", async () => {
-  let body;
-  let authorization;
-  const server = createServer(async (req, res) => {
-    let raw = "";
-    for await (const chunk of req) raw += chunk;
-    body = JSON.parse(raw);
-    authorization = req.headers.authorization;
-    res.writeHead(200, { "Content-Type": "text/event-stream" });
-    for (const delta of ["Hello", " world"])
+for (const provider of ["openai", "deepseek"]) {
+  test(`AI SDK ${provider} provider sends Chat Completions and consumes real SSE`, async () => {
+    let body;
+    let authorization;
+    const server = createServer(async (req, res) => {
+      let raw = "";
+      for await (const chunk of req) raw += chunk;
+      body = JSON.parse(raw);
+      authorization = req.headers.authorization;
+      res.writeHead(200, { "Content-Type": "text/event-stream" });
+      for (const delta of ["Hello", " world"])
+        res.write(
+          `data: ${JSON.stringify({ id: "chat-test", object: "chat.completion.chunk", created: 1, model: "fixture", choices: [{ index: 0, delta: { content: delta }, finish_reason: null }] })}\n\n`,
+        );
       res.write(
-        `data: ${JSON.stringify({ id: "chat-test", object: "chat.completion.chunk", created: 1, model: "fixture", choices: [{ index: 0, delta: { content: delta }, finish_reason: null }] })}\n\n`,
+        `data: ${JSON.stringify({ id: "chat-test", object: "chat.completion.chunk", created: 1, model: "fixture", choices: [{ index: 0, delta: {}, finish_reason: "stop" }], usage: { prompt_tokens: 3, completion_tokens: 2, total_tokens: 5 } })}\n\n`,
       );
-    res.write(
-      `data: ${JSON.stringify({ id: "chat-test", object: "chat.completion.chunk", created: 1, model: "fixture", choices: [{ index: 0, delta: {}, finish_reason: "stop" }], usage: { prompt_tokens: 3, completion_tokens: 2, total_tokens: 5 } })}\n\n`,
-    );
-    res.end("data: [DONE]\n\n");
-  });
-  const url = await listen(server);
-  const fixture = panel();
-  try {
-    await handle(
-      {
-        action: "ai_send",
-        requestId: "actual-ai",
-        data: {
-          id: "ai",
-          url: `${url}/v1`,
-          apiKey: "fixture-key",
-          config: {
-            model: "fixture",
-            system: "Be brief",
-            messages: [{ role: "user", content: "hello" }],
-            temperature: 0,
-            maxOutputTokens: 32,
-            headers: {},
+      res.end("data: [DONE]\n\n");
+    });
+    const url = await listen(server);
+    const fixture = panel();
+    try {
+      await handle(
+        {
+          action: "ai_send",
+          requestId: "actual-ai",
+          data: {
+            id: "ai",
+            url: `${url}/v1`,
+            apiKey: "fixture-key",
+            config: {
+              provider,
+              openaiApi: "chat",
+              thinking: "disabled",
+              model: "fixture",
+              system: "Be brief",
+              messages: [{ role: "user", content: "hello" }],
+              temperature: 0,
+              maxOutputTokens: 32,
+              headers: {},
+            },
           },
         },
-      },
-      fixture.target,
-    );
-    assert.equal(authorization, "Bearer fixture-key");
-    assert.equal(body.stream, true);
-    assert.equal(body.messages[0].role, "system");
-    assert.equal(
-      fixture.events
-        .filter((e) => e.data.event.type === "response.chunk")
-        .map((e) => e.data.event.text)
-        .join(""),
-      "Hello world",
-    );
-    assert.equal(fixture.events.at(-1).data.event.type, "session.closed");
-    assert.equal(
-      fixture.events.find((e) => e.data.event.type === "response.received").data
-        .event.value.usage.outputTokens,
-      2,
-    );
-  } finally {
-    fixture.dispose();
-    server.closeAllConnections();
-    await new Promise((resolve) => server.close(resolve));
-  }
-});
+        fixture.target,
+      );
+      assert.equal(authorization, "Bearer fixture-key");
+      assert.equal(body.stream, true);
+      assert.equal(body.messages[0].role, "system");
+      assert.equal(
+        fixture.events
+          .filter((e) => e.data.event.type === "response.chunk")
+          .map((e) => e.data.event.text)
+          .join(""),
+        "Hello world",
+      );
+      assert.equal(fixture.events.at(-1).data.event.type, "session.closed");
+      assert.equal(
+        fixture.events.find((e) => e.data.event.type === "response.received")
+          .data.event.value.usage.outputTokens,
+        2,
+      );
+    } finally {
+      fixture.dispose();
+      server.closeAllConnections();
+      await new Promise((resolve) => server.close(resolve));
+    }
+  });
+}
 test("MCP SDK initializes a real Streamable HTTP server, discovers and calls a tool", async () => {
   const { McpServer } = extensionRequire(
     "@modelcontextprotocol/sdk/server/mcp.js",

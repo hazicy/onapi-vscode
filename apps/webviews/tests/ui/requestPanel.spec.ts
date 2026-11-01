@@ -9,9 +9,9 @@ test("request navigation and send action adapt to panel width", async ({
 }) => {
   const workspace = page.getByRole("region", { name: "Request workspace" });
   const send = workspace.getByRole("button", { name: "Send", exact: true });
-  await expect(send.locator("span")).toBeVisible();
+  await expect(send.locator("span").last()).toBeVisible();
   await page.getByRole("button", { name: "Narrow panel" }).click();
-  await expect(send.locator("span")).toBeHidden();
+  await expect(send.locator("span").last()).toBeHidden();
   const more = workspace.getByRole("button", {
     name: "More actions",
     exact: true,
@@ -36,7 +36,7 @@ test("request navigation and send action adapt to panel width", async ({
   });
   await expect(post).toHaveAttribute("aria-selected", "true");
   await page.getByRole("button", { name: "Wide panel" }).click();
-  await expect(send.locator("span")).toBeVisible();
+  await expect(send.locator("span").last()).toBeVisible();
   await expect(
     workspace.getByRole("tab", { name: "Headers", exact: true }).first(),
   ).toBeVisible();
