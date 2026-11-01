@@ -92,25 +92,28 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "myExtension",
-          "title": "onapi",
+          "id": "onapi",
+          "title": "OnAPI",
           "icon": "dist/images/onapi-activity.svg"
         }
       ]
     },
     "views": {
-      "myExtension": [
+      "onapi": [
         {
           "id": "onapiRequests",
+          "icon": "dist/images/onapi-activity.svg",
           "name": "%view.requests%"
         },
         {
           "id": "onapiTests",
+          "icon": "dist/images/onapi-activity.svg",
           "name": "%view.tests%",
           "visibility": "collapsed"
         },
         {
           "id": "onapiHistory",
+          "icon": "dist/images/onapi-activity.svg",
           "name": "%view.history%",
           "visibility": "collapsed"
         }
