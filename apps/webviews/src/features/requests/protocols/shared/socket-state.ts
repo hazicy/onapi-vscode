@@ -1,4 +1,7 @@
-import { receiveSessionEvent, type ExecutionSession } from "./session";
+import {
+  receiveSessionEvent,
+  type ExecutionSession,
+} from "../../execution/session";
 import type {
   ExecutionEnvelope,
   SocketIoResult,

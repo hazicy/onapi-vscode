@@ -25,13 +25,13 @@ import { PROTOCOL_OPTIONS } from "@onapi/domain/requests/constants/index";
 import { METHODS_MAP } from "@onapi/domain/constants/common";
 import useTheme from "@/shared/hooks/useTheme";
 import { openEnvPage } from "@/features/requests/events/env";
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 
 import VarInput from "../../variables/components/VarInput/VarInput";
 
-import { getCollectionServerId } from "@/features/requests/utils/apis";
-import { CurlDataType } from "@/features/requests/types/other";
+import { getCollectionServerId } from "@onapi/domain/request-utils";
+import { ConvertedCurlRequest } from "@/features/curl/types";
 import styles from "./UrlGroup.module.css";
 
 export interface UrlGroupProps {
@@ -56,7 +56,7 @@ export interface UrlGroupProps {
     event: KeyboardEvent<HTMLDivElement>,
     isEnvOpen?: boolean,
   ) => void;
-  curlChange?: (d: CurlDataType) => void;
+  curlChange?: (d: ConvertedCurlRequest) => void;
   curServerId: string;
   SetCurServerId: (newId: string) => void;
   hideProtocol?: boolean;
@@ -89,9 +89,15 @@ const UrlGroup = (props: UrlGroupProps) => {
   const { themeToken } = useTheme();
   const envList = useProjectConfig((state) => state.envList);
   const envDetailKeys = useProjectConfig((state) => state.envDetailKeys);
-  const apisActiveData = useApis((store) => store.apisActiveData);
-  const apiOriginDetailsList = useApis((store) => store.apiOriginDetailsList);
-  const updateCurrentServerId = useApis((state) => state.updateCurrentServerId);
+  const apisActiveData = useRequestWorkspaceStore(
+    (store) => store.apisActiveData,
+  );
+  const apiOriginDetailsList = useRequestWorkspaceStore(
+    (store) => store.apiOriginDetailsList,
+  );
+  const updateCurrentServerId = useRequestWorkspaceStore(
+    (state) => state.updateCurrentServerId,
+  );
   const customMethodList = useProjectConfig((state) => state?.customMethodList);
 
   const [methodSelectOpen, setMethodSelectOpen] = useState(false);
@@ -182,7 +188,7 @@ const UrlGroup = (props: UrlGroupProps) => {
       serverOptions?.find((server) => server.value === option.value)?.uri || "",
     );
 
-  const pasteCurlChange = (d: CurlDataType) => {
+  const pasteCurlChange = (d: ConvertedCurlRequest) => {
     if (supportCurlImport) {
       curlChange?.(d);
     }

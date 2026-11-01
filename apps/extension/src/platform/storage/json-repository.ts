@@ -10,7 +10,7 @@ import { isDeepStrictEqual } from "node:util";
 import { randomUUID, createHash, createHmac } from "node:crypto";
 import { storageChanged } from "./events";
 import { repositories } from "./index";
-import { withStorageFileLock } from "./file-lock";
+import { withStorageFileLock } from "./storage-lock";
 
 import {
   COLLECTION_JOURNAL,

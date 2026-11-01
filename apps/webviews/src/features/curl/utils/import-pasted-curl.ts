@@ -1,9 +1,9 @@
-import type { CurlDataType } from "@/features/requests/types/other";
+import type { ConvertedCurlRequest } from "@/features/curl/types";
 
 /** Load the converter only when a cURL command is pasted. */
 export async function importPastedCurl(
   source: string,
-): Promise<CurlDataType | undefined> {
+): Promise<ConvertedCurlRequest | undefined> {
   const [{ fromCurlPostmanRequest }, { convert, validate }] = await Promise.all(
     [
       import("@onapi/domain/curl/utils/postman-request"),

@@ -1,16 +1,17 @@
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import { cloneDeep } from "lodash-es";
 
-import useWebSocketStore from "@/features/requests/store/useApis/websocket";
+import useSocketConnectionsStore from "@/features/requests/store/useSocketConnectionsStore";
 
-const useWebSocket = () => {
-  const updatePool = useWebSocketStore.getState().appendConnectionResult;
-  const connectWebSocket = (
-    ITarget: any,
+const useWebSocketConnection = () => {
+  const updatePool =
+    useSocketConnectionsStore.getState().appendConnectionResult;
+  const toggleWebSocketConnection = (
+    targetRecord: any,
     status: string,
     curServerId: string,
   ) => {
-    const target = cloneDeep(ITarget);
+    const target = cloneDeep(targetRecord);
 
     // Currently connecting
     if (["connecting", "connect"].includes(status)) {
@@ -24,7 +25,7 @@ const useWebSocket = () => {
     }
 
     const requestId = crypto.randomUUID();
-    useWebSocketStore.getState().startConnection(target.id, requestId);
+    useSocketConnectionsStore.getState().startConnection(target.id, requestId);
 
     // WebSocket connection request
     sendRequestPanelMessage({
@@ -38,9 +39,9 @@ const useWebSocket = () => {
   };
 
   return {
-    connectWebSocket,
+    toggleWebSocketConnection,
     updatePool,
   };
 };
 
-export default useWebSocket;
+export default useWebSocketConnection;

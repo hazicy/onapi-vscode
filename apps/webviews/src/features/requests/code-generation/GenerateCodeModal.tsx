@@ -17,7 +17,7 @@ import useVarReplaces from "@/features/variables/hooks/useVarReplaces";
 import { copyStringToClipboard } from "@/shared/utils/clipboard";
 import { catchError } from "@/shared/utils/notify";
 
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 
 interface Props {
@@ -34,7 +34,9 @@ const GenerateCodeModal: React.FC<Props> = (props) => {
   const { t } = useTranslation();
   const { value, onClose } = props || {};
 
-  const currentServerId = useApis((state) => state.currentServerId);
+  const currentServerId = useRequestWorkspaceStore(
+    (state) => state.currentServerId,
+  );
 
   const updateSystemConfig = useSystemConfig(
     (store) => store.updateSystemConfig,

@@ -10,11 +10,13 @@ import { produce } from "immer";
 
 import ResponsePanel from "@/features/requests/response/Response/Response";
 
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 
 const Response = memo((props: HttpEditorProps) => {
   const { apisData, onApisDataChange } = props;
-  const currentSendingData = useApis((store) => store.currentSendingData);
+  const currentSendingData = useRequestWorkspaceStore(
+    (store) => store.currentSendingData,
+  );
   const handleOnChange = useMemoizedFn((data: HttpEditorRecord["response"]) => {
     const newData = produce(apisData, (draft) => {
       draft.response = data;

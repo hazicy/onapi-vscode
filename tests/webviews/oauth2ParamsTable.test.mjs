@@ -6,7 +6,7 @@ let nextId = 0;
 let activeRefs;
 let refIndex;
 const { default: Table } = await load(
-  "apps/webviews/src/features/requests/editor/Request/Auth/components/Oauth2ParamsTable.tsx",
+  "apps/webviews/src/features/requests/editor/Request/Auth/components/OAuth2ParamsTable.tsx",
   (id) => {
     if (id === "react")
       return {

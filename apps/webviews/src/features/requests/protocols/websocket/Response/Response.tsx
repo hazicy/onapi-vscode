@@ -1,4 +1,4 @@
-import { getSocketConnectionStatus } from "@/features/requests/execution/socket-state";
+import { getSocketConnectionStatus } from "@/features/requests/protocols/shared/socket-state";
 import styles from "../WebSocketDebug.module.css";
 import React, { lazy } from "react";
 import { useTranslation } from "react-i18next";
@@ -11,7 +11,7 @@ import { map } from "lodash-es";
 import { SuspenseContent } from "@/shared/components";
 import RequestTabs from "@/features/requests/components/RequestTabs";
 
-import useApisWebSocket from "@/features/requests/store/useApis/websocket";
+import useSocketConnectionsStore from "@/features/requests/store/useSocketConnectionsStore";
 
 const Realtime = lazy(() => import("./Realtime/Realtime"));
 
@@ -25,7 +25,7 @@ const Cookie = lazy(
 const RealRequest = lazy(() => import("./RealRequest/RealRequest"));
 
 const Response: React.FC = (props: any) => {
-  const websocketConnectionPool = useApisWebSocket(
+  const websocketConnectionPool = useSocketConnectionsStore(
     (state) => state.websocketConnectionPool,
   );
   const { value, onChange } = props || {};

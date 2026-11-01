@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { parseEventStream } from "@/features/requests/execution/event-stream";
+import { parseEventStream } from "@/features/requests/protocols/http/event-stream";
 import styles from "./EventStream.module.css";
 
 export default function EventStream({

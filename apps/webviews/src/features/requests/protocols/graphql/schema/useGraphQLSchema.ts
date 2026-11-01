@@ -1,4 +1,4 @@
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import { message } from "@/shared/ui/base";
 
 import { useTranslation } from "react-i18next";
@@ -17,7 +17,7 @@ import type {
   SchemaTypeRef,
   SchemaInput,
   SchemaField,
-} from "@/features/requests/utils/graphql/types";
+} from "@/features/requests/protocols/graphql/schema/types";
 
 class InspectSchema {
   schema: OrganizedSchema;
@@ -234,15 +234,15 @@ class InspectSchema {
   }
 }
 
-const useGraphQLQuery = () => {
+const useGraphQLSchema = () => {
   const { t } = useTranslation();
-  const handelGraphQLSchemaFetchResult = (result: {
+  const handleGraphQLSchemaFetchResult = (result: {
     code: number;
     data: { data?: { __schema?: IntrospectionSchema }; errors?: unknown };
     error?: string;
   }) => {
     const { updateApisActiveData, apisActiveData, updateSchemaLoading } =
-      useApis.getState();
+      useRequestWorkspaceStore.getState();
     const { code, data, error } = result;
     if (code !== 200 || error) {
       message.error(t("graphql.refresh_fail"));
@@ -284,8 +284,8 @@ const useGraphQLQuery = () => {
   };
 
   return {
-    handelGraphQLSchemaFetchResult,
+    handleGraphQLSchemaFetchResult,
   };
 };
 
-export default useGraphQLQuery;
+export default useGraphQLSchema;

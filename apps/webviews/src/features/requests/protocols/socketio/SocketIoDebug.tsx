@@ -1,4 +1,4 @@
-import { getSocketConnectionStatus } from "@/features/requests/execution/socket-state";
+import { getSocketConnectionStatus } from "@/features/requests/protocols/shared/socket-state";
 import RequestToolbar from "@/features/requests/components/RequestToolbar";
 import RequestAction from "@/features/requests/components/RequestAction";
 import styles from "./SocketIoDebug.module.css";
@@ -14,16 +14,16 @@ import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels
 import UrlGroup from "@/features/requests/editor/UrlGroup";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
-import useApisWebSocket from "@/features/requests/store/useApis/websocket";
+import useSocketConnectionsStore from "@/features/requests/store/useSocketConnectionsStore";
 import {
   SocketIoComponentType,
   SocketIoDetailsData,
 } from "@onapi/domain/requests/types/socketio";
 import { AnyObject } from "@onapi/domain/types/common";
-import { genQueryByUrl } from "@/features/requests/utils/apis";
+import { genQueryByUrl } from "@/features/requests/editor/request-parameters";
 import { importDelay } from "@/shared/utils/common";
 
-import useWebSocket from "./useWebSocket";
+import useSocketIoConnection from "./useSocketIoConnection";
 
 import ToolBar from "../http/ToolBar";
 import { ApiDetailsData } from "@onapi/domain/requests/types/api";
@@ -40,8 +40,8 @@ const SocketIoDebug: FC<SocketIoComponentType> = ({
   onApisDataChange,
 }) => {
   const { t } = useTranslation();
-  const { connectWebSocket } = useWebSocket();
-  const websocketConnectionPool = useApisWebSocket(
+  const { toggleSocketIoConnection } = useSocketIoConnection();
+  const websocketConnectionPool = useSocketConnectionsStore(
     (state) => state.websocketConnectionPool,
   );
   const [curServerId, SetCurServerId] = useState("");
@@ -128,7 +128,7 @@ const SocketIoDebug: FC<SocketIoComponentType> = ({
                           : t("supplement.connect")
                     }
                     onClick={() =>
-                      connectWebSocket(apisData, status, curServerId)
+                      toggleSocketIoConnection(apisData, status, curServerId)
                     }
                   />
                 }

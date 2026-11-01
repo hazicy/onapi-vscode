@@ -4,7 +4,7 @@ import {
   reduceSession,
   receiveSessionEvent,
   type ExecutionSession,
-} from "../../execution/session";
+} from "./session";
 import { useEffect, useRef, useState } from "react";
 import type { ExecutionEnvelope } from "@onapi/contracts";
 import type { RequestPanelCommandInput } from "@onapi/contracts/request-panel";

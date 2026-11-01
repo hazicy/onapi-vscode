@@ -9,7 +9,7 @@ import { build } from "esbuild";
 import load, { nativeDependency } from "../helpers/loadTypeScript.mjs";
 
 const { withStorageFileLock } = await load(
-  "apps/extension/src/platform/storage/file-lock.ts",
+  "apps/extension/src/platform/storage/storage-lock.ts",
   nativeDependency,
 );
 
@@ -18,7 +18,7 @@ test("storage lock excludes a separate process and releases after work throws", 
   t.after(() => fs.rm(directory, { recursive: true, force: true }));
   const bundle = path.join(directory, "lock.cjs");
   await build({
-    entryPoints: ["apps/extension/src/platform/storage/file-lock.ts"],
+    entryPoints: ["apps/extension/src/platform/storage/storage-lock.ts"],
     outfile: bundle,
     bundle: true,
     platform: "node",
@@ -69,7 +69,7 @@ test("a compromised lock stops mutations and does not release a successor's lock
   let options;
   let releases = 0;
   const { withStorageFileLock: withLock } = await load(
-    "apps/extension/src/platform/storage/file-lock.ts",
+    "apps/extension/src/platform/storage/storage-lock.ts",
     (id) =>
       id === "proper-lockfile"
         ? {

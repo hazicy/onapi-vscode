@@ -1,25 +1,26 @@
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import { cloneDeep, isPlainObject, isString, setWith } from "lodash-es";
 
-import useWebSocketStore from "@/features/requests/store/useApis/websocket";
+import useSocketConnectionsStore from "@/features/requests/store/useSocketConnectionsStore";
 
 import { message } from "@/shared/ui/base";
 import { useTranslation } from "react-i18next";
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import useUserConfig from "@/features/auth/store/useUserConfig";
 import { useStorage } from "@/app/store";
 import { produce } from "immer";
 import { AuthOauth2 } from "@onapi/domain/requests/types/auth";
 
-const useWebSocket = () => {
+const useSocketIoConnection = () => {
   const { t } = useTranslation();
-  const updatePool = useWebSocketStore.getState().appendConnectionResult;
-  const connectWebSocket = (
-    ITarget: any,
+  const updatePool =
+    useSocketConnectionsStore.getState().appendConnectionResult;
+  const toggleSocketIoConnection = (
+    targetRecord: any,
     status: string,
     temporaryServerId: string,
   ) => {
-    const target = cloneDeep(ITarget);
+    const target = cloneDeep(targetRecord);
 
     if (["connecting", "connect"].includes(status)) {
       // Disconnect
@@ -32,7 +33,7 @@ const useWebSocket = () => {
     }
 
     const requestId = crypto.randomUUID();
-    useWebSocketStore.getState().startConnection(target.id, requestId);
+    useSocketConnectionsStore.getState().startConnection(target.id, requestId);
 
     // WebSocket connection request
     sendRequestPanelMessage({
@@ -46,7 +47,8 @@ const useWebSocket = () => {
   };
 
   const handleSetToken = (data: any) => {
-    const { updateApisActiveData, apisActiveData } = useApis.getState();
+    const { updateApisActiveData, apisActiveData } =
+      useRequestWorkspaceStore.getState();
     const { oauthRefreshData, updateOauthRefreshData } = useStorage.getState();
     const { uid } = useUserConfig.getState().userInfo;
     if (
@@ -102,10 +104,10 @@ const useWebSocket = () => {
   };
 
   return {
-    connectWebSocket,
+    toggleSocketIoConnection,
     updatePool,
     handleProxyFetchResult,
   };
 };
 
-export default useWebSocket;
+export default useSocketIoConnection;

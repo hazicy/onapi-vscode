@@ -1,6 +1,6 @@
 import { isEqual } from "lodash-es";
 import { requestDefinition } from "@onapi/domain";
-import type { HttpExecutionState } from "@/features/requests/execution/http-state";
+import type { HttpExecutionState } from "@/features/requests/protocols/http/http-state";
 import type { EditorRecord } from "@onapi/domain/requests/record";
 import { DEFAULT_REQUEST_SYSTEM_HEADERS } from "@onapi/domain/requests/constants/request";
 import { create, devtools } from "@/shared/state/store";
@@ -101,6 +101,6 @@ export default create<State & Actions>()(
       updateApiCodeHar: (har) => set({ apiCodeHar: har }),
       updateSchemaLoading: (loading) => set({ schemaLoading: loading }),
     }),
-    { name: "useApis" },
+    { name: "useRequestWorkspaceStore" },
   ),
 );

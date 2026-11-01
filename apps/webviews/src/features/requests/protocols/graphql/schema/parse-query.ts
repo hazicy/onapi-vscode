@@ -2,7 +2,7 @@ import { parse, Kind } from "graphql";
 import type { DocumentNode, SelectionSetNode, ValueNode } from "graphql";
 import type { QueryDocument, QueryField, QueryValue } from "./types";
 
-export function graphql2json(queryString: string): QueryDocument {
+export function parseGraphQLQuery(queryString: string): QueryDocument {
   try {
     // Parse GraphQL query into AST
     const ast = parse(queryString);

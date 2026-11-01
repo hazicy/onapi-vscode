@@ -9,12 +9,14 @@ import { useMemoizedFn } from "ahooks";
 import { produce } from "immer";
 
 import ResponsePanel from "@/features/requests/response/Response/Response";
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 
 const Response = memo((props: HttpEditorProps) => {
   const { apisData, onApisDataChange } = props;
 
-  const curApiSendingData = useApis((state) => state.currentSendingData);
+  const curApiSendingData = useRequestWorkspaceStore(
+    (state) => state.currentSendingData,
+  );
 
   const handleOnChange = useMemoizedFn((data: HttpEditorRecord["response"]) => {
     const newData = produce(apisData, (draft) => {

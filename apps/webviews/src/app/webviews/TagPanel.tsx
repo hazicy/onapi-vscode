@@ -1,11 +1,11 @@
-import useWebSocketStore from "@/features/requests/store/useApis/websocket";
+import useSocketConnectionsStore from "@/features/requests/store/useSocketConnectionsStore";
 import { editorRecordSchema } from "@onapi/domain/requests/record";
-import useSocketStore from "@/features/requests/store/useApis/websocket";
+import useSocketStore from "@/features/requests/store/useSocketConnectionsStore";
 import { readRequestPanelResponse } from "@/shared/bridge/request-panel";
 import SharedComponentsProvider from "@/app/providers/SharedComponentsProvider";
 import { PROTOCOL_EXECUTION_EVENT } from "@onapi/contracts";
 import { consumeExecutionEvent } from "@/features/requests/execution/consume-event";
-import { reduceHttpExecutionEvent } from "@/features/requests/execution/http-state";
+import { reduceHttpExecutionEvent } from "@/features/requests/protocols/http/http-state";
 import { Suspense, useEffect } from "react";
 import { isEqual } from "lodash-es";
 import ReactDOM from "react-dom/client";
@@ -20,16 +20,16 @@ import RequestWorkspace, {
 import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
 import "../../shared/theme/globalStyle.css";
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import { useGlobal } from "@/app/store";
 import { HotkeysProvider } from "react-hotkeys-hook";
-import useApisHotkeys from "@/features/requests/hooks/useApisHotkeys";
+import useRequestHotkeys from "@/features/requests/hooks/useRequestHotkeys";
 import useShare from "@/features/sharing/store/useShare";
 
-import useSocketIo from "@/features/requests/protocols/socketio/useWebSocket";
-import useGraphQLQuery from "@/features/requests/graphql/GraphQLQuery/useGraphQLQuery";
+import useSocketIo from "@/features/requests/protocols/socketio/useSocketIoConnection";
+import useGraphQLSchema from "@/features/requests/protocols/graphql/schema/useGraphQLSchema";
 
 function initializeRequest(data: any) {
   const { apiData, projectConfig, systemConfig, vscodeTheme, docBaseUrl } =
@@ -43,7 +43,7 @@ function initializeRequest(data: any) {
   });
   useGlobal.getState().updateVscodeTheme(vscodeTheme);
   useShare.getState().updateDocBaseUrl(docBaseUrl);
-  useApis.getState().updateApisActiveData(record);
+  useRequestWorkspaceStore.getState().updateApisActiveData(record);
   performance.mark("onapi:data-ready");
 }
 
@@ -63,23 +63,27 @@ function TagPanel() {
   const updateProjectConfig = useProjectConfig(
     (state) => state.updateProjectConfig,
   );
-  const updateApisActiveData = useApis((store) => store.updateApisActiveData);
-  const updateApiCodeHar = useApis((store) => store.updateApiCodeHar);
+  const updateApisActiveData = useRequestWorkspaceStore(
+    (store) => store.updateApisActiveData,
+  );
+  const updateApiCodeHar = useRequestWorkspaceStore(
+    (store) => store.updateApiCodeHar,
+  );
   const updateVscodeTheme = useGlobal((store) => store.updateVscodeTheme);
   const systemConfig = useSystemConfig((state) => state.systemConfig);
   const updateSystemConfig = useSystemConfig(
     (state) => state.updateSystemConfig,
   );
   const updateDocBaseUrl = useShare((state) => state.updateDocBaseUrl);
-  const updateApiOriginDetailsList = useApis(
+  const updateApiOriginDetailsList = useRequestWorkspaceStore(
     (store) => store.updateApiOriginDetailsList,
   );
 
-  useApisHotkeys();
+  useRequestHotkeys();
 
   const { handleProxyFetchResult } = useSocketIo();
 
-  const { handelGraphQLSchemaFetchResult } = useGraphQLQuery();
+  const { handleGraphQLSchemaFetchResult } = useGraphQLSchema();
 
   useEffect(() => {
     performance.mark("onapi:react-mounted");
@@ -98,7 +102,7 @@ function TagPanel() {
 
       switch (message.action) {
         case "externalStorageChanged": {
-          const state = useApis.getState();
+          const state = useRequestWorkspaceStore.getState();
           const active = state.apisActiveData;
           const previous = state.apiOriginDetailsList.find(
             (item) => item.id === active.id,
@@ -117,7 +121,7 @@ function TagPanel() {
         case PROTOCOL_EXECUTION_EVENT:
           consumeExecutionEvent(message.data, {
             http: (event, executionId, sequence) => {
-              const state = useApis.getState();
+              const state = useRequestWorkspaceStore.getState();
               state.updateCurrentSendingData(
                 reduceHttpExecutionEvent(state.currentSendingData, {
                   type: "event",
@@ -127,8 +131,10 @@ function TagPanel() {
                 }),
               );
             },
-            websocket: useWebSocketStore.getState().consumeExecutionEvent,
-            socketio: useWebSocketStore.getState().consumeExecutionEvent,
+            websocket:
+              useSocketConnectionsStore.getState().consumeExecutionEvent,
+            socketio:
+              useSocketConnectionsStore.getState().consumeExecutionEvent,
           });
           break;
         case "setProjectConfig":
@@ -137,7 +143,7 @@ function TagPanel() {
         case "requestPanelError": {
           const failure = message.data;
           if (failure.action === "sendApi" && failure.executionId) {
-            const state = useApis.getState();
+            const state = useRequestWorkspaceStore.getState();
             state.updateCurrentSendingData(
               reduceHttpExecutionEvent(state.currentSendingData, {
                 type: "failure",
@@ -161,7 +167,7 @@ function TagPanel() {
               );
           }
           if (failure.action === "getGraphQLSchema") {
-            useApis.getState().updateSchemaLoading(false);
+            useRequestWorkspaceStore.getState().updateSchemaLoading(false);
           }
           if (failure.action === "/proxy/fetch") {
             handleProxyFetchResult({ code: 500, error: failure.error.message });
@@ -170,7 +176,7 @@ function TagPanel() {
           break;
         }
         case "requestSaved":
-          useApis
+          useRequestWorkspaceStore
             .getState()
             .acknowledgeSave(message.data.definition, message.data.submitted);
           break;
@@ -195,10 +201,10 @@ function TagPanel() {
           handleProxyFetchResult(message.data);
           break;
         case "graphQLSchemaFetchResult":
-          handelGraphQLSchemaFetchResult({
+          handleGraphQLSchemaFetchResult({
             ...message.data,
             data: message.data.data as Parameters<
-              typeof handelGraphQLSchemaFetchResult
+              typeof handleGraphQLSchemaFetchResult
             >[0]["data"],
             error:
               typeof message.data.error === "string"

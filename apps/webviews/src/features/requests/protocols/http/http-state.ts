@@ -1,4 +1,4 @@
-import { reduceSession, type ExecutionSession } from "./session";
+import { reduceSession, type ExecutionSession } from "../../execution/session";
 import type {
   ExecutionEvent,
   ExecutionError,

@@ -10,7 +10,7 @@ import clsx from "clsx";
 import { importPastedCurl } from "@/features/curl/utils/import-pasted-curl";
 
 import { parseSafeBash } from "@/features/curl/utils/curl";
-import type { CurlDataType } from "@/features/requests/types/other";
+import type { ConvertedCurlRequest } from "@/features/curl/types";
 
 import styles from "./VarInput.module.css";
 import { getElementTextOffset } from "./util";
@@ -40,7 +40,7 @@ interface VarInputProps {
     event: React.KeyboardEvent<HTMLDivElement>,
     isEnvOpen?: boolean,
   ) => void;
-  pasteCurlChange?: (d: CurlDataType) => void;
+  pasteCurlChange?: (d: ConvertedCurlRequest) => void;
   wrapClassName?: string;
   disabledReturn?: boolean;
 }

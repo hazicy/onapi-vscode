@@ -7,7 +7,7 @@ import styles from "./RequestWorkspace.module.css";
 import { Flex } from "@/shared/ui/base";
 import React, { lazy, useEffect, useState } from "react";
 
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
 // Reuse the preload promise and render its resolved component synchronously.
@@ -140,8 +140,12 @@ function RequestWorkspaceReady() {
 }
 
 const RequestWorkspace: React.FC = () => {
-  const apisActiveData: EditorRecord = useApis((store) => store.apisActiveData);
-  const updateApisActiveData = useApis((store) => store.updateApisActiveData);
+  const apisActiveData: EditorRecord = useRequestWorkspaceStore(
+    (store) => store.apisActiveData,
+  );
+  const updateApisActiveData = useRequestWorkspaceStore(
+    (store) => store.updateApisActiveData,
+  );
 
   const onApisDataChange = (newData: EditorRecord) => {
     sendRequestPanelMessage({

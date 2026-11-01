@@ -1,4 +1,4 @@
-import { selectRequestIndex } from "@/features/requests/store/useApis";
+import { selectRequestIndex } from "@/features/requests/store/useRequestWorkspaceStore";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -10,7 +10,7 @@ import context from "@/shared/components/RawEditor/visualizationContext";
 import RequestTable from "@/shared/components/RequestTable/RequestTable";
 import useTableColumnSwitchConfig from "@/features/settings/hooks/useTableColumnSwitchConfig";
 
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import { ApisBaseDataItem } from "@onapi/domain/requests/types/base";
 import { WebSocketDetailsData } from "@onapi/domain/requests/types/websocket";
@@ -21,7 +21,7 @@ import {
 
 import Message from "./Message";
 import Setting from "./Setting";
-import { genUrlByQuery } from "@/features/requests/utils/apis";
+import { genUrlByQuery } from "@onapi/domain/request-utils";
 
 interface Props {
   value: any;
@@ -32,7 +32,7 @@ const Request: React.FC<Props> = (props) => {
   const { value, onChange, readOnly } = props || {};
   const { Provider } = context;
   const { request } = value || {};
-  const apiDetailsData = useApis(selectRequestIndex);
+  const apiDetailsData = useRequestWorkspaceStore(selectRequestIndex);
   const globalParams = useProjectConfig((state) => state.globalParams);
 
   const [allParentDirectories, setAllParentDirectories] = useSafeState<{

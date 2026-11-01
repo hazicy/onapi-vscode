@@ -1,5 +1,5 @@
-import type { HttpExecutionState } from "@/features/requests/execution/http-state";
-import { sdkRequestView } from "@/features/requests/utils/executionView";
+import type { HttpExecutionState } from "@/features/requests/protocols/http/http-state";
+import { sdkRequestView } from "@/features/requests/response/execution-view";
 import { requestUrl } from "@onapi/domain";
 import styles from "./RealRequest.module.css";
 import React from "react";

@@ -4,7 +4,7 @@ import type { AiResponseSummary } from "@onapi/contracts";
 import type { AiProvider, AiMessage } from "@onapi/domain/requests/ai-mcp";
 import type { AiEditorRecord } from "@onapi/domain/requests/record";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
-import { useProtocolExecution } from "../shared/useProtocolExecution";
+import { useProtocolExecution } from "../../execution/useProtocolExecution";
 import { parseAiConfig } from "../shared/request-input";
 
 type Run = {

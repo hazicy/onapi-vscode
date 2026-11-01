@@ -4,11 +4,11 @@ import load, { nativeDependency } from "../helpers/loadTypeScript.mjs";
 
 const zustand = await nativeDependency("zustand");
 const {
-  default: useApis,
+  default: useRequestWorkspaceStore,
   selectRequestIndex,
   selectIsDirty,
 } = await load(
-  "apps/webviews/src/features/requests/store/useApis/index.ts",
+  "apps/webviews/src/features/requests/store/useRequestWorkspaceStore.ts",
   (id) => {
     if (id === "@/shared/state/store")
       return { create: zustand.create, devtools: (initializer) => initializer };
@@ -25,25 +25,30 @@ const scopes = await load(
 
 test("request indexes follow collection replacement and clearing console updates the displayed execution", () => {
   const first = { id: "one", name: "Old" };
-  useApis.getState().updateApiOriginDetailsList([first]);
-  const index = selectRequestIndex(useApis.getState());
+  useRequestWorkspaceStore.getState().updateApiOriginDetailsList([first]);
+  const index = selectRequestIndex(useRequestWorkspaceStore.getState());
   assert.equal(index.one, first);
-  assert.equal(selectRequestIndex(useApis.getState()), index);
-  useApis.getState().updateApiOriginDetailsList([{ id: "two", name: "New" }]);
-  const replacement = selectRequestIndex(useApis.getState());
+  assert.equal(selectRequestIndex(useRequestWorkspaceStore.getState()), index);
+  useRequestWorkspaceStore
+    .getState()
+    .updateApiOriginDetailsList([{ id: "two", name: "New" }]);
+  const replacement = selectRequestIndex(useRequestWorkspaceStore.getState());
   assert.equal(replacement.one, undefined);
   assert.equal(replacement.two.name, "New");
   const execution = {
     result: { response: { code: 200 } },
     consoleList: [{ messages: ["log"] }],
   };
-  useApis.getState().updateCurrentSendingData(execution);
-  useApis.getState().clearConsole();
+  useRequestWorkspaceStore.getState().updateCurrentSendingData(execution);
+  useRequestWorkspaceStore.getState().clearConsole();
   assert.equal(
-    useApis.getState().currentSendingData.result.response,
+    useRequestWorkspaceStore.getState().currentSendingData.result.response,
     execution.result.response,
   );
-  assert.equal(useApis.getState().currentSendingData.consoleList.length, 0);
+  assert.equal(
+    useRequestWorkspaceStore.getState().currentSendingData.consoleList.length,
+    0,
+  );
   assert.equal(execution.consoleList.length, 1);
 });
 
@@ -89,15 +94,17 @@ test("save acknowledgements update the saved baseline without overwriting newer 
     ...saved,
     request: { ...saved.request, url: "https://example.com/c" },
   };
-  useApis.getState().updateApiOriginDetailsList([saved]);
-  useApis.getState().updateApisActiveData(submitted);
-  assert.equal(selectIsDirty(useApis.getState()), true);
-  useApis.getState().updateApisActiveData(newer);
-  useApis.getState().acknowledgeSave(submitted, submitted);
-  assert.equal(useApis.getState().apisActiveData, newer);
-  assert.equal(selectIsDirty(useApis.getState()), true);
-  useApis.getState().acknowledgeSave(newer, newer);
-  assert.equal(selectIsDirty(useApis.getState()), false);
-  useApis.getState().updateApisActiveData({ ...newer, id: "new-request" });
-  assert.equal(selectIsDirty(useApis.getState()), true);
+  useRequestWorkspaceStore.getState().updateApiOriginDetailsList([saved]);
+  useRequestWorkspaceStore.getState().updateApisActiveData(submitted);
+  assert.equal(selectIsDirty(useRequestWorkspaceStore.getState()), true);
+  useRequestWorkspaceStore.getState().updateApisActiveData(newer);
+  useRequestWorkspaceStore.getState().acknowledgeSave(submitted, submitted);
+  assert.equal(useRequestWorkspaceStore.getState().apisActiveData, newer);
+  assert.equal(selectIsDirty(useRequestWorkspaceStore.getState()), true);
+  useRequestWorkspaceStore.getState().acknowledgeSave(newer, newer);
+  assert.equal(selectIsDirty(useRequestWorkspaceStore.getState()), false);
+  useRequestWorkspaceStore
+    .getState()
+    .updateApisActiveData({ ...newer, id: "new-request" });
+  assert.equal(selectIsDirty(useRequestWorkspaceStore.getState()), true);
 });

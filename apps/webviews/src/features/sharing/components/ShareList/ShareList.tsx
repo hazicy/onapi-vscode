@@ -6,7 +6,7 @@ import { Flex, Input, Typography } from "@/shared/ui/base";
 import { useSafeState } from "ahooks";
 import useDocsData from "./hooks/useDocsData";
 import useShare from "@/features/sharing/store/useShare";
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 
 import SharePanel from "./components/SharePanel";
 
@@ -14,7 +14,9 @@ const SharePage = () => {
   const [searchValue, setSearchValue] = useSafeState("");
 
   const shareData = useShare((state) => state.shareData);
-  const apiOriginDetailsList = useApis((store) => store.apiOriginDetailsList);
+  const apiOriginDetailsList = useRequestWorkspaceStore(
+    (store) => store.apiOriginDetailsList,
+  );
   const { filteredShareList } = useDocsData({
     searchIncludesField: ["name", "url"],
     dataSource: apiOriginDetailsList,

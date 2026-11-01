@@ -1,4 +1,4 @@
-import styles from "../GraphQLQuery.module.css";
+import styles from "./GraphQLQuery.module.css";
 import {
   forwardRef,
   useContext,
@@ -28,7 +28,7 @@ import {
   some,
 } from "lodash-es";
 
-import GraphQLSchemaProvider from "@/features/requests/graphql/GraphQLQuery/context/GraphQLSchemaProvider";
+import SchemaFilterContext from "@/features/requests/protocols/graphql/editor/schema-filter-context";
 import { AppIcon } from "@/shared/ui";
 
 interface Props {
@@ -57,9 +57,8 @@ const Filters = (props: Props, ref: any) => {
   const [nameOptions, setNameOptions] = useState<any[]>([]);
   const [operaOptions, setOperaOptions] = useState<any>({});
   const [filterItem, setFilterItem] = useState<any>({});
-  const { filterData, setFilterData, refreshCheck } = useContext(
-    GraphQLSchemaProvider,
-  );
+  const { filterData, setFilterData, refreshCheck } =
+    useContext(SchemaFilterContext);
 
   useEffect(() => {
     if (open) {

@@ -31,7 +31,12 @@ Socket.IO ----------> SocketIoAdapter --------------+        |
   its events to Webviews. Request handlers select destinations and persist HTTP
   variables, cookies and history; adapters cannot access panels or project storage.
 - `apps/webviews/src/features/requests/execution/consume-event.ts` consumes the
-  common channel and dispatches protocol data to the existing views.
+  common channel. `execution/session.ts` owns execution identity, event sequence
+  filtering and terminal states. `execution/useProtocolExecution.ts` connects AI,
+  MCP and gRPC events to those rules; `execution/request-actions.ts` starts and
+  cancels HTTP requests. HTTP data reducers and SSE parsing live in
+  `protocols/http/`; shared socket data reducers live in `protocols/shared/`.
+  Protocol-independent response projections live in `response/execution-view.ts`.
 
 Every execution supplies a unique `sessionId`. Core adds `protocolVersion: 1`,
 `targetId`, a monotonically increasing per-execution `sequence`, and `timestamp`.

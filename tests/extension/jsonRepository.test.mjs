@@ -96,15 +96,15 @@ async function fixture(t) {
     nativeDependency,
   );
   const fileLock = await loadTypeScript(
-    "apps/extension/src/platform/storage/file-lock.ts",
+    "apps/extension/src/platform/storage/storage-lock.ts",
     nativeDependency,
   );
   const { JsonRepository } = await loadTypeScript(
-    "apps/extension/src/platform/storage/repository.ts",
+    "apps/extension/src/platform/storage/json-repository.ts",
     (id) => {
       if (id === "vscode") return host;
       if (id === "./collection-files") return collectionFiles;
-      if (id === "./file-lock") return fileLock;
+      if (id === "./storage-lock") return fileLock;
       if (id === "./events") return { storageChanged: { fire() {} } };
       if (id === "./index")
         return {

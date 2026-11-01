@@ -15,14 +15,14 @@ import "../../shared/theme/globalStyle.css";
 
 import { HotkeysProvider } from "react-hotkeys-hook";
 import useShare from "@/features/sharing/store/useShare";
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 
 function ShareListPanel() {
   const customTheme = useGlobalTheme();
 
   const updateShareData = useShare((state) => state.updateShareData);
-  const updateApiOriginDetailsList = useApis(
+  const updateApiOriginDetailsList = useRequestWorkspaceStore(
     (store) => store.updateApiOriginDetailsList,
   );
   const updateDocBaseUrl = useShare((state) => state.updateDocBaseUrl);

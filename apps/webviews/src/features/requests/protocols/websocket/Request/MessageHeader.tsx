@@ -1,4 +1,4 @@
-import { getSocketConnectionStatus } from "@/features/requests/execution/socket-state";
+import { getSocketConnectionStatus } from "@/features/requests/protocols/shared/socket-state";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import styles from "./Request.module.css";
 import { useEffect } from "react";
@@ -10,7 +10,7 @@ import { useSafeState } from "ahooks";
 import { includes, size, trim } from "lodash-es";
 
 import Button from "@/shared/ui/Button";
-import useApisWebSocket from "@/features/requests/store/useApis/websocket";
+import useSocketConnectionsStore from "@/features/requests/store/useSocketConnectionsStore";
 import { WebSocketDetailsData } from "@onapi/domain/requests/types/websocket";
 
 interface Props {
@@ -20,7 +20,7 @@ interface Props {
 }
 const MessageHeader = (props: Props) => {
   const { t } = useTranslation();
-  const websocketConnectionPool = useApisWebSocket(
+  const websocketConnectionPool = useSocketConnectionsStore(
     (state) => state.websocketConnectionPool,
   );
   const { value, onChange, apisData } = props || {};

@@ -2,12 +2,12 @@ import {
   httpResponseSchema,
   type HttpEditorRecord,
 } from "@onapi/domain/requests/record";
-import { hasCompletedResponse } from "@/features/requests/execution/http-state";
-import type { HttpExecutionState } from "@/features/requests/execution/http-state";
-import { sdkResponseView } from "@/features/requests/utils/executionView";
+import { hasCompletedResponse } from "@/features/requests/protocols/http/http-state";
+import type { HttpExecutionState } from "@/features/requests/protocols/http/http-state";
+import { sdkResponseView } from "@/features/requests/response/execution-view";
 import clsx from "clsx";
 import { responseText } from "@onapi/domain";
-import { isEventStream } from "@/features/requests/execution/event-stream";
+import { isEventStream } from "@/features/requests/protocols/http/event-stream";
 import styles from "./Response.module.css";
 import { FC, lazy, memo, Suspense, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

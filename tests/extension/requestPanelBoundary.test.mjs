@@ -81,7 +81,7 @@ test("failed sends end loading without accepting stale failures or losing previo
     "apps/webviews/src/features/requests/execution/session.ts",
   );
   const { reduceHttpExecutionEvent: reduce } = await load(
-    "apps/webviews/src/features/requests/execution/http-state.ts",
+    "apps/webviews/src/features/requests/protocols/http/http-state.ts",
     () => sessions,
   );
   const result = { executionId: "previous", response: { code: 200 } };

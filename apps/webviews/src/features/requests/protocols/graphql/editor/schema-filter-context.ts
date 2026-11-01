@@ -8,10 +8,10 @@ type Props = {
   refreshCheck: (d: FilterDataType) => void;
 };
 
-const GraphQLQueryContext = createContext<Props>({
+const SchemaFilterContext = createContext<Props>({
   filterData: {},
   setFilterData: function () {},
   refreshCheck: function () {},
 });
 
-export default GraphQLQueryContext;
+export default SchemaFilterContext;

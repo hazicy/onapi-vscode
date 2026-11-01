@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import load from "../helpers/loadTypeScript.mjs";
 import { nativeDependency } from "../helpers/loadTypeScript.mjs";
 const { resolveOAuth2Variables, resolveOAuth2Parameters } = await load(
-  "apps/webviews/src/features/requests/utils/oauth2Variables.ts",
+  "apps/webviews/src/features/requests/editor/Request/Auth/oauth2-variables.ts",
   (id) => nativeDependency(id),
 );
 const plain = (value) => JSON.parse(JSON.stringify(value));

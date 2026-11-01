@@ -11,7 +11,7 @@ import {
 } from "lodash-es";
 
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import { arrayToTreeObject, flatTreeItems } from "@/shared/utils/common";
 import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
@@ -25,7 +25,9 @@ export const useFolders = (props?: Props) => {
 
   const [apisFolders, setApisFolders] = useState<ApiDetailsData[]>([]);
   const [flatApisFolders, setFlatApisFolders] = useState<any[]>([]);
-  const apiOriginDetailsList = useApis((state) => state.apiOriginDetailsList);
+  const apiOriginDetailsList = useRequestWorkspaceStore(
+    (state) => state.apiOriginDetailsList,
+  );
 
   const nodeSort = (pre: any, after: any) => {
     if (pre.sort !== after.sort) {

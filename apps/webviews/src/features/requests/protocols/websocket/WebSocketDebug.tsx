@@ -1,4 +1,4 @@
-import { getSocketConnectionStatus } from "@/features/requests/execution/socket-state";
+import { getSocketConnectionStatus } from "@/features/requests/protocols/shared/socket-state";
 import RequestToolbar from "@/features/requests/components/RequestToolbar";
 import RequestAction from "@/features/requests/components/RequestAction";
 import styles from "./WebSocketDebug.module.css";
@@ -15,19 +15,19 @@ import UrlGroup from "@/features/requests/editor/UrlGroup";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 import ToolBar from "../http/ToolBar";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
-import useApisWebSocket from "@/features/requests/store/useApis/websocket";
+import useSocketConnectionsStore from "@/features/requests/store/useSocketConnectionsStore";
 import {
   WebSocketComponentType,
   WebSocketDetailsData,
 } from "@onapi/domain/requests/types/websocket";
 import { importDelay } from "@/shared/utils/common";
 
-import useWebSocket from "./useWebSocket";
+import useWebSocketConnection from "./useWebSocketConnection";
 
 import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import { produce } from "immer";
 import { AnyObject } from "@onapi/domain/types/common";
-import { genQueryByUrl } from "@/features/requests/utils/apis";
+import { genQueryByUrl } from "@/features/requests/editor/request-parameters";
 
 const Request = lazy(() => importDelay(import("./Request/Request")));
 const Response = lazy(() => importDelay(import("./Response/Response")));
@@ -40,8 +40,8 @@ const WsDebug: FC<WebSocketComponentType> = ({
   onApisDataChange,
 }) => {
   const { t } = useTranslation();
-  const { connectWebSocket } = useWebSocket();
-  const websocketConnectionPool = useApisWebSocket(
+  const { toggleWebSocketConnection } = useWebSocketConnection();
+  const websocketConnectionPool = useSocketConnectionsStore(
     (state) => state.websocketConnectionPool,
   );
 
@@ -114,7 +114,7 @@ const WsDebug: FC<WebSocketComponentType> = ({
                     apisData.url?.trim()
                   ) {
                     event.preventDefault();
-                    connectWebSocket(apisData, status, curServerId);
+                    toggleWebSocketConnection(apisData, status, curServerId);
                   }
                 }}
                 data={{
@@ -141,7 +141,7 @@ const WsDebug: FC<WebSocketComponentType> = ({
                           : t("supplement.connect")
                     }
                     onClick={() =>
-                      connectWebSocket(apisData, status, curServerId)
+                      toggleWebSocketConnection(apisData, status, curServerId)
                     }
                   />
                 }

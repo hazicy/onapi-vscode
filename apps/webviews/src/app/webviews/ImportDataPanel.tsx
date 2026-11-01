@@ -11,7 +11,7 @@ import ImportData from "@/features/import/components/ImportData/ImportData";
 import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
 import "../../shared/theme/globalStyle.css";
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import useUserConfig from "@/features/auth/store/useUserConfig";
 import { useGlobal } from "@/app/store";
@@ -21,7 +21,7 @@ import { isArray } from "lodash-es";
 function ImportDataPanel() {
   const customTheme = useGlobalTheme();
   const updateUserConfig = useUserConfig((store) => store.updateUserConfig);
-  const updateApiOriginDetailsList = useApis(
+  const updateApiOriginDetailsList = useRequestWorkspaceStore(
     (store) => store.updateApiOriginDetailsList,
   );
   const updateVscodeTheme = useGlobal((store) => store.updateVscodeTheme);

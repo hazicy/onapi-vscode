@@ -5,7 +5,7 @@ const sessionState = await load(
   "apps/webviews/src/features/requests/execution/session.ts",
 );
 const executionState = await load(
-  "apps/webviews/src/features/requests/execution/http-state.ts",
+  "apps/webviews/src/features/requests/protocols/http/http-state.ts",
   () => sessionState,
 );
 
@@ -31,11 +31,11 @@ test("sending and cancelling preserve results and prevent duplicate sends", asyn
     globals,
   );
   const { beginRequest, cancelRequest } = await load(
-    "apps/webviews/src/features/requests/utils/requestExecution.ts",
+    "apps/webviews/src/features/requests/execution/request-actions.ts",
     (id) =>
       id === "@/shared/bridge/request-panel"
         ? bridge
-        : id.endsWith("execution/http-state")
+        : id.endsWith("http/http-state")
           ? executionState
           : { default: { getState: () => state } },
     {

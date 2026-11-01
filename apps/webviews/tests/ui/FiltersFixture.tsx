@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Filters from "@/features/requests/graphql/GraphQLQuery/components/Filters";
-import GraphQLSchemaProvider from "@/features/requests/graphql/GraphQLQuery/context/GraphQLSchemaProvider";
+import Filters from "@/features/requests/protocols/graphql/editor/Filters";
+import SchemaFilterContext from "@/features/requests/protocols/graphql/editor/schema-filter-context";
 
 export default function FiltersFixture() {
   const [filterData, setFilterData] = useState<any>({});
@@ -15,7 +15,7 @@ export default function FiltersFixture() {
     },
   ];
   return (
-    <GraphQLSchemaProvider.Provider
+    <SchemaFilterContext.Provider
       value={{ filterData, setFilterData, refreshCheck: () => {} }}
     >
       <button onClick={() => setOpen(true)}>Reopen filters</button>
@@ -28,6 +28,6 @@ export default function FiltersFixture() {
         />
       )}
       <output aria-label="Filter data">{JSON.stringify(filterData)}</output>
-    </GraphQLSchemaProvider.Provider>
+    </SchemaFilterContext.Provider>
   );
 }

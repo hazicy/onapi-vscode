@@ -8,7 +8,7 @@ import { useDebounceEffect } from "ahooks";
 import { produce } from "immer";
 
 import useFolders from "@/features/collections/hooks/useFolders";
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import { FolderDetailsData } from "@onapi/domain/requests/types/folder";
 import { ChangeFuncType } from "@onapi/domain/types/common";
 
@@ -23,8 +23,10 @@ interface Props {
 
 const BaseSettings: FC<Props> = ({ value, onChange }) => {
   const { apisFolders } = useFolders({ currentTargetId: value?.id });
-  const apisActiveKey = useApis((state) => state.apisActiveData.id);
-  const isNew = useApis(
+  const apisActiveKey = useRequestWorkspaceStore(
+    (state) => state.apisActiveData.id,
+  );
+  const isNew = useRequestWorkspaceStore(
     (state) =>
       !state.apiOriginDetailsList.some((item) => item.id === value?.id),
   );

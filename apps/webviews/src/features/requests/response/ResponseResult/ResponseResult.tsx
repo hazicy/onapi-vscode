@@ -1,4 +1,4 @@
-import { sdkResponseView } from "@/features/requests/utils/executionView";
+import { sdkResponseView } from "@/features/requests/response/execution-view";
 import clsx from "clsx";
 import { responseText, responseLanguage } from "@onapi/domain";
 import {

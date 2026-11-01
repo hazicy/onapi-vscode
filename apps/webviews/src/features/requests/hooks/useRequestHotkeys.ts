@@ -1,5 +1,5 @@
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
-import { beginRequest } from "@/features/requests/utils/requestExecution";
+import { beginRequest } from "@/features/requests/execution/request-actions";
 import { useHotkeys } from "react-hotkeys-hook";
 import {
   APIS_HOT_KEYS_ENUM,
@@ -7,12 +7,12 @@ import {
   DEFAULT_HOT_KEYS_OPTIONS,
   SYSTEM_HOT_KEYS_SCOPES_ENUM,
 } from "@/shared/constants/hotkeys";
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import { handleHotKeysEventAction } from "@/shared/utils/hotkeys";
 
 const shortcuts = Object.values(DEFAULT_APIS_HOT_KEYS_MAP).flat();
 
-export default function useApisHotkeys() {
+export default function useRequestHotkeys() {
   useHotkeys(
     shortcuts,
     (_event, hotkey) => {
@@ -26,7 +26,7 @@ export default function useApisHotkeys() {
       ) {
         return;
       }
-      const { apisActiveData } = useApis.getState();
+      const { apisActiveData } = useRequestWorkspaceStore.getState();
       if (action === APIS_HOT_KEYS_ENUM.SEND) {
         const kind = apisActiveData.kind;
         if (kind !== "api" && kind !== "graphql") {

@@ -15,12 +15,23 @@ src/
       response/               # Response content, metadata and execution details
       assertions/             # Assertion configuration and results
       scripts/                # Request scripts
-      graphql/                # GraphQL query editing and contexts
-      protocols/              # HTTP (including SSE responses), GraphQL, WebSocket and Socket.IO views
+      protocols/              # Protocol screens and data reducers
+        http/                 # HTTP response state, SSE parsing and cURL request application
+        graphql/
+          editor/             # Query editor and its private components/contexts
+          schema/             # Schema loading, query parsing/printing and tree projection
+        websocket/
+        socketio/
+        ai/
+        mcp/
+        grpc/
+        shared/               # Components and socket data shared across protocols
       code-generation/        # Code generation drawer
       variables/              # Request variable extraction
-      execution/              # Execution events and state transitions
-      store/                  # Request state
+      execution/              # Shared sessions, event routing, execution hook and request actions
+      store/
+        useRequestWorkspaceStore.ts
+        useSocketConnectionsStore.ts
     collections/              # Collection tree and folder settings
     environment/              # Environments, cookies and parameters
     testing/                  # Collection runs and reports
@@ -58,7 +69,7 @@ src/
   Name the implementation after the component (`ImportData.tsx`), with a matching
   stylesheet (`ImportData.module.css`). Reserve `index.ts` for deliberate public
   exports; do not add one to every component directory.
-- Keep a single hook or store in a named file such as `hooks/useApisHotkeys.ts`
+- Keep a single hook or store in a named file such as `hooks/useRequestHotkeys.ts`
   or `store/useSchemas.ts`, without a same-named wrapper directory. Create
   category directories only when needed; do not create empty placeholders.
 - Keep private components, hooks, types and constants beside their owner. A
@@ -70,9 +81,19 @@ src/
   by other features. Promote code to `shared/` only when it has no feature-specific
   behavior or application-state dependency. Basic controls belong in `shared/ui/`;
   reusable composed components and editors belong in `shared/components/`.
-- Hooks keep the `useSomething` convention. New ordinary utility, context and
+- Hooks keep the `useSomething` convention. Zustand hooks end in `Store`, such as
+  `useRequestWorkspaceStore` and `useSocketConnectionsStore`. Connection hooks
+  name their protocol explicitly: `useWebSocketConnection` and
+  `useSocketIoConnection`. New ordinary utility, context and
   service modules use kebab-case filenames that describe their role. Existing
   modules can adopt this convention when reorganized.
+- Keep protocol data reducers with their protocol. Shared session identity,
+  sequence filtering and lifecycle transitions belong to `requests/execution`;
+  HTTP data belongs to `protocols/http`, socket timeline data to
+  `protocols/shared`, and reusable response projections to `requests/response`.
+  Request parameter reconciliation belongs to `editor/request-parameters.ts`;
+  OAuth and body-generation helpers stay next to their editors. cURL conversion
+  types belong to `features/curl`, rather than a generic request `other.ts`.
 - Put feature-specific code in `features/<feature>/`, with `components/`, `store/`,
   `hooks/`, `types/`, `constants/`, `events/` and `utils/` as needed.
 - Import feature components and hooks from their feature paths; do not re-export

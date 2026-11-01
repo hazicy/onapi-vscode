@@ -9,7 +9,7 @@ import { cloneDeep, isEqual } from "lodash-es";
 import { Button } from "@/shared/ui";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import useUserConfig from "@/features/auth/store/useUserConfig";
 import EnvDropdown from "@/features/environment/components/EnvDropdown";
@@ -26,7 +26,7 @@ const ToolBar: FC<Props> = ({}) => {
     (state) => state.http!.activeEnvironment || "",
   );
 
-  const apisData = useApis((store) => store.apisActiveData);
+  const apisData = useRequestWorkspaceStore((store) => store.apisActiveData);
 
   const isReadonly = useUserConfig((state) => state.isReadonly);
 

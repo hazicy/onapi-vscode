@@ -6,15 +6,15 @@ const sessionState = await load(
   "apps/webviews/src/features/requests/execution/session.ts",
 );
 const socketState = await load(
-  "apps/webviews/src/features/requests/execution/socket-state.ts",
+  "apps/webviews/src/features/requests/protocols/shared/socket-state.ts",
   () => sessionState,
 );
 const { createStore } = await nativeDependency("zustand/vanilla");
 async function createSocketStore() {
   const { default: store } = await load(
-    "apps/webviews/src/features/requests/store/useApis/websocket.ts",
+    "apps/webviews/src/features/requests/store/useSocketConnectionsStore.ts",
     (id) =>
-      id.endsWith("execution/session")
+      id.endsWith("/session")
         ? sessionState
         : id.includes("socket-state")
           ? socketState

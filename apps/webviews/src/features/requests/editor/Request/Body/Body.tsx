@@ -47,7 +47,7 @@ const RequestBody: FC<RequestBodyProps> = (props) => {
   }, [calcBodyModeValue, props, language]);
 
   const handleGenerateParameterByAi = () => {
-    import("@/features/requests/utils/generateMockBody")
+    import("@/features/requests/editor/Request/Body/generate-mock-body")
       .then(({ generateMockBody }) => generateMockBody(value?.raw))
       .then((mockData: unknown) => {
         if (typeof mockData !== "string" || !mockData) {

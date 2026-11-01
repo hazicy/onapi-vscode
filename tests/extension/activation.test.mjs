@@ -33,7 +33,7 @@ for (const failAt of ["storage", "initialization"]) {
               onDidChangeConfiguration: () => ({ dispose() {} }),
             },
           };
-        if (id.endsWith("/repository"))
+        if (id.endsWith("/json-repository"))
           return {
             JsonRepository: class {
               error =

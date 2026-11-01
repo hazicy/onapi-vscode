@@ -27,7 +27,7 @@ import type {
 import { randomUUID } from "node:crypto";
 import { registerSidebarTree } from "./features/sidebar/register";
 
-import { JsonRepository } from "./platform/storage/repository";
+import { JsonRepository } from "./platform/storage/json-repository";
 import { storageChanged } from "./platform/storage/events";
 import { globalConfig } from "./app/config";
 import { getCurrentProjectConfig } from "./platform/storage/project-config";

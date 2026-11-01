@@ -14,7 +14,7 @@ const result = await build({
 export * from './packages/domain/src/mock/expressions.ts';
 export {generateIdCard,generateBankCard} from './packages/domain/src/mock/cards.ts';
 export {default as MockSchema} from './packages/domain/src/mock/schema.ts';
-export {generateMockBody} from './apps/webviews/src/features/requests/utils/generateMockBody';
+export {generateMockBody} from './apps/webviews/src/features/requests/editor/Request/Body/generate-mock-body';
 export {createVariableReplacer, prepareWebSocket} from './packages/runtime/src/websocket/options';`,
     resolveDir: process.cwd(),
   },

@@ -1,5 +1,5 @@
-import { hasCompletedResponse } from "@/features/requests/execution/http-state";
-import type { HttpExecutionState } from "@/features/requests/execution/http-state";
+import { hasCompletedResponse } from "@/features/requests/protocols/http/http-state";
+import type { HttpExecutionState } from "@/features/requests/protocols/http/http-state";
 import { responseText } from "@onapi/domain";
 import styles from "./Realtime.module.css";
 import { memo, useEffect, useRef } from "react";
@@ -10,7 +10,7 @@ import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import {
   isEventStream,
   eventStreamText,
-} from "@/features/requests/execution/event-stream";
+} from "@/features/requests/protocols/http/event-stream";
 import EventStream from "./EventStream";
 
 interface Props {

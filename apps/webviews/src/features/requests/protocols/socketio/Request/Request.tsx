@@ -1,6 +1,6 @@
-import { getSocketConnectionStatus } from "@/features/requests/execution/socket-state";
+import { getSocketConnectionStatus } from "@/features/requests/protocols/shared/socket-state";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
-import { selectRequestIndex } from "@/features/requests/store/useApis";
+import { selectRequestIndex } from "@/features/requests/store/useRequestWorkspaceStore";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -12,12 +12,12 @@ import context from "@/shared/components/RawEditor/visualizationContext";
 import RequestTable from "@/shared/components/RequestTable/RequestTable";
 import useTableColumnSwitchConfig from "@/features/settings/hooks/useTableColumnSwitchConfig";
 
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
-import useWebSocketStore from "@/features/requests/store/useApis/websocket";
+import useSocketConnectionsStore from "@/features/requests/store/useSocketConnectionsStore";
 import { ApisBaseDataItem } from "@onapi/domain/requests/types/base";
 import { SocketIoDetailsData } from "@onapi/domain/requests/types/socketio";
-import { genUrlByQuery } from "@/features/requests/utils/apis";
+import { genUrlByQuery } from "@onapi/domain/request-utils";
 import {
   calcTabLineBodyHeaderNum,
   getAllParentDirectories,
@@ -35,10 +35,12 @@ const Request: React.FC<Props> = (props) => {
   const { value, onChange, readOnly } = props || {};
   const { Provider } = context;
   const { request } = value || {};
-  const apisActiveKey = useApis((state) => state.apisActiveData.id);
-  const apiDetailsData = useApis(selectRequestIndex);
+  const apisActiveKey = useRequestWorkspaceStore(
+    (state) => state.apisActiveData.id,
+  );
+  const apiDetailsData = useRequestWorkspaceStore(selectRequestIndex);
   const globalParams = useProjectConfig((state) => state.globalParams);
-  const websocketConnectionPool = useWebSocketStore(
+  const websocketConnectionPool = useSocketConnectionsStore(
     (state) => state.websocketConnectionPool,
   );
   const [allParentDirectories, setAllParentDirectories] = useSafeState<{

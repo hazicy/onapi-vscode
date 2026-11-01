@@ -1,5 +1,5 @@
-import type { SchemaTreeNode } from "@/features/requests/utils/graphql/types";
-import styles from "../GraphQLQuery.module.css";
+import type { SchemaTreeNode } from "@/features/requests/protocols/graphql/schema/types";
+import styles from "./GraphQLQuery.module.css";
 import React, { Key, useEffect, useMemo, useRef, useState } from "react";
 
 import { Tree } from "@/shared/ui/base";
@@ -9,7 +9,7 @@ import { TreeProps } from "@/shared/ui/base";
 import { t } from "i18next";
 
 import { AppIcon, Input } from "@/shared/ui";
-import { getChildTree } from "@/features/requests/utils/graphql/schema2tree";
+import { getChildTree } from "@/features/requests/protocols/graphql/schema/schema-tree";
 
 import TitleRender from "./TitleRender";
 

@@ -32,7 +32,7 @@ const Encoding = (props: any) => {
   );
 };
 
-const Oauth1 = () => {
+const OAuth1 = () => {
   const { t } = useTranslation();
   const { signatureMethod, addParamsToHeader } = useAuthValues(
     AUTH_ENUM.OAUTH1,
@@ -177,4 +177,4 @@ const Oauth1 = () => {
   );
 };
 
-export default Oauth1;
+export default OAuth1;

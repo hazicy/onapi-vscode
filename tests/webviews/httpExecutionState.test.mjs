@@ -5,7 +5,7 @@ const sessionState = await load(
   "apps/webviews/src/features/requests/execution/session.ts",
 );
 const { reduceHttpExecutionEvent: reduce, hasCompletedResponse } = await load(
-  "apps/webviews/src/features/requests/execution/http-state.ts",
+  "apps/webviews/src/features/requests/protocols/http/http-state.ts",
   () => sessionState,
 );
 const { consumeExecutionEvent } = await load(

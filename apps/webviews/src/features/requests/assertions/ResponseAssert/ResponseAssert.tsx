@@ -1,7 +1,7 @@
 import styles from "./ResponseAssert.module.css";
 import { useTranslation } from "react-i18next";
 import Empty from "@/shared/ui/Empty";
-import type { HttpExecutionState } from "@/features/requests/execution/http-state";
+import type { HttpExecutionState } from "@/features/requests/protocols/http/http-state";
 import AssertList from "./AssertList";
 
 export default function ResponseAssert({

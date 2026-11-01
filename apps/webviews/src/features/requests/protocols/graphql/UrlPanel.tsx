@@ -5,8 +5,8 @@ import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import {
   beginRequest,
   cancelRequest,
-} from "@/features/requests/utils/requestExecution";
-import { selectRequestIndex } from "@/features/requests/store/useApis";
+} from "@/features/requests/execution/request-actions";
+import { selectRequestIndex } from "@/features/requests/store/useRequestWorkspaceStore";
 import { requestUrl, editedUrl } from "@onapi/domain";
 import styles from "../../RequestWorkspace.module.css";
 import styles2 from "./UrlPanel.module.css";
@@ -20,10 +20,10 @@ import { cloneDeep, head, isEqual } from "lodash-es";
 import UrlGroup from "@/features/requests/editor/UrlGroup";
 import { AppIcon } from "@/shared/ui";
 
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import useUserConfig from "@/features/auth/store/useUserConfig";
 import type { HttpEditorRecord as GraphQLDetailsData } from "@onapi/domain/requests/record";
-import { getCollectionServerId } from "@/features/requests/utils/apis";
+import { getCollectionServerId } from "@onapi/domain/request-utils";
 import { convertToSaveFolderTree } from "@/shared/utils/common";
 
 import { AnyObject } from "@onapi/domain/types/common";
@@ -31,13 +31,23 @@ import { AnyObject } from "@onapi/domain/types/common";
 const Index = memo((props: HttpEditorProps) => {
   const { t } = useTranslation();
   const { apisData, onApisDataChange } = props;
-  const curApiSendingData = useApis((state) => state.currentSendingData);
-  const apisActiveData = useApis((store) => store.apisActiveData);
-  const apiDetailsData = useApis(selectRequestIndex);
-  const apiOriginDetailsList = useApis((store) => store.apiOriginDetailsList);
+  const curApiSendingData = useRequestWorkspaceStore(
+    (state) => state.currentSendingData,
+  );
+  const apisActiveData = useRequestWorkspaceStore(
+    (store) => store.apisActiveData,
+  );
+  const apiDetailsData = useRequestWorkspaceStore(selectRequestIndex);
+  const apiOriginDetailsList = useRequestWorkspaceStore(
+    (store) => store.apiOriginDetailsList,
+  );
 
-  const updateCurrentServerId = useApis((store) => store.updateCurrentServerId);
-  const currentServerId = useApis((store) => store.currentServerId);
+  const updateCurrentServerId = useRequestWorkspaceStore(
+    (store) => store.updateCurrentServerId,
+  );
+  const currentServerId = useRequestWorkspaceStore(
+    (store) => store.currentServerId,
+  );
 
   const isReadonly = useUserConfig((state) => state.isReadonly);
   const [saveLoading, setSaveLoading] = useState(false);
@@ -65,7 +75,7 @@ const Index = memo((props: HttpEditorProps) => {
     [apisData],
   );
   const currentData = (): GraphQLDetailsData => {
-    const latest = useApis.getState().apisActiveData;
+    const latest = useRequestWorkspaceStore.getState().apisActiveData;
     return latest?.id === apisData.id &&
       (latest.kind === "api" || latest.kind === "graphql")
       ? latest

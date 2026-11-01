@@ -6,7 +6,7 @@ import { Flex, Input, Select } from "@/shared/ui/base";
 
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
-import useWebSocketStore from "@/features/requests/store/useApis/websocket";
+import useSocketConnectionsStore from "@/features/requests/store/useSocketConnectionsStore";
 
 interface Props {
   filterValue: string;
@@ -19,10 +19,10 @@ const Header = (props: Props) => {
   const { t } = useTranslation();
   const { filterValue, setFilterValue, filterType, setFilterType, id } =
     props || {};
-  const websocketConnectionPool = useWebSocketStore(
+  const websocketConnectionPool = useSocketConnectionsStore(
     (state) => state.websocketConnectionPool,
   );
-  const updateWebSocketConnectionPool = useWebSocketStore(
+  const updateWebSocketConnectionPool = useSocketConnectionsStore(
     (state) => state.updateWebSocketConnectionPool,
   );
 

@@ -2,7 +2,7 @@ import { useState } from "react";
 import GraphQLDebug from "@/features/requests/protocols/graphql/GraphQLDebug";
 import HttpDebug from "@/features/requests/protocols/http/HttpDebug";
 import ResponseResult from "@/features/requests/response/ResponseResult/ResponseResult";
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import workspaceStyles from "@/features/requests/RequestWorkspace.module.css";
 
 export default function RequestPanelFixture() {
@@ -43,8 +43,12 @@ export default function RequestPanelFixture() {
       <button onClick={() => setWidth(1000)}>Wide panel</button>
       <button
         onClick={() =>
-          useApis.getState().updateCurrentSendingData({
-            status: "failed",
+          useRequestWorkspaceStore.getState().updateCurrentSendingData({
+            session: {
+              executionId: "request-fixture",
+              sequence: 1,
+              status: "failed",
+            },
             error: {
               message:
                 new URLSearchParams(location.search).get("error") ||

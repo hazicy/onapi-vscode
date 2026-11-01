@@ -1,7 +1,7 @@
 import type { HttpEditorRecord } from "@onapi/domain/requests/record";
 import { useMemoizedFn } from "ahooks";
 import { GraphQLChangeFuncType } from "@onapi/domain/requests/types/graphql";
-import GraphQLQueryContext from "./context/GraphQLQueryContext";
+import GraphQLQueryContext from "./graphql-query-context";
 import GraphQLQueryEditor from "./GraphQLQueryEditor";
 
 interface Props {

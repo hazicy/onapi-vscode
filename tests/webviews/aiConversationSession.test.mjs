@@ -45,13 +45,9 @@ test("AI cancellation saves partial output once before the session rejects later
     sendRequestPanelMessage: (command) => commands.push(command),
   };
   const execution = await load(
-    "apps/webviews/src/features/requests/protocols/shared/useProtocolExecution.ts",
+    "apps/webviews/src/features/requests/execution/useProtocolExecution.ts",
     (id) =>
-      id === "react"
-        ? react
-        : id.endsWith("execution/session")
-          ? sessions
-          : bridge,
+      id === "react" ? react : id.endsWith("/session") ? sessions : bridge,
     globals,
   );
   const { useAiConversation } = await load(

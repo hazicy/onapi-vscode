@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import load from "../helpers/loadTypeScript.mjs";
 const { responseDownload } = await load(
-  "apps/webviews/src/features/requests/utils/response-download.ts",
+  "apps/webviews/src/features/requests/response/response-download.ts",
   () => ({}),
   { Uint8Array },
 );

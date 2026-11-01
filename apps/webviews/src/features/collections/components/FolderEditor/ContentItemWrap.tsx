@@ -5,7 +5,7 @@ import { useMemoizedFn } from "ahooks";
 
 import { SuspenseContent } from "@/shared/components";
 
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import { ApiDetailsData, ApisData } from "@onapi/domain/requests/types/api";
 
 interface Props {
@@ -23,7 +23,9 @@ const ContentItemWrap: FC<Props> = memo((props) => {
   const { apisData } = props;
 
   const onApisDataChange = useMemoizedFn((data: ApiDetailsData) => {
-    useApis.getState().updateApisActiveData(editorRecordSchema.parse(data));
+    useRequestWorkspaceStore
+      .getState()
+      .updateApisActiveData(editorRecordSchema.parse(data));
   });
 
   return (

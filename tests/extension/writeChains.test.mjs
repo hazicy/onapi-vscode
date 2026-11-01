@@ -141,8 +141,6 @@ async function fixture(
           );
         },
       };
-    if (id === "@/features/requests/utils/apis")
-      return { createBatchApi: (items) => items };
     if (id === "vscode")
       return {
         TabInputCustom,

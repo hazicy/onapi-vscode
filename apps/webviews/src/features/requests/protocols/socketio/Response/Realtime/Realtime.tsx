@@ -1,4 +1,4 @@
-import { getSocketConnectionStatus } from "@/features/requests/execution/socket-state";
+import { getSocketConnectionStatus } from "@/features/requests/protocols/shared/socket-state";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import type { SocketIoDetailsData } from "@onapi/domain/requests/types/socketio";
 import styles from "../../SocketIoDebug.module.css";
@@ -26,12 +26,12 @@ import ResponseResult from "@/features/requests/response/ResponseResult/Response
 
 import Empty from "../../../websocket/Response/Empty";
 import Button from "@/shared/ui/Button";
-import useApis from "@/features/requests/store/useApis";
-import useWebSocketStore from "@/features/requests/store/useApis/websocket";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
+import useSocketConnectionsStore from "@/features/requests/store/useSocketConnectionsStore";
 
 import { hexToRGBA } from "@/shared/utils/common";
 
-import useWebSocket from "../../useWebSocket";
+import useSocketIoConnection from "../../useSocketIoConnection";
 import ExampleModal from "./ExampleModal";
 import Header from "./Header";
 import { getSendStr, handleSocketResponse, stringToColor } from "./utils";
@@ -43,12 +43,14 @@ interface Props {
 
 const Realtime: React.FC<Props> = ({ id, onChange }) => {
   const { t } = useTranslation();
-  const websocketConnectionPool = useWebSocketStore(
+  const websocketConnectionPool = useSocketConnectionsStore(
     (state) => state.websocketConnectionPool,
   );
-  const { updatePool } = useWebSocket();
+  const { updatePool } = useSocketIoConnection();
   const apisActiveKey = id;
-  const value = useApis((state) => state.apisActiveData) as SocketIoDetailsData;
+  const value = useRequestWorkspaceStore(
+    (state) => state.apisActiveData,
+  ) as SocketIoDetailsData;
   const [mode, setMode] = useSafeState<any>("text");
   const [data, setData] = useSafeState<any>({});
   useEffect(() => {

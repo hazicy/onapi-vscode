@@ -4,7 +4,7 @@ import { useStorage } from "@/app/store";
 import {
   readAuthValues,
   updateAuthValues,
-} from "@/features/requests/editor/Request/Auth/authState";
+} from "@/features/requests/editor/Request/Auth/auth-state";
 import { message } from "@/shared/ui/base";
 import { cloneDeep, isPlainObject, isString, setWith } from "lodash-es";
 import { useTranslation } from "react-i18next";

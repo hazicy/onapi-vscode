@@ -19,7 +19,7 @@ import type {
   QueryValue,
 } from "./types";
 
-export function json2graphql(tree: QueryDocument) {
+export function printGraphQLQuery(tree: QueryDocument) {
   // Create AST node
   const ast: DocumentNode = {
     kind: Kind.DOCUMENT,

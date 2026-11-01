@@ -1,4 +1,4 @@
-import Oauth2 from "@/features/requests/editor/Request/Auth/components/Oauth2";
+import OAuth2 from "@/features/requests/editor/Request/Auth/components/OAuth2";
 import { useState } from "react";
 import {
   AuthField,
@@ -64,7 +64,7 @@ export default function AuthFixture() {
       >
         OAuth2 auth
       </button>
-      {value.type === "oauth2" && <Oauth2 onChange={() => {}} />}
+      {value.type === "oauth2" && <OAuth2 onChange={() => {}} />}
       <output aria-label="Auth data">{JSON.stringify(value)}</output>
     </AuthContext.Provider>
   );

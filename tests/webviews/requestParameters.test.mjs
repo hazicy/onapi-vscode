@@ -6,7 +6,7 @@ import { nativeDependency } from "../helpers/loadTypeScript.mjs";
 // Isolate parameter reconciliation from the UI store and transport dependencies.
 let nextId = 0;
 const exportsObject = await load(
-  "apps/webviews/src/features/requests/utils/apis.ts",
+  "apps/webviews/src/features/requests/editor/request-parameters.ts",
   (id) => {
     if (id === "lodash-es" || id === "url-parse" || id === "immer")
       return nativeDependency(id);

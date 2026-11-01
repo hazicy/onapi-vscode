@@ -18,9 +18,9 @@ before(async () => {
       export { HttpAdapter } from './packages/runtime/src/http/adapter.ts';
       export { WebSocketAdapter } from './packages/runtime/src/websocket/adapter.ts';
       export { SocketIoAdapter } from './packages/runtime/src/socketio/adapter.ts';
-      export { reduceHttpExecutionEvent } from './apps/webviews/src/features/requests/execution/http-state.ts';
+      export { reduceHttpExecutionEvent } from './apps/webviews/src/features/requests/protocols/http/http-state.ts';
       export { consumeExecutionEvent } from './apps/webviews/src/features/requests/execution/consume-event.ts';
-      export { reduceSocketExecutionEvent } from './apps/webviews/src/features/requests/execution/socket-state.ts';
+      export { reduceSocketExecutionEvent } from './apps/webviews/src/features/requests/protocols/shared/socket-state.ts';
       export { relayExecutionEvent } from './apps/extension/src/platform/execution/webview-relay.ts';
     `,
       resolveDir: process.cwd(),

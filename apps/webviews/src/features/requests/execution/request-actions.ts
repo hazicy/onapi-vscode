@@ -1,9 +1,10 @@
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
-import { reduceHttpExecutionEvent } from "@/features/requests/execution/http-state";
-import useApis from "@/features/requests/store/useApis";
+import { reduceHttpExecutionEvent } from "@/features/requests/protocols/http/http-state";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 
 export function beginRequest(): string | undefined {
-  const { currentSendingData, updateCurrentSendingData } = useApis.getState();
+  const { currentSendingData, updateCurrentSendingData } =
+    useRequestWorkspaceStore.getState();
   if (currentSendingData?.session?.status === "running") {
     return undefined;
   }
@@ -18,7 +19,8 @@ export function beginRequest(): string | undefined {
 }
 
 export function cancelRequest(): void {
-  const { currentSendingData, updateCurrentSendingData } = useApis.getState();
+  const { currentSendingData, updateCurrentSendingData } =
+    useRequestWorkspaceStore.getState();
   if (
     currentSendingData?.session?.status !== "running" ||
     !currentSendingData.session.executionId

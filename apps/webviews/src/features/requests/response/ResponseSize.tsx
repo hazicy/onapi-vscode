@@ -1,5 +1,5 @@
 import type { SerializedResponse } from "@onapi/contracts";
-import { responseDownload } from "../utils/response-download";
+import { responseDownload } from "./response-download";
 
 import styles from "./ResponseSize.module.css";
 import React, { memo, useMemo } from "react";

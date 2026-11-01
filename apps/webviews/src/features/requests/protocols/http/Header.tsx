@@ -5,7 +5,7 @@ import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import {
   beginRequest,
   cancelRequest,
-} from "@/features/requests/utils/requestExecution";
+} from "@/features/requests/execution/request-actions";
 import { requestUrl, requestMethod, editedUrl } from "@onapi/domain";
 
 import { AnyObject } from "@onapi/domain/types/common";
@@ -13,16 +13,18 @@ import { produce } from "immer";
 import React, { FC, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { isEqual } from "lodash-es";
-import { getNewApisDataByCurlChange } from "@/features/requests/utils/apis";
+import { applyCurlRequest } from "./curl-request";
 import UrlGroup from "@/features/requests/editor/UrlGroup";
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import styles from "./Header.module.css";
 
-import { CurlDataType } from "@/features/requests/types/other";
+import { ConvertedCurlRequest } from "@/features/curl/types";
 
 const Header: FC<HttpEditorProps> = ({ apisData, onApisDataChange, type }) => {
   const { t } = useTranslation();
-  const currentSendingData = useApis((store) => store.currentSendingData);
+  const currentSendingData = useRequestWorkspaceStore(
+    (store) => store.currentSendingData,
+  );
 
   const [curServerId, SetCurServerId] = useState("");
 
@@ -76,8 +78,8 @@ const Header: FC<HttpEditorProps> = ({ apisData, onApisDataChange, type }) => {
     [apisData],
   );
 
-  const curlChange = (d: CurlDataType) => {
-    const newData = getNewApisDataByCurlChange(apisData, d);
+  const curlChange = (d: ConvertedCurlRequest) => {
+    const newData = applyCurlRequest(apisData, d);
     onApisDataChange(newData);
   };
 

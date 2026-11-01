@@ -7,7 +7,7 @@ import { memo, ReactNode } from "react";
 
 import { useMemoizedFn } from "ahooks";
 
-import GraphQLQuery from "@/features/requests/graphql/GraphQLQuery/GraphQLQuery";
+import GraphQLQuery from "@/features/requests/protocols/graphql/editor/GraphQLQuery";
 
 import context from "@/shared/components/RawEditor/visualizationContext";
 import RequestPanel from "@/features/requests/editor/Request/Request";

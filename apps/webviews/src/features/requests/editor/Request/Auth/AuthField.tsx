@@ -9,7 +9,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { Field } from "@/shared/ui/base/Field";
 import AppIcon from "@/shared/ui/AppIcon";
-import { readAuthValues, updateAuthValues } from "./authState";
+import { readAuthValues, updateAuthValues } from "./auth-state";
 
 type AuthContextValue = {
   value: any;

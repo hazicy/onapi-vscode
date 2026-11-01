@@ -3,7 +3,7 @@ import RequestAction from "@/features/requests/components/RequestAction";
 import { useState } from "react";
 import type { McpEditorRecord } from "@onapi/domain/requests/record";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
-import { useProtocolExecution } from "../shared/useProtocolExecution";
+import { useProtocolExecution } from "../../execution/useProtocolExecution";
 import {
   ProtocolEditor,
   HeadersEditor,

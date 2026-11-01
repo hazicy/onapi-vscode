@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import WebSocketDebug from "@/features/requests/protocols/websocket/WebSocketDebug";
 import SocketIoDebug from "@/features/requests/protocols/socketio/SocketIoDebug";
-import useApis from "@/features/requests/store/useApis";
-import useSocket from "@/features/requests/store/useApis/websocket";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
+import useSocketConnectionsStore from "@/features/requests/store/useSocketConnectionsStore";
 import {
   DEFAULT_WEBSOCKET_MESSAGE,
   DEFAULT_SOCKETIO_REQUEST,
@@ -36,7 +36,7 @@ export default function SocketWorkspaceFixture() {
     ack: -1,
   });
   useEffect(() => {
-    useApis.getState().updateApisActiveData(item);
+    useRequestWorkspaceStore.getState().updateApisActiveData(item);
   }, [item]);
   window.vscode = {
     postMessage: (message: unknown) => {
@@ -51,12 +51,16 @@ export default function SocketWorkspaceFixture() {
       <button onClick={() => setWidth(1000)}>Wide panel</button>
       <button
         onClick={() =>
-          useSocket.getState().updateWebSocketConnectionPool({
+          useSocketConnectionsStore.getState().updateWebSocketConnectionPool({
             "socket-ui": {
-              status: "connect",
+              session: {
+                executionId: "socket-fixture",
+                sequence: 1,
+                status: "running",
+                opened: true,
+              },
               socketRes: [
                 {
-                  id: "received",
                   action: "message",
                   message: socketio
                     ? {

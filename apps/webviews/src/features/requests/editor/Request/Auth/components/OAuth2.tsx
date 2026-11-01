@@ -3,7 +3,7 @@ import {
   scopeValues,
   selectActiveEnvironment,
 } from "@/features/project/store/useProjectConfig/selectors";
-import { validateOAuth2 } from "../authState";
+import { validateOAuth2 } from "../auth-state";
 import { AuthField, useAuth, useAuthValues } from "../AuthField";
 import "../style.css";
 import styles from "../Auth.module.css";
@@ -28,7 +28,7 @@ import {
   AUTH_OAUTH2_GRANT_TYPE_MAP,
   AUTH_OAUTH2_LOCATION,
 } from "@onapi/domain/requests/constants/auth";
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import useUserConfig from "@/features/auth/store/useUserConfig";
 import { useStorage } from "@/app/store";
@@ -40,9 +40,9 @@ import {
 import {
   resolveOAuth2Parameters,
   resolveOAuth2Variables,
-} from "@/features/requests/utils/oauth2Variables";
+} from "@/features/requests/editor/Request/Auth/oauth2-variables";
 
-import Oauth2ParamsTable, { type DataSourceItem } from "./Oauth2ParamsTable";
+import OAuth2ParamsTable, { type DataSourceItem } from "./OAuth2ParamsTable";
 
 type ObjectItem = { [key: string]: string };
 
@@ -67,7 +67,7 @@ interface Props {
   id?: string | undefined;
 }
 
-const Oauth2 = (props: Props) => {
+const OAuth2 = (props: Props) => {
   const { t } = useTranslation();
   const { setErrors } = useAuth();
   const oauth2 = useAuthValues(AUTH_ENUM.OAUTH2);
@@ -78,7 +78,9 @@ const Oauth2 = (props: Props) => {
   const { grant_type: grantType, clientId, refreshTokenUrl } = oauth2;
   const globals = useProjectConfig((state) => state.http.options.globals);
   const environment = useProjectConfig(selectActiveEnvironment);
-  const apisActiveKey = useApis((state) => state.apisActiveData.id);
+  const apisActiveKey = useRequestWorkspaceStore(
+    (state) => state.apisActiveData.id,
+  );
   const uid = useUserConfig((state) => state?.userInfo?.uid);
   const getOauthRefreshData = useStorage((state) => state.getOauthRefreshData);
 
@@ -201,7 +203,7 @@ const Oauth2 = (props: Props) => {
             {t("common.auth.auth_table_tip")}
           </Typography.Text>
           <AuthField noStyle name={[AUTH_ENUM.OAUTH2, "authRequestParams"]}>
-            <Oauth2ParamsTable />
+            <OAuth2ParamsTable />
           </AuthField>
         </Flex>
       ),
@@ -218,7 +220,7 @@ const Oauth2 = (props: Props) => {
             {t("common.auth.token_table_tip")}
           </Typography.Text>
           <AuthField noStyle name={[AUTH_ENUM.OAUTH2, "tokenRequestParams"]}>
-            <Oauth2ParamsTable hasSendIn />
+            <OAuth2ParamsTable hasSendIn />
           </AuthField>
         </Flex>
       ),
@@ -235,7 +237,7 @@ const Oauth2 = (props: Props) => {
             {t("common.auth.refresh_table_tip")}
           </Typography.Text>
           <AuthField noStyle name={[AUTH_ENUM.OAUTH2, "refreshRequestParams"]}>
-            <Oauth2ParamsTable hasSendIn />
+            <OAuth2ParamsTable hasSendIn />
           </AuthField>
         </Flex>
       ),
@@ -660,4 +662,4 @@ const Oauth2 = (props: Props) => {
   );
 };
 
-export default Oauth2;
+export default OAuth2;

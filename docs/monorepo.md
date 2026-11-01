@@ -67,12 +67,15 @@ components. Host-only socket parameter preparation lives in
 `apps/extension/src/features/requests/execution/`, outside both shared
 packages. A type being used during execution does not make it a wire contract.
 
-Webview execution routing forwards socket envelopes unchanged to the socket
-store. Its pure reducer in `features/requests/execution/socket-state.ts` owns
-session correlation, sequence checks, terminal states, handshake metadata and
-timeline projection. Protocol hooks issue commands; they do not reinterpret
-incoming execution events. Reconnection starts a new pending identity while
-retaining message history and clearing the previous handshake.
+Webview execution routing forwards socket envelopes unchanged to
+`features/requests/store/useSocketConnectionsStore.ts`. The shared
+`features/requests/execution/session.ts` owns session identity, sequence checks
+and terminal transitions. HTTP payloads are reduced in
+`protocols/http/http-state.ts`; socket handshakes and timelines are reduced in
+`protocols/shared/socket-state.ts`. `execution/useProtocolExecution.ts` connects
+AI, MCP and gRPC to the same session rules. Protocol connection hooks issue
+commands. Reconnection starts a new pending identity while retaining message
+history and clearing the previous handshake.
 
 The domain package still includes shared application configuration and Mock
 utilities used by multiple consumers. These are existing responsibilities, not
@@ -129,6 +132,12 @@ apps/extension/src/
     documentation/
   platform/
     storage/
+      index.ts                # Public storage access
+      json-repository.ts      # Snapshots, persistence and recovery
+      storage-lock.ts         # Cross-process storage exclusion
+      collection-files.ts     # Collection change planning and journal validation
+      project-config.ts
+      events.ts
     locale/
     webviews/
 ```

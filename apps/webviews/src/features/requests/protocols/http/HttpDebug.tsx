@@ -10,7 +10,7 @@ import { produce } from "immer";
 import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
 import SuspenseContent from "@/shared/components/SuspenseContent";
 
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 import Request from "@/features/requests/editor/Request/Request";
 import Response from "./Response";
 import Header from "./Header";
@@ -33,7 +33,9 @@ const panelProps = {
 
 const ApiDebug: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
   const { t } = useTranslation();
-  const updateApiCodeHar = useApis((store) => store.updateApiCodeHar);
+  const updateApiCodeHar = useRequestWorkspaceStore(
+    (store) => store.updateApiCodeHar,
+  );
   const [openGenerateCode, setOpenGenerateCode] = useState<boolean>(false);
 
   const [requestTabActiveKey, setRequestTabActiveKey] =

@@ -3,7 +3,7 @@ import {
   acceptsSession,
   beginSession,
   type ExecutionSession,
-} from "../../execution/session";
+} from "../execution/session";
 import { create, devtools } from "@/shared/state/store";
 
 import type { ExecutionEnvelope } from "@onapi/contracts";
@@ -12,7 +12,7 @@ import {
   type SocketConnection,
   type SocketTimelineEntry,
   type ConnectionStatus,
-} from "@/features/requests/execution/socket-state";
+} from "@/features/requests/protocols/shared/socket-state";
 
 type Pool = Record<string, SocketConnection>;
 type State = { websocketConnectionPool: Pool };
@@ -33,7 +33,7 @@ type Action = {
   consumeExecutionEvent: (event: ExecutionEnvelope) => void;
 };
 
-const useApisWebSocket = create<State & Action>()(
+const useSocketConnectionsStore = create<State & Action>()(
   devtools(
     (set) => ({
       websocketConnectionPool: {},
@@ -131,11 +131,11 @@ const useApisWebSocket = create<State & Action>()(
         });
       },
     }),
-    { name: "useApisWebSocket" },
+    { name: "useSocketConnectionsStore" },
   ),
 );
 
-export default useApisWebSocket;
+export default useSocketConnectionsStore;
 
 function transitionConnection(
   previous: ExecutionSession | undefined,

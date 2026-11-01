@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import load from "../helpers/loadTypeScript.mjs";
 const { parseEventStream, isEventStream, eventStreamText } = await load(
-  "apps/webviews/src/features/requests/execution/event-stream.ts",
+  "apps/webviews/src/features/requests/protocols/http/event-stream.ts",
 );
 const plain = (value) => JSON.parse(JSON.stringify(value));
 

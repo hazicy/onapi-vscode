@@ -10,9 +10,9 @@ test("MCP connection and request sessions order independently and cleanup reject
   let cleanup;
   const received = [];
   const { useProtocolExecution } = await load(
-    "apps/webviews/src/features/requests/protocols/shared/useProtocolExecution.ts",
+    "apps/webviews/src/features/requests/execution/useProtocolExecution.ts",
     (id) =>
-      id.endsWith("execution/session")
+      id.endsWith("/session")
         ? sessions
         : id === "react"
           ? {

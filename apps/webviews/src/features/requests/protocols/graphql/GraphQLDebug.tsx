@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { ResizablePanels, SuspenseContent } from "@/shared/components";
 
 import ResponseRealtimeContext from "@/features/requests/response/Response/components/Realtime/context";
-import GraphQLResponseContext from "@/features/requests/graphql/graphql-response-context";
+import GraphQLResponseContext from "@/features/requests/protocols/graphql/graphql-response-context";
 import { DirectionContext } from "@/shared/contexts";
 
 import { DirectionType } from "@onapi/domain/types/common";
@@ -18,7 +18,7 @@ import ToolBar from "../http/ToolBar";
 
 import { Flex } from "@/shared/ui/base";
 import { Button } from "@/shared/ui";
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 const GenerateCodeModal = lazy(
   () => import("@/features/requests/code-generation/GenerateCodeModal"),
 );
@@ -36,7 +36,9 @@ const Index: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
   const { t } = useTranslation();
   const [apiScreenDirection, setApiScreenDirection] =
     useState<DirectionType>("vertical");
-  const updateApiCodeHar = useApis((store) => store.updateApiCodeHar);
+  const updateApiCodeHar = useRequestWorkspaceStore(
+    (store) => store.updateApiCodeHar,
+  );
   const [openGenerateCode, setOpenGenerateCode] = useState<boolean>(false);
   const handleDirectionChange = (direction: DirectionType) => {
     setApiScreenDirection(direction);

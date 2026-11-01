@@ -9,7 +9,7 @@ import {
   readRequestPanelResponse,
   sendRequestPanelMessage,
 } from "@/shared/bridge/request-panel";
-import { useProtocolExecution } from "../shared/useProtocolExecution";
+import { useProtocolExecution } from "../../execution/useProtocolExecution";
 
 export type GrpcMessage = {
   direction: "sent" | "received";

@@ -1,4 +1,4 @@
-import styles from "../GraphQLQuery.module.css";
+import styles from "./GraphQLQuery.module.css";
 import { memo, useContext, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -21,7 +21,7 @@ import {
   size,
 } from "lodash-es";
 
-import GraphQLSchemaProvider from "@/features/requests/graphql/GraphQLQuery/context/GraphQLSchemaProvider";
+import SchemaFilterContext from "@/features/requests/protocols/graphql/editor/schema-filter-context";
 import { Tooltip } from "@/shared/ui";
 import { Popover } from "@/shared/ui";
 
@@ -39,7 +39,7 @@ const TitleRender = memo((props: DataNode | any) => {
     path,
     readOnly = false,
   } = props || {};
-  const { filterData } = useContext(GraphQLSchemaProvider);
+  const { filterData } = useContext(SchemaFilterContext);
 
   const count = useMemo(() => {
     if (isEmpty(args)) {

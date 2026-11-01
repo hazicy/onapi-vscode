@@ -44,27 +44,27 @@ import {
   unionBy,
 } from "lodash-es";
 
-import GraphQLQueryContext from "@/features/requests/graphql/GraphQLQuery/context/GraphQLQueryContext";
-import GraphQLSchemaProvider from "@/features/requests/graphql/GraphQLQuery/context/GraphQLSchemaProvider";
+import GraphQLQueryContext from "@/features/requests/protocols/graphql/editor/graphql-query-context";
+import SchemaFilterContext from "@/features/requests/protocols/graphql/editor/schema-filter-context";
 import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
 import { Button, Empty, AppIcon } from "@/shared/ui";
-import useApis from "@/features/requests/store/useApis";
+import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 
 import { FilterDataType } from "@onapi/domain/requests/types/graphql";
 import { AnyObject } from "@onapi/domain/types/common";
-import { graphql2json } from "@/features/requests/utils/graphql/graphql2json";
+import { parseGraphQLQuery } from "@/features/requests/protocols/graphql/schema/parse-query";
 import {
   createArguments,
   createOperationDefinition,
-} from "@/features/requests/utils/graphql/json2graphql";
+} from "@/features/requests/protocols/graphql/schema/print-query";
 import {
   raw2tree,
   transformStructure,
-} from "@/features/requests/utils/graphql/schema2tree";
+} from "@/features/requests/protocols/graphql/schema/schema-tree";
 
-import ResizablePanels from "../../../../shared/components/ResizablePanels/ResizablePanels";
-import SuspenseContent from "../../../../shared/components/SuspenseContent";
-import SchemaTree from "./components/SchemaTree";
+import ResizablePanels from "../../../../../shared/components/ResizablePanels/ResizablePanels";
+import SuspenseContent from "../../../../../shared/components/SuspenseContent";
+import SchemaTree from "./SchemaTree";
 
 const panelProps = {
   defaultSize: 50,
@@ -83,9 +83,15 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
   const { data, onChange } = props;
   const { apiData } = useContext(GraphQLQueryContext);
 
-  const currentServerId = useApis((state) => state.currentServerId);
-  const schemaLoading = useApis((state) => state?.schemaLoading);
-  const updateSchemaLoading = useApis((state) => state.updateSchemaLoading);
+  const currentServerId = useRequestWorkspaceStore(
+    (state) => state.currentServerId,
+  );
+  const schemaLoading = useRequestWorkspaceStore(
+    (state) => state?.schemaLoading,
+  );
+  const updateSchemaLoading = useRequestWorkspaceStore(
+    (state) => state.updateSchemaLoading,
+  );
 
   const [checkedKeys, setCheckedKeys] = useState<string[]>([]);
   const [filterData, setFilterData] = useState<FilterDataType>({});
@@ -206,7 +212,7 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
   const { run: rawToTree } = useDebounceFn(
     (value) => {
       try {
-        const data = graphql2json(value);
+        const data = parseGraphQLQuery(value);
         const { keys, filterData } = getKeys([data]);
         const { checkedKeys } = getNewKeys(keys);
         setCheckedKeys(checkedKeys);
@@ -475,7 +481,7 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
     let queryKeys = [];
     if (searchData?.query) {
       try {
-        const data = graphql2json(searchData?.query);
+        const data = parseGraphQLQuery(searchData?.query);
         const { keys } = getKeys([data]);
         queryKeys = keys;
       } catch (err) {}
@@ -546,7 +552,7 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
     (key: "query" | "variables", val: string) => {
       // Read the committed request even when React has not rendered the previous
       // editor update yet. Independent field changes must preserve each other.
-      const active = useApis.getState().apisActiveData;
+      const active = useRequestWorkspaceStore.getState().apisActiveData;
       const body =
         active?.id === apiData.id && "request" in active
           ? active.request?.body || data
@@ -602,7 +608,7 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
   };
 
   return (
-    <GraphQLSchemaProvider.Provider
+    <SchemaFilterContext.Provider
       value={{ filterData, setFilterData, refreshCheck }}
     >
       <div className={styles.main}>
@@ -741,7 +747,7 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
           }
         />
       </div>
-    </GraphQLSchemaProvider.Provider>
+    </SchemaFilterContext.Provider>
   );
 });
 

@@ -7,10 +7,10 @@ const result = await build({
   stdin: {
     contents: [
       "./apps/webviews/src/shared/components/RequestTable/sdk.ts",
-      "./apps/webviews/src/features/requests/utils/executionView.ts",
-      "./apps/webviews/src/features/requests/utils/graphql/graphql2json.ts",
-      "./apps/webviews/src/features/requests/utils/graphql/json2graphql.ts",
-      "./apps/webviews/src/features/requests/utils/graphql/schema2tree.ts",
+      "./apps/webviews/src/features/requests/response/execution-view.ts",
+      "./apps/webviews/src/features/requests/protocols/graphql/schema/parse-query.ts",
+      "./apps/webviews/src/features/requests/protocols/graphql/schema/print-query.ts",
+      "./apps/webviews/src/features/requests/protocols/graphql/schema/schema-tree.ts",
     ]
       .map((file) => `export * from ${JSON.stringify(file)};`)
       .join("\n"),
@@ -32,8 +32,8 @@ const {
   rowToSdkParameter,
   sdkResponseView,
   sdkRequestView,
-  graphql2json,
-  json2graphql,
+  parseGraphQLQuery,
+  printGraphQLQuery,
   raw2tree,
   getChildTree,
 } = module.exports;
@@ -135,20 +135,20 @@ test("execution views read SDK snapshots without changing legacy payloads", () =
 test("GraphQL field ASTs preserve nested arguments, decimals and variable type wrappers", () => {
   const query =
     "query Example { user(limit: 1.5, filter: {active: true, ids: [1, 2]}) { id name } }";
-  const parsed = graphql2json(query);
-  const roundtrip = graphql2json(json2graphql(parsed));
+  const parsed = parseGraphQLQuery(query);
+  const roundtrip = parseGraphQLQuery(printGraphQLQuery(parsed));
   assert.deepEqual(roundtrip, parsed);
-  const document = json2graphql({
+  const document = printGraphQLQuery({
     name: "Names",
     variables: [{ name: "ids", type: "[ID!]", required: true }],
     children: [{ name: "names", arguments: [{ name: "ids", value: "$ids" }] }],
   });
   assert.match(document, /\$ids: \[ID!\]!/);
   assert.throws(
-    () => graphql2json("fragment Fields on User { id }"),
+    () => parseGraphQLQuery("fragment Fields on User { id }"),
     /operation/,
   );
-  assert.throws(() => graphql2json("{ user { ...Fields } }"), /fragments/);
+  assert.throws(() => parseGraphQLQuery("{ user { ...Fields } }"), /fragments/);
 });
 
 test("GraphQL schema expansion assigns descendant paths and terminates recursive object references", () => {

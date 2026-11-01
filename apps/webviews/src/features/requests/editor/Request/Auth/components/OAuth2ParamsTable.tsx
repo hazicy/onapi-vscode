@@ -31,7 +31,7 @@ const DEFAULT_ITEM = {
   enabled: true,
 };
 
-const Oauth2ParamsTable = ({
+const OAuth2ParamsTable = ({
   value,
   onChange,
   hasSendIn = false,
@@ -156,4 +156,4 @@ const Oauth2ParamsTable = ({
   );
 };
 
-export default Oauth2ParamsTable;
+export default OAuth2ParamsTable;

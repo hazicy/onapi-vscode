@@ -26,11 +26,11 @@ import {
   Jwt,
   Kv,
   Ntlm,
-  Oauth1,
-  Oauth2,
+  OAuth1,
+  OAuth2,
 } from "./components";
 
-import { updateAuthValues } from "./authState";
+import { updateAuthValues } from "./auth-state";
 
 import { AuthOauth2 } from "@onapi/domain/requests/types/auth";
 
@@ -69,8 +69,8 @@ const RequestAuth: FC<Props> = memo(
         [AUTH_ENUM.BASIC]: <Basic />,
         [AUTH_ENUM.JWT]: <Jwt />,
         [AUTH_ENUM.DIGEST]: <Digest />,
-        [AUTH_ENUM.OAUTH1]: <Oauth1 />,
-        [AUTH_ENUM.OAUTH2]: <Oauth2 onChange={oauth2Change} />,
+        [AUTH_ENUM.OAUTH1]: <OAuth1 />,
+        [AUTH_ENUM.OAUTH2]: <OAuth2 onChange={oauth2Change} />,
         [AUTH_ENUM.HAWK]: <Hawk />,
         [AUTH_ENUM.AWSV4]: <Awsv4 />,
         [AUTH_ENUM.NTLM]: <Ntlm />,

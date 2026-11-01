@@ -1,4 +1,4 @@
-import { getSocketConnectionStatus } from "@/features/requests/execution/socket-state";
+import { getSocketConnectionStatus } from "@/features/requests/protocols/shared/socket-state";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import clsx from "clsx";
 import styles from "../../WebSocketDebug.module.css";
@@ -16,9 +16,9 @@ import ResponseResult from "@/features/requests/response/ResponseResult/Response
 
 import Empty from "../Empty";
 import Button from "@/shared/ui/Button";
-import useWebSocketStore from "@/features/requests/store/useApis/websocket";
+import useSocketConnectionsStore from "@/features/requests/store/useSocketConnectionsStore";
 
-import useWebSocket from "../../useWebSocket";
+import useWebSocketConnection from "../../useWebSocketConnection";
 import Header from "./Header";
 import { getSocketContent, handleSocketResponse } from "./utils";
 
@@ -29,10 +29,10 @@ interface Props {
 
 const Realtime: React.FC<Props> = ({ value, onChange }) => {
   const { t } = useTranslation();
-  const websocketConnectionPool = useWebSocketStore(
+  const websocketConnectionPool = useSocketConnectionsStore(
     (state) => state.websocketConnectionPool,
   );
-  const { updatePool } = useWebSocket();
+  const { updatePool } = useWebSocketConnection();
   const apisActiveKey = value.id;
 
   const [, setMode] = useSafeState<any>("text");
