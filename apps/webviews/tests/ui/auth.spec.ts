@@ -38,6 +38,16 @@ test("OAuth2 defaults render parameter tables and validate required token fields
   await authPage.open();
   await authPage.oauth2Button.click();
   await expect(authPage.passwordCredentials).toBeVisible();
+  const hint = page
+    .getByText("Header Prefix", { exact: true })
+    .locator('span[tabindex="0"]');
+  await expect(hint).toHaveAttribute(
+    "title",
+    "Added to the Authorization header before the token.",
+  );
+  await expect(hint).toHaveAccessibleName(
+    "Added to the Authorization header before the token.",
+  );
   await authPage.getTokenButton.click();
   await expect(authPage.alert).toHaveCount(3);
   expect(errors).toEqual([]);

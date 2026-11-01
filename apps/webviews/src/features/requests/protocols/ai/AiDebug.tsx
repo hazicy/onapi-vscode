@@ -42,7 +42,7 @@ export default function AiDebug({
     <RequestTabs
       activeKey={tab}
       onChange={setTab}
-      destroyInactiveTabPane
+      keepMounted={false}
       items={[
         { key: "prompt", label: label("prompt") },
         {

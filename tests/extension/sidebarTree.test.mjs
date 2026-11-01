@@ -146,15 +146,15 @@ test("native sidebar panels, test commands and workspace request history", async
     },
     db: {
       getStorageError: () => storageError,
-      getDataFromGlobalStorage: (_, key, fallback) => {
+      readStoredData: (_, key, fallback) => {
         if (key.endsWith(":history")) historyReads++;
         return structuredClone(writes.get(key) ?? fallback);
       },
-      setDataToGlobalStorage: async (_, key, value) => {
+      writeStoredData: async (_, key, value) => {
         writes.set(key, value);
         return true;
       },
-      updateDataInGlobalStorage: async (_, key, change) => {
+      updateStoredData: async (_, key, change) => {
         writes.set(key, change(writes.get(key) || []));
         return true;
       },

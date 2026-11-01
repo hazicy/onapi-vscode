@@ -74,7 +74,6 @@ const Jwt = () => {
                   <span className="auth-tips">{t("common.auth.more_tip")}</span>
                   {location === AUTH_INSERT_VALUE.HEADER ? (
                     <AuthField
-                      labelCol={{ span: 6 }}
                       label="Request header prefix"
                       name={[AUTH_ENUM.JWT, "headerPrefix"]}
                     >
@@ -82,7 +81,6 @@ const Jwt = () => {
                     </AuthField>
                   ) : (
                     <AuthField
-                      labelCol={{ span: 6 }}
                       label="Query param name"
                       name={[AUTH_ENUM.JWT, "queryParamKey"]}
                     >

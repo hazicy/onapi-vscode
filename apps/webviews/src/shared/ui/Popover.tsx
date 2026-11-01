@@ -6,11 +6,7 @@ import {
 export type PopoverProps = BasePopoverProps;
 
 const Popover = (props: PopoverProps) => {
-  const {
-    overlayInnerStyle = {},
-    destroyTooltipOnHide = true,
-    ...restProps
-  } = props;
+  const { popupStyle = {}, keepMounted = false, ...restProps } = props;
 
   const defaultOverlayInnerStyle = {
     padding: "16px 20px",
@@ -18,8 +14,8 @@ const Popover = (props: PopoverProps) => {
 
   return (
     <BasePopover
-      destroyTooltipOnHide={destroyTooltipOnHide}
-      overlayInnerStyle={{ ...defaultOverlayInnerStyle, ...overlayInnerStyle }}
+      keepMounted={keepMounted}
+      popupStyle={{ ...defaultOverlayInnerStyle, ...popupStyle }}
       {...restProps}
     />
   );

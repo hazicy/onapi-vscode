@@ -37,31 +37,7 @@ export * from "./Upload";
 export * from "./App";
 export { Modal, modal } from "./Modal";
 export { message, notification } from "./Toast";
-import { ThemeProvider, useThemeConfig } from "./Theme";
-import type { ThemeConfig } from "./Theme";
-import type { UIProps } from "./types";
+export { ThemeProvider } from "./Theme";
+export type { ThemeConfig } from "./Theme";
 export * from "./types";
-
-export { theme, ThemeProvider } from "./Theme";
 export { Drawer } from "../Drawer";
-
-export function ConfigProvider({
-  theme = {},
-  children,
-}: UIProps & { theme?: ThemeConfig }) {
-  const parent = useThemeConfig();
-  return (
-    <ThemeProvider
-      theme={{
-        ...parent,
-        ...theme,
-        token: { ...parent.token, ...theme.token },
-        components: {
-          Table: { ...parent.components?.Table, ...theme.components?.Table },
-        },
-      }}
-    >
-      {children}
-    </ThemeProvider>
-  );
-}

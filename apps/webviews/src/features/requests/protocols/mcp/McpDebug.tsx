@@ -127,7 +127,7 @@ export default function McpDebug({
       <RequestTabs
         activeKey={tab}
         onChange={setTab}
-        destroyInactiveTabPane
+        keepMounted={false}
         items={[
           { key: "request", label: "请求 Request" },
           { key: "settings", label: "设置 Settings" },

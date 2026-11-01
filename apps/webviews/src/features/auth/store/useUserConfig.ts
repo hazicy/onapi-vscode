@@ -1,11 +1,12 @@
 import { create } from "zustand";
 import { devtools } from "@/shared/state/store";
-import type { Project, UserInfo } from "@onapi/domain/auth/types/index";
+import type { Workspace } from "@onapi/domain/project/types/workspace";
+import type { UserInfo } from "@onapi/domain/auth/types/index";
 
 type State = {
   isReadonly: boolean;
   userInfo: UserInfo;
-  currentProject: Project;
+  currentProject: Workspace;
 };
 
 type Action = {
@@ -17,7 +18,7 @@ const useUserConfig = create<State & Action>()(
     (set) => ({
       isReadonly: false,
       userInfo: {} as UserInfo,
-      currentProject: {} as Project,
+      currentProject: {} as Workspace,
       updateUserConfig: (payload) =>
         set((state) => ({
           isReadonly: payload.isReadonly ?? state.isReadonly,

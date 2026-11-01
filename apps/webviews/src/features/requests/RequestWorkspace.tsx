@@ -77,11 +77,6 @@ import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
 import { WebSocketDetailsData } from "@onapi/domain/requests/types/websocket";
 import { SocketIoDetailsData } from "@onapi/domain/requests/types/socketio";
 
-interface RequestWorkspaceProps {
-  value?: ApiDetailsData;
-  curApiSendingData?: any;
-}
-
 // Inside the Suspense boundary: runs after the selected protocol has committed.
 function RequestWorkspaceReady() {
   useEffect(() => {
@@ -144,7 +139,7 @@ function RequestWorkspaceReady() {
   return null;
 }
 
-const RequestWorkspace: React.FC<RequestWorkspaceProps> = () => {
+const RequestWorkspace: React.FC = () => {
   const apisActiveData: EditorRecord = useApis((store) => store.apisActiveData);
   const updateApisActiveData = useApis((store) => store.updateApisActiveData);
 

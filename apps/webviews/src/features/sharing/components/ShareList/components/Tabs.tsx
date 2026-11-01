@@ -95,7 +95,7 @@ const TabsPanel = (props: TabsProps) => {
   return (
     <div className={styles.tabs}>
       <Tabs
-        destroyInactiveTabPane
+        keepMounted={false}
         tabBarExtraContent={tabExtraContent}
         items={tabsItems}
         tabClassName={styles.tabsTab}

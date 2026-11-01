@@ -164,7 +164,7 @@ export default function GrpcDebug({
       <RequestTabs
         activeKey={tab}
         onChange={setTab}
-        destroyInactiveTabPane
+        keepMounted={false}
         label="gRPC request tabs"
         wrapStyle={{ flex: "0 0 auto", height: "auto" }}
         tabBarExtraContent={

@@ -49,8 +49,6 @@ export const toFixed = (number: number) => {
   return number.toFixed(2);
 };
 
-export { copyStringToClipboard } from "./clipboard";
-
 /**
  * Check if it is a valid URL
  * @param url String

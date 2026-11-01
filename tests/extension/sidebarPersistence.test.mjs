@@ -174,11 +174,11 @@ test("setApiList propagates the actual storage result and selects the project ke
           };
         if (id === "./index" || /\/storage(?:\/index)?$/.test(id))
           return {
-            updateDataInGlobalStorage: unused,
+            updateStoredData: unused,
             hasStoredData: () => true,
             getStorageError: () => undefined,
-            getDataFromGlobalStorage: (_, key, fallback) => fallback || {},
-            setDataToGlobalStorage: (...args) => {
+            readStoredData: (_, key, fallback) => fallback || {},
+            writeStoredData: (...args) => {
               writes.push(args);
               return expected;
             },
@@ -282,10 +282,10 @@ test("request storage returns unified records without reading a second collectio
       if (id === "lodash") return nativeDependency(id);
       if (/\/storage(?:\/index)?$/.test(id))
         return {
-          setDataToGlobalStorage: unused,
-          updateDataInGlobalStorage: unused,
+          writeStoredData: unused,
+          updateStoredData: unused,
           getStorageError: () => undefined,
-          getDataFromGlobalStorage: (_, key) => {
+          readStoredData: (_, key) => {
             reads.push(key);
             return structuredClone(rows);
           },

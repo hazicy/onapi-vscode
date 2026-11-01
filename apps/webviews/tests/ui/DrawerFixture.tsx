@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ConfigProvider, Select } from "@/shared/ui/base";
+import { ThemeProvider, Select } from "@/shared/ui/base";
 import CustomDrawer, { Drawer } from "@/shared/ui/Drawer";
 
 export default function DrawerFixture() {
@@ -11,7 +11,7 @@ export default function DrawerFixture() {
   const [selected, setSelected] = useState("");
   const Component = query.has("named") ? Drawer : CustomDrawer;
   return (
-    <ConfigProvider>
+    <ThemeProvider theme={{}}>
       <button onClick={() => setOpen(true)}>Open drawer</button>
       <output aria-label="Close count">{closes}</output>
       <output aria-label="Transition complete">{complete}</output>
@@ -62,6 +62,6 @@ export default function DrawerFixture() {
           Nested content
         </CustomDrawer>
       </Component>
-    </ConfigProvider>
+    </ThemeProvider>
   );
 }

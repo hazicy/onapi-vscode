@@ -8,20 +8,20 @@ import { ApiDetailsData } from "@onapi/domain/requests/types/api";
 import * as vscode from "vscode";
 import {
   getStorageError,
-  getDataFromGlobalStorage,
-  setDataToGlobalStorage,
-  updateDataInGlobalStorage,
+  readStoredData,
+  writeStoredData,
+  updateStoredData,
 } from "../../platform/storage/index";
 export const getApiList = (
   context: vscode.ExtensionContext,
 ): ApiDetailsData[] => {
-  return getDataFromGlobalStorage(context, getApiListName(context), []);
+  return readStoredData(context, getApiListName(context), []);
 };
 
 export const setApiList = (
   items: ApiDetailsData[],
   context: vscode.ExtensionContext,
-) => setDataToGlobalStorage(context, getApiListName(context), items);
+) => writeStoredData(context, getApiListName(context), items);
 
 export const updateApiList = (
   context: vscode.ExtensionContext,
@@ -32,7 +32,7 @@ export const updateApiListForWorkspace = (
   context: vscode.ExtensionContext,
   workspace: string,
   change: (items: ApiDetailsData[]) => ApiDetailsData[],
-) => updateDataInGlobalStorage(context, workspace, change);
+) => updateStoredData(context, workspace, change);
 
 export const getApiListName = (context: vscode.ExtensionContext) => {
   try {
@@ -61,7 +61,7 @@ export async function readEditorRequest(
   if (uri.scheme !== "onapi-editor") {
     return parseEditorRequest(await readEditorJson(uri));
   }
-  return getDataFromGlobalStorage(context, workspace, []).find(
+  return readStoredData(context, workspace, []).find(
     (item: ApiDetailsData) => item.id === id,
   );
 }

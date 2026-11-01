@@ -339,14 +339,11 @@ const Realtime: React.FC<Props> = ({ id, onChange }) => {
                 {isEqual(data?.action, "message") && (
                   <ResponseResult
                     ref={resultRef}
-                    data={
-                      {
-                        ...data,
-                        fit_for_show: data?.message?.fitForShow,
-                        stream: data?.message?.message?.data,
-                        mime_type: { ext: data?.message?.dataType, mime: "" },
-                      } as any
-                    }
+                    content={{
+                      display: data?.message?.fitForShow,
+                      bytes: data?.message?.message?.data?.data,
+                      format: data?.message?.dataType,
+                    }}
                     setMode={setMode}
                     resultIncludesTabs={["beautify", "native", "preview"]}
                     warpVisible={false}

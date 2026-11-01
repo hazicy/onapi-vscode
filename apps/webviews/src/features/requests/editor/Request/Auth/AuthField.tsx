@@ -8,6 +8,7 @@ import {
 } from "react";
 import { useTranslation } from "react-i18next";
 import { Field } from "@/shared/ui/base/Field";
+import AppIcon from "@/shared/ui/AppIcon";
 import { readAuthValues, updateAuthValues } from "./authState";
 
 type AuthContextValue = {
@@ -36,6 +37,7 @@ export function AuthField({
   valuePropName = "value",
   noStyle,
   label,
+  tooltip,
   hidden,
   style,
   className,
@@ -48,8 +50,7 @@ export function AuthField({
   hidden?: boolean;
   style?: React.CSSProperties;
   className?: string;
-  labelCol?: unknown;
-  tooltip?: ReactNode;
+  tooltip?: string;
 }) {
   const context = useAuth();
   const { t } = useTranslation();
@@ -90,7 +91,18 @@ export function AuthField({
   return (
     <Field
       id={id}
-      label={label}
+      label={
+        tooltip ? (
+          <>
+            {label}{" "}
+            <span tabIndex={0} title={tooltip} aria-label={tooltip}>
+              <AppIcon icon="info" />
+            </span>
+          </>
+        ) : (
+          label
+        )
+      }
       error={error ? t("supplement.required") : undefined}
       style={style}
       className={className}

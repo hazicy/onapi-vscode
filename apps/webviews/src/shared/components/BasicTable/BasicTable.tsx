@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { ConfigProvider } from "@/shared/ui/base";
+import { ThemeProvider } from "@/shared/ui/base";
 
 import clsx from "clsx";
 
@@ -32,13 +32,13 @@ const BasicTable = <DataSource extends AnyObject>(
   };
 
   return (
-    <ConfigProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       {dragEnable ? (
         <DragTable<DataSource> {...tableProps} onDragEnd={onDragEnd} />
       ) : (
         <Table<DataSource> {...tableProps} />
       )}
-    </ConfigProvider>
+    </ThemeProvider>
   );
 };
 

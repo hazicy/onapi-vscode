@@ -128,7 +128,7 @@ const Index = memo((props: HttpEditorProps) => {
     }
   };
 
-  const dropdownRender = () => (
+  const popupRender = () => (
     <div className={styles.saveDropDown}>
       <Tree
         height={250}
@@ -183,10 +183,10 @@ const Index = memo((props: HttpEditorProps) => {
                 open={open}
                 onOpenChange={(open) => setOpen(open)}
                 onClick={handleSave}
-                overlayStyle={{ fontSize: 14 }}
+                popupStyle={{ fontSize: 14 }}
                 disabled={isReadonly}
-                destroyPopupOnHide
-                dropdownRender={dropdownRender}
+                keepMounted={false}
+                popupRender={popupRender}
               >
                 {t("api.run.save")}
               </Dropdown.Button>

@@ -77,7 +77,7 @@ const EnvDropdown: React.FC<EnvDropdownProps> = ({
     }
   };
 
-  const dropdownRender: DropdownProps["dropdownRender"] = (menu) => {
+  const popupRender: DropdownProps["popupRender"] = (menu) => {
     return (
       <div className={styles.envDropdownRender}>
         <Input
@@ -157,11 +157,11 @@ const EnvDropdown: React.FC<EnvDropdownProps> = ({
         }}
         onOpenChange={onOpenChange}
         open={open}
-        dropdownRender={dropdownRender}
+        popupRender={popupRender}
         className={styles.envSelectWrap}
         trigger={["click"]}
         itemClassName={styles.dropdownMenuItem}
-        overlayClassName={styles.dropdownMenu}
+        popupClassName={styles.dropdownMenu}
       >
         <Flex
           aria-label={t("interaction.environment")}

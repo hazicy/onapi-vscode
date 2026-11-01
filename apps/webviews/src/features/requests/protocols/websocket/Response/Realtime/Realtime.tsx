@@ -233,14 +233,11 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
                 {isEqual(data?.action, "message") && (
                   <ResponseResult
                     ref={resultRef}
-                    data={
-                      {
-                        ...data,
-                        fit_for_show: data?.message?.fitForShow,
-                        stream: data?.message?.data,
-                        mime_type: { ext: data?.message?.dataType, mime: "" },
-                      } as any
-                    }
+                    content={{
+                      display: data?.message?.fitForShow,
+                      bytes: data?.message?.data?.data,
+                      format: data?.message?.dataType,
+                    }}
                     setMode={setMode}
                     resultIncludesTabs={["beautify", "native", "preview"]}
                     warpVisible={false}
@@ -250,14 +247,11 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
                 {data?.action && !isEqual(data?.action, "message") && (
                   <ResponseResult
                     ref={resultRef}
-                    data={
-                      {
-                        ...data,
-                        fit_for_show: data?.message?.fitForShow,
-                        stream: data?.message?.data,
-                        mime_type: { ext: data?.message?.dataType, mime: "" },
-                      } as any
-                    }
+                    content={{
+                      display: data?.message?.fitForShow,
+                      bytes: data?.message?.data?.data,
+                      format: data?.message?.dataType,
+                    }}
                     setMode={setMode}
                     resultIncludesTabs={["beautify", "native"]}
                     warpVisible={false}

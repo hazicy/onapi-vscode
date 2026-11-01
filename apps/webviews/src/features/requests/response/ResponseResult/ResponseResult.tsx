@@ -19,12 +19,13 @@ import {
 } from "@/shared/ui/base";
 
 import { useSafeState } from "ahooks";
-import { find, forEach, isArray, isPlainObject, map } from "lodash-es";
+import { find, forEach, isArray, map } from "lodash-es";
 
 import SegmentedTabs from "@/shared/components/SegmentedTabs";
 import AppIcon from "@/shared/ui/AppIcon";
 import { BaseResponse } from "@onapi/domain/requests/types/response";
-import { ApiSendingData } from "@onapi/domain/requests/types/send";
+import type { SerializedResponse } from "@onapi/contracts";
+import type { ResponseContent } from "./content";
 import { copyStringToClipboard } from "@/shared/utils/clipboard";
 import { parseStreamToRaw } from "@onapi/domain/utils/parse";
 
@@ -39,9 +40,8 @@ import styles from "./ResponseResult.module.css";
 interface Props {
   rawHtml?: string;
   mode?: string;
-  data?:
-    | ApiSendingData["response"]
-    | import("@onapi/contracts").SerializedResponse;
+  data?: SerializedResponse;
+  content?: ResponseContent;
   defaultRawEncode?: string;
   html?: string | null;
   resultIncludesTabs?: string[];
@@ -59,6 +59,7 @@ const ResponseResult = forwardRef((props: Props, ref) => {
     resultIncludesTabs = ["beautify", "native", "preview", "visualization"],
     defaultRawEncode,
     data: sourceData,
+    content,
     rawHtml,
     warpVisible = true,
     saveSocketMessageDom = null,
@@ -69,10 +70,10 @@ const ResponseResult = forwardRef((props: Props, ref) => {
     () => sdkResponseView(sourceData),
     [sourceData],
   );
-  const data =
-    sourceData && !("header" in sourceData)
-      ? (sourceData as ApiSendingData["response"])
-      : undefined;
+  const contentMime = useMemo(
+    () => ({ ext: content?.format, mime: content?.mime ?? "" }),
+    [content?.format, content?.mime],
+  );
   const [rawEncode, setRawEncode] = useSafeState(defaultRawEncode || "utf8");
   const [rawType, setRawType] = useSafeState<string>("");
   const [tabsValue, setTabsValue] = useSafeState<string | number>();
@@ -82,9 +83,9 @@ const ResponseResult = forwardRef((props: Props, ref) => {
     setRawType(
       nativeResponse?.header
         ? responseLanguage(nativeResponse)
-        : data?.mime_type?.ext || "json",
+        : content?.format || "json",
     );
-  }, [nativeResponse?.header, data?.mime_type?.ext]);
+  }, [nativeResponse?.header, content?.format]);
 
   useImperativeHandle(ref, () => {
     return {
@@ -118,28 +119,21 @@ const ResponseResult = forwardRef((props: Props, ref) => {
         rawEncode === "utf8" ? "utf-8" : rawEncode,
       );
     }
-    if (data?.stream?.data && isPlainObject(data?.mime_type)) {
+    if (content?.bytes) {
       if (rawType === "auto") {
-        return parseStreamToRaw(data?.stream?.data, data?.mime_type, rawEncode);
+        return parseStreamToRaw(content?.bytes, contentMime, rawEncode);
       } else {
         const mime_type = RESPONSE_TYPE?.find((e) => e.ext === rawType);
         return parseStreamToRaw(
-          data?.stream?.data,
-          mime_type || data?.mime_type,
+          content?.bytes,
+          mime_type || contentMime,
           rawEncode,
         );
       }
     }
 
     return "";
-  }, [
-    data?.body,
-    nativeResponse?.header,
-    data?.stream?.data,
-    data?.mime_type,
-    rawEncode,
-    rawType,
-  ]);
+  }, [nativeResponse?.header, content?.bytes, contentMime, rawEncode, rawType]);
 
   const beautifyProps = {
     mode: rawType,
@@ -155,6 +149,7 @@ const ResponseResult = forwardRef((props: Props, ref) => {
         children: (
           <item.children
             {...props}
+            content={content}
             key={item.value}
             rawEncode={rawEncode}
             rawHtml={parsedRawHtml || rawHtml}
@@ -210,7 +205,7 @@ const ResponseResult = forwardRef((props: Props, ref) => {
                 setRawType(
                   nativeResponse?.header
                     ? responseLanguage(nativeResponse)
-                    : data?.mime_type?.ext || "json",
+                    : content?.format || "json",
                 );
               } else {
                 setRawType(newVal);

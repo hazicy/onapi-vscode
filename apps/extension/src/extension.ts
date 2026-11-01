@@ -20,7 +20,10 @@ import {
   DEFAULT_PROJECT,
   DEFAULT_TEAM_PROJECT,
 } from "@onapi/domain/project/constants/project";
-import { Project, TeamItem } from "@onapi/domain/auth/types/index";
+import type {
+  Workspace,
+  WorkspaceGroup,
+} from "@onapi/domain/project/types/workspace";
 import { randomUUID } from "node:crypto";
 import { registerSidebarTree } from "./features/sidebar/register";
 
@@ -141,13 +144,13 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("onapi.switchWorkspace", async () => {
       const userConfig = context.globalState.get<any>("userConfig") || {};
       const zh = vscode.env.language.startsWith("zh");
-      const teams: TeamItem[] = [
+      const teams: WorkspaceGroup[] = [
         DEFAULT_TEAM_PROJECT,
         ...(userConfig.teamProjectList || []),
       ];
       const items: (vscode.QuickPickItem & {
-        team?: TeamItem;
-        project?: Project;
+        team?: WorkspaceGroup;
+        project?: Workspace;
       })[] = teams.flatMap((team) =>
         (team.project || []).map((project) => ({
           label: project.name,
@@ -193,17 +196,17 @@ export async function activate(context: vscode.ExtensionContext) {
         if (!name?.trim()) {
           return;
         }
-        const project: Project = {
+        const project: Workspace = {
           ...DEFAULT_PROJECT,
           project_id: randomUUID(),
           team_id: DEFAULT_TEAM_PROJECT.team_id,
           name: name.trim(),
-          is_default: 0,
-          created_at: new Date(),
-          edited_at: new Date(),
         };
-        const team: TeamItem = { ...DEFAULT_TEAM_PROJECT, project: [project] };
-        const teamProjectList: TeamItem[] = [
+        const team: WorkspaceGroup = {
+          ...DEFAULT_TEAM_PROJECT,
+          project: [project],
+        };
+        const teamProjectList: WorkspaceGroup[] = [
           ...(userConfig.teamProjectList || []),
         ];
         const existingTeam = teamProjectList.find(

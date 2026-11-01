@@ -28,7 +28,7 @@ export function Tabs({
   onEdit,
   tabBarExtraContent,
   type,
-  destroyInactiveTabPane,
+  keepMounted = true,
   tabPosition,
   size,
   animated,
@@ -169,7 +169,7 @@ export function Tabs({
             <BaseTabs.Panel
               key={item.key}
               value={item.key}
-              keepMounted={!destroyInactiveTabPane && !item.destroyOnHidden}
+              keepMounted={keepMounted && !item.destroyOnHidden}
               className={clsx(tabsStyles.tabPanel, panelClassName)}
             >
               {item.children}

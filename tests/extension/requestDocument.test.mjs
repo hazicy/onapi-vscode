@@ -76,9 +76,9 @@ async function fixture({
     if (id.endsWith("/storage/index"))
       return {
         getStorageError: () => undefined,
-        getDataFromGlobalStorage: () => structuredClone(rows),
-        setDataToGlobalStorage() {},
-        updateDataInGlobalStorage: async (_, workspace, change) => {
+        readStoredData: () => structuredClone(rows),
+        writeStoredData() {},
+        updateStoredData: async (_, workspace, change) => {
           calls.push(["write", workspace]);
           if (gate) await gate;
           if (!succeeds) return false;
@@ -111,7 +111,7 @@ async function fixture({
     if (id.endsWith("/storage"))
       return {
         getStorageError: () => undefined,
-        getDataFromGlobalStorage: () => structuredClone(rows),
+        readStoredData: () => structuredClone(rows),
       };
     if (id === "../sharing/share-data")
       return {

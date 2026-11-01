@@ -1,26 +1,27 @@
 import { useTranslation } from "react-i18next";
 
-import { isPlainObject, isUndefined } from "lodash-es";
-
 import Empty from "@/shared/ui/Empty";
-import { ApiSendingData } from "@onapi/domain/requests/types/send";
+import type { ResponseContent } from "../content";
 import { parseStreamToBody } from "@onapi/domain/utils/parse";
 
 interface Props {
-  data?: ApiSendingData["response"];
+  content?: ResponseContent;
   rawEncode?: string;
 }
 
 const Preview = (props: Props) => {
   const { t } = useTranslation();
-  const { data, rawEncode = "utf8" } = props || {};
+  const { content, rawEncode = "utf8" } = props || {};
 
-  const streamData =
-    !isUndefined(data?.stream?.data) && isPlainObject(data?.mime_type)
-      ? parseStreamToBody(data?.stream?.data, data?.mime_type, rawEncode)
-      : null;
+  const streamData = content?.bytes
+    ? parseStreamToBody(
+        content?.bytes,
+        { ext: content?.format, mime: content?.mime ?? "" },
+        rawEncode,
+      )
+    : null;
 
-  const setBodyColor = (html: any) => {
+  const setBodyColor = (html = "") => {
     const bgcolor = "white";
     let str = `<style>
           body{
@@ -30,11 +31,11 @@ const Preview = (props: Props) => {
     return (str += html);
   };
   const responsePreview =
-    data?.response_size && data?.response_size / 1024 / 1024 > 20 ? (
+    content?.size && content?.size / 1024 / 1024 > 20 ? (
       <Empty description={t("supplement.file_big")} />
     ) : (
       <>
-        {data?.fit_for_show === "Monaco" ? (
+        {content?.display === "Monaco" ? (
           <div style={{ width: "100%", height: "100%", position: "relative" }}>
             <iframe
               sandbox=""
@@ -46,7 +47,7 @@ const Preview = (props: Props) => {
               height="100%"
             ></iframe>
           </div>
-        ) : data?.fit_for_show === "Image" ? (
+        ) : content?.display === "Image" ? (
           <div style={{ width: 300 }}>
             <img src={streamData?.base64Body} style={{ maxWidth: "100%" }} />
           </div>

@@ -1,14 +1,12 @@
-import { theme } from "@/shared/ui/base";
-
-const { useToken } = theme;
+import { useThemeConfig } from "@/shared/ui/base/Theme";
 
 export type ThemeToken = Partial<GlobalThemeToken>;
 
 const useTheme = (): { themeToken: Partial<GlobalThemeToken> } => {
-  const { token } = useToken();
+  const { token } = useThemeConfig();
 
   return {
-    themeToken: token,
+    themeToken: token ?? {},
   };
 };
 

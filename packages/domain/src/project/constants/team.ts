@@ -1,13 +1,7 @@
-import { TeamItem } from "@onapi/domain/auth/types/index";
-import dayjs from "dayjs";
+import type { WorkspaceGroup } from "@onapi/domain/project/types/workspace";
 
-export const DEFAULT_TEAM: TeamItem = {
+export const DEFAULT_TEAM: WorkspaceGroup = {
   name: "onapi",
   team_id: "-1",
-  is_team_admin: 1,
-  is_default: 1,
-  is_readonly: 0,
-  created_at: dayjs().toDate(),
   project: null,
-  upgrade_status: 0,
 };

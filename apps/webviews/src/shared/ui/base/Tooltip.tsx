@@ -10,17 +10,16 @@ export function Tooltip({
   title,
   children,
   placement: position = "top",
-  mouseEnterDelay = 0.5,
-  mouseLeaveDelay = 0,
+  openDelay = 500,
+  closeDelay = 0,
   open,
   defaultOpen,
   onOpenChange,
-  overlayClassName,
-  overlayStyle,
-  overlayInnerStyle,
-  destroyTooltipOnHide,
+  popupClassName,
+  positionerStyle,
+  popupStyle,
+  keepMounted = false,
   color,
-  trigger,
   ...rest
 }: TooltipProps) {
   const hasTitle = title !== undefined && title !== null && title !== "";
@@ -34,20 +33,20 @@ export function Tooltip({
       >
         <BaseTooltip.Trigger
           render={node(children)}
-          delay={mouseEnterDelay * 1000}
-          closeDelay={mouseLeaveDelay * 1000}
+          delay={openDelay}
+          closeDelay={closeDelay}
           {...rest}
         />
-        <BaseTooltip.Portal>
+        <BaseTooltip.Portal keepMounted={keepMounted}>
           <BaseTooltip.Positioner
             {...placement(position)}
             sideOffset={5}
             className={tooltipStyles.positioner}
-            style={overlayStyle}
+            style={positionerStyle}
           >
             <BaseTooltip.Popup
-              className={clsx(tooltipStyles.tooltip, overlayClassName)}
-              style={{ background: color, ...overlayInnerStyle }}
+              className={clsx(tooltipStyles.tooltip, popupClassName)}
+              style={{ background: color, ...popupStyle }}
             >
               {content(title)}
             </BaseTooltip.Popup>

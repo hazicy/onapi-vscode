@@ -1,10 +1,6 @@
 import { cloneDeep } from "lodash";
 import * as vscode from "vscode";
-import {
-  hasStoredData,
-  getDataFromGlobalStorage,
-  setDataToGlobalStorage,
-} from "./index";
+import { hasStoredData, readStoredData, writeStoredData } from "./index";
 import type { ProjectConfigType } from "@onapi/domain/project/types/index";
 import { DEFAULT_PROJECT_CONFIG } from "@onapi/domain/project/constants/project";
 import { globalConfig } from "../../app/config";
@@ -41,7 +37,7 @@ export const getProjectConfig = (
 ): ProjectConfigType => {
   const key = projectConfigKey(workspace);
   if (hasStoredData(context, key)) {
-    return getDataFromGlobalStorage(context, key);
+    return readStoredData(context, key);
   }
   const config = cloneDeep(DEFAULT_PROJECT_CONFIG);
   return config;
@@ -76,7 +72,7 @@ export const saveProjectConfig = async (
   try {
     const projectConfigFileName = projectConfigKey(workspace);
     if (
-      !(await setDataToGlobalStorage(
+      !(await writeStoredData(
         context,
         projectConfigFileName,
         new_project_config,

@@ -239,8 +239,7 @@ test("the actual host receiver rejects invalid messages and correlates asynchron
     "apps/extension/src/features/requests/request-editor.ts",
     (id) => {
       if (id.endsWith("/execution/owners")) return owners;
-      if (id.endsWith("/storage"))
-        return { getDataFromGlobalStorage: () => [] };
+      if (id.endsWith("/storage")) return { readStoredData: () => [] };
       if (id.endsWith("/request-panel-channel")) return boundary;
       if (id.endsWith("/create-panel")) return { setupFeatureWebview() {} };
       if (id.endsWith("/custom-editor")) return { openCustomEditor() {} };

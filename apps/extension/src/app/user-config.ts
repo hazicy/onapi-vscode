@@ -1,19 +1,22 @@
 import * as vscode from "vscode";
 import { DEFAULT_PROJECT } from "@onapi/domain/project/constants/project";
 import { DEFAULT_TEAM } from "@onapi/domain/project/constants/team";
-import { Project, TeamItem } from "@onapi/domain/auth/types/index";
+import type {
+  Workspace,
+  WorkspaceGroup,
+} from "@onapi/domain/project/types/workspace";
 
 export const getUserConfig = (
   context: vscode.ExtensionContext,
-): { currentTeam: TeamItem; currentProject: Project } => {
+): { currentTeam: WorkspaceGroup; currentProject: Workspace } => {
   try {
-    let user_config: any = context.globalState.get("userConfig") || {};
+    const userConfig = context.globalState.get<{
+      currentTeam?: WorkspaceGroup;
+      currentProject?: Workspace;
+    }>("userConfig");
     return {
-      ...{
-        currentTeam: DEFAULT_TEAM,
-        currentProject: DEFAULT_PROJECT,
-      },
-      ...user_config,
+      currentTeam: userConfig?.currentTeam ?? DEFAULT_TEAM,
+      currentProject: userConfig?.currentProject ?? DEFAULT_PROJECT,
     };
   } catch (error) {}
   return {

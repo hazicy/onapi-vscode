@@ -8,7 +8,7 @@ import { DEFAULT_PROJECT } from "@onapi/domain/project/constants/project";
 import { getCurrentProjectConfig } from "../../platform/storage/project-config";
 import { EnvList } from "@onapi/domain/environment/types/index";
 import { AnyObject } from "@onapi/domain/types/common";
-import { Project } from "@onapi/domain/auth/types/index";
+import type { Workspace } from "@onapi/domain/project/types/workspace";
 import { globalConfig } from "../../app/config";
 
 export const createShare = async (
@@ -231,7 +231,7 @@ export const completeOpenApiData = (
 ) => {
   let user_config: any = context.globalState.get("userConfig") || {};
   let project_config: any = getCurrentProjectConfig(context);
-  let project: Project = {} as Project;
+  let project: Workspace = {} as Workspace;
   if (
     user_config?.currentProject &&
     user_config?.currentProject?.project_id !== "-1"

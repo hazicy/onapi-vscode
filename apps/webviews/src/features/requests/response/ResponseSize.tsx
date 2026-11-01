@@ -386,7 +386,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
         <>
           {responseCode && (
             <Flex className={styles.flex}>
-              <CustomPopover content={responseCodeContent}>
+              <CustomPopover nativeButton={false} content={responseCodeContent}>
                 <span
                   style={{
                     padding: "0px 8px",
@@ -431,6 +431,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
                 </svg>
                 {!isEmpty(timings) ? (
                   <CustomPopover
+                    nativeButton={false}
                     content={isNewTimings ? newTimeContent : timeContent}
                   >
                     <span className={styles.curPointer}>{responseTimeStr}</span>
@@ -461,7 +462,8 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
               <Flex className={styles.flex}>
                 <Tooltip title={t("common.response_indicators.size")}></Tooltip>
                 <CustomPopover
-                  overlayInnerStyle={{
+                  nativeButton={false}
+                  popupStyle={{
                     padding: isNewTimings ? "16px 20px" : "6px 8px",
                   }}
                   content={
@@ -481,6 +483,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
       {showProxy && (
         <>
           <CustomPopover
+            nativeButton={false}
             content={
               isNewTimings ? (
                 <ResponseNetwork network={network} />

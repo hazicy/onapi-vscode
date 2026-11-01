@@ -1,7 +1,7 @@
 import { executionScopeFor } from "../../platform/execution/owners";
 import type { RequestDocument } from "./request-document";
 import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
-import { getDataFromGlobalStorage } from "../../platform/storage";
+import { readStoredData } from "../../platform/storage";
 import { setRequestDraft } from "./request-status";
 import { openCustomEditor } from "../../platform/webviews/custom-editor";
 import { postRequestPanelResponse } from "../../platform/webviews/request-panel-channel";
@@ -260,7 +260,7 @@ export function syncRequestDocuments(context: vscode.ExtensionContext) {
     }
     let rows = workspaces.get(document.workspace);
     if (!rows) {
-      rows = getDataFromGlobalStorage(context, document.workspace, []);
+      rows = readStoredData(context, document.workspace, []);
       workspaces.set(document.workspace, rows!);
     }
     const saved = rows!.find((item) => item.id === document.draft.id);

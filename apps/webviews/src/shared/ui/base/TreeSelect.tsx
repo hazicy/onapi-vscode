@@ -36,7 +36,6 @@ export const TreeSelect = forwardRef<HTMLButtonElement, TreeSelectProps>(
       dropdownClassName,
       dropdownStyle,
       style,
-      dropdownRender,
       popupRender,
       open,
       defaultOpen,
@@ -133,7 +132,7 @@ export const TreeSelect = forwardRef<HTMLButtonElement, TreeSelectProps>(
     ) : (
       <div>{notFoundContent}</div>
     );
-    const renderPopup = popupRender ?? dropdownRender;
+    const renderPopup = popupRender;
     return (
       <Popover.Root open={visible} onOpenChange={changeOpen}>
         <div

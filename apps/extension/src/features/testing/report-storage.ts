@@ -1,10 +1,7 @@
 import { forEach, isArray, isPlainObject } from "lodash";
 import type { TestingReportList } from "@onapi/contracts";
 import * as vscode from "vscode";
-import {
-  getDataFromGlobalStorage,
-  updateDataInGlobalStorage,
-} from "../../platform/storage/index";
+import { readStoredData, updateStoredData } from "../../platform/storage/index";
 
 export const getTestingFolderName = (
   folder_id: string,
@@ -48,10 +45,7 @@ export const getTestingFolderData = (
   try {
     let projectTestName = getProjectTestName(context);
 
-    let projectTestData: any = getDataFromGlobalStorage(
-      context,
-      projectTestName,
-    );
+    let projectTestData: any = readStoredData(context, projectTestName);
     const projectTestFolderData = projectTestData?.[folder_id] || {};
     return projectTestFolderData;
   } catch (error) {
@@ -67,14 +61,10 @@ export const setTestingFolderData = async (
   if (!isPlainObject(data)) {
     return false;
   }
-  return updateDataInGlobalStorage(
-    context,
-    getProjectTestName(context),
-    (current) => {
-      current[folder_id] = { ...current[folder_id], ...data };
-      return current;
-    },
-  );
+  return updateStoredData(context, getProjectTestName(context), (current) => {
+    current[folder_id] = { ...current[folder_id], ...data };
+    return current;
+  });
 };
 
 export const getProjectReportList = (context: vscode.ExtensionContext) => {
@@ -82,10 +72,7 @@ export const getProjectReportList = (context: vscode.ExtensionContext) => {
     let reslut: any[] = [];
     let projectTestName = getProjectTestName(context);
 
-    let projectTestData: any = getDataFromGlobalStorage(
-      context,
-      projectTestName,
-    );
+    let projectTestData: any = readStoredData(context, projectTestName);
     if (isPlainObject(projectTestData)) {
       forEach(projectTestData, (_val, key) => {
         if (isArray(projectTestData[key]?.reportList)) {
@@ -106,7 +93,7 @@ export const deleteProjectReport = async (
   report_id: string,
   context: vscode.ExtensionContext,
 ) =>
-  updateDataInGlobalStorage(context, getProjectTestName(context), (current) => {
+  updateStoredData(context, getProjectTestName(context), (current) => {
     for (const folder of Object.values(current) as any[]) {
       if (Array.isArray(folder.reportList)) {
         folder.reportList = folder.reportList.filter(
@@ -122,16 +109,12 @@ export const deleteTestingFoldersData = async (
   context: vscode.ExtensionContext,
 ) => {
   const ids = [...folderIds];
-  return updateDataInGlobalStorage(
-    context,
-    getProjectTestName(context),
-    (current) => {
-      for (const id of ids) {
-        delete current[id];
-      }
-      return current;
-    },
-  );
+  return updateStoredData(context, getProjectTestName(context), (current) => {
+    for (const id of ids) {
+      delete current[id];
+    }
+    return current;
+  });
 };
 
 export function getNativeTestReports(value: unknown): TestingReportList[] {

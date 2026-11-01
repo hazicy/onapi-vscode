@@ -348,13 +348,13 @@ test("batch test cleanup writes once and propagates the storage result", async (
       (id) => {
         if (id === "./index" || /\/storage(?:\/index)?$/.test(id))
           return {
-            setDataToGlobalStorage: unused,
-            getDataFromGlobalStorage: () => ({
+            writeStoredData: unused,
+            readStoredData: () => ({
               folder: {},
               request: {},
               keep: { data: "retained" },
             }),
-            updateDataInGlobalStorage: (_, key, change) => {
+            updateStoredData: (_, key, change) => {
               const value = change({
                 folder: {},
                 request: {},

@@ -28,13 +28,13 @@ export const getStorageFilePath = (context: vscode.ExtensionContext) =>
 export const hasStoredData = (context: vscode.ExtensionContext, key: string) =>
   repositoryFor(context).has(key);
 
-export const getDataFromGlobalStorage = (
+export const readStoredData = (
   context: vscode.ExtensionContext,
   key: string,
   defaultValue = {},
 ) => repositoryFor(context).get(key, defaultValue);
 
-export const setDataToGlobalStorage = async (
+export const writeStoredData = async (
   context: vscode.ExtensionContext,
   key: string,
   value: any,
@@ -54,7 +54,7 @@ export const setDataToGlobalStorage = async (
   }
 };
 
-export const updateDataInGlobalStorage = async (
+export const updateStoredData = async (
   context: vscode.ExtensionContext,
   key: string,
   change: (value: any) => any,

@@ -3,6 +3,43 @@ import assert from "node:assert/strict";
 import load, { nativeDependency } from "../helpers/loadTypeScript.mjs";
 const plain = (value) => JSON.parse(JSON.stringify(value));
 
+test("workspace defaults omit obsolete permissions and old persisted selections keep their identity", async () => {
+  const { getUserConfig } = await load(
+    "apps/extension/src/app/user-config.ts",
+    nativeDependency,
+  );
+  let stored;
+  const context = { globalState: { get: () => stored } };
+  const defaults = getUserConfig(context);
+  assert.deepEqual(Object.keys(defaults.currentProject).sort(), [
+    "intro",
+    "name",
+    "project_id",
+    "team_id",
+  ]);
+  assert.deepEqual(Object.keys(defaults.currentTeam).sort(), [
+    "name",
+    "project",
+    "team_id",
+  ]);
+  stored = {
+    currentProject: {
+      project_id: "existing-workspace",
+      team_id: "existing-group",
+      name: "Existing workspace",
+      intro: "Existing description",
+      role: 1,
+      upgrade_status: 3,
+    },
+    currentTeam: { team_id: "existing-group", name: "Existing", project: [] },
+  };
+  const selected = getUserConfig(context);
+  assert.equal(selected.currentProject.project_id, "existing-workspace");
+  assert.equal(selected.currentProject.name, "Existing workspace");
+  assert.equal(selected.currentTeam.team_id, "existing-group");
+  assert.equal(stored.currentProject.upgrade_status, 3);
+});
+
 test("explicit workspace reads and saves retain account identity and only notify the active workspace", async () => {
   const files = new Map();
   const messages = [];
@@ -37,8 +74,8 @@ test("explicit workspace reads and saves retain account identity and only notify
       if (id === "./index" || /\/storage(?:\/index)?$/.test(id))
         return {
           hasStoredData: (_, key) => files.has(key),
-          getDataFromGlobalStorage: (_, key) => structuredClone(files.get(key)),
-          setDataToGlobalStorage: (_, key, value) => {
+          readStoredData: (_, key) => structuredClone(files.get(key)),
+          writeStoredData: (_, key, value) => {
             files.set(key, structuredClone(value));
             return true;
           },
@@ -110,8 +147,8 @@ test("project config uses fresh defaults rather than migrating globalState and l
       if (id === "./index")
         return {
           hasStoredData: (_, key) => files.has(key),
-          getDataFromGlobalStorage: (_, key) => structuredClone(files.get(key)),
-          setDataToGlobalStorage: (_, key, value) => {
+          readStoredData: (_, key) => structuredClone(files.get(key)),
+          writeStoredData: (_, key, value) => {
             files.set(key, structuredClone(value));
             return true;
           },

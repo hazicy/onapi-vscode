@@ -2,10 +2,7 @@ import type * as vscode from "vscode";
 import { requestDefinition } from "@onapi/domain";
 import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { cloneDeep } from "lodash";
-import {
-  getDataFromGlobalStorage,
-  updateDataInGlobalStorage,
-} from "../../platform/storage";
+import { readStoredData, updateStoredData } from "../../platform/storage";
 import { getApiListName } from "./request-storage";
 import type { ApiDetailsData } from "@onapi/domain/requests/types/api";
 
@@ -27,7 +24,7 @@ const HISTORY_LIMIT = 200;
 export function getRequestHistory(
   context: vscode.ExtensionContext,
 ): RequestHistoryEntry[] {
-  const data = getDataFromGlobalStorage(
+  const data = readStoredData(
     context,
     `${getApiListName(context)}:history`,
     [],
@@ -51,7 +48,7 @@ export async function recordRequestHistory(
     sentAt: Date.now(),
     request,
   };
-  return updateDataInGlobalStorage(
+  return updateStoredData(
     context,
     `${getApiListName(context)}:history`,
     (entries) => [entry, ...entries].slice(0, HISTORY_LIMIT),

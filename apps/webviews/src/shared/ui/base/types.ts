@@ -139,12 +139,13 @@ interface PopupProps extends DOMProps {
   onOpenChange?: (open: boolean) => void;
   placement?: string;
   trigger?: string | string[];
-  mouseEnterDelay?: number;
-  mouseLeaveDelay?: number;
-  overlayClassName?: string;
-  overlayStyle?: React.CSSProperties;
-  overlayInnerStyle?: React.CSSProperties;
-  destroyTooltipOnHide?: boolean;
+  /** Delay in milliseconds. */
+  openDelay?: number;
+  closeDelay?: number;
+  popupClassName?: string;
+  positionerStyle?: React.CSSProperties;
+  popupStyle?: React.CSSProperties;
+  keepMounted?: boolean;
 }
 export interface Option extends UIProps {
   key?: React.Key;
@@ -219,7 +220,6 @@ export interface SelectProps<
   labelInValue?: boolean;
   fieldNames?: { label?: string; value?: string; options?: string };
   optionFilterProp?: string;
-  dropdownRender?: PopupRenderer;
   popupRender?: PopupRenderer;
   placeholder?: React.ReactNode;
   placement?: string;
@@ -332,7 +332,7 @@ export type SwitchProps = DOMProps & {
   onChange?: (checked: boolean, event: Event) => void;
 };
 export type MenuProps = UIProps & {
-  overlayClassName?: string;
+  popupClassName?: string;
   selectedKeys?: string[];
   defaultOpenKeys?: string[];
   mode?: "vertical" | "horizontal" | "inline";
@@ -354,12 +354,12 @@ export interface MenuItemProps extends Omit<UIProps, "children"> {
   children?: MenuItemProps[] | null;
 }
 export type ItemType = MenuItemProps;
-export type TooltipProps = PopupProps & {
+export type TooltipProps = Omit<PopupProps, "trigger" | "nativeButton"> & {
   color?: string;
-  overlayClassName?: string;
+  popupClassName?: string;
   title?: React.ReactNode | (() => React.ReactNode);
 };
-export type PopoverProps = TooltipProps & {
+export type PopoverProps = PopupProps & {
   content?: React.ReactNode | (() => React.ReactNode);
 };
 export type DropdownProps = DOMProps & {
@@ -369,13 +369,12 @@ export type DropdownProps = DOMProps & {
   onOpenChange?: (open: boolean, info: { source: "menu" | "trigger" }) => void;
   trigger?: string[];
   placement?: string;
-  dropdownRender?: PopupRenderer;
   popupRender?: PopupRenderer;
   overlay?: React.ReactNode;
-  overlayStyle?: React.CSSProperties;
-  destroyPopupOnHide?: boolean;
+  popupStyle?: React.CSSProperties;
+  keepMounted?: boolean;
   menu?: MenuProps;
-  overlayClassName?: string;
+  popupClassName?: string;
   itemClassName?: string;
   selectedItemClassName?: string;
 };
@@ -416,7 +415,7 @@ export type TabsProps = DOMProps & {
     | React.ReactNode
     | { left?: React.ReactNode; right?: React.ReactNode };
   type?: "line" | "card" | "editable-card";
-  destroyInactiveTabPane?: boolean;
+  keepMounted?: boolean;
   tabPosition?: "top" | "bottom" | "left" | "right";
   size?: Size;
   animated?: boolean;
@@ -505,7 +504,6 @@ export interface TreeSelectProps<V = any> extends UIProps {
   popupClassName?: string;
   dropdownClassName?: string;
   dropdownStyle?: React.CSSProperties;
-  dropdownRender?: PopupRenderer;
   popupRender?: PopupRenderer;
   open?: boolean;
   defaultOpen?: boolean;
@@ -827,7 +825,6 @@ export type DatePickerProps = Omit<
 > & {
   value?: import("dayjs").Dayjs | string | null;
   onChange?: (value: import("dayjs").Dayjs | null, text: string) => void;
-  format?: string;
   showTime?: boolean;
 };
 export type CheckboxGroupProps = DOMProps<HTMLDivElement> & {

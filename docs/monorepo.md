@@ -49,6 +49,18 @@ between the host, Worker, and Webview. Contracts may reference model types;
 models must not depend on contracts, Core, runtime, or either application.
 `pnpm check:boundaries` enforces this dependency direction.
 
+Local workspaces use `Workspace` and `WorkspaceGroup` from
+`packages/domain/src/project/types/workspace.ts`. They contain identity,
+description and grouping data, without account permissions or migration states.
+Existing `project_id`, `team_id` and selection storage keys remain stable because
+they identify persisted request, environment and report data.
+
+UI theme overrides use `ThemeProvider`, which merges nested overrides with the
+parent theme. Popup components use `popupClassName` and `popupStyle`; Tooltip and
+Popover also expose `positionerStyle`. Open and close delays are milliseconds.
+Menus, popovers, tooltips and tabs use `keepMounted` for lifecycle control;
+selectors and menus expose one `popupRender` callback for custom popup content.
+
 Socket events carry detected MIME types in `contentType`. The Webview selects
 its renderer when consuming an event; runtime and contracts do not name UI
 components. Host-only socket parameter preparation lives in

@@ -247,7 +247,7 @@ const UrlGroup = (props: UrlGroupProps) => {
           !hideServer &&
           isArray(currentEnv?.server_list) && (
             <Tooltip
-              overlayInnerStyle={{ wordBreak: "break-all" }}
+              popupStyle={{ wordBreak: "break-all" }}
               title={
                 <>
                   {t("supplement.from_env")}“{currentEnv?.name}“{envUrl}
@@ -297,7 +297,7 @@ const UrlGroup = (props: UrlGroupProps) => {
                         SetCurServerId(i);
                       }}
                       size="small"
-                      dropdownRender={(menu) => (
+                      popupRender={(menu) => (
                         <>
                           {menu}
                           <Divider style={{ margin: "4px 0" }} />

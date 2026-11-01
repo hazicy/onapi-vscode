@@ -168,7 +168,7 @@ export default function VariableValueEditor({
     [propsValue, t],
   );
 
-  const dropdownRender = (originNode: ReactNode) => {
+  const popupRender = (originNode: ReactNode) => {
     return (
       <div className={styles.treeDropDown}>
         <Tabs
@@ -231,7 +231,7 @@ export default function VariableValueEditor({
       return (
         <Popover
           nativeButton={false}
-          overlayInnerStyle={{ padding: 8 }}
+          popupStyle={{ padding: 8 }}
           content={
             <QuoteOption
               value={value}
@@ -270,7 +270,7 @@ export default function VariableValueEditor({
           searchValue={searchValue}
           onSearch={(v) => setSearchValue(v)}
           placeholder={t("var_insert.fixed_placeholder")}
-          dropdownRender={dropdownRender}
+          popupRender={popupRender}
           treeTitleRender={treeTitleRender}
           value={value || undefined}
           style={{ width: "100%" }}

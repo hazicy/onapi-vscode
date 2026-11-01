@@ -11,7 +11,7 @@ import { node } from "./popupUtils";
 
 function MenuItems({
   itemClassName,
-  overlayClassName,
+  popupClassName,
   selectedItemClassName,
   items = [],
   onClick,
@@ -34,7 +34,7 @@ function MenuItems({
               items={item.children ?? []}
               itemClassName={itemClassName}
               selectedItemClassName={selectedItemClassName}
-              overlayClassName={overlayClassName}
+              popupClassName={popupClassName}
               onClick={onClick}
               selectedKeys={selectedKeys}
             />
@@ -59,13 +59,13 @@ function MenuItems({
                 sideOffset={2}
               >
                 <BaseMenu.Popup
-                  className={clsx(dropdownStyles.popup, overlayClassName)}
+                  className={clsx(dropdownStyles.popup, popupClassName)}
                 >
                   <MenuItems
                     items={item.children ?? []}
                     itemClassName={itemClassName}
                     selectedItemClassName={selectedItemClassName}
-                    overlayClassName={overlayClassName}
+                    popupClassName={popupClassName}
                     onClick={onClick}
                     selectedKeys={selectedKeys}
                   />
@@ -113,15 +113,14 @@ export function Dropdown({
   onOpenChange,
   trigger = ["hover"],
   placement: position = "bottomLeft",
-  dropdownRender,
   popupRender,
   overlay,
   itemClassName,
   selectedItemClassName,
-  overlayClassName,
-  overlayStyle,
+  popupClassName,
+  popupStyle,
   disabled,
-  destroyPopupOnHide = true,
+  keepMounted = false,
   ...rest
 }: DropdownProps) {
   if (disabled) {
@@ -131,15 +130,15 @@ export function Dropdown({
   const Root = context ? BaseContextMenu.Root : BaseMenu.Root;
   const body = (
     <BaseMenu.Popup
-      className={clsx(dropdownStyles.popup, overlayClassName)}
-      style={overlayStyle}
+      className={clsx(dropdownStyles.popup, popupClassName)}
+      style={popupStyle}
     >
       {overlay ?? (
         <MenuItems
           {...menu}
           itemClassName={itemClassName}
           selectedItemClassName={selectedItemClassName}
-          overlayClassName={overlayClassName}
+          popupClassName={popupClassName}
         />
       )}
     </BaseMenu.Popup>
@@ -164,17 +163,13 @@ export function Dropdown({
           openOnHover={trigger.includes("hover")}
         />
       )}
-      <BaseMenu.Portal keepMounted={!destroyPopupOnHide}>
+      <BaseMenu.Portal keepMounted={keepMounted}>
         <BaseMenu.Positioner
           {...placement(position)}
           sideOffset={4}
           className={dropdownStyles.positioner}
         >
-          {popupRender
-            ? popupRender(body)
-            : dropdownRender
-              ? dropdownRender(body)
-              : body}
+          {popupRender ? popupRender(body) : body}
         </BaseMenu.Positioner>
       </BaseMenu.Portal>
     </Root>

@@ -39,7 +39,7 @@ export function GrpcResponse({ controller }: { controller: GrpcController }) {
       <RequestTabs
         activeKey={tab}
         onChange={setTab}
-        destroyInactiveTabPane
+        keepMounted={false}
         label="gRPC response tabs"
         items={[
           { key: "messages", label: "Messages" },

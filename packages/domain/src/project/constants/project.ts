@@ -1,5 +1,7 @@
-import { Project, TeamItem } from "@onapi/domain/auth/types/index";
-import dayjs from "dayjs";
+import type {
+  Workspace,
+  WorkspaceGroup,
+} from "@onapi/domain/project/types/workspace";
 import { DEFAULT_TEAM } from "@onapi/domain/project/constants/team";
 import { ProjectConfigType } from "@onapi/domain/project/types/index";
 
@@ -32,27 +34,14 @@ export const INIT_SERVER_LIST = [
   },
 ];
 
-export const DEFAULT_PROJECT: Project = {
+export const DEFAULT_PROJECT: Workspace = {
   project_id: "-1",
   team_id: "",
   name: "Local Project",
-  is_lock: -1,
-  is_default: 1,
-  is_describe_library: 1,
-  is_force: "1",
-  logo: "",
   intro: "",
-  created_at: dayjs().toDate(),
-  can_del: -1,
-  can_quit: -1,
-  is_project_admin: 1,
-  role: 1,
-  authority: 3,
-  edited_at: dayjs().toDate(),
-  upgrade_status: 1,
 };
 
-export const DEFAULT_TEAM_PROJECT: TeamItem = {
+export const DEFAULT_TEAM_PROJECT: WorkspaceGroup = {
   ...DEFAULT_TEAM,
   project: [{ ...DEFAULT_PROJECT }],
 };

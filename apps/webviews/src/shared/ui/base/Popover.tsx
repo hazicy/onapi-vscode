@@ -16,12 +16,12 @@ export function Popover({
   open,
   defaultOpen,
   onOpenChange,
-  overlayClassName,
-  overlayStyle,
-  overlayInnerStyle,
-  destroyTooltipOnHide = true,
-  mouseEnterDelay = 0.1,
-  mouseLeaveDelay = 0.1,
+  popupClassName,
+  positionerStyle,
+  popupStyle,
+  keepMounted = false,
+  openDelay = 100,
+  closeDelay = 100,
   ...rest
 }: PopoverProps) {
   const hover = (Array.isArray(trigger) ? trigger : [trigger]).includes(
@@ -37,20 +37,20 @@ export function Popover({
         render={node(children)}
         nativeButton={nativeButton}
         openOnHover={hover}
-        delay={mouseEnterDelay * 1000}
-        closeDelay={mouseLeaveDelay * 1000}
+        delay={openDelay}
+        closeDelay={closeDelay}
         {...rest}
       />
-      <BasePopover.Portal keepMounted={!destroyTooltipOnHide}>
+      <BasePopover.Portal keepMounted={keepMounted}>
         <BasePopover.Positioner
           {...placement(position)}
           sideOffset={5}
           className={popoverStyles.positioner}
-          style={overlayStyle}
+          style={positionerStyle}
         >
           <BasePopover.Popup
-            className={clsx(popoverStyles.popup, overlayClassName)}
-            style={overlayInnerStyle}
+            className={clsx(popoverStyles.popup, popupClassName)}
+            style={popupStyle}
           >
             {title && <BasePopover.Title>{content(title)}</BasePopover.Title>}
             {content(body)}

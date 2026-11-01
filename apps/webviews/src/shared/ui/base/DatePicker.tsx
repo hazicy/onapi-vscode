@@ -3,7 +3,6 @@ import type { DatePickerProps } from "./types";
 export const DatePicker = ({
   value,
   onChange,
-  format,
   showTime,
   ...props
 }: DatePickerProps) => (

@@ -55,7 +55,6 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
       optionFilterProp = "label",
       optionRender,
       labelRender,
-      dropdownRender,
       popupRender,
       placeholder,
       disabled,
@@ -252,7 +251,7 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
         )}
       </Combobox.List>
     );
-    const renderPopup = popupRender ?? dropdownRender;
+    const renderPopup = popupRender;
     return (
       <Combobox.Root
         modal={false}
