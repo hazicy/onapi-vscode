@@ -24,7 +24,7 @@ const MessageHeader = (props: Props) => {
     (state) => state.websocketConnectionPool,
   );
   const { value, onChange, apisData } = props || {};
-  const apisActiveKey = apisData.id;
+  const activeRequestId = apisData.id;
   const [binaryType, setBinaryType] = useSafeState("");
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const MessageHeader = (props: Props) => {
     }
   }, [setBinaryType, value]);
   const connected =
-    getSocketConnectionStatus(websocketConnectionPool[apisActiveKey]) ===
+    getSocketConnectionStatus(websocketConnectionPool[activeRequestId]) ===
     "connect";
   const sendHint = !connected
     ? t("ws.request.connect_first")
@@ -108,7 +108,7 @@ const MessageHeader = (props: Props) => {
             sendRequestPanelMessage({
               action: "ws_send",
               data: {
-                id: apisActiveKey,
+                id: activeRequestId,
                 msg: value?.raw,
                 type: value?.mode,
               },

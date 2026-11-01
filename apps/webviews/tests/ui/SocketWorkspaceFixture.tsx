@@ -36,7 +36,7 @@ export default function SocketWorkspaceFixture() {
     ack: -1,
   });
   useEffect(() => {
-    useRequestWorkspaceStore.getState().updateApisActiveData(item);
+    useRequestWorkspaceStore.getState().setActiveRequest(item);
   }, [item]);
   window.vscode = {
     postMessage: (message: unknown) => {

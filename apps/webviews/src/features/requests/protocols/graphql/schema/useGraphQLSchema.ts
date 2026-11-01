@@ -241,33 +241,33 @@ const useGraphQLSchema = () => {
     data: { data?: { __schema?: IntrospectionSchema }; errors?: unknown };
     error?: string;
   }) => {
-    const { updateApisActiveData, apisActiveData, updateSchemaLoading } =
+    const { setActiveRequest, activeRequest, setSchemaLoading } =
       useRequestWorkspaceStore.getState();
     const { code, data, error } = result;
     if (code !== 200 || error) {
       message.error(t("graphql.refresh_fail"));
-      updateSchemaLoading(false);
+      setSchemaLoading(false);
       return;
     }
 
     if (data?.errors) {
       message.error(t("graphql.refresh_fail"));
-      updateSchemaLoading(false);
+      setSchemaLoading(false);
       return;
     }
 
     if (!data?.data?.__schema?.types) {
       message.error(t("graphql.refresh_fail"));
-      updateSchemaLoading(false);
+      setSchemaLoading(false);
       return;
     }
     try {
       const organizedSchema = new InspectSchema().organizeSchema(
         data.data.__schema,
       );
-      if (apisActiveData.kind === "api" || apisActiveData.kind === "graphql") {
-        updateApisActiveData({
-          ...apisActiveData,
+      if (activeRequest.kind === "api" || activeRequest.kind === "graphql") {
+        setActiveRequest({
+          ...activeRequest,
           graphqlSchema: organizedSchema,
         });
       }
@@ -279,7 +279,7 @@ const useGraphQLSchema = () => {
           : "Invalid GraphQL introspection response",
       );
     } finally {
-      updateSchemaLoading(false);
+      setSchemaLoading(false);
     }
   };
 

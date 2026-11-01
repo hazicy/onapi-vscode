@@ -140,11 +140,11 @@ function RequestWorkspaceReady() {
 }
 
 const RequestWorkspace: React.FC = () => {
-  const apisActiveData: EditorRecord = useRequestWorkspaceStore(
-    (store) => store.apisActiveData,
+  const activeRequest: EditorRecord = useRequestWorkspaceStore(
+    (store) => store.activeRequest,
   );
-  const updateApisActiveData = useRequestWorkspaceStore(
-    (store) => store.updateApisActiveData,
+  const setActiveRequest = useRequestWorkspaceStore(
+    (store) => store.setActiveRequest,
   );
 
   const onApisDataChange = (newData: EditorRecord) => {
@@ -152,76 +152,76 @@ const RequestWorkspace: React.FC = () => {
       action: "updateApiActiveData",
       data: newData,
     });
-    updateApisActiveData(newData);
+    setActiveRequest(newData);
   };
 
   const renderContainer = () => {
-    if (apisActiveData.kind === "grpc") {
+    if (activeRequest.kind === "grpc") {
       return (
         <GrpcDebug
-          key={apisActiveData.id}
-          apisData={apisActiveData}
+          key={activeRequest.id}
+          apisData={activeRequest}
           onApisDataChange={onApisDataChange}
         />
       );
     }
-    if (apisActiveData.kind === "ai" || apisActiveData.kind === "mcp") {
-      return apisActiveData.kind === "ai" ? (
+    if (activeRequest.kind === "ai" || activeRequest.kind === "mcp") {
+      return activeRequest.kind === "ai" ? (
         <AiDebug
-          key={apisActiveData.id}
-          apisData={apisActiveData}
+          key={activeRequest.id}
+          apisData={activeRequest}
           onApisDataChange={onApisDataChange}
         />
       ) : (
         <McpDebug
-          key={apisActiveData.id}
-          apisData={apisActiveData}
+          key={activeRequest.id}
+          apisData={activeRequest}
           onApisDataChange={onApisDataChange}
         />
       );
     }
-    if (apisActiveData.kind === "api") {
+    if (activeRequest.kind === "api") {
       return (
         <ApiDebug
-          apisData={apisActiveData}
+          apisData={activeRequest}
           onApisDataChange={onApisDataChange}
         />
       );
     }
-    if (apisActiveData.kind === APIS_TARGET_TYPE_ENUM.FOLDER) {
+    if (activeRequest.kind === APIS_TARGET_TYPE_ENUM.FOLDER) {
       return (
         <Folder
-          apisData={apisActiveData as unknown as ApiDetailsData}
+          apisData={activeRequest as unknown as ApiDetailsData}
           onApisDataChange={(value) =>
             onApisDataChange(editorRecordSchema.parse(value))
           }
         />
       );
     }
-    if (apisActiveData.kind === "websocket") {
+    if (activeRequest.kind === "websocket") {
       return (
         <WebSocketDebug
-          apisData={apisActiveData as WebSocketDetailsData}
+          apisData={activeRequest as WebSocketDetailsData}
           onApisDataChange={(val) => {
             onApisDataChange(editorRecordSchema.parse(val));
           }}
         />
       );
     }
-    if (apisActiveData.kind === "socketio") {
+    if (activeRequest.kind === "socketio") {
       return (
         <SocketioDebug
-          apisData={apisActiveData as SocketIoDetailsData}
+          apisData={activeRequest as SocketIoDetailsData}
           onApisDataChange={(val) => {
             onApisDataChange(editorRecordSchema.parse(val));
           }}
         />
       );
     }
-    if (apisActiveData.kind === "graphql") {
+    if (activeRequest.kind === "graphql") {
       return (
         <GraphqlDebug
-          apisData={apisActiveData}
+          apisData={activeRequest}
           onApisDataChange={onApisDataChange}
         />
       );
@@ -234,7 +234,7 @@ const RequestWorkspace: React.FC = () => {
       {
         <Flex vertical className={styles.apiDebug}>
           {renderContainer()}
-          {apisActiveData.id && <RequestWorkspaceReady />}
+          {activeRequest.id && <RequestWorkspaceReady />}
         </Flex>
       }
     </>

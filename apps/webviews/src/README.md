@@ -87,6 +87,15 @@ src/
   `useSocketIoConnection`. New ordinary utility, context and
   service modules use kebab-case filenames that describe their role. Existing
   modules can adopt this convention when reorganized.
+- Request workspace state uses `savedRequests` for the persisted baseline,
+  `activeRequest` for the editable draft, and `httpExecution` for transient HTTP
+  execution data. Use `setSavedRequests`, `setActiveRequest` and
+  `setHttpExecution` for replacement, and `acknowledgeSave` to advance the saved
+  baseline without overwriting newer input.
+- OAuth2 forms only render controls. `useOAuth2Token.ts` validates, resolves
+  variables and dispatches token requests; `oauth2-token-request.ts` builds the
+  request payloads; `useRequestOAuth2Result.ts` applies request-panel results and
+  caches refresh credentials. Socket connection hooks do not update auth state.
 - Keep protocol data reducers with their protocol. Shared session identity,
   sequence filtering and lifecycle transitions belong to `requests/execution`;
   HTTP data belongs to `protocols/http`, socket timeline data to

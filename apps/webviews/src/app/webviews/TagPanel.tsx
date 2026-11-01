@@ -1,6 +1,5 @@
 import useSocketConnectionsStore from "@/features/requests/store/useSocketConnectionsStore";
 import { editorRecordSchema } from "@onapi/domain/requests/record";
-import useSocketStore from "@/features/requests/store/useSocketConnectionsStore";
 import { readRequestPanelResponse } from "@/shared/bridge/request-panel";
 import SharedComponentsProvider from "@/app/providers/SharedComponentsProvider";
 import { PROTOCOL_EXECUTION_EVENT } from "@onapi/contracts";
@@ -28,7 +27,7 @@ import { HotkeysProvider } from "react-hotkeys-hook";
 import useRequestHotkeys from "@/features/requests/hooks/useRequestHotkeys";
 import useShare from "@/features/sharing/store/useShare";
 
-import useSocketIo from "@/features/requests/protocols/socketio/useSocketIoConnection";
+import { useRequestOAuth2Result } from "@/features/requests/editor/Request/Auth/useRequestOAuth2Result";
 import useGraphQLSchema from "@/features/requests/protocols/graphql/schema/useGraphQLSchema";
 
 function initializeRequest(data: any) {
@@ -43,7 +42,7 @@ function initializeRequest(data: any) {
   });
   useGlobal.getState().updateVscodeTheme(vscodeTheme);
   useShare.getState().updateDocBaseUrl(docBaseUrl);
-  useRequestWorkspaceStore.getState().updateApisActiveData(record);
+  useRequestWorkspaceStore.getState().setActiveRequest(record);
   performance.mark("onapi:data-ready");
 }
 
@@ -63,11 +62,11 @@ function TagPanel() {
   const updateProjectConfig = useProjectConfig(
     (state) => state.updateProjectConfig,
   );
-  const updateApisActiveData = useRequestWorkspaceStore(
-    (store) => store.updateApisActiveData,
+  const setActiveRequest = useRequestWorkspaceStore(
+    (store) => store.setActiveRequest,
   );
-  const updateApiCodeHar = useRequestWorkspaceStore(
-    (store) => store.updateApiCodeHar,
+  const setRequestHar = useRequestWorkspaceStore(
+    (store) => store.setRequestHar,
   );
   const updateVscodeTheme = useGlobal((store) => store.updateVscodeTheme);
   const systemConfig = useSystemConfig((state) => state.systemConfig);
@@ -75,13 +74,13 @@ function TagPanel() {
     (state) => state.updateSystemConfig,
   );
   const updateDocBaseUrl = useShare((state) => state.updateDocBaseUrl);
-  const updateApiOriginDetailsList = useRequestWorkspaceStore(
-    (store) => store.updateApiOriginDetailsList,
+  const setSavedRequests = useRequestWorkspaceStore(
+    (store) => store.setSavedRequests,
   );
 
   useRequestHotkeys();
 
-  const { handleProxyFetchResult } = useSocketIo();
+  const { handleProxyFetchResult } = useRequestOAuth2Result();
 
   const { handleGraphQLSchemaFetchResult } = useGraphQLSchema();
 
@@ -103,27 +102,27 @@ function TagPanel() {
       switch (message.action) {
         case "externalStorageChanged": {
           const state = useRequestWorkspaceStore.getState();
-          const active = state.apisActiveData;
-          const previous = state.apiOriginDetailsList.find(
+          const active = state.activeRequest;
+          const previous = state.savedRequests.find(
             (item) => item.id === active.id,
           );
           const current = message.data.find((item) => item.id === active.id);
           // Preserve edits when the file changes underneath an open editor.
           if (current && (!previous || isEqual(active, previous))) {
-            updateApisActiveData({ ...current });
+            setActiveRequest({ ...current });
           }
-          updateApiOriginDetailsList(message.data);
+          setSavedRequests(message.data);
           break;
         }
         case "setApiList":
-          updateApiOriginDetailsList(message.data);
+          setSavedRequests(message.data);
           break;
         case PROTOCOL_EXECUTION_EVENT:
           consumeExecutionEvent(message.data, {
             http: (event, executionId, sequence) => {
               const state = useRequestWorkspaceStore.getState();
-              state.updateCurrentSendingData(
-                reduceHttpExecutionEvent(state.currentSendingData, {
+              state.setHttpExecution(
+                reduceHttpExecutionEvent(state.httpExecution, {
                   type: "event",
                   executionId,
                   sequence,
@@ -144,8 +143,8 @@ function TagPanel() {
           const failure = message.data;
           if (failure.action === "sendApi" && failure.executionId) {
             const state = useRequestWorkspaceStore.getState();
-            state.updateCurrentSendingData(
-              reduceHttpExecutionEvent(state.currentSendingData, {
+            state.setHttpExecution(
+              reduceHttpExecutionEvent(state.httpExecution, {
                 type: "failure",
                 executionId: failure.executionId,
                 error: failure.error,
@@ -158,7 +157,7 @@ function TagPanel() {
             failure.targetId &&
             message.requestId
           ) {
-            useSocketStore
+            useSocketConnectionsStore
               .getState()
               .failConnection(
                 failure.targetId,
@@ -167,7 +166,7 @@ function TagPanel() {
               );
           }
           if (failure.action === "getGraphQLSchema") {
-            useRequestWorkspaceStore.getState().updateSchemaLoading(false);
+            useRequestWorkspaceStore.getState().setSchemaLoading(false);
           }
           if (failure.action === "/proxy/fetch") {
             handleProxyFetchResult({ code: 500, error: failure.error.message });
@@ -182,7 +181,7 @@ function TagPanel() {
           break;
         case "setApiData":
           void preloadRequestProtocol(message.data.kind)?.catch(() => {});
-          updateApisActiveData(message.data);
+          setActiveRequest(message.data);
 
           break;
         case "setVscodeTheme":
@@ -195,7 +194,7 @@ function TagPanel() {
           updateDocBaseUrl(message.data);
           break;
         case "setCodeHar":
-          updateApiCodeHar(message.data);
+          setRequestHar(message.data);
           break;
         case "proxyFetchResult":
           handleProxyFetchResult(message.data);

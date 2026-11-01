@@ -25,7 +25,10 @@ import {
   variableDisplayText,
 } from "../../utils/variable-display";
 
-interface VarInputProps {
+interface VarInputProps extends Pick<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "id" | "aria-label" | "aria-describedby" | "aria-invalid"
+> {
   envId?: string;
   value: string;
   readOnly: boolean;
@@ -295,11 +298,18 @@ export default function VarInput(props: Partial<VarInputProps>) {
     }
   };
 
+  const describedBy =
+    [props["aria-describedby"], names.length ? previewId : undefined]
+      .filter(Boolean)
+      .join(" ") || undefined;
   const fieldProps = {
+    id: props.id,
+    "aria-label": props["aria-label"],
+    "aria-invalid": props["aria-invalid"],
     className: styles.editorField,
     value,
     placeholder,
-    "aria-describedby": names.length ? previewId : undefined,
+    "aria-describedby": describedBy,
     readOnly,
     maxLength: nativeMaxLength,
     onChange: handleChange,

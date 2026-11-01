@@ -33,8 +33,8 @@ const panelProps = {
 
 const ApiDebug: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
   const { t } = useTranslation();
-  const updateApiCodeHar = useRequestWorkspaceStore(
-    (store) => store.updateApiCodeHar,
+  const setRequestHar = useRequestWorkspaceStore(
+    (store) => store.setRequestHar,
   );
   const [openGenerateCode, setOpenGenerateCode] = useState<boolean>(false);
 
@@ -50,7 +50,7 @@ const ApiDebug: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
   };
 
   const handleToCode = () => {
-    updateApiCodeHar({});
+    setRequestHar({});
     setOpenGenerateCode(true);
   };
 

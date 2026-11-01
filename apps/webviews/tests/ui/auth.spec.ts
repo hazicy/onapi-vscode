@@ -52,3 +52,61 @@ test("OAuth2 defaults render parameter tables and validate required token fields
   await expect(authPage.alert).toHaveCount(3);
   expect(errors).toEqual([]);
 });
+
+test("OAuth2 password flow dispatches the form request and keeps validation in the editor", async ({
+  page,
+  authPage,
+}) => {
+  await authPage.open();
+  await authPage.oauth2Button.click();
+  await page
+    .getByLabel("Access Token URL", { exact: true })
+    .fill("https://example.test/token");
+  await page.getByLabel("Username", { exact: true }).last().fill("alice");
+  await page.getByLabel("Password", { exact: true }).last().fill("secret");
+  await authPage.getTokenButton.click();
+  await expect(page.getByLabel("Auth commands")).toContainText(
+    '"action":"/proxy/fetch"',
+  );
+  const commands = JSON.parse(
+    await page.getByLabel("Auth commands").innerText(),
+  );
+  expect(commands[0].data).toMatchObject({
+    url: "https://example.test/token",
+    data: { grant_type: "password", username: "alice", password: "secret" },
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  });
+  await expect(authPage.alert).toHaveCount(0);
+});
+
+test("OAuth2 observes newly cached refresh tokens without changing the client", async ({
+  page,
+  authPage,
+}) => {
+  await authPage.open();
+  await authPage.oauth2Button.click();
+  await page
+    .getByLabel("Access Token URL", { exact: true })
+    .fill("https://example.test/token");
+  await page.getByLabel("Username", { exact: true }).last().fill("alice");
+  await page.getByLabel("Password", { exact: true }).last().fill("secret");
+  await page.getByLabel("Client ID", { exact: true }).fill("client");
+  await page.getByRole("button", { name: /Advanced configurations/ }).click();
+  await page
+    .getByLabel("Refresh Token URL", { exact: true })
+    .fill("https://example.test/refresh");
+  await expect(
+    page.getByRole("button", { name: "Refresh", exact: true }),
+  ).toHaveCount(0);
+  await page
+    .getByRole("button", { name: "Cache refresh token", exact: true })
+    .click();
+  await page.getByRole("button", { name: "Refresh", exact: true }).click();
+  await expect(page.getByLabel("Auth commands")).toContainText(
+    '"refresh_token":"cached-refresh-token"',
+  );
+  const commands = JSON.parse(
+    await page.getByLabel("Auth commands").innerText(),
+  );
+  expect(commands[0].data.url).toBe("https://example.test/refresh");
+});

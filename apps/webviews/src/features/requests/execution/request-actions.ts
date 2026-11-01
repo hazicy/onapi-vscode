@@ -3,14 +3,14 @@ import { reduceHttpExecutionEvent } from "@/features/requests/protocols/http/htt
 import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
 
 export function beginRequest(): string | undefined {
-  const { currentSendingData, updateCurrentSendingData } =
+  const { httpExecution, setHttpExecution } =
     useRequestWorkspaceStore.getState();
-  if (currentSendingData?.session?.status === "running") {
+  if (httpExecution?.session?.status === "running") {
     return undefined;
   }
   const executionId = crypto.randomUUID();
-  updateCurrentSendingData(
-    reduceHttpExecutionEvent(currentSendingData, {
+  setHttpExecution(
+    reduceHttpExecutionEvent(httpExecution, {
       type: "begin",
       executionId,
     }),
@@ -19,22 +19,22 @@ export function beginRequest(): string | undefined {
 }
 
 export function cancelRequest(): void {
-  const { currentSendingData, updateCurrentSendingData } =
+  const { httpExecution, setHttpExecution } =
     useRequestWorkspaceStore.getState();
   if (
-    currentSendingData?.session?.status !== "running" ||
-    !currentSendingData.session.executionId
+    httpExecution?.session?.status !== "running" ||
+    !httpExecution.session.executionId
   ) {
     return;
   }
-  updateCurrentSendingData(
-    reduceHttpExecutionEvent(currentSendingData, {
+  setHttpExecution(
+    reduceHttpExecutionEvent(httpExecution, {
       type: "cancel",
-      executionId: currentSendingData.session.executionId,
+      executionId: httpExecution.session.executionId,
     }),
   );
   sendRequestPanelMessage({
     action: "stopSendApi",
-    executionId: currentSendingData.session.executionId,
+    executionId: httpExecution.session.executionId,
   });
 }

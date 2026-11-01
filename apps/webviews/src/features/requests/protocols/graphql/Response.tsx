@@ -14,8 +14,8 @@ import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorksp
 const Response = memo((props: HttpEditorProps) => {
   const { apisData, onApisDataChange } = props;
 
-  const curApiSendingData = useRequestWorkspaceStore(
-    (state) => state.currentSendingData,
+  const httpExecution = useRequestWorkspaceStore(
+    (state) => state.httpExecution,
   );
 
   const handleOnChange = useMemoizedFn((data: HttpEditorRecord["response"]) => {
@@ -40,7 +40,7 @@ const Response = memo((props: HttpEditorProps) => {
           "console",
         ]}
         responseData={apisData.response}
-        sendingData={curApiSendingData}
+        sendingData={httpExecution}
         onResponseDataChange={handleOnChange}
       />
     </div>

@@ -43,7 +43,7 @@ export default function RequestPanelFixture() {
       <button onClick={() => setWidth(1000)}>Wide panel</button>
       <button
         onClick={() =>
-          useRequestWorkspaceStore.getState().updateCurrentSendingData({
+          useRequestWorkspaceStore.getState().setHttpExecution({
             session: {
               executionId: "request-fixture",
               sequence: 1,

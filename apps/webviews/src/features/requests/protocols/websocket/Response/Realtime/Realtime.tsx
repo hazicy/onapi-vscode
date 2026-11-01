@@ -33,13 +33,13 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
     (state) => state.websocketConnectionPool,
   );
   const { updatePool } = useWebSocketConnection();
-  const apisActiveKey = value.id;
+  const activeRequestId = value.id;
 
   const [, setMode] = useSafeState<any>("text");
   const [data, setData] = useSafeState<any>({});
   useEffect(() => {
     setData({});
-  }, [apisActiveKey, setData]);
+  }, [activeRequestId, setData]);
   const [filterValue, setFilterValue] = useSafeState<string>("");
   const [filterType, setFilterType] = useSafeState<string>("all");
   const [isScrollAuto, setIsScrollAuto] = useSafeState<boolean>(true);
@@ -76,14 +76,14 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
 
   const wsTemplateStateList = useMemo(() => {
     return handleSocketResponse(
-      websocketConnectionPool[apisActiveKey]?.socketRes,
+      websocketConnectionPool[activeRequestId]?.socketRes,
       filterValue,
       filterType,
     );
-  }, [websocketConnectionPool, apisActiveKey, filterValue, filterType]);
-  const messages = websocketConnectionPool[apisActiveKey]?.socketRes;
+  }, [websocketConnectionPool, activeRequestId, filterValue, filterType]);
+  const messages = websocketConnectionPool[activeRequestId]?.socketRes;
   const connected =
-    getSocketConnectionStatus(websocketConnectionPool[apisActiveKey]) ===
+    getSocketConnectionStatus(websocketConnectionPool[activeRequestId]) ===
     "connect";
   const hasFilter = Boolean(filterValue || filterType !== "all");
   useEffect(() => {
@@ -145,7 +145,7 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
   }, [wsTemplateStateList]);
   return (
     <>
-      {getSocketConnectionStatus(websocketConnectionPool[apisActiveKey]) ===
+      {getSocketConnectionStatus(websocketConnectionPool[activeRequestId]) ===
         "connecting" && (
         <Sending
           onCancel={() => {
@@ -172,7 +172,7 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
             list={
               <div className={styles.websocketLeftPanel}>
                 <Header
-                  id={apisActiveKey}
+                  id={activeRequestId}
                   filterValue={filterValue}
                   filterType={filterType}
                   setFilterType={setFilterType}

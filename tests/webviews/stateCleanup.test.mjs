@@ -25,13 +25,13 @@ const scopes = await load(
 
 test("request indexes follow collection replacement and clearing console updates the displayed execution", () => {
   const first = { id: "one", name: "Old" };
-  useRequestWorkspaceStore.getState().updateApiOriginDetailsList([first]);
+  useRequestWorkspaceStore.getState().setSavedRequests([first]);
   const index = selectRequestIndex(useRequestWorkspaceStore.getState());
   assert.equal(index.one, first);
   assert.equal(selectRequestIndex(useRequestWorkspaceStore.getState()), index);
   useRequestWorkspaceStore
     .getState()
-    .updateApiOriginDetailsList([{ id: "two", name: "New" }]);
+    .setSavedRequests([{ id: "two", name: "New" }]);
   const replacement = selectRequestIndex(useRequestWorkspaceStore.getState());
   assert.equal(replacement.one, undefined);
   assert.equal(replacement.two.name, "New");
@@ -39,14 +39,14 @@ test("request indexes follow collection replacement and clearing console updates
     result: { response: { code: 200 } },
     consoleList: [{ messages: ["log"] }],
   };
-  useRequestWorkspaceStore.getState().updateCurrentSendingData(execution);
+  useRequestWorkspaceStore.getState().setHttpExecution(execution);
   useRequestWorkspaceStore.getState().clearConsole();
   assert.equal(
-    useRequestWorkspaceStore.getState().currentSendingData.result.response,
+    useRequestWorkspaceStore.getState().httpExecution.result.response,
     execution.result.response,
   );
   assert.equal(
-    useRequestWorkspaceStore.getState().currentSendingData.consoleList.length,
+    useRequestWorkspaceStore.getState().httpExecution.consoleList.length,
     0,
   );
   assert.equal(execution.consoleList.length, 1);
@@ -94,17 +94,17 @@ test("save acknowledgements update the saved baseline without overwriting newer 
     ...saved,
     request: { ...saved.request, url: "https://example.com/c" },
   };
-  useRequestWorkspaceStore.getState().updateApiOriginDetailsList([saved]);
-  useRequestWorkspaceStore.getState().updateApisActiveData(submitted);
+  useRequestWorkspaceStore.getState().setSavedRequests([saved]);
+  useRequestWorkspaceStore.getState().setActiveRequest(submitted);
   assert.equal(selectIsDirty(useRequestWorkspaceStore.getState()), true);
-  useRequestWorkspaceStore.getState().updateApisActiveData(newer);
+  useRequestWorkspaceStore.getState().setActiveRequest(newer);
   useRequestWorkspaceStore.getState().acknowledgeSave(submitted, submitted);
-  assert.equal(useRequestWorkspaceStore.getState().apisActiveData, newer);
+  assert.equal(useRequestWorkspaceStore.getState().activeRequest, newer);
   assert.equal(selectIsDirty(useRequestWorkspaceStore.getState()), true);
   useRequestWorkspaceStore.getState().acknowledgeSave(newer, newer);
   assert.equal(selectIsDirty(useRequestWorkspaceStore.getState()), false);
   useRequestWorkspaceStore
     .getState()
-    .updateApisActiveData({ ...newer, id: "new-request" });
+    .setActiveRequest({ ...newer, id: "new-request" });
   assert.equal(selectIsDirty(useRequestWorkspaceStore.getState()), true);
 });

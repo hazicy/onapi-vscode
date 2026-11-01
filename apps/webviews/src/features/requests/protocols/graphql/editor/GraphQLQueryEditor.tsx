@@ -89,8 +89,8 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
   const schemaLoading = useRequestWorkspaceStore(
     (state) => state?.schemaLoading,
   );
-  const updateSchemaLoading = useRequestWorkspaceStore(
-    (state) => state.updateSchemaLoading,
+  const setSchemaLoading = useRequestWorkspaceStore(
+    (state) => state.setSchemaLoading,
   );
 
   const [checkedKeys, setCheckedKeys] = useState<string[]>([]);
@@ -552,7 +552,7 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
     (key: "query" | "variables", val: string) => {
       // Read the committed request even when React has not rendered the previous
       // editor update yet. Independent field changes must preserve each other.
-      const active = useRequestWorkspaceStore.getState().apisActiveData;
+      const active = useRequestWorkspaceStore.getState().activeRequest;
       const body =
         active?.id === apiData.id && "request" in active
           ? active.request?.body || data
@@ -568,7 +568,7 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
 
   const refreshSchema = async () => {
     try {
-      updateSchemaLoading(true);
+      setSchemaLoading(true);
 
       sendRequestPanelMessage({
         action: "getGraphQLSchema",

@@ -22,8 +22,8 @@ import { ConvertedCurlRequest } from "@/features/curl/types";
 
 const Header: FC<HttpEditorProps> = ({ apisData, onApisDataChange, type }) => {
   const { t } = useTranslation();
-  const currentSendingData = useRequestWorkspaceStore(
-    (store) => store.currentSendingData,
+  const httpExecution = useRequestWorkspaceStore(
+    (store) => store.httpExecution,
   );
 
   const [curServerId, SetCurServerId] = useState("");
@@ -41,7 +41,7 @@ const Header: FC<HttpEditorProps> = ({ apisData, onApisDataChange, type }) => {
       }),
     );
   };
-  const isSending = isEqual(currentSendingData?.session?.status, "running");
+  const isSending = isEqual(httpExecution?.session?.status, "running");
 
   const handleSend = (option?: { server_id: string }) => {
     const executionId = beginRequest();

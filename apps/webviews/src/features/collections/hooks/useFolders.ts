@@ -25,8 +25,8 @@ export const useFolders = (props?: Props) => {
 
   const [apisFolders, setApisFolders] = useState<ApiDetailsData[]>([]);
   const [flatApisFolders, setFlatApisFolders] = useState<any[]>([]);
-  const apiOriginDetailsList = useRequestWorkspaceStore(
-    (state) => state.apiOriginDetailsList,
+  const savedRequests = useRequestWorkspaceStore(
+    (state) => state.savedRequests,
   );
 
   const nodeSort = (pre: any, after: any) => {
@@ -40,7 +40,7 @@ export const useFolders = (props?: Props) => {
   };
 
   useEffect(() => {
-    if (isArray(apiOriginDetailsList)) {
+    if (isArray(savedRequests)) {
       const apiArr = cloneDeep(
         addRootFolder
           ? concat(
@@ -54,9 +54,9 @@ export const useFolders = (props?: Props) => {
                   status: 0,
                 } as any,
               ],
-              apiOriginDetailsList,
+              savedRequests,
             )
-          : apiOriginDetailsList,
+          : savedRequests,
       )
         .filter(
           (item) =>
@@ -74,7 +74,7 @@ export const useFolders = (props?: Props) => {
       setFlatApisFolders(selectOptions);
       setApisFolders(newApiArr);
     }
-  }, [apiOriginDetailsList]);
+  }, [savedRequests]);
 
   return {
     apisFolders,

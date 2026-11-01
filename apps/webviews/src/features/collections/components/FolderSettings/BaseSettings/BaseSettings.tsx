@@ -23,12 +23,11 @@ interface Props {
 
 const BaseSettings: FC<Props> = ({ value, onChange }) => {
   const { apisFolders } = useFolders({ currentTargetId: value?.id });
-  const apisActiveKey = useRequestWorkspaceStore(
-    (state) => state.apisActiveData.id,
+  const activeRequestId = useRequestWorkspaceStore(
+    (state) => state.activeRequest.id,
   );
   const isNew = useRequestWorkspaceStore(
-    (state) =>
-      !state.apiOriginDetailsList.some((item) => item.id === value?.id),
+    (state) => !state.savedRequests.some((item) => item.id === value?.id),
   );
   const { t } = useTranslation();
   const inputRef = useRef<InputRef>(null);
@@ -43,13 +42,13 @@ const BaseSettings: FC<Props> = ({ value, onChange }) => {
 
   useDebounceEffect(
     () => {
-      if (apisActiveKey === value?.id && isNew && !value?.description) {
+      if (activeRequestId === value?.id && isNew && !value?.description) {
         inputRef.current!.focus({
           cursor: "end",
         });
       }
     },
-    [apisActiveKey],
+    [activeRequestId],
     { wait: 100 },
   );
 

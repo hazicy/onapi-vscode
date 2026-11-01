@@ -26,7 +26,7 @@ const MessageHeader = (props: Props) => {
     (state) => state.websocketConnectionPool,
   );
   const { value, onChange, apisData, onChangeApisData } = props || {};
-  const apisActiveKey = apisData.id;
+  const activeRequestId = apisData.id;
   const [binaryType, setBinaryType] = useSafeState("");
 
   useEffect(() => {
@@ -133,7 +133,7 @@ const MessageHeader = (props: Props) => {
               size(trim(value?.raw)) > 0 &&
               isEqual(
                 getSocketConnectionStatus(
-                  websocketConnectionPool[apisActiveKey],
+                  websocketConnectionPool[activeRequestId],
                 ),
                 "connect",
               )
@@ -143,7 +143,7 @@ const MessageHeader = (props: Props) => {
             sendRequestPanelMessage({
               action: "socketio_send",
               data: {
-                id: apisActiveKey,
+                id: activeRequestId,
                 msg: value?.raw,
                 type: value?.mode,
                 event: apisData?.msg_data || "message",

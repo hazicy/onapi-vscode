@@ -22,8 +22,8 @@ function ShareListPanel() {
   const customTheme = useGlobalTheme();
 
   const updateShareData = useShare((state) => state.updateShareData);
-  const updateApiOriginDetailsList = useRequestWorkspaceStore(
-    (store) => store.updateApiOriginDetailsList,
+  const setSavedRequests = useRequestWorkspaceStore(
+    (store) => store.setSavedRequests,
   );
   const updateDocBaseUrl = useShare((state) => state.updateDocBaseUrl);
 
@@ -57,7 +57,7 @@ function ShareListPanel() {
 
       switch (message.action) {
         case "setApiList":
-          updateApiOriginDetailsList(message?.data || []);
+          setSavedRequests(message?.data || []);
           setLodaing(false);
           break;
         case "setShareData":

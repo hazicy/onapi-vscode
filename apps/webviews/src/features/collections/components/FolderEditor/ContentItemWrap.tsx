@@ -25,7 +25,7 @@ const ContentItemWrap: FC<Props> = memo((props) => {
   const onApisDataChange = useMemoizedFn((data: ApiDetailsData) => {
     useRequestWorkspaceStore
       .getState()
-      .updateApisActiveData(editorRecordSchema.parse(data));
+      .setActiveRequest(editorRecordSchema.parse(data));
   });
 
   return (

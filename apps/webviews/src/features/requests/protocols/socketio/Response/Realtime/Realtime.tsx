@@ -47,15 +47,15 @@ const Realtime: React.FC<Props> = ({ id, onChange }) => {
     (state) => state.websocketConnectionPool,
   );
   const { updatePool } = useSocketIoConnection();
-  const apisActiveKey = id;
+  const activeRequestId = id;
   const value = useRequestWorkspaceStore(
-    (state) => state.apisActiveData,
+    (state) => state.activeRequest,
   ) as SocketIoDetailsData;
   const [mode, setMode] = useSafeState<any>("text");
   const [data, setData] = useSafeState<any>({});
   useEffect(() => {
     setData({});
-  }, [apisActiveKey, setData]);
+  }, [activeRequestId, setData]);
   const [filterValue, setFilterValue] = useSafeState<string>("");
   const [filterType, setFilterType] = useSafeState<string>("all");
   const [isScrollAuto, setIsScrollAuto] = useSafeState<boolean>(true);
@@ -198,15 +198,15 @@ const Realtime: React.FC<Props> = ({ id, onChange }) => {
 
   const wsTemplateStateList = useMemo(() => {
     return handleSocketResponse(
-      websocketConnectionPool[apisActiveKey]?.socketRes,
+      websocketConnectionPool[activeRequestId]?.socketRes,
       filterValue,
       filterType,
     );
-  }, [websocketConnectionPool, apisActiveKey, filterValue, filterType]);
+  }, [websocketConnectionPool, activeRequestId, filterValue, filterType]);
 
-  const messages = websocketConnectionPool[apisActiveKey]?.socketRes;
+  const messages = websocketConnectionPool[activeRequestId]?.socketRes;
   const connected =
-    getSocketConnectionStatus(websocketConnectionPool[apisActiveKey]) ===
+    getSocketConnectionStatus(websocketConnectionPool[activeRequestId]) ===
     "connect";
   const hasFilter = Boolean(filterValue.trim() || filterType !== "all");
   useEffect(() => {
@@ -241,7 +241,7 @@ const Realtime: React.FC<Props> = ({ id, onChange }) => {
     if (scroll) {
       flowRef.current.scrollTop = flowRef?.current?.scrollHeight || 0;
     }
-  }, [apisActiveKey, isScrollAuto, wsTemplateStateList]);
+  }, [activeRequestId, isScrollAuto, wsTemplateStateList]);
   useEffect(() => {
     const element = flowRef.current;
     if (!element) {
@@ -252,14 +252,14 @@ const Realtime: React.FC<Props> = ({ id, onChange }) => {
         lastScrollTop.current = {};
       }
       const currentScrollTop = element.scrollTop;
-      if (currentScrollTop < (lastScrollTop.current[apisActiveKey] || 0)) {
+      if (currentScrollTop < (lastScrollTop.current[activeRequestId] || 0)) {
         setIsScrollAuto(false);
       }
-      lastScrollTop.current[apisActiveKey] = currentScrollTop;
+      lastScrollTop.current[activeRequestId] = currentScrollTop;
     };
     element.addEventListener("scroll", handleScroll);
     return () => element.removeEventListener("scroll", handleScroll);
-  }, [apisActiveKey, setIsScrollAuto]);
+  }, [activeRequestId, setIsScrollAuto]);
   useEffect(() => {
     if (wsTemplateStateList[size(wsTemplateStateList) - 1]?.action === "send") {
       setIsScrollAuto(true);
@@ -268,7 +268,7 @@ const Realtime: React.FC<Props> = ({ id, onChange }) => {
 
   return (
     <>
-      {getSocketConnectionStatus(websocketConnectionPool[apisActiveKey]) ===
+      {getSocketConnectionStatus(websocketConnectionPool[activeRequestId]) ===
         "connecting" && (
         <Sending
           onCancel={() => {
@@ -294,7 +294,7 @@ const Realtime: React.FC<Props> = ({ id, onChange }) => {
             list={
               <div className={styles.socketIoLeftPanel}>
                 <Header
-                  id={apisActiveKey}
+                  id={activeRequestId}
                   filterValue={filterValue}
                   filterType={filterType}
                   setFilterType={setFilterType}

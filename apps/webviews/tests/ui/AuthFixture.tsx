@@ -1,3 +1,6 @@
+import { useStorage } from "@/app/store";
+import useUserConfig from "@/features/auth/store/useUserConfig";
+import { readAuthValues } from "@/features/requests/editor/Request/Auth/auth-state";
 import OAuth2 from "@/features/requests/editor/Request/Auth/components/OAuth2";
 import { useState } from "react";
 import {
@@ -14,6 +17,11 @@ export default function AuthFixture() {
       { key: "password", value: "secret" },
     ],
   });
+  const [commands, setCommands] = useState<unknown[]>([]);
+  window.vscode = {
+    postMessage: (command: unknown) =>
+      setCommands((current) => [...current, command]),
+  } as typeof window.vscode;
   const [errors, setErrors] = useState<Record<string, string>>({});
   return (
     <AuthContext.Provider
@@ -64,7 +72,19 @@ export default function AuthFixture() {
       >
         OAuth2 auth
       </button>
-      {value.type === "oauth2" && <OAuth2 onChange={() => {}} />}
+      {value.type === "oauth2" && <OAuth2 />}
+      <button
+        onClick={() => {
+          const uid = useUserConfig.getState().userInfo.uid;
+          const clientId = readAuthValues(value, "oauth2").clientId ?? "";
+          useStorage.getState().updateOauthRefreshData({
+            [uid]: { [clientId]: { refresh_token: "cached-refresh-token" } },
+          });
+        }}
+      >
+        Cache refresh token
+      </button>
+      <output aria-label="Auth commands">{JSON.stringify(commands)}</output>
       <output aria-label="Auth data">{JSON.stringify(value)}</output>
     </AuthContext.Provider>
   );

@@ -12,14 +12,14 @@ const executionState = await load(
 test("sending and cancelling preserve results and prevent duplicate sends", async () => {
   const response = { code: 200, body: "previous" };
   const state = {
-    currentSendingData: {
+    httpExecution: {
       result: { executionId: "old", response },
       status: "succeeded",
       error: { message: "old error" },
     },
   };
-  state.updateCurrentSendingData = (next) => {
-    state.currentSendingData = next;
+  state.setHttpExecution = (next) => {
+    state.httpExecution = next;
   };
   const messages = [];
   const globals = {
@@ -44,16 +44,16 @@ test("sending and cancelling preserve results and prevent duplicate sends", asyn
   );
   const executionId = beginRequest();
   assert.equal(typeof executionId, "string");
-  assert.equal(state.currentSendingData.session.executionId, executionId);
-  assert.equal(state.currentSendingData.result.response, response);
-  assert.equal(state.currentSendingData.error, null);
-  assert.equal(state.currentSendingData.session.status, "running");
-  const pending = state.currentSendingData;
+  assert.equal(state.httpExecution.session.executionId, executionId);
+  assert.equal(state.httpExecution.result.response, response);
+  assert.equal(state.httpExecution.error, null);
+  assert.equal(state.httpExecution.session.status, "running");
+  const pending = state.httpExecution;
   assert.equal(beginRequest(), undefined);
-  assert.equal(state.currentSendingData, pending);
+  assert.equal(state.httpExecution, pending);
   cancelRequest();
-  assert.equal(state.currentSendingData.result.response, response);
-  assert.equal(state.currentSendingData.session.status, "cancelled");
+  assert.equal(state.httpExecution.result.response, response);
+  assert.equal(state.httpExecution.session.status, "cancelled");
   assert.equal(messages.length, 1);
   assert.equal(messages[0].action, "stopSendApi");
   assert.equal(messages[0].executionId, executionId);

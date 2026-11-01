@@ -21,8 +21,8 @@ import { isArray } from "lodash-es";
 function ImportDataPanel() {
   const customTheme = useGlobalTheme();
   const updateUserConfig = useUserConfig((store) => store.updateUserConfig);
-  const updateApiOriginDetailsList = useRequestWorkspaceStore(
-    (store) => store.updateApiOriginDetailsList,
+  const setSavedRequests = useRequestWorkspaceStore(
+    (store) => store.setSavedRequests,
   );
   const updateVscodeTheme = useGlobal((store) => store.updateVscodeTheme);
   const [lodaing, setLodaing] = useState(true);
@@ -57,7 +57,7 @@ function ImportDataPanel() {
           break;
         case "setApiList":
           if (isArray(message.data)) {
-            updateApiOriginDetailsList(message.data);
+            setSavedRequests(message.data);
           }
           setLodaing(false);
           break;

@@ -14,12 +14,12 @@ const SharePage = () => {
   const [searchValue, setSearchValue] = useSafeState("");
 
   const shareData = useShare((state) => state.shareData);
-  const apiOriginDetailsList = useRequestWorkspaceStore(
-    (store) => store.apiOriginDetailsList,
+  const savedRequests = useRequestWorkspaceStore(
+    (store) => store.savedRequests,
   );
   const { filteredShareList } = useDocsData({
     searchIncludesField: ["name", "url"],
-    dataSource: apiOriginDetailsList,
+    dataSource: savedRequests,
     treeDataFilterParams: {
       value: searchValue,
     },

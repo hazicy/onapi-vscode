@@ -89,14 +89,14 @@ const UrlGroup = (props: UrlGroupProps) => {
   const { themeToken } = useTheme();
   const envList = useProjectConfig((state) => state.envList);
   const envDetailKeys = useProjectConfig((state) => state.envDetailKeys);
-  const apisActiveData = useRequestWorkspaceStore(
-    (store) => store.apisActiveData,
+  const activeRequest = useRequestWorkspaceStore(
+    (store) => store.activeRequest,
   );
-  const apiOriginDetailsList = useRequestWorkspaceStore(
-    (store) => store.apiOriginDetailsList,
+  const savedRequests = useRequestWorkspaceStore(
+    (store) => store.savedRequests,
   );
-  const updateCurrentServerId = useRequestWorkspaceStore(
-    (state) => state.updateCurrentServerId,
+  const setCurrentServerId = useRequestWorkspaceStore(
+    (state) => state.setCurrentServerId,
   );
   const customMethodList = useProjectConfig((state) => state?.customMethodList);
 
@@ -120,17 +120,17 @@ const UrlGroup = (props: UrlGroupProps) => {
 
   useEffect(() => {
     const tempServerId = getCollectionServerId(
-      apisActiveData?.id,
-      apiOriginDetailsList.reduce((pre: any, cur) => {
+      activeRequest?.id,
+      savedRequests.reduce((pre: any, cur) => {
         if (cur?.id) {
           pre[cur.id] = cur;
         }
         return pre;
       }, {}),
     );
-    updateCurrentServerId(tempServerId);
+    setCurrentServerId(tempServerId);
     SetCurServerId(tempServerId);
-  }, [apiOriginDetailsList]);
+  }, [savedRequests]);
 
   const handleChange = (key: string, value: string) => {
     onChange(key, value);
@@ -299,7 +299,7 @@ const UrlGroup = (props: UrlGroupProps) => {
                         styles.select,
                       )}
                       onChange={(i) => {
-                        updateCurrentServerId(i);
+                        setCurrentServerId(i);
                         SetCurServerId(i);
                       }}
                       size="small"

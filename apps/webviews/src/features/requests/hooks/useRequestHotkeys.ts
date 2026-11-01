@@ -26,9 +26,9 @@ export default function useRequestHotkeys() {
       ) {
         return;
       }
-      const { apisActiveData } = useRequestWorkspaceStore.getState();
+      const { activeRequest } = useRequestWorkspaceStore.getState();
       if (action === APIS_HOT_KEYS_ENUM.SEND) {
-        const kind = apisActiveData.kind;
+        const kind = activeRequest.kind;
         if (kind !== "api" && kind !== "graphql") {
           return;
         }
@@ -39,12 +39,12 @@ export default function useRequestHotkeys() {
         sendRequestPanelMessage({
           action: "sendApi",
           executionId,
-          data: { ...apisActiveData, kind, request: apisActiveData.request },
+          data: { ...activeRequest, kind, request: activeRequest.request },
         });
       } else {
         sendRequestPanelMessage({
           action: "saveApiData",
-          data: apisActiveData,
+          data: activeRequest,
         });
       }
     },

@@ -36,8 +36,8 @@ const Index: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
   const { t } = useTranslation();
   const [apiScreenDirection, setApiScreenDirection] =
     useState<DirectionType>("vertical");
-  const updateApiCodeHar = useRequestWorkspaceStore(
-    (store) => store.updateApiCodeHar,
+  const setRequestHar = useRequestWorkspaceStore(
+    (store) => store.setRequestHar,
   );
   const [openGenerateCode, setOpenGenerateCode] = useState<boolean>(false);
   const handleDirectionChange = (direction: DirectionType) => {
@@ -45,7 +45,7 @@ const Index: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
   };
 
   const handleToCode = () => {
-    updateApiCodeHar({});
+    setRequestHar({});
     setOpenGenerateCode(true);
   };
 

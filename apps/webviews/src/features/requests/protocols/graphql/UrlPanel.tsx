@@ -31,19 +31,19 @@ import { AnyObject } from "@onapi/domain/types/common";
 const Index = memo((props: HttpEditorProps) => {
   const { t } = useTranslation();
   const { apisData, onApisDataChange } = props;
-  const curApiSendingData = useRequestWorkspaceStore(
-    (state) => state.currentSendingData,
+  const httpExecution = useRequestWorkspaceStore(
+    (state) => state.httpExecution,
   );
-  const apisActiveData = useRequestWorkspaceStore(
-    (store) => store.apisActiveData,
+  const activeRequest = useRequestWorkspaceStore(
+    (store) => store.activeRequest,
   );
   const apiDetailsData = useRequestWorkspaceStore(selectRequestIndex);
-  const apiOriginDetailsList = useRequestWorkspaceStore(
-    (store) => store.apiOriginDetailsList,
+  const savedRequests = useRequestWorkspaceStore(
+    (store) => store.savedRequests,
   );
 
-  const updateCurrentServerId = useRequestWorkspaceStore(
-    (store) => store.updateCurrentServerId,
+  const setCurrentServerId = useRequestWorkspaceStore(
+    (store) => store.setCurrentServerId,
   );
   const currentServerId = useRequestWorkspaceStore(
     (store) => store.currentServerId,
@@ -55,18 +55,18 @@ const Index = memo((props: HttpEditorProps) => {
 
   useEffect(() => {
     const tempServerId = getCollectionServerId(
-      apisActiveData?.id,
-      apiOriginDetailsList.reduce((pre: any, cur) => {
+      activeRequest?.id,
+      savedRequests.reduce((pre: any, cur) => {
         if (cur?.id) {
           pre[cur.id] = cur;
         }
         return pre;
       }, {}),
     );
-    updateCurrentServerId(tempServerId);
-  }, [apiOriginDetailsList]);
+    setCurrentServerId(tempServerId);
+  }, [savedRequests]);
 
-  const isSending = isEqual(curApiSendingData?.session?.status, "running");
+  const isSending = isEqual(httpExecution?.session?.status, "running");
 
   const urlGroupData = useMemo(
     () => ({
@@ -75,7 +75,7 @@ const Index = memo((props: HttpEditorProps) => {
     [apisData],
   );
   const currentData = (): GraphQLDetailsData => {
-    const latest = useRequestWorkspaceStore.getState().apisActiveData;
+    const latest = useRequestWorkspaceStore.getState().activeRequest;
     return latest?.id === apisData.id &&
       (latest.kind === "api" || latest.kind === "graphql")
       ? latest
@@ -172,7 +172,7 @@ const Index = memo((props: HttpEditorProps) => {
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         curServerId={currentServerId}
-        SetCurServerId={updateCurrentServerId}
+        SetCurServerId={setCurrentServerId}
         style={{
           paddingRight: "0",
         }}

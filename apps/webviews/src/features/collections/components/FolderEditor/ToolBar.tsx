@@ -26,7 +26,7 @@ const ToolBar: FC<Props> = ({}) => {
     (state) => state.http!.activeEnvironment || "",
   );
 
-  const apisData = useRequestWorkspaceStore((store) => store.apisActiveData);
+  const apisData = useRequestWorkspaceStore((store) => store.activeRequest);
 
   const isReadonly = useUserConfig((state) => state.isReadonly);
 

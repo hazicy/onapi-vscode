@@ -35,8 +35,8 @@ const Request: React.FC<Props> = (props) => {
   const { value, onChange, readOnly } = props || {};
   const { Provider } = context;
   const { request } = value || {};
-  const apisActiveKey = useRequestWorkspaceStore(
-    (state) => state.apisActiveData.id,
+  const activeRequestId = useRequestWorkspaceStore(
+    (state) => state.activeRequest.id,
   );
   const apiDetailsData = useRequestWorkspaceStore(selectRequestIndex);
   const globalParams = useProjectConfig((state) => state.globalParams);
@@ -68,7 +68,7 @@ const Request: React.FC<Props> = (props) => {
       sendRequestPanelMessage({
         action: "socketio_update_event",
         data: {
-          id: apisActiveKey,
+          id: activeRequestId,
           parameter: data,
         },
       });
@@ -81,7 +81,7 @@ const Request: React.FC<Props> = (props) => {
     if (isEqual(type, "event")) {
       if (
         isEqual(
-          getSocketConnectionStatus(websocketConnectionPool?.[apisActiveKey]),
+          getSocketConnectionStatus(websocketConnectionPool?.[activeRequestId]),
           "connect",
         )
       ) {

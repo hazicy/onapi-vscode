@@ -14,8 +14,8 @@ import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorksp
 
 const Response = memo((props: HttpEditorProps) => {
   const { apisData, onApisDataChange } = props;
-  const currentSendingData = useRequestWorkspaceStore(
-    (store) => store.currentSendingData,
+  const httpExecution = useRequestWorkspaceStore(
+    (store) => store.httpExecution,
   );
   const handleOnChange = useMemoizedFn((data: HttpEditorRecord["response"]) => {
     const newData = produce(apisData, (draft) => {
@@ -29,7 +29,7 @@ const Response = memo((props: HttpEditorProps) => {
       <ResponsePanel
         showDownload
         responseData={apisData.response}
-        sendingData={currentSendingData}
+        sendingData={httpExecution}
         onResponseDataChange={handleOnChange}
       />
     </div>

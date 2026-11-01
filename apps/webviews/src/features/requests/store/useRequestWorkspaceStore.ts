@@ -6,29 +6,29 @@ import { DEFAULT_REQUEST_SYSTEM_HEADERS } from "@onapi/domain/requests/constants
 import { create, devtools } from "@/shared/state/store";
 
 type State = {
-  apiOriginDetailsList: EditorRecord[];
-  apisActiveData: EditorRecord;
-  currentSendingData?: HttpExecutionState;
+  savedRequests: EditorRecord[];
+  activeRequest: EditorRecord;
+  httpExecution?: HttpExecutionState;
   currentServerId: string;
   systemRequestHeader: typeof DEFAULT_REQUEST_SYSTEM_HEADERS;
-  apiCodeHar: unknown;
+  requestHar: unknown;
   schemaLoading: boolean;
 };
 type Actions = {
-  updateApiOriginDetailsList: (items: EditorRecord[]) => void;
-  updateApisActiveData: (item: EditorRecord) => void;
+  setSavedRequests: (items: EditorRecord[]) => void;
+  setActiveRequest: (item: EditorRecord) => void;
   acknowledgeSave: (definition: EditorRecord, submitted: EditorRecord) => void;
-  updateCurrentSendingData: (result: HttpExecutionState) => void;
+  setHttpExecution: (result: HttpExecutionState) => void;
   clearConsole: () => void;
-  updateCurrentServerId: (id: string) => void;
-  updateApiCodeHar: (har: any) => void;
-  updateSchemaLoading: (loading: boolean) => void;
+  setCurrentServerId: (id: string) => void;
+  setRequestHar: (har: unknown) => void;
+  setSchemaLoading: (loading: boolean) => void;
 };
 
 // Derive the lookup from the collection; never maintain a second writable copy.
 const indexes = new WeakMap<EditorRecord[], Record<string, EditorRecord>>();
-export function selectRequestIndex(state: Pick<State, "apiOriginDetailsList">) {
-  const items = state.apiOriginDetailsList;
+export function selectRequestIndex(state: Pick<State, "savedRequests">) {
+  const items = state.savedRequests;
   let index = indexes.get(items);
   if (!index) {
     index = Object.fromEntries(items.map((item) => [item.id, item]));
@@ -39,67 +39,66 @@ export function selectRequestIndex(state: Pick<State, "apiOriginDetailsList">) {
 
 /** The active document is a draft; saved records contain no editor flags. */
 export function selectIsDirty(
-  state: Pick<State, "apisActiveData" | "apiOriginDetailsList">,
+  state: Pick<State, "activeRequest" | "savedRequests">,
 ) {
-  const draft = state.apisActiveData;
+  const draft = state.activeRequest;
   if (!draft.id) {
     return false;
   }
-  const saved = state.apiOriginDetailsList.find((item) => item.id === draft.id);
+  const saved = state.savedRequests.find((item) => item.id === draft.id);
   return !saved || !isEqual(requestDefinition(draft), requestDefinition(saved));
 }
 
 export default create<State & Actions>()(
   devtools(
     (set) => ({
-      apiOriginDetailsList: [],
-      apisActiveData: {
+      savedRequests: [],
+      activeRequest: {
         id: "",
         parentId: "0",
         name: "",
         kind: "api",
         request: { method: "GET", url: "" },
       },
-      currentSendingData: undefined,
+      httpExecution: undefined,
       currentServerId: "",
       systemRequestHeader: DEFAULT_REQUEST_SYSTEM_HEADERS,
-      apiCodeHar: {},
+      requestHar: {},
       schemaLoading: false,
-      updateApiOriginDetailsList: (items) =>
-        set({ apiOriginDetailsList: items }),
-      updateApisActiveData: (item) => set({ apisActiveData: item }),
+      setSavedRequests: (items) => set({ savedRequests: items }),
+      setActiveRequest: (item) => set({ activeRequest: item }),
       acknowledgeSave: (definition, submitted) =>
         set((state) => {
-          const exists = state.apiOriginDetailsList.some(
+          const exists = state.savedRequests.some(
             (item) => item.id === definition.id,
           );
-          const apiOriginDetailsList = exists
-            ? state.apiOriginDetailsList.map((item) =>
+          const savedRequests = exists
+            ? state.savedRequests.map((item) =>
                 item.id === definition.id ? definition : item,
               )
-            : [...state.apiOriginDetailsList, definition];
+            : [...state.savedRequests, definition];
           const matches =
-            state.apisActiveData.id === definition.id &&
+            state.activeRequest.id === definition.id &&
             isEqual(
-              requestDefinition(state.apisActiveData),
+              requestDefinition(state.activeRequest),
               requestDefinition(submitted),
             );
           return {
-            apiOriginDetailsList,
-            apisActiveData: matches ? definition : state.apisActiveData,
+            savedRequests,
+            activeRequest: matches ? definition : state.activeRequest,
           };
         }),
-      updateCurrentSendingData: (result) => set({ currentSendingData: result }),
+      setHttpExecution: (result) => set({ httpExecution: result }),
       clearConsole: () =>
         set((state) => ({
-          currentSendingData: state.currentSendingData && {
-            ...state.currentSendingData,
+          httpExecution: state.httpExecution && {
+            ...state.httpExecution,
             consoleList: [],
           },
         })),
-      updateCurrentServerId: (id) => set({ currentServerId: id }),
-      updateApiCodeHar: (har) => set({ apiCodeHar: har }),
-      updateSchemaLoading: (loading) => set({ schemaLoading: loading }),
+      setCurrentServerId: (id) => set({ currentServerId: id }),
+      setRequestHar: (har) => set({ requestHar: har }),
+      setSchemaLoading: (loading) => set({ schemaLoading: loading }),
     }),
     { name: "useRequestWorkspaceStore" },
   ),

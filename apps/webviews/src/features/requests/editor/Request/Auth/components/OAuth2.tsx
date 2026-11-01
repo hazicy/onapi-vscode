@@ -1,23 +1,13 @@
-import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
-import {
-  scopeValues,
-  selectActiveEnvironment,
-} from "@/features/project/store/useProjectConfig/selectors";
-import { validateOAuth2 } from "../auth-state";
-import { AuthField, useAuth, useAuthValues } from "../AuthField";
+import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { AuthField, useAuthValues } from "../AuthField";
+import { useOAuth2Token } from "../useOAuth2Token";
 import "../style.css";
 import styles from "../Auth.module.css";
-/* eslint-disable no-useless-escape */
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-
-import { Flex, Select, Typography, message } from "@/shared/ui/base";
-
-import { has, includes, isEqual, setWith } from "lodash-es";
-
+import { Flex, Select, Typography } from "@/shared/ui/base";
+import { includes, isEqual } from "lodash-es";
 import { SegmentedTabs } from "@/shared/components";
 import VarInput from "@/features/variables/components/VarInput/VarInput";
-
 import { Button, AppIcon, Tooltip } from "@/shared/ui";
 import GhostCollapse from "@/shared/ui/GhostCollapse";
 import {
@@ -25,171 +15,17 @@ import {
   AUTH_OAUTH2_AUTHENTICATION,
   AUTH_OAUTH2_CHALLENGE,
   AUTH_OAUTH2_GRANT_TYPE,
-  AUTH_OAUTH2_GRANT_TYPE_MAP,
   AUTH_OAUTH2_LOCATION,
 } from "@onapi/domain/requests/constants/auth";
-import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorkspaceStore";
-import useProjectConfig from "@/features/project/store/useProjectConfig";
-import useUserConfig from "@/features/auth/store/useUserConfig";
-import { useStorage } from "@/app/store";
-import {
-  AuthOauth2,
-  RequestParamsItem,
-} from "@onapi/domain/requests/types/auth";
+import OAuth2ParamsTable from "./OAuth2ParamsTable";
 
-import {
-  resolveOAuth2Parameters,
-  resolveOAuth2Variables,
-} from "@/features/requests/editor/Request/Auth/oauth2-variables";
-
-import OAuth2ParamsTable, { type DataSourceItem } from "./OAuth2ParamsTable";
-
-type ObjectItem = { [key: string]: string };
-
-type AccessInfo = {
-  code?: string;
-  state?: string;
-};
-
-type TokenInfo = Omit<
-  AuthOauth2,
-  | "access_token"
-  | "addTokenTo"
-  | "headerPrefix"
-  | "challengeAlgorithm"
-  | "client_authentication"
-  | "refreshTokenUrl"
-  | "refreshRequestParams"
->;
-
-interface Props {
-  onChange: (v: AuthOauth2) => void;
-  id?: string | undefined;
-}
-
-const OAuth2 = (props: Props) => {
+const OAuth2 = () => {
   const { t } = useTranslation();
-  const { setErrors } = useAuth();
   const oauth2 = useAuthValues(AUTH_ENUM.OAUTH2);
-  const childWindow = useRef<any>(null);
-  const tokenInfo = useRef<Partial<TokenInfo> | null>(null);
-  const [tabsValue, setTabsValue] = useState<string>("authRequestParams");
-  const [refreshLoading, setRefreshLoading] = useState<boolean>(false);
-  const { grant_type: grantType, clientId, refreshTokenUrl } = oauth2;
-  const globals = useProjectConfig((state) => state.http.options.globals);
-  const environment = useProjectConfig(selectActiveEnvironment);
-  const apisActiveKey = useRequestWorkspaceStore(
-    (state) => state.apisActiveData.id,
-  );
-  const uid = useUserConfig((state) => state?.userInfo?.uid);
-  const getOauthRefreshData = useStorage((state) => state.getOauthRefreshData);
-
-  const closeChildWindow = () => {
-    try {
-      childWindow?.current?.close();
-    } catch (e) {}
-  };
-
-  const getAccessToken = async ({ code, state }: AccessInfo) => {
-    const {
-      tokenRequestParams = [],
-      accessTokenUrl = "",
-      clientId,
-      clientSecret,
-      redirect_uri,
-      grant_type,
-      code_verifier,
-      password,
-      username,
-    } = tokenInfo.current || {};
-    const { data, params, headers } = tokenRequestParams.reduce(
-      (pre, { key, value, send_as }) => {
-        const { data, params, headers } = pre;
-        if (isEqual(send_as, "request_body")) {
-          data[key] = value;
-        } else if (isEqual(send_as, "request_url")) {
-          params[key] = value;
-        } else {
-          headers[key] = value;
-        }
-        return pre;
-      },
-      {
-        data: {} as ObjectItem,
-        params: {} as ObjectItem,
-        headers: {} as ObjectItem,
-      },
-    );
-    const prams = {
-      ...data,
-      client_id: clientId,
-      client_secret: clientSecret,
-      redirect_uri,
-      grant_type:
-        grant_type && has(AUTH_OAUTH2_GRANT_TYPE_MAP, grant_type)
-          ? AUTH_OAUTH2_GRANT_TYPE_MAP[grant_type]
-          : undefined,
-    };
-    if (code) {
-      setWith(prams, ["code"], code, Object);
-    }
-    if (state) {
-      setWith(prams, ["state"], state, Object);
-    }
-    if (isEqual(grant_type, "authorization_code_with_pkce")) {
-      setWith(prams, ["code_verifier"], code_verifier, Object);
-    }
-    if (isEqual(grant_type, "password_credentials")) {
-      setWith(prams, ["password"], password, Object);
-      setWith(prams, ["username"], username, Object);
-    }
-
-    try {
-      sendRequestPanelMessage({
-        action: "/proxy/fetch",
-        data: {
-          url: accessTokenUrl,
-          data: prams,
-          headers: {
-            ...headers,
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          options: { params },
-        },
-      });
-
-      closeChildWindow();
-    } catch (err: any) {
-      message.error(t("common.auth.get_access_fail"));
-      closeChildWindow();
-    }
-  };
-
-  const handleMessage = (e: any) => {
-    const isEqualOrigin = e?.origin === location.origin;
-    if (e?.data?.source === "oauth-source-subpage" && isEqualOrigin) {
-      const watching = isEqual(props.id, apisActiveKey);
-      if (e?.data?.payload?.code && watching) {
-        getAccessToken({
-          code: e?.data?.payload?.code,
-          state: e?.data?.payload?.state,
-        });
-      }
-    }
-  };
-
-  const refreshToken = useMemo(() => {
-    return getOauthRefreshData([uid, clientId, "refresh_token"]);
-  }, [uid, clientId]);
-
-  useEffect(() => {
-    window.addEventListener("message", handleMessage);
-    return () => {
-      closeChildWindow();
-      window.removeEventListener("message", handleMessage);
-    };
-  }, [apisActiveKey]);
-
+  const { grant_type: grantType, refreshTokenUrl } = oauth2;
+  const [selectedTab, setSelectedTab] = useState("authRequestParams");
+  const { getToken, refresh, refreshToken, refreshLoading } =
+    useOAuth2Token(oauth2);
   const segmentedOptions = useMemo(() => {
     const authRequest = {
       label: "Auth Request",
@@ -243,192 +79,24 @@ const OAuth2 = (props: Props) => {
       ),
     };
     if (isEqual(grantType, "implicit")) {
-      if (isEqual(tabsValue, "tokenRequestParams")) {
-        setTabsValue("authRequestParams");
-      }
       return [authRequest, refreshRequest];
     }
     if (["password_credentials", "client_credentials"].includes(grantType)) {
-      if (isEqual(tabsValue, "authRequestParams")) {
-        setTabsValue("tokenRequestParams");
-      }
       return [tokenRequest, refreshRequest];
     }
     return [authRequest, tokenRequest, refreshRequest];
-  }, [grantType]);
+  }, [grantType, t]);
 
-  const variableMap = useMemo(() => {
-    return { ...scopeValues(globals), ...scopeValues(environment) };
-  }, [globals, environment]);
+  const tabsValue = segmentedOptions.some(
+    (option) => option.value === selectedTab,
+  )
+    ? selectedTab
+    : segmentedOptions[0].value;
+  useEffect(() => {
+    setSelectedTab(tabsValue);
+  }, [tabsValue]);
 
-  const validateUrl = (value = "") =>
-    resolveOAuth2Variables(value, variableMap);
-  const validateTableParams = (parameters: DataSourceItem[]) =>
-    resolveOAuth2Parameters(parameters, variableMap);
-
-  const handleGetTokenByPassword = async () => {
-    const errors = validateOAuth2(oauth2);
-    setErrors(errors);
-    if (Object.keys(errors).length) {
-      return;
-    }
-    const {
-      clientId,
-      scope,
-      state,
-      accessTokenUrl,
-      clientSecret,
-      tokenRequestParams,
-      grant_type,
-      password,
-      username,
-    } = oauth2 || {};
-    try {
-      const [
-        _clientId,
-        _scope,
-        _state,
-        _accessTokenUrl,
-        _clientSecret,
-        _password,
-        _username,
-        _tokenRequestParams,
-      ] = await Promise.all([
-        await validateUrl(clientId),
-        await validateUrl(scope),
-        await validateUrl(state),
-        await validateUrl(accessTokenUrl),
-        await validateUrl(clientSecret),
-        await validateUrl(password),
-        await validateUrl(username),
-        await validateTableParams(tokenRequestParams || []),
-      ]);
-      tokenInfo.current = {
-        clientId: _clientId,
-        scope: _scope,
-        state: _state,
-        accessTokenUrl: _accessTokenUrl,
-        clientSecret: _clientSecret,
-        password: _password,
-        username: _username,
-        tokenRequestParams:
-          _tokenRequestParams as unknown as RequestParamsItem[],
-        grant_type,
-      };
-      await getAccessToken({});
-    } catch (err) {
-      return message.error(t("common.auth.var_not_defined", { err }));
-    }
-  };
-
-  const handleGetToken = () => {
-    if (isEqual(grantType, "password_credentials")) {
-      handleGetTokenByPassword();
-    }
-  };
-
-  const refreshAccessToken = async ({
-    clientId,
-    clientSecret,
-    redirect_uri,
-    refreshTokenUrl,
-    refreshRequestParams,
-  }: Pick<
-    AuthOauth2,
-    | "refreshRequestParams"
-    | "clientId"
-    | "clientSecret"
-    | "redirect_uri"
-    | "refreshTokenUrl"
-  >) => {
-    const { data, params, headers } = refreshRequestParams.reduce(
-      (pre, { key, value, send_as }) => {
-        const { data, params, headers } = pre;
-        if (isEqual(send_as, "request_body")) {
-          data[key] = value;
-        } else if (isEqual(send_as, "request_url")) {
-          params[key] = value;
-        } else {
-          headers[key] = value;
-        }
-        return pre;
-      },
-      {
-        data: {} as ObjectItem,
-        params: {} as ObjectItem,
-        headers: {} as ObjectItem,
-      },
-    );
-    const prams: any = {
-      ...data,
-      refresh_token: refreshToken,
-      client_id: clientId,
-      client_secret: clientSecret,
-      redirect_uri,
-    };
-
-    try {
-      setRefreshLoading(true);
-      sendRequestPanelMessage({
-        action: "/proxy/fetch",
-        data: {
-          url: refreshTokenUrl,
-          data: prams,
-          headers: {
-            ...headers,
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          options: { params },
-        },
-      });
-    } catch (err: any) {
-      message.error(t("supplement.refresh_fail"));
-    } finally {
-      setRefreshLoading(false);
-    }
-  };
-
-  const handleRefreshToken = async () => {
-    const errors = validateOAuth2(oauth2);
-    setErrors(errors);
-    if (Object.keys(errors).length) {
-      return;
-    }
-    const {
-      clientId,
-      redirect_uri,
-      clientSecret,
-      refreshRequestParams,
-      refreshTokenUrl,
-    } = oauth2 || {};
-    try {
-      const [
-        _clientId,
-        _redirect_uri,
-        _clientSecret,
-        _refreshTokenUrl,
-        _refreshRequestParams,
-      ] = await Promise.all([
-        await validateUrl(clientId),
-        await validateUrl(redirect_uri),
-        await validateUrl(clientSecret),
-        await validateUrl(refreshTokenUrl),
-        await validateTableParams(refreshRequestParams || []),
-      ]);
-      await refreshAccessToken({
-        clientId: _clientId,
-        redirect_uri: _redirect_uri,
-        clientSecret: _clientSecret,
-        refreshTokenUrl: _refreshTokenUrl,
-        refreshRequestParams:
-          _refreshRequestParams as unknown as RequestParamsItem[],
-      });
-    } catch (err) {
-      return message.error(t("common.auth.var_not_defined", { err }));
-    }
-  };
-
-  const downLoadTip = t("common.auth.unsupported_grant_type");
+  const unsupportedGrantTip = t("common.auth.unsupported_grant_type");
 
   const refreshSuffix =
     refreshToken && refreshTokenUrl ? (
@@ -438,13 +106,13 @@ const OAuth2 = (props: Props) => {
             ["authorization_code", "authorization_code_with_pkce"],
             grantType,
           )
-            ? downLoadTip
+            ? unsupportedGrantTip
             : ""
         }
       >
         <Button
           loading={refreshLoading}
-          onClick={handleRefreshToken}
+          onClick={refresh}
           disabled={includes(
             ["authorization_code", "authorization_code_with_pkce"],
             grantType,
@@ -497,12 +165,12 @@ const OAuth2 = (props: Props) => {
               ["authorization_code", "authorization_code_with_pkce"],
               grantType,
             )
-              ? downLoadTip
+              ? unsupportedGrantTip
               : ""
           }
         >
           <Button
-            onClick={handleGetToken}
+            onClick={getToken}
             size="small"
             disabled={includes(
               ["authorization_code", "authorization_code_with_pkce"],
@@ -651,7 +319,7 @@ const OAuth2 = (props: Props) => {
                   wrapClassName="oauth-segment"
                   options={segmentedOptions}
                   value={tabsValue}
-                  onChange={(val) => setTabsValue(val as string)}
+                  onChange={(val) => setSelectedTab(val as string)}
                 />
               </>
             ),
