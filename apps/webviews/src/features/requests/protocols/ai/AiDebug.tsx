@@ -1,21 +1,15 @@
 import RequestToolbar from "@/features/requests/components/RequestToolbar";
 import RequestTabs from "@/features/requests/components/RequestTabs";
 import RequestAction from "@/features/requests/components/RequestAction";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { AiResponseSummary } from "@onapi/contracts";
-import {
-  aiProviders,
-  type AiProvider,
-  type AiMessage,
-} from "@onapi/domain/requests/ai-mcp";
+import { aiProviders, type AiProvider } from "@onapi/domain/requests/ai-mcp";
 import type { AiEditorRecord } from "@onapi/domain/requests/record";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import AppIcon from "@/shared/ui/AppIcon";
 import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
-import { useProtocolExecution } from "../shared/useProtocolExecution";
+import { useAiConversation } from "./useAiConversation";
 import { HeadersEditor } from "../shared/ProtocolEditor";
-import { parseAiConfig } from "../shared/request-input";
 import AiConversation from "./AiConversation";
 import shared from "../shared/ProtocolEditor.module.css";
 import styles from "./AiDebug.module.css";
@@ -24,14 +18,6 @@ type Props = {
   apisData: AiEditorRecord;
   onApisDataChange: (record: AiEditorRecord) => void;
 };
-type Run = {
-  provider: AiProvider;
-  model: string;
-  startedAt: number;
-  cancelled: boolean;
-  summary?: AiResponseSummary;
-};
-
 export default function AiDebug({
   apisData: record,
   onApisDataChange: change,
@@ -40,80 +26,8 @@ export default function AiDebug({
   const label = (key: string) => t(`ai_panel.${key}`);
   const [tab, setTab] = useState("prompt");
   const [keys, setKeys] = useState<Partial<Record<AiProvider, string>>>({});
-  const [partial, setPartial] = useState({ text: "", reasoning: "" });
-  const [outcome, setOutcome] = useState("");
-  const streamed = useRef({ text: "", reasoning: "" });
-  const run = useRef<Run | null>(null);
-  const conversation = useRef(record.ai.messages);
-  const latest = useRef({ record, change });
-  latest.current = { record, change };
-  const execution = useProtocolExecution(record.id, ({ event }) => {
-    if (event.protocol !== "ai") {
-      return;
-    }
-    if (event.type === "response.chunk") {
-      const channel = event.channel === "reasoning" ? "reasoning" : "text";
-      streamed.current = {
-        ...streamed.current,
-        [channel]: streamed.current[channel] + event.text,
-      };
-      setPartial(streamed.current);
-    }
-    if (event.type === "response.received" && run.current) {
-      run.current.summary = event.value;
-    }
-    if (event.type === "execution.cancelled") {
-      if (run.current) {
-        run.current.cancelled = true;
-      }
-      setOutcome(label("cancelled"));
-    }
-    if (event.type === "execution.completed") {
-      const current = latest.current;
-      const { text, reasoning } = streamed.current;
-      const info = run.current;
-      if (
-        info &&
-        (text || reasoning || info.summary) &&
-        JSON.stringify(current.record.ai.messages) ===
-          JSON.stringify(conversation.current)
-      ) {
-        const state = event.failed
-          ? "failed"
-          : info.cancelled
-            ? "cancelled"
-            : "completed";
-        current.change({
-          ...current.record,
-          ai: {
-            ...current.record.ai,
-            messages: [
-              ...current.record.ai.messages,
-              {
-                role: "assistant",
-                content: text,
-                ...(reasoning ? { reasoning } : {}),
-                result: {
-                  provider: info.provider,
-                  model: info.model,
-                  state,
-                  completedAt: Date.now(),
-                  durationMs:
-                    info.summary?.durationMs ??
-                    Math.round(performance.now() - info.startedAt),
-                  finishReason: info.summary?.finishReason ?? state,
-                  usage: info.summary?.usage ?? {},
-                },
-              },
-            ],
-          },
-        });
-      }
-      run.current = null;
-      streamed.current = { text: "", reasoning: "" };
-      setPartial(streamed.current);
-    }
-  });
+  const conversation = useAiConversation(record, change, keys);
+  const { send } = conversation;
   const update = (patch: Partial<AiEditorRecord["ai"]>) =>
     change({ ...record, ai: { ...record.ai, ...patch } });
   const selectProvider = (provider: AiProvider) => {
@@ -122,50 +36,7 @@ export default function AiDebug({
       url: aiProviders[provider].baseURL,
       ai: { ...record.ai, provider, model: aiProviders[provider].models[0] },
     });
-    setOutcome("");
-  };
-  const send = (retry = false) => {
-    if (execution.busy || (!retry && !record.ai.prompt.trim())) {
-      return;
-    }
-    execution.start((requestId) => {
-      const config = parseAiConfig(record);
-      if (!config.model.trim()) {
-        throw new Error(label("model_required"));
-      }
-      if (!record.url?.trim()) {
-        throw new Error(label("url_required"));
-      }
-      const messages: AiMessage[] = retry
-        ? config.messages.at(-1)?.role === "assistant"
-          ? config.messages.slice(0, -1)
-          : config.messages
-        : [...config.messages, { role: "user", content: config.prompt }];
-      if (!messages.length) {
-        throw new Error(label("message_required"));
-      }
-      conversation.current = messages;
-      run.current = {
-        provider: config.provider,
-        model: config.model,
-        startedAt: performance.now(),
-        cancelled: false,
-      };
-      change({ ...record, ai: { ...record.ai, messages } });
-      streamed.current = { text: "", reasoning: "" };
-      setPartial(streamed.current);
-      setOutcome("");
-      return {
-        action: "ai_send",
-        requestId,
-        data: {
-          id: record.id,
-          url: record.url,
-          apiKey: keys[config.provider] || "",
-          config: { ...config, messages },
-        },
-      };
-    });
+    conversation.clearOutcome();
   };
   const editor = (
     <RequestTabs
@@ -224,7 +95,7 @@ export default function AiDebug({
             <textarea
               aria-label="System prompt"
               value={record.ai.system}
-              disabled={execution.busy}
+              disabled={conversation.busy}
               placeholder={label("system_help")}
               onChange={(e) => update({ system: e.target.value })}
             />
@@ -243,7 +114,7 @@ export default function AiDebug({
               autoComplete="off"
               spellCheck={false}
               value={keys[record.ai.provider] || ""}
-              disabled={execution.busy}
+              disabled={conversation.busy}
               placeholder={label("key_placeholder")}
               onChange={(e) =>
                 setKeys({ ...keys, [record.ai.provider]: e.target.value })
@@ -261,7 +132,7 @@ export default function AiDebug({
               <select
                 aria-label="OpenAI API"
                 value={record.ai.openaiApi}
-                disabled={execution.busy}
+                disabled={conversation.busy}
                 onChange={(e) =>
                   update({ openaiApi: e.target.value as "responses" | "chat" })
                 }
@@ -277,7 +148,7 @@ export default function AiDebug({
               <select
                 aria-label="Thinking mode"
                 value={record.ai.thinking}
-                disabled={execution.busy}
+                disabled={conversation.busy}
                 onChange={(e) =>
                   update({
                     thinking: e.target.value as "auto" | "enabled" | "disabled",
@@ -301,7 +172,7 @@ export default function AiDebug({
                 step="0.1"
                 value={record.ai.temperature}
                 disabled={
-                  execution.busy ||
+                  conversation.busy ||
                   (record.ai.provider === "deepseek" &&
                     record.ai.thinking !== "disabled")
                 }
@@ -320,7 +191,7 @@ export default function AiDebug({
                 type="number"
                 min="1"
                 value={record.ai.maxOutputTokens}
-                disabled={execution.busy}
+                disabled={conversation.busy}
                 onChange={(e) => {
                   const n = e.target.valueAsNumber;
                   if (Number.isInteger(n) && n > 0) {
@@ -333,7 +204,7 @@ export default function AiDebug({
         </div>
       )}
       {tab === "headers" && (
-        <fieldset className={styles.headers} disabled={execution.busy}>
+        <fieldset className={styles.headers} disabled={conversation.busy}>
           <HeadersEditor
             value={
               record.draft?.headersText ??
@@ -358,7 +229,7 @@ export default function AiDebug({
           className={styles.endpoint}
           aria-label="Server URL"
           value={record.url ?? ""}
-          disabled={execution.busy}
+          disabled={conversation.busy}
           onChange={(e) => change({ ...record, url: e.target.value })}
           placeholder={aiProviders[record.ai.provider].baseURL}
         />
@@ -381,7 +252,7 @@ export default function AiDebug({
           <select
             aria-label="Provider"
             value={record.ai.provider}
-            disabled={execution.busy}
+            disabled={conversation.busy}
             onChange={(e) => selectProvider(e.target.value as AiProvider)}
           >
             {Object.entries(aiProviders).map(([id, provider]) => (
@@ -394,7 +265,7 @@ export default function AiDebug({
             aria-label="Model"
             list={`models-${record.id}`}
             value={record.ai.model}
-            disabled={execution.busy}
+            disabled={conversation.busy}
             onChange={(e) => update({ model: e.target.value })}
             placeholder={label("custom_model")}
           />
@@ -405,21 +276,15 @@ export default function AiDebug({
           </datalist>
         </div>
         <RequestAction
-          label={label(execution.busy ? "stop" : "send")}
-          stopping={execution.busy}
+          label={label(conversation.busy ? "stop" : "send")}
+          stopping={conversation.busy}
           disabled={
-            !execution.busy &&
+            !conversation.busy &&
             (!record.ai.prompt.trim() || !record.ai.model.trim())
           }
           onClick={() => {
-            if (execution.busy) {
-              const executionId = execution.activeId();
-              if (executionId) {
-                sendRequestPanelMessage({
-                  action: "ai_stop",
-                  data: { executionId },
-                });
-              }
+            if (conversation.busy) {
+              conversation.stop();
             } else {
               send();
             }
@@ -439,19 +304,15 @@ export default function AiDebug({
           rightPanel={
             <AiConversation
               messages={record.ai.messages}
-              partial={partial}
-              busy={execution.busy}
-              error={execution.error}
-              outcome={outcome}
+              partial={conversation.partial}
+              busy={conversation.busy}
+              error={conversation.error}
+              outcome={conversation.outcome}
               onChange={(messages) => update({ messages })}
               onRetry={() => send(true)}
               onConfigure={() => setTab("authorization")}
-              onError={execution.setError}
-              onClear={() => {
-                update({ messages: [] });
-                setOutcome("");
-                execution.setError("");
-              }}
+              onError={conversation.setError}
+              onClear={conversation.clear}
             />
           }
         />
