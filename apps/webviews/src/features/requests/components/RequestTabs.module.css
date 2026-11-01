@@ -1,12 +1,11 @@
 .root {
+  gap: 8px;
   font: var(--vscode-font-size, 13px) var(--vscode-font-family, sans-serif);
   min-width: 0;
 }
 .root > .nav {
-  padding: 0 12px;
   gap: 8px;
   min-height: 36px;
-  border-bottom: 1px solid var(--vscode-panel-border, var(--color-border));
 }
 .root .nav .list {
   gap: 4px;
@@ -20,20 +19,23 @@
   box-sizing: border-box;
   padding: 0 10px;
   border: 0;
-  border-bottom: 2px solid transparent;
   border-radius: 0;
   background: transparent;
-  color: var(--vscode-descriptionForeground, var(--font-light-color));
+  color: var(
+    --vscode-tab-inactiveForeground,
+    var(--vscode-descriptionForeground, var(--font-light-color))
+  );
   font: var(--vscode-font-size, 13px) var(--vscode-font-family, sans-serif);
   white-space: nowrap;
 }
 .root .nav .button:hover {
-  background: var(--vscode-toolbar-hoverBackground);
   color: var(--vscode-foreground, var(--font-content-color));
 }
 .root .nav .button[data-active] {
-  color: var(--vscode-foreground, var(--font-content-color));
-  border-bottom-color: var(--vscode-focusBorder, var(--color-primary));
+  color: var(
+    --vscode-tab-activeForeground,
+    var(--vscode-foreground, var(--font-content-color))
+  );
   font-weight: 600;
 }
 .root .nav .button:focus-visible {

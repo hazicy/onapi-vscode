@@ -1,5 +1,4 @@
 .container {
-  margin-bottom: 12px;
   padding: 0 16px;
   & .tabBarExtraContentWrap .editWrap .apisTitleEdit {
     border-color: transparent;

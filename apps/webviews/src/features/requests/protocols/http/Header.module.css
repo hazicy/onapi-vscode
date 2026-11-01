@@ -3,7 +3,6 @@
   align-items: center;
   width: 100%;
   gap: 8px;
-  padding-bottom: 8px;
   container-type: inline-size;
   & > .urlGroupWrap {
     flex: 1;

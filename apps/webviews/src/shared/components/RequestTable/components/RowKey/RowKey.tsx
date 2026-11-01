@@ -111,7 +111,7 @@ const RowKey: FC<Props> = memo((props) => {
   );
 
   const handleBlur = async (newKey: string) => {
-    if (!showAiDescription) {
+    if (!showAiDescription || newKey === (rowData.key || "")) {
       return;
     }
 

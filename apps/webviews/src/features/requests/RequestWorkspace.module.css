@@ -3,6 +3,7 @@
   height: 100%;
   background-color: var(--color-bg-right);
   padding-top: 12px;
+  gap: 8px;
   overflow: auto;
   & > header {
     padding: 0 16px;

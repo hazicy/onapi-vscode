@@ -21,6 +21,7 @@ import clock from "@iconify-icons/lucide/clock";
 import columns2 from "@iconify-icons/lucide/columns-2";
 import cookie from "@iconify-icons/lucide/cookie";
 import copy from "@iconify-icons/lucide/copy";
+import cornerDownLeft from "@iconify-icons/lucide/corner-down-left";
 import database from "@iconify-icons/lucide/database";
 import download from "@iconify-icons/lucide/download";
 import ellipsis from "@iconify-icons/lucide/ellipsis";
@@ -103,6 +104,7 @@ export const appIcons = {
   "columns-2": columns2,
   cookie: cookie,
   copy: copy,
+  "corner-down-left": cornerDownLeft,
   database: database,
   download: download,
   ellipsis: ellipsis,

@@ -22,6 +22,7 @@ export type KeyValueRowProps = {
   placeholderRow?: boolean;
   onCheckedChange?: (checked: boolean) => void;
   onDelete?: () => void;
+  onAdd?: () => void;
 };
 
 const KeyValueRow = memo(function KeyValueRow({
@@ -38,6 +39,7 @@ const KeyValueRow = memo(function KeyValueRow({
   placeholderRow = false,
   onCheckedChange,
   onDelete,
+  onAdd,
 }: KeyValueRowProps) {
   const { t } = useTranslation();
   const dragDisabled = readOnly || placeholderRow || !draggable;
@@ -46,6 +48,33 @@ const KeyValueRow = memo(function KeyValueRow({
   return (
     <div
       ref={sortable.setNodeRef}
+      data-parameter-placeholder={placeholderRow ? "" : undefined}
+      onKeyDown={(event) => {
+        if (
+          readOnly ||
+          event.key !== "Enter" ||
+          event.nativeEvent.isComposing ||
+          event.shiftKey ||
+          event.ctrlKey ||
+          event.metaKey ||
+          event.altKey ||
+          !(event.target instanceof HTMLInputElement) ||
+          event.target.readOnly ||
+          event.target.getAttribute("aria-expanded") === "true"
+        ) {
+          return;
+        }
+        event.preventDefault();
+        event.stopPropagation();
+        if (!placeholderRow) {
+          event.currentTarget
+            .closest("[data-request-parameter-table]")
+            ?.querySelector<HTMLInputElement>(
+              "[data-parameter-placeholder] [data-parameter-key] input:not([disabled]):not([readonly])",
+            )
+            ?.focus();
+        }
+      }}
       className={clsx(styles.row, {
         [styles.dragging]: sortable.isDragging,
         [styles.placeholder]: placeholderRow,
@@ -56,16 +85,36 @@ const KeyValueRow = memo(function KeyValueRow({
       }}
     >
       {showCheckbox && (
-        <span
-          className={clsx(styles.checkbox, {
-            [styles.draftCheckbox]: placeholderRow,
-          })}
-        >
-          <Checkbox
-            checked={checked}
-            disabled={readOnly || checkboxDisabled}
-            onChange={(event) => onCheckedChange?.(event.target.checked)}
-          />
+        <span className={styles.checkbox}>
+          {placeholderRow ? (
+            <button
+              type="button"
+              className={styles.placeholderAdd}
+              disabled={readOnly || !onAdd}
+              aria-label={t("request_panel.add_parameter")}
+              onClick={(event) => {
+                const row = event.currentTarget.closest(
+                  "[data-parameter-placeholder]",
+                );
+                onAdd?.();
+                requestAnimationFrame(() => {
+                  row
+                    ?.querySelector<HTMLInputElement>(
+                      "[data-parameter-key] input",
+                    )
+                    ?.focus();
+                });
+              }}
+            >
+              <AppIcon icon="plus" />
+            </button>
+          ) : (
+            <Checkbox
+              checked={checked}
+              disabled={readOnly || checkboxDisabled}
+              onChange={(event) => onCheckedChange?.(event.target.checked)}
+            />
+          )}
         </span>
       )}
       <button
@@ -79,7 +128,9 @@ const KeyValueRow = memo(function KeyValueRow({
       >
         <AppIcon icon="grip-vertical" />
       </button>
-      <div className={styles.key}>{keyEditor}</div>
+      <div className={styles.key} data-parameter-key="">
+        {keyEditor}
+      </div>
       {valueEditor !== undefined && valueEditor !== null && (
         <div className={styles.value}>{valueEditor}</div>
       )}
@@ -87,6 +138,11 @@ const KeyValueRow = memo(function KeyValueRow({
         <div className={styles.value}>{extraFields}</div>
       )}
       <div className={styles.operations}>
+        {placeholderRow && !readOnly && (
+          <span className={styles.enterHint} aria-hidden="true">
+            <AppIcon icon="corner-down-left" />
+          </span>
+        )}
         {showDelete && !readOnly && !placeholderRow && (
           <button
             type="button"

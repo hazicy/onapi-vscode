@@ -857,6 +857,7 @@
     "error_details": "Error details",
     "more_tabs": "More tabs",
     "request_tabs": "Request tabs",
+    "add_parameter": "Add parameter",
     "response_tabs": "Response tabs"
   },
   "event_stream": {

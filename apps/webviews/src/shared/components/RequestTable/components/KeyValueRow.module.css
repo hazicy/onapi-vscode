@@ -66,20 +66,57 @@
   touch-action: none;
 }
 .action:disabled {
-  visibility: hidden;
+  color: var(--vscode-disabledForeground, var(--font-light-color));
+  cursor: default;
 }
-.action:hover {
+.action:hover:not(:disabled) {
   color: var(--color-primary);
 }
 .operations {
   width: 20px;
   flex-shrink: 0;
 }
+.enterHint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 28px;
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+  font: inherit;
+}
 .checkbox {
   display: inline-flex;
 }
-.draftCheckbox {
-  visibility: hidden;
+.placeholderAdd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid var(--check-box-border-color, #888);
+  border-radius: var(--vscode-cornerRadius-small, 4px);
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+  padding: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+.placeholderAdd:hover:not(:disabled) {
+  color: var(--vscode-foreground, var(--font-content-color));
+  border-color: var(--vscode-focusBorder, var(--color-primary));
+}
+.placeholderAdd:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder, var(--color-primary));
+  outline-offset: 2px;
+}
+.placeholderAdd:disabled {
+  cursor: default;
+}
+.placeholder > .action,
+.placeholder > .operations {
+  opacity: 0.65;
 }
 .placeholder .key > div > div,
 .placeholder .value {

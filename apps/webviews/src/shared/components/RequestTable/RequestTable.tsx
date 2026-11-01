@@ -30,7 +30,7 @@ import { useMemoizedFn } from "ahooks";
 
 import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { produce } from "immer";
-import { cloneDeep } from "lodash-es";
+import { cloneDeep, isEqual } from "lodash-es";
 
 import KeyValueRow from "./components/KeyValueRow";
 import { PARAMETER_ITEM } from "@onapi/domain/requests/constants/request";
@@ -87,6 +87,11 @@ const RequestTable: FC<RequestTableProps & { fileValue?: "path" | "base64" }> =
 
       const handleItemOnChange = useMemoizedFn(
         (rowIndex: number, rowData: ApisBaseDataItem) => {
+          const previousRow = dataSource[rowIndex] ?? lastRowDataRef.current;
+          if (isEqual(previousRow, rowData)) {
+            return;
+          }
+
           const newDataSource = produce(
             dataSource,
             (draft: ApisBaseDataItem[]) => {
@@ -133,7 +138,7 @@ const RequestTable: FC<RequestTableProps & { fileValue?: "path" | "base64" }> =
       };
       return (
         <Context.Provider value={{ fileValue }}>
-          <div className={styles.requestTable}>
+          <div className={styles.requestTable} data-request-parameter-table="">
             <PublicParamsTable
               kind={kind}
               tabType={tabType}
@@ -174,6 +179,11 @@ const RequestTable: FC<RequestTableProps & { fileValue?: "path" | "base64" }> =
                       })
                     }
                     onDelete={() => onDelete(index)}
+                    onAdd={() => {
+                      const newRow = { ...row };
+                      delete newRow.static;
+                      handleItemOnChange(index, newRow);
+                    }}
                     keyEditor={
                       <RowKey
                         rowData={row}
