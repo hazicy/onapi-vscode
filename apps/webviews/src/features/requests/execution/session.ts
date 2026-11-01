@@ -128,6 +128,7 @@ export function receiveSessionEvent(
     // Socket send errors carry a result and leave the connection usable.
     failed:
       connectionFailed ||
+      (connectionClosed && !!result && !result.isSuccess) ||
       fatal ||
       (event.type === "execution.error" && !socket) ||
       ("failed" in event && event.failed),

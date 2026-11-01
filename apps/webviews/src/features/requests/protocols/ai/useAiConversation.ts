@@ -50,7 +50,10 @@ export function useAiConversation(
       }
       setOutcome(label("cancelled"));
     }
-    if (event.type === "execution.completed") {
+    if (
+      event.type === "execution.completed" ||
+      event.type === "execution.cancelled"
+    ) {
       const current = latest.current;
       const { text, reasoning } = streamed.current;
       const info = run.current;
@@ -60,11 +63,12 @@ export function useAiConversation(
         JSON.stringify(current.record.ai.messages) ===
           JSON.stringify(conversation.current)
       ) {
-        const state = event.failed
-          ? "failed"
-          : info.cancelled
-            ? "cancelled"
-            : "completed";
+        const state =
+          event.type === "execution.completed" && event.failed
+            ? "failed"
+            : info.cancelled
+              ? "cancelled"
+              : "completed";
         current.change({
           ...current.record,
           ai: {
