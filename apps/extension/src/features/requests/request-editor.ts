@@ -36,6 +36,7 @@ export const openRequestEditor = (
     return;
   }
   return openCustomEditor(context, "onapi.request", data.id, {
+    title: showTabName(data.name || PANEL_OPTIONS.OPEN.title),
     workspace: getApiListName(context),
     data: getApiList(context).some((item) => item.id === data.id)
       ? { id: data.id }

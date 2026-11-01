@@ -119,6 +119,35 @@ test("concurrent opens retain both inputs and unregistered editors cannot open",
   assert.equal(f.opened.length, 2);
 });
 
+test("initial labels are supplied when opening without changing resource identity", async () => {
+  const f = await fixture();
+  const { readFile } = await import("node:fs/promises");
+  const manifest = JSON.parse(
+    await readFile("apps/extension/package.json", "utf8"),
+  );
+  for (const editor of manifest.contributes.customEditors) {
+    assert.equal(editor.priority, "default");
+    f.registerCustomEditor(
+      f.context,
+      { viewType: editor.viewType, resolve() {} },
+      () => "p",
+    );
+    for (const title of ["获取用户列表", "Renamed request"]) {
+      await f.openCustomEditor(f.context, editor.viewType, "12345", {
+        workspace: "p",
+        data: { id: "12345" },
+        title,
+      });
+      const [command, uri, options, label] = f.opened.at(-1);
+      assert.equal(command, "vscode.open");
+      assert.equal(label, title);
+      assert.equal(options.preview, true);
+      assert.ok(uri.toString().endsWith("/12345"));
+    }
+    assert.equal(f.opened.at(-1)[1].toString(), f.opened.at(-2)[1].toString());
+  }
+});
+
 test("closing a tab removes its persisted snapshot without losing other resources", async () => {
   const f = await fixture();
   f.registerCustomEditor(
@@ -150,10 +179,7 @@ test("contributed editors register selectors for virtual resources without match
   );
   const f = await fixture();
   for (const editor of manifest.contributes.customEditors) {
-    assert.equal(
-      editor.priority,
-      editor.viewType === "onapi.request" ? "default" : "option",
-    );
+    assert.equal(editor.priority, "default");
     assert.ok(
       editor.selector.length > 0,
       `${editor.viewType} needs a resolver registration`,

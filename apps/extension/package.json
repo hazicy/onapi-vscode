@@ -447,7 +447,7 @@
             "filenamePattern": "onapi-editor:/onapi.folderTest/**"
           }
         ],
-        "priority": "option"
+        "priority": "default"
       },
       {
         "viewType": "onapi.testReport",
@@ -457,7 +457,7 @@
             "filenamePattern": "onapi-editor:/onapi.testReport/**"
           }
         ],
-        "priority": "option"
+        "priority": "default"
       }
     ],
     "icons": {

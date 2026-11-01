@@ -4,6 +4,7 @@ export interface EditorInput {
   workspace: string;
   data: unknown;
   option?: unknown;
+  title?: string;
 }
 
 type EditorDefinition = { viewType: string } & (
@@ -110,6 +111,20 @@ export async function openCustomEditor(
     path: `/${viewType}/${encodeURIComponent(input.workspace)}/${encodeURIComponent(id)}`,
   });
   await setEditorInput(context, uri, input);
+  // vscode.open supplies the label before the custom editor provider resolves.
+  // The manifest must register this view as the default for its virtual URI.
+  if (input.title) {
+    await vscode.commands.executeCommand(
+      "vscode.open",
+      uri,
+      {
+        viewColumn: vscode.ViewColumn.One,
+        preview: true,
+      },
+      input.title,
+    );
+    return;
+  }
   await vscode.commands.executeCommand("vscode.openWith", uri, viewType, {
     viewColumn: vscode.ViewColumn.One,
     preview: true,

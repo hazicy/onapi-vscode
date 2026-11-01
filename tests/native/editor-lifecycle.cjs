@@ -43,8 +43,25 @@ exports.run = async () => {
       `${id}.json`,
     );
 
+  const initialLabels = [];
+  const labelSubscription = vscode.window.tabGroups.onDidChangeTabs((event) => {
+    for (const tab of [...event.opened, ...event.changed]) {
+      if (
+        tab.input instanceof vscode.TabInputCustom &&
+        tab.input.uri.path.endsWith("/native-undo")
+      ) {
+        initialLabels.push(tab.label);
+      }
+    }
+  });
   await vscode.commands.executeCommand("openTabPanel", record("native-undo"));
   await until(() => tabFor("native-undo")?.isDirty, "new request dirty");
+  labelSubscription.dispose();
+  assert.ok(initialLabels.length > 0, "custom editor tab events were observed");
+  assert.ok(
+    initialLabels.every((label) => label === "Native lifecycle"),
+    `initial tab labels: ${JSON.stringify(initialLabels)}`,
+  );
   await vscode.commands.executeCommand("undo");
   await until(
     () => tabFor("native-undo") && !tabFor("native-undo").isDirty,

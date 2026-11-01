@@ -42,6 +42,7 @@ export const openFolderTestEditor = (
   }
 
   return openCustomEditor(context, "onapi.folderTest", folderName, {
+    title: showTabName(data.name || PANEL_OPTIONS.FOLDER_TEST.title),
     workspace: getApiListName(context),
     data: { id: data.id },
     option,

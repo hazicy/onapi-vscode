@@ -22,6 +22,9 @@ export const openTestReportEditor = (
   }
 
   return openCustomEditor(context, "onapi.testReport", data.report_id, {
+    title: showTabName(
+      data.report_name || PANEL_OPTIONS.FOLDER_TEST_REPORT.title,
+    ),
     workspace: getApiListName(context),
     data: { report_id: data.report_id },
   });
