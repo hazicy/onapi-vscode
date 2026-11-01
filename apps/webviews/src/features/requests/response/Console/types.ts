@@ -1,6 +1,12 @@
-import { ApiSendResponseData } from "@onapi/domain/requests/types/send";
+import type { ExecutionEvent } from "@onapi/contracts";
+
+export type ConsoleEntry = {
+  level: NonNullable<ExecutionEvent["level"]>;
+  args: unknown[];
+  time: string;
+};
 
 export type ConsoleContentProps = {
-  consoleList: ApiSendResponseData["console"];
+  consoleList: ConsoleEntry[];
   onClear?: () => void;
 };

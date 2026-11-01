@@ -202,8 +202,9 @@ for (const narrow of [false, true]) {
             "detail".repeat(80),
         ),
     );
-    if (narrow)
+    if (narrow) {
       await page.getByRole("button", { name: "Narrow panel" }).click();
+    }
     await page.getByRole("button", { name: "Fail request" }).click();
     const alert = page
       .getByRole("region", { name: "Request workspace" })
@@ -257,8 +258,9 @@ for (const narrow of [false, true]) {
       );
       document.body.style.background = "#222";
     });
-    if (narrow)
+    if (narrow) {
       await page.getByRole("button", { name: "Narrow panel" }).click();
+    }
     const loaded = page.waitForResponse(
       (response) =>
         response.url().includes("/components/Realtime/Realtime.tsx") &&

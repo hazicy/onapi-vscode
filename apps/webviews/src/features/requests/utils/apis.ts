@@ -15,16 +15,12 @@ import {
   isArray,
   isEqual,
   isUndefined,
-  map,
 } from "lodash-es";
 import { STATUS_CODE } from "@onapi/domain/constants/common";
 import { snowflakeId } from "@onapi/domain/utils/data-tools";
 import { ApisData } from "@onapi/domain/requests/types/api";
 import { EnvListItem } from "@onapi/domain/environment/types/index";
 
-import { ApiSendResponseData } from "@onapi/domain/requests/types/send";
-import { formatTime, TIME_FORMAT } from "@onapi/domain/utils/time";
-import dayjs from "dayjs";
 import { DEFAULT_API_RESPONSE } from "@onapi/domain/requests/constants/response";
 import { CurlDataType } from "@/features/requests/types/other";
 
@@ -211,19 +207,6 @@ export const createBatchApi = (
 
   // await guestDB.api_details_data.bulkPut(list);
   return list;
-};
-
-export const handleResponseConsole = (
-  console: ApiSendResponseData["console"],
-) => {
-  const _console = cloneDeep(console);
-
-  const time = formatTime(dayjs(), TIME_FORMAT.TIME_L);
-
-  return map(_console, (item) => ({
-    ...item,
-    time: item?.time || time,
-  }));
 };
 
 export const getNewApisDataByCurlChange = <

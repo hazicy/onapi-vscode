@@ -16,7 +16,7 @@ import {
 
 import AppIcon from "@/shared/ui/AppIcon";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
-import { ApiSendResponseDataConsoleItem } from "@onapi/domain/requests/types/send";
+import type { ConsoleEntry } from "./types";
 
 import { ConsoleContentProps } from "./types";
 
@@ -31,10 +31,7 @@ const ConsoleContent = (props: ConsoleContentProps) => {
   const { consoleList } = props;
   const { bg_color } = useSystemConfig((state) => state?.systemConfig);
 
-  const computedContent = (
-    argsItem: any,
-    level: ApiSendResponseDataConsoleItem["level"],
-  ) => {
+  const computedContent = (argsItem: any, level: ConsoleEntry["level"]) => {
     if (isEqual(level, "error") && isPlainObject(argsItem)) {
       return String(argsItem?.errorMessage);
     }

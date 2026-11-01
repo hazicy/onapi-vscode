@@ -236,7 +236,7 @@ const Index = ({
                 ? params?.[item.key]?.description?.[MOCK_LANGUAGE_MAP[language]]
                 : "";
               return (
-                <div className={styles.paramItem}>
+                <div key={item.key} className={styles.paramItem}>
                   <div className={styles.paramContent}>
                     <span className={styles.paramItemDesc}>
                       <Tooltip title={desc}>{transKey(item.key)}</Tooltip>
@@ -266,7 +266,10 @@ const Index = ({
               return "";
             }
             return (
-              <Tooltip title={v?.description?.[MOCK_LANGUAGE_MAP[language]]}>
+              <Tooltip
+                key={key}
+                title={v?.description?.[MOCK_LANGUAGE_MAP[language]]}
+              >
                 <span
                   onClick={() => add(key, v?.type)}
                   className={styles.selectItem}

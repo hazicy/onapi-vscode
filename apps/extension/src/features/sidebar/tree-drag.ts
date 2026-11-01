@@ -59,7 +59,9 @@ export class RequestTreeDragController implements vscode.TreeDragAndDropControll
       const visited = new Set([id]);
       let parent = byId.get(id)?.parentId;
       while (parent && byId.has(parent)) {
-        if (selected.has(parent) || visited.has(parent)) return false;
+        if (selected.has(parent) || visited.has(parent)) {
+          return false;
+        }
         visited.add(parent);
         parent = byId.get(parent)?.parentId;
       }
@@ -67,7 +69,9 @@ export class RequestTreeDragController implements vscode.TreeDragAndDropControll
     });
     const destination =
       target?.kind === "request" ? byId.get(target.data.id) : undefined;
-    if (!ids.length || (target?.kind === "request" && !destination)) return;
+    if (!ids.length || (target?.kind === "request" && !destination)) {
+      return;
+    }
     const parentId =
       destination?.kind === "folder"
         ? destination.id
@@ -75,11 +79,15 @@ export class RequestTreeDragController implements vscode.TreeDragAndDropControll
     const visited = new Set<string>();
     let ancestor: string | undefined = parentId;
     while (ancestor && byId.has(ancestor)) {
-      if (selected.has(ancestor) || visited.has(ancestor)) return;
+      if (selected.has(ancestor) || visited.has(ancestor)) {
+        return;
+      }
       visited.add(ancestor);
       ancestor = byId.get(ancestor)?.parentId;
     }
-    if (destination && selected.has(destination.id)) return;
+    if (destination && selected.has(destination.id)) {
+      return;
+    }
     await handleMessage(
       {
         action: "onDrop",

@@ -301,24 +301,3 @@ export const RESPONSE_CODE_DESC_MAP = {
     desc: i18next.t("response.511"),
   },
 };
-
-export const HTTP_TIME_ARRAY = [
-  "prepare",
-  "socketInitialization",
-  "dnsLookup",
-  "tcpHandshake",
-  "waiting",
-  "download",
-  "process",
-];
-
-export const HTTPS_TIME_ARRAY = [
-  "prepare",
-  "socketInitialization",
-  "dnsLookup",
-  "tcpHandshake",
-  "sslHandshake",
-  "waiting",
-  "download",
-  "process",
-];

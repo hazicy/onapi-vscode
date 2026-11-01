@@ -6,7 +6,9 @@ for (const multiline of [false, true]) {
   }) => {
     const errors: string[] = [];
     page.on("console", (message) => {
-      if (message.type() === "error") errors.push(message.text());
+      if (message.type() === "error") {
+        errors.push(message.text());
+      }
     });
     await page.goto(`/?variableInput${multiline ? "&multiline" : ""}`);
     const input = page.getByPlaceholder("Request value");

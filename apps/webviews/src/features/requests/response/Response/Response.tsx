@@ -276,7 +276,6 @@ const Response: FC<Props> = memo((props) => {
                 showProxy={showProxy}
                 showDownload={showDownload && isSendDone}
                 response={sendingData?.result?.response}
-                request={sendingData?.result?.request}
               />
             </Suspense>
           )

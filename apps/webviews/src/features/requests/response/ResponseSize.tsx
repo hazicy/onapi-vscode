@@ -1,20 +1,14 @@
-import ResponseNetwork from "./ResponseNetwork";
-import { timingSegments } from "../utils/response-metrics";
+import type { SerializedResponse } from "@onapi/contracts";
 import { responseDownload } from "../utils/response-download";
-import {
-  responseIndicators,
-  type IndicatorResponse,
-  type IndicatorRequest,
-} from "../utils/response-indicators";
 
 import styles from "./ResponseSize.module.css";
 import React, { memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Col, Divider, Flex, Row } from "@/shared/ui/base";
+import { Col, Flex, Row } from "@/shared/ui/base";
 
 import clsx from "clsx";
-import { add, get, has, isEmpty, isEqual, map } from "lodash-es";
+import { get } from "lodash-es";
 
 import { Tooltip } from "@/shared/ui";
 import AppIcon from "@/shared/ui/AppIcon";
@@ -27,12 +21,10 @@ import {
   convertResponseTime,
   download,
   hexToRGBA,
-  toFixed,
 } from "@/shared/utils/common";
 
 interface ResponseSizeProps {
-  response?: IndicatorResponse;
-  request?: IndicatorRequest;
+  response?: SerializedResponse;
   showProxy?: boolean;
   showIcon?: boolean;
   showDownload?: boolean;
@@ -42,7 +34,6 @@ interface ResponseSizeProps {
 const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
   const {
     response: sourceResponse,
-    request: sourceRequest,
     showDownload = false,
     showIcon = true,
     showProxy = true,
@@ -54,17 +45,10 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
   const systemConfig = useSystemConfig((state) => state.systemConfig);
   const { proxy: systemProxy } = systemConfig || {};
 
-  const {
-    code: responseCode,
-    size: responseSize,
-    time: responseTime,
-    timings,
-    formatTimings,
-    formatSize,
-    network,
-    hasFormattedTimings: isNewTimings,
-    proxy,
-  } = responseIndicators(sourceResponse, sourceRequest);
+  const responseCode = sourceResponse?.code;
+  const responseSize =
+    sourceResponse?.responseSize ?? sourceResponse?.stream?.data.length ?? 0;
+  const responseTime = sourceResponse?.responseTime;
   const originResponseSizeFormat = convertResponseBytes(responseSize);
 
   const handleDownload = () => {
@@ -75,29 +59,24 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
   };
 
   const proxyContent = (
-    <div style={{ width: 180 }} className={styles.container}>
+    <div style={{ width: 180 }}>
       <Row gutter={[0, 8]}>
         <Col span={24}>
           <Flex
             justify="space-between"
-            className={clsx(styles.responseSizeTitle, styles.flex)}
+            className={clsx(styles.responseSizeTitle)}
           >
             <span>{t("common.response_indicators.network")}</span>
           </Flex>
         </Col>
         <Col span={24}>
-          <Flex flex={1} justify="space-between" className={styles.flex}>
+          <Flex flex={1} justify="space-between">
             <span>{t("common.response_indicators.local")}</span>
-            <span>{proxy ?? t("common.response_indicators.no_local")}</span>
+            <span>{t("common.response_indicators.no_local")}</span>
           </Flex>
         </Col>
       </Row>
     </div>
-  );
-
-  const timeContentList = useMemo(
-    () => timingSegments(formatTimings),
-    [formatTimings],
   );
 
   const responseCodeDesc = useMemo(() => {
@@ -107,137 +86,16 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
     return { name: "", desc: "" };
   }, [responseCode]);
 
-  const responseSizeFormat = useMemo(() => {
-    if (!formatSize) {
-      return {};
-    }
-    const resSize = convertResponseBytes(
-      add(formatSize.responseHeaders, formatSize.responseBody),
-    );
-    const resHeaderSize = convertResponseBytes(formatSize.responseHeaders);
-    const resBodySize = convertResponseBytes(formatSize.responseBody);
-    const reqSize = convertResponseBytes(
-      add(formatSize.requestHeaders, formatSize.requestBody),
-    );
-    const reqHeaderSize = convertResponseBytes(formatSize.requestHeaders);
-    const reqBodySize = convertResponseBytes(formatSize.requestBody);
-    const resUnCompressSize = convertResponseBytes(
-      formatSize.uncompressedResponseBody || 0,
-    );
-    return {
-      responseSize: `${resSize.convertedValue}${resSize.unit}`,
-      responseHeaders: `${resHeaderSize.convertedValue}${resHeaderSize.unit}`,
-      responseBody: `${resBodySize.convertedValue}${resBodySize.unit}`,
-      requestSize: `${reqSize.convertedValue}${reqSize.unit}`,
-      requestHeaders: `${reqHeaderSize.convertedValue}${reqHeaderSize.unit}`,
-      requestBody: `${reqBodySize.convertedValue}${reqBodySize.unit}`,
-      responseUnCompress: `${resUnCompressSize.convertedValue}${resUnCompressSize.unit}`,
-    };
-  }, [formatSize]);
-
-  const responseSizeContent = (
-    <Flex
-      vertical
-      style={{ width: 300 }}
-      className={clsx(styles.customSizePopover, styles.flex)}
-    >
-      <Flex gap={4} vertical className={styles.flex}>
-        <Flex style={{ width: "100%" }} gap={8} className={styles.flex}>
-          <Flex className={clsx(styles.iconWrapper, styles.flex)}>
-            <AppIcon icon="download" className={styles.icon} />
-          </Flex>
-          <Flex flex={1} gap={4} vertical className={styles.flex}>
-            <Flex
-              justify="space-between"
-              className={clsx(styles.name, styles.flex)}
-              gap={4}
-            >
-              <span>Response Size</span>
-              <span>{responseSizeFormat?.responseSize}</span>
-            </Flex>
-            <Flex
-              justify="space-between"
-              className={clsx(styles.desc, styles.flex)}
-              gap={4}
-            >
-              <span>Headers</span>
-              <span>{responseSizeFormat?.responseHeaders}</span>
-            </Flex>
-            <Flex
-              justify="space-between"
-              className={clsx(styles.desc, styles.flex)}
-              gap={4}
-            >
-              <span>Body</span>
-              <span>{responseSizeFormat?.responseBody}</span>
-            </Flex>
-            {has(formatSize, "uncompressedResponseBody") && (
-              <Flex
-                justify="space-between"
-                className={clsx(styles.desc, styles.flex)}
-                gap={4}
-              >
-                <span>Uncompressed</span>
-                <span>{responseSizeFormat?.responseUnCompress}</span>
-              </Flex>
-            )}
-          </Flex>
-        </Flex>
-        <Divider style={{ margin: "8px 0" }} />
-        <Flex style={{ width: "100%" }} gap={8} className={styles.flex}>
-          <Flex
-            className={clsx(
-              [styles.iconWrapper, styles.request].join(" "),
-              styles.flex,
-            )}
-          >
-            <AppIcon rotate={180} icon="download" className={styles.icon} />
-          </Flex>
-          <Flex flex={1} gap={4} vertical className={styles.flex}>
-            <Flex
-              justify="space-between"
-              className={clsx(styles.name, styles.flex)}
-              gap={4}
-            >
-              <span>Request Size</span>
-              <span>{responseSizeFormat?.requestSize}</span>
-            </Flex>
-            <Flex
-              justify="space-between"
-              className={clsx(styles.desc, styles.flex)}
-              gap={4}
-            >
-              <span>Headers</span>
-              <span>{responseSizeFormat?.requestHeaders}</span>
-            </Flex>
-            <Flex
-              justify="space-between"
-              className={clsx(styles.desc, styles.flex)}
-              gap={4}
-            >
-              <span>Body</span>
-              <span>{responseSizeFormat?.requestBody}</span>
-            </Flex>
-          </Flex>
-        </Flex>
-      </Flex>
-    </Flex>
-  );
-
   const responseCodeContent = (
     <Flex
       gap={8}
       style={{ width: 240 }}
-      className={clsx(styles.customCodePopover, styles.flex)}
+      className={clsx(styles.customCodePopover)}
     >
       <Flex
-        className={clsx(
-          styles.iconCode,
-          {
-            [styles.success]: String(responseCode).charAt(0) === "2",
-          },
-          styles.flex,
-        )}
+        className={clsx(styles.iconCode, {
+          [styles.success]: String(responseCode).charAt(0) === "2",
+        })}
       >
         <AppIcon
           icon={
@@ -246,130 +104,16 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
           className={styles.icon}
         />
       </Flex>
-      <Flex gap={4} vertical className={styles.flex}>
-        <Flex className={clsx(styles.name, styles.flex)} gap={4}>
+      <Flex gap={4} vertical>
+        <Flex className={clsx(styles.name)} gap={4}>
           <span>{responseCode}</span>
           <span>{responseCodeDesc?.name}</span>
         </Flex>
-        <Flex className={clsx(styles.desc, styles.flex)} wrap="wrap">
+        <Flex className={clsx(styles.desc)} wrap="wrap">
           {responseCodeDesc?.desc}
         </Flex>
       </Flex>
     </Flex>
-  );
-
-  const newTimeContent = (
-    <div style={{ width: 380 }} className={styles.container}>
-      <Flex align="flex-start" gap={4} className={styles.flex}>
-        <AppIcon
-          style={{
-            marginTop: 2,
-            color: "var(--font-title-color)",
-            fontSize: "14px",
-          }}
-          icon="clock"
-          className={styles.icon}
-        />
-        <Flex flex={1} vertical className={styles.flex}>
-          <Row gutter={[8, 8]}>
-            <Col span={24}>
-              <Flex
-                justify="space-between"
-                className={clsx(styles.newResponseSizeTitle, styles.flex)}
-              >
-                Response Time
-                <span>{`${toFixed(formatTimings?.total?.duration || 0)}ms`}</span>
-              </Flex>
-            </Col>
-          </Row>
-
-          {map(
-            timeContentList,
-            ({ key, name, lineLeftSize, lineRightSize, width, marginLeft }) => (
-              <Row
-                key={key}
-                className={clsx(styles[key] ?? key, {
-                  [styles.empty]: isEqual(width, 0),
-                })}
-                gutter={[8, 8]}
-              >
-                <Col style={{ lineHeight: "26px" }} span={8}>
-                  {name}
-                </Col>
-                <Col style={{ height: 24 }} span={12}>
-                  <div className={styles.progress}>
-                    <div
-                      style={{ left: `${lineLeftSize}%` }}
-                      className={styles.progressLeft}
-                    ></div>
-                    <div
-                      style={{
-                        width: `${width}%`,
-                        marginLeft: `${marginLeft}%`,
-                      }}
-                      className={clsx(
-                        styles.progressContent,
-                        styles[key] ?? key,
-                      )}
-                    ></div>
-                    <div
-                      style={{ left: `${lineRightSize}%` }}
-                      className={styles.progressRight}
-                    ></div>
-                  </div>
-                </Col>
-                <Col
-                  style={{ textAlign: "right", lineHeight: "26px" }}
-                  span={4}
-                >
-                  {isEqual(width, 0)
-                    ? "Cache"
-                    : `${toFixed(get(formatTimings, key)?.duration)}ms`}
-                </Col>
-              </Row>
-            ),
-          )}
-        </Flex>
-      </Flex>
-    </div>
-  );
-
-  const timeContent = (
-    <div style={{ width: 240 }} className={styles.container}>
-      <Row gutter={[0, 8]}>
-        <Col span={24}>
-          <Flex
-            justify="space-between"
-            className={clsx(styles.responseSizeTitle, styles.flex)}
-          >
-            <span>{t("common.response_indicators.event")}</span>
-            <span>{t("common.response_indicators.use_time")}</span>
-          </Flex>
-        </Col>
-        {(
-          [
-            ["request", "Request"],
-            ["socket", "Socket"],
-            ["lookup", "Lookup"],
-            ["connect", "Connect"],
-            ["secure_connect", "SecureConnect"],
-            ["response", "Response"],
-            ["end", "End"],
-            ["done", "Done"],
-          ] as const
-        ).map(([key, label]) => {
-          const duration = timings?.[key];
-          return duration === undefined || duration === null ? null : (
-            <Col key={key} span={24}>
-              <Flex justify="space-between" className={styles.flex}>
-                <span>{label}</span>
-                <span className={styles.time}>{toFixed(duration)}ms</span>
-              </Flex>
-            </Col>
-          );
-        })}
-      </Row>
-    </div>
   );
 
   const responseTimeStr = useMemo(() => {
@@ -377,15 +121,11 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
   }, [responseTime]);
 
   return (
-    <Flex
-      gap={8}
-      align="center"
-      className={clsx(styles.responseSize, styles.flex)}
-    >
+    <Flex gap={8} align="center" className={clsx(styles.responseSize)}>
       {responseCode !== 0 && (
         <>
           {responseCode && (
-            <Flex className={styles.flex}>
+            <Flex>
               <CustomPopover nativeButton={false} content={responseCodeContent}>
                 <span
                   style={{
@@ -412,8 +152,8 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
             </Flex>
           )}
 
-          <Flex gap={6} align="center" className={styles.flex}>
-            {responseTime && (
+          <Flex gap={6} align="center">
+            {responseTime !== undefined && (
               <>
                 <svg
                   width="4"
@@ -429,16 +169,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
                     fill="var(--check-box-border-color)"
                   />
                 </svg>
-                {!isEmpty(timings) ? (
-                  <CustomPopover
-                    nativeButton={false}
-                    content={isNewTimings ? newTimeContent : timeContent}
-                  >
-                    <span className={styles.curPointer}>{responseTimeStr}</span>
-                  </CustomPopover>
-                ) : (
-                  <span>{responseTimeStr}</span>
-                )}
+                <span>{responseTimeStr}</span>
               </>
             )}
           </Flex>
@@ -459,21 +190,10 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
                   fill="var(--check-box-border-color)"
                 />
               </svg>
-              <Flex className={styles.flex}>
-                <Tooltip title={t("common.response_indicators.size")}></Tooltip>
-                <CustomPopover
-                  nativeButton={false}
-                  popupStyle={{
-                    padding: isNewTimings ? "16px 20px" : "6px 8px",
-                  }}
-                  content={
-                    isNewTimings
-                      ? responseSizeContent
-                      : t("common.response_indicators.size")
-                  }
-                >
+              <Flex>
+                <Tooltip title={t("common.response_indicators.size")}>
                   <span>{`${originResponseSizeFormat.convertedValue}${originResponseSizeFormat.unit}`}</span>
-                </CustomPopover>
+                </Tooltip>
               </Flex>
             </>
           )}
@@ -482,16 +202,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
 
       {showProxy && (
         <>
-          <CustomPopover
-            nativeButton={false}
-            content={
-              isNewTimings ? (
-                <ResponseNetwork network={network} />
-              ) : (
-                proxyContent
-              )
-            }
-          >
+          <CustomPopover nativeButton={false} content={proxyContent}>
             <AppIcon
               icon="network"
               className={clsx(styles.curPointer, styles.icon)}

@@ -5,7 +5,6 @@ import {
 } from "@onapi/domain/testing/constants/index";
 import { CaseItem, Settings } from "@onapi/domain/testing/types/common";
 import { ApiDetailsData } from "@onapi/domain/requests/types/api";
-import { ApiSendResponseData } from "@onapi/domain/requests/types/send";
 
 /**Test case list */
 export type TestingData = {
@@ -96,8 +95,3 @@ export type TestingDataListItem = {
   created_at: string;
   data_list: { env_id: string; data: any[] }[];
 };
-
-export type RuntimeResponse = Pick<
-  ApiSendResponseData,
-  "console" | "request" | "response" | "assertions"
->;
