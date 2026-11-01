@@ -205,8 +205,14 @@ export class HistoryDayTreeItem extends vscode.TreeItem {
     node: Extract<SidebarTreeNode, { kind: "day" }>,
     context: vscode.ExtensionContext,
     historyCount: number,
+    expanded: boolean,
   ) {
-    super(node.day, vscode.TreeItemCollapsibleState.Expanded);
+    super(
+      node.day,
+      expanded
+        ? vscode.TreeItemCollapsibleState.Expanded
+        : vscode.TreeItemCollapsibleState.Collapsed,
+    );
     this.id = `history-day:${node.day}`;
     this.iconPath = getSidebarIcon(context, "history");
     this.description = String(historyCount);

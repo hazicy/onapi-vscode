@@ -100,13 +100,15 @@ export class SidebarTreeProvider
         );
       case "report":
         return new ReportTreeItem(node, this.zh);
-      case "day":
+      case "day": {
+        const history = this.history();
         return new HistoryDayTreeItem(
           node,
           this.context,
-          this.history().filter((entry) => dayKey(entry.sentAt) === node.day)
-            .length,
+          history.filter((entry) => dayKey(entry.sentAt) === node.day).length,
+          history.length > 0 && dayKey(history[0].sentAt) === node.day,
         );
+      }
       case "history":
         return new HistoryTreeItem(node, this.context, this.list);
       case "empty":
