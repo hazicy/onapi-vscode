@@ -226,7 +226,6 @@ export interface SelectProps<
   dropdownStyle?: React.CSSProperties;
   open?: boolean;
   defaultOpen?: boolean;
-  onDropdownVisibleChange?: (open: boolean) => void;
   onOpenChange?: (open: boolean) => void;
   notFoundContent?: React.ReactNode;
   bordered?: boolean;
@@ -278,7 +277,7 @@ export interface SelectProps<
   onSearch?: (text: string) => void;
   mode?: "multiple" | "tags";
 }
-export interface InputNumberProps<V = number> extends DOMProps<HTMLDivElement> {
+export interface InputNumberProps extends DOMProps<HTMLDivElement> {
   min?: number;
   max?: number;
   step?: number;
@@ -286,13 +285,10 @@ export interface InputNumberProps<V = number> extends DOMProps<HTMLDivElement> {
   readOnly?: boolean;
   controls?: boolean;
   precision?: number;
-  stringMode?: boolean;
-  formatter?: (value: V | undefined) => string;
-  parser?: (value: string | undefined) => V;
   inputClassName?: string;
-  value?: V | null;
-  defaultValue?: V;
-  onChange?: (value: V | null) => void;
+  value?: number | null;
+  defaultValue?: number;
+  onChange?: (value: number | null) => void;
 }
 export interface CheckboxProps extends DOMProps {
   name?: string;
@@ -507,7 +503,6 @@ export interface TreeSelectProps<V = any> extends UIProps {
   popupRender?: PopupRenderer;
   open?: boolean;
   defaultOpen?: boolean;
-  onDropdownVisibleChange?: (open: boolean) => void;
   onOpenChange?: (open: boolean) => void;
   allowClear?: boolean;
   treeNodeFilterProp?: "title" | "key" | "name" | "id";

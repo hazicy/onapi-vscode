@@ -199,7 +199,7 @@ const UrlGroup = (props: UrlGroupProps) => {
           <Select
             bordered={false}
             open={methodSelectOpen}
-            onDropdownVisibleChange={(open) => {
+            onOpenChange={(open) => {
               setMethodSelectOpen(open);
             }}
             className={clsx(

@@ -39,7 +39,6 @@ export const TreeSelect = forwardRef<HTMLButtonElement, TreeSelectProps>(
       popupRender,
       open,
       defaultOpen,
-      onDropdownVisibleChange,
       onOpenChange,
       allowClear,
       treeNodeFilterProp = "title",
@@ -94,7 +93,6 @@ export const TreeSelect = forwardRef<HTMLButtonElement, TreeSelectProps>(
     }, [nodes, query, filterTreeNode, treeNodeFilterProp]);
     const changeOpen = (next: boolean) => {
       setOpen(next);
-      onDropdownVisibleChange?.(next);
       onOpenChange?.(next);
       if (!next && searchValue === undefined) {
         setSearch("");

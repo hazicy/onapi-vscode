@@ -14,9 +14,6 @@ export const InputNumber = forwardRef<HTMLDivElement, InputNumberProps>(
       rootClassName,
       controls,
       precision,
-      formatter,
-      parser,
-      stringMode,
       ...props
     },
     ref,
@@ -25,9 +22,19 @@ export const InputNumber = forwardRef<HTMLDivElement, InputNumberProps>(
       {...props}
       ref={ref}
       className={clsx(inputNumberStyles.number, className, rootClassName)}
+      format={
+        precision === undefined
+          ? undefined
+          : {
+              maximumFractionDigits: precision,
+              useGrouping: false,
+            }
+      }
       onValueChange={(value) =>
         onChange?.(
-          stringMode && value !== null ? (String(value) as never) : value,
+          value !== null && precision !== undefined
+            ? Number(value.toFixed(precision))
+            : value,
         )
       }
     >

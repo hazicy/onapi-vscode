@@ -21,6 +21,8 @@ import {
   Modal,
   Upload,
   message,
+  Row,
+  Space,
 } from "@/shared/ui/base";
 
 function Content() {
@@ -250,6 +252,46 @@ export default function BaseFixture() {
   return (
     <App>
       <Content />
+      <ControlBehavior />
     </App>
+  );
+}
+
+function ControlBehavior() {
+  const [value, setValue] = useState<number | null>(null);
+  const [text, setText] = useState("");
+  const [autoSize, setAutoSize] = useState(true);
+  return (
+    <section aria-label="Control behavior">
+      <InputNumber
+        aria-label="Decimal value"
+        precision={2}
+        controls={false}
+        value={value}
+        onChange={setValue}
+      />
+      <output aria-label="Decimal result">
+        {value === null ? "empty" : value}
+      </output>
+      <Input.TextArea
+        aria-label="Growing text"
+        style={{ width: 240, lineHeight: "20px" }}
+        autoSize={autoSize ? { minRows: 2, maxRows: 4 } : false}
+        value={text}
+        onChange={(event) => setText(event.target.value)}
+      />
+      <button onClick={() => setText("short")}>Reset growing text</button>
+      <button onClick={() => setAutoSize((current) => !current)}>
+        Toggle autosize
+      </button>
+      <Row aria-label="Two axis row" gutter={[12, 20]}>
+        <span>A</span>
+        <span>B</span>
+      </Row>
+      <Space aria-label="Two axis space" size={[14, 22]}>
+        <span>A</span>
+        <span>B</span>
+      </Space>
+    </section>
   );
 }

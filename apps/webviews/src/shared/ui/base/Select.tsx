@@ -70,7 +70,6 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
       dropdownStyle,
       open,
       defaultOpen,
-      onDropdownVisibleChange,
       onOpenChange,
       notFoundContent,
       size,
@@ -300,7 +299,6 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
         open={open}
         defaultOpen={defaultOpen}
         onOpenChange={(v) => {
-          onDropdownVisibleChange?.(v);
           onOpenChange?.(v);
         }}
         disabled={disabled}

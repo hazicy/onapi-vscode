@@ -1,3 +1,4 @@
+import { useTextareaAutosize } from "./useTextareaAutosize";
 import inputStyles from "./Input.module.css";
 import { forwardRef } from "react";
 import { useImperativeHandle, useRef } from "react";
@@ -16,29 +17,38 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       ...props
     },
     ref,
-  ) => (
-    <textarea
-      {...props}
-      ref={ref}
-      rows={
-        props.rows ??
-        (typeof autoSize === "object" ? autoSize.minRows : undefined) ??
-        2
-      }
-      className={clsx(
-        inputStyles.input,
-        inputClassName,
-        className,
-        rootClassName,
-      )}
-      onKeyDown={(event) => {
-        props.onKeyDown?.(event);
-        if (event.key === "Enter") {
-          onPressEnter?.(event);
-        }
-      }}
-    />
-  ),
+  ) => {
+    const input = useRef<HTMLTextAreaElement>(null);
+    useImperativeHandle(ref, () => input.current!);
+    const rows =
+      props.rows ??
+      (typeof autoSize === "object" ? autoSize.minRows : undefined) ??
+      2;
+    const resize = useTextareaAutosize(input, autoSize, rows, props.value);
+    return (
+      <textarea
+        {...props}
+        ref={input}
+        rows={rows}
+        onInput={(event) => {
+          props.onInput?.(event);
+          resize();
+        }}
+        className={clsx(
+          inputStyles.input,
+          inputClassName,
+          className,
+          rootClassName,
+        )}
+        onKeyDown={(event) => {
+          props.onKeyDown?.(event);
+          if (event.key === "Enter") {
+            onPressEnter?.(event);
+          }
+        }}
+      />
+    );
+  },
 );
 
 const InputControl = forwardRef<InputRef, InputProps>(

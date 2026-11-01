@@ -3,6 +3,44 @@ import { test } from "./fixtures";
 test.beforeEach(async ({ basePage }) => {
   await basePage.open();
 });
+test("number precision applies to the value and clearing keeps null", async ({
+  page,
+}) => {
+  const input = page.getByRole("textbox", { name: "Decimal value" });
+  await input.fill("1.236");
+  await input.blur();
+  await expect(input).toHaveValue("1.24");
+  await expect(page.getByLabel("Decimal result")).toHaveText("1.24");
+  await input.fill("");
+  await input.blur();
+  await expect(page.getByLabel("Decimal result")).toHaveText("empty");
+});
+
+test("row and space retain both gap dimensions", async ({ page }) => {
+  await expect(page.getByLabel("Two axis row")).toHaveCSS("column-gap", "12px");
+  await expect(page.getByLabel("Two axis row")).toHaveCSS("row-gap", "20px");
+  await expect(page.getByLabel("Two axis space")).toHaveCSS(
+    "column-gap",
+    "14px",
+  );
+  await expect(page.getByLabel("Two axis space")).toHaveCSS("row-gap", "22px");
+});
+
+test("textarea grows, caps at max rows, shrinks on external updates and restores fixed sizing", async ({
+  page,
+}) => {
+  const input = page.getByRole("textbox", { name: "Growing text" });
+  const initial = (await input.boundingBox())!.height;
+  await input.fill("one\ntwo\nthree\nfour\nfive\nsix");
+  await expect(input).toHaveCSS("overflow-y", "auto");
+  const capped = (await input.boundingBox())!.height;
+  expect(capped - initial).toBeCloseTo(40, 0);
+  await page.getByRole("button", { name: "Reset growing text" }).click();
+  await expect(input).toHaveCSS("overflow-y", "hidden");
+  expect((await input.boundingBox())!.height).toBeCloseTo(initial, 0);
+  await page.getByRole("button", { name: "Toggle autosize" }).click();
+  expect(await input.evaluate((node) => node.style.height)).toBe("");
+});
 test("component className props preserve component overrides, size variants, and wrapper scope", async ({
   basePage,
 }) => {

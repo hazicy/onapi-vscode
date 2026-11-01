@@ -279,7 +279,7 @@ export default function VariableValueEditor({
             dispatch({ type: "mock-value", value: String(e) });
           }}
           open={treeOpen}
-          onDropdownVisibleChange={(v) => setTreeOpen(v)}
+          onOpenChange={(v) => setTreeOpen(v)}
           className={styles.select}
         />
       );
