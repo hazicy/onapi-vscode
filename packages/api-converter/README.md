@@ -24,7 +24,7 @@ const warnings = [...imported.warnings, ...exported.warnings];
 
 [统一模型](./src/model.ts) 定义集合、目录、请求、参数、请求体、认证、响应示例和环境。[格式适配器](./src/index.ts) 不依赖 VS Code、React、Mock 引擎或应用 `src`。
 
-[应用适配层](./src/adapters/converter-adapter.ts) 负责旧存储结构、项目 ID、参数 ID、默认值和认证字段映射。集合变量作为可选择的环境导入；目录变量在导入时按目录作用域代入请求值。应用保留现有的按需加载和 `status/message/data` 返回协议。导入和文件导出展示转换警告。
+[应用适配层](./src/adapters/converter-adapter.ts) 负责转换器集合模型与当前原生请求记录、项目 ID、HTTP 配置和环境之间的映射。Postman 原生导入导出保留集合和目录变量及脚本；其他格式通过转换器模型进入相同的记录结构。应用保留现有的按需加载和 `status/message/data` 返回协议。导入和文件导出展示转换警告。
 
 ## 边界
 
@@ -45,6 +45,6 @@ pnpm --dir packages/api-converter typecheck
 node --experimental-vm-modules --test "tests/api-converter/*.test.mjs"
 ```
 
-测试覆盖格式往返、Postman Schema 校验、真实应用入口、认证、变量、目录、表单文件、响应示例、服务器路径、参数覆盖、循环 Schema、非法输入和按需加载。
+测试直接覆盖现用格式读取/写入 API 和真实应用导入导出入口，包括格式往返、Postman Schema 校验、认证、变量、嵌套及空目录、表单文件、响应示例、服务器路径、参数覆盖、循环及深层 Schema、非法输入和按需加载。导出及导入结果与输入相互隔离；迁移自旧补全器的行为用例在这些入口验证，不保留仅供旧测试调用的转换实现。
 
 格式参考：[OpenAPI 3.0.3](https://spec.openapis.org/oas/v3.0.3)、[Postman 2.1](https://schema.postman.com/json/collection/v2.1.0/docs/index.html)。

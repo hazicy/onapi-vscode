@@ -490,22 +490,10 @@ importers:
       '@onapi/domain':
         specifier: workspace:*
         version: link:../domain
-      i18next:
-        specifier: ^26.5.10
-        version: 26.5.10(typescript@7.0.2)
-      lodash:
-        specifier: ^4.18.1
-        version: 4.18.1
     devDependencies:
-      '@types/lodash':
-        specifier: ^4.17.27
-        version: 4.17.27
       '@types/node':
         specifier: ~26.6.5
         version: 26.6.5
-      '@types/react':
-        specifier: ^19.3.0
-        version: 19.3.0
 
   packages/contracts:
     dependencies:

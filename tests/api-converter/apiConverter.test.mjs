@@ -332,3 +332,62 @@ test("Postman structured URLs with string paths import without a raw URL", () =>
     "https://example.com/users/1",
   );
 });
+
+test("OpenAPI schema traversal preserves nested references, extensions and deep schemas without mutating input", () => {
+  const schema = {
+    type: "object",
+    properties: {
+      child: { $ref: "#/components/schemas/Model" },
+      list: {
+        type: "array",
+        items: {
+          anyOf: [{ $ref: "#/components/schemas/Model" }, { type: "null" }],
+        },
+      },
+    },
+    "x-schema-orders": ["child", "list"],
+    "x-schema-overrides": { child: { $ref: "#/components/schemas/Model" } },
+  };
+  let deep = { type: "string" };
+  for (let depth = 0; depth < 150; depth++)
+    deep = { type: "object", properties: { nested: deep } };
+  schema.properties.deep = deep;
+  const source = {
+    openapi: "3.0.3",
+    info: { title: "Schema references" },
+    components: {
+      schemas: {
+        Model: {
+          type: "object",
+          properties: { next: { $ref: "#/components/schemas/Model" } },
+        },
+      },
+    },
+    paths: {
+      "/users": {
+        post: {
+          requestBody: { content: { "application/json": { schema } } },
+          responses: { 200: { description: "OK" } },
+        },
+      },
+    },
+  };
+  const original = structuredClone(source);
+  const collection = api.readOpenApi(source).data;
+  const converted = collection.items[0].request.body.schema;
+  const localRef = "#/$defs/components~1schemas~1Model";
+  assert.equal(converted.properties.child.$ref, localRef);
+  assert.equal(converted.properties.list.items.anyOf[0].$ref, localRef);
+  assert.equal(converted["x-schema-overrides"].child.$ref, localRef);
+  assert.equal(
+    converted.$defs["components/schemas/Model"].properties.next.$ref,
+    localRef,
+  );
+  assert.deepEqual(converted["x-schema-orders"], ["child", "list"]);
+  assert.deepEqual(converted.properties.deep, deep);
+  const beforeExport = structuredClone(collection);
+  const exported = api.writeOpenApi(collection).data;
+  assert.deepEqual(collection, beforeExport);
+  assert.deepEqual(source, original);
+  assert.doesNotThrow(() => api.readOpenApi(exported));
+});
