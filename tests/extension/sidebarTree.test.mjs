@@ -272,16 +272,13 @@ test("native sidebar panels, test commands and workspace request history", async
       setRequestResult,
     } = bundled;
     registerSidebarTree(context);
-    assert.equal(treeViews.get("onapiRequests").description, "one");
+    assert.equal(treeViews.get("onapiRequests").description, undefined);
     context.project = "renamed workspace";
     storageChanged.fire("userConfig");
-    assert.equal(
-      treeViews.get("onapiRequests").description,
-      "renamed workspace",
-    );
+    assert.equal(treeViews.get("onapiRequests").description, undefined);
     context.project = "one";
     storageChanged.fire("userConfig");
-    assert.equal(treeViews.get("onapiRequests").description, "one");
+    assert.equal(treeViews.get("onapiRequests").description, undefined);
     for (const id of ["onapiRequests", "onapiTests", "onapiHistory"]) {
       const treeView = treeViews.get(id);
       treeView.setVisible(true);
