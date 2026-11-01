@@ -91,10 +91,20 @@ async function fixture(t) {
     },
   };
   let changes = 0;
+  const collectionFiles = await loadTypeScript(
+    "apps/extension/src/platform/storage/collection-files.ts",
+    nativeDependency,
+  );
+  const fileLock = await loadTypeScript(
+    "apps/extension/src/platform/storage/file-lock.ts",
+    nativeDependency,
+  );
   const { JsonRepository } = await loadTypeScript(
     "apps/extension/src/platform/storage/repository.ts",
     (id) => {
       if (id === "vscode") return host;
+      if (id === "./collection-files") return collectionFiles;
+      if (id === "./file-lock") return fileLock;
       if (id === "./events") return { storageChanged: { fire() {} } };
       if (id === "./index")
         return {
@@ -739,5 +749,325 @@ test("gRPC definitions, unfinished messages and credentials survive disk persist
   assert.deepEqual(
     JSON.parse(JSON.stringify(reopened.get("apiList", [])))[0],
     JSON.parse(JSON.stringify(record)),
+  );
+});
+
+test("collection saves write only changed files, skip no-ops and never scan for deletions", async (t) => {
+  const f = await fixture(t);
+  await f.repo.set("apiList", records());
+  const renamed = [];
+  let commitScans = 0;
+  let applying = false;
+  let secrets = 0;
+  const rename = f.host.workspace.fs.rename;
+  const readDirectory = f.host.workspace.fs.readDirectory;
+  const storeSecret = f.context.secrets.store;
+  const remove = f.host.workspace.fs.delete;
+  f.host.workspace.fs.delete = async (uri) => {
+    const result = await remove(uri);
+    if (uri.path.endsWith("/.collection-transaction.json")) applying = false;
+    return result;
+  };
+  f.host.workspace.fs.rename = async (from, to) => {
+    renamed.push(path.relative(f.root, to.path));
+    if (to.path.endsWith("/.collection-transaction.json")) applying = true;
+    return rename(from, to);
+  };
+  f.host.workspace.fs.readDirectory = async (...args) => {
+    if (applying) commitScans++;
+    return readDirectory(...args);
+  };
+  f.context.secrets.store = async (...args) => {
+    secrets++;
+    return storeSecret(...args);
+  };
+  await f.repo.set("apiList", records());
+  await f.repo.set("apiList", records().reverse());
+  assert.deepEqual(renamed, []);
+  assert.equal(secrets, 0);
+  const changed = records();
+  changed[1].name = "Changed request";
+  await f.repo.set("apiList", changed);
+  assert.deepEqual(renamed, [
+    ".collection-transaction.json",
+    "collections/users/get-user.json",
+  ]);
+  renamed.length = 0;
+  await f.repo.set("apiList", changed.slice(0, 1));
+  assert.deepEqual(renamed, [".collection-transaction.json"]);
+  assert.equal(commitScans, 0);
+  await assert.rejects(
+    fs.stat(path.join(f.root, "collections/users/get-user.json")),
+  );
+});
+
+for (const key of ["apiList", "apiList:project/one"]) {
+  test(`${key} recovers a partially written batch before loading a snapshot`, async (t) => {
+    const f = await fixture(t);
+    const base =
+      key === "apiList"
+        ? f.root
+        : path.join(f.root, "projects", encodeURIComponent(key));
+    await f.repo.set(key, records());
+    const changed = records();
+    changed[0].name = "Imported folder";
+    changed[1].name = "Imported request";
+    changed.push({
+      id: "new",
+      sort: 2,
+      parentId: "users",
+      kind: "api",
+      name: "New",
+      request: { method: "POST", url: "https://example.com" },
+    });
+    const rename = f.host.workspace.fs.rename;
+    f.host.workspace.fs.rename = async (from, to) => {
+      if (to.path.endsWith("/get-user.json"))
+        throw new Error("interrupted batch");
+      return rename(from, to);
+    };
+    await assert.rejects(f.repo.set(key, changed), /interrupted batch/);
+    assert.equal(f.repo.get(key, [])[0].name, "Users");
+    assert.match(f.repo.error, /Pending collection transaction/);
+    await assert.rejects(
+      f.repo.set("auxiliary", {}),
+      /Pending collection transaction/,
+    );
+    const journal = path.join(base, ".collection-transaction.json");
+    const text = await fs.readFile(journal, "utf8");
+    assert.equal(text.includes("PRIVATE_TOKEN"), false);
+    assert.equal(JSON.parse(text).writes.length, 3);
+    const reopened = new f.JsonRepository(f.context, () => {});
+    await reopened.start();
+    assert.ok(reopened.error);
+    assert.equal(reopened.has(key), false);
+    assert.equal(await fs.readFile(journal, "utf8"), text);
+    f.host.workspace.fs.rename = rename;
+    assert.equal(await reopened.retry(), true);
+    assert.equal(reopened.error, undefined);
+    assert.deepEqual(
+      JSON.parse(JSON.stringify(reopened.get(key, []))),
+      changed,
+    );
+    await assert.rejects(fs.stat(journal));
+    await reopened.set(key, changed);
+  });
+}
+
+for (const failure of ["delete", "journal cleanup"]) {
+  test(`folder moves recover after interrupted ${failure} and tolerate already deleted paths`, async (t) => {
+    const f = await fixture(t);
+    const before = [
+      ...records(),
+      {
+        id: "destination",
+        parentId: "0",
+        kind: "folder",
+        name: "Destination",
+        sort: 2,
+      },
+      {
+        id: "nested",
+        parentId: "users",
+        kind: "folder",
+        name: "Nested",
+        sort: 3,
+      },
+      {
+        id: "leaf",
+        parentId: "nested",
+        kind: "api",
+        name: "Leaf",
+        sort: 4,
+        request: { method: "GET", url: "https://example.com" },
+      },
+    ];
+    await f.repo.set("apiList", before);
+    const moved = structuredClone(before);
+    moved[0].parentId = "destination";
+    const remove = f.host.workspace.fs.delete;
+    const blocked =
+      failure === "delete"
+        ? "collections/users/get-user.json"
+        : ".collection-transaction.json";
+    f.host.workspace.fs.delete = async (uri) => {
+      if (uri.path === path.join(f.root, blocked))
+        throw new Error("interrupted removal");
+      return remove(uri);
+    };
+    await assert.rejects(f.repo.set("apiList", moved), /interrupted removal/);
+    assert.deepEqual(
+      JSON.parse(JSON.stringify(f.repo.get("apiList", []))),
+      before,
+    );
+    assert.ok(
+      await fs.stat(
+        path.join(f.root, "collections/destination/users/nested/leaf.json"),
+      ),
+    );
+    await assert.rejects(
+      fs.stat(path.join(f.root, "collections/users/collection.json")),
+    );
+    f.host.workspace.fs.delete = remove;
+    assert.equal(await f.repo.retry(), true);
+    assert.deepEqual(
+      JSON.parse(JSON.stringify(f.repo.get("apiList", []))),
+      moved,
+    );
+    for (const old of [
+      "collections/users/get-user.json",
+      "collections/users/nested/leaf.json",
+      ".collection-transaction.json",
+    ]) {
+      await assert.rejects(fs.stat(path.join(f.root, old)));
+    }
+    const reopened = new f.JsonRepository(f.context, () => {});
+    await reopened.reload();
+    assert.deepEqual(
+      JSON.parse(JSON.stringify(reopened.get("apiList", []))),
+      moved,
+    );
+  });
+}
+
+test("invalid transaction paths and versions block recovery before touching collection files", async (t) => {
+  const f = await fixture(t);
+  await f.repo.set("apiList", records());
+  const file = path.join(f.root, "collections/users/collection.json");
+  const original = await fs.readFile(file, "utf8");
+  for (const transaction of [
+    { version: 99, writes: [], deletes: [] },
+    {
+      version: 1,
+      writes: [
+        ["collections/users/collection.json", { name: "Must not be applied" }],
+      ],
+      deletes: ["collections/../../outside.json"],
+    },
+    {
+      version: 1,
+      writes: [],
+      deletes: [
+        "collections/users/collection.json",
+        "collections/users/collection.json",
+      ],
+    },
+  ]) {
+    const journal = path.join(f.root, ".collection-transaction.json");
+    await fs.writeFile(journal, JSON.stringify(transaction));
+    assert.equal(await f.repo.retry(), false);
+    assert.match(f.repo.error, /collection transaction/);
+    assert.equal(await fs.readFile(file, "utf8"), original);
+    assert.ok(await fs.stat(journal));
+  }
+});
+
+for (const operation of ["save", "reload"]) {
+  test(`another repository waits for an interrupted move before ${operation}`, async (t) => {
+    const f = await fixture(t);
+    const before = [
+      ...records(),
+      {
+        id: "destination",
+        parentId: "0",
+        kind: "folder",
+        name: "Destination",
+        sort: 2,
+      },
+    ];
+    await f.repo.set("apiList", before);
+    const other = new f.JsonRepository(f.context, () => {});
+    await other.start();
+    let release, entered;
+    const gate = new Promise((resolve) => {
+      release = resolve;
+    });
+    const paused = new Promise((resolve) => {
+      entered = resolve;
+    });
+    const rename = f.host.workspace.fs.rename;
+    f.host.workspace.fs.rename = async (from, to) => {
+      if (to.path.endsWith("/destination/users/get-user.json")) {
+        entered();
+        await gate;
+        throw new Error("interrupted move");
+      }
+      return rename(from, to);
+    };
+    const moved = structuredClone(before);
+    moved[0].parentId = "destination";
+    const writing = f.repo.set("apiList", moved);
+    const rejected = assert.rejects(writing, /interrupted move/);
+    await paused;
+    const journal = path.join(f.root, ".collection-transaction.json");
+    const original = await fs.readFile(journal, "utf8");
+    let enteredOther = false;
+    const waiting =
+      operation === "save"
+        ? other.update("apiList", (items) => {
+            enteredOther = true;
+            items.find((item) => item.id === "get-user").name =
+              "Other window edit";
+            return items;
+          })
+        : other.reload().then(() => {
+            enteredOther = true;
+          });
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 150));
+      assert.equal(enteredOther, false);
+      assert.equal(await fs.readFile(journal, "utf8"), original);
+    } finally {
+      f.host.workspace.fs.rename = rename;
+      release();
+    }
+    await rejected;
+    await waiting;
+    const expected = structuredClone(moved);
+    if (operation === "save") expected[1].name = "Other window edit";
+    assert.deepEqual(
+      JSON.parse(JSON.stringify(other.get("apiList", []))),
+      expected,
+    );
+    assert.equal(await f.repo.retry(), true);
+    assert.deepEqual(
+      JSON.parse(JSON.stringify(f.repo.get("apiList", []))),
+      expected,
+    );
+    await assert.rejects(fs.stat(journal));
+  });
+}
+
+test("failed replay stops generating watcher retries after already applied writes", async (t) => {
+  const f = await fixture(t);
+  await f.repo.set("apiList", records());
+  const rename = f.host.workspace.fs.rename;
+  let rewrites = 0;
+  f.host.workspace.fs.rename = async (from, to) => {
+    if (to.path.endsWith("/get-user.json"))
+      throw new Error("persistent file failure");
+    await rename(from, to);
+    if (to.path.endsWith("/collection.json")) {
+      rewrites++;
+      f.handlers.Change(to);
+    }
+  };
+  const changed = records();
+  changed[0].name = "Changed folder";
+  changed[1].name = "Changed request";
+  await assert.rejects(
+    f.repo.set("apiList", changed),
+    /persistent file failure/,
+  );
+  await new Promise((resolve) => setTimeout(resolve, 850));
+  await f.repo.flush();
+  assert.equal(rewrites, 1);
+  assert.ok(f.repo.error);
+  f.host.workspace.fs.rename = rename;
+  assert.equal(await f.repo.retry(), true);
+  assert.equal(rewrites, 1);
+  assert.deepEqual(
+    JSON.parse(JSON.stringify(f.repo.get("apiList", []))),
+    changed,
   );
 });

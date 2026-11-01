@@ -10,6 +10,14 @@ import { isDeepStrictEqual } from "node:util";
 import { randomUUID, createHash, createHmac } from "node:crypto";
 import { storageChanged } from "./events";
 import { repositories } from "./index";
+import { withStorageFileLock } from "./file-lock";
+
+import {
+  COLLECTION_JOURNAL,
+  planCollectionChanges,
+  parseCollectionTransaction,
+  type CollectionTransaction,
+} from "./collection-files";
 
 type Data = Record<string, any>;
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value));
@@ -26,6 +34,7 @@ export class JsonRepository {
   private values = new Map<string, any>();
   private queue: Promise<void> = Promise.resolve();
   private timer?: ReturnType<typeof setTimeout>;
+  private assertLockOwned?: () => void;
   readonly root: vscode.Uri;
   constructor(
     private context: vscode.ExtensionContext,
@@ -44,21 +53,40 @@ export class JsonRepository {
     return this.update(key, () => snapshot);
   }
   update(key: string, change: (value: any) => any): Promise<boolean> {
-    return this.enqueue(async () => {
-      if (this.loadFailure) {
-        throw new Error(this.loadFailure);
+    return this.enqueue(() =>
+      this.withLock(async () => {
+        if (this.loadFailure) {
+          throw new Error(this.loadFailure);
+        }
+        // A different extension host may have committed since our last watcher refresh.
+        const previous = this.values;
+        await this.readSnapshot();
+        if (!isDeepStrictEqual(previous, this.values)) {
+          this.changed();
+        }
+        let snapshot = clone(
+          change(this.get(key, key.startsWith("apiList") ? [] : {})),
+        );
+        if (/^apiList(?::[^:]+)?$/.test(key) && !key.endsWith(":history")) {
+          snapshot = clone(snapshot.map(requestDefinition));
+        }
+        this.validate(key, snapshot);
+        await this.write(key, snapshot);
+        this.assertLockOwned?.();
+        this.values.set(key, snapshot);
+        storageChanged.fire(key);
+        return true;
+      }),
+    );
+  }
+  private async withLock<T>(work: () => Promise<T>): Promise<T> {
+    return withStorageFileLock(this.root.fsPath, async (assertOwned) => {
+      this.assertLockOwned = assertOwned;
+      try {
+        return await work();
+      } finally {
+        this.assertLockOwned = undefined;
       }
-      let snapshot = clone(
-        change(this.get(key, key.startsWith("apiList") ? [] : {})),
-      );
-      if (/^apiList(?::[^:]+)?$/.test(key) && !key.endsWith(":history")) {
-        snapshot = snapshot.map(requestDefinition);
-      }
-      this.validate(key, snapshot);
-      await this.write(key, snapshot);
-      this.values.set(key, snapshot);
-      storageChanged.fire(key);
-      return true;
     });
   }
   private validate(key: string, value: any) {
@@ -252,6 +280,7 @@ export class JsonRepository {
             : JSON.stringify(value, null, 2) + "\n",
         ),
       );
+      this.assertLockOwned?.();
       await vscode.workspace.fs.rename(temp, uri, { overwrite: true });
     } finally {
       try {
@@ -272,35 +301,13 @@ export class JsonRepository {
     );
   }
   private async write(key: string, source: any) {
+    if (!key.endsWith(":history") && /^apiList(?::[^:]+)?$/.test(key)) {
+      await this.writeCollection(key, source);
+      return;
+    }
     let value = await this.protect(source, key);
     if (key.endsWith(":history")) {
       await this.atomic(this.history(key), value, true);
-      return;
-    }
-    if (/^apiList(?::[^:]+)?$/.test(key)) {
-      const base = this.requestBase(key);
-      const files = new Map<string, any>();
-      const byId = new Map<string, any>(value.map((row: any) => [row.id, row]));
-      const directory = (row: any): string =>
-        row.parentId === "0"
-          ? "collections"
-          : `${directory(byId.get(row.parentId))}/${segment(row.parentId)}`;
-      for (const row of value) {
-        const prefix = directory(row);
-        const name =
-          row.kind === "folder"
-            ? `${prefix}/${segment(row.id)}/collection.json`
-            : `${prefix}/${row.id === "collection" ? "%63ollection" : segment(row.id)}.json`;
-        files.set(name, row);
-      }
-      for (const [name, row] of files) {
-        await this.atomic(vscode.Uri.joinPath(base, name), row);
-      }
-      for (const name of await this.list(base, "collections")) {
-        if (!files.has(name)) {
-          await vscode.workspace.fs.delete(vscode.Uri.joinPath(base, name));
-        }
-      }
       return;
     }
     if (!key.startsWith("projectConfig_")) {
@@ -355,6 +362,75 @@ export class JsonRepository {
       );
     }
   }
+  private async writeCollection(key: string, source: any[]) {
+    const changes = planCollectionChanges(this.values.get(key) ?? [], source);
+    if (!changes.writes.length && !changes.deletes.length) {
+      return;
+    }
+    const transaction: CollectionTransaction = {
+      version: 1,
+      writes: [],
+      deletes: changes.deletes,
+    };
+    for (const [name, row] of changes.writes) {
+      transaction.writes.push([
+        name,
+        await this.protect(row, `${key}/${row.id}`),
+      ]);
+    }
+    const base = this.requestBase(key);
+    // Once this rename succeeds, replay will finish the intended batch on recovery.
+    await this.atomic(
+      vscode.Uri.joinPath(base, COLLECTION_JOURNAL),
+      transaction,
+    );
+    try {
+      await this.applyCollectionTransaction(base, transaction);
+    } catch (error) {
+      this.loadFailure = `Pending collection transaction: ${error instanceof Error ? error.message : String(error)}`;
+      this.changed();
+      throw error;
+    }
+  }
+
+  private async removeFile(uri: vscode.Uri) {
+    try {
+      await vscode.workspace.fs.readFile(uri);
+      this.assertLockOwned?.();
+      await vscode.workspace.fs.delete(uri);
+    } catch (error) {
+      if ((error as { code?: string }).code !== "FileNotFound") {
+        throw error;
+      }
+    }
+  }
+
+  private async applyCollectionTransaction(
+    base: vscode.Uri,
+    transaction: CollectionTransaction,
+  ) {
+    // Writes precede removals so interrupted moves always retain a recoverable copy.
+    for (const [name, row] of transaction.writes) {
+      const uri = vscode.Uri.joinPath(base, name);
+      let existing: unknown;
+      try {
+        existing = await this.read(uri);
+      } catch (error) {
+        if ((error as { code?: string }).code !== "FileNotFound") {
+          throw error;
+        }
+      }
+      // Replaying a partially applied journal must not generate its own next retry.
+      if (!isDeepStrictEqual(existing, row)) {
+        await this.atomic(uri, row);
+      }
+    }
+    for (const name of transaction.deletes) {
+      await this.removeFile(vscode.Uri.joinPath(base, name));
+    }
+    await this.removeFile(vscode.Uri.joinPath(base, COLLECTION_JOURNAL));
+  }
+
   private async list(base: vscode.Uri, prefix = ""): Promise<string[]> {
     let entries: [string, vscode.FileType][];
     try {
@@ -379,8 +455,27 @@ export class JsonRepository {
     return result;
   }
   async reload() {
+    return this.enqueue(() => this.withLock(() => this.readSnapshot()));
+  }
+  private async readSnapshot() {
     const next = new Map<string, any>();
-    const all = await this.list(this.root);
+    let all = await this.list(this.root);
+    const journals = all.filter(
+      (name) =>
+        name === COLLECTION_JOURNAL ||
+        /^projects\/apiList[^/]+\/\.collection-transaction\.json$/.test(name),
+    );
+    for (const name of journals) {
+      const uri = vscode.Uri.joinPath(this.root, name);
+      const transaction = parseCollectionTransaction(await this.read(uri));
+      await this.applyCollectionTransaction(
+        vscode.Uri.joinPath(uri, ".."),
+        transaction,
+      );
+    }
+    if (journals.length) {
+      all = await this.list(this.root);
+    }
     for (const configPath of all.filter(
       (p) => p === "config.json" || /^projects\/[^/]+\/config.json$/.test(p),
     )) {
@@ -480,6 +575,7 @@ export class JsonRepository {
         next.set(key, value);
       }
     }
+    this.assertLockOwned?.();
     this.values = next;
     this.loadFailure = undefined;
   }
@@ -488,30 +584,32 @@ export class JsonRepository {
       const previous = this.values;
       const previousError = this.loadFailure;
       try {
-        const saltKey = `api-client:${this.secretScope}:salt`;
-        this.secretSalt =
-          (await this.context.secrets.get(saltKey)) || randomUUID();
-        await this.context.secrets.store(saltKey, this.secretSalt);
-        await this.reload();
-        const user = this.context.globalState.get<any>("userConfig") || {};
-        const projects = new Set(
-          [
-            "-1",
-            ...(user.teamProjectList || []).flatMap((team: any) =>
-              (team.project || []).map((project: any) => project.project_id),
-            ),
-            user.currentProject?.project_id,
-          ].filter(Boolean),
-        );
-        for (const id of projects) {
-          await this.loadHistory(
-            id === "-1" ? "apiList:history" : `apiList:${id}:history`,
+        return await this.withLock(async () => {
+          const saltKey = `api-client:${this.secretScope}:salt`;
+          this.secretSalt =
+            (await this.context.secrets.get(saltKey)) || randomUUID();
+          await this.context.secrets.store(saltKey, this.secretSalt);
+          await this.readSnapshot();
+          const user = this.context.globalState.get<any>("userConfig") || {};
+          const projects = new Set(
+            [
+              "-1",
+              ...(user.teamProjectList || []).flatMap((team: any) =>
+                (team.project || []).map((project: any) => project.project_id),
+              ),
+              user.currentProject?.project_id,
+            ].filter(Boolean),
           );
-        }
-        if (previousError || !isDeepStrictEqual(previous, this.values)) {
-          this.changed();
-        }
-        return true;
+          for (const id of projects) {
+            await this.loadHistory(
+              id === "-1" ? "apiList:history" : `apiList:${id}:history`,
+            );
+          }
+          if (previousError || !isDeepStrictEqual(previous, this.values)) {
+            this.changed();
+          }
+          return true;
+        });
       } catch (error) {
         this.loadFailure =
           error instanceof Error ? error.message : String(error);
@@ -528,14 +626,17 @@ export class JsonRepository {
     const backup = this.root.with({
       path: `${this.root.path}.backup-${randomUUID()}`,
     });
-    await this.enqueue(async () => {
-      if (!this.loadFailure) {
-        throw new Error("Storage is already available");
-      }
-      await vscode.workspace.fs.rename(this.root, backup);
-      this.values.clear();
-      this.loadFailure = undefined;
-    });
+    await this.enqueue(() =>
+      this.withLock(async () => {
+        if (!this.loadFailure) {
+          throw new Error("Storage is already available");
+        }
+        this.assertLockOwned?.();
+        await vscode.workspace.fs.rename(this.root, backup);
+        this.values.clear();
+        this.loadFailure = undefined;
+      }),
+    );
     await this.retry();
     return backup;
   }
