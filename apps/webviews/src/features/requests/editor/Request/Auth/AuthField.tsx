@@ -7,6 +7,8 @@ import {
   type ReactNode,
 } from "react";
 import { useTranslation } from "react-i18next";
+import clsx from "clsx";
+import styles from "./Auth.module.css";
 import { Field } from "@/shared/ui/base/Field";
 import AppIcon from "@/shared/ui/AppIcon";
 import { readAuthValues, updateAuthValues } from "./auth-state";
@@ -105,7 +107,7 @@ export function AuthField({
       }
       error={error ? t("supplement.required") : undefined}
       style={style}
-      className={className}
+      className={clsx(styles.formItem, className)}
     >
       {control}
     </Field>

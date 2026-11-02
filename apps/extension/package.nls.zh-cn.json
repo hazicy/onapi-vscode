@@ -27,5 +27,14 @@
   "command.tree.new.socketio": "新建 Socket.IO 请求",
   "command.tree.new.folder": "新建子目录",
   "command.shareList": "文档分享管理",
-  "command.tree.shareDocs": "分享接口或目录文档"
+  "command.tree.shareDocs": "分享接口或目录文档",
+  "command.request.changeLayout": "请求面板布局",
+  "view.environments": "环境",
+  "view.environments.welcome": "[新建环境](command:onapi.environment.create)，配置当前工作区的变量。",
+  "command.environment.create": "新建环境",
+  "command.environment.edit": "编辑环境",
+  "command.environment.activate": "设为当前环境",
+  "command.environment.import": "导入环境…",
+  "command.environment.export": "导出环境…",
+  "command.environment.refresh": "刷新环境"
 }

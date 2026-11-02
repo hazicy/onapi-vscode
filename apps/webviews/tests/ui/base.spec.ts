@@ -217,3 +217,23 @@ test("theme changes update CSS variables and extracted conditional styles", asyn
   await controls[1].focus();
   await expect(controls[1]).toHaveCSS("border-top-color", "rgb(200, 100, 50)");
 });
+
+test("collapse uses its supplied icon and places it after the label", async ({
+  page,
+}) => {
+  await page.goto("/?base");
+  const trigger = page.getByRole("button", {
+    name: "Expand details",
+    exact: true,
+  });
+  const icon = trigger.getByTestId("collapse-icon");
+  await expect(icon).toHaveText("closed");
+  const label = trigger.locator("span").filter({ hasText: /^Expand details$/ });
+  expect((await icon.boundingBox())!.x).toBeGreaterThan(
+    (await label.boundingBox())!.x,
+  );
+  await trigger.click();
+  await expect(icon).toHaveText("open");
+  await trigger.click();
+  await expect(icon).toHaveText("closed");
+});

@@ -1,6 +1,11 @@
 import { cloneDeep } from "lodash";
 import * as vscode from "vscode";
-import { hasStoredData, readStoredData, writeStoredData } from "./index";
+import {
+  hasStoredData,
+  readStoredData,
+  writeStoredData,
+  updateStoredData,
+} from "./index";
 import type { ProjectConfigType } from "@onapi/domain/project/types/index";
 import { DEFAULT_PROJECT_CONFIG } from "@onapi/domain/project/constants/project";
 import { globalConfig } from "../../app/config";
@@ -80,23 +85,51 @@ export const saveProjectConfig = async (
     ) {
       return false;
     }
-    if (
-      projectConfigKey(workspace) !==
-      projectConfigKey(getProjectWorkspace(context))
-    ) {
-      return true;
-    }
-    for (const panel of [
-      ...Object.values(globalConfig.openedPanels || {}),
-      globalConfig.environmentWebView,
-    ]) {
-      panel?.webview.postMessage({
-        action: "setProjectConfig",
-        data: new_project_config,
-      });
-    }
+    notifyProjectConfig(context, workspace);
     return true;
   } catch (error) {
     return false;
   }
 };
+
+/** Apply a targeted change against the latest snapshot under the repository lock. */
+export const updateProjectConfig = async (
+  context: vscode.ExtensionContext,
+  workspace: ProjectWorkspace,
+  change: (config: ProjectConfigType) => ProjectConfigType,
+) => {
+  const saved = await updateStoredData(
+    context,
+    projectConfigKey(workspace),
+    (current) =>
+      change(
+        Object.keys(current).length
+          ? current
+          : cloneDeep(DEFAULT_PROJECT_CONFIG),
+      ),
+  );
+  if (!saved) {
+    return false;
+  }
+  notifyProjectConfig(context, workspace);
+  return true;
+};
+
+function notifyProjectConfig(
+  context: vscode.ExtensionContext,
+  workspace: ProjectWorkspace,
+) {
+  if (
+    projectConfigKey(workspace) !==
+    projectConfigKey(getProjectWorkspace(context))
+  ) {
+    return;
+  }
+  const config = getProjectConfig(context, workspace);
+  for (const panel of [
+    ...Object.values(globalConfig.openedPanels || {}),
+    globalConfig.environmentWebView,
+  ]) {
+    panel?.webview.postMessage({ action: "setProjectConfig", data: config });
+  }
+}

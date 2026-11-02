@@ -27,5 +27,14 @@
   "command.tree.new.socketio": "New Socket.IO Request",
   "command.tree.new.folder": "New Subfolder",
   "command.shareList": "Shared API Documents",
-  "command.tree.shareDocs": "Share API Documentation"
+  "command.tree.shareDocs": "Share API Documentation",
+  "command.request.changeLayout": "Request Panel Layout",
+  "view.environments": "Environments",
+  "view.environments.welcome": "[Create an environment](command:onapi.environment.create) to define workspace variables.",
+  "command.environment.create": "New Environment",
+  "command.environment.edit": "Edit Environment",
+  "command.environment.activate": "Set as Active Environment",
+  "command.environment.import": "Import Environments…",
+  "command.environment.export": "Export Environment…",
+  "command.environment.refresh": "Refresh Environments"
 }

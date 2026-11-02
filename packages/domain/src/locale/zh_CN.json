@@ -858,6 +858,7 @@
     "more_tabs": "更多标签",
     "request_tabs": "请求标签",
     "add_parameter": "添加参数",
+    "inherited_parameters": "继承的 {{name}}",
     "response_tabs": "响应标签"
   },
   "event_stream": {

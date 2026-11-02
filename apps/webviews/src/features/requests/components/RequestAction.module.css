@@ -5,8 +5,8 @@
   flex-shrink: 0;
   gap: 6px;
   box-sizing: border-box;
-  min-width: 28px;
-  height: 28px;
+  min-width: 32px;
+  height: 32px;
   padding: 0 10px;
   border: 0;
   border-radius: var(--vscode-cornerRadius-small, 4px);
@@ -16,7 +16,7 @@
   color: var(--vscode-button-foreground, #fff);
   background: var(--vscode-button-background, var(--color-primary, #1677ff));
 }
-.action[data-request-action]:hover {
+.action[data-request-action]:hover:not(:disabled) {
   background: var(
     --vscode-button-hoverBackground,
     var(--color-primary, #1677ff)
@@ -38,7 +38,7 @@
 }
 @container (max-width: 520px) {
   .action[data-request-action] {
-    width: 28px;
+    width: 32px;
     padding: 0;
   }
   .label {

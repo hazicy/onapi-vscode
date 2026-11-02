@@ -1,3 +1,4 @@
+import { registerRequestLayoutCommand } from "../features/requests/request-layout";
 import type * as vscode from "vscode";
 import { registerCustomEditor } from "../platform/webviews/custom-editor";
 import { RequestEditorProvider } from "../features/requests/request-editor-provider";
@@ -11,6 +12,7 @@ import { resolveTestReportEditor } from "../features/testing/test-report-editor"
 
 /** Composition root: the platform knows editor lifecycles; features own their content. */
 export function registerEditors(context: vscode.ExtensionContext) {
+  registerRequestLayoutCommand(context);
   const workspace = () => getApiListName(context);
   registerCustomEditor(
     context,

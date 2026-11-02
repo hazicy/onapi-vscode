@@ -858,6 +858,7 @@
     "more_tabs": "More tabs",
     "request_tabs": "Request tabs",
     "add_parameter": "Add parameter",
+    "inherited_parameters": "Inherited {{name}}",
     "response_tabs": "Response tabs"
   },
   "event_stream": {

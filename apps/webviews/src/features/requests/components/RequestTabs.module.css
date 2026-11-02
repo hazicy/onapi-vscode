@@ -9,34 +9,37 @@
 }
 .root .nav .list {
   gap: 4px;
-  min-height: 36px;
+  min-height: 40px;
+  padding-block: 4px;
+  box-sizing: border-box;
 }
 .root .nav .button {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 36px;
+  height: 32px;
   box-sizing: border-box;
-  padding: 0 10px;
+  padding: 0 12px;
   border: 0;
-  border-radius: 0;
+  border-radius: var(--vscode-cornerRadius-medium, 8px);
   background: transparent;
   color: var(
     --vscode-tab-inactiveForeground,
     var(--vscode-descriptionForeground, var(--font-light-color))
   );
-  font: var(--vscode-font-size, 13px) var(--vscode-font-family, sans-serif);
+  font: 14px var(--vscode-font-family, sans-serif);
   white-space: nowrap;
 }
 .root .nav .button:hover {
   color: var(--vscode-foreground, var(--font-content-color));
 }
 .root .nav .button[data-active] {
+  background: transparent;
   color: var(
     --vscode-tab-activeForeground,
     var(--vscode-foreground, var(--font-content-color))
   );
-  font-weight: 600;
+  font-weight: 500;
 }
 .root .nav .button:focus-visible {
   outline: 1px solid var(--vscode-focusBorder, var(--color-primary));
@@ -69,7 +72,7 @@
   height: 28px;
   padding: 0;
   border: 0;
-  border-radius: 4px;
+  border-radius: var(--vscode-cornerRadius-small, 4px);
   font: inherit;
   background: transparent;
   color: var(--vscode-descriptionForeground, var(--font-light-color));

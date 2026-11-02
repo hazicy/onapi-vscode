@@ -88,7 +88,7 @@ const RequestAuth: FC<Props> = memo(
       <AuthContext.Provider value={{ value, onChange, errors, setErrors }}>
         <div className={styles.container}>
           <Flex justify="center" className={styles.layout}>
-            <div className={styles.form} style={{ width: 700 }}>
+            <div className={styles.form}>
               <Field
                 label={t("common.auth.type")}
                 labelClassName={styles.formItemLabel}

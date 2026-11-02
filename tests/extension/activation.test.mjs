@@ -10,6 +10,10 @@ for (const failAt of ["storage", "initialization"]) {
     const { activate, deactivate } = await load(
       "apps/extension/src/extension.ts",
       (id) => {
+        if (id === "./features/environment/environment-tree")
+          return {
+            registerEnvironmentTree: () => calls.push(["environment-view"]),
+          };
         if (id === "./app/editors")
           return { registerEditors: () => calls.push(["editors"]) };
         if (id === "./features/requests/request-editor")

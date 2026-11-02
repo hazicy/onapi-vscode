@@ -6,10 +6,11 @@
   justify-content: space-between;
   position: relative;
   z-index: 999;
-  padding: 2px;
-  padding-left: 0;
-  height: 36px;
-  border-radius: var(--border-radius);
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 0;
+  height: 32px;
+  border-radius: var(--vscode-cornerRadius-small, 4px);
   background-color: var(--search-big-bg-color);
   border: 1px solid var(--color-border);
 }
@@ -25,7 +26,7 @@
   transition: all 0.3s linear;
 }
 .container .button {
-  height: 36px !important;
+  height: 30px !important;
 }
 .container .select {
   height: 30px;
@@ -65,14 +66,13 @@
   color: var(--color-success);
 }
 .container .select:not(.rightSelect).put .selectSelectionItem {
-  color: #ff0;
   color: var(--color-info);
 }
 .container .select:not(.rightSelect).delete .selectSelectionItem {
   color: var(--color-error);
 }
 .container .select:not(.rightSelect).patch .selectSelectionItem {
-  color: undefined;
+  color: var(--color-info);
 }
 .container .select:not(.rightSelect).raw .selectSelectionItem {
   color: var(--color-warning);
@@ -86,7 +86,7 @@
 .container .envDesc {
   overflow: hidden;
   font-size: var(--font-size-14);
-  line-height: 36px;
+  line-height: 30px;
   white-space: nowrap;
   color: var(--font-light-color);
   text-overflow: ellipsis;
@@ -302,4 +302,13 @@
 }
 .container > .select:first-child {
   max-width: 110px;
+}
+
+.container:focus-within {
+  border-color: var(--vscode-focusBorder, var(--color-primary));
+}
+
+.container > [data-request-action] {
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
 }

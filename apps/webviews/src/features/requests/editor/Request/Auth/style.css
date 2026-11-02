@@ -1,12 +1,12 @@
 .auth-checked {
-  height: 31px;
+  min-height: 32px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
 }
 .auth-tips {
-  font-size: 14px;
-  line-height: 30px;
+  font-size: var(--vscode-font-size, 13px);
+  line-height: 1.6;
   color: var(--font-light-color);
 }

@@ -1,3 +1,4 @@
+import { registerEnvironmentTree } from "./features/environment/environment-tree";
 import { registerEditors } from "./app/editors";
 import * as vscode from "vscode";
 import "./platform/locale/index";
@@ -56,6 +57,7 @@ export async function activate(context: vscode.ExtensionContext) {
   await repository.start();
   // Views must register even when local data cannot be loaded.
   registerSidebarTree(context);
+  registerEnvironmentTree(context);
   registerEditors(context);
   const recover = async () => {
     if (!repository?.error) {

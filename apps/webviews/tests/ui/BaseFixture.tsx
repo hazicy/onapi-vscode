@@ -122,6 +122,12 @@ function Content() {
         ]}
       />
       <Collapse
+        expandIconPosition="end"
+        expandIcon={({ isActive }) => (
+          <span data-testid="collapse-icon">
+            {isActive ? "open" : "closed"}
+          </span>
+        )}
         items={[
           {
             key: "details",

@@ -71,3 +71,32 @@ test("dropdown follows its input when the containing panel scrolls", async ({
   await autocompletePage.acceptOption.click();
   await expect(input).toHaveValue("Accept");
 });
+
+test("header suggestions stay closed on click and reopen with the keyboard", async ({
+  page,
+}) => {
+  await page.goto("/?autocomplete&suggestions");
+  const input = page.getByPlaceholder("Header name");
+  const list = page.getByRole("listbox");
+  await input.click();
+  await expect(list).toBeHidden();
+  await input.fill("auth");
+  await expect(
+    page.getByRole("option", { name: "Authorization", exact: true }),
+  ).toBeVisible();
+  await input.press("Escape");
+  await expect(list).toBeHidden();
+  await input.press("ArrowDown");
+  await expect(list).toBeVisible();
+  await input.press("ArrowDown");
+  await expect(
+    page.getByRole("option", { name: "Authorization", exact: true }),
+  ).toHaveAttribute("data-highlighted", "");
+  await input.press("Enter");
+  await expect(input).toHaveValue("Authorization");
+  await input.fill("X-Fully-Custom");
+  await expect(list).toBeHidden();
+  await page.getByRole("button", { name: "Outside", exact: true }).click();
+  await expect(input).toHaveValue("X-Fully-Custom");
+  await expect(list).toBeHidden();
+});

@@ -3,27 +3,28 @@
   font-size: var(--vscode-font-size, 13px);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 10px;
   min-width: 0;
-  padding: 3px 4px;
-  border-radius: 3px;
+  padding: 5px 8px;
+  border-radius: 0;
 }
 .key,
 .value {
   flex: 1;
   min-width: 0;
+  box-sizing: border-box;
 }
 .key > div {
   height: var(--request-parameter-height);
   align-items: center;
-  gap: 6px;
+  gap: 10px;
 }
 .key > div > div {
   min-width: 0;
   flex: 1;
   height: var(--request-parameter-height);
   box-sizing: border-box;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--vscode-panel-border, var(--color-border));
   border-radius: var(--vscode-cornerRadius-small, 3px);
   background: transparent;
 }
@@ -37,27 +38,35 @@
   font-family: var(--vscode-editor-font-family, monospace);
 }
 .value {
+  position: relative;
   box-sizing: border-box;
   height: var(--request-parameter-height);
   min-height: var(--request-parameter-height);
   padding-inline: 8px;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--vscode-panel-border, var(--color-border));
   border-radius: var(--vscode-cornerRadius-small, 3px);
 }
 .value > div {
   height: 100%;
   align-items: center;
 }
+.placeholder .key > div > div,
+.placeholder > .value {
+  border-style: dashed;
+}
 .key > div > div:focus-within,
 .value:focus-within {
   border-color: var(--vscode-focusBorder, var(--color-primary));
+  background: var(--vscode-input-background, transparent);
 }
 .action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 20px;
-  height: 28px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: var(--vscode-cornerRadius-small, 4px);
   padding: 0;
   border: 0;
   background: transparent;
@@ -70,7 +79,12 @@
   cursor: default;
 }
 .action:hover:not(:disabled) {
-  color: var(--color-primary);
+  color: var(--vscode-foreground, var(--font-content-color));
+  background: var(--vscode-toolbar-hoverBackground, transparent);
+}
+.row > .action {
+  width: 16px;
+  margin-inline: -6px;
 }
 .operations {
   width: 20px;
@@ -81,7 +95,7 @@
   align-items: center;
   justify-content: center;
   width: 20px;
-  height: 28px;
+  height: 24px;
   color: var(--vscode-descriptionForeground, var(--font-light-color));
   font: inherit;
 }
@@ -114,23 +128,32 @@
 .placeholderAdd:disabled {
   cursor: default;
 }
-.placeholder > .action,
-.placeholder > .operations {
-  opacity: 0.65;
+.placeholder > .action {
+  visibility: hidden;
 }
-.placeholder .key > div > div,
-.placeholder .value {
-  border-style: dashed;
+.placeholder > .operations {
+  opacity: 0;
 }
 .dragging {
   position: relative;
   z-index: 10;
   background: var(--color-bg-right);
+  box-shadow: 0 0 0 1px var(--vscode-focusBorder, var(--color-primary));
 }
 
-.row:hover,
-.row:focus-within {
-  background: var(--vscode-list-hoverBackground, transparent);
+.row.dragging {
+  background: var(--vscode-editor-background, var(--color-bg-right));
+}
+.unchecked:not(:hover):not(:focus-within) > .key,
+.unchecked:not(:hover):not(:focus-within) > .value {
+  opacity: 0.65;
+}
+.row:not(.placeholder):not(:hover):not(:focus-within) > .action {
+  opacity: 0;
+}
+.placeholder:hover > .operations,
+.placeholder:focus-within > .operations {
+  opacity: 1;
 }
 .key input {
   color: var(--vscode-input-foreground, inherit);
@@ -139,4 +162,11 @@
 .action:focus-visible {
   outline: 1px solid var(--vscode-focusBorder);
   outline-offset: -1px;
+}
+
+@media (pointer: coarse) {
+  .row:not(.placeholder) > .action,
+  .row:not(.placeholder) > .operations {
+    opacity: 1;
+  }
 }

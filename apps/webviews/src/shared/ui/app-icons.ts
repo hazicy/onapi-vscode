@@ -1,4 +1,5 @@
 import square from "@iconify-icons/lucide/square";
+import layers from "@iconify-icons/lucide/layers";
 import arrowUp from "@iconify-icons/lucide/arrow-up";
 import arrowDown from "@iconify-icons/lucide/arrow-down";
 import bot from "@iconify-icons/lucide/bot";
@@ -11,6 +12,7 @@ import braces from "@iconify-icons/lucide/braces";
 import cable from "@iconify-icons/lucide/cable";
 import check from "@iconify-icons/lucide/check";
 import chevronDown from "@iconify-icons/lucide/chevron-down";
+import chevronRight from "@iconify-icons/lucide/chevron-right";
 import chevronsUp from "@iconify-icons/lucide/chevrons-up";
 import circleAlert from "@iconify-icons/lucide/circle-alert";
 import circleCheck from "@iconify-icons/lucide/circle-check";
@@ -82,6 +84,7 @@ import zap from "@iconify-icons/lucide/zap";
 
 // Bundle icon data so Webviews render without requests to the Iconify API.
 export const appIcons = {
+  layers,
   square,
   "arrow-up": arrowUp,
   "arrow-down": arrowDown,
@@ -94,6 +97,7 @@ export const appIcons = {
   cable: cable,
   check: check,
   "chevron-down": chevronDown,
+  "chevron-right": chevronRight,
   "chevrons-up": chevronsUp,
   "circle-alert": circleAlert,
   "circle-check": circleCheck,

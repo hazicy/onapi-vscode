@@ -14,7 +14,6 @@ import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorksp
 import Request from "@/features/requests/editor/Request/Request";
 import Response from "./Response";
 import Header from "./Header";
-import ToolBar from "./ToolBar";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/shared/ui";
@@ -63,7 +62,7 @@ const ApiDebug: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
 
   const tabBarExtraContent = useMemo(() => {
     return (
-      <Flex align="center" className={styles.actions}>
+      <Flex align="center" gap={8} className={styles.actions}>
         <div className={styles.primaryActions}>
           <Button
             onClick={handleToCode}
@@ -121,11 +120,6 @@ const ApiDebug: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
 
   return (
     <>
-      <ToolBar
-        showLayoutControl
-        apisData={apisData}
-        onApisDataChange={onApisDataChange}
-      />
       <header>
         <Header apisData={apisData} onApisDataChange={onApisDataChange} />
       </header>

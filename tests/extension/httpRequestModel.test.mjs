@@ -24,7 +24,7 @@ const { requestCollection } = await load(
         getApiList: (context) => structuredClone(context.items || []),
         getProjectWorkspace() {},
         getProjectConfig: (context) => context.config,
-        saveProjectConfig() {},
+        updateProjectConfig() {},
       };
     if (id === "../request-status") return { setRequestResult() {} };
     return nativeDependency(id);

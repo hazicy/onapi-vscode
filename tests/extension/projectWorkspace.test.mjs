@@ -75,6 +75,10 @@ test("explicit workspace reads and saves retain account identity and only notify
         return {
           hasStoredData: (_, key) => files.has(key),
           readStoredData: (_, key) => structuredClone(files.get(key)),
+          updateStoredData: (_, key, change) => {
+            files.set(key, change(structuredClone(files.get(key) ?? {})));
+            return true;
+          },
           writeStoredData: (_, key, value) => {
             files.set(key, structuredClone(value));
             return true;
@@ -148,6 +152,10 @@ test("project config uses fresh defaults rather than migrating globalState and l
         return {
           hasStoredData: (_, key) => files.has(key),
           readStoredData: (_, key) => structuredClone(files.get(key)),
+          updateStoredData: (_, key, change) => {
+            files.set(key, change(structuredClone(files.get(key) ?? {})));
+            return true;
+          },
           writeStoredData: (_, key, value) => {
             files.set(key, structuredClone(value));
             return true;
@@ -169,4 +177,78 @@ test("project config uses fresh defaults rather than migrating globalState and l
   const restored = api.getProjectConfig(context, workspace);
   assert.equal(restored.envList[0].name, "Default");
   assert.equal(restored.serverList[0].name, "default_server");
+});
+
+test("atomic config changes read the latest snapshot after acquiring the storage lock", async () => {
+  const messages = [];
+  let stored = {
+    http: {
+      activeEnvironment: "dev",
+      environments: [{ id: "prod", values: [] }],
+      options: {},
+    },
+  };
+  let apply;
+  const context = {
+    globalState: { get: () => ({ currentProject: { project_id: "one" } }) },
+  };
+  const api = await load(
+    "apps/extension/src/platform/storage/project-config.ts",
+    (id) => {
+      if (id === "lodash") return nativeDependency(id);
+      if (id.endsWith("/config"))
+        return {
+          globalConfig: {
+            openedPanels: {
+              panel: {
+                webview: { postMessage: (message) => messages.push(message) },
+              },
+            },
+          },
+        };
+      if (id === "./index")
+        return {
+          hasStoredData: () => true,
+          readStoredData: () => structuredClone(stored),
+          writeStoredData: () => {
+            throw new Error(
+              "Atomic changes must not replace a captured snapshot",
+            );
+          },
+          updateStoredData: (_, key, change) =>
+            new Promise((resolve) => {
+              apply = () => {
+                stored = change(structuredClone(stored));
+                resolve(true);
+              };
+            }),
+        };
+      return {};
+    },
+  );
+  const pending = api.updateProjectConfig(
+    context,
+    api.getProjectWorkspace(context),
+    (latest) => ({
+      ...latest,
+      http: { ...latest.http, activeEnvironment: "prod" },
+    }),
+  );
+  // A request completes while this change waits for the storage lock.
+  stored.http.options = {
+    requester: { cookieJar: { cookies: [{ key: "session", value: "fresh" }] } },
+  };
+  stored.http.environments[0].values.push({
+    key: "token",
+    value: "fresh-token",
+  });
+  apply();
+  assert.equal(await pending, true);
+  assert.equal(stored.http.activeEnvironment, "prod");
+  assert.equal(
+    stored.http.options.requester.cookieJar.cookies[0].value,
+    "fresh",
+  );
+  assert.equal(stored.http.environments[0].values[0].value, "fresh-token");
+  assert.equal(messages[0].data.http.activeEnvironment, "prod");
 });

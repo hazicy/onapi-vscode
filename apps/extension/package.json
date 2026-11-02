@@ -106,6 +106,11 @@
           "name": "%view.requests%"
         },
         {
+          "id": "onapiEnvironments",
+          "name": "%view.environments%",
+          "icon": "$(symbol-variable)"
+        },
+        {
           "id": "onapiTests",
           "icon": "dist/images/onapi-activity.svg",
           "name": "%view.tests%",
@@ -180,6 +185,26 @@
           "command": "onapi.shareList",
           "when": "view == onapiRequests",
           "group": "2_workspace@1"
+        },
+        {
+          "command": "onapi.environment.create",
+          "when": "view == onapiEnvironments",
+          "group": "navigation@1"
+        },
+        {
+          "command": "onapi.environment.import",
+          "when": "view == onapiEnvironments",
+          "group": "1_transfer@1"
+        },
+        {
+          "command": "onapi.environment.export",
+          "when": "view == onapiEnvironments",
+          "group": "1_transfer@2"
+        },
+        {
+          "command": "onapi.environment.refresh",
+          "when": "view == onapiEnvironments",
+          "group": "2_tools@1"
         }
       ],
       "view/item/context": [
@@ -297,6 +322,28 @@
           "command": "onapi.tree.runTests",
           "when": "view == onapiRequests && viewItem == onapiFolder",
           "group": "inline@3"
+        },
+        {
+          "command": "onapi.environment.activate",
+          "when": "view == onapiEnvironments && viewItem == onapiEnvironment",
+          "group": "1_environment@1"
+        },
+        {
+          "command": "onapi.environment.edit",
+          "when": "view == onapiEnvironments && viewItem =~ /^onapiEnvironment/",
+          "group": "1_environment@2"
+        },
+        {
+          "command": "onapi.environment.export",
+          "when": "view == onapiEnvironments && viewItem =~ /^onapiEnvironment/",
+          "group": "2_transfer@1"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "onapi.request.changeLayout",
+          "when": "activeCustomEditorId == onapi.request",
+          "group": "navigation@20"
         }
       ]
     },
@@ -443,6 +490,41 @@
         "command": "onapi.tree.new.grpc",
         "title": "New gRPC Request",
         "icon": "$(onapi-grpc)"
+      },
+      {
+        "command": "onapi.request.changeLayout",
+        "title": "%command.request.changeLayout%",
+        "icon": "$(layout)"
+      },
+      {
+        "command": "onapi.environment.create",
+        "title": "%command.environment.create%",
+        "icon": "$(add)"
+      },
+      {
+        "command": "onapi.environment.edit",
+        "title": "%command.environment.edit%",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "onapi.environment.activate",
+        "title": "%command.environment.activate%",
+        "icon": "$(check)"
+      },
+      {
+        "command": "onapi.environment.import",
+        "title": "%command.environment.import%",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "onapi.environment.export",
+        "title": "%command.environment.export%",
+        "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "onapi.environment.refresh",
+        "title": "%command.environment.refresh%",
+        "icon": "$(refresh)"
       }
     ],
     "customEditors": [
@@ -722,6 +804,12 @@
           "highContrast": "#DE83BD",
           "highContrastLight": "#BA3B91"
         }
+      }
+    ],
+    "viewsWelcome": [
+      {
+        "view": "onapiEnvironments",
+        "contents": "%view.environments.welcome%"
       }
     ]
   },

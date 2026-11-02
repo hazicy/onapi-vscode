@@ -168,11 +168,7 @@ const Environment = (props: Props) => {
             ENV_MANAGE_ENUM.globalParm,
             ENV_MANAGE_ENUM.globalVariable,
           ].includes(head(selectedKeys)) && (
-            <EnvManage
-              changeKey={setSelectedKeys}
-              editEnvId={head(selectedKeys)}
-              envMenus={envList}
-            />
+            <EnvManage editEnvId={head(selectedKeys)} envMenus={envList} />
           )}
         </div>
       </div>

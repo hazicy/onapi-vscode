@@ -35,16 +35,19 @@
 
 .selectionList {
   gap: 4px;
+  padding-block: 4px;
   border: 0;
 }
 .selectionList [role="tab"] {
-  min-height: 28px;
-  padding: 4px 10px;
+  box-sizing: border-box;
+  height: 32px;
+  min-height: 32px;
+  padding: 0 12px;
   border: 0;
-  border-radius: 5px;
+  border-radius: var(--vscode-cornerRadius-medium, 8px);
   background: transparent;
   color: var(--vscode-descriptionForeground, var(--font-light-color));
-  font-size: var(--vscode-font-size, 13px);
+  font-size: 14px;
   font-weight: 400;
   line-height: 20px;
   transition: color 120ms ease;
@@ -55,7 +58,7 @@
 .selectionList [role="tab"][data-active] {
   background: transparent;
   color: var(--vscode-foreground, var(--font-title-color));
-  font-weight: 600;
+  font-weight: 500;
   box-shadow: none;
 }
 .selectionList [role="tab"]:focus-visible {

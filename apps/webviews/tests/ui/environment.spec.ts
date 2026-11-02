@@ -120,3 +120,38 @@ test("narrow container uses compact navigation without losing edits", async ({
     path: testInfo.outputPath("shared-config-wide.png"),
   });
 });
+
+test("switching the workspace environment preserves unsaved name and variable edits", async ({
+  page,
+}) => {
+  await page.goto("/?environment&draft");
+  const name = page.locator('input[class*="envManageInput"]');
+  await expect(name).toHaveValue("Review Development");
+  await name.fill("Unsaved name");
+  const token = page.locator("textarea").first();
+  await expect(token).toHaveValue("original-token");
+  await token.fill("unsaved-token");
+  await page
+    .getByRole("button", { name: "Simulate environment switch", exact: true })
+    .click();
+  await expect(name).toHaveValue("Unsaved name");
+  await expect(page.locator("textarea").first()).toHaveValue("unsaved-token");
+  await page
+    .getByRole("button", { name: "Simulate host update", exact: true })
+    .click();
+  await expect(name).toHaveValue("Unsaved name");
+  await expect(page.locator("textarea").first()).toHaveValue("unsaved-token");
+});
+
+test("clean environment editors accept updated values from the host", async ({
+  page,
+}) => {
+  await page.goto("/?environment&draft");
+  const name = page.locator('input[class*="envManageInput"]');
+  await expect(name).toHaveValue("Review Development");
+  await page
+    .getByRole("button", { name: "Simulate host update", exact: true })
+    .click();
+  await expect(name).toHaveValue("Host renamed environment");
+  await expect(page.locator("textarea").first()).toHaveValue("host-token");
+});

@@ -95,8 +95,8 @@ async function fixture() {
             userId: -1,
           }),
           getProjectConfig: (_ctx, workspace) => configs[workspace.projectId],
-          saveProjectConfig: (ctx, workspace, value) => {
-            configs[workspace.projectId] = value;
+          updateProjectConfig: (ctx, workspace, change) => {
+            configs[workspace.projectId] = change(configs[workspace.projectId]);
             writes.push({
               project: workspace.projectId,
               notify: workspace.projectId === project(ctx),

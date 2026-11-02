@@ -840,6 +840,7 @@ export type AutoCompleteProps = Omit<
   options?: Option[];
   allowClear?: boolean;
   showArrow?: boolean;
+  suggestOnInput?: boolean;
   arrowClassName?: string;
   triggerClassName?: string;
   filterOption?: boolean | ((value: string, option: Option) => boolean);

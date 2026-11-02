@@ -53,10 +53,7 @@ const RequestTable: FC<RequestTableProps & { fileValue?: "path" | "base64" }> =
       readOnly,
       bodyMode,
       showAiDescription = true,
-      isSystem = false,
-      columnSwitchConfig,
       showDelete = true,
-      kind,
     }) => {
       const sensors = useSensors(
         useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
@@ -139,15 +136,6 @@ const RequestTable: FC<RequestTableProps & { fileValue?: "path" | "base64" }> =
       return (
         <Context.Provider value={{ fileValue }}>
           <div className={styles.requestTable} data-request-parameter-table="">
-            <PublicParamsTable
-              kind={kind}
-              tabType={tabType}
-              isSystem={isSystem}
-              paramsType={paramsType}
-              globalParams={globalParams}
-              folderParams={folderParams}
-              columnSwitchConfig={columnSwitchConfig}
-            />
             <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
@@ -232,6 +220,12 @@ const RequestTable: FC<RequestTableProps & { fileValue?: "path" | "base64" }> =
                 ))}
               </SortableContext>
             </DndContext>
+            <PublicParamsTable
+              tabType={tabType}
+              paramsType={paramsType}
+              globalParams={globalParams}
+              folderParams={folderParams}
+            />
           </div>
         </Context.Provider>
       );

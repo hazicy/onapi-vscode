@@ -40,7 +40,7 @@ const bundle = await build({
           export const getApiListName = () => "test";
           export const getProjectWorkspace = () => ({});
           export const getProjectConfig = context => context.config;
-          export const saveProjectConfig = () => {};
+          export const updateProjectConfig = () => {};
           export const setRequestResult = () => {};
           export const toPostmanCollection = () => {};
           export const createDefaultHttpConfig = () => {};

@@ -78,6 +78,7 @@ const KeyValueRow = memo(function KeyValueRow({
       className={clsx(styles.row, {
         [styles.dragging]: sortable.isDragging,
         [styles.placeholder]: placeholderRow,
+        [styles.unchecked]: showCheckbox && !checked && !placeholderRow,
       })}
       style={{
         transform: CSS.Transform.toString(sortable.transform),

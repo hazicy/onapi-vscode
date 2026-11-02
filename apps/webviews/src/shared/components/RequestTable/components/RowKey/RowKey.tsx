@@ -147,7 +147,7 @@ const RowKey: FC<Props> = memo((props) => {
         </div>
       ) : (
         <AutoComplete
-          showArrow
+          suggestOnInput
           placeholder="Header-Name"
           filterOption
           value={rowData?.key || ""}
@@ -157,8 +157,7 @@ const RowKey: FC<Props> = memo((props) => {
             label: item,
             value: item,
           }))}
-          arrowClassName={styles.selectArrow}
-          triggerClassName={styles.selectTrigger}
+          aria-label={t("common.request_table.param_name")}
           className={styles.select}
         />
       )}

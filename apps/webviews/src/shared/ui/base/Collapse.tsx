@@ -1,6 +1,8 @@
 import collapseStyles from "./Collapse.module.css";
+import AppIcon from "../AppIcon";
 import { Accordion } from "@base-ui/react/accordion";
 import clsx from "clsx";
+import { useState } from "react";
 import type { CollapseProps } from "./types";
 
 const array = (v: any) =>
@@ -19,7 +21,7 @@ export function Collapse({
   accordion,
   onChange,
   expandIcon,
-  expandIconPosition,
+  expandIconPosition = "start",
   ghost,
   bordered = true,
   destroyInactivePanel,
@@ -27,14 +29,20 @@ export function Collapse({
   rootClassName,
   ...props
 }: CollapseProps) {
+  const [expanded, setExpanded] = useState(() => array(defaultActiveKey) ?? []);
+  const current = array(activeKey) ?? expanded;
   return (
     <Accordion.Root
       {...props}
       className={clsx(collapseStyles.collapse, className, rootClassName)}
-      value={array(activeKey)}
-      defaultValue={array(defaultActiveKey)}
+      value={current}
       multiple={!accordion}
-      onValueChange={(v) => onChange?.(accordion ? v[0] : v)}
+      onValueChange={(v) => {
+        if (activeKey === undefined) {
+          setExpanded(v);
+        }
+        onChange?.(accordion ? v[0] : v);
+      }}
     >
       {items.map((item) => (
         <Accordion.Item
@@ -46,9 +54,23 @@ export function Collapse({
         >
           <Accordion.Header className={headerClassName}>
             <Accordion.Trigger
-              className={clsx(collapseStyles.trigger, triggerClassName)}
+              className={clsx(
+                collapseStyles.trigger,
+                expandIconPosition === "end" && collapseStyles.iconEnd,
+                triggerClassName,
+              )}
             >
-              {item.label}
+              <span className={collapseStyles.expandIcon} aria-hidden="true">
+                {expandIcon ? (
+                  expandIcon({ isActive: current.includes(item.key) })
+                ) : (
+                  <AppIcon
+                    icon="chevron-right"
+                    className={collapseStyles.chevron}
+                  />
+                )}
+              </span>
+              <span className={collapseStyles.label}>{item.label}</span>
             </Accordion.Trigger>
             {item.extra}
           </Accordion.Header>

@@ -4,42 +4,21 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/?sharedComponents");
 });
 
-test("inherited headers follow protocol changes and persist to their own settings", async ({
+test("inherited headers show collection and folder configuration without automatic headers", async ({
   page,
 }) => {
   const headers = page.getByRole("region", { name: "Inherited headers" });
-  await headers.getByRole("button").click();
-  await expect(headers.locator('input[value="X-HTTP"]')).toBeVisible();
-  await page.getByRole("button", { name: "Switch protocol" }).click();
-  await expect(headers.locator('input[value="X-Socket"]')).toBeVisible();
+  const toggle = headers.getByRole("button");
+  await expect(headers.locator('input[value="X-Collection"]')).toBeHidden();
+  await toggle.click();
+  await expect(headers.locator('input[value="X-Collection"]')).toBeVisible();
+  await expect(headers.locator('input[value="X-Folder"]')).toBeVisible();
   await expect(headers.locator('input[value="X-HTTP"]')).toHaveCount(0);
-  await headers.getByRole("checkbox").uncheck();
-  await expect(page.getByLabel("Messages")).toHaveText(
-    JSON.stringify([
-      {
-        action: "setSystemConfig",
-        data: {
-          systemRequestHeaderWebSocket: [
-            {
-              key: "X-Socket",
-              value: "socket",
-              is_checked: -1,
-              field_type: "String",
-            },
-          ],
-        },
-      },
-    ]),
-  );
-  await page.getByRole("button", { name: "Switch protocol" }).click();
-  await expect(headers.getByRole("checkbox")).toBeChecked();
-  await headers.getByRole("checkbox").uncheck();
-  const messages = JSON.parse(await page.getByLabel("Messages").innerText());
-  expect(messages[1].data).toEqual({
-    systemRequestHeader: [
-      { key: "X-HTTP", value: "http", is_checked: -1, field_type: "String" },
-    ],
-  });
+  await expect(headers.locator('input[value="X-Socket"]')).toHaveCount(0);
+  for (const checkbox of await headers.getByRole("checkbox").all()) {
+    await expect(checkbox).toBeDisabled();
+  }
+  await expect(page.getByLabel("Messages")).toHaveText("[]");
 });
 
 test("parameter rows accept injected controls and preserve insertion targets and modes", async ({

@@ -2,11 +2,12 @@
   padding: 0 16px;
   & .tabBarExtraContentWrap .editWrap .apisTitleEdit {
     border-color: transparent;
-    border-bottom-color: var(--color-table-border);
+    border-bottom: 0;
     font-size: var(--font-size-14);
     background: transparent;
   }
-  & .tabBarExtraContentWrap .editWrap .apisTitleEdit:hover {
-    border-bottom-color: var(--selected-border-color);
+  & .tabBarExtraContentWrap .editWrap .apisTitleEdit:focus-visible {
+    outline: 1px solid var(--vscode-focusBorder, var(--color-primary));
+    outline-offset: 2px;
   }
 }

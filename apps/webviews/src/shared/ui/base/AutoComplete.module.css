@@ -123,3 +123,11 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.compactPopup {
+  min-width: 180px;
+  width: 260px;
+}
+.compactPopup .options {
+  max-height: 224px;
+}

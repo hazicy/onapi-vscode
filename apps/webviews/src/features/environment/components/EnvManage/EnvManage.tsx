@@ -1,19 +1,16 @@
 import { saveEnvironments } from "@/features/requests/events/env";
 import styles from "./EnvManage.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Flex, Input, message, Tooltip } from "@/shared/ui/base";
 
-import { useUpdateEffect } from "ahooks";
-import { produce } from "immer";
-import { cloneDeep, find, findIndex, isNull, isUndefined } from "lodash-es";
+import { cloneDeep, find, isNull, isUndefined } from "lodash-es";
 
 import Table from "@/shared/components/BasicTable/BasicTable";
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
 
-import useProjectConfig from "@/features/project/store/useProjectConfig";
 import type { EnvironmentScope as EnvListItem } from "@onapi/domain";
 type EnvList = EnvListItem[];
 
@@ -25,17 +22,11 @@ import { IEnvDataItem } from "./types";
 interface EnvModifyModalProps {
   editEnvId: string | undefined;
   envMenus: EnvList;
-  changeKey: React.Dispatch<string[]>;
 }
 
 const Index = (props: EnvModifyModalProps) => {
   const { t } = useTranslation();
   const { editEnvId, envMenus } = props;
-
-  const updateHttpEnvironments = useProjectConfig(
-    (state) => state.updateHttpEnvironments,
-  );
-  const serverList = useProjectConfig((state) => state.serverList);
 
   const [envData, setEnvData] = useState<Partial<EnvListItem>>({});
   const [envList, setEnvList] = useState<Array<IEnvDataItem>>([
@@ -43,38 +34,27 @@ const Index = (props: EnvModifyModalProps) => {
   ]);
   const readonly = false;
 
+  const dirty = useRef(false);
+  const editingId = useRef<string | undefined>(undefined);
   useEffect(() => {
-    const data = find(envMenus, ({ id }) => id === editEnvId) as EnvListItem;
-
-    if (!data) {
+    const data = find(envMenus, ({ id }) => id === editEnvId);
+    if (!data || (editingId.current === editEnvId && dirty.current)) {
       return;
     }
-
+    editingId.current = editEnvId;
+    dirty.current = false;
     setEnvData({ ...data });
+    setEnvList(cloneDeep(data.values || []));
   }, [editEnvId, envMenus]);
-
-  useEffect(() => {
-    const data = find(envMenus, ({ id }) => id === editEnvId) as EnvListItem;
-    if (data) {
-      const list = data.values || [];
-      setEnvList(list);
-    }
-  }, [editEnvId, envMenus]);
-
-  const isDefaultOrMockEnv = () => {
-    return false;
-  };
 
   const handleEnvChange = (key: string, value: string | number) => {
+    dirty.current = true;
     const newEnv: any = cloneDeep(envData);
     const newEnvData = {
       ...newEnv,
       [key]: value,
     };
     setEnvData(newEnvData);
-
-    // Add auto-save logic
-    // onOk({envData:newEnvData});
   };
 
   const tableDataList = () => {
@@ -87,30 +67,22 @@ const Index = (props: EnvModifyModalProps) => {
 
   const handleItemChange = (rowData: any, index: number, newVal: any) => {
     const newList: Array<IEnvDataItem> = cloneDeep(envList);
-    delete rowData.static;
+    dirty.current = true;
+    const { static: _static, ...editableRow } = rowData;
     newList[index] = {
-      ...rowData,
+      ...editableRow,
       ...newVal,
     };
     setEnvList([...newList]);
-
-    // Add auto-save logic
-    // onOk({
-    //   envList:[...newList]
-    // });
   };
 
   const handleDeleteItem = (index: number) => {
+    dirty.current = true;
     const newList = [...envList];
     if (newList.length > 0) {
       newList.splice(index, 1);
       setEnvList([...newList]);
     }
-
-    // Add auto-save logic
-    // onOk({
-    //   envList:[...newList]
-    // });
   };
 
   const envColumn: any[] = [
@@ -191,14 +163,14 @@ const Index = (props: EnvModifyModalProps) => {
     },
   ];
 
-  const onOk = (options?: any) => {
-    const tempEnvData = options?.envData || envData;
+  const onOk = () => {
+    const tempEnvData = envData;
 
     if (!tempEnvData.name?.trim()) {
       return;
     }
     try {
-      const envVarList = options?.envList || envList;
+      const envVarList = envList;
       const params = {
         ...tempEnvData,
         name: tempEnvData.name?.trim(),
@@ -206,6 +178,7 @@ const Index = (props: EnvModifyModalProps) => {
       params.values = envVarList
         .filter((row: any) => row.key?.trim())
         .map(({ static: _, current_value: __, ...row }: any) => row);
+      dirty.current = false;
       if (params?.isLocal) {
         delete params.isLocal;
         // Get maximum sort value
@@ -219,8 +192,6 @@ const Index = (props: EnvModifyModalProps) => {
           }
           return e;
         });
-        updateHttpEnvironments(list);
-        // changeKey([res.id]);
         saveEnvironments(list);
         message.success(t("interaction.environmentSaved"));
         return;
@@ -233,25 +204,6 @@ const Index = (props: EnvModifyModalProps) => {
       });
       saveEnvironments(newList);
       message.success(t("interaction.environmentSaved"));
-      // await updateEnvRequest({ ...params, project_id: project_id || '' });
-      updateEnv({ ...params }, false);
-    } catch (err) {
-      // err
-    }
-  };
-  useUpdateEffect(() => {}, [serverList]);
-  const updateEnv = async (envData: any, serverUpdate = true) => {
-    try {
-      const newEnvList = produce(envMenus, (draft) => {
-        const targetIndex = findIndex(draft, (e) => e.id === editEnvId);
-        draft[targetIndex] = { ...draft[targetIndex], ...envData };
-      });
-
-      if (serverUpdate) {
-        // Get service list
-      } else {
-        updateHttpEnvironments(newEnvList);
-      }
     } catch (err) {
       // err
     }
@@ -262,7 +214,7 @@ const Index = (props: EnvModifyModalProps) => {
       <Flex className={styles.envManageFlex} vertical gap={15}>
         <Flex gap={15} vertical>
           <span> {t("global_setting.environment_detail.title")}</span>
-          <div className={[undefined, undefined].join(" ")}>
+          <div>
             <div>{t("global_setting.environment_detail.tips")}</div>
             <div>{t("global_setting.environment_detail.tips1")}</div>
             <div>{t("global_setting.environment_detail.tips2")}</div>
@@ -276,8 +228,7 @@ const Index = (props: EnvModifyModalProps) => {
             className={styles.envManageInput}
             maxLength={128}
             placeholder={t("supplement.env_input_tip")}
-            disabled={isDefaultOrMockEnv()}
-            value={envData.name}
+            value={envData.name || ""}
             onChange={(e) => handleEnvChange("name", e.target.value)}
           />
           <div className={styles.container}>

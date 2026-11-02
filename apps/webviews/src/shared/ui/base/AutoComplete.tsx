@@ -20,6 +20,7 @@ export function AutoComplete({
   style,
   disabled,
   showArrow = false,
+  suggestOnInput = false,
   arrowClassName,
   triggerClassName,
   filterOption,
@@ -36,25 +37,44 @@ export function AutoComplete({
     getBoundingClientRect() {
       const field = fieldRef.current?.getBoundingClientRect();
       const arrow = arrowRef.current?.getBoundingClientRect();
-      return field && arrow
-        ? new DOMRect(arrow.x, field.y, arrow.width, field.height)
-        : new DOMRect();
+      if (showArrow && field && arrow) {
+        return new DOMRect(arrow.x, field.y, arrow.width, field.height);
+      }
+      return field ?? new DOMRect();
     },
   };
   const current = value ?? input;
+  const hasSuggestions = options.some((option) =>
+    String(option.value ?? "")
+      .toLocaleLowerCase()
+      .includes(current.toLocaleLowerCase()),
+  );
   return (
     <Combobox.Root
       modal={false}
       items={options}
       value={current}
-      open={showArrow ? popupOpen : undefined}
-      openOnInputClick={!showArrow}
-      mode={showArrow ? "none" : "list"}
+      open={
+        showArrow || suggestOnInput
+          ? popupOpen && (!suggestOnInput || hasSuggestions)
+          : undefined
+      }
+      openOnInputClick={!showArrow && !suggestOnInput}
+      mode={showArrow && !suggestOnInput ? "none" : "list"}
       onOpenChange={(open, details) => {
-        if (!showArrow) {
+        if (!showArrow && !suggestOnInput) {
           return;
         }
-        if (open && details.reason !== "trigger-press") {
+        if (
+          (showArrow || suggestOnInput) &&
+          open &&
+          details.reason !== "trigger-press" &&
+          !(
+            suggestOnInput &&
+            (details.reason === "input-change" ||
+              details.event instanceof KeyboardEvent)
+          )
+        ) {
           details.cancel();
           return;
         }
@@ -103,15 +123,16 @@ export function AutoComplete({
       <Combobox.Portal>
         <Combobox.Positioner
           className={autoCompleteStyles.positioner}
-          anchor={showArrow ? dropdownAnchor : undefined}
+          anchor={showArrow || suggestOnInput ? dropdownAnchor : undefined}
           side="bottom"
           align={showArrow ? "end" : "start"}
-          sideOffset={showArrow ? 8 : 0}
+          sideOffset={showArrow ? 8 : suggestOnInput ? 4 : 0}
         >
           <Combobox.Popup
             className={clsx(
               autoCompleteStyles.popup,
               showArrow && autoCompleteStyles.arrowPopup,
+              suggestOnInput && autoCompleteStyles.compactPopup,
             )}
           >
             {showArrow && (

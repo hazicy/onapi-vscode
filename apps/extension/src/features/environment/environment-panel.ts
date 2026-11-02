@@ -1,3 +1,4 @@
+import { getCurrentProjectConfig } from "../../platform/storage/project-config";
 import { createFeaturePanel } from "../../platform/webviews/create-panel";
 import { globalConfig, PANEL_OPTIONS } from "../../app/config";
 import * as vscode from "vscode";
@@ -34,7 +35,11 @@ export const createEnvironmentPanel = (
     } else if (!data?.cookie) {
       environmentWebView.webview.postMessage({
         action: "setEnvSettingKeys",
-        data: !data?.env_id ? "1" : data?.env_id,
+        data:
+          data?.id ||
+          data?.env_id ||
+          getCurrentProjectConfig(context).http?.activeEnvironment ||
+          "",
       });
     }
     if (data?.cookie) {

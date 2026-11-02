@@ -19,7 +19,7 @@ import {
   getCurrentProjectConfig,
   getProjectWorkspace,
   getProjectConfig,
-  saveProjectConfig,
+  updateProjectConfig,
 } from "../../../platform/storage/project-config";
 import { getApiList, getApiListName } from "../request-storage";
 import { setRequestResult } from "../request-status";
@@ -145,16 +145,18 @@ export function runCollection(
           !event.error &&
           !session.cancelled
         ) {
-          const config = getProjectConfig(context, workspace);
-          const next = mergeHttpState(
-            before,
-            event,
-            config.http || createDefaultHttpConfig(),
+          persistedState = updateProjectConfig(
+            context,
+            workspace,
+            (config) => ({
+              ...config,
+              http: mergeHttpState(
+                before,
+                event,
+                config.http || createDefaultHttpConfig(),
+              ),
+            }),
           );
-          persistedState = saveProjectConfig(context, workspace, {
-            ...config,
-            http: next,
-          });
         }
       },
     )

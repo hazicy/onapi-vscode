@@ -5,6 +5,7 @@ import RowValue from "@/shared/components/RequestTable/components/RowValue";
 import {
   VariableControlsContext,
   type VariableInsertProps,
+  type VariableInputProps,
 } from "@/shared/contexts/variable-controls";
 import useSystemConfig from "@/features/settings/store/useSystemConfig";
 import { useGlobal } from "@/app/store";
@@ -13,9 +14,22 @@ import { App, modal } from "@/shared/ui/base";
 import LayoutControl from "@/shared/components/ResizablePanels/LayoutControl";
 import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
 
+function TestInput({ value, onChange, suffix }: VariableInputProps) {
+  return (
+    <div style={{ display: "flex", alignItems: "center" }}>
+      <input
+        aria-label="Injected input"
+        value={value}
+        onChange={(event) => onChange?.(event.target.value)}
+      />
+      {suffix}
+    </div>
+  );
+}
+
 function TestInsert({ onChange, children }: VariableInsertProps) {
   return (
-    <div>
+    <div style={{ display: "inline-flex", alignItems: "center" }}>
       {children}
       <button onClick={() => onChange("+", "value", true)}>Append value</button>
       <button onClick={() => onChange("replacement", "value", false)}>
@@ -32,7 +46,6 @@ function TestInsert({ onChange, children }: VariableInsertProps) {
 }
 
 export default function SharedComponentsFixture() {
-  const [kind, setKind] = useState("api");
   const [messages, setMessages] = useState<unknown[]>([]);
   const [row, setRow] = useState<ApisBaseDataItem>({
     is_checked: 1,
@@ -65,26 +78,28 @@ export default function SharedComponentsFixture() {
   return (
     <App>
       <main>
-        <button onClick={() => setKind(kind === "api" ? "websocket" : "api")}>
-          Switch protocol
-        </button>
         <section aria-label="Inherited headers">
-          <PublicParamsTable kind={kind} tabType="header" />
+          <PublicParamsTable
+            tabType="header"
+            globalParams={[
+              {
+                param_id: "collection-header",
+                description: "",
+                field_type: "String",
+                not_null: -1,
+                key: "X-Collection",
+                value: "shared",
+                is_checked: 1,
+              },
+            ]}
+            folderParams={[{ key: "X-Folder", value: "folder", is_checked: 1 }]}
+          />
         </section>
         <output aria-label="Configuration">{JSON.stringify(config)}</output>
         <output aria-label="Messages">{JSON.stringify(messages)}</output>
         <VariableControlsContext.Provider
           value={{
-            Input: ({ value, onChange, suffix }) => (
-              <div>
-                <input
-                  aria-label="Injected input"
-                  value={value}
-                  onChange={(event) => onChange?.(event.target.value)}
-                />
-                {suffix}
-              </div>
-            ),
+            Input: TestInput,
             Insert: TestInsert,
           }}
         >
