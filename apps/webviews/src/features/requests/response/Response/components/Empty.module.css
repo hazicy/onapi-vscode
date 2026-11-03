@@ -5,7 +5,6 @@
   place-items: center;
   height: 100%;
   min-width: 0;
-  font-size: var(--vscode-font-size, 13px);
 }
 .maskMode {
   position: absolute;
@@ -32,7 +31,7 @@
 }
 .errorTitle {
   color: var(--vscode-foreground, var(--font-content-color));
-  font-size: 16px;
+  font-size: 1.125em;
   font-weight: 500;
 }
 .errorDetails {
@@ -60,7 +59,6 @@
   outline: none;
   color: var(--vscode-descriptionForeground, var(--font-light-color));
   font: inherit;
-  font-size: 13px;
   line-height: 1.6;
   cursor: pointer;
 }
@@ -91,7 +89,6 @@
   white-space: pre-wrap;
   color: var(--vscode-descriptionForeground, var(--font-light-color));
   font-family: var(--vscode-editor-font-family, monospace);
-  font-size: 12px;
   line-height: 1.7;
 }
 

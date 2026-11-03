@@ -35,7 +35,6 @@
   flex-shrink: 0;
   padding: 0;
   line-height: 1;
-  font-size: 12px;
 }
 .checkbox[data-indeterminate] {
   background: var(--color-primary, #1677ff);

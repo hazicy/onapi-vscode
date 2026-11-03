@@ -188,7 +188,7 @@ const EnvDropdown: React.FC<EnvDropdownProps> = ({
                   updateEnvSettingKeys(envDetails.id);
                 }
               }}
-              style={{ fontSize: 12, color: "var(--icon-color)" }}
+              style={{ fontSize: "inherit", color: "var(--icon-color)" }}
               icon="settings"
             />
             <span className={styles.title}>

@@ -28,9 +28,12 @@ export const getThemeConfig = (
   themeMode: themeModeType,
   systemScale: number = 100,
 ) => {
-  const fontSize = Math.round((12 * systemScale) / 100);
-  const fontSize14 = Math.round((14 * systemScale) / 100);
-  const fontSize16 = Math.round((16 * systemScale) / 100);
+  const hostFontSize = Number.parseFloat(
+    getComputedStyle(document.documentElement).getPropertyValue("--vscode-font-size"),
+  ) || 13;
+  const fontSize = hostFontSize;
+  const fontSize14 = hostFontSize;
+  const fontSize16 = hostFontSize * 16 / 14;
 
   const vscodeBtnBgColor = getComputedStyle(document.documentElement)
     .getPropertyValue("--vscode-button-background")

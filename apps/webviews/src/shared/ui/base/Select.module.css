@@ -156,7 +156,7 @@
 }
 
 .arrow {
-  font-size: 10px;
+  font-size: 0.75em;
 }
 .select {
   border-color: var(--ui-select-border, var(--color-border, #ddd));
@@ -174,7 +174,6 @@
   gap: 8px;
   padding: 8px 10px 4px;
   color: var(--font-light-color, #7c8fb0);
-  font-size: 12px;
   white-space: nowrap;
 }
 .groupLabel::after {

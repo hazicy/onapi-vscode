@@ -1,6 +1,6 @@
 .root {
   gap: 8px;
-  font: var(--vscode-font-size, 13px) var(--vscode-font-family, sans-serif);
+  font: inherit;
   min-width: 0;
 }
 .root > .nav {
@@ -28,7 +28,7 @@
     --vscode-tab-inactiveForeground,
     var(--vscode-descriptionForeground, var(--font-light-color))
   );
-  font: 14px var(--vscode-font-family, sans-serif);
+  font: inherit;
   white-space: nowrap;
 }
 .root .nav .button:hover {

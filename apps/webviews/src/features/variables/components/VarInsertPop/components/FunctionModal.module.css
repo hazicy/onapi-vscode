@@ -6,9 +6,7 @@
   width: 100%;
   max-height: 500px;
   overflow-y: auto;
-  & .innerContent .tipTitle {
-    font-size: 12px;
-    font-weight: 400;
+  & .innerContent .tipTitle {    font-weight: 400;
     color: var(--font-light-color);
   }
   & .innerContent .item {
@@ -35,14 +33,12 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-size: 14px;
     font-weight: 400;
     color: var(--font-content-color);
   }
   & .innerContent .item .render {
     display: flex;
     width: 190px;
-    font-size: 12px;
     font-weight: 400;
     color: var(--font-light-color);
     gap: 8px;

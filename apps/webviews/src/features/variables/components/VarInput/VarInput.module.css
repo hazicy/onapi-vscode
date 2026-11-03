@@ -108,13 +108,11 @@
   font-weight: 400;
   max-height: 280px;
   overflow: auto;
-  font-size: var(--vscode-font-size, 13px);
   line-height: 1.5;
 }
 .previewHeading {
   margin-bottom: 8px;
   color: var(--vscode-descriptionForeground, #888);
-  font-size: 12px;
 }
 .previewRow {
   display: grid;

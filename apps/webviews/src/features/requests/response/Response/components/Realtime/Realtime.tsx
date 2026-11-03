@@ -14,11 +14,15 @@ import {
 import EventStream from "./EventStream";
 
 interface Props {
+  encoding?: string;
+  wordWrap?: boolean;
+  viewMode?: string;
+  onViewModeChange?: (value: string) => void;
   resultIncludesTabs?: string[];
   sendingData?: HttpExecutionState;
 }
 
-const Realtime = memo(({ resultIncludesTabs, sendingData }: Props) => {
+const Realtime = memo(({ resultIncludesTabs, sendingData, viewMode, onViewModeChange, encoding, wordWrap }: Props) => {
   const responseResultRef = useRef<any>(null);
 
   useEffect(() => {
@@ -28,6 +32,7 @@ const Realtime = memo(({ resultIncludesTabs, sendingData }: Props) => {
     const { systemConfig } = useSystemConfig.getState();
     if (isEqual(systemConfig.send_after_auto_beautify, STATUS_CODE.ENABLE)) {
       responseResultRef.current?.setTabsValue("beautify");
+      onViewModeChange?.("beautify");
     }
   }, [sendingData?.session?.status, sendingData?.result]);
 
@@ -52,6 +57,12 @@ const Realtime = memo(({ resultIncludesTabs, sendingData }: Props) => {
     <div className={styles.container}>
       <ResponseResult
         ref={responseResultRef}
+        viewMode={viewMode}
+        onViewModeChange={onViewModeChange}
+        hideModeTabs
+        hideToolbar
+        encoding={encoding}
+        wordWrap={wordWrap}
         resultIncludesTabs={resultIncludesTabs}
         rawHtml={responseText(sendingData?.result?.response)}
         data={sendingData?.result?.response}

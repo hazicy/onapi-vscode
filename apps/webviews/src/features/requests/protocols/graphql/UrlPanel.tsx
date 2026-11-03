@@ -193,7 +193,7 @@ const Index = memo((props: HttpEditorProps) => {
                 open={open}
                 onOpenChange={(open) => setOpen(open)}
                 onClick={handleSave}
-                popupStyle={{ fontSize: 14 }}
+                popupStyle={{ fontSize: "inherit" }}
                 disabled={isReadonly}
                 keepMounted={false}
                 popupRender={popupRender}

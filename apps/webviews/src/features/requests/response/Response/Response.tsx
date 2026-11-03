@@ -12,7 +12,12 @@ import styles from "./Response.module.css";
 import { FC, lazy, memo, Suspense, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { TabPaneProps, TabsProps } from "@/shared/ui/base";
+import AppIcon from "@/shared/ui/AppIcon";
+import { download } from "@/shared/utils/common";
+import { responseDownload } from "../response-download";
+import { RAW_ENCODE, RESPONSE_RESULT_TABS_LIST } from "../ResponseResult/constants";
+
+import { Dropdown, TabPaneProps, TabsProps } from "@/shared/ui/base";
 
 import { useMemoizedFn, useSafeState, useUpdateEffect } from "ahooks";
 import { compact, isEmpty, isEqual, map, size } from "lodash-es";
@@ -83,6 +88,9 @@ const Response: FC<Props> = memo((props) => {
   const [selectedKey, setActiveKey] = useSafeState(
     tabsDefaultActiveKey || "realtime",
   );
+  const [viewMode, setViewMode] = useState(resultIncludesTabs?.[0] ?? "beautify");
+  const [encoding, setEncoding] = useState("utf-8");
+  const [wordWrap, setWordWrap] = useState(true);
   const hasExecution = !!sendingData?.session;
   const initialTabKey = tabsDefaultActiveKey || "realtime";
   const activeKey = hasExecution ? selectedKey : initialTabKey;
@@ -155,8 +163,35 @@ const Response: FC<Props> = memo((props) => {
     {
       key: "realtime",
       label: t("api.run.response_tab"),
+      tabExtra: !isEventStream(sendingData) && (
+        <Dropdown
+          trigger={["click"]}
+          menu={{
+            selectedKeys: [viewMode],
+            items: RESPONSE_RESULT_TABS_LIST
+              .filter((item) => !resultIncludesTabs || resultIncludesTabs.includes(item.value))
+              .map((item) => ({ key: item.value, label: item.label })),
+            onClick: ({ key }) => {
+              setViewMode(key);
+              setActiveKey("realtime");
+            },
+          }}
+        >
+          <button
+            type="button"
+            className={styles.viewModeButton}
+            aria-label={`${t("api.run.response_tab")}: ${RESPONSE_RESULT_TABS_LIST.find((item) => item.value === viewMode)?.label ?? ""}`}
+          >
+            <AppIcon icon="chevron-down" />
+          </button>
+        </Dropdown>
+      ),
       children: (
         <Realtime
+          encoding={encoding}
+          wordWrap={wordWrap}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
           resultIncludesTabs={resultIncludesTabs}
           sendingData={sendingData}
         />
@@ -273,16 +308,91 @@ const Response: FC<Props> = memo((props) => {
         }}
         items={tabsItems()}
         tabBarExtraContent={
-          !isEmpty(sendingData) &&
-          showResponseSize && (
-            <Suspense fallback={null}>
-              <ResponseSize
-                showProxy={showProxy}
-                showDownload={showDownload && isSendDone}
-                response={sendingData?.result?.response}
-              />
-            </Suspense>
-          )
+          <div className={styles.toolbar}>
+            {!isEmpty(sendingData) && showResponseSize && (
+              <Suspense fallback={null}>
+                <ResponseSize
+                  showProxy={showProxy}
+                  showIcon={false}
+                  response={sendingData?.result?.response}
+                />
+              </Suspense>
+            )}
+            <Dropdown
+              trigger={["click"]}
+              placement="bottomRight"
+              popupClassName={styles.moreMenu}
+              itemClassName={styles.moreMenuItem}
+              menu={{
+                selectedKeys: [encoding, ...(wordWrap ? ["wordWrap"] : [])],
+                items: [
+                  {
+                    key: "settings",
+                    type: "group",
+                    label: <span className={styles.menuSection}>{t("request_panel.response_settings")}</span>,
+                    children: [
+                      {
+                        key: "wordWrap",
+                        label: (
+                          <span className={styles.menuLabel}>
+                            {t("request_panel.word_wrap")}
+                            {wordWrap && <AppIcon icon="check" />}
+                          </span>
+                        ),
+                        icon: <AppIcon icon="wrap-text" />,
+                        onClick: () => setWordWrap((value) => !value),
+                      },
+                      {
+                        key: "encoding",
+                        label: (
+                          <span className={styles.menuLabel}>
+                            {t("request_panel.encoding")}
+                            <span className={styles.menuValue}>
+                              {Object.entries(RAW_ENCODE).find(([, value]) =>
+                                (value === "utf8" ? "utf-8" : value) === encoding,
+                              )?.[0] ?? encoding}
+                            </span>
+                          </span>
+                        ),
+                        icon: <AppIcon icon="file-code" />,
+                        children: Object.entries(RAW_ENCODE).map(([label, value]) => ({
+                          key: value === "utf8" ? "utf-8" : value,
+                          label: <span className={styles.menuLabel}>{label}</span>,
+                          icon: <AppIcon icon="check" className={
+                            (value === "utf8" ? "utf-8" : value) === encoding
+                              ? undefined : styles.unselectedCheck
+                          } />,
+                          onClick: () => setEncoding(value === "utf8" ? "utf-8" : value),
+                        })),
+                      },
+                    ],
+                  },
+                  ...(showDownload ? [
+                    { key: "download-divider", type: "divider" },
+                    {
+                      key: "download",
+                      label: <span className={styles.menuLabel}>{t("response.download_tip")}</span>,
+                      icon: <AppIcon icon="download" />,
+                      disabled: !isSendDone,
+                      onClick: () => {
+                        const prepared = responseDownload(sendingData?.result?.response, t("supplement.res_data"));
+                        if (prepared) download(prepared.data, prepared.name, prepared.mime);
+                      },
+                    },
+                  ] : []),
+                ],
+              }}
+            >
+              <button
+                type="button"
+                className={styles.toolButton}
+                aria-label={t("request_panel.more")}
+                title={t("request_panel.more")}
+              >
+                <AppIcon icon="ellipsis" />
+              </button>
+            </Dropdown>
+          </div>
         }
         navWrapClassName={styles.tabsNavWrap}
         panelsClassName={styles.tabsContent}

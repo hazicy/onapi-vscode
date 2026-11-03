@@ -27,9 +27,6 @@
   box-shadow: 0 2px 4px var(--box-shadow-modal-color);
   cursor: pointer;
 }
-.container .resizablePanelHandle .rightCollapseBtn > .icon {
-  font-size: 14px;
-}
 .container .resizablePanelHandle .rightCollapseBtn:hover {
   color: var(--color-primary);
 }
@@ -81,12 +78,6 @@
 .container .resizablePanelLeftWrap .rightCollapseWrap .flex,
 .container .resizablePanelRightWrap .rightCollapseWrap .flex {
   height: 100%;
-}
-.container .resizablePanelLeftWrap .leftCollapseWrap .flex > .icon,
-.container .resizablePanelRightWrap .leftCollapseWrap .flex > .icon,
-.container .resizablePanelLeftWrap .rightCollapseWrap .flex > .icon,
-.container .resizablePanelRightWrap .rightCollapseWrap .flex > .icon {
-  font-size: 12px;
 }
 .container .resizablePanelLeftWrap .leftCollapseWrap .flex .collapseTitle,
 .container .resizablePanelRightWrap .leftCollapseWrap .flex .collapseTitle,

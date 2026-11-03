@@ -66,7 +66,7 @@ const ImportProjectManual = () => {
   return (
     <Spin spinning={importLoading}>
       <div className={styles.importExport}>
-        <Title style={{ fontSize: "16px" }} level={3}>
+        <Title style={{ fontSize: "1.125em" }} level={3}>
           {t("settings.import_project.title")}
         </Title>
         <div className={styles.importProjectItem}>

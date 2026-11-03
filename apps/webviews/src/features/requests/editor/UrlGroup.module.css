@@ -81,7 +81,7 @@
   color: var(--color-warning);
 }
 .container .selectSelectionItem {
-  font-size: var(--vscode-font-size, 13px) !important;
+  font-size: inherit !important;
 }
 .container .envDesc {
   overflow: hidden;
@@ -243,10 +243,6 @@
   color: inherit;
   opacity: 1;
 }
-
-.methodDropdown {
-  font-size: var(--vscode-font-size, 13px);
-}
 .methodDropdown .selectItem {
   display: flex;
   align-items: center;
@@ -269,7 +265,6 @@
   position: relative;
   min-height: 26px;
   padding: 4px 16px 4px 28px;
-  font-size: var(--vscode-font-size, 13px);
   line-height: 18px;
 }
 .methodPopup .selectItem > :last-child:not(:first-child) {

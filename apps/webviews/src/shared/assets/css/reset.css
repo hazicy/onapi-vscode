@@ -5,7 +5,7 @@ html {
   height: 100%;
   box-sizing: border-box;
   background-color: #fff;
-  font-size: 14px;
+  font-size: var(--vscode-font-size, 13px);
 
   font-family: var(
     --vscode-font-family,
@@ -16,6 +16,16 @@ html {
     sans-serif
   );
   overflow: hidden;
+}
+
+/* Native form controls use the same typography as their surrounding UI. */
+button,
+input,
+select,
+textarea,
+optgroup,
+option {
+  font: inherit;
 }
 
 *,
@@ -64,6 +74,7 @@ li {
 }
 
 body {
+  font-size: inherit;
   font-family: inherit;
   line-height: 1.4;
   height: 100%;

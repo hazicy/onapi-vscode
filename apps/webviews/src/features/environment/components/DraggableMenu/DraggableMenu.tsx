@@ -55,7 +55,7 @@ const Item: FC<ItemProps> = ({
             icon="grip-vertical"
             className={styles.iconDrag}
             ref={setActivatorNodeRef}
-            style={{ touchAction: "none", cursor: "move", fontSize: 10 }}
+            style={{ touchAction: "none", cursor: "move", fontSize: "0.75em" }}
             {...listeners}
           />
         )}

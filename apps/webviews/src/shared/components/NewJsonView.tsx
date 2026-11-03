@@ -10,7 +10,7 @@ import { copyStringToClipboard } from "@/shared/utils/clipboard";
 import JSON5 from "json5";
 
 const reactJsonStyle = {
-  fontSize: "12px",
+  fontSize: "inherit",
   height: "100%",
   overflow: "auto",
   backgroundColor: "transparent",

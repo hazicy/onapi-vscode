@@ -140,7 +140,7 @@
     color: var(--color-primary);
   }
   & .select .selectArrow {
-    font-size: 16px;
+    font-size: 1.125em;
   }
   & .select .selectArrow > div {
     display: flex;
@@ -163,9 +163,6 @@
   & .select .selectArrow > div .required span {
     display: inline-block;
     margin-top: 1px;
-  }
-  & .select .selectArrow > div .required span svg {
-    font-size: 14px;
   }
   & .rowDescription .input {
     padding: 4px 12px;
@@ -240,9 +237,6 @@
   & thead .queryEqIconWrap .icon {
     /* font-size: var(--font-size-16); */
   }
-  & thead .queryEqIconWrap .icon > svg {
-    font-size: 14px;
-  }
   & tbody .insertIcon {
     visibility: hidden;
     color: var(--font-light-color);
@@ -270,7 +264,7 @@
     color: var(--color-primary);
   }
   & .select .selectArrow {
-    font-size: 16px;
+    font-size: 1.125em;
   }
   & .select .selectArrow > div {
     display: flex;
@@ -294,9 +288,6 @@
     display: inline-block;
     margin-top: 1px;
   }
-  & .select .selectArrow > div .required span svg {
-    font-size: 14px;
-  }
   & .tableCollapse .collapseHeader {
     padding: 12px;
   }
@@ -307,7 +298,7 @@
   }
 }
 .selectFieldTypeOptionItem {
-  font-size: 12px;
+  font-size: inherit;
   color: #e0790b;
   &.itemObject {
     color: #067ced;
@@ -354,9 +345,6 @@
   & thead .queryEqIconWrap .icon {
     /* font-size: var(--font-size-16); */
   }
-  & thead .queryEqIconWrap .icon > svg {
-    font-size: 14px;
-  }
   & tbody tr .rowDescriptionOperation {
     visibility: hidden;
   }
@@ -377,7 +365,7 @@
     color: var(--color-primary);
   }
   & .select .selectArrow {
-    font-size: 16px;
+    font-size: 1.125em;
   }
   & .select .selectArrow > div {
     display: flex;
@@ -400,9 +388,6 @@
   & .select .selectArrow > div .required span {
     display: inline-block;
     margin-top: 1px;
-  }
-  & .select .selectArrow > div .required span svg {
-    font-size: 14px;
   }
   & .tableCollapse .collapseHeader {
     padding: 12px;

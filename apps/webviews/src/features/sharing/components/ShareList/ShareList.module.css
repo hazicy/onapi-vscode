@@ -34,20 +34,14 @@
   background: var(--vscode-list-hoverBackground, #303030);
 }
 .itemTitle {
-  & .time {
-    font-size: 12px;
-    flex: 1;
+  & .time {    flex: 1;
   }
   & .name {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 14px;
     flex: 1;
     overflow: hidden;
-  }
-  & .name svg {
-    font-size: 14px;
   }
 }
 .tabs {

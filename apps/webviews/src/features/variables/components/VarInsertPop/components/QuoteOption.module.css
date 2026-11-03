@@ -58,14 +58,10 @@
     white-space: nowrap;
     text-overflow: ellipsis;
   }
-  & .content .label {
-    font-size: 12px;
-    font-weight: 400;
+  & .content .label {    font-weight: 400;
     color: var(--font-light-color);
   }
-  & .content .value {
-    font-size: 14px;
-    font-weight: 400;
+  & .content .value {    font-weight: 400;
     word-wrap: break-word;
     word-break: break-all;
     color: var(--font-content-color);

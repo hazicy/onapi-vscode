@@ -3,9 +3,7 @@
 }
 .label {
   margin-bottom: var(--margin8);
-  & .text {
-    font-size: 14px;
-    color: var(--font-title-color);
+  & .text {    color: var(--font-title-color);
   }
   & .text:hover {
     color: var(--color-primary);
@@ -14,9 +12,7 @@
     flex-shrink: 0;
     margin-left: 30px;
   }
-  & .labelRight .consResponseTitle {
-    font-size: var(--vscode-font-size, 13px);
-    color: var(--font-content-color);
+  & .labelRight .consResponseTitle {    color: var(--font-content-color);
   }
   & .labelRight .consResponseCode {
     color: #3cc071;
@@ -26,7 +22,6 @@
     display: flex;
     flex-shrink: 0;
     align-items: center;
-    font-size: 14px;
     color: var(--font-light-color);
   }
 }
@@ -39,9 +34,7 @@
   & .collapseItem .collapseHeader {
     margin-bottom: 0;
   }
-  & .collapseHeaderText {
-    font-size: 14px;
-    color: var(--font-title-color);
+  & .collapseHeaderText {    color: var(--font-title-color);
   }
 }
 .consoleItem {

@@ -31,7 +31,7 @@ const SharePage = () => {
       <Flex justify="space-between" className={styles.flex}>
         <Typography.Text
           style={{
-            fontSize: 16,
+            fontSize: "1.125em",
             fontWeight: 600,
             color: "var(--font-title-color)",
           }}

@@ -57,31 +57,3 @@ export const RESPONSE_RESULT_TABS_LIST = [
     children: Visualization,
   },
 ];
-
-export const RESPONSE_TYPE = [
-  {
-    label: "JSON",
-    ext: "json",
-    mine: "application/json",
-  },
-  {
-    label: "XML",
-    ext: "xml",
-    mine: "application/xml",
-  },
-  {
-    label: "HTML",
-    ext: "html",
-    mine: "text/html",
-  },
-  {
-    label: "Text",
-    ext: "text",
-    mine: "text/html",
-  },
-  {
-    label: "Auto",
-    ext: "auto",
-    mine: "application/json",
-  },
-];

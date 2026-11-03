@@ -75,7 +75,7 @@ const Tree = forwardRef<TreeHandle, Props>((props, treeRef) => {
   );
 
   const switcherIcon = useMemo(
-    () => <AppIcon icon="chevron-down" style={{ fontSize: 16 }} />,
+    () => <AppIcon icon="chevron-down" style={{ fontSize: "1.125em" }} />,
     [],
   );
 

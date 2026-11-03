@@ -377,7 +377,7 @@ const Index = ({
                       iconRender={() => <AppIcon icon="link" />}
                     >
                       <p className={styles.antUploadDragIcon}>
-                        <AppIcon icon="file-output" style={{ fontSize: 20 }} />
+                        <AppIcon icon="file-output" style={{ fontSize: "1.5em" }} />
                       </p>
                       <p className="ant-upload-text">
                         {t("settings.import_project.file")}

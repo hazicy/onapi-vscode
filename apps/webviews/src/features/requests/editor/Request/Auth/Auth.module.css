@@ -6,11 +6,10 @@
 }
 .container .formItem input,
 .container .formItem .selectTrigger {
-  font-size: var(--vscode-font-size, 13px);
+  font-size: inherit;
 }
 .moreTip {
   display: flex;
-  font-size: 14px;
   color: var(--color-primary);
 }
 .code {
@@ -47,14 +46,14 @@
   min-width: 0;
 }
 .selectArrow {
-  font-size: 10px;
+  font-size: 0.75em;
 }
 
 .container
   :where(input:not([type="checkbox"]):not([type="radio"]), select, .select) {
   box-sizing: border-box;
   min-height: 32px;
-  font-size: var(--vscode-font-size, 13px);
+  font-size: inherit;
 }
 .container :where(input:not([type="checkbox"]):not([type="radio"])) {
   height: 32px;

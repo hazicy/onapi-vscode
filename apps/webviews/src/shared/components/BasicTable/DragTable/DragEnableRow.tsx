@@ -39,7 +39,7 @@ const DragEnableRow = ({ children, ...props }: DragEnableRow) => {
                 <AppIcon
                   icon="grip-vertical"
                   ref={setActivatorNodeRef}
-                  style={{ touchAction: "none", cursor: "move", fontSize: 10 }}
+                  style={{ touchAction: "none", cursor: "move", fontSize: "0.75em" }}
                   {...listeners}
                 />
               ),

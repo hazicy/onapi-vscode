@@ -10,7 +10,7 @@
   padding: 0 10px;
   border: 0;
   border-radius: var(--vscode-cornerRadius-small, 4px);
-  font: var(--vscode-font-size, 13px) var(--vscode-font-family, sans-serif);
+  font: inherit;
   white-space: nowrap;
   cursor: pointer;
   color: var(--vscode-button-foreground, #fff);
@@ -31,7 +31,7 @@
   cursor: default;
 }
 .action > span:first-child {
-  font-size: 16px;
+  font-size: 1.125em;
 }
 .label {
   font: inherit;

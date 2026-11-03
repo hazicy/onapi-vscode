@@ -68,11 +68,7 @@
     var(--vscode-input-background)
   );
   color: var(--vscode-foreground, var(--font-title-color));
-  font-size: 12px;
   font-weight: 500;
-}
-.container .table td {
-  font-size: 12px;
 }
 
 /* Cells grow through the table layout; native textarea grips break row alignment. */

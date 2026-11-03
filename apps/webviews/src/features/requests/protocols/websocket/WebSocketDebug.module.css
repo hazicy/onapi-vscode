@@ -17,14 +17,14 @@
 .wsHeader .inputOutlined,
 .wsHeader .select {
   height: 28px;
-  font-size: 12px;
+  font-size: inherit;
 }
 .wsHeader .select {
   width: auto;
   min-width: 90px;
 }
 .wsHeader .selectTrigger {
-  font-size: 12px;
+  font-size: inherit;
 }
 .iconColor {
   color: var(--vscode-descriptionForeground, var(--font-light-color));
@@ -35,7 +35,6 @@
   min-height: 0;
   min-width: 0;
   gap: 8px;
-  font-size: var(--vscode-font-size, 13px);
 }
 .urlPanel {
   flex-shrink: 0;
@@ -72,7 +71,6 @@
   border: 0;
   padding: 4px 0 4px 8px;
   color: var(--vscode-descriptionForeground, var(--font-light-color));
-  font-size: 12px;
   white-space: nowrap;
 }
 .statusDot {

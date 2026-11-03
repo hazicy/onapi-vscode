@@ -5,7 +5,6 @@
   overflow: auto;
   padding: 12px 0;
   color: var(--vscode-foreground, var(--font-content-color));
-  font-size: var(--vscode-font-size, 13px);
 }
 .contentTitle {
   margin-bottom: 8px;

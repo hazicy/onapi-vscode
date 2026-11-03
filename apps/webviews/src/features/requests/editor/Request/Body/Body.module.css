@@ -28,7 +28,7 @@
     gap: 4px;
     align-items: center;
     background: transparent;
-    font-size: var(--vscode-font-size, 13px);
+    font-size: inherit;
     padding: 0 4px;
     padding-left: 6px;
   }

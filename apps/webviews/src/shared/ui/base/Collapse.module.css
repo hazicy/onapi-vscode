@@ -28,7 +28,6 @@
 }
 .chevron {
   flex-shrink: 0;
-  font-size: 14px;
 }
 .trigger[data-panel-open] .chevron {
   transform: rotate(90deg);

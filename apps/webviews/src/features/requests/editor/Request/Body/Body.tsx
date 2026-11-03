@@ -90,7 +90,7 @@ const RequestBody: FC<RequestBodyProps> = (props) => {
                           <AppIcon
                             style={{
                               color: "var(--icon-color)",
-                              fontSize: "16px",
+                              fontSize: "1.125em",
                             }}
                             icon="sparkles"
                           />

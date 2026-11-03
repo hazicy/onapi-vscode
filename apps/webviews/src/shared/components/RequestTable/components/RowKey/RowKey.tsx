@@ -101,7 +101,7 @@ const RowKey: FC<Props> = memo((props) => {
       >
         <Tooltip title={t("supplement.required")} placement="top">
           <AppIcon
-            style={{ fontSize: 14 }}
+            style={{ fontSize: "inherit" }}
             icon="braces"
             className={styles.icon}
           />

@@ -15,7 +15,6 @@
 }
 .emptyDescription {
   color: var(--vscode-descriptionForeground, var(--font-light-color));
-  font-size: var(--vscode-font-size, 13px);
 }
 .tabsNavWrap {
   flex: 1 1 0;
@@ -29,7 +28,107 @@
 }
 .testResultsCount {
   color: var(--vscode-descriptionForeground, var(--font-light-color));
-  font-size: 12px;
   font-weight: 400;
   font-variant-numeric: tabular-nums;
+}
+
+.viewModeButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.viewModeButton:hover {
+  background: var(--vscode-toolbar-hoverBackground);
+}
+.viewModeButton:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 4px;
+  white-space: nowrap;
+}
+.toolButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--vscode-icon-foreground);
+  cursor: pointer;
+}
+.toolButton:hover,
+.toolButton[aria-pressed="true"] {
+  background: var(--vscode-toolbar-hoverBackground);
+}
+.toolButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.toolButton:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder);
+}
+
+.moreMenu {
+  min-width: 232px;
+  border-color: var(--vscode-menu-border, var(--vscode-widget-border, var(--color-border)));
+  background: var(--vscode-menu-background, var(--color-bg-right));
+  color: var(--vscode-menu-foreground, var(--font-content-color));
+  box-shadow: 0 4px 16px var(--vscode-widget-shadow, #0003);
+}
+.moreMenu .moreMenuItem {
+  min-height: 30px;
+  gap: 8px;
+  color: inherit;
+  text-shadow: none;
+}
+.moreMenu .moreMenuItem:hover,
+.moreMenu .moreMenuItem[data-highlighted] {
+  color: var(--vscode-menu-selectionForeground, var(--vscode-foreground));
+  background: var(--vscode-menu-selectionBackground, var(--vscode-list-hoverBackground));
+}
+.moreMenu .moreMenuItem[data-disabled] {
+  opacity: 0.5;
+  cursor: default;
+}
+.moreMenu .moreMenuItem[data-disabled]:hover {
+  color: inherit;
+  background: transparent;
+}
+.moreMenu [role="separator"] {
+  margin: 4px 0;
+  background: var(--vscode-menu-separatorBackground, var(--color-border));
+}
+.menuSection {
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+  font-size: 0.875em;
+}
+.menuLabel {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.menuValue {
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+}
+.moreMenuItem[data-highlighted] .menuValue {
+  color: inherit;
+}
+.unselectedCheck {
+  visibility: hidden;
 }

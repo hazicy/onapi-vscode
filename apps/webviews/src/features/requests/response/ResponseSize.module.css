@@ -2,13 +2,9 @@
   color: var(--font-pale-color);
 }
 .customCodePopover {
-  & .desc {
-    font-size: var(--vscode-font-size, 13px);
-    color: var(--font-pale-color);
+  & .desc {    color: var(--font-pale-color);
   }
-  & .name {
-    font-size: var(--vscode-font-size, 13px);
-    color: var(--font-title-color);
+  & .name {    color: var(--font-title-color);
   }
   & .iconCode {
     display: flex;
@@ -36,7 +32,7 @@
   white-space: nowrap;
   gap: 8px;
   padding: 2px 0;
-  font-size: var(--vscode-font-size, 13px);
+  font-size: inherit;
   line-height: 20px;
   font-variant-numeric: tabular-nums;
   color: var(--vscode-descriptionForeground, var(--font-light-color));

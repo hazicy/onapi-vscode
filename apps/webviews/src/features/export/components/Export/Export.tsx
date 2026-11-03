@@ -53,7 +53,7 @@ const Export = () => {
   };
   return (
     <div className={styles.container}>
-      <Title style={{ fontSize: 16 }} level={3}>
+      <Title style={{ fontSize: "1.125em" }} level={3}>
         {t("settings.export_project.title")}
       </Title>
       <ExportComponent

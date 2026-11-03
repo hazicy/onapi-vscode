@@ -20,9 +20,7 @@
 .selectTrigger {
   box-shadow: none;
 }
-.title {
-  font-size: 14px;
-  font-weight: 400;
+.title {  font-weight: 400;
   color: var(--font-content-color);
   cursor: pointer;
 }
@@ -78,7 +76,6 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-size: 14px;
     font-weight: 400;
     color: var(--font-content-color);
   }
@@ -86,16 +83,13 @@
     text-decoration: line-through;
     color: var(--font-light-color);
   }
-  & .fnList .listContent .listContentItem .desc {
-    font-size: 12px;
-    font-weight: 400;
+  & .fnList .listContent .listContentItem .desc {    font-weight: 400;
     color: var(--font-light-color);
   }
   & .descList .descItem {
     padding: 0 8px;
     min-height: 32px;
     border-radius: 4px;
-    font-size: 14px;
     line-height: 32px;
     box-sizing: border-box;
     gap: 4px;
@@ -118,9 +112,7 @@
   width: 100%;
 }
 .container {
-  & .descAi .descAiTitle {
-    font-size: 12px;
-    font-weight: 400;
+  & .descAi .descAiTitle {    font-weight: 400;
     color: var(--font-light-color);
   }
   & .descAi .descAiTitle.refresh {
@@ -136,9 +128,7 @@
   & .descAi .descAiTitle.refresh .paramsRefresh:hover {
     color: var(--color-primary);
   }
-  & .descAi .descAiKey {
-    font-size: 14px;
-    font-weight: 400;
+  & .descAi .descAiKey {    font-weight: 400;
     color: var(--font-content-color);
     overflow: hidden;
     white-space: nowrap;
@@ -151,7 +141,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 12px;
     font-weight: 400;
     color: var(--font-light-color);
   }
@@ -191,7 +180,7 @@
     text-overflow: ellipsis;
   }
   & .footer .footerBth .icon {
-    font-size: 18px;
+    font-size: 1.25em;
   }
   & .footer .footerBth > button {
     flex: 1;
@@ -224,7 +213,6 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-size: 12px;
     text-align: right;
     color: var(--font-light-color);
   }
@@ -238,7 +226,6 @@
   }
   & .icon {
     padding-left: 4px;
-    font-size: 12px;
     cursor: pointer;
   }
 }

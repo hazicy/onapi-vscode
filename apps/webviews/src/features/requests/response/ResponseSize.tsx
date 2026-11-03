@@ -20,7 +20,6 @@ import {
   convertResponseBytes,
   convertResponseTime,
   download,
-  hexToRGBA,
 } from "@/shared/utils/common";
 
 interface ResponseSizeProps {
@@ -129,17 +128,6 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
               <CustomPopover nativeButton={false} content={responseCodeContent}>
                 <span
                   style={{
-                    padding: "0px 8px",
-                    borderRadius: "var(--border-radius)",
-                    border: "1px solid",
-                    borderColor:
-                      String(responseCode).charAt(0) === "2"
-                        ? hexToRGBA("#26CEA4", 0.15)
-                        : hexToRGBA("#ff583e", 0.15),
-                    background:
-                      String(responseCode).charAt(0) === "2"
-                        ? hexToRGBA("#26CEA4", 0.1)
-                        : hexToRGBA("#ff583e", 0.1),
                     color:
                       String(responseCode).charAt(0) === "2"
                         ? themeToken.colorSuccess
@@ -237,7 +225,7 @@ const ResponseSize: React.FC<ResponseSizeProps> = (props) => {
       {showDownload ? (
         <Tooltip title={t("response.download_tip")}>
           <AppIcon
-            style={{ fontSize: 14 }}
+            style={{ fontSize: "inherit" }}
             className={clsx(styles.curPointer, styles.icon)}
             onClick={handleDownload}
             icon="download"

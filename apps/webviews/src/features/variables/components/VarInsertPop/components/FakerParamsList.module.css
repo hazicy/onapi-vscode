@@ -46,7 +46,6 @@
   }
   & .param .paramItem .paramItemDesc {
     width: 120px;
-    font-size: 14px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -70,7 +69,6 @@
     min-height: 24px;
     border-radius: 4px;
     border: 1px solid transparent;
-    font-size: 12px;
     font-weight: 400;
     color: var(--font-content-color);
     box-sizing: border-box;

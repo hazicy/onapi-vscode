@@ -27,17 +27,23 @@ import { BaseResponse } from "@onapi/domain/requests/types/response";
 import type { SerializedResponse } from "@onapi/contracts";
 import type { ResponseContent } from "./content";
 import { copyStringToClipboard } from "@/shared/utils/clipboard";
+import { responseFormatMode } from "@/shared/utils/editFormat";
 import { parseStreamToRaw } from "@onapi/domain/utils/parse";
 
 import {
   RAW_ENCODE,
   RESPONSE_RESULT_TABS_LIST,
-  RESPONSE_TYPE,
 } from "./constants";
 
 import styles from "./ResponseResult.module.css";
 
 interface Props {
+  encoding?: string;
+  wordWrap?: boolean;
+  hideToolbar?: boolean;
+  viewMode?: string;
+  onViewModeChange?: (value: string) => void;
+  hideModeTabs?: boolean;
   rawHtml?: string;
   mode?: string;
   data?: SerializedResponse;
@@ -74,18 +80,12 @@ const ResponseResult = forwardRef((props: Props, ref) => {
     () => ({ ext: content?.format, mime: content?.mime ?? "" }),
     [content?.format, content?.mime],
   );
-  const [rawEncode, setRawEncode] = useSafeState(defaultRawEncode || "utf8");
-  const [rawType, setRawType] = useSafeState<string>("");
+  const [localRawEncode, setRawEncode] = useSafeState(defaultRawEncode || "utf8");
   const [tabsValue, setTabsValue] = useSafeState<string | number>();
-  const [warp, setWarp] = useSafeState(true);
+  const [localWarp, setWarp] = useSafeState(true);
 
-  useEffect(() => {
-    setRawType(
-      nativeResponse?.header
-        ? responseLanguage(nativeResponse)
-        : content?.format || "json",
-    );
-  }, [nativeResponse?.header, content?.format]);
+  const rawEncode = props.encoding ?? localRawEncode;
+  const warp = props.wordWrap ?? localWarp;
 
   useImperativeHandle(ref, () => {
     return {
@@ -120,20 +120,16 @@ const ResponseResult = forwardRef((props: Props, ref) => {
       );
     }
     if (content?.bytes) {
-      if (rawType === "auto") {
-        return parseStreamToRaw(content?.bytes, contentMime, rawEncode);
-      } else {
-        const mime_type = RESPONSE_TYPE?.find((e) => e.ext === rawType);
-        return parseStreamToRaw(
-          content?.bytes,
-          mime_type || contentMime,
-          rawEncode,
-        );
-      }
+      return parseStreamToRaw(content.bytes, contentMime, rawEncode);
     }
 
     return "";
-  }, [nativeResponse?.header, content?.bytes, contentMime, rawEncode, rawType]);
+  }, [nativeResponse, content?.bytes, contentMime, rawEncode]);
+
+  const rawType = responseFormatMode(
+    parsedRawHtml || rawHtml || "",
+    nativeResponse?.header ? responseLanguage(nativeResponse) : content?.format,
+  );
 
   const beautifyProps = {
     mode: rawType,
@@ -166,6 +162,7 @@ const ResponseResult = forwardRef((props: Props, ref) => {
 
   const handleOptionsChange: SegmentedProps["onChange"] = (value) => {
     setTabsValue(value);
+    props.onViewModeChange?.(String(value));
   };
 
   const handleCopy = () => {
@@ -182,39 +179,14 @@ const ResponseResult = forwardRef((props: Props, ref) => {
 
   useEffect(() => {
     setMode?.(rawType);
-  }, [rawType]);
+  }, [rawType, setMode]);
   return (
-    <div className={styles.container}>
+    <div className={clsx(styles.container, props.hideToolbar && styles.withoutToolbar)}>
       <SegmentedTabs
         options={segmentedOptions}
-        value={tabsValue}
+        value={props.viewMode ?? tabsValue}
         onChange={handleOptionsChange}
         wrapClassName={styles.responseResultTabsWrap}
-        tabBarStartContent={
-          <Select
-            aria-label="Response format"
-            variant="borderless"
-            suffixIcon={<AppIcon icon="chevron-down" />}
-            options={RESPONSE_TYPE.map(({ label, ext }) => ({
-              label,
-              value: ext,
-            }))}
-            value={rawType || "json"}
-            onChange={(newVal: string) => {
-              if (newVal === "auto") {
-                setRawType(
-                  nativeResponse?.header
-                    ? responseLanguage(nativeResponse)
-                    : content?.format || "json",
-                );
-              } else {
-                setRawType(newVal);
-              }
-            }}
-            className={styles.select}
-            triggerClassName={styles.selectTrigger}
-          />
-        }
         tabBarExtraContent={
           <Flex
             className={clsx(styles.tabBarExtraContentWrap, styles.flex)}
@@ -270,8 +242,8 @@ const ResponseResult = forwardRef((props: Props, ref) => {
             {saveSocketMessageDom}
           </Flex>
         }
-        className={styles.segmented}
-        headerClassName={styles.segmentedTabsHeader}
+        className={clsx(styles.segmented, props.hideModeTabs && styles.hiddenModeTabs)}
+        headerClassName={clsx(styles.segmentedTabsHeader, props.hideToolbar && styles.hiddenToolbar)}
         contentClassName={styles.segmentedTabsContent}
         extraClassName={styles.tabBarExtraContentWrap}
       />

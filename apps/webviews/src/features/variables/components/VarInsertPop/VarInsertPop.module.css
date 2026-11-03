@@ -44,7 +44,7 @@
     box-sizing: border-box;
   }
   & .optionsList .iconContent .icon {
-    font-size: 16px;
+    font-size: 1.125em;
   }
   & .optionsList .iconContent.var {
     background: #af711a;
@@ -88,9 +88,7 @@
   min-height: 55px;
   box-sizing: border-box;
   gap: 12px;
-  & .label {
-    font-size: 14px;
-    color: var(--font-title-color);
+  & .label {    color: var(--font-title-color);
   }
   & .desc {
     color: var(--font-light-color);

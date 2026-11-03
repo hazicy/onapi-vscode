@@ -108,7 +108,7 @@ const MessageHeader = (props: Props) => {
         </Checkbox>
         <AutoComplete
           aria-label={t("ws.request.event_name")}
-          style={{ width: 160, minWidth: 0, fontSize: 12, height: 28 }}
+          style={{ width: 160, minWidth: 0, fontSize: "inherit", height: 28 }}
           value={apisData?.msg_data || ""}
           placeholder={t("ws.request.event_name")}
           onSelect={setEventName}

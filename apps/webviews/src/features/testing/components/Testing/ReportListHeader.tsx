@@ -15,7 +15,7 @@ const ReportListHeader = ({
     <div className={styles.container}>
       <Flex align="center" gap={6}>
         <AppIcon
-          style={{ fontSize: 20 }}
+          style={{ fontSize: "1.5em" }}
           icon="arrow-left"
           onClick={() => setShowReportList(false)}
         />

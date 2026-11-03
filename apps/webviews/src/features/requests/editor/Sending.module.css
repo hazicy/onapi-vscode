@@ -42,7 +42,6 @@
     var(--vscode-editor-background, var(--color-bg-right)) 65%,
     transparent
   );
-  font-size: var(--vscode-font-size, 13px);
 }
 
 .barOnly {

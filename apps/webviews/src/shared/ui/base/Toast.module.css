@@ -32,7 +32,6 @@
   );
   box-shadow: 0 2px 8px var(--vscode-widget-shadow, #0003);
   font-family: var(--vscode-font-family, sans-serif);
-  font-size: var(--vscode-font-size, 13px);
   line-height: 1.5;
   pointer-events: auto;
 }
@@ -47,7 +46,6 @@
 }
 .description {
   margin-top: 4px;
-  font-size: 12px;
   line-height: 1.5;
   white-space: pre-wrap;
 }

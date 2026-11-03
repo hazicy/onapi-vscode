@@ -8,7 +8,6 @@
   overflow: auto;
   color: var(--vscode-foreground, #30343b);
   background: var(--vscode-editor-background, #fff);
-  font-size: 13px;
   font-family: var(--vscode-font-family, system-ui, sans-serif);
   --grpc-border: var(--vscode-panel-border, #dedfe3);
   --grpc-muted: var(--vscode-descriptionForeground, #747780);
@@ -87,7 +86,7 @@
   align-items: center;
   border-left: 1px solid var(--grpc-border);
   border-radius: 0;
-  font-size: 11px;
+  font-size: 0.875em;
   color: var(--grpc-muted);
 }
 .workspace .tlsToggle[aria-pressed="true"] {
@@ -113,7 +112,7 @@
 .methodType {
   margin-left: auto;
   color: var(--grpc-muted);
-  font-size: 11px;
+  font-size: 0.875em;
   padding: 4px 7px;
   white-space: nowrap;
   border: 1px solid var(--grpc-border);
@@ -138,7 +137,7 @@
   gap: 12px;
   padding: 8px 16px;
   color: var(--grpc-muted);
-  font-size: 11px;
+  font-size: 0.875em;
 }
 .messageToolbar span {
   overflow: hidden;
@@ -146,7 +145,7 @@
   white-space: nowrap;
 }
 .messageToolbar button {
-  font-size: 11px;
+  font-size: inherit;
 }
 .messageEditor {
   height: 245px;
@@ -155,7 +154,7 @@
 .fieldDocs {
   padding: 9px 16px;
   color: var(--grpc-muted);
-  font-size: 11px;
+  font-size: 0.875em;
   border-top: 1px solid var(--grpc-border);
 }
 .fieldDocs summary {
@@ -186,7 +185,7 @@
 .streamActions span {
   margin-right: auto;
   color: var(--grpc-muted);
-  font-size: 11px;
+  font-size: 0.875em;
 }
 .streamActions button {
   background: var(--vscode-button-background, #126cc5);
@@ -219,14 +218,13 @@
 }
 .definition h3,
 .configuration h3 {
-  font-size: 13px;
+  font-size: inherit;
   font-weight: 600;
   margin: 0 0 8px;
 }
 .definition p,
 .configuration p {
   color: var(--grpc-muted);
-  font-size: 12px;
   margin: 0 0 16px;
   line-height: 1.6;
 }
@@ -250,7 +248,7 @@
 }
 .sourceOptions span {
   color: var(--grpc-muted);
-  font-size: 11px;
+  font-size: 0.875em;
   white-space: normal;
 }
 .hint {
@@ -258,7 +256,6 @@
   color: var(--grpc-muted);
   border: 1px dashed var(--grpc-border);
   border-radius: 5px;
-  font-size: 12px;
   line-height: 1.8;
 }
 .toolbar {
@@ -278,7 +275,7 @@
   border-bottom: 1px solid var(--grpc-border);
 }
 .fileTabs button {
-  font-size: 11px;
+  font-size: 0.875em;
   border-radius: 0;
 }
 .fileTabs button[aria-pressed="true"] {
@@ -295,10 +292,9 @@
   gap: 5px;
   color: var(--vscode-testing-iconPassed, #268866);
   margin-top: 14px;
-  font-size: 12px;
 }
 .loaded span {
-  font-size: 11px;
+  font-size: 0.875em;
   color: var(--grpc-muted);
 }
 .configuration {
@@ -310,7 +306,6 @@
   gap: 8px;
   margin: 16px 0;
   max-width: 650px;
-  font-size: 12px;
 }
 .configuration label small {
   color: var(--grpc-muted);
@@ -319,7 +314,7 @@
   min-height: 90px;
   resize: vertical;
   font-family: var(--vscode-editor-font-family, monospace);
-  font-size: 11px;
+  font-size: 0.875em;
 }
 .configuration .check {
   flex-direction: row;
@@ -329,7 +324,6 @@
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  font-size: 12px;
   margin-bottom: 10px;
 }
 .metadataTable th,
@@ -356,12 +350,11 @@
   align-items: center;
   gap: 14px;
   padding: 12px 16px;
-  font-size: 11px;
+  font-size: 0.875em;
   color: var(--grpc-muted);
 }
 .responseHeader strong {
   color: var(--vscode-foreground, #30343b);
-  font-size: 12px;
   margin-right: auto;
 }
 .status {
@@ -381,14 +374,14 @@
   flex: 1;
   background: transparent;
   padding: 6px 10px;
-  font-size: 11px;
+  font-size: 0.875em;
 }
 .responseTools select {
-  font-size: 11px;
+  font-size: 0.875em;
   padding: 6px;
 }
 .responseTools button {
-  font-size: 11px;
+  font-size: 0.875em;
   color: var(--grpc-muted);
 }
 .responseEmpty {
@@ -400,11 +393,9 @@
   min-height: 130px;
   padding: 20px;
   color: var(--grpc-muted);
-  font-size: 11px;
+  font-size: 0.875em;
 }
-.responseEmpty strong {
-  font-size: 12px;
-  font-weight: 500;
+.responseEmpty strong {  font-weight: 500;
 }
 .timeline {
   padding: 0 16px 16px;
@@ -419,7 +410,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 9px 12px;
-  font-size: 11px;
+  font-size: 0.875em;
   cursor: pointer;
   background: var(--vscode-sideBar-background, #fafafa);
 }
@@ -437,7 +428,7 @@
   margin: 0;
   padding: 12px;
   font-family: var(--vscode-editor-font-family, monospace);
-  font-size: 12px;
+  font-size: inherit;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   line-height: 1.65;
@@ -445,7 +436,6 @@
 .responseMetadata {
   padding: 16px;
   color: var(--grpc-muted);
-  font-size: 12px;
 }
 .responseMetadata table {
   width: 100%;
@@ -488,6 +478,6 @@
 
 .retention {
   color: var(--grpc-muted);
-  font-size: 11px;
+  font-size: 0.875em;
   margin: 0 16px 10px;
 }

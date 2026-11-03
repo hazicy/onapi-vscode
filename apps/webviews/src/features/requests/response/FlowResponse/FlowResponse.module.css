@@ -24,7 +24,6 @@
 .container.compact {
   border: 0;
   border-radius: 0;
-  font-size: var(--vscode-font-size, 13px);
 }
 .compact ul {
   margin: 0;

@@ -1,6 +1,5 @@
 .row {
   --request-parameter-height: 32px;
-  font-size: var(--vscode-font-size, 13px);
   display: flex;
   align-items: center;
   gap: 10px;

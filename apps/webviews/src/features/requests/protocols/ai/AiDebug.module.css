@@ -1,6 +1,6 @@
 .workspace {
   container-type: inline-size;
-  font: var(--vscode-font-size, 13px) var(--vscode-font-family, sans-serif);
+  font: inherit;
   overflow: hidden;
   min-width: 0;
 }
@@ -12,7 +12,7 @@
   flex-shrink: 0;
 }
 .type {
-  font-size: 20px;
+  font-size: 1.5em;
   color: var(--vscode-textLink-foreground);
 }
 .workspace .endpoint {
@@ -122,7 +122,7 @@
 }
 .promptField small {
   color: var(--vscode-descriptionForeground);
-  font-size: 11px;
+  font-size: 0.875em;
 }
 .settings {
   display: flex;
@@ -225,7 +225,6 @@
   align-items: center;
   gap: 12px;
   color: var(--vscode-descriptionForeground);
-  font-size: 12px;
   font-variant-numeric: tabular-nums;
 }
 .success {
@@ -354,7 +353,6 @@
 .responseDetails {
   margin-top: 10px;
   color: var(--vscode-descriptionForeground);
-  font-size: 12px;
 }
 .responseDetails > pre {
   color: var(--vscode-foreground);
@@ -381,11 +379,11 @@
   text-align: center;
 }
 .empty > span {
-  font-size: 24px;
+  font-size: 1.75em;
   color: var(--vscode-descriptionForeground);
 }
 .empty h2 {
-  font-size: 15px;
+  font-size: 1.125em;
   font-weight: 600;
   margin: 12px 0 8px;
 }

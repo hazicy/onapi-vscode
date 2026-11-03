@@ -851,6 +851,8 @@
   },
   "request_panel": {
     "more": "更多操作",
+    "response_settings": "设置",
+    "word_wrap": "自动换行",
     "encoding": "响应编码",
     "send_hint": "发送请求后，在这里查看响应",
     "failed": "请求失败",

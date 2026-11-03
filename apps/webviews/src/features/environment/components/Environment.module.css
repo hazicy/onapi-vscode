@@ -65,15 +65,11 @@
     background-color: transparent;
   }
 }
-.menuTitle {
-  font-size: 12px;
-  font-weight: 400;
+.menuTitle {  font-weight: 400;
   color: var(--font-light-color);
   font-style: normal;
 }
-.menuChildTitle {
-  font-size: 14px;
-  font-weight: 400;
+.menuChildTitle {  font-weight: 400;
   color: var(--font-content-color);
 }
 .envIcon {

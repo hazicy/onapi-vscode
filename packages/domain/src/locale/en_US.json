@@ -851,6 +851,8 @@
   },
   "request_panel": {
     "more": "More actions",
+    "response_settings": "Settings",
+    "word_wrap": "Word wrap",
     "encoding": "Response encoding",
     "send_hint": "Send a request to see the response",
     "failed": "Request failed",
