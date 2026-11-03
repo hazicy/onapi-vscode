@@ -3,7 +3,8 @@ import styles from "../Body.module.css";
 import type { RequestBodyProps } from "../types";
 export default function Binary(props: RequestBodyProps) {
   return (
-    <div className={styles.requestBodyContent}>
+    <label className={styles.binaryContent}>
+      <span className={styles.fileLabel}>File path</span>
       <Input
         value={props.value?.file?.src || ""}
         placeholder="File path"
@@ -15,6 +16,6 @@ export default function Binary(props: RequestBodyProps) {
           })
         }
       />
-    </div>
+    </label>
   );
 }

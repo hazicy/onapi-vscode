@@ -10,7 +10,9 @@ import { REQUEST_BODY_MODE_ENUM } from "@onapi/domain/requests/constants/index";
 
 import { RequestBodyProps } from "./types";
 
-import { Button, AppIcon } from "@/shared/ui";
+import { Button } from "@/shared/ui";
+import { Icon } from "@iconify/react";
+import dice5 from "@iconify-icons/lucide/dice-5";
 
 const RequestBodyBinary = lazy(() => import("./components/Binary"));
 const RequestBodyFormData = lazy(() => import("./components/FormData"));
@@ -21,8 +23,8 @@ const RequestBodyUrlencoded = lazy(() => import("./components/Urlencoded"));
 const RequestBody: FC<RequestBodyProps> = (props) => {
   const { apiData, value } = props;
   const language = value?.options?.raw?.language || "json";
-  const isRowMode = value?.mode === "raw";
-  const calcBodyModeValue = isRowMode
+  const isRawMode = value?.mode === "raw";
+  const calcBodyModeValue = isRawMode
     ? REQUEST_BODY_MODE_ENUM.RAW
     : value?.mode === "formdata"
       ? REQUEST_BODY_MODE_ENUM.FORM_DATA
@@ -46,7 +48,7 @@ const RequestBody: FC<RequestBodyProps> = (props) => {
     return bodyMap[calcBodyModeValue];
   }, [calcBodyModeValue, props, language]);
 
-  const handleGenerateParameterByAi = () => {
+  const handleGenerateMockBody = () => {
     import("@/features/requests/editor/Request/Body/generate-mock-body")
       .then(({ generateMockBody }) => generateMockBody(value?.raw))
       .then((mockData: unknown) => {
@@ -63,50 +65,28 @@ const RequestBody: FC<RequestBodyProps> = (props) => {
   return (
     <div className={clsx(styles.container, "request-body-container")}>
       <Flex vertical className={styles.flex}>
-        {(!props.hideModeSelect ||
-          (apiData?.kind === "api" && isRowMode && language === "json")) && (
-          <Flex
-            className={clsx(styles.requestBodyHeader, styles.flex)}
-            align="center"
-            justify="space-between"
-          >
-            <Flex align="center" className={styles.flex}>
-              {!props.hideModeSelect && <BodyModeSelect {...props} />}
-            </Flex>
-            {apiData?.kind === "api" && (
-              <Flex
-                className={clsx(styles.otherBtn, styles.flex)}
-                align="center"
-              >
-                {language === "json" && (
-                  <Tooltip title="Auto Generate">
-                    <Flex className={styles.flex}>
-                      <Button
-                        onClick={handleGenerateParameterByAi}
-                        type="text"
-                        mode="light"
-                        size="small"
-                        icon={
-                          <AppIcon
-                            style={{
-                              color: "var(--icon-color)",
-                              fontSize: "1.125em",
-                            }}
-                            icon="sparkles"
-                          />
-                        }
-                        className={styles.button}
-                      ></Button>
-                    </Flex>
-                  </Tooltip>
-                )}
-              </Flex>
-            )}
+        {!props.hideModeSelect && (
+          <Flex className={styles.requestBodyHeader} align="center">
+            <BodyModeSelect {...props} />
           </Flex>
         )}
-        <SuspenseContent>
-          <div className={styles.requestBodyContentWrap}>{bodyContent}</div>
-        </SuspenseContent>
+        <div className={styles.requestBodyContentWrap}>
+          <SuspenseContent>{bodyContent}</SuspenseContent>
+          {apiData?.kind === "api" && isRawMode && language === "json" && (
+            <div className={styles.editorActions}>
+              <Tooltip title="生成模拟数据">
+                <Button
+                  aria-label="生成模拟数据"
+                  onClick={handleGenerateMockBody}
+                  type="text"
+                  mode="light"
+                  size="small"
+                  icon={<Icon icon={dice5} width={16} height={16} />}
+                />
+              </Tooltip>
+            </div>
+          )}
+        </div>
       </Flex>
     </div>
   );

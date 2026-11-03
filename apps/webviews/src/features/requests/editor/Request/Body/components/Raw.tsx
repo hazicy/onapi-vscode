@@ -13,7 +13,13 @@ export default function Raw(props: RequestBodyProps & { mode?: string }) {
           raw: value?.raw || "",
         })
       }
-      editorOptions={{ hover: { enabled: true, delay: 500 } }}
+      editorOptions={{
+        hover: { enabled: true, delay: 500 },
+        placeholder: props.mode === "json" ? "输入 JSON 请求体…" : "输入请求体…",
+        borderless: true,
+        lintGutter: false,
+        highlightOnlyWhenFocused: true,
+      }}
     />
   );
 }

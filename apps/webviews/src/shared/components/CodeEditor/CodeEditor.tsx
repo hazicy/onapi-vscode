@@ -25,6 +25,7 @@ import {
   hoverTooltip,
   keymap,
   lineNumbers,
+  placeholder,
 } from "@codemirror/view";
 import {
   bracketMatching,
@@ -54,6 +55,10 @@ import { loadLanguage, normalizeLanguage } from "./languages";
 import { editorTheme, isDarkTheme } from "./theme";
 
 export interface EditorOptions {
+  lintGutter?: boolean;
+  placeholder?: string;
+  borderless?: boolean;
+  highlightOnlyWhenFocused?: boolean;
   wordWrap?: "on" | "off";
   lineNumbers?: "on" | "off";
   hover?: { enabled?: boolean; delay?: number };
@@ -233,7 +238,7 @@ const CodeEditor = forwardRef<CodeEditorRef, Props>((props, ref) => {
         if (name === "json" && !readOnly) {
           extensions.push(
             linter((v) => jsonDiagnostics(v.state.doc.toString())),
-            lintGutter(),
+            ...(options?.lintGutter === false ? [] : [lintGutter()]),
           );
         }
         view.dispatch({
@@ -246,7 +251,7 @@ const CodeEditor = forwardRef<CodeEditorRef, Props>((props, ref) => {
     return () => {
       cancelled = true;
     };
-  }, [language, readOnly, compartments]);
+  }, [language, readOnly, compartments, options?.lintGutter]);
 
   useEffect(() => {
     const view = viewRef.current!;
@@ -268,6 +273,17 @@ const CodeEditor = forwardRef<CodeEditorRef, Props>((props, ref) => {
     }
     if (!readOnly) {
       config.push(highlightActiveLine());
+    }
+    if (options?.placeholder && !readOnly) {
+      config.push(placeholder(options.placeholder));
+    }
+    if (options?.highlightOnlyWhenFocused) {
+      config.push(EditorView.theme({
+        "&:not(.cm-focused) .cm-activeLine": { backgroundColor: "transparent" },
+        "&:not(.cm-focused) .cm-activeLineGutter": {
+          color: "var(--vscode-editorLineNumber-foreground, #888)",
+        },
+      }));
     }
     if (resolveVariable && !readOnly) {
       const matcher = new MatchDecorator({
@@ -341,7 +357,10 @@ const CodeEditor = forwardRef<CodeEditorRef, Props>((props, ref) => {
   }, [language, onMountAutoFormat]);
 
   return (
-    <div style={{ height }} className={styles.container}>
+    <div
+      style={{ height }}
+      className={[styles.container, options?.borderless && styles.borderless].filter(Boolean).join(" ")}
+    >
       <div
         className={[styles.codeEditorHost, className].filter(Boolean).join(" ")}
         ref={hostRef}

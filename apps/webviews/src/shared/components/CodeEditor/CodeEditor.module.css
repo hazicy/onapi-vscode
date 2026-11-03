@@ -3,6 +3,9 @@
   height: 100%;
   overflow: hidden;
 }
+.container.borderless {
+  border-bottom: 0;
+}
 .container {
   position: relative;
   width: 100%;

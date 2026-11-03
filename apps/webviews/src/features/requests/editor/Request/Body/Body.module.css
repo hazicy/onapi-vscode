@@ -3,46 +3,79 @@
   height: 100%;
   min-width: 0;
   min-height: 0;
-  & .otherBtn .button:hover {
-    opacity: 0.6;
-  }
-  & > .flex {
-    height: 100%;
-  }
-  & > .flex .requestBodyHeader {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 32px;
-    flex-shrink: 0;
-  }
-  & > .flex .requestBodyContentWrap {
-    flex: 1;
-    margin-top: 12px;
-    min-width: 0;
-    min-height: 0;
-    height: 0;
-  }
-  & .requestBodyHeader .select .selectTrigger {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-    background: transparent;
-    font-size: inherit;
-    padding: 0 4px;
-    padding-left: 6px;
-  }
+}
+.container > .flex {
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  gap: 8px;
+}
+.requestBodyHeader {
+  min-height: 28px;
+  flex-shrink: 0;
+  gap: 8px;
+}
+.requestBodyContentWrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
 }
 .requestBodyContent {
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding: 20px 0;
+  box-sizing: border-box;
+  padding: 24px 16px;
   width: 100%;
+  min-height: 100%;
+}
+.requestBodyContentWrap [class~="cm-lineNumbers"] [class~="cm-gutterElement"] {
+  min-width: 0;
+  padding-left: 12px;
+  padding-right: 8px;
+}
+.binaryContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 16px;
   border-radius: var(--border-radius);
   border: 1px solid var(--color-border);
-  & .uploadWrapper {
-    text-align: center;
+}
+.fileLabel {
+  color: var(--font-content-color);
+  font-weight: 500;
+}
+
+.editorActions {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  z-index: 2;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  background: var(--vscode-editor-background, var(--background-color));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+.requestBodyContentWrap:hover .editorActions,
+.requestBodyContentWrap:focus-within .editorActions {
+  opacity: 1;
+  pointer-events: auto;
+}
+@media (hover: none) {
+  .editorActions {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .editorActions {
+    transition: none;
   }
 }
