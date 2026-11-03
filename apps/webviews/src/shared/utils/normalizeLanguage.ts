@@ -15,6 +15,8 @@ export function normalizeLanguage(language = "text") {
         py: "python",
         c: "cpp",
         "c++": "cpp",
+        c_cpp: "cpp",
+        golang: "go",
         "c#": "csharp",
         cs: "csharp",
         "objective-c": "objectivec",

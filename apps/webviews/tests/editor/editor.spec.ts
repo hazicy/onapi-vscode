@@ -258,3 +258,33 @@ test("editor surfaces follow live VS Code theme variables", async ({
   );
   expect(await editorPage.value()).toBe("const answer = 42");
 });
+
+test("generated code languages render syntax colors in read-only previews", async ({
+  editorPage,
+}) => {
+  for (const [language, value] of [
+    ["python", 'import requests\nrequests.get("https://example.com")'],
+    ["java", 'public class Example { String url = "https://example.com"; }'],
+    ["golang", 'package main\nvar url = "https://example.com"'],
+    ["c_cpp", "#include <stdio.h>\nint main() { return 0; }"],
+    ["php", '<?php echo "hello";'],
+    ["dart", 'void main() { print("hello"); }'],
+    ["r", 'library(httr)\nGET("https://example.com")'],
+    ["ocaml", 'let url = "https://example.com"'],
+    ["rust", 'fn main() { let url = "https://example.com"; }'],
+    ["typescript", 'const url: string = "https://example.com";'],
+  ]) {
+    await editorPage.configure({
+      language,
+      value,
+      readOnly: true,
+      onMountAutoFormat: false,
+    });
+    await expect.poll(() => editorPage.value()).toBe(value);
+    await expect
+      .poll(() => editorPage.content.locator("span[class]").count(), {
+        message: language,
+      })
+      .toBeGreaterThan(0);
+  }
+});
