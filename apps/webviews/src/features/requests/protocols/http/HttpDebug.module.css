@@ -7,25 +7,8 @@
   min-height: 0;
   container-type: inline-size;
 }
-.container .textBtnHighlight {
-  color: var(--vscode-descriptionForeground, var(--font-light-color));
-  font-size: inherit;
-}
-.container .textBtnHighlight:hover {
-  color: var(--vscode-textLink-foreground, var(--color-primary));
-  background: var(--vscode-toolbar-hoverBackground);
-}
-.actions {
+.actionButton {
   flex-shrink: 0;
-}
-.primaryActions {
-  display: flex;
-  align-items: center;
-}
-.compactActions {
-  display: none;
-}
-.moreButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -37,17 +20,9 @@
   background: transparent;
   cursor: pointer;
 }
-.moreButton:hover {
+.actionButton:hover {
   background: var(--vscode-toolbar-hoverBackground);
 }
-.moreButton:focus-visible {
+.actionButton:focus-visible {
   outline: 1px solid var(--vscode-focusBorder);
-}
-@container (max-width: 760px) {
-  .primaryActions {
-    display: none;
-  }
-  .compactActions {
-    display: block;
-  }
 }

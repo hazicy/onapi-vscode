@@ -8,6 +8,7 @@
   min-height: 36px;
 }
 .root .nav .list {
+  flex: 0 1 auto;
   gap: 4px;
   min-height: 40px;
   padding-block: 4px;

@@ -1,3 +1,4 @@
+import AppIcon from "../AppIcon";
 import tabsStyles from "./Tabs.module.css";
 import React, { useState } from "react";
 import { Tabs as BaseTabs } from "@base-ui/react/tabs";
@@ -155,7 +156,7 @@ export function Tabs({
                   aria-label={overflowLabel}
                   title={overflowLabel}
                 >
-                  »
+                  <AppIcon icon="chevron-down" />
                 </button>
               </Dropdown>
             </div>

@@ -3,8 +3,8 @@ import type {
   HttpEditorRecord,
 } from "@onapi/domain/requests/record";
 import styles from "./HttpDebug.module.css";
-import { FC, lazy, Suspense, useMemo, useState } from "react";
-import { Dropdown, Flex } from "@/shared/ui/base";
+import { FC, lazy, Suspense, useState } from "react";
+import { Dropdown } from "@/shared/ui/base";
 import AppIcon from "@/shared/ui/AppIcon";
 import { produce } from "immer";
 import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
@@ -16,7 +16,6 @@ import Response from "./Response";
 import Header from "./Header";
 import { useTranslation } from "react-i18next";
 
-import { Button } from "@/shared/ui";
 import context from "@/shared/components/RawEditor/visualizationContext";
 const GenerateCodeModal = lazy(
   () => import("@/features/requests/code-generation/GenerateCodeModal"),
@@ -52,47 +51,29 @@ const ApiDebug: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
     setOpenGenerateCode(true);
   };
 
-  const tabBarExtraContent = useMemo(() => {
-    return (
-      <Flex align="center" gap={8} className={styles.actions}>
-        <div className={styles.primaryActions}>
-          <Button
-            onClick={handleToCode}
-            type="text"
-            mode="light"
-            size="small"
-            style={{ padding: "4px 6px" }}
-            className={styles.textBtnHighlight}
-          >
-            {t("system_settings.shortcuts.apis_detail.code")}
-          </Button>
-        </div>
-        <div className={styles.compactActions}>
-          <Dropdown
-            trigger={["click"]}
-            menu={{
-              items: [
-                {
-                  key: "code",
-                  label: t("system_settings.shortcuts.apis_detail.code"),
-                  onClick: handleToCode,
-                },
-              ],
-            }}
-          >
-            <button
-              type="button"
-              className={styles.moreButton}
-              aria-label={t("request_panel.more")}
-              title={t("request_panel.more")}
-            >
-              <AppIcon icon="ellipsis" />
-            </button>
-          </Dropdown>
-        </div>
-      </Flex>
-    );
-  }, [t]);
+  const tabBarExtraContent = (
+    <Dropdown
+      trigger={["click"]}
+      menu={{
+        items: [
+          {
+            key: "code",
+            label: t("system_settings.shortcuts.apis_detail.code"),
+            onClick: handleToCode,
+          },
+        ],
+      }}
+    >
+      <button
+        type="button"
+        className={styles.actionButton}
+        aria-label={t("request_panel.more")}
+        title={t("request_panel.more")}
+      >
+        <AppIcon icon="ellipsis" />
+      </button>
+    </Dropdown>
+  );
 
   return (
     <>
