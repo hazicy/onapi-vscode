@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { Flex, Field, Select } from "@/shared/ui/base";
 
-import { concat, isEqual } from "lodash-es";
+import { isEqual } from "lodash-es";
 
 import {
   AUTH_ENUM,
@@ -15,22 +15,7 @@ import {
 } from "@onapi/domain/requests/constants/auth";
 import type { HttpRequest } from "@onapi/domain";
 
-import {
-  Asap,
-  Awsv4,
-  Basic,
-  Bearer,
-  Digest,
-  Edgegrid,
-  Hawk,
-  Jwt,
-  Kv,
-  Ntlm,
-  OAuth1,
-  OAuth2,
-} from "./components";
-
-import { updateAuthValues } from "./auth-state";
+import { Basic, Bearer, Digest, Jwt, Kv, OAuth1, OAuth2 } from "./components";
 
 type Props = {
   isSystem?: boolean;
@@ -65,29 +50,23 @@ const RequestAuth: FC<Props> = memo(
         [AUTH_ENUM.DIGEST]: <Digest />,
         [AUTH_ENUM.OAUTH1]: <OAuth1 />,
         [AUTH_ENUM.OAUTH2]: <OAuth2 />,
-        [AUTH_ENUM.HAWK]: <Hawk />,
-        [AUTH_ENUM.AWSV4]: <Awsv4 />,
-        [AUTH_ENUM.NTLM]: <Ntlm />,
-        [AUTH_ENUM.EDGEGRID]: <Edgegrid />,
-        [AUTH_ENUM.ASAP]: <Asap />,
         [AUTH_ENUM.NOAUTH]: null,
         [AUTH_ENUM.INHERIT]: null,
       };
 
-      return authMap[value?.type as AUTH_ENUM];
+      return authMap[value?.type as keyof typeof authMap];
     })();
 
     const options = useMemo(() => {
-      if (isSystem) {
-        return AUTH_OPTIONS;
-      }
-      return concat(AUTH_INHERIT_OPTIONS, AUTH_OPTIONS);
+      return isSystem
+        ? AUTH_OPTIONS
+        : [...AUTH_INHERIT_OPTIONS, ...AUTH_OPTIONS];
     }, [isSystem]);
 
     return (
       <AuthContext.Provider value={{ value, onChange, errors, setErrors }}>
         <div className={styles.container}>
-          <Flex justify="center" className={styles.layout}>
+          <Flex className={styles.layout}>
             <div className={styles.form}>
               <Field
                 label={t("common.auth.type")}
@@ -95,6 +74,7 @@ const RequestAuth: FC<Props> = memo(
                 className={styles.formItem}
               >
                 <Select
+                  aria-label={t("common.auth.type")}
                   value={value?.type || "inherit"}
                   options={options}
                   onChange={(type: string) => {

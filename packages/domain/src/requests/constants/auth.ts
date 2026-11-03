@@ -64,26 +64,6 @@ export const AUTH_OPTIONS = [
     label: "OAuth 2.0",
     value: AUTH_ENUM.OAUTH2,
   },
-  {
-    label: "Hawk authentication",
-    value: AUTH_ENUM.HAWK,
-  },
-  {
-    label: "AWS Signature",
-    value: AUTH_ENUM.AWSV4,
-  },
-  {
-    label: "NTLM Authentication [Beta]",
-    value: AUTH_ENUM.NTLM,
-  },
-  {
-    label: "Akamai EdgeGrid",
-    value: AUTH_ENUM.EDGEGRID,
-  },
-  {
-    label: "ASAP(Atlassian)",
-    value: AUTH_ENUM.ASAP,
-  },
 ];
 
 export const DEFAULT_AUTH: Partial<Auth> = {
