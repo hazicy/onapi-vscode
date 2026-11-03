@@ -18,7 +18,6 @@ import { useTranslation } from "react-i18next";
 
 import { Button } from "@/shared/ui";
 import context from "@/shared/components/RawEditor/visualizationContext";
-import { openEnvPage } from "@/features/requests/events/env";
 const GenerateCodeModal = lazy(
   () => import("@/features/requests/code-generation/GenerateCodeModal"),
 );
@@ -53,13 +52,6 @@ const ApiDebug: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
     setOpenGenerateCode(true);
   };
 
-  const handleToGlobalParams = () => {
-    openEnvPage({
-      global_param: "global_param",
-      global_param_tab_key: requestTabActiveKey,
-    });
-  };
-
   const tabBarExtraContent = useMemo(() => {
     return (
       <Flex align="center" gap={8} className={styles.actions}>
@@ -74,17 +66,6 @@ const ApiDebug: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
           >
             {t("system_settings.shortcuts.apis_detail.code")}
           </Button>
-          <Button
-            onClick={handleToGlobalParams}
-            type="text"
-            mode="light"
-            size="small"
-            style={{ padding: "4px 6px" }}
-            className={styles.textBtnHighlight}
-          >
-            {t("global_setting.global_title")}{" "}
-            {requestTabActiveKey === "Path" ? "Para" : requestTabActiveKey}
-          </Button>
         </div>
         <div className={styles.compactActions}>
           <Dropdown
@@ -95,11 +76,6 @@ const ApiDebug: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
                   key: "code",
                   label: t("system_settings.shortcuts.apis_detail.code"),
                   onClick: handleToCode,
-                },
-                {
-                  key: "global",
-                  label: `${t("global_setting.global_title")} ${requestTabActiveKey === "Path" ? "Para" : requestTabActiveKey}`,
-                  onClick: handleToGlobalParams,
                 },
               ],
             }}
@@ -116,7 +92,7 @@ const ApiDebug: FC<HttpEditorProps> = ({ apisData, onApisDataChange }) => {
         </div>
       </Flex>
     );
-  }, [requestTabActiveKey]);
+  }, [t]);
 
   return (
     <>
