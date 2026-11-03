@@ -1,5 +1,6 @@
 import type { Page } from "@playwright/test";
 export class RequestPage {
+  private kind = "api";
   constructor(readonly page: Page) {}
 
   async open(
@@ -7,6 +8,7 @@ export class RequestPage {
     request: unknown,
     systemConfig: Record<string, unknown> = {},
   ) {
+    this.kind = kind;
     const errors: string[] = [];
     this.page.on("pageerror", (error) => {
       errors.push(error.message);
@@ -126,6 +128,19 @@ export class RequestPage {
 
   get codeButton() {
     return this.page.getByRole("button", { name: "Code", exact: true });
+  }
+
+  get requestMoreButton() {
+    return this.page.getByRole("button", { name: "More actions", exact: true }).first();
+  }
+
+  async openCode() {
+    if (this.kind === "graphql") {
+      await this.codeButton.click();
+    } else {
+      await this.requestMoreButton.click();
+      await this.page.getByRole("menuitem", { name: "Code", exact: true }).click();
+    }
   }
 
   get tab() {

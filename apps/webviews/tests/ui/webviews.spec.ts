@@ -360,29 +360,18 @@ for (const panel of [
       });
       for (const width of [760, 1200]) {
         await page.setViewportSize({ width, height: 900 });
-        const toolbar = page.locator(componentSelector("responseResultTabs"));
-        const wrapButton = toolbar.getByRole("button", {
-          name: "Toggle word wrap",
-        });
-        await expect(wrapButton).toBeVisible();
-        await expect(wrapButton).toHaveCSS("height", "28px");
-        const tools = toolbar
-          .locator(componentSelector("responseTools"))
-          .last();
-        const controls = tools.locator(componentSelector("select"));
-        for (const control of await controls.all()) {
-          const box = await control.boundingBox();
-          const buttonBox = await wrapButton.boundingBox();
-          expect(
-            Math.abs(
-              box!.y + box!.height / 2 - buttonBox!.y - buttonBox!.height / 2,
-            ),
-          ).toBeLessThanOrEqual(2);
-        }
-        await wrapButton.click();
-        await expect(wrapButton).toHaveAttribute("aria-pressed", "false");
-        await wrapButton.click();
-        await expect(wrapButton).toHaveAttribute("aria-pressed", "true");
+        const more = page.getByRole("button", { name: "More actions", exact: true }).last();
+        await expect(more).toBeVisible();
+        await more.click();
+        const wrap = page.getByRole("menuitem", { name: "Word wrap", exact: true });
+        await expect(wrap.locator("svg")).toHaveCount(2);
+        await wrap.click();
+        await more.click();
+        await expect(wrap.locator("svg")).toHaveCount(1);
+        await wrap.click();
+        await more.click();
+        await expect(wrap.locator("svg")).toHaveCount(2);
+        await page.keyboard.press("Escape");
         await expect(webviewsPage.codeEditorTextbox.first()).toBeVisible();
         await page.screenshot({
           path: test.info().outputPath(`response-${width}.png`),

@@ -201,7 +201,14 @@ test("theme changes update CSS variables and extracted conditional styles", asyn
   for (const panel of directionPanels) {
     await expect(panel).toHaveCSS("padding-bottom", "12px");
   }
-  await expect(themePage.html).toHaveCSS("--font-size-14", "16px");
+  await expect(themePage.html).toHaveCSS("--font-size-14", "1em");
+  await themePage.html.evaluate((root) => {
+    root.style.setProperty("--vscode-font-size", "18px");
+    root.style.fontSize = "var(--vscode-font-size)";
+  });
+  for (const control of controls) {
+    await expect(control).toHaveCSS("font-size", "18px");
+  }
   for (const control of controls) {
     await expect(control).toHaveCSS("border-radius", "4px");
   }

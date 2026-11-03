@@ -376,7 +376,9 @@ const Response: FC<Props> = memo((props) => {
                       disabled: !isSendDone,
                       onClick: () => {
                         const prepared = responseDownload(sendingData?.result?.response, t("supplement.res_data"));
-                        if (prepared) download(prepared.data, prepared.name, prepared.mime);
+                        if (prepared) {
+                          download(prepared.data, prepared.name, prepared.mime);
+                        }
                       },
                     },
                   ] : []),

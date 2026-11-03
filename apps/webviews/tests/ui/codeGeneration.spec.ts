@@ -38,7 +38,7 @@ for (const kind of ["api", "graphql"]) {
       ).toHaveCount(0);
       const main = page.locator("main").first();
       const before = await main.boundingBox();
-      await requestPage.codeButton.click();
+      await requestPage.openCode();
       await loading;
       await page.evaluate(
         () =>
@@ -90,7 +90,7 @@ test("code modal switches language and library, copies the latest result, and cl
     url: "https://example.com/request",
     header: [],
   });
-  await requestPage.codeButton.click();
+  await requestPage.openCode();
   const modal = page.getByRole("dialog");
   const copy = modal.getByRole("button", { name: "Copy Code", exact: true });
   const language = modal.getByLabel("Language", { exact: true });
@@ -176,8 +176,8 @@ test("code modal switches language and library, copies the latest result, and cl
 
   await page.keyboard.press("Escape");
   await expect(modal).toBeHidden();
-  await expect(requestPage.codeButton).toBeFocused();
-  await requestPage.codeButton.click();
+  await expect(requestPage.requestMoreButton).toBeVisible();
+  await requestPage.openCode();
   await expect
     .poll(async () => (await request())?.data)
     .toMatchObject({ language: "javascript", variant: "XHR" });

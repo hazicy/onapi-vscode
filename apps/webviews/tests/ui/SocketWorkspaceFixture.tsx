@@ -90,6 +90,7 @@ export default function SocketWorkspaceFixture() {
           display: "flex",
           flexDirection: "column",
           fontFamily: "sans-serif",
+          fontSize: "var(--vscode-font-size, 13px)",
         }}
       >
         <Debug apisData={item} onApisDataChange={setItem} />

@@ -186,8 +186,8 @@ for (const moduleDelay of [0, 250]) {
       },
       { type: "done", error: null },
     ]);
-    await expect(requestPage.toggleWordWrapButton).toBeVisible();
-    await requestPage.codeButton.click();
+    await expect(page.getByRole("button", { name: "More actions", exact: true }).last()).toBeVisible();
+    await requestPage.openCode();
     await expect
       .poll(() =>
         page.evaluate(() =>

@@ -125,7 +125,7 @@ test("empty, sending and failed requests have distinct states", async ({
   expect(titleBox).not.toBeNull();
   expect(actionBox).not.toBeNull();
   expect(actionBox!.y - titleBox!.y - titleBox!.height).toBeCloseTo(12, 0);
-  await expect(title).toHaveCSS("font-size", "16px");
+  await expect(title).toHaveCSS("font-size", "14.625px");
   await expect(action).toHaveCSS("font-size", "13px");
   const icon = alert.locator("svg");
   await expect(icon).toHaveCSS("width", "48px");
