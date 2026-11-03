@@ -16,7 +16,7 @@ import Response from "./Response";
 import Header from "./Header";
 import { useTranslation } from "react-i18next";
 
-import context from "@/shared/components/RawEditor/visualizationContext";
+import context from "@/shared/components/RawEditor/requestEditorContext";
 const GenerateCodeModal = lazy(
   () => import("@/features/requests/code-generation/GenerateCodeModal"),
 );

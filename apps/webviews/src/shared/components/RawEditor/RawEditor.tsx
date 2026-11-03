@@ -13,7 +13,7 @@ import { useVariableControls } from "@/shared/contexts/variable-controls";
 import { Button, AppIcon } from "@/shared/ui";
 import { ApisBaseRequestBody } from "@onapi/domain/requests/types/request";
 
-import VisualizationContext from "./visualizationContext";
+import RequestEditorContext from "./requestEditorContext";
 
 import type {
   CodeEditorRef,
@@ -42,7 +42,7 @@ const RawEditor = ({
 
   const codeEditorRef = useRef<CodeEditorRef>(null);
 
-  const { isDebugArea = false } = useContext(VisualizationContext);
+  const { isDebugArea = false } = useContext(RequestEditorContext);
   const [varOpen, setVarOpen] = useSafeState(false);
 
   const valueChange = (str: string) => {

@@ -6,7 +6,7 @@ import { useSafeState } from "ahooks";
 import { concat, forEach, isEqual, keys, reverse } from "lodash-es";
 
 import RequestTabs from "@/features/requests/components/RequestTabs";
-import context from "@/shared/components/RawEditor/visualizationContext";
+import context from "@/shared/components/RawEditor/requestEditorContext";
 import RequestTable from "@/shared/components/RequestTable/RequestTable";
 import useTableColumnSwitchConfig from "@/features/settings/hooks/useTableColumnSwitchConfig";
 

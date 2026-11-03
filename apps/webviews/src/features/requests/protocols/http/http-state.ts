@@ -11,7 +11,6 @@ export interface HttpExecutionResult {
   response: SerializedResponse;
   request?: import("postman-collection").RequestDefinition;
   cookies?: unknown;
-  visualizerHtml?: string | null;
 }
 export interface HttpExecutionState {
   session?: ExecutionSession;
@@ -102,7 +101,6 @@ function reduceHttpData(
               response: event.response,
               request: event.request,
               cookies: event.cookies,
-              visualizerHtml: null,
             }
           : current.result,
         error: event.error,
@@ -119,15 +117,6 @@ function reduceHttpData(
       };
     case "exception":
       return { ...next, error: event.error };
-    case "item":
-      return event.visualizer &&
-        current.result &&
-        current.result.executionId === current.session?.executionId
-        ? {
-            ...next,
-            result: { ...current.result, visualizerHtml: event.visualizer },
-          }
-        : next;
     case "done": {
       const error = event.error || current.error;
       return {

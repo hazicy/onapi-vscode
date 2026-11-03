@@ -106,11 +106,6 @@
   outline: 1px solid var(--vscode-focusBorder);
   outline-offset: -1px;
 }
-.visualizationEmpty {
-  display: grid;
-  place-items: center;
-  height: 100%;
-}
 
 .hiddenModeTabs {
   display: none;

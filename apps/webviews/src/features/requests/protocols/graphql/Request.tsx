@@ -9,7 +9,7 @@ import { useMemoizedFn } from "ahooks";
 
 import GraphQLQuery from "@/features/requests/protocols/graphql/editor/GraphQLQuery";
 
-import context from "@/shared/components/RawEditor/visualizationContext";
+import context from "@/shared/components/RawEditor/requestEditorContext";
 import RequestPanel from "@/features/requests/editor/Request/Request";
 import { GraphQLChangeFuncType } from "@onapi/domain/requests/types/graphql";
 import { DirectionType } from "@onapi/domain/types/common";

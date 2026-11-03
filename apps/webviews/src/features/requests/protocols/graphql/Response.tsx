@@ -29,7 +29,7 @@ const Response = memo((props: HttpEditorProps) => {
     <div className={styles.container}>
       <ResponsePanel
         showDownload
-        resultIncludesTabs={["beautify", "visualization"]}
+        resultIncludesTabs={["beautify"]}
         includesTabs={[
           "realtime",
           "requestHeader",

@@ -3,7 +3,6 @@ import i18next from "@/shared/locale";
 import Beautify from "./content/Beautify";
 import Native from "./content/Native";
 import Preview from "./content/Preview";
-import Visualization from "./content/Visualization";
 
 export const RAW_ENCODE: { [x: string]: string } = {
   "UTF-8": "utf8",
@@ -50,10 +49,5 @@ export const RESPONSE_RESULT_TABS_LIST = [
     label: i18next.t("common.response_component.preview"),
     value: "preview",
     children: Preview,
-  },
-  {
-    label: i18next.t("common.response_component.visualize"),
-    value: "visualization",
-    children: Visualization,
   },
 ];

@@ -171,7 +171,7 @@ test("native requests and collection/folder events execute without task translat
           ),
           event(
             "test",
-            'pm.test("status",()=>pm.response.to.have.status(200));pm.globals.set("saved",42);pm.visualizer.set("<p>{{value}}</p>",{value:42});',
+            'pm.test("status",()=>pm.response.to.have.status(200));pm.globals.set("saved",42);',
           ),
         ],
       }),
@@ -188,11 +188,6 @@ test("native requests and collection/folder events execute without task translat
   assert.equal(
     events.find((event) => event.type === "console").messages[0],
     "native log",
-  );
-  assert.equal(
-    events.find((event) => event.type === "item" && event.visualizer).visualizer
-      .processedTemplate,
-    "<p>42</p>",
   );
   assert.equal(
     events.at(-1).environment.values.find((value) => value.key === "value")

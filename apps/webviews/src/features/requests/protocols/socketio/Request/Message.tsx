@@ -18,7 +18,7 @@ import {
 
 import { RawEditor } from "@/shared/components";
 
-import context from "@/shared/components/RawEditor/visualizationContext";
+import context from "@/shared/components/RawEditor/requestEditorContext";
 import {
   MessageItem,
   SocketIoDetailsData,

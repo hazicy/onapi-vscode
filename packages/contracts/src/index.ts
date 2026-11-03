@@ -47,7 +47,6 @@ export type ExecutionEvent = {
   messages?: unknown[];
   level?: keyof typeof console;
   timestamp?: number;
-  visualizer?: string;
   request?: RequestDefinition;
   response?: SerializedResponse;
   [key: string]: unknown;

@@ -66,7 +66,6 @@ const Realtime = memo(({ resultIncludesTabs, sendingData, viewMode, onViewModeCh
         resultIncludesTabs={resultIncludesTabs}
         rawHtml={responseText(sendingData?.result?.response)}
         data={sendingData?.result?.response}
-        html={sendingData?.result?.visualizerHtml}
       />
     </div>
   );

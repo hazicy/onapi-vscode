@@ -98,8 +98,8 @@ export async function run(collection, options = {}, emit = () => {}) {
             scopes(results);
             emit({ type: "test", error, cursor, results, item });
           },
-          item(error, cursor, item, visualizer) {
-            emit({ type: "item", error, cursor, item, visualizer });
+          item(error, cursor, item) {
+            emit({ type: "item", error, cursor, item });
           },
           done(error, cursor) {
             const result = {

@@ -166,9 +166,6 @@
       "pretty": "美化",
       "raw": "原生",
       "preview": "预览",
-      "visualize": "可视化",
-      "visualize_tip": "欢迎使用可视化功能，请先阅读使用说明",
-      "visualize_doc": "什么是可视化",
       "single_pane": "上下分屏",
       "two_pane": "左右分屏"
     },

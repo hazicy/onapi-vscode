@@ -49,7 +49,6 @@ interface Props {
   data?: SerializedResponse;
   content?: ResponseContent;
   defaultRawEncode?: string;
-  html?: string | null;
   resultIncludesTabs?: string[];
   onChange?: (value: BaseResponse) => void;
   responseData?: BaseResponse;
@@ -62,7 +61,7 @@ interface Props {
 const ResponseResult = forwardRef((props: Props, ref) => {
   const { t } = useTranslation();
   const {
-    resultIncludesTabs = ["beautify", "native", "preview", "visualization"],
+    resultIncludesTabs = ["beautify", "native", "preview"],
     defaultRawEncode,
     data: sourceData,
     content,

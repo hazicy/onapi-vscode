@@ -40,7 +40,7 @@ test("a new execution preserves the display result and resets runtime data immut
   assert.deepEqual(previous, snapshot);
 });
 
-test("native events accumulate logs and assertions and replace response and visualizer", () => {
+test("native events accumulate logs and assertions and replace response", () => {
   const events = [
     { type: "start" },
     { type: "responseData", data: "chunk" },
@@ -53,7 +53,7 @@ test("native events accumulate logs and assertions and replace response and visu
     { type: "console", messages: ["hello"] },
     { type: "assertion", assertions: [{ assertion: "status" }] },
     { type: "assertion", assertions: { invalid: true } },
-    { type: "item", visualizer: "<p>result</p>" },
+    { type: "item" },
     { type: "done" },
   ];
   let state = begin(undefined);
@@ -66,7 +66,6 @@ test("native events accumulate logs and assertions and replace response and visu
   assert.deepEqual(plain(state.events), events);
   assert.deepEqual(plain(state.consoleList), [events[3]]);
   assert.deepEqual(plain(state.assertions), events[4].assertions);
-  assert.equal(state.result.visualizerHtml, "<p>result</p>");
   assert.equal(state.result.cookies[0].name, "one");
   assert.equal(hasCompletedResponse(state), true);
 });
