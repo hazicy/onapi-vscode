@@ -25,8 +25,6 @@ import { importDelay } from "@/shared/utils/common";
 
 import useSocketIoConnection from "./useSocketIoConnection";
 
-import ToolBar from "../http/ToolBar";
-
 import { produce } from "immer";
 
 const Request = lazy(() => importDelay(import("./Request/Request")));
@@ -91,12 +89,6 @@ const SocketIoDebug: FC<SocketIoComponentType> = ({
 
   return (
     <>
-      <ToolBar
-        apisData={apisData}
-        onApisDataChange={(val) => {
-          onApisDataChange(val);
-        }}
-      />
       <div className={styles.container}>
         <div className={styles.urlPanel}>
           <RequestToolbar className={styles.connectionRow}>

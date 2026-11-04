@@ -13,7 +13,6 @@ import { SuspenseContent } from "@/shared/components";
 import ResizablePanels from "@/shared/components/ResizablePanels/ResizablePanels";
 import UrlGroup from "@/features/requests/editor/UrlGroup";
 import { APIS_TARGET_TYPE_ENUM } from "@onapi/domain/requests/constants/index";
-import ToolBar from "../http/ToolBar";
 import useProjectConfig from "@/features/project/store/useProjectConfig";
 import useSocketConnectionsStore from "@/features/requests/store/useSocketConnectionsStore";
 import {
@@ -90,12 +89,6 @@ const WsDebug: FC<WebSocketComponentType> = ({
 
   return (
     <>
-      <ToolBar
-        apisData={apisData}
-        onApisDataChange={(val) => {
-          onApisDataChange(val);
-        }}
-      />
       <div className={styles.container}>
         <div className={styles.urlPanel}>
           <RequestToolbar className={styles.connectionRow}>
