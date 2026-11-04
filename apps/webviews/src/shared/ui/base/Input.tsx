@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useTextareaAutosize } from "./useTextareaAutosize";
 import inputStyles from "./Input.module.css";
 import { forwardRef } from "react";
@@ -76,6 +77,8 @@ const InputControl = forwardRef<InputRef, InputProps>(
     },
     ref,
   ) => {
+    const { t } = useTranslation();
+
     const input = useRef<HTMLInputElement>(null);
     useImperativeHandle(ref, () => ({
       input: input.current,
@@ -126,7 +129,7 @@ const InputControl = forwardRef<InputRef, InputProps>(
         {allowClear && props.value && (
           <button
             type="button"
-            aria-label="Clear"
+            aria-label={t("ui.clear")}
             onClick={() => {
               const setter = Object.getOwnPropertyDescriptor(
                 HTMLInputElement.prototype,

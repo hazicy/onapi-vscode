@@ -29,12 +29,12 @@ const RealRequest: React.FC<Props> = ({ sendingData }) => {
   const segmentedOptions = [
     {
       value: "header",
-      label: "header",
+      label: t("request_fields.headers"),
       children: <CommonTable value={sendingData?.request?.headers || []} />,
     },
     {
       value: "query",
-      label: "query",
+      label: t("request_fields.query"),
       children: <CommonTable value={sendingData?.request?.query || []} />,
     },
   ];

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import styles from "./Cookie.module.css";
 import { FC, memo } from "react";
 
@@ -15,6 +16,8 @@ interface Props {
 
 const Cookie: FC<Props> = memo(
   ({ value }) => {
+    const { t } = useTranslation();
+
     const dataList = () => {
       const list: any[] = [];
       if (isArray(value)) {
@@ -47,14 +50,14 @@ const Cookie: FC<Props> = memo(
     const columns = [
       {
         width: "15%",
-        title: "name",
+        title: t("ui.name"),
         dataIndex: "key",
         render: (_: any, rowData: any) =>
           renderItem(rowData.key || rowData.name),
       },
       {
         width: "15%",
-        title: "value",
+        title: t("ui.value"),
         dataIndex: "value",
         render: (text: string) => renderItem(text),
       },
@@ -66,20 +69,20 @@ const Cookie: FC<Props> = memo(
       },
       {
         width: "15%",
-        title: "domain",
+        title: t("ui.cookie_domain"),
         dataIndex: "domain",
         render: (text: string) => renderItem(text),
       },
       {
         width: "15%",
-        title: "expires",
+        title: t("ui.cookie_expires"),
         dataIndex: "expires",
         render: (text: string) =>
           renderItem(dayjs(text).format("YYYY-MM-DD HH:mm:ss")),
       },
       {
         width: "15%",
-        title: "path",
+        title: t("ui.cookie_path"),
         dataIndex: "path",
         render: (text: string) => renderItem(text),
       },

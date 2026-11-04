@@ -30,7 +30,7 @@ const PrivateCom = (props: any) => {
         accept=".pem,.crt,.cer"
       >
         <Button size="small" type="primary">
-          Select File
+          {t("ui.select_file")}
         </Button>
       </Upload>
     </Flex>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type {
   HttpEditorProps,
   HttpEditorRecord,
@@ -21,6 +22,8 @@ const Request = memo(
       tabBarExtraContent?: ReactNode;
     },
   ) => {
+    const { t } = useTranslation();
+
     const { direction, apisData, onApisDataChange, tabBarExtraContent } = props;
     const { Provider } = context;
 
@@ -44,7 +47,7 @@ const Request = memo(
     const extra = [
       {
         key: "cusQuery",
-        label: "Query",
+        label: t("ui.query"),
         children: (
           <GraphQLQuery
             id={apisData?.id}

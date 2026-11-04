@@ -40,7 +40,7 @@ const Jwt = () => {
           arrowClassName={styles.selectArrow}
         />
       </AuthField>
-      <AuthField label="Algorithm" name={[AUTH_ENUM.JWT, "algorithm"]}>
+      <AuthField label={t("ui.algorithm")} name={[AUTH_ENUM.JWT, "algorithm"]}>
         <Select
           options={options}
           className={styles.select}
@@ -48,7 +48,7 @@ const Jwt = () => {
           arrowClassName={styles.selectArrow}
         />
       </AuthField>
-      <AuthField label="Secret" name={[AUTH_ENUM.JWT, "secret"]}>
+      <AuthField label={t("ui.secret")} name={[AUTH_ENUM.JWT, "secret"]}>
         <Input.TextArea autoSize />
       </AuthField>
       <AuthField
@@ -56,9 +56,11 @@ const Jwt = () => {
         noStyle
         name={[AUTH_ENUM.JWT, "isSecretBase64Encoded"]}
       >
-        <Checkbox className="auth-checked">Secret Base64 encoded</Checkbox>
+        <Checkbox className="auth-checked">
+          {t("ui.secret_base64_encoded")}
+        </Checkbox>
       </AuthField>
-      <AuthField label="Payload" name={[AUTH_ENUM.JWT, "payload"]}>
+      <AuthField label={t("ui.payload")} name={[AUTH_ENUM.JWT, "payload"]}>
         <CodeEditor />
       </AuthField>
       <AuthField noStyle>
@@ -74,21 +76,21 @@ const Jwt = () => {
                   <span className="auth-tips">{t("common.auth.more_tip")}</span>
                   {location === AUTH_INSERT_VALUE.HEADER ? (
                     <AuthField
-                      label="Request header prefix"
+                      label={t("ui.request_header_prefix")}
                       name={[AUTH_ENUM.JWT, "headerPrefix"]}
                     >
                       <Input.TextArea autoSize />
                     </AuthField>
                   ) : (
                     <AuthField
-                      label="Query param name"
+                      label={t("ui.query_param_name")}
                       name={[AUTH_ENUM.JWT, "queryParamKey"]}
                     >
                       <Input.TextArea autoSize />
                     </AuthField>
                   )}
                   <AuthField
-                    label="JWT headers"
+                    label={t("ui.jwt_headers")}
                     name={[AUTH_ENUM.JWT, "header"]}
                   >
                     <CodeEditor />

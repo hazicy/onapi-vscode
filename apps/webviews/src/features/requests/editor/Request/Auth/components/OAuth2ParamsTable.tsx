@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useMemo, useRef } from "react";
 import type { DragEndEvent } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
@@ -36,6 +37,8 @@ const OAuth2ParamsTable = ({
   onChange,
   hasSendIn = false,
 }: TableProps) => {
+  const { t } = useTranslation();
+
   const lastRowDataRef = useRef<DataSourceItem | null>(null);
   const handleItemChange = (rowData: any, index: number, newVal: any) => {
     const newList = [...(value || [])];
@@ -69,7 +72,7 @@ const OAuth2ParamsTable = ({
       },
     },
     {
-      title: "Key",
+      title: t("ui.key"),
       width: 150,
       dataIndex: "key",
       render: (text: string, rowData: DataSourceItem, rowIndex: number) => (
@@ -83,7 +86,7 @@ const OAuth2ParamsTable = ({
       ),
     },
     {
-      title: "Value",
+      title: t("ui.value"),
       dataIndex: "value",
       render: (text: string, rowData: DataSourceItem, rowIndex: number) => (
         <VarInput
@@ -101,7 +104,7 @@ const OAuth2ParamsTable = ({
 
   const sendColumns = [
     {
-      title: "Send In",
+      title: t("ui.send_in"),
       width: 150,
       dataIndex: "send_as",
       render: (text: string, rowData: DataSourceItem, rowIndex: number) => (

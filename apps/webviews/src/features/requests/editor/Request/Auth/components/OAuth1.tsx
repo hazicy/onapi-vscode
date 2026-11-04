@@ -22,12 +22,14 @@ const options = map(OAUTH1_METHODS_OPTIONS, (item) => ({
 }));
 
 const Encoding = (props: any) => {
+  const { t } = useTranslation();
+
   return (
     <Checkbox
       checked={!props?.checked}
       onChange={(e) => props?.onChange(!e?.target?.checked)}
     >
-      Encode the parameters in the Authorization header
+      {t("ui.auth_encode_parameters")}
     </Checkbox>
   );
 };
@@ -55,7 +57,7 @@ const OAuth1 = () => {
         />
       </AuthField>
       <AuthField
-        label="Signature Method"
+        label={t("ui.signature_method")}
         name={[AUTH_ENUM.OAUTH1, "signatureMethod"]}
       >
         <Select
@@ -66,19 +68,22 @@ const OAuth1 = () => {
           arrowClassName={styles.selectArrow}
         />
       </AuthField>
-      <AuthField label="Consumer Key" name={[AUTH_ENUM.OAUTH1, "consumerKey"]}>
+      <AuthField
+        label={t("ui.consumer_key")}
+        name={[AUTH_ENUM.OAUTH1, "consumerKey"]}
+      >
         <Input.TextArea autoSize />
       </AuthField>
       <>
         <AuthField
-          label="Consumer Secret"
+          label={t("ui.consumer_secret")}
           name={[AUTH_ENUM.OAUTH1, "consumerSecret"]}
           hidden={isRSA}
         >
           <Input.TextArea autoSize />
         </AuthField>
         <AuthField
-          label="Token Secret"
+          label={t("ui.token_secret")}
           name={[AUTH_ENUM.OAUTH1, "tokenSecret"]}
           hidden={isRSA}
         >
@@ -86,14 +91,14 @@ const OAuth1 = () => {
         </AuthField>
         {/* NOTE RSA has two display types */}
         <AuthField
-          label="Access Token"
+          label={t("ui.access_token")}
           name={[AUTH_ENUM.OAUTH1, "token"]}
           hidden={isRSA}
         >
           <Input.TextArea autoSize />
         </AuthField>
         <AuthField
-          label="Private Key"
+          label={t("ui.private_key")}
           name={[AUTH_ENUM.OAUTH1, "privateKey"]}
           hidden={!isRSA}
         >
@@ -113,19 +118,19 @@ const OAuth1 = () => {
                 <>
                   <span className="auth-tips">{t("common.auth.more_tip")}</span>
                   <AuthField
-                    label="Callback Url"
+                    label={t("ui.callback_url")}
                     name={[AUTH_ENUM.OAUTH1, "callback"]}
                   >
                     <Input.TextArea autoSize />
                   </AuthField>
                   <AuthField
-                    label="Verifier"
+                    label={t("ui.verifier")}
                     name={[AUTH_ENUM.OAUTH1, "verifier"]}
                   >
                     <Input.TextArea autoSize />
                   </AuthField>
                   <AuthField
-                    label="Timestamp"
+                    label={t("ui.timestamp")}
                     name={[AUTH_ENUM.OAUTH1, "timestamp"]}
                   >
                     <Input.TextArea autoSize />
@@ -134,7 +139,7 @@ const OAuth1 = () => {
                     <Input.TextArea autoSize />
                   </AuthField>
                   <AuthField
-                    label="Version"
+                    label={t("ui.version")}
                     name={[AUTH_ENUM.OAUTH1, "version"]}
                   >
                     <Input.TextArea autoSize />
@@ -148,14 +153,14 @@ const OAuth1 = () => {
                       name={[AUTH_ENUM.OAUTH1, "includeBodyHash"]}
                       valuePropName="checked"
                     >
-                      <Checkbox>Include body hash</Checkbox>
+                      <Checkbox>{t("ui.include_body_hash")}</Checkbox>
                     </AuthField>
                     <AuthField
                       noStyle
                       name={[AUTH_ENUM.OAUTH1, "addEmptyParamsToSign"]}
                       valuePropName="checked"
                     >
-                      <Checkbox>Add empty parameters to signature</Checkbox>
+                      <Checkbox>{t("ui.auth_sign_empty_parameters")}</Checkbox>
                     </AuthField>
                     {addParamsToHeader && (
                       <AuthField

@@ -224,7 +224,7 @@ const UrlGroup = (props: UrlGroupProps) => {
             popupSideOffset={12}
             popupArrowStyle={{ left: 32 }}
             popupClassName={styles.methodPopup}
-            placeholder="METHOD"
+            placeholder={t("ui.method")}
             dropdownStyle={{ width: "max-content", minWidth: 0 }}
             showSearch={false}
             onChange={(value) => handleChange("method", value)}
@@ -318,7 +318,7 @@ const UrlGroup = (props: UrlGroupProps) => {
                               onClick={addServer}
                               className={styles.button}
                             >
-                              Add Server
+                              {t("ui.add_server")}
                             </Button>
                           </Space>
                         </>

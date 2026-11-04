@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type {
   HttpEditorEvent,
   HttpEditorScript,
@@ -19,6 +20,8 @@ export default function RequestScripts({
   events: HttpEditorEvent[];
   onChange: (events: HttpEditorEvent[]) => void;
 }) {
+  const { t } = useTranslation();
+
   const selected = events.filter((event) => event.listen === listen);
   const update = (index: number, event: HttpEditorEvent) => {
     const next = [...events];
@@ -43,10 +46,10 @@ export default function RequestScripts({
             key,
             label:
               scriptDefinition(event).name ||
-              (listen === "test" ? "Tests" : "Pre-request script"),
+              (listen === "test" ? t("ui.tests") : t("ui.pre_request_script")),
             extra: (
               <Popconfirm
-                title="Delete script?"
+                title={t("ui.delete_script_confirm")}
                 onConfirm={() =>
                   onChange(events.filter((item) => item !== event))
                 }
@@ -54,7 +57,7 @@ export default function RequestScripts({
                 <button
                   type="button"
                   className={styles.deleteButton}
-                  aria-label="Delete script"
+                  aria-label={t("ui.delete_script")}
                 >
                   <AppIcon icon="trash-2" />
                 </button>
@@ -84,7 +87,7 @@ export default function RequestScripts({
         }}
         className={styles.addButton}
       >
-        Add script
+        {t("ui.add_script")}
       </Button>
     </div>
   );

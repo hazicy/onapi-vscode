@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import styles from "./ShareList.module.css";
 
 import { AppIcon } from "@/shared/ui";
@@ -11,6 +12,8 @@ import useRequestWorkspaceStore from "@/features/requests/store/useRequestWorksp
 import SharePanel from "./components/SharePanel";
 
 const SharePage = () => {
+  const { t } = useTranslation();
+
   const [searchValue, setSearchValue] = useSafeState("");
 
   const shareData = useShare((state) => state.shareData);
@@ -36,7 +39,7 @@ const SharePage = () => {
             color: "var(--font-title-color)",
           }}
         >
-          Share List
+          {t("ui.share_list")}
         </Typography.Text>
         <Input
           prefix={<AppIcon icon="search" />}

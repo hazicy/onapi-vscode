@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import treeSelectStyles from "./TreeSelect.module.css";
 import { useId, useMemo, useState } from "react";
 import { forwardRef } from "react";
@@ -11,6 +12,8 @@ import type { DataNode, TreeSelectProps } from "./types";
 const EMPTY: never[] = [];
 export const TreeSelect = forwardRef<HTMLButtonElement, TreeSelectProps>(
   function TreeSelect(allProps, ref) {
+    const { t } = useTranslation();
+
     const {
       treeData = EMPTY,
       fieldNames,
@@ -43,7 +46,7 @@ export const TreeSelect = forwardRef<HTMLButtonElement, TreeSelectProps>(
       allowClear,
       treeNodeFilterProp = "title",
       treeNodeLabelProp,
-      notFoundContent = "No data",
+      notFoundContent = t("ui.no_data"),
       ...props
     } = allProps;
     const [internalValue, setValue] = useState(defaultValue);
@@ -168,7 +171,7 @@ export const TreeSelect = forwardRef<HTMLButtonElement, TreeSelectProps>(
             !disabled && (
               <button
                 type="button"
-                aria-label="Clear selection"
+                aria-label={t("ui.clear_selection")}
                 className={treeSelectStyles.clearButton}
                 onClick={() => {
                   setValue(undefined);
@@ -198,7 +201,7 @@ export const TreeSelect = forwardRef<HTMLButtonElement, TreeSelectProps>(
             >
               {showSearch && (
                 <Input
-                  aria-label="Search tree"
+                  aria-label={t("ui.search_tree")}
                   placeholder={placeholder}
                   value={query}
                   onChange={(event) => {

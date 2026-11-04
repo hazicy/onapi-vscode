@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import buttonStyles from "./Button.module.css";
 import { forwardRef } from "react";
 import { Button as BaseButton } from "@base-ui/react/button";
@@ -24,37 +25,42 @@ export const Button = forwardRef<HTMLElement, ButtonProps>(
       ...props
     },
     ref,
-  ) => (
-    <BaseButton
-      {...props}
-      ref={ref}
-      type={htmlType}
-      disabled={props.disabled || !!loading}
-      className={clsx(
-        buttonStyles.button,
-        type !== "default" && buttonStyles[`button-${type}`],
-        size === "small"
-          ? buttonStyles.small
-          : size === "large"
-            ? buttonStyles.large
-            : undefined,
-        className,
-        rootClassName,
-        {
-          [buttonStyles.danger]: danger,
-          [buttonStyles.block]: block,
-          [buttonStyles.ghost]: ghost,
-        },
-      )}
-    >
-      {loading ? (
-        <span className={buttonStyles.spinner} aria-label="Loading" />
-      ) : (
-        icon && (
-          <span className={clsx(buttonStyles.icon, iconClassName)}>{icon}</span>
-        )
-      )}
-      {children}
-    </BaseButton>
-  ),
+  ) => {
+    const { t } = useTranslation();
+    return (
+      <BaseButton
+        {...props}
+        ref={ref}
+        type={htmlType}
+        disabled={props.disabled || !!loading}
+        className={clsx(
+          buttonStyles.button,
+          type !== "default" && buttonStyles[`button-${type}`],
+          size === "small"
+            ? buttonStyles.small
+            : size === "large"
+              ? buttonStyles.large
+              : undefined,
+          className,
+          rootClassName,
+          {
+            [buttonStyles.danger]: danger,
+            [buttonStyles.block]: block,
+            [buttonStyles.ghost]: ghost,
+          },
+        )}
+      >
+        {loading ? (
+          <span className={buttonStyles.spinner} aria-label={t("ui.loading")} />
+        ) : (
+          icon && (
+            <span className={clsx(buttonStyles.icon, iconClassName)}>
+              {icon}
+            </span>
+          )
+        )}
+        {children}
+      </BaseButton>
+    );
+  },
 );

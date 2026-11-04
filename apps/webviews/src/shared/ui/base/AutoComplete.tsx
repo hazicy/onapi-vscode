@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useRef, useState } from "react";
 import clsx from "clsx";
 import type { AutoCompleteProps } from "./types";
@@ -26,6 +27,8 @@ export function AutoComplete({
   filterOption,
   ...props
 }: AutoCompleteProps) {
+  const { t } = useTranslation();
+
   const [input, setInput] = useState(defaultValue ?? "");
   const [popupOpen, setPopupOpen] = useState(false);
   const arrowRef = useRef<HTMLButtonElement>(null);
@@ -109,11 +112,13 @@ export function AutoComplete({
               : undefined
           }
         />
-        {allowClear && <Combobox.Clear aria-label="Clear">×</Combobox.Clear>}
+        {allowClear && (
+          <Combobox.Clear aria-label={t("ui.clear")}>×</Combobox.Clear>
+        )}
         {showArrow && (
           <Combobox.Trigger
             ref={arrowRef}
-            aria-label="Show options"
+            aria-label={t("ui.show_options")}
             className={clsx(autoCompleteStyles.arrow, arrowClassName)}
           >
             <Icon icon={chevronDown} width={14} />

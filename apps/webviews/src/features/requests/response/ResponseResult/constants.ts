@@ -36,17 +36,23 @@ export const RAW_ENCODE: { [x: string]: string } = {
 
 export const RESPONSE_RESULT_TABS_LIST = [
   {
-    label: i18next.t("common.response_component.pretty"),
+    get label() {
+      return i18next.t("common.response_component.pretty");
+    },
     value: "beautify",
     children: Beautify,
   },
   {
-    label: i18next.t("common.response_component.raw"),
+    get label() {
+      return i18next.t("common.response_component.raw");
+    },
     value: "native",
     children: Native,
   },
   {
-    label: i18next.t("common.response_component.preview"),
+    get label() {
+      return i18next.t("common.response_component.preview");
+    },
     value: "preview",
     children: Preview,
   },

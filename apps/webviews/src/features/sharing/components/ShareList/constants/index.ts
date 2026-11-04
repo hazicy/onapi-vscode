@@ -4,7 +4,9 @@ import { Tab } from "../types";
 
 export const SHARE_TAB_LIST: Array<Tab> = [
   {
-    label: i18next.t("docs.document.all"),
+    get label() {
+      return i18next.t("docs.document.all");
+    },
     key: "all",
   },
 ];

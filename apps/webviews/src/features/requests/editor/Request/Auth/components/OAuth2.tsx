@@ -28,7 +28,7 @@ const OAuth2 = () => {
     useOAuth2Token(oauth2);
   const segmentedOptions = useMemo(() => {
     const authRequest = {
-      label: "Auth Request",
+      label: t("ui.auth_request"),
       key: "authRequestParams",
       value: "authRequestParams",
       children: (
@@ -45,7 +45,7 @@ const OAuth2 = () => {
       ),
     };
     const tokenRequest = {
-      label: "Token Request",
+      label: t("ui.token_request"),
       key: "tokenRequestParams",
       value: "tokenRequestParams",
       children: (
@@ -62,7 +62,7 @@ const OAuth2 = () => {
       ),
     };
     const refreshRequest = {
-      label: "Refresh Request",
+      label: t("ui.refresh_request"),
       key: "refreshRequestParams",
       value: "refreshRequestParams",
       children: (
@@ -236,14 +236,14 @@ const OAuth2 = () => {
       </AuthField>
       <AuthField
         hidden={!isEqual(grantType, "password_credentials")}
-        label={"Username"}
+        label={t("ui.username")}
         name={[AUTH_ENUM.OAUTH2, "username"]}
       >
         <VarInput hasBorder />
       </AuthField>
       <AuthField
         hidden={!isEqual(grantType, "password_credentials")}
-        label={"Password"}
+        label={t("ui.password")}
         name={[AUTH_ENUM.OAUTH2, "password"]}
       >
         <VarInput hasBorder />

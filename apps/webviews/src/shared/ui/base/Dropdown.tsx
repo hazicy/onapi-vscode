@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 
 import dropdownStyles from "./Dropdown.module.css";
@@ -191,26 +192,29 @@ Dropdown.Button = ({
   Pick<
     import("./types").ButtonProps,
     "type" | "size" | "loading" | "icon"
-  >) => (
-  <div className={clsx(dropdownStyles.splitButton, className)} style={style}>
-    <Button
-      type={type}
-      size={size}
-      loading={loading}
-      disabled={disabled}
-      onClick={onClick}
-    >
-      {children}
-    </Button>
-    <Dropdown {...props} disabled={disabled} trigger={["click"]}>
+  >) => {
+  const { t } = useTranslation();
+  return (
+    <div className={clsx(dropdownStyles.splitButton, className)} style={style}>
       <Button
         type={type}
         size={size}
+        loading={loading}
         disabled={disabled}
-        aria-label="More actions"
+        onClick={onClick}
       >
-        {icon ?? "⌄"}
+        {children}
       </Button>
-    </Dropdown>
-  </div>
-);
+      <Dropdown {...props} disabled={disabled} trigger={["click"]}>
+        <Button
+          type={type}
+          size={size}
+          disabled={disabled}
+          aria-label={t("ui.more_actions")}
+        >
+          {icon ?? "⌄"}
+        </Button>
+      </Dropdown>
+    </div>
+  );
+};

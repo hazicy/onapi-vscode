@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import styles from "./FlowResponse.module.css";
 import React from "react";
 
@@ -20,6 +21,8 @@ interface Props {
 }
 
 const RowItem = (props: Props) => {
+  const { t } = useTranslation();
+
   const { data, renderTitle, customTipsContent } = props || {};
 
   const calcTipsContent = (data: any) => {
@@ -35,9 +38,20 @@ const RowItem = (props: Props) => {
 
     return (
       <>
-        <p>size: {sizeFormat(config?.size)}</p>
-        <p>time: {config?.time}</p>
-        {config?.mode && <p>Mime Type: {config?.mode}</p>}
+        <p>
+          {t("ui.size")}
+          {sizeFormat(config?.size)}
+        </p>
+        <p>
+          {t("ui.time")}
+          {config?.time}
+        </p>
+        {config?.mode && (
+          <p>
+            {t("ui.mime_type")}
+            {config?.mode}
+          </p>
+        )}
       </>
     );
   };

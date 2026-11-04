@@ -70,7 +70,7 @@ const Request: FC<RequestProps> = ({
   const requestItems = [
     {
       key: "Headers",
-      label: "Headers",
+      label: t("request_fields.headers"),
       children: parameterTable(
         request.header,
         (rows) =>
@@ -83,7 +83,7 @@ const Request: FC<RequestProps> = ({
     },
     {
       key: "Params",
-      label: "Params",
+      label: t("request_fields.query"),
       children: parameterTable(
         url.query,
         (rows) => write("url", urlWithQuery(request.url, rows)),
@@ -92,7 +92,7 @@ const Request: FC<RequestProps> = ({
     },
     {
       key: "Path",
-      label: "Path",
+      label: t("request_fields.path"),
       children: parameterTable(
         url.variable,
         (rows) => write("url", { ...url, variable: rows }),

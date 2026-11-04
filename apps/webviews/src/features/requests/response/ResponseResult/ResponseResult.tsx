@@ -30,10 +30,7 @@ import { copyStringToClipboard } from "@/shared/utils/clipboard";
 import { responseFormatMode } from "@/shared/utils/editFormat";
 import { parseStreamToRaw } from "@onapi/domain/utils/parse";
 
-import {
-  RAW_ENCODE,
-  RESPONSE_RESULT_TABS_LIST,
-} from "./constants";
+import { RAW_ENCODE, RESPONSE_RESULT_TABS_LIST } from "./constants";
 
 import styles from "./ResponseResult.module.css";
 
@@ -79,7 +76,9 @@ const ResponseResult = forwardRef((props: Props, ref) => {
     () => ({ ext: content?.format, mime: content?.mime ?? "" }),
     [content?.format, content?.mime],
   );
-  const [localRawEncode, setRawEncode] = useSafeState(defaultRawEncode || "utf8");
+  const [localRawEncode, setRawEncode] = useSafeState(
+    defaultRawEncode || "utf8",
+  );
   const [tabsValue, setTabsValue] = useSafeState<string | number>();
   const [localWarp, setWarp] = useSafeState(true);
 
@@ -180,7 +179,12 @@ const ResponseResult = forwardRef((props: Props, ref) => {
     setMode?.(rawType);
   }, [rawType, setMode]);
   return (
-    <div className={clsx(styles.container, props.hideToolbar && styles.withoutToolbar)}>
+    <div
+      className={clsx(
+        styles.container,
+        props.hideToolbar && styles.withoutToolbar,
+      )}
+    >
       <SegmentedTabs
         options={segmentedOptions}
         value={props.viewMode ?? tabsValue}
@@ -220,7 +224,7 @@ const ResponseResult = forwardRef((props: Props, ref) => {
             <button
               type="button"
               className={styles.toolButton}
-              aria-label="Copy response"
+              aria-label={t("ui.copy_response")}
               title={t("common.copy")}
               onClick={handleCopy}
             >
@@ -230,9 +234,9 @@ const ResponseResult = forwardRef((props: Props, ref) => {
               <button
                 type="button"
                 className={styles.toolButton}
-                aria-label="Toggle word wrap"
+                aria-label={t("ui.toggle_word_wrap")}
                 aria-pressed={warp}
-                title="Toggle word wrap"
+                title={t("request_fields.word_wrap")}
                 onClick={() => setWarp(!warp)}
               >
                 <AppIcon icon="wrap-text" />
@@ -241,8 +245,14 @@ const ResponseResult = forwardRef((props: Props, ref) => {
             {saveSocketMessageDom}
           </Flex>
         }
-        className={clsx(styles.segmented, props.hideModeTabs && styles.hiddenModeTabs)}
-        headerClassName={clsx(styles.segmentedTabsHeader, props.hideToolbar && styles.hiddenToolbar)}
+        className={clsx(
+          styles.segmented,
+          props.hideModeTabs && styles.hiddenModeTabs,
+        )}
+        headerClassName={clsx(
+          styles.segmentedTabsHeader,
+          props.hideToolbar && styles.hiddenToolbar,
+        )}
         contentClassName={styles.segmentedTabsContent}
         extraClassName={styles.tabBarExtraContentWrap}
       />

@@ -81,20 +81,20 @@ test("MCP discovers tools, prepares a call, and shows invalid arguments", async 
   page,
 }) => {
   await page.goto("/?aiMcp=mcp");
-  await page.getByRole("button", { name: "连接 Connect" }).click();
+  await page.getByRole("button", { name: "Connect" }).click();
   await respond(page, "connected", { value: {} });
   await expect(page.getByRole("status")).toContainText("Connected");
-  await page.getByRole("button", { name: "发送 Send" }).click();
+  await page.getByRole("button", { name: "Send" }).click();
   await respond(page, "result", {
     value: { tools: [{ name: "echo", description: "Echo a message" }] },
   });
   await page.getByRole("button", { name: "echo Echo a message" }).click();
   await expect(page.getByLabel("MCP method")).toHaveValue("tools/call");
   await page.getByLabel("Arguments (JSON)").fill("invalid");
-  await page.getByRole("button", { name: "发送 Send" }).click();
+  await page.getByRole("button", { name: "Send" }).click();
   await expect(page.getByRole("alert")).toBeVisible();
   await page.getByLabel("Arguments (JSON)").fill('{"message":"hello"}');
-  await page.getByRole("button", { name: "发送 Send" }).click();
+  await page.getByRole("button", { name: "Send" }).click();
   const call = await page.evaluate(() => (window as any).aiMcpMessages.at(-1));
   expect(call.data.operation).toEqual({
     method: "tools/call",
@@ -138,7 +138,7 @@ test("MCP raw arguments survive native save and revert follows the document", as
   page,
 }) => {
   await page.goto("/?aiMcp=mcp");
-  await page.getByRole("tab", { name: "设置 Settings" }).click();
+  await page.getByRole("tab", { name: "Settings" }).click();
   await page.getByLabel("Transport").selectOption("stdio");
   await page.getByLabel("Command", { exact: true }).fill("node");
   await page.getByLabel("Arguments (JSON array)").fill('["server.js"]');
@@ -164,13 +164,13 @@ test("MCP discovers additional pages and forwards the cursor", async ({
   page,
 }) => {
   await page.goto("/?aiMcp=mcp");
-  await page.getByRole("button", { name: "连接 Connect" }).click();
+  await page.getByRole("button", { name: "Connect" }).click();
   await respond(page, "connected", { value: {} });
-  await page.getByRole("button", { name: "发送 Send" }).click();
+  await page.getByRole("button", { name: "Send" }).click();
   await respond(page, "result", {
     value: { tools: [{ name: "first" }], nextCursor: "page-2" },
   });
-  await page.getByRole("button", { name: "加载更多 Load more" }).click();
+  await page.getByRole("button", { name: "Load more" }).click();
   const request = await page.evaluate(() =>
     (window as any).aiMcpMessages.at(-1),
   );
@@ -182,9 +182,7 @@ test("MCP discovers additional pages and forwards the cursor", async ({
   await expect(
     page.getByRole("button", { name: "second", exact: true }),
   ).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "加载更多 Load more" }),
-  ).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Load more" })).toHaveCount(0);
 });
 
 test("AI stop preserves partial output and reports a cancellation terminal state", async ({

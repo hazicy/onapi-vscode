@@ -1,3 +1,4 @@
+import i18next from "i18next";
 import * as vscode from "vscode";
 import { globalConfig } from "../../app/config";
 import {
@@ -156,7 +157,7 @@ export async function handelImportDataMessage(
         ) {
           throw new Error("Failed to save imported requests. Please retry.");
         }
-        vscode.window.showInformationMessage("Import Successful");
+        vscode.window.showInformationMessage(i18next.t("ui.import_success"));
         panel?.webview.postMessage({
           action: "importComplete",
           requestId: message.requestId,

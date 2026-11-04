@@ -148,7 +148,7 @@ const RowKey: FC<Props> = memo((props) => {
       ) : (
         <AutoComplete
           suggestOnInput
-          placeholder="Header-Name"
+          placeholder={t("ui.header_name")}
           filterOption
           value={rowData?.key || ""}
           onChange={handleVarInputChange}

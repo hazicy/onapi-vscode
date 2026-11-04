@@ -69,13 +69,13 @@ const MessageHeader = (props: Props) => {
           className={styles.select}
         >
           <Select.Option value="text" className={styles.select}>
-            Text
+            {t("ui.text")}
           </Select.Option>
           <Select.Option value="json" className={styles.select}>
             JSON
           </Select.Option>
           <Select.Option value="binary" className={styles.select}>
-            Binary
+            {t("ui.binary")}
           </Select.Option>
         </Select>
         {binaryType === "binary" && (
@@ -92,7 +92,7 @@ const MessageHeader = (props: Props) => {
               Base64
             </Select.Option>
             <Select.Option value="hexadecimal" className={styles.select}>
-              Hexadecimal
+              {t("ui.hexadecimal")}
             </Select.Option>
           </Select>
         )}

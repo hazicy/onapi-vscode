@@ -140,7 +140,7 @@ const TitleRender = memo((props: DataNode | any) => {
                   justify="center"
                   align="center"
                 >
-                  Filter
+                  {t("ui.filter")}
                 </Flex>
               </Tooltip>
             </Badge>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 
 import { entries, isArray, isPlainObject } from "lodash-es";
@@ -10,6 +11,8 @@ interface Props {
 }
 
 const CommonTable: React.FC<Props> = ({ value }) => {
+  const { t } = useTranslation();
+
   const calcValue = (text: string | any[] | undefined) => {
     if (isArray(text)) {
       return text.join(", ");
@@ -41,7 +44,7 @@ const CommonTable: React.FC<Props> = ({ value }) => {
   const columns = [
     {
       width: 200,
-      title: "name",
+      title: t("ui.name"),
       dataIndex: "key",
       render: (_text: any, rowData: any, _rowIndex: number) => (
         <span>{rowData.key || rowData.name}</span>
@@ -49,7 +52,7 @@ const CommonTable: React.FC<Props> = ({ value }) => {
     },
     {
       // width: '50%',
-      title: "value",
+      title: t("ui.value"),
       dataIndex: "value",
       render: (text: any, _rowData: any, _rowIndex: number) => (
         <span>{calcValue(text)}</span>

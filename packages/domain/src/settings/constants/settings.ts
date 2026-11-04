@@ -220,15 +220,21 @@ export const EXPORT_TYPE_LIST = [
 export const SWAGGER_FULL_MODAL_OPTIONS = [
   {
     value: "clear",
-    label: i18next.t("supplement.overwrite_clear"),
+    get label() {
+      return i18next.t("supplement.overwrite_clear");
+    },
   },
   {
     value: "name",
-    label: i18next.t("supplement.overwrite_same_model"),
+    get label() {
+      return i18next.t("supplement.overwrite_same_model");
+    },
   },
   {
     value: "ignore",
-    label: i18next.t("supplement.overwrite_same_model_no"),
+    get label() {
+      return i18next.t("supplement.overwrite_same_model_no");
+    },
   },
 ];
 

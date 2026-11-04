@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 import RequestToolbar from "@/features/requests/components/RequestToolbar";
 import RequestTabs from "@/features/requests/components/RequestTabs";
 import { useState } from "react";
@@ -5,6 +7,8 @@ import type { GrpcController } from "./useGrpc";
 import styles from "./GrpcDebug.module.css";
 
 export function GrpcResponse({ controller }: { controller: GrpcController }) {
+  const { t } = useTranslation();
+
   const [tab, setTab] = useState("messages");
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
@@ -17,74 +21,76 @@ export function GrpcResponse({ controller }: { controller: GrpcController }) {
         .includes(search.toLowerCase()),
   );
   return (
-    <section className={styles.response} aria-label="gRPC response">
+    <section className={styles.response} aria-label={t("ui.grpc_response")}>
       <RequestToolbar as="header" className={styles.responseHeader}>
-        <strong>Response</strong>
+        <strong>{t("ui.response")}</strong>
         <div
           role="status"
           className={styles.status}
           data-failed={!!status?.code}
         >
           {controller.cancelled
-            ? "Cancelled"
+            ? t("ui.cancelled")
             : status
               ? `${status.code} ${status.name}`
               : controller.busy && controller.phase === "invoke"
-                ? "Calling…"
-                : "Ready"}
+                ? t("ui.calling")
+                : t("ui.ready")}
         </div>
         {status && <span>{status.durationMs} ms</span>}
-        <span>{controller.receivedCount} received</span>
+        <span>
+          {t("ui.grpc_received", { count: controller.receivedCount })}
+        </span>
       </RequestToolbar>
       <RequestTabs
         activeKey={tab}
         onChange={setTab}
         keepMounted={false}
-        label="gRPC response tabs"
+        label={t("ui.grpc_response_tabs")}
         items={[
-          { key: "messages", label: "Messages" },
-          { key: "metadata", label: "Metadata" },
-          { key: "trailers", label: "Trailers" },
+          { key: "messages", label: t("ui.messages") },
+          { key: "metadata", label: t("ui.metadata") },
+          { key: "trailers", label: t("ui.trailers") },
         ]}
       >
         {tab === "messages" && (
           <>
             <div className={styles.responseTools}>
               <input
-                aria-label="Search messages"
-                placeholder="Search messages"
+                aria-label={t("ui.search_messages")}
+                placeholder={t("ui.search_messages")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
               <select
-                aria-label="Message filter"
+                aria-label={t("ui.message_filter")}
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
               >
-                <option value="all">All messages</option>
-                <option value="received">Received</option>
-                <option value="sent">Sent</option>
+                <option value="all">{t("ui.all_messages")}</option>
+                <option value="received">{t("ui.received")}</option>
+                <option value="sent">{t("ui.sent")}</option>
               </select>
               <button
                 onClick={controller.clearMessages}
                 disabled={!controller.messages.length}
               >
-                Clear
+                {t("ui.clear")}
               </button>
             </div>
             {controller.messages.length > 0 &&
               controller.totalMessages > controller.messages.length && (
                 <p className={styles.retention}>
-                  Showing the latest {controller.messages.length} of{" "}
-                  {controller.totalMessages} messages.
+                  {t("ui.grpc_retention", {
+                    visible: controller.messages.length,
+                    total: controller.totalMessages,
+                  })}
                 </p>
               )}
             {!controller.messages.length ? (
               <div className={styles.responseEmpty}>
-                <strong>Your response will appear here</strong>
-                <span>
-                  Invoke a method to inspect messages, metadata, and trailers.
-                </span>
+                <strong>{t("ui.grpc_empty_response")}</strong>
+                <span>{t("ui.grpc_response_help")}</span>
               </div>
             ) : (
               <div className={styles.timeline}>
@@ -96,7 +102,12 @@ export function GrpcResponse({ controller }: { controller: GrpcController }) {
                   >
                     <summary>
                       <span data-direction={message.direction}>
-                        {message.direction === "sent" ? "↑ Sent" : "↓ Received"}
+                        {message.direction === "sent" ? "↑ " : "↓ "}
+                        {i18next.t(
+                          message.direction === "sent"
+                            ? "ui.sent"
+                            : "ui.received",
+                        )}
                       </span>
                       <time>
                         {new Date(message.timestamp).toLocaleTimeString()}
@@ -131,7 +142,13 @@ export function GrpcResponse({ controller }: { controller: GrpcController }) {
                 </tbody>
               </table>
             ) : (
-              <p>No {tab} returned.</p>
+              <p>
+                {i18next.t(
+                  tab === "metadata"
+                    ? "ui.grpc_no_metadata"
+                    : "ui.grpc_no_trailers",
+                )}
+              </p>
             )}
             {tab === "trailers" && status?.details && <p>{status.details}</p>}
           </div>

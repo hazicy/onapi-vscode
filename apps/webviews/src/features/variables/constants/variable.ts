@@ -245,127 +245,189 @@ export const DATE_FORMAT_OPTIONS = [
   },
   {
     value: "YY",
-    label: i18next.t("var_insert.date_desc.d1"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d1");
+    },
   },
   {
     value: "YYYY",
-    label: i18next.t("var_insert.date_desc.d2"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d2");
+    },
   },
   {
     value: "M",
-    label: i18next.t("var_insert.date_desc.d3"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d3");
+    },
   },
   {
     value: "MM",
-    label: i18next.t("var_insert.date_desc.d4"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d4");
+    },
   },
   {
     value: "MMM",
-    label: i18next.t("var_insert.date_desc.d5"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d5");
+    },
   },
   {
     value: "MMMM",
-    label: i18next.t("var_insert.date_desc.d6"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d6");
+    },
   },
   {
     value: "D",
-    label: i18next.t("var_insert.date_desc.d7"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d7");
+    },
   },
   {
     value: "DD",
-    label: i18next.t("var_insert.date_desc.d8"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d8");
+    },
   },
   {
     value: "d",
-    label: i18next.t("var_insert.date_desc.d9"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d9");
+    },
   },
   {
     value: "dd",
-    label: i18next.t("var_insert.date_desc.d10"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d10");
+    },
   },
   {
     value: "ddd",
-    label: i18next.t("var_insert.date_desc.d11"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d11");
+    },
   },
   {
     value: "dddd",
-    label: i18next.t("var_insert.date_desc.d12"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d12");
+    },
   },
   {
     value: "H",
-    label: i18next.t("var_insert.date_desc.d13"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d13");
+    },
   },
   {
     value: "HH",
-    label: i18next.t("var_insert.date_desc.d14"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d14");
+    },
   },
   {
     value: "h",
-    label: i18next.t("var_insert.date_desc.d15"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d15");
+    },
   },
   {
     value: "hh",
-    label: i18next.t("var_insert.date_desc.d16"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d16");
+    },
   },
   {
     value: "m",
-    label: i18next.t("var_insert.date_desc.d17"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d17");
+    },
   },
   {
     value: "mm",
-    label: i18next.t("var_insert.date_desc.d18"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d18");
+    },
   },
   {
     value: "s",
-    label: i18next.t("var_insert.date_desc.d19"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d19");
+    },
   },
   {
     value: "ss",
-    label: i18next.t("var_insert.date_desc.d20"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d20");
+    },
   },
   {
     value: "SSS",
-    label: i18next.t("var_insert.date_desc.d21"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d21");
+    },
   },
   {
     value: "Z",
-    label: i18next.t("var_insert.date_desc.d22"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d22");
+    },
   },
   {
     value: "ZZ",
-    label: i18next.t("var_insert.date_desc.d23"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d23");
+    },
   },
   {
     value: "A",
-    label: i18next.t("var_insert.date_desc.d24"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d24");
+    },
   },
   {
     value: "a",
-    label: i18next.t("var_insert.date_desc.d25"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d25");
+    },
   },
   {
     value: "Q",
-    label: i18next.t("var_insert.date_desc.d26"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d26");
+    },
   },
   {
     value: "Do",
-    label: i18next.t("var_insert.date_desc.d27"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d27");
+    },
   },
   {
     value: "k",
-    label: i18next.t("var_insert.date_desc.d28"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d28");
+    },
   },
   {
     value: "kk",
-    label: i18next.t("var_insert.date_desc.d29"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d29");
+    },
   },
   {
     value: "X",
-    label: i18next.t("var_insert.date_desc.d30"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d30");
+    },
   },
   {
     value: "x",
-    label: i18next.t("var_insert.date_desc.d31"),
+    get label() {
+      return i18next.t("var_insert.date_desc.d31");
+    },
   },
 ];
 
@@ -383,51 +445,75 @@ export const FAKERJS_FORMAT_LIST = [
 
 export const TIME_ZONE_OPTIONS = [
   {
-    label: i18next.t("var_insert.utc_desc.ut-12"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut-12");
+    },
     value: "-12:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut-11"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut-11");
+    },
     value: "-11:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut-10"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut-10");
+    },
     value: "-10:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut-9"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut-9");
+    },
     value: "-09:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut-8"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut-8");
+    },
     value: "-08:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut-7"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut-7");
+    },
     value: "-07:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut-6"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut-6");
+    },
     value: "-06:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut-5"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut-5");
+    },
     value: "-05:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut-4"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut-4");
+    },
     value: "-04:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut-3"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut-3");
+    },
     value: "-03:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut-2"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut-2");
+    },
     value: "-02:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut-1"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut-1");
+    },
     value: "-01:00",
   },
   {
@@ -435,51 +521,75 @@ export const TIME_ZONE_OPTIONS = [
     value: "+00:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut+1"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut+1");
+    },
     value: "+01:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut+2"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut+2");
+    },
     value: "+02:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut+3"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut+3");
+    },
     value: "+03:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut+4"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut+4");
+    },
     value: "+04:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut+5"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut+5");
+    },
     value: "+05:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut+6"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut+6");
+    },
     value: "+06:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut+7"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut+7");
+    },
     value: "+07:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut+8"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut+8");
+    },
     value: "+08:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut+9"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut+9");
+    },
     value: "+09:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut+10"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut+10");
+    },
     value: "+10:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut+11"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut+11");
+    },
     value: "+11:00",
   },
   {
-    label: i18next.t("var_insert.utc_desc.ut+12"),
+    get label() {
+      return i18next.t("var_insert.utc_desc.ut+12");
+    },
     value: "+12:00",
   },
 ];

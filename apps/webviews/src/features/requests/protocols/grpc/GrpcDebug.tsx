@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import RequestToolbar from "@/features/requests/components/RequestToolbar";
 import RequestTabs from "@/features/requests/components/RequestTabs";
 import RequestAction from "@/features/requests/components/RequestAction";
@@ -25,6 +26,8 @@ export default function GrpcDebug({
   apisData: record,
   onApisDataChange: change,
 }: Props) {
+  const { t } = useTranslation();
+
   const [tab, setTab] = useState(record.grpc.method ? "message" : "definition");
   const controller = useGrpc(record, change);
   const editor = useRef<CodeEditorRef>(null);
@@ -39,18 +42,16 @@ export default function GrpcDebug({
   const methodType = method
     ? method.requestStream
       ? method.responseStream
-        ? "Bidirectional streaming"
-        : "Client streaming"
+        ? t("ui.bidirectional_streaming")
+        : t("ui.client_streaming")
       : method.responseStream
-        ? "Server streaming"
-        : "Unary"
+        ? t("ui.server_streaming")
+        : t("ui.unary")
     : undefined;
   const invoke = () => {
     if (!method) {
       setTab("definition");
-      controller.setError(
-        "Load a service definition and select a method first",
-      );
+      controller.setError(t("ui.grpc_method_required"));
       return;
     }
     controller.invoke();
@@ -61,7 +62,7 @@ export default function GrpcDebug({
         <span className={styles.protocol}>gRPC</span>
         <div className={styles.address}>
           <input
-            aria-label="gRPC server address"
+            aria-label={t("ui.grpc_server_address")}
             value={record.url ?? ""}
             disabled={controller.busy}
             placeholder="localhost:50051"
@@ -82,7 +83,7 @@ export default function GrpcDebug({
           />
           <button
             className={styles.tlsToggle}
-            aria-label="Enable TLS"
+            aria-label={t("ui.enable_tls")}
             aria-pressed={secure}
             disabled={controller.busy}
             onClick={() =>
@@ -115,7 +116,7 @@ export default function GrpcDebug({
         </div>
         {controller.methods.length ? (
           <select
-            aria-label="gRPC method"
+            aria-label={t("ui.grpc_method")}
             className={styles.methodSelect}
             value={config.method}
             disabled={controller.busy}
@@ -144,7 +145,7 @@ export default function GrpcDebug({
             disabled={controller.busy}
             onClick={() => setTab("definition")}
           >
-            Select a method ▾
+            {t("ui.select_a_method")}
           </button>
         )}
         <button
@@ -153,10 +154,10 @@ export default function GrpcDebug({
             sendRequestPanelMessage({ action: "saveApiData", data: record })
           }
         >
-          Save
+          {t("ui.save")}
         </button>
         <RequestAction
-          label={controller.busy ? "Cancel" : "Invoke"}
+          label={controller.busy ? t("ui.cancel") : t("ui.invoke")}
           stopping={controller.busy}
           onClick={controller.busy ? controller.cancel : invoke}
         />
@@ -165,25 +166,25 @@ export default function GrpcDebug({
         activeKey={tab}
         onChange={setTab}
         keepMounted={false}
-        label="gRPC request tabs"
+        label={t("ui.grpc_request_tabs")}
         wrapStyle={{ flex: "0 0 auto", height: "auto" }}
         tabBarExtraContent={
           methodType && <span className={styles.methodType}>{methodType}</span>
         }
         items={[
-          { key: "message", label: "Message" },
+          { key: "message", label: t("ui.message") },
           {
             key: "metadata",
-            label: "Metadata",
+            label: t("ui.metadata"),
             countParams: {
               dataSource: config.metadata.filter(
                 (row) => row.enabled && row.key,
               ),
             },
           },
-          { key: "auth", label: "Authorization" },
-          { key: "definition", label: "Service definition" },
-          { key: "settings", label: "Settings" },
+          { key: "auth", label: t("ui.authorization") },
+          { key: "definition", label: t("ui.service_definition") },
+          { key: "settings", label: t("ui.settings") },
         ]}
       >
         {controller.error && (
@@ -195,10 +196,10 @@ export default function GrpcDebug({
           {tab === "message" && (
             <>
               <div className={styles.messageToolbar}>
-                <span>{method?.requestType ?? "Request message"}</span>
+                <span>{method?.requestType ?? t("ui.request_message")}</span>
                 <div>
                   <button onClick={() => void editor.current?.formatEditor()}>
-                    Beautify
+                    {t("ui.beautify")}
                   </button>
                   <button
                     disabled={!method || controller.busy}
@@ -208,14 +209,14 @@ export default function GrpcDebug({
                       })
                     }
                   >
-                    Use example message
+                    {t("ui.use_example_message")}
                   </button>
                 </div>
               </div>
               <div
                 className={styles.messageEditor}
                 role="group"
-                aria-label="gRPC message editor"
+                aria-label={t("ui.grpc_message_editor")}
                 onKeyDown={(event) => {
                   if (
                     (event.metaKey || event.ctrlKey) &&
@@ -238,7 +239,11 @@ export default function GrpcDebug({
               </div>
               {method && (
                 <details className={styles.fieldDocs}>
-                  <summary>Message fields · {method.fields.length}</summary>
+                  <summary>
+                    {t("ui.grpc_message_fields", {
+                      count: method.fields.length,
+                    })}
+                  </summary>
                   <table>
                     <tbody>
                       {method.fields.map((field) => (
@@ -259,17 +264,19 @@ export default function GrpcDebug({
                 <div className={styles.streamActions}>
                   <span>
                     {controller.writable
-                      ? "Stream is open · compose another message"
-                      : "Waiting for the server…"}
+                      ? t("ui.grpc_stream_open")
+                      : t("ui.waiting_for_the_server")}
                   </span>
                   {controller.writable && (
                     <>
-                      <button onClick={controller.write}>Send message</button>
+                      <button onClick={controller.write}>
+                        {t("ui.send_message")}
+                      </button>
                       <button
                         className={styles.secondary}
                         onClick={controller.end}
                       >
-                        End streaming
+                        {t("ui.end_streaming")}
                       </button>
                     </>
                   )}

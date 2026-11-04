@@ -47,7 +47,7 @@ const SharePanel = (props: PanelProps) => {
         type="primary"
         className={styles.button}
       >
-        {"Delete"}
+        {t("ui.delete")}
       </Button>
     </Flex>
   );

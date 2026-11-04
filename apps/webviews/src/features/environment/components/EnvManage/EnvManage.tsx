@@ -105,7 +105,7 @@ const Index = (props: EnvModifyModalProps) => {
     {
       title: (
         <Flex gap={8}>
-          <span>{"Value"}</span>
+          <span>{t("ui.value")}</span>
           <Tooltip title={t("global_setting.variables_table.local_tip")}>
             <AppIcon icon="circle-help" className={styles.icon} />
           </Tooltip>

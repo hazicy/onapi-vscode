@@ -81,7 +81,7 @@ const Index = () => {
       ),
     },
     {
-      title: "Value",
+      title: t("ui.value"),
       dataIndex: "value",
       width: 320,
       render: (text: any, rowData: any, rowIndex: number) => (

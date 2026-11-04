@@ -30,7 +30,17 @@ export default function CookieManage() {
     });
   const columns = [
     ...["key", "value", "domain", "path", "expires"].map((key) => ({
-      title: key === "key" ? "Name" : key[0].toUpperCase() + key.slice(1),
+      title: t(
+        (
+          {
+            key: "ui.name",
+            value: "ui.value",
+            domain: "ui.cookie_domain",
+            path: "ui.cookie_path",
+            expires: "ui.cookie_expires",
+          } as Record<string, string>
+        )[key],
+      ),
       dataIndex: key,
       render: (value: string, _row: Cookie, index: number) => (
         <Input
@@ -62,7 +72,7 @@ export default function CookieManage() {
             )
           }
         >
-          Delete
+          {t("ui.delete")}
         </Button>
       ),
     },
@@ -79,9 +89,7 @@ export default function CookieManage() {
             !Number.isFinite(Date.parse(cookie.expires))),
       )
     ) {
-      message.error(
-        "Enter a domain, path and valid expiry date for each cookie.",
-      );
+      message.error(t("ui.cookie_validation"));
       return;
     }
     const state = useProjectConfig.getState();
@@ -116,7 +124,7 @@ export default function CookieManage() {
         />
         <Flex justify="flex-end">
           <Button type="primary" onClick={save}>
-            Save
+            {t("ui.save")}
           </Button>
         </Flex>
       </Flex>

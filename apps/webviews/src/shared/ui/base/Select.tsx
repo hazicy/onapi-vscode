@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { get } from "lodash-es";
 import { forwardRef } from "react";
 import React, { useState } from "react";
@@ -86,6 +87,8 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
     },
     ref,
   ) => {
+    const { t } = useTranslation();
+
     const [search, setSearch] = useState("");
     const [internal, setInternal] = useState(defaultValue);
     const multiple = mode === "multiple" || mode === "tags";
@@ -372,7 +375,7 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
           {allowClear && (
             <Combobox.Clear
               className={selectStyles.clear}
-              aria-label="Clear selection"
+              aria-label={t("ui.clear_selection")}
             >
               ×
             </Combobox.Clear>
@@ -380,7 +383,7 @@ const SelectControl = forwardRef<HTMLInputElement, SelectProps>(
           {(showSearch || multiple) && (
             <Combobox.Trigger
               className={clsx(selectStyles.arrow, arrowClassName)}
-              aria-label="Open options"
+              aria-label={t("ui.open_options")}
             >
               {loading ? "…" : (suffixIcon ?? "⌄")}
             </Combobox.Trigger>

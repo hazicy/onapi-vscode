@@ -1,3 +1,4 @@
+import i18next from "i18next";
 import type { EditorRecord } from "@onapi/domain/requests/record";
 import { discardRequestDocuments } from "../requests/request-editor";
 import { getExecutionCollection } from "../requests/execution/http-runner";
@@ -275,7 +276,7 @@ export const handleMessage = async (
       dataNew.name += ` Copy`;
 
       if (await saveApiListItem(dataNew, context)) {
-        vscode.window.showInformationMessage("Duplicate Successfully");
+        vscode.window.showInformationMessage(i18next.t("ui.duplicate_success"));
       }
 
       break;
@@ -393,7 +394,7 @@ export const handleMessage = async (
         changedItems.forEach((item) => updateOpenData(openedPanels, item));
         notifyApiListChanged(getApiList(context), context);
 
-        vscode.window.showInformationMessage("Move Success");
+        vscode.window.showInformationMessage(i18next.t("ui.move_success"));
       }
       break;
     case "runFolder":
@@ -407,7 +408,7 @@ export const handleMessage = async (
 
     case "deleteReport":
       if (await deleteProjectReport(message?.data?.report_id, context)) {
-        vscode.window.showInformationMessage("Delete Success");
+        vscode.window.showInformationMessage(i18next.t("ui.delete_success"));
         // Close already open tabs
         if (openedFolderTestReportDataPanels[message?.data?.report_id]) {
           openedFolderTestReportDataPanels[message?.data?.report_id].dispose();

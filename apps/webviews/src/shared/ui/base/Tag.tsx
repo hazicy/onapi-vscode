@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { forwardRef } from "react";
 import clsx from "clsx";
 import type { TagProps } from "./types";
@@ -17,20 +18,27 @@ export const Tag = forwardRef<HTMLSpanElement, TagProps>(
       ...props
     },
     ref,
-  ) => (
-    <span
-      {...props}
-      ref={ref}
-      className={clsx(tagStyles.tag, className)}
-      style={{ color, ...style }}
-    >
-      {icon}
-      {children}
-      {closable && (
-        <button type="button" aria-label="Remove tag" onClick={onClose}>
-          ×
-        </button>
-      )}
-    </span>
-  ),
+  ) => {
+    const { t } = useTranslation();
+    return (
+      <span
+        {...props}
+        ref={ref}
+        className={clsx(tagStyles.tag, className)}
+        style={{ color, ...style }}
+      >
+        {icon}
+        {children}
+        {closable && (
+          <button
+            type="button"
+            aria-label={t("ui.remove_tag")}
+            onClick={onClose}
+          >
+            ×
+          </button>
+        )}
+      </span>
+    );
+  },
 );

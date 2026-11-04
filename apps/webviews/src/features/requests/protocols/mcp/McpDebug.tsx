@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import RequestTabs from "@/features/requests/components/RequestTabs";
 import RequestAction from "@/features/requests/components/RequestAction";
 import { useState } from "react";
@@ -25,6 +26,7 @@ export default function McpDebug({
   apisData: record,
   onApisDataChange: change,
 }: Props) {
+  const { t } = useTranslation();
   const [tab, setTab] = useState("request");
   const [connected, setConnected] = useState(false);
   const [response, setResponse] = useState<unknown>(undefined);
@@ -71,8 +73,8 @@ export default function McpDebug({
       ) {
         throw new Error(
           config.transport === "stdio"
-            ? "MCP command is required"
-            : "Server URL is required",
+            ? t("ui.mcp_command_is_required")
+            : t("ui.server_url_is_required"),
         );
       }
       return {
@@ -116,7 +118,7 @@ export default function McpDebug({
           disabled={disconnecting}
           stopping={connected || execution.busy}
           label={
-            connected || execution.busy ? "断开 Disconnect" : "连接 Connect"
+            connected || execution.busy ? t("ui.disconnect") : t("ui.connect")
           }
           onClick={() =>
             connected || execution.busy ? disconnect() : connect()
@@ -129,17 +131,17 @@ export default function McpDebug({
         onChange={setTab}
         keepMounted={false}
         items={[
-          { key: "request", label: "请求 Request" },
-          { key: "settings", label: "设置 Settings" },
-          { key: "headers", label: "Headers" },
+          { key: "request", label: t("ui.request") },
+          { key: "settings", label: t("ui.settings") },
+          { key: "headers", label: t("request_fields.headers") },
         ]}
         tabBarExtraContent={
           <span role="status">
             {execution.busy
-              ? "处理中…"
+              ? t("ui.processing")
               : connected
-                ? "● Connected"
-                : "Disconnected"}
+                ? t("ui.connected")
+                : t("ui.disconnected")}
           </span>
         }
       >
@@ -156,7 +158,7 @@ export default function McpDebug({
         {tab === "settings" && (
           <div className={styles.settings}>
             <label>
-              Transport
+              {t("ui.transport")}
               <select
                 disabled={connected || execution.busy}
                 value={record.mcp.transport}
@@ -179,7 +181,7 @@ export default function McpDebug({
             {record.mcp.transport === "stdio" && (
               <>
                 <label>
-                  Command
+                  {t("ui.command")}
                   <input
                     disabled={connected || execution.busy}
                     value={record.mcp.command}
@@ -193,7 +195,7 @@ export default function McpDebug({
                   />
                 </label>
                 <label>
-                  Arguments (JSON array)
+                  {t("ui.arguments_json_array")}
                   <textarea
                     disabled={connected || execution.busy}
                     value={
@@ -202,7 +204,7 @@ export default function McpDebug({
                     onChange={(e) => draft({ argsText: e.target.value })}
                   />
                 </label>
-                <p>连接时将在本机启动此命令。</p>
+                <p>{t("ui.local_command_help")}</p>
               </>
             )}
           </div>
@@ -211,7 +213,7 @@ export default function McpDebug({
           <div className={styles.mcpRequest}>
             <div className={styles.address}>
               <select
-                aria-label="MCP method"
+                aria-label={t("ui.mcp_method")}
                 disabled={execution.busy}
                 value={input.method}
                 onChange={(e) => {
@@ -238,7 +240,7 @@ export default function McpDebug({
               <RequestAction
                 disabled={!connected || execution.busy}
                 onClick={() => request()}
-                label="发送 Send"
+                label={t("ui.send")}
               />
             </div>
             {entries.length > 0 && (
@@ -273,12 +275,14 @@ export default function McpDebug({
                 disabled={execution.busy || !connected}
                 onClick={() => request(cursor)}
               >
-                加载更多 Load more
+                {t("ui.load_more")}
               </button>
             )}
             {!input.method.endsWith("/list") && (
               <label className={styles.field}>
-                {input.method === "resources/read" ? "Resource URI" : "Name"}
+                {input.method === "resources/read"
+                  ? t("ui.resource_uri")
+                  : t("ui.name")}
                 <input
                   value={input.name}
                   onChange={(e) => draft({ name: e.target.value })}
@@ -287,7 +291,7 @@ export default function McpDebug({
             )}
             {["tools/call", "prompts/get"].includes(input.method) && (
               <label className={styles.field}>
-                Arguments (JSON)
+                {t("ui.arguments_json")}
                 <textarea
                   value={input.argumentsText}
                   onChange={(e) => draft({ argumentsText: e.target.value })}

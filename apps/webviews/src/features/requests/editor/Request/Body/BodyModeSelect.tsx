@@ -1,3 +1,5 @@
+import i18next from "i18next";
+import { useTranslation } from "react-i18next";
 import { Select } from "@/shared/ui/base";
 import { Icon } from "@iconify/react";
 import chevronDown from "@iconify-icons/lucide/chevron-down";
@@ -8,27 +10,27 @@ import styles from "./BodyModeSelect.module.css";
 
 const groups = [
   {
-    label: "Form Data",
+    label: "request_fields.form_data",
     options: [
-      { value: "urlencoded", label: "Url Encoded" },
-      { value: "form-data", label: "Multi-Part" },
+      { value: "urlencoded", label: "request_fields.urlencoded" },
+      { value: "form-data", label: "request_fields.multipart" },
     ],
   },
   {
-    label: "Text Content",
+    label: "request_fields.text_content",
     options: [
       { value: "json", label: "JSON" },
       { value: "xml", label: "XML" },
       { value: "javascript", label: "JavaScript" },
       { value: "html", label: "HTML" },
-      { value: "plain", label: "Other" },
+      { value: "plain", label: "request_fields.other" },
     ],
   },
   {
-    label: "Other",
+    label: "request_fields.other",
     options: [
-      { value: "binary", label: "Binary File" },
-      { value: "none", label: "No Body" },
+      { value: "binary", label: "request_fields.binary_file" },
+      { value: "none", label: "request_fields.no_body" },
     ],
   },
 ];
@@ -55,10 +57,13 @@ export function getBodyMode(props: RequestBodyProps): RequestBodyContentType {
 export function getBodyModeLabel(props: RequestBodyProps): string {
   const mode = getBodyMode(props);
   return mode === "none"
-    ? "Body"
-    : groups
-        .flatMap((group) => group.options)
-        .find((option) => option.value === mode)?.label || "Body";
+    ? i18next.t("request_fields.body")
+    : i18next.t(
+        groups
+          .flatMap((group) => group.options)
+          .find((option) => option.value === mode)?.label ||
+          "request_fields.body",
+      );
 }
 
 export function changeBodyMode(
@@ -94,14 +99,25 @@ export function changeBodyMode(
 export default function BodyModeSelect(
   props: RequestBodyProps & { iconOnly?: boolean },
 ) {
+  const { t } = useTranslation();
+  const options = groups.map((group) => ({
+    ...group,
+    label: t(group.label),
+    options: group.options.map((option) => ({
+      ...option,
+      label: t(option.label),
+    })),
+  }));
   return (
     <Select
-      aria-label="Body type"
+      aria-label={t("request_fields.body_type")}
       size="small"
       variant="borderless"
       value={getBodyMode(props)}
-      options={groups}
-      labelRender={({ value, label }) => (value === "none" ? "Body" : label)}
+      options={options}
+      labelRender={({ value, label }) =>
+        value === "none" ? i18next.t("request_fields.body") : label
+      }
       valueClassName={props.iconOnly ? styles.hiddenLabel : undefined}
       suffixIcon={<Icon icon={chevronDown} width={14} height={14} />}
       arrowClassName={styles.arrow}

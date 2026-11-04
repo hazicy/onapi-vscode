@@ -67,10 +67,10 @@ const PublicParamsTable: FC<Props> = memo(
                     {t("request_panel.inherited_parameters", {
                       name:
                         tabType === "header"
-                          ? "Headers"
+                          ? t("request_fields.headers")
                           : tabType === "cookie"
                             ? "Cookie"
-                            : "Params",
+                            : t("request_fields.query"),
                     })}
                     <span className={styles.count}>{size(lastDataSource)}</span>
                   </span>
@@ -91,7 +91,7 @@ const PublicParamsTable: FC<Props> = memo(
                         <Input
                           readOnly
                           value={row.value || ""}
-                          aria-label="value"
+                          aria-label={t("ui.parameter_value")}
                         />
                       </div>
                     ))}

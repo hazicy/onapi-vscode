@@ -45,7 +45,7 @@ export default function VariableInsertFooter({
             </span>
             <div
               className={styles.previewContent}
-              aria-label="Variable expression"
+              aria-label={t("ui.variable_expression")}
             >
               <span className={styles.previewContentText}>
                 <Tooltip placement="topLeft" title={expression}>
@@ -76,7 +76,7 @@ export default function VariableInsertFooter({
             <Spin spinning={previewLoading}>
               <div
                 className={styles.previewContent}
-                aria-label="Variable preview"
+                aria-label={t("ui.variable_preview")}
               >
                 <span className={styles.previewContentText}>
                   <Tooltip placement="topLeft" title={previewText}>

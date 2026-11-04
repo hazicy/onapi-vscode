@@ -19,10 +19,10 @@ const Kv = () => {
   }));
   return (
     <>
-      <AuthField label="Key" name={[AUTH_ENUM.KV, "key"]}>
+      <AuthField label={t("ui.key")} name={[AUTH_ENUM.KV, "key"]}>
         <Input.TextArea autoSize placeholder={t("common.auth.key_tip")} />
       </AuthField>
-      <AuthField label="Value" name={[AUTH_ENUM.KV, "value"]}>
+      <AuthField label={t("ui.value")} name={[AUTH_ENUM.KV, "value"]}>
         <VarInput
           multiline
           hasBorder

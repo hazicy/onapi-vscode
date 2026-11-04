@@ -1,6 +1,8 @@
+import { useTranslation } from "react-i18next";
 import RawEditor from "@/shared/components/RawEditor/RawEditor";
 import type { RequestBodyProps } from "../types";
 export default function Raw(props: RequestBodyProps & { mode?: string }) {
+  const { t } = useTranslation();
   return (
     <RawEditor
       mode={props.mode}
@@ -15,7 +17,10 @@ export default function Raw(props: RequestBodyProps & { mode?: string }) {
       }
       editorOptions={{
         hover: { enabled: true, delay: 500 },
-        placeholder: props.mode === "json" ? "输入 JSON 请求体…" : "输入请求体…",
+        placeholder:
+          props.mode === "json"
+            ? t("ui.json_body_placeholder")
+            : t("ui.body_placeholder"),
         borderless: true,
         lintGutter: false,
         highlightOnlyWhenFocused: true,

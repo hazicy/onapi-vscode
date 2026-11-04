@@ -136,22 +136,30 @@ export const APIS_CONTENT_MAP: {
   api: [
     {
       value: "debug",
-      label: i18next.t("common.api_tab.run"),
+      get label() {
+        return i18next.t("common.api_tab.run");
+      },
       children: null,
     },
     {
       value: "sample",
-      label: i18next.t("common.api_tab.case"),
+      get label() {
+        return i18next.t("common.api_tab.case");
+      },
       children: null,
     },
     {
       value: "pressure",
-      label: i18next.t("common.api_tab.stress"),
+      get label() {
+        return i18next.t("common.api_tab.stress");
+      },
       children: null,
     },
     {
       value: "mock",
-      label: i18next.t("common.api_tab.mock"),
+      get label() {
+        return i18next.t("common.api_tab.mock");
+      },
       children: null,
     },
   ],

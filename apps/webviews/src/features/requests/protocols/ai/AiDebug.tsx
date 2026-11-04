@@ -71,7 +71,7 @@ export default function AiDebug({
               <AppIcon icon="message-square" /> {label("prompt")}
             </span>
             <textarea
-              aria-label="Message"
+              aria-label={t("ui.message")}
               value={record.ai.prompt}
               onChange={(e) => update({ prompt: e.target.value })}
               placeholder={label("message_placeholder")}
@@ -90,10 +90,11 @@ export default function AiDebug({
           </label>
           <label className={styles.promptField}>
             <span>
-              <AppIcon icon="bot" /> System prompt
+              <AppIcon icon="bot" />
+              {t("ui.system_prompt")}
             </span>
             <textarea
-              aria-label="System prompt"
+              aria-label={t("ui.system_prompt")}
               value={record.ai.system}
               disabled={conversation.busy}
               placeholder={label("system_help")}
@@ -146,7 +147,7 @@ export default function AiDebug({
             <label>
               {label("thinking_mode")}
               <select
-                aria-label="Thinking mode"
+                aria-label={t("ui.thinking_mode")}
                 value={record.ai.thinking}
                 disabled={conversation.busy}
                 onChange={(e) =>
@@ -164,7 +165,7 @@ export default function AiDebug({
           )}
           <div className={styles.parameterGrid}>
             <label>
-              Temperature
+              {t("ui.temperature")}
               <input
                 type="number"
                 min="0"
@@ -187,7 +188,7 @@ export default function AiDebug({
             <label>
               {label("max_tokens")}
               <input
-                aria-label="Max output tokens"
+                aria-label={t("ui.max_output_tokens")}
                 type="number"
                 min="1"
                 value={record.ai.maxOutputTokens}
@@ -227,7 +228,7 @@ export default function AiDebug({
         <AppIcon icon="sparkles" className={styles.type} />
         <input
           className={styles.endpoint}
-          aria-label="Server URL"
+          aria-label={t("ui.server_url")}
           value={record.url ?? ""}
           disabled={conversation.busy}
           onChange={(e) => change({ ...record, url: e.target.value })}
@@ -250,7 +251,7 @@ export default function AiDebug({
           aria-label={label("provider_model")}
         >
           <select
-            aria-label="Provider"
+            aria-label={t("ui.provider")}
             value={record.ai.provider}
             disabled={conversation.busy}
             onChange={(e) => selectProvider(e.target.value as AiProvider)}
@@ -262,7 +263,7 @@ export default function AiDebug({
             ))}
           </select>
           <input
-            aria-label="Model"
+            aria-label={t("ui.model")}
             list={`models-${record.id}`}
             value={record.ai.model}
             disabled={conversation.busy}

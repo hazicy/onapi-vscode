@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 import type { SkeletonProps } from "./types";
 import skeletonStyles from "./Skeleton.module.css";
@@ -9,8 +10,9 @@ export const Skeleton = Object.assign(
     paragraph,
     active = true,
     ...props
-  }: SkeletonProps) =>
-    loading ? (
+  }: SkeletonProps) => {
+    const { t } = useTranslation();
+    return loading ? (
       <div
         {...props}
         className={clsx(
@@ -19,7 +21,7 @@ export const Skeleton = Object.assign(
           props.className,
         )}
         role="status"
-        aria-label="Loading"
+        aria-label={t("ui.loading")}
       >
         <span aria-hidden="true" />
         <span aria-hidden="true" />
@@ -27,7 +29,8 @@ export const Skeleton = Object.assign(
       </div>
     ) : (
       children
-    ),
+    );
+  },
   {
     Input: ({ style, ...props }: SkeletonProps) => (
       <span

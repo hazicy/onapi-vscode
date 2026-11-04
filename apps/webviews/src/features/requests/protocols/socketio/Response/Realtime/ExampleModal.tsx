@@ -214,7 +214,7 @@ const Index = forwardRef((props: Props, ref) => {
               className={styles.select}
             >
               <Select.Option value="text" className={styles.select}>
-                Text
+                {t("ui.text")}
               </Select.Option>
               <Select.Option value="json" className={styles.select}>
                 JSON
@@ -226,7 +226,7 @@ const Index = forwardRef((props: Props, ref) => {
                 HTML
               </Select.Option>
               <Select.Option value="binary" className={styles.select}>
-                Binary
+                {t("ui.binary")}
               </Select.Option>
             </Select>
             {binaryType === "binary" && isEqual(activeKey, "request") && (
@@ -244,7 +244,7 @@ const Index = forwardRef((props: Props, ref) => {
                   Base64
                 </Select.Option>
                 <Select.Option value="hexadecimal" className={styles.select}>
-                  Hexadecimal
+                  {t("ui.hexadecimal")}
                 </Select.Option>
               </Select>
             )}

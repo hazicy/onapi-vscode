@@ -8,6 +8,8 @@ let refIndex;
 const { default: Table } = await load(
   "apps/webviews/src/features/requests/editor/Request/Auth/components/OAuth2ParamsTable.tsx",
   (id) => {
+    if (id === "react-i18next")
+      return { useTranslation: () => ({ t: (key) => key }) };
     if (id === "react")
       return {
         useMemo: (callback) => callback(),

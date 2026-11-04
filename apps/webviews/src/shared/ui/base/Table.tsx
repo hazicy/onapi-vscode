@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import tableStyles from "./Table.module.css";
 import { Skeleton } from "./Skeleton";
 import React, { useMemo, useState } from "react";
@@ -58,6 +59,8 @@ export function Table<T extends object = Record<string, unknown>>({
   showHeader = true,
   ...props
 }: TableProps<T>) {
+  const { t } = useTranslation();
+
   const theme = useThemeConfig().components?.Table;
   const [sorting, setSorting] = useState<SortingState>([]);
   const [selected, setSelected] = useState<RowSelectionState>(() =>
@@ -323,7 +326,7 @@ export function Table<T extends object = Record<string, unknown>>({
                           ) : (
                             (rowSelection?.columnTitle ?? (
                               <Checkbox
-                                aria-label="Select all rows"
+                                aria-label={t("ui.select_all_rows")}
                                 checked={table.getIsAllRowsSelected()}
                                 indeterminate={
                                   !table.getIsAllRowsSelected() &&
@@ -468,7 +471,7 @@ export function Table<T extends object = Record<string, unknown>>({
             {!rows.length && (
               <tr>
                 <td colSpan={Math.max(1, leaves.length)}>
-                  {locale?.emptyText ?? "No data"}
+                  {locale?.emptyText ?? t("ui.no_data")}
                 </td>
               </tr>
             )}
@@ -476,16 +479,16 @@ export function Table<T extends object = Record<string, unknown>>({
         </table>
       </div>
       {pagination && (
-        <nav aria-label="Pagination" className={tableStyles.actions}>
+        <nav aria-label={t("ui.pagination")} className={tableStyles.actions}>
           {pagination.showTotal?.(total, [
             pageState.pageIndex * pageState.pageSize + 1,
             Math.min((pageState.pageIndex + 1) * pageState.pageSize, total),
           ])}
           {pagination.showSizeChanger && (
             <label>
-              Page size
+              {t("ui.page_size")}
               <select
-                aria-label="Page size"
+                aria-label={t("ui.page_size")}
                 value={pageState.pageSize}
                 onChange={(event) =>
                   table.setPagination({
@@ -508,7 +511,7 @@ export function Table<T extends object = Record<string, unknown>>({
             disabled={!table.getCanPreviousPage()}
             onClick={() => table.previousPage()}
           >
-            Previous
+            {t("ui.previous")}
           </Button>
           <span>
             {pageState.pageIndex + 1} /{" "}
@@ -518,7 +521,7 @@ export function Table<T extends object = Record<string, unknown>>({
             disabled={!table.getCanNextPage()}
             onClick={() => table.nextPage()}
           >
-            Next
+            {t("ui.next")}
           </Button>
         </nav>
       )}

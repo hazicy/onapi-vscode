@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import styles from "./ResponseHeader.module.css";
 import { FC, memo } from "react";
 
@@ -12,6 +13,8 @@ interface Props {
 
 const ResponseHeader: FC<Props> = memo(
   ({ value }) => {
+    const { t } = useTranslation();
+
     const dataList = () => {
       const list: any[] = [];
       if (isArray(value)) {
@@ -30,7 +33,7 @@ const ResponseHeader: FC<Props> = memo(
     const columns = [
       {
         width: "25%",
-        title: "name",
+        title: t("ui.name"),
         dataIndex: "key",
         render: (_text: any, rowData: any, _rowIndex: number) => (
           <span className={styles.tableCellSpan}>
@@ -40,7 +43,7 @@ const ResponseHeader: FC<Props> = memo(
       },
       {
         width: "75%",
-        title: "value",
+        title: t("ui.value"),
         dataIndex: "value",
         render: (text: any, _rowData: any, _rowIndex: number) => (
           <span className={styles.tableCellSpan}>{text || "-"}</span>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import RequestToolbar from "@/features/requests/components/RequestToolbar";
 import React from "react";
 import type {
@@ -20,12 +21,14 @@ export function ProtocolEditor({
   actions?: React.ReactNode;
   children: React.ReactNode;
 }) {
+  const { t } = useTranslation();
+
   return (
     <section className={styles.workspace}>
       <RequestToolbar as="header" className={styles.address}>
         <strong>{record.kind.toUpperCase()}</strong>
         <input
-          aria-label="Server URL"
+          aria-label={t("ui.server_url")}
           value={record.url ?? ""}
           disabled={disabled}
           onChange={(e) => onUrlChange(e.target.value)}
@@ -40,7 +43,7 @@ export function ProtocolEditor({
             sendRequestPanelMessage({ action: "saveApiData", data: record })
           }
         >
-          保存 Save
+          {t("ui.save")}
         </button>
         {actions}
       </RequestToolbar>
@@ -55,11 +58,13 @@ export function HeadersEditor({
   value: string;
   onChange: (value: string) => void;
 }) {
+  const { t } = useTranslation();
+
   return (
     <label className={styles.field}>
-      Headers (JSON)
+      {t("ui.headers_json")}
       <textarea
-        aria-label="Headers JSON"
+        aria-label={t("ui.headers_json")}
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
@@ -80,9 +85,11 @@ export function ProtocolResponse({
   value: unknown;
   ai?: boolean;
 }) {
+  const { t } = useTranslation();
+
   return value !== undefined ? (
     <details className={styles.response} open={!ai}>
-      <summary>{ai ? "响应统计 / Usage" : "响应 / Response"}</summary>
+      <summary>{ai ? t("ui.response_usage") : t("ui.response")}</summary>
       <pre>{JSON.stringify(value, null, 2)}</pre>
     </details>
   ) : null;

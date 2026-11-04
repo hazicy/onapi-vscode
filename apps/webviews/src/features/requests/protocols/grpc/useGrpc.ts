@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { GrpcEditorRecord } from "@onapi/domain/requests/record";
 import type {
@@ -21,6 +22,8 @@ export function useGrpc(
   record: GrpcEditorRecord,
   change: (record: GrpcEditorRecord) => void,
 ) {
+  const { t } = useTranslation();
+
   const [messages, setMessages] = useState<GrpcMessage[]>([]);
   const [receivedCount, setReceivedCount] = useState(0);
   const [totalMessages, setTotalMessages] = useState(0);
@@ -163,25 +166,25 @@ export function useGrpc(
         record.grpc.definition.source === "reflection" &&
         !record.url?.trim()
       ) {
-        throw new Error("Enter a server address to use reflection");
+        throw new Error(t("ui.grpc_reflection_address_required"));
       }
       if (
         record.grpc.definition.source === "proto" &&
         !record.grpc.definition.files.length
       ) {
-        throw new Error("Import a .proto file in Service definition first");
+        throw new Error(t("ui.grpc_proto_required"));
       }
       if (action === "grpc_invoke") {
         if (!record.url?.trim()) {
-          throw new Error("Server address is required");
+          throw new Error(t("ui.server_address_is_required"));
         }
         if (!record.grpc.method) {
-          throw new Error("Load a service definition and select a method");
+          throw new Error(t("ui.grpc_select_method"));
         }
         if (!/{{[^{}]+}}/.test(record.grpc.message)) {
           const value = JSON.parse(record.grpc.message);
           if (!value || typeof value !== "object" || Array.isArray(value)) {
-            throw new Error("Message must be a JSON object");
+            throw new Error(t("ui.grpc_message_object_required"));
           }
         }
         setMessages([]);

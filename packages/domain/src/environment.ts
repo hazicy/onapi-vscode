@@ -16,21 +16,29 @@ export enum MENU_ITEMS_KEY {
 
 export const MENU_ITEMS = [
   {
-    label: i18next.t("global_setting.global_title"),
+    get label() {
+      return i18next.t("global_setting.global_title");
+    },
     key: MENU_ITEMS_KEY.all,
     children: [
       {
-        label: i18next.t("global_setting.cookie"),
+        get label() {
+          return i18next.t("global_setting.cookie");
+        },
         key: ENV_MANAGE_ENUM.cookie,
         icon: "cookie",
       },
       {
-        label: i18next.t("global_setting.global_key"),
+        get label() {
+          return i18next.t("global_setting.global_key");
+        },
         key: ENV_MANAGE_ENUM.globalParm,
         icon: "list-filter",
       },
       {
-        label: i18next.t("global_setting.global_variables"),
+        get label() {
+          return i18next.t("global_setting.global_variables");
+        },
         key: ENV_MANAGE_ENUM.globalVariable,
         icon: "variable",
       },
@@ -39,7 +47,9 @@ export const MENU_ITEMS = [
     disableDraggable: true,
   },
   {
-    label: i18next.t("global_setting.environment_list"),
+    get label() {
+      return i18next.t("global_setting.environment_list");
+    },
     key: MENU_ITEMS_KEY.env,
     type: "group",
   },

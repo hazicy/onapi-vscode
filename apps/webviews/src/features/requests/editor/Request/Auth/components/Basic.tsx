@@ -8,14 +8,14 @@ const Basic = () => {
   const { t } = useTranslation();
   return (
     <>
-      <AuthField label="Username" name={[AUTH_ENUM.BASIC, "username"]}>
+      <AuthField label={t("ui.username")} name={[AUTH_ENUM.BASIC, "username"]}>
         <VarInput
           multiline
           hasBorder
           placeholder={t("common.auth.username_tip")}
         />
       </AuthField>
-      <AuthField label="Password" name={[AUTH_ENUM.BASIC, "password"]}>
+      <AuthField label={t("ui.password")} name={[AUTH_ENUM.BASIC, "password"]}>
         <VarInput multiline hasBorder placeholder={t("common.auth.pwd_tip")} />
       </AuthField>
     </>

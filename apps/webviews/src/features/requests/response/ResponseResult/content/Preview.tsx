@@ -40,7 +40,7 @@ const Preview = (props: Props) => {
             <iframe
               sandbox=""
               srcDoc={setBodyColor(streamData?.rawBody)}
-              title="w"
+              title={t("common.response_component.preview")}
               frameBorder="0"
               width="100%"
               z-index="100"

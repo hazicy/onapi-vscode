@@ -617,7 +617,10 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
             autoSaveId: "graphql_debug_container_resize_save_id",
             direction: "horizontal",
           }}
-          leftPanelProps={{ ...panelProps, collapseTitle: "GraphQL Schema" }}
+          leftPanelProps={{
+            ...panelProps,
+            collapseTitle: t("ui.graphql_schema"),
+          }}
           rightPanelProps={{ ...panelProps, collapseTitle: "queryEdit" }}
           leftPanel={
             <SuspenseContent>
@@ -627,7 +630,7 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
                   align="center"
                   justify="space-between"
                 >
-                  GraphQL Schema
+                  {t("ui.graphql_schema")}
                   <Button
                     onClick={refreshSchema}
                     type="text"
@@ -691,7 +694,7 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
                   leftPanelProps={{
                     ...panelProps,
                     defaultSize: 70,
-                    collapseTitle: "Query",
+                    collapseTitle: t("ui.query"),
                   }}
                   rightPanelProps={{
                     ...panelProps,
@@ -706,7 +709,7 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
                           align="center"
                           justify="space-between"
                         >
-                          Query
+                          {t("ui.query")}
                         </Flex>
                         <Flex flex={1} style={{ height: 0 }}>
                           <CodeEditor
@@ -729,7 +732,7 @@ const GraphQLQueryEditor = forwardRef((props: Props, ref) => {
                           align="center"
                           justify="space-between"
                         >
-                          Variables
+                          {t("ui.variables")}
                         </Flex>
                         <Flex flex={1} style={{ height: 0 }}>
                           <CodeEditor

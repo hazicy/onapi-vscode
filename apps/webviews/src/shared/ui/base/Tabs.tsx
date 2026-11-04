@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import AppIcon from "../AppIcon";
 import tabsStyles from "./Tabs.module.css";
 import React, { useState } from "react";
@@ -21,7 +22,7 @@ export function Tabs({
   panelClassName,
 
   overflow = false,
-  overflowLabel = "More tabs",
+  overflowLabel,
   items = [],
   activeKey,
   defaultActiveKey,
@@ -37,6 +38,8 @@ export function Tabs({
   rootClassName,
   ...props
 }: TabsProps) {
+  const { t } = useTranslation();
+
   const [selected, setSelected] = useState(defaultActiveKey ?? items[0]?.key);
   const current = activeKey ?? selected;
   const { wrapRef, listRef, moreRef, visibleKeys } = useOverflowTabs(
@@ -117,7 +120,7 @@ export function Tabs({
                 {type === "editable-card" && item.closable !== false && (
                   <button
                     type="button"
-                    aria-label="Close tab"
+                    aria-label={t("ui.close_tab")}
                     onClick={(e) => {
                       e.stopPropagation();
                       onEdit?.(item.key, "remove");
@@ -153,8 +156,8 @@ export function Tabs({
                   ref={moreRef}
                   type="button"
                   className={clsx(tabsStyles.moreTabs, overflowButtonClassName)}
-                  aria-label={overflowLabel}
-                  title={overflowLabel}
+                  aria-label={overflowLabel ?? t("ui.more_tabs")}
+                  title={overflowLabel ?? t("ui.more_tabs")}
                 >
                   <AppIcon icon="chevron-down" />
                 </button>

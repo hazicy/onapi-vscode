@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import type { GrpcConfig, GrpcProtoFile } from "@onapi/domain/requests/grpc";
 import CodeEditor from "@/shared/components/CodeEditor/CodeEditor";
@@ -13,6 +14,8 @@ export function GrpcDefinition({
   update: GrpcConfigChange;
   controller: GrpcController;
 }) {
+  const { t } = useTranslation();
+
   const [selectedFile, setSelectedFile] = useState("");
   const definition = config.definition;
   const files = definition.source === "proto" ? definition.files : [];
@@ -24,19 +27,16 @@ export function GrpcDefinition({
     <div className={styles.definition}>
       <div className={styles.sectionTitle}>
         <div>
-          <h3>Service definition</h3>
-          <p>
-            Load services and message types from your server or Protocol Buffers
-            files.
-          </p>
+          <h3>{t("ui.service_definition")}</h3>
+          <p>{t("ui.grpc_definition_help")}</p>
         </div>
         <button
           disabled={controller.busy || controller.importing}
           onClick={controller.discover}
         >
           {controller.busy && controller.phase === "discover"
-            ? "Loading…"
-            : "Load services"}
+            ? t("ui.loading")
+            : t("ui.load_services")}
         </button>
       </div>
       <div className={styles.sourceOptions}>
@@ -47,23 +47,20 @@ export function GrpcDefinition({
             update({ definition: { source: "reflection" }, method: "" })
           }
         >
-          <strong>Server reflection</strong>
-          <span>Discover services directly from the server</span>
+          <strong>{t("ui.server_reflection")}</strong>
+          <span>{t("ui.discover_services_directly_from_the_server")}</span>
         </button>
         <button
           aria-pressed={definition.source === "proto"}
           disabled={controller.busy}
           onClick={() => updateFiles([])}
         >
-          <strong>Protobuf files</strong>
-          <span>Import a .proto file and its dependencies</span>
+          <strong>{t("ui.protobuf_files")}</strong>
+          <span>{t("ui.import_a_proto_file_and_its_dependencies")}</span>
         </button>
       </div>
       {definition.source === "reflection" ? (
-        <div className={styles.hint}>
-          Enter the server address and select <strong>Load services</strong>. If
-          the server does not support reflection, import its .proto definition.
-        </div>
+        <div className={styles.hint}>{t("ui.grpc_reflection_help")}</div>
       ) : (
         <>
           <div className={styles.toolbar}>
@@ -71,13 +68,13 @@ export function GrpcDefinition({
               disabled={controller.busy || controller.importing}
               onClick={() => controller.importFiles()}
             >
-              Import .proto
+              {t("ui.import_proto")}
             </button>
             <button
               disabled={controller.busy || controller.importing}
               onClick={() => controller.importFiles(true)}
             >
-              Import folder
+              {t("ui.import_folder")}
             </button>
             <button
               disabled={controller.busy}
@@ -98,7 +95,7 @@ export function GrpcDefinition({
                 setSelectedFile(name);
               }}
             >
-              New proto file
+              {t("ui.new_proto_file")}
             </button>
             <button
               disabled={!file || controller.busy}
@@ -106,9 +103,11 @@ export function GrpcDefinition({
                 updateFiles(files.filter((item) => item.name !== file?.name))
               }
             >
-              Remove file
+              {t("ui.remove_file")}
             </button>
-            {controller.importing && <span role="status">Importing…</span>}
+            {controller.importing && (
+              <span role="status">{t("ui.importing")}</span>
+            )}
           </div>
           {file ? (
             <>
@@ -126,7 +125,7 @@ export function GrpcDefinition({
               <div
                 className={styles.protoEditor}
                 role="group"
-                aria-label="Proto definition editor"
+                aria-label={t("ui.proto_definition_editor")}
               >
                 <CodeEditor
                   value={file.content}
@@ -144,22 +143,19 @@ export function GrpcDefinition({
               </div>
             </>
           ) : (
-            <div className={styles.hint}>
-              Import a .proto file to get started. Local imports are included
-              automatically and saved with the request.
-            </div>
+            <div className={styles.hint}>{t("ui.grpc_proto_help")}</div>
           )}
         </>
       )}
       {methods.length > 0 && (
         <div className={styles.loaded}>
           <strong>
-            {new Set(methods.map((method) => method.service)).size} services ·{" "}
-            {methods.length} methods loaded
+            {t("ui.grpc_loaded", {
+              services: new Set(methods.map((method) => method.service)).size,
+              methods: methods.length,
+            })}
           </strong>
-          <span>
-            Select a method in the request bar to compose its message.
-          </span>
+          <span>{t("ui.grpc_select_method_help")}</span>
         </div>
       )}
     </div>

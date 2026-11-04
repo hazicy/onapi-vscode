@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import type { PopconfirmProps } from "./types";
 import popconfirmStyles from "./Popconfirm.module.css";
@@ -11,8 +12,8 @@ export function Popconfirm({
   description,
   onConfirm,
   onCancel,
-  okText = "OK",
-  cancelText = "Cancel",
+  okText,
+  cancelText,
   okButtonProps,
   cancelButtonProps,
   showCancel = true,
@@ -21,6 +22,8 @@ export function Popconfirm({
   disabled,
   ...props
 }: PopconfirmProps) {
+  const { t } = useTranslation();
+
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const change = (v: boolean) => {
@@ -49,7 +52,7 @@ export function Popconfirm({
                   change(false);
                 }}
               >
-                {cancelText}
+                {cancelText ?? t("base.cancel")}
               </Button>
             )}
             <Button
@@ -66,7 +69,7 @@ export function Popconfirm({
                 }
               }}
             >
-              {okText}
+              {okText ?? t("base.confirm")}
             </Button>
           </div>
         </>

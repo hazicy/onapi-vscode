@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import styles from "./Body.module.css";
 import clsx from "clsx";
 import { FC, lazy, useMemo } from "react";
@@ -21,6 +22,8 @@ const RequestBodyRaw = lazy(() => import("./components/Raw"));
 const RequestBodyUrlencoded = lazy(() => import("./components/Urlencoded"));
 
 const RequestBody: FC<RequestBodyProps> = (props) => {
+  const { t } = useTranslation();
+
   const { apiData, value } = props;
   const language = value?.options?.raw?.language || "json";
   const isRawMode = value?.mode === "raw";
@@ -74,9 +77,9 @@ const RequestBody: FC<RequestBodyProps> = (props) => {
           <SuspenseContent>{bodyContent}</SuspenseContent>
           {apiData?.kind === "api" && isRawMode && language === "json" && (
             <div className={styles.editorActions}>
-              <Tooltip title="生成模拟数据">
+              <Tooltip title={t("ui.generate_mock_data")}>
                 <Button
-                  aria-label="生成模拟数据"
+                  aria-label={t("ui.generate_mock_data")}
                   onClick={handleGenerateMockBody}
                   type="text"
                   mode="light"

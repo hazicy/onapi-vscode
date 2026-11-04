@@ -305,7 +305,7 @@ const Filters = (props: Props, ref: any) => {
               {!independent && args.length > 1 && (
                 <button
                   type="button"
-                  aria-label="Remove condition"
+                  aria-label={t("ui.remove_condition")}
                   className={styles.filterRemove}
                   onClick={() =>
                     setArgs((items) =>

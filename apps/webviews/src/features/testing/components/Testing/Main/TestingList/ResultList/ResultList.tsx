@@ -74,15 +74,15 @@ export default function ResultList({ groups }: { groups: ExecutionEvent[][] }) {
               message={`${assertion.assertion || assertion.name || "Assertion"}${assertion.skipped ? " (skipped)" : ""}${assertion.error ? `: ${assertion.error.message}` : ""}`}
             />
           ))}
-          <Typography.Text>Request</Typography.Text>
+          <Typography.Text>{t("ui.request")}</Typography.Text>
           <pre style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>
             {JSON.stringify(request?.request, null, 2)}
           </pre>
-          <Typography.Text>Response</Typography.Text>
+          <Typography.Text>{t("ui.response")}</Typography.Text>
           <pre style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>
             {JSON.stringify(request?.response, null, 2)}
           </pre>
-          <Typography.Text>Console</Typography.Text>
+          <Typography.Text>{t("ui.console")}</Typography.Text>
           <pre style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>
             {JSON.stringify(
               selected?.filter((event) => event.type === "console"),

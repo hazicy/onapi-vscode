@@ -98,7 +98,7 @@ const BaseSettings: FC<Props> = ({ value, onChange }) => {
               dropdownStyle={{ maxHeight: 400, overflow: "auto" }}
               treeData={apisFolders}
               onChange={(value) => handleChange("parentId", value)}
-              notFoundContent={<Empty description="No Data" />}
+              notFoundContent={<Empty description={t("ui.no_data")} />}
               className={styles.select}
             />
           </Flex>

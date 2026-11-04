@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { GrpcConfig } from "@onapi/domain/requests/grpc";
 import type { GrpcConfigChange } from "./useGrpc";
 import styles from "./GrpcDebug.module.css";
@@ -9,6 +10,8 @@ export function GrpcMetadata({
   config: GrpcConfig;
   update: GrpcConfigChange;
 }) {
+  const { t } = useTranslation();
+
   const rows = config.metadata;
   const edit = (index: number, patch: Partial<(typeof rows)[number]>) =>
     update({
@@ -18,18 +21,15 @@ export function GrpcMetadata({
     });
   return (
     <div className={styles.configuration}>
-      <h3>Request metadata</h3>
-      <p>
-        Pass key-value pairs with the call. Binary keys ending in -bin use
-        base64 values.
-      </p>
+      <h3>{t("ui.request_metadata")}</h3>
+      <p>{t("ui.grpc_metadata_help")}</p>
       <table className={styles.metadataTable}>
         <thead>
           <tr>
-            <th aria-label="Enabled" />
-            <th>Key</th>
-            <th>Value</th>
-            <th aria-label="Actions" />
+            <th aria-label={t("ui.enabled")} />
+            <th>{t("ui.key")}</th>
+            <th>{t("ui.value")}</th>
+            <th aria-label={t("ui.actions")} />
           </tr>
         </thead>
         <tbody>
@@ -38,14 +38,16 @@ export function GrpcMetadata({
               <td>
                 <input
                   type="checkbox"
-                  aria-label={`Enable metadata ${index + 1}`}
+                  aria-label={t("ui.grpc_enable_metadata", {
+                    index: index + 1,
+                  })}
                   checked={row.enabled}
                   onChange={(e) => edit(index, { enabled: e.target.checked })}
                 />
               </td>
               <td>
                 <input
-                  aria-label={`Metadata key ${index + 1}`}
+                  aria-label={t("ui.grpc_metadata_key", { index: index + 1 })}
                   value={row.key}
                   onChange={(e) => edit(index, { key: e.target.value })}
                   placeholder="authorization"
@@ -53,15 +55,19 @@ export function GrpcMetadata({
               </td>
               <td>
                 <input
-                  aria-label={`Metadata value ${index + 1}`}
+                  aria-label={t("ui.grpc_metadata_value", { index: index + 1 })}
                   value={row.value}
                   onChange={(e) => edit(index, { value: e.target.value })}
-                  placeholder="Value or {{variable}}"
+                  placeholder={t("ui.value_or_variable", {
+                    variable: "{{variable}}",
+                  })}
                 />
               </td>
               <td>
                 <button
-                  aria-label={`Remove metadata ${index + 1}`}
+                  aria-label={t("ui.grpc_remove_metadata", {
+                    index: index + 1,
+                  })}
                   onClick={() =>
                     update({
                       metadata: rows.filter(
@@ -83,7 +89,7 @@ export function GrpcMetadata({
           update({ metadata: [...rows, { key: "", value: "", enabled: true }] })
         }
       >
-        + Add metadata
+        {t("ui.add_metadata")}
       </button>
     </div>
   );
@@ -95,27 +101,29 @@ export function GrpcAuthorization({
   config: GrpcConfig;
   update: GrpcConfigChange;
 }) {
+  const { t } = useTranslation();
+
   const auth = config.auth;
   const edit = (patch: Partial<GrpcConfig["auth"]>) =>
     update({ auth: { ...auth, ...patch } });
   return (
     <div className={styles.configuration}>
-      <h3>Authorization</h3>
+      <h3>{t("ui.authorization")}</h3>
       <label>
-        Type
+        {t("ui.type")}
         <select
-          aria-label="Authorization type"
+          aria-label={t("ui.authorization_type")}
           value={auth.type}
           onChange={(e) => edit({ type: e.target.value as typeof auth.type })}
         >
-          <option value="none">No Auth</option>
+          <option value="none">{t("ui.no_auth")}</option>
           <option value="bearer">Bearer Token</option>
-          <option value="basic">Basic Auth</option>
+          <option value="basic">{t("ui.basic_auth")}</option>
           <option value="apikey">API Key</option>
         </select>
       </label>
       {auth.type === "none" && (
-        <p>This call will use the metadata you configured.</p>
+        <p>{t("ui.this_call_will_use_the_metadata_you_configured")}</p>
       )}
       {auth.type === "bearer" && (
         <label>
@@ -125,21 +133,23 @@ export function GrpcAuthorization({
             autoComplete="off"
             value={auth.token}
             onChange={(e) => edit({ token: e.target.value })}
-            placeholder="Token or {{variable}}"
+            placeholder={t("ui.token_or_variable", {
+              variable: "{{variable}}",
+            })}
           />
         </label>
       )}
       {auth.type === "basic" && (
         <>
           <label>
-            Username
+            {t("ui.username")}
             <input
               value={auth.username}
               onChange={(e) => edit({ username: e.target.value })}
             />
           </label>
           <label>
-            Password
+            {t("ui.password")}
             <input
               type="password"
               autoComplete="off"
@@ -152,14 +162,14 @@ export function GrpcAuthorization({
       {auth.type === "apikey" && (
         <>
           <label>
-            Key
+            {t("ui.key")}
             <input
               value={auth.key}
               onChange={(e) => edit({ key: e.target.value })}
             />
           </label>
           <label>
-            Value
+            {t("ui.value")}
             <input
               type="password"
               autoComplete="off"
@@ -179,13 +189,15 @@ export function GrpcSettings({
   config: GrpcConfig;
   update: GrpcConfigChange;
 }) {
+  const { t } = useTranslation();
+
   const editTls = (patch: Partial<GrpcConfig["tls"]>) =>
     update({ tls: { ...config.tls, ...patch } });
   return (
     <div className={styles.configuration}>
-      <h3>Call settings</h3>
+      <h3>{t("ui.call_settings")}</h3>
       <label>
-        Deadline (ms)
+        {t("ui.deadline_ms")}
         <input
           type="number"
           min="0"
@@ -198,12 +210,10 @@ export function GrpcSettings({
             }
           }}
         />
-        <small>
-          0 keeps the call open until it completes or you cancel it.
-        </small>
+        <small>{t("ui.grpc_deadline_help")}</small>
       </label>
       <label>
-        Maximum response message size (bytes)
+        {t("ui.grpc_message_limit")}
         <input
           type="number"
           min="0"
@@ -216,7 +226,7 @@ export function GrpcSettings({
             }
           }}
         />
-        <small>0 removes the message size limit.</small>
+        <small>{t("ui.grpc_message_limit_help")}</small>
       </label>
       <label className={styles.check}>
         <input
@@ -224,34 +234,34 @@ export function GrpcSettings({
           checked={config.includeDefaults}
           onChange={(e) => update({ includeDefaults: e.target.checked })}
         />
-        Include fields with default values in responses
+        {t("ui.grpc_include_defaults")}
       </label>
-      <h3>TLS certificates</h3>
+      <h3>{t("ui.tls_certificates")}</h3>
       <label>
-        Server name override
+        {t("ui.server_name_override")}
         <input
           value={config.tls.serverName}
           onChange={(e) => editTls({ serverName: e.target.value })}
-          placeholder="Optional hostname for certificate verification"
+          placeholder={t("ui.grpc_server_name_placeholder")}
         />
       </label>
       <label>
-        Root CA certificate (PEM)
+        {t("ui.root_ca_certificate_pem")}
         <textarea
           value={config.tls.rootCertificates}
           onChange={(e) => editTls({ rootCertificates: e.target.value })}
-          placeholder="Use system certificate authorities when empty"
+          placeholder={t("ui.grpc_ca_placeholder")}
         />
       </label>
       <label>
-        Client certificate (PEM)
+        {t("ui.client_certificate_pem")}
         <textarea
           value={config.tls.clientCertificate}
           onChange={(e) => editTls({ clientCertificate: e.target.value })}
         />
       </label>
       <label>
-        Client private key (PEM)
+        {t("ui.client_private_key_pem")}
         <textarea
           value={config.tls.privateKey}
           onChange={(e) => editTls({ privateKey: e.target.value })}

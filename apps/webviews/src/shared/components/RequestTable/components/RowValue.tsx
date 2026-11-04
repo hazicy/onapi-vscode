@@ -112,7 +112,7 @@ const RowValue = memo((props: ItemProps) => {
         <>
           <AutoComplete
             showArrow
-            placeholder="value"
+            placeholder={t("ui.parameter_value")}
             value={rowData.value || ""}
             disabled={readOnly}
             onChange={(value) => handleChange("value", value)}
@@ -128,7 +128,7 @@ const RowValue = memo((props: ItemProps) => {
         <VariableInput
           value={rowData.value || ""}
           onChange={(src) => onChange?.(rowIndex, { ...rowData, value: src })}
-          placeholder="File path"
+          placeholder={t("ui.file_path")}
         />
       ) : isEqual(rowData?.field_type, "File") &&
         isEqual(bodyMode, "form-data") ? (
@@ -157,7 +157,7 @@ const RowValue = memo((props: ItemProps) => {
       ) : (
         <VariableInput
           suffix={suffix}
-          placeholder="value"
+          placeholder={t("ui.parameter_value")}
           envId={envId}
           disabledReturn={includes(["header", "query", "cookie"], tabType)}
           readOnly={readOnly}

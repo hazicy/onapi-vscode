@@ -26,22 +26,30 @@ export enum AUTH_INSERT_VALUE {
 
 export const AUTH_INHERIT_OPTIONS = [
   {
-    label: i18next.t("auth.from_parent") || "Inherit auth from parent",
+    get label() {
+      return i18next.t("auth.from_parent") || "Inherit auth from parent";
+    },
     value: AUTH_ENUM.INHERIT,
   },
 ];
 
 export const AUTH_OPTIONS = [
   {
-    label: i18next.t("auth.noauth") || "NO Auth",
+    get label() {
+      return i18next.t("auth.noauth") || "NO Auth";
+    },
     value: AUTH_ENUM.NOAUTH,
   },
   {
-    label: i18next.t("auth.key_value") || "API Key",
+    get label() {
+      return i18next.t("auth.key_value") || "API Key";
+    },
     value: AUTH_ENUM.KV,
   },
   {
-    label: "Basic auth",
+    get label() {
+      return i18next.t("ui.auth_basic");
+    },
     value: AUTH_ENUM.BASIC,
   },
   {
@@ -53,7 +61,9 @@ export const AUTH_OPTIONS = [
     value: AUTH_ENUM.JWT,
   },
   {
-    label: "Digest auth",
+    get label() {
+      return i18next.t("ui.auth_digest");
+    },
     value: AUTH_ENUM.DIGEST,
   },
   {
@@ -205,66 +215,90 @@ export const OAUTH1_METHODS_OPTIONS = [
 
 export const AUTH_INSERT_LOCATION = [
   {
-    label: "Request Header",
+    get label() {
+      return i18next.t("ui.auth_header");
+    },
     value: AUTH_INSERT_VALUE.HEADER,
   },
   {
-    label: "Query Param",
+    get label() {
+      return i18next.t("ui.auth_query_param");
+    },
     value: AUTH_INSERT_VALUE.QUERY,
   },
 ];
 
 export const AUTH_OAUTH_LOCATION = [
   {
-    label: "Request Headers",
+    get label() {
+      return i18next.t("ui.auth_headers");
+    },
     value: true,
   },
   {
-    label: "Request Body / Request URL",
+    get label() {
+      return i18next.t("ui.auth_body_url");
+    },
     value: false,
   },
 ];
 
 export const AUTH_AWSV4_LOCATION = [
   {
-    label: "Request Headers",
+    get label() {
+      return i18next.t("ui.auth_headers");
+    },
     value: false,
   },
   {
-    label: "Request URL",
+    get label() {
+      return i18next.t("ui.auth_url");
+    },
     value: true,
   },
 ];
 
 export const AUTH_APIKEY_LOCATION = [
   {
-    label: "Header",
+    get label() {
+      return i18next.t("ui.auth_header");
+    },
     value: "header",
   },
   {
-    label: "Query Params",
+    get label() {
+      return i18next.t("ui.auth_query");
+    },
     value: "query",
   },
 ];
 
 export const AUTH_OAUTH2_LOCATION = [
   {
-    label: "Request URL",
+    get label() {
+      return i18next.t("ui.auth_url");
+    },
     value: "queryParams",
   },
   {
-    label: "Request Headers",
+    get label() {
+      return i18next.t("ui.auth_headers");
+    },
     value: "header",
   },
 ];
 
 export const AUTH_OAUTH2_AUTHENTICATION = [
   {
-    label: "Send as Basic Auth header",
+    get label() {
+      return i18next.t("ui.auth_basic_header");
+    },
     value: "header",
   },
   {
-    label: "Send client credentials in body",
+    get label() {
+      return i18next.t("ui.auth_body_credentials");
+    },
     value: "body",
   },
 ];
@@ -275,37 +309,51 @@ export const AUTH_OAUTH2_CHALLENGE = [
     value: "S256",
   },
   {
-    label: "Plain",
+    get label() {
+      return i18next.t("ui.auth_plain");
+    },
     value: "plain",
   },
 ];
 
 export const AUTH_OAUTH2_SEND_IN = [
   {
-    label: "Request Body",
+    get label() {
+      return i18next.t("ui.auth_body");
+    },
     value: "request_body",
   },
   {
-    label: "Request URL",
+    get label() {
+      return i18next.t("ui.auth_url");
+    },
     value: "request_url",
   },
   {
-    label: "Request Headers",
+    get label() {
+      return i18next.t("ui.auth_headers");
+    },
     value: "request_header",
   },
 ];
 
 export const AUTH_OAUTH2_GRANT_TYPE = [
   {
-    label: "Authorization Code",
+    get label() {
+      return i18next.t("ui.auth_code");
+    },
     value: "authorization_code",
   },
   {
-    label: "Authorization Code (With PKCE)",
+    get label() {
+      return i18next.t("ui.auth_code_pkce");
+    },
     value: "authorization_code_with_pkce",
   },
   {
-    label: "Password Credentials",
+    get label() {
+      return i18next.t("ui.auth_password");
+    },
     value: "password_credentials",
   },
 ];

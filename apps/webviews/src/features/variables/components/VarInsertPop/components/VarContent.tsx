@@ -174,7 +174,7 @@ const VarContent = forwardRef<VarContentRef, { className?: string }>(
           <Flex
             role="button"
             tabIndex={0}
-            aria-label="Back to variable types"
+            aria-label={t("ui.back_to_variable_types")}
             onClick={() => stepChange({ step: 1, key: optionKey })}
             onKeyDown={(event) => {
               if (event.key === "Enter" || event.key === " ") {

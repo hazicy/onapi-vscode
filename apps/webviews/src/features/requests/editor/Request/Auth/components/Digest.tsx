@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { AuthField } from "../AuthField";
 import "../style.css";
 import styles from "../Auth.module.css";
@@ -17,37 +18,55 @@ const options = map(DIGEST_ALGORITHM_OPTIONS, (item) => ({
   value: item,
 }));
 
-const fieldList = [
-  {
-    label: "",
-    text: i18next.t("common.auth.disable_tip"),
-    tip: true,
-  },
-  {
-    name: "disableRetryRequest",
-    checked: true,
-  },
-  { name: "username", placeholder: "Username", label: "Username" },
-  { name: "password", placeholder: "Password", label: "Password" },
-];
-
-const moreFieldList = [
-  { name: "realm", placeholder: "testrealm@example.com", label: "Realm" },
-  { name: "nonce", placeholder: "Nonce", label: "Nonce" },
-  {
-    name: "algorithm",
-    placeholder: i18next.t("common.select_tip"),
-    type: "select",
-    options,
-    label: "Algorithm",
-  },
-  { label: "qop", name: "qop", placeholder: "e.g. auth-int" },
-  { name: "nc", placeholder: "e.g. 000000001", label: "Nonce Count" },
-  { name: "cnonce", placeholder: "e.g. 0a4f113b", label: "Client Nonce" },
-  { name: "opaque", placeholder: "Opaque", label: "Opaque" },
-];
-
 const Digest = () => {
+  const { t } = useTranslation();
+
+  const fieldList = [
+    {
+      label: "",
+      text: i18next.t("common.auth.disable_tip"),
+      tip: true,
+    },
+    {
+      name: "disableRetryRequest",
+      checked: true,
+    },
+    {
+      name: "username",
+      placeholder: t("ui.username"),
+      label: t("ui.username"),
+    },
+    {
+      name: "password",
+      placeholder: t("ui.password"),
+      label: t("ui.password"),
+    },
+  ];
+
+  const moreFieldList = [
+    {
+      name: "realm",
+      placeholder: "testrealm@example.com",
+      label: t("ui.digest_realm"),
+    },
+    { name: "nonce", placeholder: "Nonce", label: "Nonce" },
+    {
+      name: "algorithm",
+      placeholder: i18next.t("common.select_tip"),
+      type: "select",
+      options,
+      label: t("ui.algorithm"),
+    },
+    { label: "qop", name: "qop", placeholder: "e.g. auth-int" },
+    { name: "nc", placeholder: "e.g. 000000001", label: t("ui.nonce_count") },
+    {
+      name: "cnonce",
+      placeholder: "e.g. 0a4f113b",
+      label: t("ui.client_nonce"),
+    },
+    { name: "opaque", placeholder: "Opaque", label: "Opaque" },
+  ];
+
   return (
     <>
       {map(fieldList, (item) => {
