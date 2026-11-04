@@ -1,4 +1,4 @@
-import { forEach, isArray, isPlainObject } from "lodash";
+import { forEach, isArray, isPlainObject } from "lodash-es";
 import type { TestingReportList } from "@onapi/contracts";
 import * as vscode from "vscode";
 import { readStoredData, updateStoredData } from "../../platform/storage/index";

@@ -60,7 +60,7 @@ test("explicit workspace reads and saves retain account identity and only notify
   const api = await load(
     "apps/extension/src/platform/storage/project-config.ts",
     (id) => {
-      if (id === "lodash") return nativeDependency(id);
+      if (id === "lodash-es") return nativeDependency(id);
       if (id.endsWith("/config"))
         return {
           globalConfig: {
@@ -146,7 +146,7 @@ test("project config uses fresh defaults rather than migrating globalState and l
   const api = await load(
     "apps/extension/src/platform/storage/project-config.ts",
     (id) => {
-      if (id === "lodash") return nativeDependency(id);
+      if (id === "lodash-es") return nativeDependency(id);
       if (id.endsWith("/config")) return { globalConfig: { openedPanels: {} } };
       if (id === "./index")
         return {
@@ -195,7 +195,7 @@ test("atomic config changes read the latest snapshot after acquiring the storage
   const api = await load(
     "apps/extension/src/platform/storage/project-config.ts",
     (id) => {
-      if (id === "lodash") return nativeDependency(id);
+      if (id === "lodash-es") return nativeDependency(id);
       if (id.endsWith("/config"))
         return {
           globalConfig: {

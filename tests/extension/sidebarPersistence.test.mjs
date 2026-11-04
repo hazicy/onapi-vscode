@@ -36,7 +36,7 @@ async function fixture(writeSucceeds = true) {
         };
       if (id.endsWith("/panel-actions"))
         return { handlePanelAction: () => false };
-      if (id === "lodash") return nativeDependency(id);
+      if (id === "lodash-es") return nativeDependency(id);
       if (id === "../../app/config") return { globalConfig };
       if (
         /\/(?:project-config|request-storage|report-storage|collection-order|import-curl|prepare-options|html|host-utils|user-config)$/.test(
@@ -166,7 +166,7 @@ test("setApiList propagates the actual storage result and selects the project ke
           );
         if (id.endsWith("/panel-actions"))
           return { handlePanelAction: () => false };
-        if (id === "lodash") return nativeDependency(id);
+        if (id === "lodash-es") return nativeDependency(id);
         if (id.endsWith("/config"))
           return {
             globalConfig: { openedPanels: {} },
@@ -279,7 +279,7 @@ test("request storage returns unified records without reading a second collectio
   const { getApiList } = await loadTypeScript(
     "apps/extension/src/features/requests/request-storage.ts",
     (id) => {
-      if (id === "lodash") return nativeDependency(id);
+      if (id === "lodash-es") return nativeDependency(id);
       if (/\/storage(?:\/index)?$/.test(id))
         return {
           writeStoredData: unused,

@@ -1,4 +1,4 @@
-import { forEach, isFunction, isPlainObject } from "lodash";
+import { forEach, isFunction, isPlainObject } from "lodash-es";
 import * as vscode from "vscode";
 import { globalConfig } from "../app/config";
 import { getVscodeFontSize, getVscodeFontFamily } from "./host-utils";

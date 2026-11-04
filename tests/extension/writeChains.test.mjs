@@ -60,7 +60,7 @@ async function fixture(
 
     if (id.endsWith("/panel-actions"))
       return { handlePanelAction: () => false };
-    if (id === "lodash") return nativeDependency(id);
+    if (id === "lodash-es") return nativeDependency(id);
     if (id === "./request-status") return { setRequestDraft: () => {} };
     if (id === "../sidebar/protocol-icon")
       return { getProtocolIcon: () => undefined };

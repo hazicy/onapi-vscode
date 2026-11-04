@@ -1,9 +1,9 @@
 import type { EditorRecord } from "@onapi/domain/requests/record";
-import { forEach } from "lodash";
+import { forEach } from "lodash-es";
 
 import { ShareInfoData } from "@onapi/domain/sharing/types/share";
 import { exportMethod } from "@onapi/api-converter/export";
-import { isPlainObject } from "lodash";
+import { isPlainObject } from "lodash-es";
 import * as vscode from "vscode";
 import { DEFAULT_PROJECT } from "@onapi/domain/project/constants/project";
 import { getCurrentProjectConfig } from "../../platform/storage/project-config";

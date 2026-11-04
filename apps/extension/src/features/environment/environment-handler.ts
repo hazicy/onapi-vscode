@@ -4,7 +4,7 @@ import {
   setProjectConfig,
 } from "../../platform/storage/project-config";
 import { globalConfig } from "../../app/config";
-import { forEach, isPlainObject } from "lodash";
+import { forEach, isPlainObject } from "lodash-es";
 import { ENV_MANAGE_ENUM } from "@onapi/domain/environment";
 import { proxyFetch } from "../../platform/http-client";
 

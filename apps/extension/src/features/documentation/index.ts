@@ -10,7 +10,7 @@ import {
 import { getApiList } from "../requests/request-storage";
 import { getLocalIPv4 } from "../../platform/host-utils";
 import { exportMethod } from "@onapi/api-converter/export";
-import { isPlainObject } from "lodash";
+import { isPlainObject } from "lodash-es";
 
 const PORT_START = 3000; // Starting port
 const MAX_PORT = 5000; // Maximum port limit

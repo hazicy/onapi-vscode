@@ -15,7 +15,7 @@ import { onThemeChange, onFontSizeChange } from "./platform/theme";
 import { initializePlugin } from "./app/initialize";
 import { restartServer, startDocsServer } from "./features/documentation";
 import { createShareListPanel } from "./features/sharing/share-list-panel";
-import { isNumber } from "lodash";
+import { isNumber } from "lodash-es";
 import { handleMessage } from "./features/sidebar/sidebar-handler";
 import {
   DEFAULT_PROJECT,

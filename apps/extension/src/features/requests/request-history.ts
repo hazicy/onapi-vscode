@@ -2,7 +2,7 @@ import type { EditorRecord } from "@onapi/domain/requests/record";
 import type * as vscode from "vscode";
 import { requestDefinition } from "@onapi/domain";
 import { snowflakeId } from "@onapi/domain/utils/data-tools";
-import { cloneDeep } from "lodash";
+import { cloneDeep } from "lodash-es";
 import { readStoredData, updateStoredData } from "../../platform/storage";
 import { getApiListName } from "./request-storage";
 

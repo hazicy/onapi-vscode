@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import { values } from "lodash";
+import { values } from "lodash-es";
 import type { FunctionComponent } from "react";
 
 export { APIS_TARGET_TYPE_ENUM } from "../kinds";

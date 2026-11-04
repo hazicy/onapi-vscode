@@ -1,6 +1,6 @@
 import { postRequestPanelResponse } from "./webviews/request-panel-channel";
 import * as vscode from "vscode";
-import { forEach } from "lodash";
+import { forEach } from "lodash-es";
 import axios from "axios";
 
 export const proxyFetch = async (

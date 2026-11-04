@@ -1,4 +1,4 @@
-import { cloneDeep, find, isEqual, keys, reduce } from "lodash";
+import { cloneDeep, find, isEqual, keys, reduce } from "lodash-es";
 import { PrepareSocketOptions, SocketHostOptions } from "./socket-option-types";
 import { DEFAULT_SOCKET_GLOBAL_PARAMS } from "@onapi/domain/requests/constants/request";
 import {

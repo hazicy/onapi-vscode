@@ -9,7 +9,7 @@ test("initialization does not inspect old account data or repair old parameter I
   let saves = 0;
   const updates = [];
   const api = await load("apps/extension/src/app/initialize.ts", (id) => {
-    if (id === "lodash") return nativeDependency(id);
+    if (id === "lodash-es") return nativeDependency(id);
     if (id.endsWith("requests/constants/default"))
       return { INIT_DEFAULT_API_DATAS: [] };
     if (id.endsWith("utils/data-tools")) return { snowflakeId: () => "new-id" };

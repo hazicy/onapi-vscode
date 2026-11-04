@@ -18,7 +18,7 @@ import {
   reduce,
   size,
   values,
-} from "lodash";
+} from "lodash-es";
 import { Cookies, Env } from "./socket-option-types";
 import { DomainInfoProps } from "@onapi/domain/project/types/cookie";
 import { SysConfig } from "@onapi/domain/settings/types/settings";

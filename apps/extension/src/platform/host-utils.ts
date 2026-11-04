@@ -1,4 +1,4 @@
-import { isNumber, isString } from "lodash";
+import { isNumber, isString } from "lodash-es";
 import * as vscode from "vscode";
 import * as childProcess from "child_process";
 import fs from "fs";

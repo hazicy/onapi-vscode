@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { cloneDeep, isEqual, isPlainObject } from "lodash";
+import { cloneDeep, isEqual, isPlainObject } from "lodash-es";
 import { requestDefinition } from "@onapi/domain";
 import { APIS_BASE_DEFAULT_DATA } from "@onapi/domain/requests/constants/common";
 import type { EditorRecord } from "@onapi/domain/requests/record";

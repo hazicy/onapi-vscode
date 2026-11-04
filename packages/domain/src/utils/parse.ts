@@ -1,5 +1,5 @@
 import { bufferToRaw } from "@onapi/domain/utils/response-tools";
-import { isString } from "lodash";
+import { isString } from "lodash-es";
 
 export const parseStreamToRaw: (
   stream: ArrayBuffer | undefined,

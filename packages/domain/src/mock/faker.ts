@@ -1,4 +1,4 @@
-import { get, set } from "lodash";
+import { get, set } from "lodash-es";
 import JSON5 from "json5";
 import definitions from "./faker-definitions.json";
 import { faker, fakerZH_CN } from "./locales";

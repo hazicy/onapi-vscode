@@ -15,7 +15,7 @@ import { prepareSocketOptions } from "./prepare-socket-options";
 import { getApiList } from "../request-storage";
 import { getCurrentProjectConfig } from "../../../platform/storage/project-config";
 import { ProjectConfigType } from "@onapi/domain/project/types/index";
-import { find, isEqual } from "lodash";
+import { find, isEqual } from "lodash-es";
 import { randomUUID } from "node:crypto";
 import { executionService } from "../../../platform/execution/service";
 import { relayExecutionEvent } from "../../../platform/execution/webview-relay";

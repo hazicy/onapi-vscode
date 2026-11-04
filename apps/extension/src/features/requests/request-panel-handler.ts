@@ -20,7 +20,7 @@ import {
   reserveHttpExecution,
 } from "./execution/http-runner";
 import { globalConfig } from "../../app/config";
-import { forEach, isPlainObject } from "lodash";
+import { forEach, isPlainObject } from "lodash-es";
 import { createShare } from "../sharing/share-data";
 
 import {

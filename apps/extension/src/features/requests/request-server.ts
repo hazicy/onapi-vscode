@@ -1,5 +1,5 @@
 import type * as vscode from "vscode";
-import { find, isEqual, isObject, isUndefined } from "lodash";
+import { find, isEqual, isObject, isUndefined } from "lodash-es";
 import { getCurrentProjectConfig } from "../../platform/storage/project-config";
 
 export const getCurrentRequestServer = (

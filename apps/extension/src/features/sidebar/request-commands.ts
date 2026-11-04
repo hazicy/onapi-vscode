@@ -3,7 +3,7 @@ import * as vscode from "vscode";
 import type { SidebarTreeNode } from "./tree-data";
 import { handleMessage } from "./sidebar-handler";
 import type { SidebarCommandContext } from "./command-context";
-import { cloneDeep } from "lodash";
+import { cloneDeep } from "lodash-es";
 import { copyAsCurl } from "../requests/commands";
 import { getApiListName } from "../requests/request-storage";
 import { snowflakeId } from "@onapi/domain/utils/data-tools";

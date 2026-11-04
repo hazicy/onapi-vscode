@@ -29,7 +29,7 @@ import {
   isEmpty,
   isFunction,
   isPlainObject,
-} from "lodash";
+} from "lodash-es";
 import { updateOpenData } from "../requests/commands";
 import {
   createShare,

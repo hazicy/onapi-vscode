@@ -1,4 +1,4 @@
-import { head, isPlainObject } from "lodash";
+import { head, isPlainObject } from "lodash-es";
 import { fromCurlPostmanRequest } from "@onapi/domain/curl/utils/postman-request";
 import * as vscode from "vscode";
 import curlToPostman from "curl-to-postmanv2";

@@ -8,7 +8,7 @@ import {
   forEach,
   filter,
   toUpper,
-} from "lodash";
+} from "lodash-es";
 
 import { produce } from "immer";
 import urlParse from "url-parse";
