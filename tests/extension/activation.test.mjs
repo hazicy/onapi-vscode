@@ -74,8 +74,7 @@ for (const failAt of ["storage", "initialization"]) {
           return { openTestReportEditor: unused };
         if (id.endsWith("/import-data-panel"))
           return { createImportDataPanel: unused };
-        if (id.endsWith("/export-data-panel"))
-          return { createExportDataPanel: unused };
+        if (id.endsWith("/export-flow")) return { exportProject: unused };
         if (id.endsWith("/environment-panel"))
           return { createEnvironmentPanel: unused };
         if (id === "./platform/theme")

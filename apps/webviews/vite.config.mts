@@ -22,7 +22,6 @@ const panels = [
   "folderTestPanel",
   "folderTestReportPanel",
   "shareListPanel",
-  "exportDataPanel",
 ];
 
 export default defineConfig(({ mode, command }) => {

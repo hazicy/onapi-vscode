@@ -19,9 +19,19 @@ async function main() {
   const chunks = (await fs.readdir(path.join(output, "chunks")))
     .filter((name) => name.endsWith(".js"))
     .map((name) => `chunks/${name}`);
-  if (entries.length !== 7 || chunks.length === 0) {
-    throw new Error("Expected seven Webview entries and shared ESM chunks.");
-  }
+  const expectedEntries = (
+    await fs.readdir(new URL("../apps/webviews/src/app/webviews/", import.meta.url))
+  )
+    .filter((name) => name.endsWith("Panel.tsx"))
+    .map((name) => name[0].toLowerCase() + name.slice(1).replace(/\.tsx$/, ""))
+    .sort();
+  assert.ok(expectedEntries.length > 0, "Expected Webview source entries.");
+  assert.deepEqual(
+    entries.map((name) => name.replace(/(?:\.bundle)?\.js$/, "")).sort(),
+    expectedEntries,
+    "Built Webview entries must match the current source panels.",
+  );
+  assert.ok(chunks.length > 0, "Expected shared ESM chunks.");
   // Parse emitted modules independently: injected globals and vendor-local
   // bindings can collide only after code splitting, even if bundling succeeds.
   for (const filename of [...entries, ...chunks]) {

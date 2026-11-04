@@ -10,7 +10,7 @@ import { createImportDataPanel } from "./features/import/import-data-panel";
 import { createEnvironmentPanel } from "./features/environment/environment-panel";
 import { openFolderTestEditor } from "./features/testing/folder-test-editor";
 import { openTestReportEditor } from "./features/testing/test-report-editor";
-import { createExportDataPanel } from "./features/export/export-data-panel";
+import { exportProject } from "./features/export/export-flow";
 import { onThemeChange, onFontSizeChange } from "./platform/theme";
 import { initializePlugin } from "./app/initialize";
 import { restartServer, startDocsServer } from "./features/documentation";
@@ -254,7 +254,7 @@ export async function activate(context: vscode.ExtensionContext) {
   // Register Export Data Webview
   context.subscriptions.push(
     vscode.commands.registerCommand("openExportDataPanel", (data) => {
-      createExportDataPanel(data ?? { type: "onapi" }, context);
+      return exportProject(data, context);
     }),
   );
 

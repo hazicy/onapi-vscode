@@ -96,7 +96,6 @@ for (const panel of [
   "folderTestPanel",
   "folderTestReportPanel",
   "shareListPanel",
-  "exportDataPanel",
 ]) {
   test(`production ${panel} initializes without module errors`, async ({
     page,
@@ -127,7 +126,6 @@ for (const panel of [
   "folderTestPanel",
   "folderTestReportPanel",
   "shareListPanel",
-  "exportDataPanel",
 ]) {
   test(`production ${panel} renders loaded application content`, async ({
     page,

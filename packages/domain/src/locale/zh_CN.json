@@ -1,4 +1,11 @@
 {
+  "exportFlow": {
+    "title": "导出请求集合",
+    "format": "选择导出格式",
+    "version": "选择 OpenAPI 版本",
+    "workspaceChanged": "当前项目已切换，请重新开始导出。",
+    "unsupported": "不支持的导出格式"
+  },
   "importSource": {
     "file": "从文件导入",
     "url": "从链接导入",

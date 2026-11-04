@@ -2,116 +2,126 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import load, { nativeDependency } from "../helpers/loadTypeScript.mjs";
 
-async function fixture({ prepare, save } = {}) {
-  const messages = [];
-  let disposed = false;
-  const panel = {
-    webview: { postMessage: (message) => messages.push(message) },
-    dispose: () => {
-      disposed = true;
-    },
-  };
-  const { handelExportDataMessage } = await load(
-    "apps/extension/src/features/export/export-data-handler.ts",
+async function fixture({
+  choices = ["onapi"],
+  cancelSave = false,
+  failure,
+  switchProject = false,
+} = {}) {
+  const prepared = [],
+    saved = [],
+    notices = [],
+    errors = [],
+    picks = [];
+  let project = "one";
+  const { exportProject } = await load(
+    "apps/extension/src/features/export/export-flow.ts",
     (id) => {
-      if (id === "../../app/config")
-        return { globalConfig: { exportDataWebView: panel } };
+      if (id === "vscode")
+        return {
+          ProgressLocation: { Notification: 1 },
+          window: {
+            showQuickPick: async (items) => {
+              picks.push(items);
+              const choice = choices.shift();
+              if (!choice) return undefined;
+              return items.find(
+                (item) => item.type === choice || item.version === choice,
+              );
+            },
+            withProgress: async (_, run) => run(),
+            showInformationMessage: (message) => notices.push(message),
+            showErrorMessage: (message) => errors.push(message),
+          },
+        };
+      if (id === "i18next") return { t: (key) => key };
+      if (id.endsWith("project-config"))
+        return { getCurrentProjectId: () => project };
       if (id === "./export-data")
         return {
-          getExportData:
-            prepare ||
-            (async () => ({ fileName: "requests.json", fileText: "{}" })),
+          getExportData: async (options) => {
+            prepared.push(options);
+            if (failure === "prepare") throw new Error("Conversion failed");
+            if (switchProject) project = "two";
+            return { fileName: "requests.json", fileText: "{}" };
+          },
         };
-      if (id === "../../platform/host-utils")
+      if (id.endsWith("host-utils"))
         return {
-          saveTextFile:
-            save ||
-            (async (_name, _text, onWrite) => {
-              onWrite();
-              return "/tmp/requests.json";
-            }),
+          saveTextFile: async (...args) => {
+            saved.push(args);
+            if (failure === "write") throw new Error("Disk full");
+            return cancelSave ? undefined : "/tmp/requests.json";
+          },
         };
-      if (id === "vscode") return { window: { showInformationMessage() {} } };
-      return nativeDependency(id);
+      throw new Error(id);
     },
   );
   return {
-    messages,
-    disposed: () => disposed,
-    run: () =>
-      handelExportDataMessage(
-        {
-          action: "exportProjectData",
-          requestId: "export-1",
-          data: { type: "onapi" },
-        },
-        {},
-        {},
-      ),
+    prepared,
+    saved,
+    notices,
+    errors,
+    picks,
+    run: (options) => exportProject(options, {}),
   };
 }
 
-test("export stays pending through the save dialog and acknowledges the actual write", async () => {
-  let release;
-  const gate = new Promise((resolve) => {
-    release = resolve;
-  });
-  const f = await fixture({
-    save: async (_name, _text, onWrite) => {
-      await gate;
-      onWrite();
-      return "/tmp/requests.json";
-    },
-  });
-  const operation = f.run();
-  await new Promise((resolve) => setImmediate(resolve));
-  assert.deepEqual(
-    f.messages.map((message) => message.data.stage),
-    ["preparing", "choosingLocation"],
-  );
-  assert.equal(f.disposed(), false);
-  release();
-  await operation;
-  assert.deepEqual(
-    f.messages.map((message) => message.data.stage),
-    ["preparing", "choosingLocation", "saving", "complete"],
-  );
-  assert.ok(f.messages.every((message) => message.requestId === "export-1"));
-  assert.equal(f.disposed(), true);
+test("export chooses a format then saves without opening a webview", async () => {
+  const f = await fixture({ choices: ["postman"] });
+  await f.run();
+  assert.equal(f.prepared[0].type, "postman");
+  assert.deepEqual(f.saved, [["requests.json", "{}"]]);
+  assert.equal(f.notices.length, 1);
 });
 
-for (const failure of ["cancel", "prepare", "write"]) {
-  test(`export ${failure} retains the panel and reports a terminal status`, async () => {
-    const f = await fixture({
-      ...(failure === "cancel" ? { save: async () => undefined } : {}),
-      ...(failure === "prepare"
-        ? {
-            prepare: async () => {
-              throw new Error("Invalid collection");
-            },
-          }
-        : {}),
-      ...(failure === "write"
-        ? {
-            save: async () => {
-              throw new Error("Permission denied");
-            },
-          }
-        : {}),
-    });
+test("OpenAPI export selects its version", async () => {
+  const f = await fixture({ choices: ["swagger", "2.0"] });
+  await f.run();
+  assert.equal(f.prepared[0].version, "2.0");
+  assert.equal(f.picks.length, 2);
+});
+
+test("explicit environment export skips format selection", async () => {
+  const f = await fixture();
+  await f.run({ type: "environment" });
+  assert.equal(f.prepared[0].type, "environment");
+  assert.equal(f.picks.length, 0);
+});
+
+for (const choices of [[], ["swagger"]]) {
+  test(`cancelling selection after ${choices.length} steps does not prepare or save`, async () => {
+    const f = await fixture({ choices: [...choices] });
     await f.run();
-    assert.equal(f.disposed(), false);
     assert.equal(
-      f.messages.at(-1).data.stage,
-      failure === "cancel" ? "cancelled" : "error",
-    );
-    if (failure !== "cancel") assert.ok(f.messages.at(-1).data.error);
-    assert.equal(
-      f.messages.some((message) => message.data.stage === "complete"),
-      false,
+      f.prepared.length + f.saved.length + f.notices.length + f.errors.length,
+      0,
     );
   });
 }
+
+test("cancelling save does not report success", async () => {
+  const f = await fixture({ cancelSave: true });
+  await f.run();
+  assert.equal(f.saved.length, 1);
+  assert.equal(f.notices.length + f.errors.length, 0);
+});
+
+for (const failure of ["prepare", "write"]) {
+  test(`export reports ${failure} failures`, async () => {
+    const f = await fixture({ failure });
+    await f.run();
+    assert.equal(f.errors.length, 1);
+    assert.equal(f.notices.length, 0);
+  });
+}
+
+test("project changes during conversion abort saving", async () => {
+  const f = await fixture({ switchProject: true });
+  await f.run();
+  assert.equal(f.saved.length, 0);
+  assert.equal(f.errors.length, 1);
+});
 
 test("saving text distinguishes cancellation from write failure", async () => {
   let uri;

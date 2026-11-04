@@ -6,12 +6,10 @@ interface GlobalConfigType {
   openedFolderTestReportDataPanels: { [key: string]: vscode.WebviewPanel };
   environmentWebView: vscode.WebviewPanel | null;
   importDataWebView: vscode.WebviewPanel | null;
-  exportDataWebView: vscode.WebviewPanel | null;
   shareListWebView: vscode.WebviewPanel | null;
 }
 
 enum PanelNameEnum {
-  EXPORTDATA = "EXPORTDATA",
   IMPORTDATA = "IMPORTDATA",
   SHARELIST = "SHARELIST",
   ENVIRONMENT = "ENVIRONMENT",
@@ -47,7 +45,6 @@ export const globalConfig: GlobalConfigType = {
   // Import data webview object
   importDataWebView: null,
 
-  exportDataWebView: null,
   // Global store for open document pages
 };
 
@@ -60,11 +57,6 @@ export const DEFAULT_TARGET_NAME: any = {
 };
 
 export const PANEL_OPTIONS: PanelOptionsType = {
-  [PanelNameEnum.EXPORTDATA]: {
-    viewType: "exportDataPanel",
-    title: i18next.t("settings.export_project.title"),
-    iconName: "export_data.png",
-  },
   [PanelNameEnum.IMPORTDATA]: {
     viewType: "importDataPanel",
     get title() {

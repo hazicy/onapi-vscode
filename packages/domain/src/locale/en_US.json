@@ -1,4 +1,11 @@
 {
+  "exportFlow": {
+    "title": "Export collections",
+    "format": "Choose an export format",
+    "version": "Choose an OpenAPI version",
+    "workspaceChanged": "The current project has changed. Start the export again.",
+    "unsupported": "Unsupported export format"
+  },
   "importSource": {
     "file": "Import from file",
     "url": "Import from link",

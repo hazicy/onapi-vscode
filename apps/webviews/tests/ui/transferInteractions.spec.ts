@@ -1,10 +1,7 @@
 import { expect, type Page } from "@playwright/test";
 import { test } from "./fixtures";
 
-async function openPanel(
-  page: Page,
-  panel: "importDataPanel" | "exportDataPanel",
-) {
+async function openPanel(page: Page, panel: "importDataPanel") {
   await page.route("**/transfer.html", (route) =>
     route.fulfill({
       contentType: "text/html",
@@ -36,75 +33,6 @@ const latest = (page: Page, action: string) =>
   );
 const emit = (page: Page, response: unknown) =>
   page.evaluate((response) => window.postMessage(response, "*"), response);
-
-test("export follows host progress and retains options after cancellation and failure", async ({
-  page,
-}) => {
-  await openPanel(page, "exportDataPanel");
-  const button = page.getByRole("button", { name: "Export Now", exact: true });
-  await page.getByRole("radio", { name: "Postman 2.1", exact: true }).check();
-  await button.click();
-  const first = await latest(page, "exportProjectData");
-  expect(first.data.type).toBe("postman");
-  await expect(button).toBeDisabled();
-  await expect(
-    page.getByRole("status").filter({ hasText: "Preparing export" }),
-  ).toBeVisible();
-  await emit(page, {
-    action: "exportStatus",
-    requestId: first.requestId,
-    data: { stage: "choosingLocation" },
-  });
-  await expect(
-    page.getByRole("status").filter({ hasText: "Choose a location" }),
-  ).toBeVisible();
-  await expect(button).toBeDisabled();
-  await emit(page, {
-    action: "exportStatus",
-    requestId: first.requestId,
-    data: { stage: "cancelled" },
-  });
-  await expect(button).toBeEnabled();
-  await expect(
-    page.getByRole("radio", { name: "Postman 2.1", exact: true }),
-  ).toBeChecked();
-  await expect(
-    page.getByText("Save cancelled. Your export options have been kept."),
-  ).toBeVisible();
-  await button.click();
-  const second = await latest(page, "exportProjectData");
-  expect(second.requestId).not.toBe(first.requestId);
-  await emit(page, {
-    action: "exportStatus",
-    requestId: first.requestId,
-    data: { stage: "error", error: "Old failure" },
-  });
-  await expect(button).toBeDisabled();
-  await emit(page, {
-    action: "exportStatus",
-    requestId: second.requestId,
-    data: { stage: "error", error: "Disk full" },
-  });
-  await expect(page.getByRole("alert")).toContainText("Disk full");
-  await expect(button).toBeEnabled();
-  await button.click();
-  const third = await latest(page, "exportProjectData");
-  expect(third.data.type).toBe("postman");
-  await emit(page, {
-    action: "exportStatus",
-    requestId: third.requestId,
-    data: { stage: "saving" },
-  });
-  await expect(
-    page.getByRole("status").filter({ hasText: "Saving file" }),
-  ).toBeVisible();
-  await emit(page, {
-    action: "exportStatus",
-    requestId: third.requestId,
-    data: { stage: "complete" },
-  });
-  await expect(page.getByText("Export complete")).toBeVisible();
-});
 
 test("import keeps the preview and selection when saving fails", async ({
   page,

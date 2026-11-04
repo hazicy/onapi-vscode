@@ -72,7 +72,7 @@ export const getExportData = async (
     result.fileText = JSON.stringify(onapiData, null, "\t");
     return result;
   } else if (type === EXPORT_TYPE_ENUM.swagger) {
-    result.fileName = `${user_config?.currentProject?.name || ""}_openapi_${3.0}.json`;
+    result.fileName = `${user_config?.currentProject?.name || ""}_openapi_${version}.json`;
     const res = await exportMethod.toOpenApi(json, version);
     if (res.status === "success") {
       showConverterWarnings(res.warnings);

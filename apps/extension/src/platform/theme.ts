@@ -8,7 +8,6 @@ export const onThemeChange = () => {
     openedPanels,
     environmentWebView,
     openedFolderTestPanels,
-    exportDataWebView,
     importDataWebView,
   } = globalConfig;
   const currentTheme = vscode.workspace
@@ -35,12 +34,6 @@ export const onThemeChange = () => {
       action: "setVscodeTheme",
       data: currentTheme,
     });
-  });
-
-  // Notify export
-  exportDataWebView?.webview.postMessage({
-    action: "setVscodeTheme",
-    data: currentTheme,
   });
 
   // Notify import
