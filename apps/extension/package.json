@@ -142,11 +142,6 @@
           "group": "1_data@2"
         },
         {
-          "command": "onapi.openEnv",
-          "when": "view == onapiRequests",
-          "group": "navigation@4"
-        },
-        {
           "command": "onapi.openExtenisonSettings",
           "when": "view == onapiRequests",
           "group": "2_workspace@2"
