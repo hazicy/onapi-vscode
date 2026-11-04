@@ -43,7 +43,13 @@ export function getProtocolTreeIcon(
   const methodColor = name.startsWith("http-")
     ? `onapi.method.${name.slice(5)}`
     : undefined;
-  const protocolColor = ["websocket", "socketio", "graphql"].includes(name)
+  const protocolColor = [
+    "ai",
+    "mcp",
+    "websocket",
+    "socketio",
+    "graphql",
+  ].includes(name)
     ? `onapi.protocol.${name}`
     : undefined;
   const iconColor = color || methodColor || protocolColor;

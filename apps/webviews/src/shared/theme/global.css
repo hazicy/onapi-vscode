@@ -10,3 +10,34 @@
   --color-warning: #ffb400;
   --color-info: #097bed;
 }
+
+/* VS Code injects theme variables on body; resolve aliases at that scope. */
+body {
+  --onapi-method-get: var(--vscode-onapi-method-get, #2a7c4c);
+  --onapi-method-post: var(--vscode-onapi-method-post, #9e7d10);
+  --onapi-method-put: var(--vscode-onapi-method-put, #325ab5);
+  --onapi-method-patch: var(--vscode-onapi-method-patch, #734fae);
+  --onapi-method-delete: var(--vscode-onapi-method-delete, #a83934);
+  --onapi-method-head: var(--vscode-onapi-method-head, #2a7c4c);
+  --onapi-method-options: var(--vscode-onapi-method-options, #b64489);
+  --onapi-protocol-websocket: var(--vscode-onapi-protocol-websocket, #c55014);
+  --onapi-protocol-socketio: var(--vscode-onapi-protocol-socketio, #c55014);
+  --onapi-protocol-graphql: var(--vscode-onapi-protocol-graphql, #ba3b91);
+  --onapi-protocol-ai: var(--vscode-onapi-protocol-ai, #2a7c4c);
+  --onapi-protocol-mcp: var(--vscode-onapi-protocol-mcp, #6b6b6b);
+}
+body.vscode-dark,
+body.vscode-high-contrast {
+  --onapi-method-get: var(--vscode-onapi-method-get, #7bc193);
+  --onapi-method-post: var(--vscode-onapi-method-post, #d7be76);
+  --onapi-method-put: var(--vscode-onapi-method-put, #81bdf3);
+  --onapi-method-patch: var(--vscode-onapi-method-patch, #b9a3e9);
+  --onapi-method-delete: var(--vscode-onapi-method-delete, #e88f7d);
+  --onapi-method-head: var(--vscode-onapi-method-head, #7bc193);
+  --onapi-method-options: var(--vscode-onapi-method-options, #d192c6);
+  --onapi-protocol-websocket: var(--vscode-onapi-protocol-websocket, #ef9462);
+  --onapi-protocol-socketio: var(--vscode-onapi-protocol-socketio, #ef9462);
+  --onapi-protocol-graphql: var(--vscode-onapi-protocol-graphql, #de83bd);
+  --onapi-protocol-ai: var(--vscode-onapi-protocol-ai, #7bc193);
+  --onapi-protocol-mcp: var(--vscode-onapi-protocol-mcp, #b0b0b0);
+}

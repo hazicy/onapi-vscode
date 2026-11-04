@@ -307,3 +307,38 @@
   border-start-start-radius: 0;
   border-end-start-radius: 0;
 }
+
+.container > .select.get,
+.container .select:not(.rightSelect).get .selectSelectionItem {
+  color: var(--onapi-method-get);
+}
+
+.container > .select.post,
+.container .select:not(.rightSelect).post .selectSelectionItem {
+  color: var(--onapi-method-post);
+}
+
+.container > .select.put,
+.container .select:not(.rightSelect).put .selectSelectionItem {
+  color: var(--onapi-method-put);
+}
+
+.container > .select.patch,
+.container .select:not(.rightSelect).patch .selectSelectionItem {
+  color: var(--onapi-method-patch);
+}
+
+.container > .select.delete,
+.container .select:not(.rightSelect).delete .selectSelectionItem {
+  color: var(--onapi-method-delete);
+}
+
+.container > .select.head,
+.container .select:not(.rightSelect).head .selectSelectionItem {
+  color: var(--onapi-method-head);
+}
+
+.container > .select.options,
+.container .select:not(.rightSelect).options .selectSelectionItem {
+  color: var(--onapi-method-options);
+}

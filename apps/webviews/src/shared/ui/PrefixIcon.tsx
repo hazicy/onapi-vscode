@@ -22,8 +22,8 @@ const PrefixIcon: FC<Props> = memo(
       const typeMap: {
         [key: string]: { icon: string | React.ReactNode; className: string };
       } = {
-        ai: { icon: <AppIcon icon="ai" />, className: "" },
-        mcp: { icon: <AppIcon icon="mcp" />, className: "" },
+        ai: { icon: <AppIcon icon="ai" />, className: styles.ai },
+        mcp: { icon: <AppIcon icon="mcp" />, className: styles.mcp },
         doc: { icon: "MD", className: styles.doc },
         folder: {
           icon: (

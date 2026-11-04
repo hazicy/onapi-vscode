@@ -76,32 +76,40 @@
 
 /* Protocol colors match the native sidebar and editor tab icons. */
 .container.get {
-  color: light-dark(#2a7c4c, #7bc193);
+  color: var(--onapi-method-get);
 }
 .container.post {
-  color: light-dark(#9e7d10, #d7be76);
+  color: var(--onapi-method-post);
 }
 .container.put {
-  color: light-dark(#325ab5, #81bdf3);
+  color: var(--onapi-method-put);
 }
 .container.patch {
-  color: light-dark(#734fae, #b9a3e9);
+  color: var(--onapi-method-patch);
 }
 .container.delete {
-  color: light-dark(#a83934, #e88f7d);
+  color: var(--onapi-method-delete);
 }
 .container.head {
-  color: light-dark(#2a7c4c, #7bc193);
+  color: var(--onapi-method-head);
 }
 .container.options {
-  color: light-dark(#b64489, #d192c6);
+  color: var(--onapi-method-options);
 }
 .container.ws {
-  color: light-dark(#c55014, #ef9462);
+  color: var(--onapi-protocol-websocket);
 }
 .container.socketio {
-  color: light-dark(#c55014, #ef9462);
+  color: var(--onapi-protocol-socketio);
 }
 .container.gql {
-  color: light-dark(#ba3b91, #de83bd);
+  color: var(--onapi-protocol-graphql);
+}
+
+.container.ai {
+  color: var(--onapi-protocol-ai);
+}
+
+.container.mcp {
+  color: var(--onapi-protocol-mcp);
 }

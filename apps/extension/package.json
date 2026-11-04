@@ -804,6 +804,26 @@
           "highContrast": "#DE83BD",
           "highContrastLight": "#BA3B91"
         }
+      },
+      {
+        "id": "onapi.protocol.ai",
+        "description": "OnAPI AI icon color",
+        "defaults": {
+          "light": "#2A7C4C",
+          "dark": "#7BC193",
+          "highContrast": "#7BC193",
+          "highContrastLight": "#2A7C4C"
+        }
+      },
+      {
+        "id": "onapi.protocol.mcp",
+        "description": "OnAPI MCP icon color",
+        "defaults": {
+          "light": "#6B6B6B",
+          "dark": "#B0B0B0",
+          "highContrast": "#B0B0B0",
+          "highContrastLight": "#6B6B6B"
+        }
       }
     ],
     "viewsWelcome": [
