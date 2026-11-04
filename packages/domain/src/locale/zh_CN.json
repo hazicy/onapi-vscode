@@ -1,4 +1,31 @@
 {
+  "importSource": {
+    "file": "从文件导入",
+    "url": "从链接导入",
+    "curl": "导入 cURL",
+    "chooseSource": "选择导入来源",
+    "curlPrompt": "粘贴 cURL 命令或 HTTP 链接",
+    "required": "请输入内容",
+    "invalidCurl": "请输入 cURL 命令或 HTTP 链接",
+    "unsupported": "不支持的集合格式",
+    "workspaceChanged": "当前项目已切换，请重新开始导入。",
+    "reading": "正在读取导入内容…",
+    "empty": "未找到请求或环境",
+    "source": "来源"
+  },
+  "importPanel": {
+    "title": "导入请求集合",
+    "method": "导入方式",
+    "file": "文件",
+    "link": "链接",
+    "curl": "cURL",
+    "format": "文件格式",
+    "chooseFile": "选择文件",
+    "dropFile": "拖放文件到此处",
+    "preview": "预览导入内容",
+    "invalidUrl": "请输入有效的 HTTP 或 HTTPS 文档链接。",
+    "emptyFile": "文件为空，请选择包含导入数据的 JSON 文件。"
+  },
   "interaction": {
     "noMatchingVariables": "没有匹配的变量",
     "configuredValue": "当前配置值",

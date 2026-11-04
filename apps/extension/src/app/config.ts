@@ -67,7 +67,13 @@ export const PANEL_OPTIONS: PanelOptionsType = {
   },
   [PanelNameEnum.IMPORTDATA]: {
     viewType: "importDataPanel",
-    title: i18next.t("common.import_project"),
+    get title() {
+      return i18next.t("importPanel.title", {
+        defaultValue: vscode.env.language.toLowerCase().startsWith("zh")
+          ? "导入请求集合"
+          : "Import collections",
+      });
+    },
     iconName: "import_data.png",
   },
   [PanelNameEnum.SHARELIST]: {

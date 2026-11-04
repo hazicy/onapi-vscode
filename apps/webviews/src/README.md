@@ -62,7 +62,7 @@ src/
 ## Naming and imports
 
 - Use PascalCase for React component names, component files and component folders:
-  `EditItem.tsx`, `components/ImportData/ImportData.tsx`.
+  `EditItem.tsx`, `components/ImportPreview.tsx`.
 - Keep a standalone component and its stylesheet side by side as `Component.tsx`
   and `Component.module.css`; do not add a folder containing only that pair.
 - Keep component folders when they contain supporting logic or subcomponents.

@@ -3,10 +3,20 @@ import { globalConfig, PANEL_OPTIONS } from "../../app/config";
 import * as vscode from "vscode";
 import { getApiList } from "../requests/request-storage";
 import { handelImportDataMessage } from "./import-data-handler";
-import { isString } from "lodash";
+import { collectImportSource, type ImportPreview } from "./import-source";
+import { getCurrentProjectId } from "../../platform/storage/project-config";
+import i18next from "i18next";
 
 export const createImportDataPanel = (
-  data: any,
+  data: { type?: string } | undefined,
+  context: vscode.ExtensionContext,
+) =>
+  collectImportSource(data, context, (preview) =>
+    openImportPreview(preview, context),
+  );
+
+const openImportPreview = (
+  data: ImportPreview,
   context: vscode.ExtensionContext,
 ) => {
   let { importDataWebView } = globalConfig;
@@ -14,26 +24,29 @@ export const createImportDataPanel = (
   const panelOptions = PANEL_OPTIONS.IMPORTDATA;
 
   if (importDataWebView) {
-    let systemConfig: any = context.globalState.get("systemConfig") || {};
-    if (isString(data?.type)) {
-      systemConfig["import_data_init_type"] = data.type;
-    }
-    importDataWebView?.webview.postMessage({
-      action: "setSystemConfig",
-      data: systemConfig,
-    });
-
-    // Tab already exists, switch to it
-    importDataWebView.reveal(vscode.ViewColumn.One);
-    return;
+    importDataWebView.dispose();
   }
   // Create and show panel
-  const panel = createFeaturePanel(context, panelOptions);
+  const panel = createFeaturePanel(context, panelOptions, {
+    data: { importPreview: data },
+  });
 
   // Receive messages from Webview
   panel.webview.onDidReceiveMessage(
-    async (message: { action: string; data: any }) => {
-      handelImportDataMessage(message, context, data);
+    async (message: { action: string; data: any; requestId?: string }) => {
+      if (message.action === "closeImportPreview") {
+        panel.dispose();
+        return;
+      }
+      if (data.projectId !== getCurrentProjectId(context)) {
+        panel.webview.postMessage({
+          action: "importError",
+          requestId: message.requestId,
+          data: i18next.t("importSource.workspaceChanged"),
+        });
+        return;
+      }
+      await handelImportDataMessage(message, context, data);
     },
   );
 

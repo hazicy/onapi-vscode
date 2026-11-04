@@ -16,6 +16,52 @@ import { importMethod } from "@onapi/api-converter/export";
 import { IMPORT_TYPE_ENUM } from "@onapi/domain/settings/constants/settings";
 import { fromPostmanCollection, createDefaultHttpConfig } from "@onapi/domain";
 
+/** Parse sources before opening a preview; importing remains an explicit action. */
+export async function parseImportSource(
+  json: any,
+  fileType: IMPORT_TYPE_ENUM,
+  formData: { basePath?: boolean; hostPath?: boolean },
+  context: vscode.ExtensionContext,
+) {
+  let result: any;
+  if (Array.isArray(json?.values)) {
+    result = {
+      status: "success",
+      data: {
+        apis: [],
+        envs: [{ ...json, id: json.id || crypto.randomUUID() }],
+      },
+    };
+  } else if (fileType === IMPORT_TYPE_ENUM.POSTMAN) {
+    result = await importMethod.fromPostman(
+      json,
+      getCurrentProjectId(context),
+    );
+  } else if (fileType === IMPORT_TYPE_ENUM.THUNDER_CLIENT) {
+    result = await importMethod.fromThunder(
+      json,
+      getCurrentProjectId(context),
+    );
+  } else if (
+    [IMPORT_TYPE_ENUM.SWAGGER, IMPORT_TYPE_ENUM.SWAGGERURL].includes(
+      fileType,
+    )
+  ) {
+    result = await importMethod.fromOpenApi(json, {
+      basePath: !!formData?.basePath,
+      host: !!formData?.hostPath,
+    });
+  } else if (fileType === IMPORT_TYPE_ENUM.ONAPI && json?.http) {
+    result = { status: "success", data: json };
+  } else {
+    throw new Error("Unsupported import format");
+  }
+  if (result?.status !== "success") {
+    throw new Error(result?.message || "Invalid collection");
+  }
+  return { models: [], envs: [], ...result.data };
+}
+
 export async function handelImportDataMessage(
   message: { action: string; data: any; requestId?: string },
   context: vscode.ExtensionContext,
@@ -38,43 +84,7 @@ export async function handelImportDataMessage(
     case "getImportData": {
       try {
         const { json, fileType, formData } = message.data;
-        let result: any;
-        if (Array.isArray(json?.values)) {
-          result = {
-            status: "success",
-            data: {
-              apis: [],
-              envs: [{ ...json, id: json.id || crypto.randomUUID() }],
-            },
-          };
-        } else if (fileType === IMPORT_TYPE_ENUM.POSTMAN) {
-          result = await importMethod.fromPostman(
-            json,
-            getCurrentProjectId(context),
-          );
-        } else if (fileType === IMPORT_TYPE_ENUM.THUNDER_CLIENT) {
-          result = await importMethod.fromThunder(
-            json,
-            getCurrentProjectId(context),
-          );
-        } else if (
-          [IMPORT_TYPE_ENUM.SWAGGER, IMPORT_TYPE_ENUM.SWAGGERURL].includes(
-            fileType,
-          )
-        ) {
-          result = await importMethod.fromOpenApi(json, {
-            basePath: !!formData?.basePath,
-            host: !!formData?.hostPath,
-          });
-        } else if (fileType === IMPORT_TYPE_ENUM.ONAPI && json?.http) {
-          result = { status: "success", data: json };
-        } else {
-          throw new Error("Unsupported import format");
-        }
-        if (result?.status !== "success") {
-          throw new Error(result?.message || "Invalid collection");
-        }
-        const data = { models: [], envs: [], ...result.data };
+        const data = await parseImportSource(json, fileType, formData, context);
         panel?.webview.postMessage({
           action: "setImportData",
           requestId: message.requestId,

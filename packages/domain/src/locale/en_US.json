@@ -1,4 +1,31 @@
 {
+  "importSource": {
+    "file": "Import from file",
+    "url": "Import from link",
+    "curl": "Import cURL",
+    "chooseSource": "Choose an import source",
+    "curlPrompt": "Paste a cURL command or HTTP URL",
+    "required": "Enter a value",
+    "invalidCurl": "Enter a cURL command or HTTP URL",
+    "unsupported": "Unsupported collection format",
+    "workspaceChanged": "The current project has changed. Start the import again.",
+    "reading": "Reading import source…",
+    "empty": "No requests or environments found",
+    "source": "Source"
+  },
+  "importPanel": {
+    "title": "Import collections",
+    "method": "Import method",
+    "file": "File",
+    "link": "Link",
+    "curl": "cURL",
+    "format": "File format",
+    "chooseFile": "Choose file",
+    "dropFile": "Drop a file here",
+    "preview": "Preview import",
+    "invalidUrl": "Enter a valid HTTP or HTTPS document URL.",
+    "emptyFile": "This file is empty. Choose a JSON file containing import data."
+  },
   "interaction": {
     "noMatchingVariables": "No matching variables",
     "configuredValue": "Configured value",

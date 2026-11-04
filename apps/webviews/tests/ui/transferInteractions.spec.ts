@@ -8,8 +8,17 @@ async function openPanel(
   await page.route("**/transfer.html", (route) =>
     route.fulfill({
       contentType: "text/html",
-      body: `<!doctype html><html><head><link rel="stylesheet" href="/webviews.css"></head><body><div id="root"></div><script>
-    window.vscodeData={};window.messages=[];window.resourceBaseUrl=location.origin;
+      body: `<!doctype html><html><head><link rel="stylesheet" href="/webviews.css"><style>
+    :root { --vscode-font-family: -apple-system, BlinkMacSystemFont, sans-serif; --vscode-font-size: 13px;
+    --vscode-editor-background: #1f1f1f; --vscode-foreground: #ccc; --vscode-descriptionForeground: #9d9d9d;
+    --vscode-editorWidget-background: #252526; --vscode-widget-border: #454545; --vscode-focusBorder: #007fd4;
+    --vscode-inputOption-activeBackground: #04395e; --vscode-inputOption-activeBorder: #007acc; --vscode-inputOption-activeForeground: #fff;
+    --vscode-dropdown-background: #313131; --vscode-dropdown-foreground: #ccc; --vscode-dropdown-border: #3c3c3c;
+    --vscode-button-secondaryBackground: #313131; --vscode-button-secondaryForeground: #ccc;
+    --vscode-button-background: #0078d4; --vscode-button-foreground: #fff; --vscode-button-hoverBackground: #026ec1;
+    --vscode-list-hoverBackground: #2a2d2e; --vscode-toolbar-hoverBackground: #333; }
+    </style></head><body><div id="root"></div><script>
+    window.vscodeData={importPreview:{fileType:"postman",name:"collection.json",data:{apis:[{id:"imported",name:"Imported request",kind:"api",parentId:"0",method:"GET",url:"https://example.com"}],models:[],envs:[]}}};window.messages=[];window.resourceBaseUrl=location.origin;
     window.vscode={postMessage(message){window.messages.push(message);const replies={getSystemConfig:{action:"setSystemConfig",data:{import_data_init_type:"postman"}},getUserConfig:{action:"setUserConfig",data:{}},getApiList:{action:"setApiList",data:[]},getVscodeTheme:{action:"setVscodeTheme",data:"Default Dark Modern"}};if(replies[message.action])window.postMessage(replies[message.action],"*")}};
     </script><script type="module" src="/${panel}.js"></script></body></html>`,
     }),
@@ -97,60 +106,11 @@ test("export follows host progress and retains options after cancellation and fa
   await expect(page.getByText("Export complete")).toBeVisible();
 });
 
-test("import reports parse errors and keeps the preview and selection when saving fails", async ({
+test("import keeps the preview and selection when saving fails", async ({
   page,
 }) => {
   await openPanel(page, "importDataPanel");
-  await page.getByRole("radio", { name: "Postman", exact: true }).check();
-  const file = page.locator('input[type="file"]');
-  await file.setInputFiles({
-    name: "broken.json",
-    mimeType: "application/json",
-    buffer: Buffer.from("{ broken json"),
-  });
-  await expect(page.getByRole("alert")).toContainText("Import failed");
-  await file.setInputFiles({
-    name: "collection.json",
-    mimeType: "application/json",
-    buffer: Buffer.from("{}"),
-  });
-  await expect.poll(() => latest(page, "getImportData")).toBeTruthy();
-  const first = await latest(page, "getImportData");
-  await emit(page, {
-    action: "importError",
-    requestId: first.requestId,
-    data: "Invalid collection",
-  });
-  await expect(page.getByRole("alert")).toContainText("Invalid collection");
-  await file.setInputFiles({
-    name: "collection.json",
-    mimeType: "application/json",
-    buffer: Buffer.from("{}"),
-  });
-  await expect
-    .poll(async () => (await latest(page, "getImportData"))?.requestId)
-    .not.toBe(first.requestId);
-  const preview = await latest(page, "getImportData");
-  await emit(page, {
-    action: "setImportData",
-    requestId: preview.requestId,
-    type: "select_apis",
-    data: {
-      apis: [
-        {
-          id: "imported",
-          name: "Imported request",
-          kind: "api",
-          parentId: "0",
-          method: "GET",
-          url: "https://example.com",
-        },
-      ],
-      models: [],
-      envs: [],
-    },
-  });
-  const dialog = page.getByRole("dialog", { name: "Preview" });
+  const dialog = page.locator("main");
   await expect(dialog).toBeVisible();
   const submit = dialog.getByRole("button", { name: "Import", exact: true });
   await submit.click();
@@ -187,5 +147,16 @@ test("import reports parse errors and keeps the preview and selection when savin
     dialog.getByRole("button", { name: "Importing…", exact: true }),
   ).toBeDisabled();
   await emit(page, { action: "importComplete", requestId: retry.requestId });
-  await expect(dialog).toBeHidden();
+  await expect.poll(() => latest(page, "closeImportPreview")).toBeTruthy();
+});
+
+test("import preview is the only webview import UI", async ({ page }) => {
+  await openPanel(page, "importDataPanel");
+  await expect(page.getByText("Source: collection.json")).toBeVisible();
+  await expect(page.locator('input[type="file"]')).toHaveCount(0);
+  await expect(page.getByRole("group", { name: "Import method" })).toHaveCount(
+    0,
+  );
+  await page.getByRole("button", { name: "Cancel", exact: true }).click();
+  expect(await latest(page, "closeImportPreview")).toBeTruthy();
 });

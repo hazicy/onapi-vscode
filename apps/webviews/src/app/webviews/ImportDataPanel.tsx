@@ -7,7 +7,8 @@ import useGlobalTheme from "@/features/settings/hooks/useGlobalTheme";
 import "@/shared/assets/css/reset.css";
 
 import "@/shared/locale";
-import ImportData from "@/features/import/components/ImportData/ImportData";
+import ImportPreview from "@/features/import/components/ImportPreview";
+import type { ImportPreviewSource } from "@/features/import/components/ImportPreview";
 import { ThemeProvider } from "@/shared/ui/base/Theme";
 import GlobalThemeStyle from "../../shared/theme/global";
 import "../../shared/theme/globalStyle.css";
@@ -20,6 +21,9 @@ import { isArray } from "lodash-es";
 
 function ImportDataPanel() {
   const customTheme = useGlobalTheme();
+  const [importPreview, setImportPreview] = useState<
+    ImportPreviewSource | undefined
+  >(window.vscodeData?.importPreview);
   const updateUserConfig = useUserConfig((store) => store.updateUserConfig);
   const setSavedRequests = useRequestWorkspaceStore(
     (store) => store.setSavedRequests,
@@ -51,6 +55,9 @@ function ImportDataPanel() {
       const message = event.data; // The JSON data our extension sent
 
       switch (message.action) {
+        case "setImportPreview":
+          setImportPreview(message.data);
+          break;
         case "setUserConfig":
           updateUserConfig({ ...message.data });
           setLodaing(false);
@@ -84,7 +91,7 @@ function ImportDataPanel() {
         <ThemeProvider theme={customTheme}>
           <GlobalThemeStyle />
           <Skeleton active paragraph={{ rows: 15 }} loading={lodaing}>
-            <ImportData />
+            {importPreview && <ImportPreview source={importPreview} />}
           </Skeleton>
         </ThemeProvider>
       </BaseApp>

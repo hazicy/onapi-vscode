@@ -1,7 +1,6 @@
 import type { EditorRecord } from "@onapi/domain/requests/record";
 import type { ImportOptions } from "./ImportContent/options";
 import styles2 from "./ImportApiPreview.module.css";
-import { Modal } from "@/shared/ui/base";
 import { Alert, Spin } from "@/shared/ui/base";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -13,7 +12,6 @@ import {
   Select,
   Tabs,
   TreeSelect,
-  Typography,
 } from "@/shared/ui/base";
 
 import { filter, isArray } from "lodash-es";
@@ -455,48 +453,20 @@ const Index = ({
         children: children(key),
       };
     });
-  }, [data, previewSelectData, apisFolders]);
+  }, [
+    data,
+    previewSelectData,
+    apisFolders,
+    options,
+    onOptionsChange,
+    importLocation,
+    fileType,
+    t,
+  ]);
 
+  if (!open) return null;
   return (
-    <Modal
-      width="80%"
-      destroyOnClose
-      title={t("common.api_tab.preview")}
-      onCancel={onCancel}
-      closable={!loading}
-      keyboard={!loading}
-      styles={{
-        body: {
-          minHeight: 505,
-        },
-      }}
-      footer={
-        <Flex justify="space-between" align="center">
-          <Typography.Text style={{ color: "var(--font-light-color)" }}>
-            {t("common.import_modal.import_tip")}
-          </Typography.Text>
-          <Button
-            loading={loading}
-            aria-label={t(
-              loading
-                ? "interaction.importing"
-                : "settings.synchronize.import_now_tip_confirm",
-            )}
-            aria-busy={loading}
-            onClick={() => onProjectImport()}
-            type="primary"
-          >
-            {t(
-              loading
-                ? "interaction.importing"
-                : "settings.synchronize.import_now_tip_confirm",
-            )}
-          </Button>
-        </Flex>
-      }
-      open={open}
-      className={styles2.container}
-    >
+    <section className={styles2.container}>
       {error && (
         <Alert
           type="error"
@@ -507,7 +477,24 @@ const Index = ({
       <Spin spinning={loading} tip={t("interaction.importing")}>
         <Tabs items={items} />
       </Spin>
-    </Modal>
+      <Flex justify="end" gap={12}>
+        <Button disabled={loading} onClick={onCancel}>
+          {t("base.cancel")}
+        </Button>
+        <Button
+          loading={loading}
+          aria-busy={loading}
+          onClick={() => onProjectImport()}
+          type="primary"
+        >
+          {t(
+            loading
+              ? "interaction.importing"
+              : "settings.synchronize.import_now_tip_confirm",
+          )}
+        </Button>
+      </Flex>
+    </section>
   );
 };
 

@@ -247,7 +247,7 @@ export async function activate(context: vscode.ExtensionContext) {
   // Register Import Data Webview
   context.subscriptions.push(
     vscode.commands.registerCommand("openImportDataPanel", (data) => {
-      createImportDataPanel(data ?? { type: "curl" }, context);
+      return createImportDataPanel(data, context);
     }),
   );
 
