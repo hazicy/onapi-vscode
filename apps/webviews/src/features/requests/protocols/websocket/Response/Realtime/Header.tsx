@@ -69,7 +69,10 @@ const Header = (props: Props) => {
             </Select.Option>
           </Select>
           <Button
-            style={{ height: 32, borderColor: "var(--color-table-border)" }}
+            type="text"
+            mode="icon"
+            title={t("ws.response.clear")}
+            aria-label={t("ws.response.clear")}
             size="small"
             icon={<AppIcon icon="trash-2" />}
             disabled={!websocketConnectionPool[id]?.socketRes?.length}
@@ -83,9 +86,7 @@ const Header = (props: Props) => {
               })
             }
             className={styles.button}
-          >
-            {t("ws.response.clear")}
-          </Button>
+          />
         </Flex>
       </Flex>
     </>

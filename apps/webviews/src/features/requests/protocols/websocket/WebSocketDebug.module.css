@@ -38,11 +38,10 @@
 }
 .urlPanel {
   flex-shrink: 0;
-  padding: 0 12px;
+  padding: 8px 12px 0;
 }
 .connectionRow {
   gap: 8px;
-  flex-wrap: wrap;
   min-width: 0;
 }
 .urlGroup {
@@ -64,27 +63,6 @@
   min-width: 0;
 }
 
-.connectionStatus {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border: 0;
-  padding: 4px 0 4px 8px;
-  color: var(--vscode-descriptionForeground, var(--font-light-color));
-  white-space: nowrap;
-}
-.statusDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-}
-.connectionStatus[data-status="connect"] {
-  color: var(--vscode-testing-iconPassed, #73c991);
-}
-.connectionStatus[data-status="connecting"] {
-  color: var(--vscode-editorWarning-foreground, #cca700);
-}
 .websocketLeftPanel,
 .socketIoLeftPanel {
   display: flex;
@@ -97,7 +75,9 @@
 }
 .wsHeader {
   flex-shrink: 0;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--vscode-widget-border, var(--color-border));
 }
 .messageFilters {
   width: 100%;

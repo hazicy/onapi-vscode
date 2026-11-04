@@ -120,27 +120,29 @@ const Message = (props: Props) => {
 
   return (
     <div className={styles.composer}>
-      <MessagePresets
-        key={value.id}
-        items={value.message || []}
-        activeId={curItem?.param_id}
-        onSelect={handleSelect}
-        onRename={onEdit}
-        onAdd={handleAdd}
-        onRemove={handleRemove}
-      />
       <Provider
         value={{
           isDebugArea: true,
         }}
       >
-        {curItem && (
-          <div className={styles.messageBody}>
-            <MessageHeader
-              value={curItem.request}
-              apisData={value}
-              onChange={onChangeItemRequest}
-            />
+        <div className={styles.messageBody}>
+          <MessageHeader
+            presets={
+              <MessagePresets
+                key={value.id}
+                items={value.message || []}
+                activeId={curItem?.param_id}
+                onSelect={handleSelect}
+                onRename={onEdit}
+                onAdd={handleAdd}
+                onRemove={handleRemove}
+              />
+            }
+            value={curItem?.request}
+            apisData={value}
+            onChange={onChangeItemRequest}
+          />
+          {curItem && (
             <div className={clsx(styles.rawEditor, "raw-editor-wrap")}>
               <RawEditor
                 regularValueHeight={0}
@@ -149,8 +151,8 @@ const Message = (props: Props) => {
                 onChange={onChangeItemRequest}
               />
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </Provider>
     </div>
   );

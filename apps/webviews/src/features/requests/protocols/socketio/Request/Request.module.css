@@ -52,3 +52,18 @@
 .messageHeader .selectTrigger {
   font-size: inherit;
 }
+
+.composerTools {
+  flex: 1 1 240px;
+  gap: 8px;
+}
+.sendActions {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.sendHint {
+  font-size: 12px;
+}
+@container (max-width: 540px) {
+  .sendHint { display: none; }
+}

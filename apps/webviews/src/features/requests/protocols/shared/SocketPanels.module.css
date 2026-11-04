@@ -4,12 +4,12 @@
   flex-wrap: wrap;
   gap: 6px;
   min-width: 0;
-  flex-shrink: 0;
+  flex: 1 1 180px;
 }
 .presetSelect {
   flex: 1 1 140px;
   min-width: 0;
-  max-width: 220px;
+  max-width: 180px;
 }
 .messageName {
   flex: 1 1 100px;
@@ -67,4 +67,29 @@
 .presets button:disabled {
   opacity: 0.4;
   cursor: default;
+}
+
+.connectionStatus {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 6px;
+  color: var(--vscode-descriptionForeground, var(--font-light-color));
+  font-size: 12px;
+  white-space: nowrap;
+}
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.connectionStatus[data-status="connect"] .statusDot {
+  color: var(--vscode-testing-iconPassed, #73c991);
+}
+.connectionStatus[data-status="connecting"] .statusDot {
+  color: var(--vscode-editorWarning-foreground, #cca700);
+}
+@container (max-width: 480px) {
+  .statusLabel { display: none; }
 }

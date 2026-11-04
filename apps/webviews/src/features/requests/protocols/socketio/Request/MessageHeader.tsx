@@ -1,7 +1,7 @@
 import { getSocketConnectionStatus } from "@/features/requests/protocols/shared/socket-state";
 import { sendRequestPanelMessage } from "@/shared/bridge/request-panel";
 import styles from "./Request.module.css";
-import { useEffect } from "react";
+import { useEffect, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AutoComplete, Checkbox, Flex, Select } from "@/shared/ui/base";
@@ -15,6 +15,7 @@ import useSocketConnectionsStore from "@/features/requests/store/useSocketConnec
 import { SocketIoDetailsData } from "@onapi/domain/requests/types/socketio";
 
 interface Props {
+  presets: ReactNode;
   value: any;
   onChange: (value: any) => void;
   apisData: SocketIoDetailsData;
@@ -25,7 +26,7 @@ const MessageHeader = (props: Props) => {
   const websocketConnectionPool = useSocketConnectionsStore(
     (state) => state.websocketConnectionPool,
   );
-  const { value, onChange, apisData, onChangeApisData } = props || {};
+  const { presets, value, onChange, apisData, onChangeApisData } = props || {};
   const activeRequestId = apisData.id;
   const [binaryType, setBinaryType] = useSafeState("");
 
@@ -50,8 +51,11 @@ const MessageHeader = (props: Props) => {
   };
   return (
     <div className={styles.messageHeader}>
-      <Flex align="center" gap={12}>
+      <Flex align="center" gap={8} className={styles.composerTools}>
+        {presets}
         <Select
+          disabled={!value}
+          aria-label={t("ws.response.message_type")}
           value={binaryType || value?.mode}
           onChange={(val) => {
             if (val === "binary") {
@@ -97,7 +101,7 @@ const MessageHeader = (props: Props) => {
           </Select>
         )}
       </Flex>
-      <Flex align="center" gap={12}>
+      <Flex align="center" gap={8} className={styles.sendActions}>
         <Checkbox
           checked={isEqual(apisData?.ack, 1)}
           onChange={(e) => {

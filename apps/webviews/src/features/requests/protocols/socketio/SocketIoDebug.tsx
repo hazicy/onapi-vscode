@@ -1,3 +1,4 @@
+import { ConnectionStatus } from "../shared/SocketPanels";
 import { getSocketConnectionStatus } from "@/features/requests/protocols/shared/socket-state";
 import RequestToolbar from "@/features/requests/components/RequestToolbar";
 import RequestAction from "@/features/requests/components/RequestAction";
@@ -30,7 +31,7 @@ import { produce } from "immer";
 const Request = lazy(() => importDelay(import("./Request/Request")));
 const Response = lazy(() => importDelay(import("./Response/Response")));
 const panelProps = {
-  defaultSize: 44,
+  defaultSize: 40,
   minSize: 25,
 };
 const SocketIoDebug: FC<SocketIoComponentType> = ({
@@ -92,6 +93,7 @@ const SocketIoDebug: FC<SocketIoComponentType> = ({
       <div className={styles.container}>
         <div className={styles.urlPanel}>
           <RequestToolbar className={styles.connectionRow}>
+            <ConnectionStatus status={status} />
             <div className={styles.urlGroup}>
               <UrlGroup
                 curServerId={curServerId}
@@ -139,7 +141,7 @@ const SocketIoDebug: FC<SocketIoComponentType> = ({
           }}
           rightPanelProps={{
             ...panelProps,
-            defaultSize: 56,
+            defaultSize: 60,
             collapseTitle: t("supplement.response_panel"),
           }}
           leftPanel={

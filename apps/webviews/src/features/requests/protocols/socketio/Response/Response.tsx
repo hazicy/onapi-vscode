@@ -1,9 +1,7 @@
-import { getSocketConnectionStatus } from "@/features/requests/protocols/shared/socket-state";
 import styles from "../SocketIoDebug.module.css";
 import React, { lazy, memo } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Flex } from "@/shared/ui/base";
 
 import { useMemoizedFn } from "ahooks";
 import { map } from "lodash-es";
@@ -53,31 +51,12 @@ const Response: React.FC = memo((props: any) => {
 
     return _originItems;
   });
-  const status = getSocketConnectionStatus(websocketConnectionPool[value?.id]);
-  const connectionLabel =
-    status === "connect"
-      ? t("ws.response.connected")
-      : status === "connecting"
-        ? t("ws.response.connecting")
-        : t("ws.response.disconnected");
   return (
     <div className={styles.lineBar}>
       <RequestTabs
         label={t("request_panel.response_tabs")}
         items={tabsItems()}
 
-        tabBarExtraContent={
-          <Flex align="center" gap={12} className={styles.flex}>
-            <span
-              className={styles.connectionStatus}
-              data-status={status || "disconnect"}
-              role="status"
-            >
-              <span className={styles.statusDot} aria-hidden="true" />
-              {connectionLabel}
-            </span>
-          </Flex>
-        }
         panelsClassName={styles.tabsContent}
         className={styles.tabs}
       />

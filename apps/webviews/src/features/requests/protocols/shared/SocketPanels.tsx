@@ -1,9 +1,24 @@
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { Input, Popconfirm, Select } from "@/shared/ui/base";
+import { Dropdown, Input, Modal, Select } from "@/shared/ui/base";
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
 import styles from "./SocketPanels.module.css";
+
+export function ConnectionStatus({ status }: { status: string }) {
+  const { t } = useTranslation();
+  const label = status === "connect"
+    ? t("ws.response.connected")
+    : status === "connecting"
+      ? t("ws.response.connecting")
+      : t("ws.response.disconnected");
+  return (
+    <span className={styles.connectionStatus} data-status={status} role="status" title={label}>
+      <span className={styles.statusDot} aria-hidden="true" />
+      <span className={styles.statusLabel}>{label}</span>
+    </span>
+  );
+}
 
 export function MessagePresets({
   items,
@@ -21,6 +36,7 @@ export function MessagePresets({
   onRemove: (id: string) => void;
 }) {
   const { t } = useTranslation();
+  const cancelRename = useRef(false);
   const [renaming, setRenaming] = useState(false);
   const [draftName, setDraftName] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -29,6 +45,10 @@ export function MessagePresets({
     items.findIndex((item) => item.param_id === activeId),
   );
   const commitName = () => {
+    if (cancelRename.current) {
+      cancelRename.current = false;
+      return;
+    }
     const item = items[index];
     if (item) {
       onRename(index, {
@@ -57,6 +77,7 @@ export function MessagePresets({
       {items[index] && renaming && (
         <Input
           autoFocus
+          onBlur={commitName}
           onKeyDown={(event) => {
             if (event.nativeEvent.isComposing) {
               return;
@@ -66,6 +87,7 @@ export function MessagePresets({
               event.stopPropagation();
               commitName();
             } else if (event.key === "Escape") {
+              cancelRename.current = true;
               event.preventDefault();
               event.stopPropagation();
               setRenaming(false);
@@ -81,24 +103,8 @@ export function MessagePresets({
       <Button
         type="text"
         mode="icon"
-        disabled={!items.length}
         onClick={() => {
-          if (renaming) {
-            commitName();
-          } else {
-            setDraftName(items[index]?.name || "");
-            setRenaming(true);
-          }
-        }}
-        aria-label={t("ws.layout.rename_message")}
-        title={t("ws.layout.rename_message")}
-      >
-        <AppIcon icon="pencil" />
-      </Button>
-      <Button
-        type="text"
-        mode="icon"
-        onClick={() => {
+          cancelRename.current = false;
           onAdd();
           setDraftName("");
           setRenaming(true);
@@ -108,36 +114,52 @@ export function MessagePresets({
       >
         <AppIcon icon="plus" />
       </Button>
-      <Popconfirm
-        title={t("ws.layout.delete_message")}
-        description={t("ws.layout.delete_confirm")}
-        okText={t("supplement.confirm")}
-        cancelText={t("supplement.cancel")}
+      <Dropdown
+        trigger={["click"]}
         disabled={!items.length}
-        open={deletingId !== null}
-        onOpenChange={(open) =>
-          setDeletingId(open ? items[index]?.param_id || null : null)
-        }
-        onConfirm={() => {
-          if (
-            deletingId &&
-            items.some((item) => item.param_id === deletingId)
-          ) {
-            onRemove(deletingId);
-          }
-          setRenaming(false);
+        menu={{
+          items: [
+            { key: "rename", label: t("ws.layout.rename_message") },
+            { key: "delete", label: t("ws.layout.delete_message"), danger: true },
+          ],
+          onClick: ({ key }) => {
+            if (key === "rename") {
+              cancelRename.current = false;
+              setDraftName(items[index]?.name || "");
+              setRenaming(true);
+            } else if (key === "delete") {
+              setDeletingId(items[index]?.param_id || null);
+            }
+          },
         }}
       >
         <Button
           type="text"
           mode="icon"
           disabled={!items.length}
-          aria-label={t("ws.layout.delete_message")}
-          title={t("ws.layout.delete_message")}
+          aria-label={t("ws.layout.saved_messages")}
+          title={t("ws.layout.saved_messages")}
         >
-          <AppIcon icon="trash-2" />
+          <AppIcon icon="ellipsis" />
         </Button>
-      </Popconfirm>
+      </Dropdown>
+      <Modal
+        title={t("ws.layout.delete_message")}
+        width={360}
+        open={deletingId !== null}
+        okText={t("supplement.confirm")}
+        cancelText={t("supplement.cancel")}
+        onCancel={() => setDeletingId(null)}
+        onOk={() => {
+          if (deletingId && items.some((item) => item.param_id === deletingId)) {
+            onRemove(deletingId);
+          }
+          setDeletingId(null);
+          setRenaming(false);
+        }}
+      >
+        {t("ws.layout.delete_confirm")}
+      </Modal>
     </div>
   );
 }
