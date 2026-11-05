@@ -1,4 +1,3 @@
-import { ConnectionStatus } from "../shared/SocketPanels";
 import { getSocketConnectionStatus } from "@/features/requests/protocols/shared/socket-state";
 import RequestToolbar from "@/features/requests/components/RequestToolbar";
 import RequestAction from "@/features/requests/components/RequestAction";
@@ -93,7 +92,6 @@ const WsDebug: FC<WebSocketComponentType> = ({
       <div className={styles.container}>
         <div className={styles.urlPanel}>
           <RequestToolbar className={styles.connectionRow}>
-            <ConnectionStatus status={status} />
             <div className={styles.urlGroup}>
               <UrlGroup
                 maxLength={10240}
