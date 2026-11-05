@@ -428,9 +428,8 @@ test("native sidebar panels, test commands and workspace request history", async
     );
     rows[2].request.url = "";
     assert.equal(
-      requests.getTreeItem({ kind: "request", data: rows[2] }).iconPath.color
-        .id,
-      "onapi.method.get",
+      requests.getTreeItem({ kind: "request", data: rows[2] }).iconPath.color,
+      undefined,
     );
     assert.equal(decorations.provideFileDecoration(resource).badge, undefined);
     assert.equal(decorations.provideFileDecoration(resource).color, undefined);

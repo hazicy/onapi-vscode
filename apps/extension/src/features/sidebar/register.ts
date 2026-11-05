@@ -79,9 +79,6 @@ export function registerSidebarTree(context: vscode.ExtensionContext) {
         return status
           ? {
               badge: status.badge,
-              color: status.color
-                ? new vscode.ThemeColor(status.color)
-                : undefined,
               propagate: false,
             }
           : undefined;

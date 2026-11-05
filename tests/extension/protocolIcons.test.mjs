@@ -39,12 +39,12 @@ test("HTTP methods share the same glyph selection in trees and editor tabs", () 
       ? "http"
       : `http-${method.toLowerCase()}`;
     assert.equal(
-      getProtocolTreeIcon(data, "list.errorForeground").id,
+      getProtocolTreeIcon(data).id,
       `onapi-${name}`,
     );
     assert.equal(
-      getProtocolTreeIcon(data, "list.errorForeground").color.id,
-      "list.errorForeground",
+      getProtocolTreeIcon(data).color,
+      undefined,
     );
     const paths = getProtocolIcon({ extensionUri: "/extension" }, data);
     assert.equal(paths.light, `/extension/dist/images/${name}.svg`);

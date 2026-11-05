@@ -31,32 +31,15 @@ const protocolIcons = new Set([
   "doc",
 ]);
 
-/** Font-backed icons support theme colors; editor tabs still use SVG paths. */
+/** Native tree icons inherit the active VS Code icon foreground. */
 export function getProtocolTreeIcon(
   data: IconData,
-  color?: string,
 ): vscode.ThemeIcon | undefined {
   if (!protocolIcons.has(data.kind || "")) {
     return undefined;
   }
   const name = iconName(data);
-  const methodColor = name.startsWith("http-")
-    ? `onapi.method.${name.slice(5)}`
-    : undefined;
-  const protocolColor = [
-    "ai",
-    "mcp",
-    "websocket",
-    "socketio",
-    "graphql",
-  ].includes(name)
-    ? `onapi.protocol.${name}`
-    : undefined;
-  const iconColor = color || methodColor || protocolColor;
-  return new vscode.ThemeIcon(
-    `onapi-${name.replaceAll("_", "-")}`,
-    iconColor ? new vscode.ThemeColor(iconColor) : undefined,
-  );
+  return new vscode.ThemeIcon(`onapi-${name.replaceAll("_", "-")}`);
 }
 
 /** SVG paths for editor surfaces whose icon API does not accept ThemeIcon. */

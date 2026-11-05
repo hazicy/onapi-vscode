@@ -101,7 +101,6 @@ export class RequestTreeItem extends vscode.TreeItem {
         getCurrentProjectConfig(context),
         list(),
       );
-      this.iconPath = getProtocolTreeIcon(node.data, status?.color);
       const label =
         node.data.kind === "api"
           ? requestMethod(node.data)
@@ -184,12 +183,7 @@ export class ReportTreeItem extends vscode.TreeItem {
         event.error ||
         event.assertions?.some((assertion: any) => !assertion.passed),
     );
-    this.iconPath = new vscode.ThemeIcon(
-      failed ? "error" : "pass",
-      new vscode.ThemeColor(
-        !failed ? "testing.iconPassed" : "testing.iconFailed",
-      ),
-    );
+    this.iconPath = new vscode.ThemeIcon(failed ? "error" : "pass");
     this.description = report.startedAt
       ? new Date(report.startedAt).toLocaleString()
       : undefined;
