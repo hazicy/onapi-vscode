@@ -19,32 +19,37 @@ for (const protocol of ["websocket", "socketio"]) {
     await expect(send).toBeDisabled();
     await expect(
       workspace.getByRole("combobox", { name: "Saved messages", exact: true }),
-    ).toBeVisible();
+    ).toHaveCount(protocol === "socketio" ? 1 : 0);
     await expect(
       workspace.getByRole("region", { name: "Message detail", exact: true }),
     ).toHaveCount(0);
     await page
       .getByRole("button", { name: "Narrow panel", exact: true })
       .click();
-    await workspace
-      .getByRole("button", { name: "Add message", exact: true })
-      .click();
-    await workspace
-      .getByRole("textbox", { name: "Message name", exact: true })
-      .fill("Second message");
-    await workspace
-      .getByRole("textbox", { name: "Message name", exact: true })
-      .press("Enter");
-    await expect(page.getByLabel("Socket definition")).toContainText(
-      "Second message",
-    );
-    await workspace
-      .getByRole("button", { name: "Delete message", exact: true })
-      .click();
-    await page.getByRole("button", { name: "Confirm", exact: true }).click();
-    await expect(
-      workspace.getByRole("combobox", { name: "Saved messages", exact: true }),
-    ).toContainText("Greeting");
+    if (protocol === "socketio") {
+      await workspace
+        .getByRole("button", { name: "Add message", exact: true })
+        .click();
+      await workspace
+        .getByRole("textbox", { name: "Message name", exact: true })
+        .fill("Second message");
+      await workspace
+        .getByRole("textbox", { name: "Message name", exact: true })
+        .press("Enter");
+      await expect(page.getByLabel("Socket definition")).toContainText(
+        "Second message",
+      );
+      await workspace
+        .getByRole("button", { name: "Delete message", exact: true })
+        .click();
+      await page.getByRole("button", { name: "Confirm", exact: true }).click();
+      await expect(
+        workspace.getByRole("combobox", {
+          name: "Saved messages",
+          exact: true,
+        }),
+      ).toContainText("Greeting");
+    }
     await page
       .getByRole("button", { name: "Connected fixture", exact: true })
       .click();
@@ -99,7 +104,7 @@ for (const protocol of ["websocket", "socketio"]) {
   });
 }
 
-for (const protocol of ["websocket", "socketio"]) {
+for (const protocol of ["socketio"]) {
   test(`${protocol}: rename can be cancelled and deletion requires confirmation`, async ({
     page,
   }) => {
@@ -244,12 +249,52 @@ for (const protocol of ["websocket", "socketio"]) {
     await send.hover();
     await expect(send).toHaveCSS("color", "rgb(241, 242, 243)");
     await expect(send).toHaveCSS("background-color", "rgb(52, 86, 120)");
-    const rename = workspace.getByRole("button", {
-      name: "Rename message",
+    if (protocol === "socketio") {
+      const rename = workspace.getByRole("button", {
+        name: "Rename message",
+        exact: true,
+      });
+      await rename.hover();
+      await expect(rename).toHaveCSS("color", "rgb(221, 221, 221)");
+      await expect(rename).toHaveCSS("text-decoration-line", "none");
+    }
+  });
+}
+
+for (const fixture of ["empty", "filled"]) {
+  test(`websocket: single editor handles ${fixture} saved messages`, async ({
+    page,
+  }) => {
+    await page.goto(`/?socketWorkspace=websocket&messageFixture=${fixture}`);
+    const workspace = page.getByRole("region", {
+      name: "Socket workspace",
       exact: true,
     });
-    await rename.hover();
-    await expect(rename).toHaveCSS("color", "rgb(221, 221, 221)");
-    await expect(rename).toHaveCSS("text-decoration-line", "none");
+    await expect(
+      workspace.getByRole("combobox", { name: "Saved messages", exact: true }),
+    ).toHaveCount(0);
+    await expect(
+      workspace.getByRole("button", {
+        name: /Add message|Rename message|Delete message/,
+      }),
+    ).toHaveCount(0);
+    const editor = workspace.locator(".cm-content[contenteditable=true]");
+    await expect(editor).toBeVisible();
+    await expect(editor).toHaveText(fixture === "filled" ? "hello" : "");
+    await editor.fill("updated message");
+    await expect(page.getByLabel("Socket definition")).toContainText(
+      '"raw":"updated message"',
+    );
+    await page
+      .getByRole("button", { name: "Connected fixture", exact: true })
+      .click();
+    await workspace.getByRole("button", { name: "Send", exact: true }).click();
+    const command = await page.evaluate(() =>
+      (window as any).socketMessages.at(-1),
+    );
+    expect(command.data).toMatchObject({
+      msg: "updated message",
+      type: "text",
+    });
   });
 }

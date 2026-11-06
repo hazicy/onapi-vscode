@@ -12,6 +12,9 @@ import workspaceStyles from "@/features/requests/RequestWorkspace.module.css";
 export default function SocketWorkspaceFixture() {
   const socketio =
     new URLSearchParams(location.search).get("socketWorkspace") === "socketio";
+  const messageFixture = new URLSearchParams(location.search).get(
+    "messageFixture",
+  );
   const [width, setWidth] = useState(1000);
   const [item, setItem] = useState<any>({
     id: "socket-ui",
@@ -23,14 +26,17 @@ export default function SocketWorkspaceFixture() {
     url: socketio ? "http://localhost:3000" : "ws://localhost:3000",
     request: structuredClone(DEFAULT_SOCKETIO_REQUEST),
     config: {},
-    message: [
-      {
-        ...structuredClone(DEFAULT_WEBSOCKET_MESSAGE),
-        param_id: "first",
-        name: "Greeting",
-        request: { ...DEFAULT_WEBSOCKET_MESSAGE.request, raw: "hello" },
-      },
-    ],
+    message:
+      messageFixture === "empty"
+        ? []
+        : [
+            {
+              ...structuredClone(DEFAULT_WEBSOCKET_MESSAGE),
+              param_id: "first",
+              name: "Greeting",
+              request: { ...DEFAULT_WEBSOCKET_MESSAGE.request, raw: "hello" },
+            },
+          ],
     active_id: "first",
     msg_data: "chat",
     ack: -1,
