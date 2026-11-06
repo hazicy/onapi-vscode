@@ -50,6 +50,7 @@ for (const development of [false, true]) {
     );
     assert.equal(registeredFormatter, panel);
     assert.equal(calls[0][1], "Edited request");
+    assert.equal(calls[0][3].enableFindWidget, true);
     assert.equal(
       calls[1][0],
       development

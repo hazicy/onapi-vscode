@@ -2,23 +2,20 @@ import clsx from "clsx";
 import styles from "../../WebSocketDebug.module.css";
 import { useTranslation } from "react-i18next";
 
-import { Flex, Input, Select } from "@/shared/ui/base";
+import { Flex, Select } from "@/shared/ui/base";
 
 import Button from "@/shared/ui/Button";
 import AppIcon from "@/shared/ui/AppIcon";
 import useSocketConnectionsStore from "@/features/requests/store/useSocketConnectionsStore";
 
 interface Props {
-  filterValue: string;
-  setFilterValue: (value: string) => void;
   filterType: string;
   setFilterType: (value: string) => void;
   id: string;
 }
 const Header = (props: Props) => {
   const { t } = useTranslation();
-  const { filterValue, setFilterValue, filterType, setFilterType, id } =
-    props || {};
+  const { filterType, setFilterType, id } = props || {};
   const websocketConnectionPool = useSocketConnectionsStore(
     (state) => state.websocketConnectionPool,
   );
@@ -38,16 +35,6 @@ const Header = (props: Props) => {
           style={{ wordBreak: "keep-all" }}
           className={styles.messageFilters}
         >
-          <Input
-            prefix={<AppIcon icon="search" className={styles.iconColor} />}
-            aria-label={t("ws.response.search_tip")}
-            className={styles.messageSearch}
-            placeholder={t("ws.response.search_tip")}
-            value={filterValue}
-            onChange={(e) => setFilterValue(e?.target?.value || "")}
-            size="small"
-            outlinedClassName={styles.inputOutlined}
-          />
           <Select
             aria-label={t("ws.response.message_type")}
             value={filterType}

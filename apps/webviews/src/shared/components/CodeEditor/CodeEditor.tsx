@@ -45,7 +45,7 @@ import {
   closeBracketsKeymap,
   completionKeymap,
 } from "@codemirror/autocomplete";
-import { highlightSelectionMatches, searchKeymap } from "@codemirror/search";
+import { highlightSelectionMatches } from "@codemirror/search";
 import { lintGutter, lintKeymap, linter } from "@codemirror/lint";
 import { useEditorPreferences } from "@/shared/contexts/editor-preferences";
 import { scriptCompletions } from "./completion";
@@ -174,7 +174,6 @@ const CodeEditor = forwardRef<CodeEditorRef, Props>((props, ref) => {
             ...closeBracketsKeymap,
             ...defaultKeymap,
             ...historyKeymap,
-            ...searchKeymap,
             ...foldKeymap,
             ...completionKeymap,
             ...lintKeymap,

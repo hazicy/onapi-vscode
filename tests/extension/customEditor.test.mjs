@@ -83,6 +83,7 @@ test("stable resources survive provider recreation and isolate workspaces", asyn
   register();
   const { provider, options } = f.providers.get("onapi.request");
   assert.equal(options.supportsMultipleEditorsPerDocument, false);
+  assert.equal(options.webviewOptions.enableFindWidget, true);
   const document = provider.openCustomDocument(f.opened[0][1]);
   let disposed = 0;
   const panel = { dispose: () => disposed++ };

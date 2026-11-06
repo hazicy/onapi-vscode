@@ -56,7 +56,6 @@ const Realtime: React.FC<Props> = ({ id, onChange }) => {
   useEffect(() => {
     setData({});
   }, [activeRequestId, setData]);
-  const [filterValue, setFilterValue] = useSafeState<string>("");
   const [filterType, setFilterType] = useSafeState<string>("all");
   const [isScrollAuto, setIsScrollAuto] = useSafeState<boolean>(true);
   const lastScrollTop = useRef<{ [k: string]: number } | undefined>(undefined);
@@ -199,16 +198,16 @@ const Realtime: React.FC<Props> = ({ id, onChange }) => {
   const wsTemplateStateList = useMemo(() => {
     return handleSocketResponse(
       websocketConnectionPool[activeRequestId]?.socketRes,
-      filterValue,
+      "",
       filterType,
     );
-  }, [websocketConnectionPool, activeRequestId, filterValue, filterType]);
+  }, [websocketConnectionPool, activeRequestId, filterType]);
 
   const messages = websocketConnectionPool[activeRequestId]?.socketRes;
   const connected =
     getSocketConnectionStatus(websocketConnectionPool[activeRequestId]) ===
     "connect";
-  const hasFilter = Boolean(filterValue.trim() || filterType !== "all");
+  const hasFilter = filterType !== "all";
   useEffect(() => {
     if (!messages?.length) {
       setData({});
@@ -295,10 +294,8 @@ const Realtime: React.FC<Props> = ({ id, onChange }) => {
               <div className={styles.socketIoLeftPanel}>
                 <Header
                   id={activeRequestId}
-                  filterValue={filterValue}
                   filterType={filterType}
                   setFilterType={setFilterType}
-                  setFilterValue={setFilterValue}
                 />
                 <div ref={flowRef} className={styles.messageList}>
                   {!wsTemplateStateList.length ? (
@@ -316,7 +313,6 @@ const Realtime: React.FC<Props> = ({ id, onChange }) => {
                           type="text"
                           size="small"
                           onClick={() => {
-                            setFilterValue("");
                             setFilterType("all");
                           }}
                         >

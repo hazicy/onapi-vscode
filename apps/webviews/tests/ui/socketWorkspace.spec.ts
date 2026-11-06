@@ -96,7 +96,7 @@ for (const protocol of ["websocket", "socketio"]) {
     await expect(detail).toBeVisible();
     await expect(
       workspace.getByRole("textbox", { name: "Search", exact: true }),
-    ).toBeVisible();
+    ).toHaveCount(0);
     await workspace.screenshot({
       path: testInfo.outputPath(`${protocol}-wide.png`),
     });
@@ -193,8 +193,10 @@ test("socketio: empty timeline distinguishes connection and filter states", asyn
     .getByRole("button", { name: "Connected fixture", exact: true })
     .click();
   await workspace
-    .getByRole("textbox", { name: "Search", exact: true })
-    .fill("no matching message");
+    .getByRole("combobox", { name: "Message type", exact: true })
+    .last()
+    .click();
+  await page.getByRole("option", { name: "Sent Messages", exact: true }).click();
   await expect(
     workspace.getByText("Try a different search or reset the filters.", {
       exact: true,

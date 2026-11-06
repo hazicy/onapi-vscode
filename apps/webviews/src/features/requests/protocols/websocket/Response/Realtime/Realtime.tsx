@@ -40,7 +40,6 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
   useEffect(() => {
     setData({});
   }, [activeRequestId, setData]);
-  const [filterValue, setFilterValue] = useSafeState<string>("");
   const [filterType, setFilterType] = useSafeState<string>("all");
   const [isScrollAuto, setIsScrollAuto] = useSafeState<boolean>(true);
   const lastScrollTop = useRef(0);
@@ -77,15 +76,15 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
   const wsTemplateStateList = useMemo(() => {
     return handleSocketResponse(
       websocketConnectionPool[activeRequestId]?.socketRes,
-      filterValue,
+      "",
       filterType,
     );
-  }, [websocketConnectionPool, activeRequestId, filterValue, filterType]);
+  }, [websocketConnectionPool, activeRequestId, filterType]);
   const messages = websocketConnectionPool[activeRequestId]?.socketRes;
   const connected =
     getSocketConnectionStatus(websocketConnectionPool[activeRequestId]) ===
     "connect";
-  const hasFilter = Boolean(filterValue || filterType !== "all");
+  const hasFilter = filterType !== "all";
   useEffect(() => {
     if (!messages?.length) {
       setData({});
@@ -173,10 +172,8 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
               <div className={styles.websocketLeftPanel}>
                 <Header
                   id={activeRequestId}
-                  filterValue={filterValue}
                   filterType={filterType}
                   setFilterType={setFilterType}
-                  setFilterValue={setFilterValue}
                 />
                 <div
                   ref={flowRef}
@@ -202,7 +199,6 @@ const Realtime: React.FC<Props> = ({ value, onChange }) => {
                           type="text"
                           size="small"
                           onClick={() => {
-                            setFilterValue("");
                             setFilterType("all");
                           }}
                         >
