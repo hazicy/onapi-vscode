@@ -424,7 +424,7 @@ test("production WebSocket request finishes loading without render errors", asyn
   await expect(page.locator(componentSelector("skeleton"))).toHaveCount(0);
   await expect(webSocketPage.alert).toHaveCount(0);
   await expect(webSocketPage.status).toHaveText("Disconnected");
-  await expect(webSocketPage.connectToSendAMessage).toBeVisible();
+  await expect(webSocketPage.connectToSendAMessage).toHaveCount(0);
   await expect(webSocketPage.sendButton).toBeDisabled();
   await expect(webSocketPage.clearMessagesButton).toBeDisabled();
   await page.setViewportSize({ width: 650, height: 760 });

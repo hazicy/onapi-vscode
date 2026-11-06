@@ -490,7 +490,6 @@
       "messages": "Messages"
     },
     "request": {
-      "connect_first": "Connect to send a message",
       "enter_message": "Enter a message to send",
       "message": "Message",
       "headers": "Headers",

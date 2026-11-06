@@ -468,7 +468,6 @@
       "messages": "消息记录"
     },
     "request": {
-      "connect_first": "连接后即可发送消息",
       "enter_message": "输入消息后即可发送",
       "message": "发送消息",
       "headers": "请求头",

@@ -37,11 +37,8 @@ const MessageHeader = (props: Props) => {
   const connected =
     getSocketConnectionStatus(websocketConnectionPool[activeRequestId]) ===
     "connect";
-  const sendHint = !connected
-    ? t("ws.request.connect_first")
-    : !trim(value?.raw)
-      ? t("ws.request.enter_message")
-      : "";
+  const sendHint =
+    connected && !trim(value?.raw) ? t("ws.request.enter_message") : "";
   return (
     <div className={styles.messageHeader}>
       <Flex align="center" gap={8} className={styles.composerTools}>
