@@ -25,6 +25,7 @@ export const disconnectWebSocketSession = (targetId: string) => {
 };
 export const connectWebSocketSession = async (
   data: WebSocketExecutionRequest,
+  sessionId: string = randomUUID(),
 ) => {
   const id = data.target?.id;
   if (!id) {
@@ -37,7 +38,7 @@ export const connectWebSocketSession = async (
   const adapter = new WebSocketAdapter();
   const run = executionScopeFor(panel).reserve(
     `websocket:${id}`,
-    randomUUID(),
+    sessionId,
     id,
     adapter,
   );

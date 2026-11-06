@@ -225,10 +225,13 @@ export const handleRequestPanelCommand = async (
     }
     case "ws_connect":
       await recordRequestHistory(context, data.target);
-      connectWebSocketSession({
-        target: data.target,
-        option: await prepareWebSocketSessionOptions(data, context),
-      });
+      connectWebSocketSession(
+        {
+          target: data.target,
+          option: await prepareWebSocketSessionOptions(data, context),
+        },
+        message.requestId,
+      );
       break;
     case "ws_disconnect":
       disconnectWebSocketSession(data);
@@ -238,10 +241,13 @@ export const handleRequestPanelCommand = async (
       break;
     case "socketio_connect":
       await recordRequestHistory(context, data.target);
-      connectSocketIoSession({
-        target: data.target,
-        option: await prepareSocketIoSessionOptions(data, context),
-      });
+      connectSocketIoSession(
+        {
+          target: data.target,
+          option: await prepareSocketIoSessionOptions(data, context),
+        },
+        message.requestId,
+      );
       break;
     case "socketio_disconnect":
       disconnectSocketIoSession(data);

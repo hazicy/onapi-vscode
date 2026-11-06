@@ -29,6 +29,7 @@ export const disconnectSocketIoSession = (targetId: string) => {
 };
 export const connectSocketIoSession = async (
   data: SocketIoExecutionRequest,
+  sessionId: string = randomUUID(),
 ) => {
   const id = data.target?.id;
   if (!id) {
@@ -41,7 +42,7 @@ export const connectSocketIoSession = async (
   const adapter = new SocketIoAdapter();
   const run = executionScopeFor(panel).reserve(
     `socketio:${id}`,
-    randomUUID(),
+    sessionId,
     id,
     adapter,
   );
