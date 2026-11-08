@@ -1,4 +1,4 @@
-import { formatWithOxfmt } from "@/shared/bridge/formatter";
+import { requestDocumentFormatting } from "@/shared/bridge/formatter";
 import { normalizeLanguage } from "@/shared/utils/normalizeLanguage";
 
 /** Invalid/unsupported input stays untouched. JSON formatting preserves comments and numeric literals. */
@@ -27,7 +27,7 @@ export async function formatDocument(
   if (sourceTooLarge(value)) {
     return value;
   }
-  return formatWithOxfmt(value, name);
+  return requestDocumentFormatting(value, name);
 }
 
 function sourceTooLarge(value: string) {

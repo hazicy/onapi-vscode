@@ -1,6 +1,10 @@
 import { test as base } from "@playwright/test";
-import { format } from "oxfmt";
+import { createRequire } from "node:module";
 import { EditorPage } from "./pages/EditorPage";
+
+const { format } = createRequire(
+  new URL("../../../extension/package.json", import.meta.url),
+)("prettier");
 
 type Pages = {
   editorPage: EditorPage;
@@ -14,26 +18,30 @@ export const test = base.extend<Pages>({
         requestId: string;
         data: { source: string; language: string };
       }) => {
-        const extensions: Record<string, string> = {
+        const parsers: Record<string, string> = {
           json: "jsonc",
           json5: "json5",
-          javascript: "js",
-          typescript: "ts",
+          javascript: "babel",
+          typescript: "typescript",
           html: "html",
           css: "css",
           graphql: "graphql",
           yaml: "yaml",
         };
         const { source, language } = message.data;
-        const result = await format(
-          `document.${extensions[language]}`,
-          source,
-          { embeddedLanguageFormatting: "off" },
-        );
+        let value = source;
+        try {
+          value = await format(source, {
+            parser: parsers[language],
+            embeddedLanguageFormatting: "off",
+          });
+        } catch {
+          // Invalid input stays intact, matching the extension worker.
+        }
         return {
           action: "documentFormatted",
           requestId: message.requestId,
-          data: { value: result.errors.length ? source : result.code },
+          data: { value },
         };
       },
     );

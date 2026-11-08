@@ -7,7 +7,7 @@ const pending = new Map<string, (value?: string) => void>();
 let listening = false;
 
 /** Correlate concurrent editors and responses without installing a listener per call. */
-export function formatWithOxfmt(
+export function requestDocumentFormatting(
   source: string,
   language: string,
 ): Promise<string> {
